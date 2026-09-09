@@ -2,6 +2,14 @@
 @import "tw-animate-css";
 @import "shadcn/tailwind.css";
 @import "@fontsource-variable/geist";
+@import "@fontsource/poppins/300.css";
+@import "@fontsource/poppins/300-italic.css";
+@import "@fontsource/poppins/400.css";
+@import "@fontsource/poppins/500.css";
+@import "@fontsource/poppins/600.css";
+@import "@fontsource/poppins/600-italic.css";
+@import "@fontsource/poppins/700.css";
+@import "@fontsource/poppins/700-italic.css";
 
 @custom-variant dark (&:is(.dark *));
 
@@ -20,6 +28,7 @@ body {
 @theme inline {
   --font-heading: var(--font-sans);
   --font-sans: 'Geist Variable', sans-serif;
+  --font-landing: 'Poppins', sans-serif;
   --color-sidebar-ring: var(--sidebar-ring);
   --color-sidebar-border: var(--sidebar-border);
   --color-sidebar-accent-foreground: var(--sidebar-accent-foreground);
@@ -142,5 +151,93 @@ body {
   ::selection {
     background: #ffe100;
     color: #0a0a0a;
+  }
+}
+
+@keyframes landing-enter-down {
+  from {
+    opacity: 0;
+    transform: translateY(-1rem);
+  }
+}
+
+@keyframes landing-enter-up {
+  from {
+    opacity: 0;
+    transform: translateY(1.5rem);
+  }
+}
+
+@keyframes landing-hero-focus {
+  from {
+    opacity: 0.72;
+    transform: scale(1.035);
+  }
+}
+
+.landing-header {
+  animation: landing-enter-down 600ms cubic-bezier(0.22, 1, 0.36, 1) both;
+}
+
+.landing-hero-media {
+  animation: landing-hero-focus 1400ms cubic-bezier(0.22, 1, 0.36, 1) both;
+}
+
+.landing-hero-title,
+.landing-hero-action,
+.landing-hero-description {
+  animation: landing-enter-up 700ms cubic-bezier(0.22, 1, 0.36, 1) both;
+}
+
+.landing-hero-title {
+  animation-delay: 120ms;
+}
+
+.landing-hero-action {
+  animation-delay: 220ms;
+}
+
+.landing-hero-description {
+  animation-delay: 320ms;
+}
+
+[data-reveal].reveal-pending {
+  opacity: 0;
+  transform: translateY(1.75rem);
+  transition:
+    opacity 650ms cubic-bezier(0.22, 1, 0.36, 1),
+    transform 650ms cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+[data-reveal].reveal-pending.is-visible {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+.landing-benefits [data-reveal]:nth-child(2) {
+  transition-delay: 90ms;
+}
+
+.landing-benefits [data-reveal]:nth-child(3) {
+  transition-delay: 180ms;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  html {
+    scroll-behavior: auto;
+  }
+
+  .landing-header,
+  .landing-hero-media,
+  .landing-hero-title,
+  .landing-hero-action,
+  .landing-hero-description {
+    animation: none;
+  }
+
+  [data-reveal].reveal-pending {
+    opacity: 1;
+    transform: none;
+    transition: none;
   }
 }
