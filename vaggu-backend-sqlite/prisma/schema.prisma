@@ -1,11 +1,9 @@
 generator client {
-  // Gera JavaScript para manter o projeto sem uma etapa de compilação TypeScript.
   provider = "prisma-client-js"
-  output   = "../src/generated/prisma"
 }
 
 datasource db {
-  provider = "sqlite"
+  provider = "postgresql"
 }
 
 enum Perfil {
@@ -20,7 +18,7 @@ enum EstadoVaga {
 }
 
 model Shopping {
-  id           String        @id @default(uuid())
+  id           String        @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
   nome         String
   endereco     String?
   ativo        Boolean       @default(true)
@@ -33,13 +31,15 @@ model Shopping {
 }
 
 model Usuario {
-  id         String  @id @default(uuid())
-  shoppingId String? @map("shopping_id")
-  nome       String
-  email      String  @unique
-  senhaHash  String  @map("senha_hash")
-  perfil     Perfil
-  ativo      Boolean @default(true)
+  id                       String  @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  shoppingId               String? @map("shopping_id") @db.Uuid
+  nome                     String
+  email                    String  @unique
+  telefone                 String?
+  senhaHash                String  @map("senha_hash")
+  perfil                   Perfil
+  ativo                    Boolean @default(true)
+  trocarSenhaObrigatoria   Boolean @default(false) @map("trocar_senha_obrigatoria")
 
   shopping Shopping? @relation(fields: [shoppingId], references: [id], onDelete: Restrict)
   sessoes  Sessao[]
@@ -49,9 +49,9 @@ model Usuario {
 }
 
 model Sessao {
-  id        String   @id @default(uuid())
+  id        String   @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
   tokenHash String   @unique @map("token_hash")
-  usuarioId String   @map("usuario_id")
+  usuarioId String   @map("usuario_id") @db.Uuid
   criadoEm  DateTime @default(now()) @map("criado_em")
   expiraEm  DateTime @map("expira_em")
 
@@ -63,8 +63,8 @@ model Sessao {
 }
 
 model Dispositivo {
-  id              String    @id @default(uuid())
-  shoppingId      String    @map("shopping_id")
+  id              String    @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  shoppingId      String    @map("shopping_id") @db.Uuid
   nome            String
   chaveApiHash    String    @map("chave_api_hash")
   ultimoContatoEm DateTime? @map("ultimo_contato_em")
@@ -79,9 +79,9 @@ model Dispositivo {
 }
 
 model Vaga {
-  id              String          @id @default(uuid())
-  shoppingId      String          @map("shopping_id")
-  dispositivoId   String?         @map("dispositivo_id")
+  id              String          @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  shoppingId      String          @map("shopping_id") @db.Uuid
+  dispositivoId   String?         @map("dispositivo_id") @db.Uuid
   codigo          String
   canalSensor     String?         @map("canal_sensor")
   estadoAtual     EstadoVaga      @default(DESCONHECIDA) @map("estado_atual")
@@ -98,8 +98,8 @@ model Vaga {
 }
 
 model HistoricoVaga {
-  id           String     @id @default(uuid())
-  vagaId       String     @map("vaga_id")
+  id           String     @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  vagaId       String     @map("vaga_id") @db.Uuid
   eventoId     String     @unique @map("evento_id")
   estado       EstadoVaga
   registradoEm DateTime   @default(now()) @map("registrado_em")
@@ -116,7 +116,7 @@ enum WhatsappEventStatus {
 }
 
 model WhatsappEvento {
-  id              String              @id @default(uuid())
+  id              String              @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
   metaMessageId   String              @unique @map("meta_message_id")
   tipo            String
   status          WhatsappEventStatus @default(PROCESSANDO)

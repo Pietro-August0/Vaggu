@@ -5,6 +5,8 @@ import { createApp } from './app.js';
 import { createAuthService } from './auth/service.js';
 import { createWhatsappClient } from './whatsapp/client.js';
 import { createWhatsappService } from './whatsapp/service.js';
+import { createShoppingsService } from './shoppings/service.js';
+import { createContaService } from './conta/service.js';
 
 const config = readEnv();
 const prisma = createPrisma(config.databaseUrl);
@@ -14,6 +16,8 @@ const app = createApp({
   checkDatabase: () => prisma.$queryRaw`SELECT 1`,
   auth: createAuthService(prisma),
   whatsapp: { config: config.whatsapp, service: whatsappService },
+  shoppings: createShoppingsService(prisma),
+  conta: createContaService(prisma),
 });
 
 const server = app.listen(config.port, config.host, () => {
@@ -21,7 +25,7 @@ const server = app.listen(config.port, config.host, () => {
   console.log('Para testar o banco: GET /api/v1/health/ready');
 });
 
-server.on('error', async (error) => {
+server.on('error', async (error: NodeJS.ErrnoException) => {
   console.error(error.code === 'EADDRINUSE'
     ? 'Porta já está em uso. Altere PORT no .env.'
     : 'Não foi possível iniciar o servidor. Verifique HOST e PORT.');

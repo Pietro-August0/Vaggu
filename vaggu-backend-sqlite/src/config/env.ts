@@ -1,6 +1,6 @@
 import { resolveDatabaseUrl } from './database.js';
 
-export function readEnv(env = process.env) {
+export function readEnv(env: NodeJS.ProcessEnv = process.env) {
   const databaseUrl = resolveDatabaseUrl(env.DATABASE_URL);
 
   const rawPort = env.PORT ?? '3000';

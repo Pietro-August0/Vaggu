@@ -2,12 +2,12 @@
 
 ## Arquivos alterados
 
-- `src/app.js`: registra `/api/v1/whatsapp/webhook` antes do `express.json`, usando `express.raw` somente nessa rota.
-- `src/server.js`: cria o cliente e o serviço WhatsApp com a configuração do ambiente.
-- `src/config/env.js`: lê variáveis do WhatsApp sem exigir credenciais de envio para inicializar.
+- `src/app.ts`: registra `/api/v1/whatsapp/webhook` antes do `express.json`, usando `express.raw` somente nessa rota.
+- `src/server.ts`: cria o cliente e o serviço WhatsApp com a configuração do ambiente.
+- `src/config/env.ts`: lê variáveis do WhatsApp sem exigir credenciais de envio para inicializar.
 - `src/whatsapp/*`: valida assinatura, extrai eventos, deduplica mensagens e encapsula o envio pela API oficial.
 - `prisma/schema.prisma` e `prisma/migrations/20260909000100_whatsapp_eventos/migration.sql`: tabela técnica `whatsapp_eventos`.
-- `test/whatsapp.test.js`: testes HTTP e de processamento simulando a Meta.
+- `test/whatsapp.test.ts`: testes HTTP e de processamento simulando a Meta.
 
 ## Variáveis
 
@@ -59,4 +59,4 @@ O erro 130497 é tratado como restrição de envio informada pela Meta. O códig
 
 ## Limites
 
-A deduplicação usa `meta_message_id` único em SQLite. Se uma tentativa de envio falhar, o evento fica como `FALHOU` e uma nova entrega legítima do mesmo webhook pode tentar novamente. Se ocorrer timeout depois que a Meta recebeu o pedido de envio, o resultado é incerto; a integração evita processamento duplicado normal, mas não promete entrega exatamente uma vez.
+A deduplicação usa `meta_message_id` único no PostgreSQL. Se uma tentativa de envio falhar, o evento fica como `FALHOU` e uma nova entrega legítima do mesmo webhook pode tentar novamente. Se ocorrer timeout depois que a Meta recebeu o pedido de envio, o resultado é incerto; a integração evita processamento duplicado normal, mas não promete entrega exatamente uma vez.

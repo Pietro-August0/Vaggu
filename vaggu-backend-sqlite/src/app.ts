@@ -1,11 +1,21 @@
-import express from 'express';
+import express, { type ErrorRequestHandler } from 'express';
 import helmet from 'helmet';
 import { authRoutes } from './auth/routes.js';
 import { ApiError } from './auth/service.js';
 import { whatsappRoutes } from './whatsapp/routes.js';
+import { gerentesRoutes, shoppingsRoutes } from './shoppings/routes.js';
+import { contaRoutes } from './conta/routes.js';
+
+type AppServices = {
+  checkDatabase: () => Promise<unknown> | unknown;
+  auth?: any;
+  whatsapp?: any;
+  shoppings?: any;
+  conta?: any;
+};
 
 // Injeção da consulta facilita testar HTTP sem um banco real.
-export function createApp({ checkDatabase, auth, whatsapp }) {
+export function createApp({ checkDatabase, auth, whatsapp, shoppings, conta }: AppServices) {
   const app = express();
   app.disable('x-powered-by');
   app.use(helmet());
@@ -35,6 +45,11 @@ export function createApp({ checkDatabase, auth, whatsapp }) {
   });
 
   if (auth) app.use('/api/v1/auth', authRoutes(auth));
+  if (auth && conta) app.use('/api/v1/minha-conta', contaRoutes(auth, conta));
+  if (auth && shoppings) {
+    app.use('/api/v1/shoppings', shoppingsRoutes(auth, shoppings));
+    app.use('/api/v1/gerentes', gerentesRoutes(auth, shoppings));
+  }
 
   app.use((_req, res) => {
     res.status(404).json({
@@ -42,7 +57,7 @@ export function createApp({ checkDatabase, auth, whatsapp }) {
     });
   });
 
-  app.use((error, _req, res, _next) => {
+  const errorHandler: ErrorRequestHandler = (error: any, _req, res, _next) => {
     if (error instanceof ApiError) {
       return res.status(error.status).json({ erro: { codigo: error.codigo, mensagem: error.message } });
     }
@@ -59,7 +74,8 @@ export function createApp({ checkDatabase, auth, whatsapp }) {
     return res.status(500).json({
       erro: { codigo: 'ERRO_INTERNO', mensagem: 'Não foi possível processar a solicitação.' },
     });
-  });
+  };
+  app.use(errorHandler);
 
   return app;
 }

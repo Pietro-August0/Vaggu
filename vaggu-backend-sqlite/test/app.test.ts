@@ -30,7 +30,7 @@ test('readiness devolve 503 sem vazar erro interno', async () => {
   assert.ok(!response.text.includes('SEGREDO_DO_BANCO'));
 });
 
-test('rota de negócio ainda não existe e não expõe dados', async () => {
+test('rota de negócio não montada por padrão não expõe dados', async () => {
   const response = await request(app).get('/api/v1/shoppings').expect(404);
   assert.equal(response.body.erro.codigo, 'ROTA_NAO_ENCONTRADA');
 });

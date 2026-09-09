@@ -4,15 +4,24 @@ Este documento resume o estado atual do backend para instalar, testar e continua
 
 ## Estado atual
 
-O projeto e um backend Node.js com Express, Prisma 7 e SQLite local. A API usa JavaScript com ES Modules, sem etapa TypeScript.
+O projeto e um backend TypeScript com Node.js, Express, Prisma 7 e PostgreSQL.
 
-Ja existem rotas de saude e autenticacao:
+Ja existem rotas de saude, autenticacao e acessos administrativos:
 
 - `GET /api/v1/health`
 - `GET /api/v1/health/ready`
 - `POST /api/v1/auth/login`
 - `GET /api/v1/auth/me`
+- `POST /api/v1/auth/change-password`
 - `POST /api/v1/auth/logout`
+- `GET /api/v1/minha-conta`
+- `PATCH /api/v1/minha-conta`
+- `GET /api/v1/shoppings`
+- `POST /api/v1/shoppings`
+- `GET /api/v1/shoppings/:shoppingId/gerentes`
+- `POST /api/v1/shoppings/:shoppingId/gerentes`
+- `PATCH /api/v1/gerentes/:gerenteId`
+- `POST /api/v1/gerentes/:gerenteId/redefinir-senha`
 
 Foi adicionada a infraestrutura do WhatsApp Cloud API:
 
@@ -27,19 +36,25 @@ Foi adicionada a infraestrutura do WhatsApp Cloud API:
 
 ## Arquivos principais alterados
 
-- `src/app.js`: registra a rota do WhatsApp antes do parser JSON global.
-- `src/server.js`: instancia servico de autenticacao, Prisma e WhatsApp.
-- `src/config/env.js`: le configuracoes gerais e do WhatsApp.
-- `src/whatsapp/client.js`: envio de texto pela Graph API.
-- `src/whatsapp/payload.js`: extracao e classificacao de payloads.
-- `src/whatsapp/routes.js`: GET/POST do webhook.
-- `src/whatsapp/service.js`: processamento, retry e deduplicacao.
-- `src/whatsapp/signature.js`: assinatura HMAC e comparacao segura.
-- `prisma/schema.prisma`: inclui `WhatsappEvento` e `WhatsappEventStatus`.
-- `prisma/migrations/20260909000100_whatsapp_eventos/migration.sql`: migration aditiva da tabela tecnica.
-- `test/whatsapp.test.js`: testes do webhook simulando a Meta.
+- `src/app.ts`: registra a rota do WhatsApp antes do parser JSON global.
+- `src/server.ts`: instancia servico de autenticacao, Prisma, WhatsApp e shoppings.
+- `src/config/env.ts`: le configuracoes gerais e do WhatsApp.
+- `src/conta/service.ts`: consulta e edicao dos dados pessoais permitidos.
+- `src/conta/routes.ts`: rota autenticada de minha conta.
+- `src/shoppings/service.ts`: regras de Admin para shopping, gerente, senha provisoria e redefinicao.
+- `src/shoppings/routes.ts`: rotas administrativas protegidas por sessao, senha pronta e perfil VAGGU.
+- `src/whatsapp/client.ts`: envio de texto pela Graph API.
+- `src/whatsapp/payload.ts`: extracao e classificacao de payloads.
+- `src/whatsapp/routes.ts`: GET/POST do webhook.
+- `src/whatsapp/service.ts`: processamento, retry e deduplicacao.
+- `src/whatsapp/signature.ts`: assinatura HMAC e comparacao segura.
+- `prisma/schema.prisma`: usa provider PostgreSQL, UUIDs, `WhatsappEvento`, `WhatsappEventStatus`, telefone e troca obrigatoria de senha em usuarios.
+- `prisma/migrations/20260909000300_inicial_postgresql/migration.sql`: schema inicial PostgreSQL.
+- `test/whatsapp.test.ts`: testes do webhook simulando a Meta.
+- `test/prisma-postgresql.test.ts`: verifica schema e migration PostgreSQL.
 - `.env.example`: placeholders das variaveis.
 - `docs/whatsapp-webhook.md`: guia operacional do webhook.
+- `docs/diagnostico-vaggu-codex.md`: matriz de conformidade contra a especificacao.
 
 ## Instalar em outra maquina
 
@@ -80,7 +95,7 @@ http://127.0.0.1:3000/api/v1/health
 Crie um `.env` local a partir de `.env.example`. Nao envie segredos por chat e nao versione `.env`.
 
 ```dotenv
-DATABASE_URL="file:./prisma/dev.db"
+DATABASE_URL="postgresql://vaggu:vaggu@localhost:5432/vaggu"
 PORT=3000
 HOST=127.0.0.1
 NODE_ENV=development
@@ -103,19 +118,17 @@ Diferenças importantes:
 
 Passaram:
 
-- `npm.cmd run db:validate`
-- `npm.cmd run db:generate`
-- `node --test test\whatsapp.test.js`
+- `cmd /c npm run typecheck`
+- `DATABASE_URL=postgresql://... npm run db:validate`
+- `cmd /c npm test`
 
 Resultado do teste completo:
 
-- `npm.cmd test`: 23 de 24 testes passaram.
-- A falha restante ocorreu em `test/database.test.js`, no comando `prisma migrate deploy` contra SQLite temporario vazio.
-- O erro retornado pelo Prisma foi somente `Schema engine error:`, sem detalhe SQL.
-- As migrations SQL foram executadas diretamente com `prisma db execute` em banco temporario, incluindo a migration do WhatsApp.
-- O teste de upgrade que aplica migrations pendentes sobre uma base antiga passou e confirmou a tabela `whatsapp_eventos`.
+- 23 testes passaram, 0 falharam.
+- A suite atual cobre HTTP, configuracao PostgreSQL, schema/migration Prisma e webhook do WhatsApp.
+- Testes de integracao com PostgreSQL real precisam de um `TEST_DATABASE_URL` ou servico de CI para validar migrations contra banco executando.
 
-Na nova maquina, rode `npm test` novamente. Se o mesmo erro do Prisma aparecer, investigue o schema engine do Prisma 7 no ambiente antes de publicar.
+Na nova maquina, rode `npm test` novamente antes de publicar.
 
 ## Publicacao
 
@@ -129,7 +142,7 @@ npm.cmd exec --yes --package vercel -- vercel login
 
 Depois configure variaveis de ambiente no painel da Vercel ou pela CLI autenticada. O conector disponivel nesta sessao nao expunha ferramenta para gravar secrets.
 
-Atencao: SQLite local nao e ideal para Vercel/serverless porque o disco nao deve ser tratado como armazenamento duravel. Para teste publico simples, a API pode subir, mas login, sessoes e deduplicacao precisam de persistencia confiavel. Para producao real, prefira um ambiente Node com disco persistente ou migre o banco para um servico persistente.
+Atencao: configure um PostgreSQL persistente antes de publicar. Em ambientes serverless, use pooling/conexao compativel com o provedor para evitar excesso de conexoes.
 
 ## Configurar webhook na Meta
 
@@ -144,21 +157,25 @@ Depois que a API estiver em HTTPS:
 
 ## Proximas atualizacoes recomendadas
 
-1. Corrigir/investigar o erro de `prisma migrate deploy` em SQLite temporario vazio no Windows.
-2. Escolher hospedagem compativel com persistencia: VPS/Render/Railway/Fly com volume, ou migrar para banco gerenciado.
-3. Configurar variaveis de ambiente no provedor sem expor segredos.
-4. Aplicar migrations no ambiente escolhido com backup previo.
-5. Validar `GET /api/v1/health` e `GET /api/v1/health/ready` no dominio HTTPS.
-6. Validar o GET do webhook no painel da Meta.
-7. Enviar payload POST assinado de teste antes de ativar resposta automatica.
-8. Criar rotina operacional para logs e monitoramento de erros de envio.
-9. Implementar fluxos reais do menu somente depois da infraestrutura estar estavel.
+1. Adicionar teste de integracao com PostgreSQL real em CI ou ambiente local controlado.
+2. Modelar Andar, Setor, Vaga tipada, MapaAndar, PosicaoVaga, Placa e Sensor separado.
+3. Criar telemetria autenticada com heartbeat, estados de sensores, confirmacao de 30 segundos, sequencia e expiracao independente.
+4. Escolher hospedagem compativel com persistencia: VPS/Render/Railway/Fly com volume, ou banco gerenciado.
+5. Configurar variaveis de ambiente no provedor sem expor segredos.
+6. Aplicar migrations no ambiente escolhido com backup previo.
+7. Validar `GET /api/v1/health` e `GET /api/v1/health/ready` no dominio HTTPS.
+8. Validar o GET do webhook no painel da Meta.
+9. Enviar payload POST assinado de teste antes de ativar resposta automatica.
+10. Persistir pedidos reais de demonstracao/suporte vindos do WhatsApp.
 
 ## O que ainda nao foi implementado
 
 - Consultas de vagas pelo WhatsApp.
 - Bot completo ou IA.
 - Autenticacao de gerentes via WhatsApp.
+- Mapa por andar, setores, importacao CSV/XLSX e posicoes de vagas.
+- Telemetria real de placas/sensores, confirmacao de estados e expiracao.
+- Telao, dashboard, exportacoes e Power BI.
 - Campanhas ou mensagens proativas.
 - Abertura real de chamados, agendamento de demonstracao ou transferencia para atendente.
 - Publicacao em producao.

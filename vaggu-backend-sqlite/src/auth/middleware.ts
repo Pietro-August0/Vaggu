@@ -1,3 +1,5 @@
+// Middlewares de autorização usados pelas rotas HTTP. Eles constroem o escopo
+// a partir da sessão validada, nunca de filtros enviados pelo navegador.
 import { ApiError } from './service.js';
 
 export function requireAuth(auth) {
@@ -15,6 +17,15 @@ export function requirePerfil(perfil) {
     }
     next();
   };
+}
+
+export function requirePasswordReady(_req, res, next) {
+  const user = res.locals.auth?.usuario;
+  if (!user) throw new ApiError(401, 'NAO_AUTENTICADO', 'Faça login para continuar.');
+  if (user.trocarSenhaObrigatoria) {
+    throw new ApiError(403, 'TROCA_SENHA_OBRIGATORIA', 'Troque a senha provisória antes de acessar esta área.');
+  }
+  next();
 }
 
 // Futuras consultas da dashboard devem usar este escopo, nunca o shoppingId

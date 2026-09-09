@@ -31,7 +31,7 @@ export function createWhatsappClient(config, { fetchImpl = globalThis.fetch } = 
         if (!response.ok) {
           let metaCode = `HTTP_${response.status}`;
           try {
-            const data = await response.json();
+            const data: any = await response.json();
             if (data?.error?.code) metaCode = String(data.error.code);
           } catch {
             // Mantem o codigo HTTP quando a Meta nao retorna JSON parseavel.
@@ -40,7 +40,7 @@ export function createWhatsappClient(config, { fetchImpl = globalThis.fetch } = 
         }
         return response.json().catch(() => ({}));
       } catch (error) {
-        if (error.name === 'AbortError') throw new Error('META_ENVIO_TIMEOUT');
+        if (error instanceof Error && error.name === 'AbortError') throw new Error('META_ENVIO_TIMEOUT');
         throw error;
       } finally {
         clearTimeout(timeout);

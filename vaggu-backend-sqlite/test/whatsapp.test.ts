@@ -56,7 +56,7 @@ function createFakePrisma() {
       async create({ data }) {
         if (rows.has(data.metaMessageId)) {
           const error = new Error('Unique constraint failed');
-          error.code = 'P2002';
+          (error as any).code = 'P2002';
           throw error;
         }
         const row = {
@@ -90,7 +90,7 @@ function createFakePrisma() {
   };
 }
 
-function createWhatsappApp({ autoReplyEnabled = false, sendText } = {}) {
+function createWhatsappApp({ autoReplyEnabled = false, sendText }: { autoReplyEnabled?: boolean; sendText?: any } = {}) {
   const prisma = createFakePrisma();
   const sent = [];
   const client = {

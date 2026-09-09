@@ -1,10 +1,13 @@
 import 'dotenv/config';
 import { defineConfig } from 'prisma/config';
-import { prismaDatabaseUrl } from './src/config/database.js';
+
+const databaseUrl = process.env.DATABASE_URL;
+if (!databaseUrl) {
+  throw new Error('DATABASE_URL deve apontar para um PostgreSQL, como postgresql://usuario:senha@localhost:5432/vaggu.');
+}
 
 export default defineConfig({
   schema: 'prisma/schema.prisma',
   migrations: { path: 'prisma/migrations' },
-  // CLI e API usam exatamente o mesmo caminho, inclusive no Windows.
-  datasource: { url: prismaDatabaseUrl(process.env.DATABASE_URL) },
+  datasource: { url: databaseUrl },
 });

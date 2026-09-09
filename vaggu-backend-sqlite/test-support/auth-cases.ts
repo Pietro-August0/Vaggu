@@ -6,13 +6,15 @@ import { createAuthService, digestToken } from '../src/auth/service.js';
 import { hashPassword, verifyPassword } from '../src/auth/password.js';
 import { requireAuth, requirePerfil, shoppingScope, loginLimiter } from '../src/auth/middleware.js';
 import { createInitialAdmin } from '../src/auth/bootstrap.js';
+import { createContaService } from '../src/conta/service.js';
 
 export async function runAuthCases(t, prisma, shoppingA, shoppingB) {
   const password = 'SenhaFicticiaSomenteTeste!';
   const senhaHash = await hashPassword(password);
   await prisma.usuario.updateMany({ data: { senhaHash } });
   const auth = createAuthService(prisma);
-  const newApp = () => createApp({ checkDatabase: () => prisma.$queryRaw`SELECT 1`, auth });
+  const conta = createContaService(prisma);
+  const newApp = () => createApp({ checkDatabase: () => prisma.$queryRaw`SELECT 1`, auth, conta });
   const app = newApp();
   const login = (email = 'vaggu@example.com') => request(newApp())
     .post('/api/v1/auth/login').send({ email, senha: password });
@@ -66,7 +68,9 @@ export async function runAuthCases(t, prisma, shoppingA, shoppingB) {
     await me('a'.repeat(43)).expect(401);
     const response = await me(adminToken).expect(200);
     assert.equal(response.body.usuario.email, 'vaggu@example.com');
-    assert.deepEqual(Object.keys(response.body.usuario).sort(), ['email', 'id', 'nome', 'perfil', 'shoppingId']);
+    assert.deepEqual(Object.keys(response.body.usuario).sort(), [
+      'email', 'id', 'nome', 'perfil', 'shoppingId', 'telefone', 'trocarSenhaObrigatoria',
+    ]);
   });
 
   await t.test('conta SHOPPING recebe seu vínculo vindo do banco', async () => {
@@ -74,6 +78,57 @@ export async function runAuthCases(t, prisma, shoppingA, shoppingB) {
     shoppingToken = response.body.token;
     assert.equal(response.body.usuario.perfil, 'SHOPPING');
     assert.equal(response.body.usuario.shoppingId, shoppingA.id);
+  });
+
+  await t.test('minha conta permite dados pessoais sem aceitar perfil ou shopping forjados', async () => {
+    const before = await request(app).get('/api/v1/minha-conta')
+      .set('Authorization', `Bearer ${shoppingToken}`).expect(200);
+    assert.equal(before.body.usuario.shoppingId, shoppingA.id);
+
+    const changed = await request(app).patch('/api/v1/minha-conta')
+      .set('Authorization', `Bearer ${shoppingToken}`)
+      .send({
+        nome: 'Gerente Atualizado',
+        telefone: '+55 11 91111-1111',
+        perfil: 'VAGGU',
+        shoppingId: shoppingB.id,
+        email: 'forjado@example.com',
+      }).expect(200);
+    assert.equal(changed.body.usuario.nome, 'Gerente Atualizado');
+    assert.equal(changed.body.usuario.telefone, '+55 11 91111-1111');
+    assert.equal(changed.body.usuario.perfil, 'SHOPPING');
+    assert.equal(changed.body.usuario.shoppingId, shoppingA.id);
+    assert.equal(changed.body.usuario.email, 'shopping@example.com');
+  });
+
+  await t.test('senha provisória exige troca e não permanece válida depois da alteração', async () => {
+    const senhaProvisoria = 'SenhaProvisoriaTeste!';
+    const senhaNova = 'NovaSenhaDefinitivaTeste!';
+    await prisma.usuario.create({ data: {
+      nome: 'Gerente provisório',
+      email: 'provisorio@example.com',
+      senhaHash: await hashPassword(senhaProvisoria),
+      perfil: 'SHOPPING',
+      shoppingId: shoppingA.id,
+      trocarSenhaObrigatoria: true,
+    } });
+    const loginProvisorio = await request(app).post('/api/v1/auth/login')
+      .send({ email: 'provisorio@example.com', senha: senhaProvisoria }).expect(200);
+    assert.equal(loginProvisorio.body.usuario.trocarSenhaObrigatoria, true);
+    await request(app).post('/api/v1/auth/change-password')
+      .set('Authorization', `Bearer ${loginProvisorio.body.token}`)
+      .send({ senhaAtual: 'errada', novaSenha: senhaNova }).expect(401);
+    await request(app).post('/api/v1/auth/change-password')
+      .set('Authorization', `Bearer ${loginProvisorio.body.token}`)
+      .send({ senhaAtual: senhaProvisoria, novaSenha: 'curta' }).expect(400);
+    const changed = await request(app).post('/api/v1/auth/change-password')
+      .set('Authorization', `Bearer ${loginProvisorio.body.token}`)
+      .send({ senhaAtual: senhaProvisoria, novaSenha: senhaNova }).expect(200);
+    assert.equal(changed.body.usuario.trocarSenhaObrigatoria, false);
+    await request(app).post('/api/v1/auth/login')
+      .send({ email: 'provisorio@example.com', senha: senhaProvisoria }).expect(401);
+    await request(app).post('/api/v1/auth/login')
+      .send({ email: 'provisorio@example.com', senha: senhaNova }).expect(200);
   });
 
   // Rotas de teste somente aqui, nunca montadas na API entregue.
@@ -164,7 +219,7 @@ export async function runAuthCases(t, prisma, shoppingA, shoppingB) {
 
   await t.test('bootstrap não sobrescreve administrador existente', async () => {
     await assert.rejects(() => createInitialAdmin(prisma, { nome: 'Outro admin', email: 'outro@example.com' }),
-      (error) => error.codigo === 'ADMIN_JA_EXISTE');
+      (error: any) => error.codigo === 'ADMIN_JA_EXISTE');
     assert.equal(await prisma.usuario.count({ where: { perfil: 'VAGGU' } }), 1);
   });
 }

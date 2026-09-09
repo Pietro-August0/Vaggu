@@ -1,8 +1,13 @@
+// Serviço de autenticação humana: valida credenciais, emite sessões opacas,
+// expõe a identidade pública e aplica a troca de senha sem vazar hashes.
 import { createHash, randomBytes } from 'node:crypto';
-import { dummyHash, verifyPassword } from './password.js';
+import { dummyHash, hashPassword, verifyPassword } from './password.js';
 
 export class ApiError extends Error {
-  constructor(status, codigo, mensagem) {
+  status: number;
+  codigo: string;
+
+  constructor(status: number, codigo: string, mensagem: string) {
     super(mensagem);
     this.status = status;
     this.codigo = codigo;
@@ -27,8 +32,15 @@ function allowedUser(user) {
 
 // Lista explícita: nunca devolver senhaHash, tokenHash ou chaves de dispositivos.
 export function publicUser(user) {
-  return { id: user.id, nome: user.nome, email: user.email,
-    perfil: user.perfil, shoppingId: user.shoppingId };
+  return {
+    id: user.id,
+    nome: user.nome,
+    email: user.email,
+    telefone: user.telefone ?? null,
+    perfil: user.perfil,
+    shoppingId: user.shoppingId,
+    trocarSenhaObrigatoria: Boolean(user.trocarSenhaObrigatoria),
+  };
 }
 
 export function createAuthService(prisma, { now = () => new Date() } = {}) {
@@ -73,6 +85,35 @@ export function createAuthService(prisma, { now = () => new Date() } = {}) {
       });
       if (!session || session.expiraEm <= now() || !allowedUser(session.usuario)) throw unauthorized();
       return { sessionId: session.id, usuario: publicUser(session.usuario) };
+    },
+
+    async changePassword(sessionId, body) {
+      const senhaAtual = body?.senhaAtual;
+      const novaSenha = body?.novaSenha;
+      if (typeof senhaAtual !== 'string' || typeof novaSenha !== 'string') {
+        throw new ApiError(400, 'DADOS_INVALIDOS', 'Informe a senha atual e a nova senha.');
+      }
+      if (novaSenha.length < 12 || novaSenha.length > 128) {
+        throw new ApiError(400, 'SENHA_INVALIDA', 'A nova senha deve ter entre 12 e 128 caracteres.');
+      }
+      const session = await prisma.sessao.findUnique({
+        where: { id: sessionId },
+        include: { usuario: { include: { shopping: true } } },
+      });
+      if (!session || session.expiraEm <= now() || !allowedUser(session.usuario)) throw unauthorized();
+      if (!await verifyPassword(senhaAtual, session.usuario.senhaHash)) {
+        throw new ApiError(401, 'CREDENCIAIS_INVALIDAS', 'Senha atual inválida.');
+      }
+      if (senhaAtual === novaSenha) {
+        throw new ApiError(400, 'SENHA_REPETIDA', 'A nova senha deve ser diferente da senha atual.');
+      }
+      const senhaHash = await hashPassword(novaSenha);
+      const usuario = await prisma.usuario.update({
+        where: { id: session.usuario.id },
+        data: { senhaHash, trocarSenhaObrigatoria: false },
+        include: { shopping: true },
+      });
+      return { usuario: publicUser(usuario) };
     },
 
     async logout(sessionId) {
