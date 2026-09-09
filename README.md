@@ -117,10 +117,3 @@ Essas credenciais pertencem somente ao protótipo local do frontend. O backend n
 O frontend é um protótipo funcional que usa `localStorage`; a API PostgreSQL está implementada e testada como projeto separado dentro deste monorepo. A integração direta entre ambos, a telemetria de sensores, o mapa operacional completo e o Power BI permanecem como próximas etapas.
 
 Consulte a [documentação do produto](./docs/README.md) para conhecer o escopo, as decisões técnicas e os critérios de aceite sem confundir funcionalidades planejadas com funcionalidades já entregues.
-
-## Segurança
-
-- Não inclua arquivos `.env`, tokens, senhas reais ou strings de conexão em commits.
-- Use HTTPS, CORS restritivo e configuração segura de proxy antes de publicar a API.
-- Faça backup do banco antes de aplicar migrations em ambientes compartilhados.
-- Substitua o número demonstrativo do WhatsApp antes de disponibilizar a landing page.
