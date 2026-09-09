@@ -1,4 +1,4 @@
-# VAGGU — MVP Frontend
+# VAGGU
 
 Protótipo navegável do sistema de gestão de estacionamentos da VAGGU, construído em React, TypeScript e Tailwind CSS.
 
