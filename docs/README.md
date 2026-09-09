@@ -1,33 +1,33 @@
-# VAGGU — pacote de especificação para o Codex
+# Documentação da VAGGU
 
 Versão 1.0 • 09 de setembro de 2026 • Português brasileiro
 
-Este pacote transforma as decisões da equipe em uma base de desenvolvimento orientado por especificação. “SSD” é o nome adotado aqui para a especificação solicitada; os arquivos cobrem produto, comportamento, desenho técnico, padrões de código e critérios de aceite. Não se trata apenas de um diagrama de sequência.
+Esta pasta reúne as decisões de produto, o desenho técnico, os padrões de código e os critérios de aceite do projeto. “SSD” é o nome adotado para a especificação principal; a documentação descreve tanto o que já existe quanto o destino planejado da plataforma.
 
 ## Arquivos e finalidade
 
 | Arquivo | O que contém |
 | --- | --- |
-| [AGENTS.md](AGENTS.md) | Instruções centrais de trabalho para o Codex e seus agentes. |
-| [documentacao/SSD-VAGGU.md](documentacao/SSD-VAGGU.md) | Escopo, fluxos, permissões, dados, API proposta, telemetria, Power BI e decisões pendentes. |
-| [documentacao/regras-de-codigo.md](documentacao/regras-de-codigo.md) | Português brasileiro, comentários, nomes, arquitetura, pastas, segurança e qualidade. |
-| [documentacao/regras-visuais.md](documentacao/regras-visuais.md) | Identidade da VAGGU, componentes, mapa, telões, responsividade e conferência do Figma. |
-| [documentacao/plano-e-aceite.md](documentacao/plano-e-aceite.md) | Etapas, testes concretos, trabalho com agentes e definição de pronto. |
+| [AGENTS.md](../AGENTS.md) | Instruções centrais de trabalho para o Codex e seus agentes. |
+| [SSD-VAGGU.md](SSD-VAGGU.md) | Escopo, fluxos, permissões, dados, API proposta, telemetria, Power BI e decisões pendentes. |
+| [regras-de-codigo.md](regras-de-codigo.md) | Português brasileiro, comentários, nomes, arquitetura, pastas, segurança e qualidade. |
+| [regras-visuais.md](regras-visuais.md) | Identidade da VAGGU, componentes, mapa, telões, responsividade e conferência do Figma. |
+| [plano-e-aceite.md](plano-e-aceite.md) | Etapas, testes concretos, trabalho com agentes e definição de pronto. |
 
 ## Como usar no projeto
 
-1. Extraia o pacote em uma pasta de apoio.
-2. Integre o conteúdo de `AGENTS.md` ao arquivo de mesmo nome na raiz do repositório. Se já existir, preserve as instruções válidas e concilie os conflitos; não sobrescreva sem leitura.
-3. Adicione a pasta `documentacao` ao repositório, conciliando eventuais arquivos existentes. Se a equipe usa `docs`, mantenha essa convenção e ajuste os links do `AGENTS.md`.
-4. Abra uma nova sessão do Codex na raiz do projeto e envie o prompt abaixo.
-5. O Codex deve conferir o código existente antes de implementar. O pacote documenta o que o sistema deve fazer; não atesta que essas funcionalidades já estão prontas.
+1. Leia o `AGENTS.md` da raiz antes de alterar o projeto.
+2. Consulte o SSD para entender escopo, regras de negócio e decisões pendentes.
+3. Use os guias de código e interface conforme a área modificada.
+4. Relacione cada entrega aos cenários do plano de aceite.
+5. Confira o código e os testes: documentação planejada não comprova implementação.
 
-O `AGENTS.md` funciona como ponto de entrada para as instruções do projeto. O SSD é uma referência explicitamente indicada por ele, não um arquivo que depende de reconhecimento automático pelo nome. A documentação oficial de instruções do Codex está nas [referências](documentacao/SSD-VAGGU.md#referencias).
+O `AGENTS.md` funciona como ponto de entrada para as instruções do projeto. O SSD é uma referência explicitamente indicada por ele, não um arquivo que depende de reconhecimento automático pelo nome. As fontes externas usadas na especificação estão nas [referências](SSD-VAGGU.md#referencias).
 
 ## Prompt inicial para copiar
 
 ```text
-Leia o AGENTS.md aplicável ao repositório e os arquivos de documentacao deste pacote VAGGU. Responda e documente em português brasileiro.
+Leia o AGENTS.md aplicável ao repositório e os arquivos da pasta docs. Responda e documente em português brasileiro.
 
 Primeiro inspecione o projeto existente: estrutura, package.json, lockfile, schema e migrations, autenticação, telas, testes e integrações. Produza um diagnóstico com evidências por arquivo: implementado e verificado, parcial, ausente ou não verificado. Não considere a documentação uma prova de implementação.
 

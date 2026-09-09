@@ -76,7 +76,7 @@ Esta é uma **proposta para adaptação**, não uma ordem de mover todo o reposi
 | Caminho proposto | Responsabilidade |
 | --- | --- |
 | `AGENTS.md` | Regras de trabalho e referências. |
-| `documentacao/` | Especificação, decisões, contratos, operação e identidade visual. |
+| `docs/` | Especificação, decisões, contratos, operação e identidade visual. |
 | `frontend/src/aplicacao/` | Composição, rotas, provedores e inicialização. |
 | `frontend/src/modulos/autenticacao/` | Login, sessão e troca de senha. |
 | `frontend/src/modulos/estacionamento/` | Mapa, filtros, lista e detalhe de vaga. |

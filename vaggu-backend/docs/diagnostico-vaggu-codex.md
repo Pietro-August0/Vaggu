@@ -2,7 +2,7 @@
 
 Data da revisão: 09/09/2026.
 
-Este diagnóstico compara o backend em `vaggu-backend-sqlite` com as regras da pasta `vaggu-codex`. A documentação da especificação descreve o destino do produto; só marquei como implementado o que aparece no código e nos testes.
+Este diagnóstico compara o backend em `vaggu-backend` com as regras da pasta `docs`. A documentação da especificação descreve o destino do produto; só marquei como implementado o que aparece no código e nos testes.
 
 ## Resumo executivo
 
