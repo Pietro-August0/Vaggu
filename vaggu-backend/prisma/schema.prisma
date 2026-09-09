@@ -1,0 +1,131 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+}
+
+enum Perfil {
+  VAGGU
+  SHOPPING
+}
+
+enum EstadoVaga {
+  LIVRE
+  OCUPADA
+  DESCONHECIDA
+}
+
+model Shopping {
+  id           String        @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  nome         String
+  endereco     String?
+  ativo        Boolean       @default(true)
+  criadoEm     DateTime      @default(now()) @map("criado_em")
+  usuarios     Usuario[]
+  dispositivos Dispositivo[]
+  vagas        Vaga[]
+
+  @@map("shoppings")
+}
+
+model Usuario {
+  id                       String  @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  shoppingId               String? @map("shopping_id") @db.Uuid
+  nome                     String
+  email                    String  @unique
+  telefone                 String?
+  senhaHash                String  @map("senha_hash")
+  perfil                   Perfil
+  ativo                    Boolean @default(true)
+  trocarSenhaObrigatoria   Boolean @default(false) @map("trocar_senha_obrigatoria")
+
+  shopping Shopping? @relation(fields: [shoppingId], references: [id], onDelete: Restrict)
+  sessoes  Sessao[]
+
+  @@index([shoppingId])
+  @@map("usuarios")
+}
+
+model Sessao {
+  id        String   @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  tokenHash String   @unique @map("token_hash")
+  usuarioId String   @map("usuario_id") @db.Uuid
+  criadoEm  DateTime @default(now()) @map("criado_em")
+  expiraEm  DateTime @map("expira_em")
+
+  usuario Usuario @relation(fields: [usuarioId], references: [id], onDelete: Cascade)
+
+  @@index([usuarioId])
+  @@index([expiraEm])
+  @@map("sessoes")
+}
+
+model Dispositivo {
+  id              String    @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  shoppingId      String    @map("shopping_id") @db.Uuid
+  nome            String
+  chaveApiHash    String    @map("chave_api_hash")
+  ultimoContatoEm DateTime? @map("ultimo_contato_em")
+  ativo           Boolean   @default(true)
+  shopping        Shopping  @relation(fields: [shoppingId], references: [id], onDelete: Restrict)
+  vagas           Vaga[]
+
+  // Permite a FK composta que impede ligar uma vaga a outro shopping.
+  @@unique([id, shoppingId])
+  @@index([shoppingId])
+  @@map("dispositivos")
+}
+
+model Vaga {
+  id              String          @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  shoppingId      String          @map("shopping_id") @db.Uuid
+  dispositivoId   String?         @map("dispositivo_id") @db.Uuid
+  codigo          String
+  canalSensor     String?         @map("canal_sensor")
+  estadoAtual     EstadoVaga      @default(DESCONHECIDA) @map("estado_atual")
+  ultimaLeituraEm DateTime?       @map("ultima_leitura_em")
+  ativo           Boolean         @default(true)
+  shopping        Shopping        @relation(fields: [shoppingId], references: [id], onDelete: Restrict)
+  dispositivo     Dispositivo?    @relation(fields: [dispositivoId, shoppingId], references: [id, shoppingId], onDelete: Restrict)
+  historico       HistoricoVaga[]
+
+  @@unique([shoppingId, codigo])
+  @@unique([dispositivoId, canalSensor])
+  @@index([dispositivoId, shoppingId])
+  @@map("vagas")
+}
+
+model HistoricoVaga {
+  id           String     @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  vagaId       String     @map("vaga_id") @db.Uuid
+  eventoId     String     @unique @map("evento_id")
+  estado       EstadoVaga
+  registradoEm DateTime   @default(now()) @map("registrado_em")
+  vaga         Vaga       @relation(fields: [vagaId], references: [id], onDelete: Restrict)
+
+  @@index([vagaId, registradoEm])
+  @@map("historico_vagas")
+}
+
+enum WhatsappEventStatus {
+  PROCESSANDO
+  PROCESSADO
+  FALHOU
+}
+
+model WhatsappEvento {
+  id              String              @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  metaMessageId   String              @unique @map("meta_message_id")
+  tipo            String
+  status          WhatsappEventStatus @default(PROCESSANDO)
+  tentativas      Int                 @default(0)
+  erroCodigo      String?             @map("erro_codigo")
+  recebidoEm      DateTime            @default(now()) @map("recebido_em")
+  processadoEm    DateTime?           @map("processado_em")
+  atualizadoEm    DateTime            @default(now()) @updatedAt @map("atualizado_em")
+
+  @@index([status, atualizadoEm])
+  @@map("whatsapp_eventos")
+}

@@ -1,0 +1,28 @@
+# Dependências e artefatos de build
+node_modules/
+dist/
+build/
+coverage/
+.npm-cache/
+
+# Variáveis de ambiente e arquivos locais
+.env
+.env.*
+!.env.example
+*.local
+
+# Logs e bancos locais
+*.log
+*.db
+*.db-journal
+*.db-shm
+*.db-wal
+
+# Arquivos gerados
+src/generated/
+
+# Editores e sistema operacional
+.idea/
+.vscode/
+.DS_Store
+Thumbs.db
