@@ -1,0 +1,4 @@
+interface:
+  display_name: "Start — iniciar o dia VAGGU"
+  short_description: "Revisa o plano e executa a entrega do dia na VAGGU"
+  default_prompt: "Use $start para revisar o planejamento da VAGGU e executar o pacote preparado para hoje."

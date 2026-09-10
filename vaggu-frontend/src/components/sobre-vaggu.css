@@ -1,0 +1,98 @@
+/* Escala e pesos da landing; medidas compartilhadas mantêm as conexões alinhadas. */
+.sobre-vaggu { --diametro-etapa: clamp(96px, 10vw, 136px); background: #000; color: #fff; padding: 72px 32px 80px; scroll-margin-top: 24px; }
+.sobre-conteudo { max-width: 1200px; margin: auto; }
+.sobre-vaggu h2, .sobre-vaggu h3, .sobre-vaggu h4, .sobre-vaggu p { margin: 0; }
+.sobre-vaggu h2 span, .sobre-etapa p span, .sobre-legenda { color: var(--primary); }
+.sobre-introducao { display: grid; grid-template-columns: 1fr 1.05fr; align-items: center; gap: 48px; }
+.sobre-legenda { font-size: 13px; font-weight: 400; margin-bottom: 20px !important; }
+.sobre-vaggu h2 { max-width: 490px; font-size: clamp(28px, 2.6vw, 36px); font-weight: 400; line-height: 1.22; letter-spacing: -0.035em; text-wrap: balance; }
+.sobre-descricao { margin-top: 22px !important; font-size: 16px; font-weight: 300; line-height: 1.75; color: #bdbdbd; max-width: 470px; }
+/* Os rótulos usam o mesmo centro e raio dos anéis, nunca as bordas da coluna. */
+.sobre-orbitas { --diametro-anel: clamp(230px, 20vw, 260px); position: relative; width: 100%; max-width: 540px; height: 350px; justify-self: center; }
+.sobre-aneis { position: absolute; width: var(--diametro-anel); height: var(--diametro-anel); top: 50%; left: 50%; transform: translate(-50%, -50%); display: grid; place-items: center; }
+.sobre-aneis i { position: absolute; inset: 0; border: 1px solid color-mix(in srgb, var(--primary) 45%, transparent); border-radius: 50%; animation: circular-dados 18s linear infinite; animation-play-state: paused; }
+.sobre-aneis i:nth-child(2) { inset: 28px; animation-duration: 24s; animation-delay: -8s; animation-direction: reverse; }
+.sobre-aneis i:nth-child(3) { inset: 56px; animation-duration: 14s; animation-delay: -4s; }
+.sobre-aneis i::after { content: ""; position: absolute; width: 5px; height: 5px; left: calc(50% - 2.5px); top: -3px; background: var(--primary); border-radius: 50%; box-shadow: 0 0 9px 2px #ffe10070; }
+.sobre-orbitas[data-animando="true"] .sobre-aneis i { animation-play-state: running; }
+@keyframes circular-dados { to { transform: rotate(360deg); } }
+.sobre-marca { display: grid; place-items: center; width: 100px; height: 100px; border-radius: 50%; background: var(--primary); }
+.sobre-marca img { width: 76px; height: 32px; object-fit: contain; }
+.sobre-satelite { position: absolute; left: 50%; top: 50%; transform: translate(-50%, -50%); border: 1px solid #ffffff30; border-radius: 30px; background: #f5f5f5; color: #171717; padding: 8px 14px; font-size: 11px; font-weight: 400; text-align: center; line-height: 1.4; }
+.sobre-satelite-topo { top: calc(50% - var(--diametro-anel) / 2); white-space: nowrap; }
+.sobre-satelite-base { top: calc(50% + var(--diametro-anel) / 2); white-space: nowrap; }
+.sobre-satelite-esquerda { left: calc(50% - var(--diametro-anel) / 2); width: 145px; transform: translate(calc(-100% + 8px), -50%); }
+.sobre-satelite-direita { left: calc(50% + var(--diametro-anel) / 2); width: 132px; transform: translate(-8px, -50%); }
+.sobre-movimento { position: absolute; bottom: -12px; left: 50%; transform: translateX(-50%); display: grid; place-items: center; width: 28px; height: 28px; padding: 4px; color: #a3a3a3; cursor: pointer; border-radius: 50%; }
+.sobre-movimento svg { width: 12px; height: 12px; }
+.sobre-movimento:hover { color: #fff; }
+.sobre-movimento:focus-visible { outline: 2px solid var(--primary); outline-offset: 3px; }
+.sobre-comecar { margin-top: 64px; }
+.sobre-vaggu h3 { text-align: center; font-size: clamp(23px, 2vw, 28px); font-weight: 400; letter-spacing: -0.025em; }
+.sobre-etapas { --conectar: 100%; display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 32px; padding: 0; margin: 36px 0 0; list-style: none; }
+.sobre-etapa { position: relative; display: flex; flex-direction: column; align-items: center; gap: 22px; text-align: center; }
+.sobre-etapa p { min-height: 52px; max-width: 220px; display: grid; align-content: center; font-size: 15px; font-weight: 300; line-height: 1.65; color: #d4d4d4; }
+.sobre-etapa p span { display: contents; }
+.sobre-circulo { position: relative; width: var(--diametro-etapa); height: var(--diametro-etapa); margin-top: auto; padding: 17px; border: 1px solid #ffe10070; border-radius: 50%; background: #000; }
+.sobre-circulo > * { display: grid; width: 100%; height: 100%; place-items: center; border-radius: 50%; background: var(--primary); color: #000; }
+.sobre-circulo svg { width: 42%; height: 42%; stroke-width: 1.6; }
+.sobre-circulo a:hover { background: #fff; }
+.sobre-circulo a:focus-visible { outline: 2px solid #fff; outline-offset: 6px; }
+/* O diâmetro real define a altura das linhas, inclusive acima da largura máxima. */
+.sobre-etapa:not(:last-child)::before { content: ""; position: absolute; width: calc(100% + 32px); left: 50%; bottom: calc(var(--diametro-etapa) / 2); border-top: 1px dashed #ffe10080; clip-path: inset(0 var(--conectar) 0 0); transition: clip-path 0.75s ease; transition-delay: inherit; }
+.sobre-visualiza { margin-top: 64px; }
+.sobre-painel { --conectar: 100%; position: relative; display: grid; grid-template-columns: 45% 45%; justify-content: space-between; align-items: center; min-height: 330px; margin-top: 32px; }
+.sobre-conexoes { position: absolute; width: 100%; height: 330px; pointer-events: none; overflow: visible; clip-path: inset(-25% var(--conectar) -25% 0); transition: clip-path 1.8s ease; }
+.sobre-conexoes path { fill: none; stroke: var(--primary); opacity: 0.55; stroke-width: 1; stroke-dasharray: 7 8; vector-effect: non-scaling-stroke; }
+.sobre-notebook { position: relative; margin: 0; width: 100%; }
+.sobre-notebook img { width: 100%; height: auto; max-height: 280px; object-fit: contain; }
+.sobre-notebook figcaption { font-size: 10px; color: #737373; text-align: center; margin-top: 10px; }
+.sobre-beneficios { position: relative; display: grid; grid-template-rows: repeat(3, 100px); gap: 10px; list-style: none; padding: 0; margin: 0; }
+.sobre-beneficios li { position: relative; display: flex; flex-direction: column; justify-content: center; padding: 16px 22px; border: 1px solid #ffffff14; border-radius: 12px; background: #0a0a0a; }
+.sobre-beneficios li::before { content: ""; position: absolute; left: -3px; top: calc(50% - 2px); width: 4px; height: 4px; border-radius: 50%; background: var(--primary); box-shadow: 0 0 8px 2px #ffe10050; }
+.sobre-beneficios h4 { font-size: 17px; font-weight: 400; line-height: 1.35; }
+.sobre-beneficios p { font-size: 13px; font-weight: 300; line-height: 1.65; color: #a3a3a3; margin-top: 6px; }
+@media (max-width: 1000px) {
+  .sobre-introducao { grid-template-columns: 1fr; gap: 32px; }
+  .sobre-introducao > div:first-child { max-width: 580px; }
+  .sobre-vaggu h2, .sobre-descricao { max-width: 580px; }
+  .sobre-etapas { gap: 24px; }
+  .sobre-etapa:not(:last-child)::before { width: calc(100% + 24px); }
+  .sobre-etapa p { min-height: 74px; font-size: 14px; }
+  .sobre-circulo { padding: 13px; }
+  .sobre-painel { min-height: 450px; }
+  .sobre-conexoes { height: 450px; }
+  .sobre-beneficios { grid-template-rows: repeat(3, 140px); }
+  .sobre-beneficios li { padding: 12px 16px; }
+  .sobre-beneficios h4 { font-size: 15px; }
+}
+@media (max-width: 640px) {
+  .sobre-vaggu { --diametro-etapa: 82px; padding: 48px 20px 56px; }
+  .sobre-descricao { font-size: 15px; }
+  .sobre-orbitas { --diametro-anel: clamp(180px, 58vw, 220px); height: 290px; }
+  .sobre-aneis i:nth-child(2) { inset: 22px; }
+  .sobre-aneis i:nth-child(3) { inset: 44px; }
+  .sobre-marca { width: 80px; height: 80px; }
+  .sobre-marca img { width: 62px; height: 26px; }
+  .sobre-satelite { font-size: 10px; padding: 7px 9px; }
+  .sobre-satelite-esquerda, .sobre-satelite-direita { width: 96px; transform: translate(-50%, -50%); }
+  .sobre-comecar { margin-top: 48px; }
+  .sobre-etapas { grid-template-columns: 1fr; gap: 24px; margin-top: 28px; }
+  .sobre-etapa { flex-direction: row; text-align: left; gap: 24px; }
+  .sobre-etapa p { order: 2; min-height: 0; font-size: 14px; display: block; }
+  .sobre-circulo { flex-shrink: 0; margin-top: 0; padding: 11px; }
+  .sobre-etapa:not(:last-child)::before { width: 0; height: calc(100% + 24px); left: calc(var(--diametro-etapa) / 2); top: 50%; border-top: 0; border-left: 1px dashed #ffe10080; clip-path: inset(0 0 var(--conectar) 0); }
+  .sobre-visualiza { margin-top: 44px; }
+  .sobre-painel { grid-template-columns: 1fr; gap: 30px; margin-top: 24px; }
+  .sobre-notebook { max-width: 380px; justify-self: center; }
+  .sobre-conexoes { display: none; }
+  .sobre-beneficios { margin-left: 16px; grid-template-rows: none; gap: 12px; }
+  .sobre-beneficios::before { content: ""; position: absolute; left: -16px; top: -30px; bottom: 50px; border-left: 1px dashed #ffe10080; clip-path: inset(0 0 var(--conectar) 0); transition: clip-path 1.8s ease; }
+  .sobre-beneficios li { min-height: 100px; padding: 16px; }
+  .sobre-beneficios li::after { content: ""; position: absolute; width: 16px; left: -17px; top: 50%; border-top: 1px dashed #ffe10080; }
+}
+@media (prefers-reduced-motion: reduce) {
+  .sobre-vaggu *, .sobre-vaggu *::before { animation: none !important; transition: none !important; clip-path: none !important; }
+  .sobre-movimento { display: none; }
+}
+.sobre-vaggu[data-movimento-reduzido] *, .sobre-vaggu[data-movimento-reduzido] *::before { animation: none !important; transition: none !important; clip-path: none !important; }

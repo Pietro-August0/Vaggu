@@ -1,0 +1,4 @@
+interface:
+  display_name: "End — encerrar o dia VAGGU"
+  short_description: "Registra a entrega e prepara o próximo dia da VAGGU"
+  default_prompt: "Use $end para documentar as alterações da VAGGU e preparar o próximo início no planejamento."

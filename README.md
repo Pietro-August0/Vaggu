@@ -114,6 +114,8 @@ Essas credenciais pertencem somente ao protótipo local do frontend. O backend n
 
 ## Estado atual
 
-O frontend é um protótipo funcional que usa `localStorage`; a API PostgreSQL está implementada e testada como projeto separado dentro deste monorepo. A integração direta entre ambos, a telemetria de sensores, o mapa operacional completo e o Power BI permanecem como próximas etapas.
+O frontend é um protótipo funcional que usa `localStorage`; os módulos da API PostgreSQL estão implementados separadamente neste monorepo. A revisão de 10/09 identificou pendências nos comandos de inicialização e na execução dos cenários de autenticação/gerentes, que ainda precisam ser validados com PostgreSQL de teste. A integração direta entre frontend e API, a telemetria de sensores, o mapa operacional completo e o Power BI permanecem como próximas etapas.
+
+O [planejamento do projeto](./docs/planejamento-do-projeto.md) registra o estado real, os resultados da revisão e a próxima entrega. As skills `$start` e `$end` usam esse documento para iniciar e encerrar o trabalho diário.
 
 Consulte a [documentação do produto](./docs/README.md) para conhecer o escopo, as decisões técnicas e os critérios de aceite sem confundir funcionalidades planejadas com funcionalidades já entregues.

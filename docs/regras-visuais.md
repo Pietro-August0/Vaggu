@@ -133,6 +133,16 @@ Se um asset exato vier do Figma, preservar o desenho e dar nome descritivo em po
 
 ## 10. Aceite visual
 
+### Revisão da seção Sobre — 09/09/2026
+
+A seção usa como referência complementar os arquivos `Group 132.png` e `Group 132.svg` enviados pela equipe: apresentação com anéis ao redor da marca, quatro etapas com círculos amarelos e notebook conectado aos benefícios. O componente `sobre-vaggu.tsx` reutiliza Poppins, `--primary` e os assets existentes. As linhas aparecem ao entrar na tela, com disposição vertical no celular e respeito a movimento reduzido.
+
+Os textos foram ajustados ao escopo de estacionamento: “Eventos estratégicos” e “Gestão de público” passam a “Planejamento da operação” e “Visão da ocupação”. A pedido da equipe, a legenda visível do notebook e o texto do controle de pausa foram removidos; o notebook mantém descrição alternativa de ilustração e o botão por ícone mantém nome acessível. A consulta ao contexto do nó `2022:2` retornou erro de seleção; medidas exatas e tokens do Figma continuam pendentes de confirmação. Esta revisão da apresentação não comprova implementação das integrações anunciadas.
+
+Refinamento solicitado pela equipe em 10/09: reduzir a escala e o peso da seção para acompanhar o restante da landing. Títulos usam peso 400, textos de apoio 300 e círculos das etapas têm até 136 px. Rótulos do diagrama são posicionados pelo raio dos anéis; pontos luminosos percorrem as órbitas, pausam fora da tela e oferecem controle de pausa e movimento reduzido. Referências de movimento: [Orbiting Circles](https://magicui.design/docs/components/orbiting-circles), [Moving Border](https://ui.aceternity.com/components/moving-border) e [Motion — movimento reduzido](https://motion.dev/docs/react-use-reduced-motion). Implementação própria com CSS e Motion já instalado, sem adicionar bibliotecas.
+
+A seção seguinte, `operacao-vaggu.tsx`, preserva a foto urbana e apresenta um título, explicação, benefícios de planejamento/implantação e contato pelo WhatsApp. Substitui os dois cards no rodapé de uma área alta por conteúdo alinhado à imagem; no celular, a imagem precede o texto. Essas mudanças seguem a correção explícita da equipe, não uma nova extração de medidas do Figma.
+
 - [ ] Logo e paleta da VAGGU preservadas.
 - [ ] Fontes e medidas conferidas ou pendências declaradas.
 - [ ] Nenhum texto cortado, ícone desalinhado ou elemento sobreposto.

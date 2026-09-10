@@ -13,6 +13,9 @@ Esta pasta reúne as decisões de produto, o desenho técnico, os padrões de c�
 | [regras-de-codigo.md](regras-de-codigo.md) | Português brasileiro, comentários, nomes, arquitetura, pastas, segurança e qualidade. |
 | [regras-visuais.md](regras-visuais.md) | Identidade da VAGGU, componentes, mapa, telões, responsividade e conferência do Figma. |
 | [plano-e-aceite.md](plano-e-aceite.md) | Etapas, testes concretos, trabalho com agentes e definição de pronto. |
+| [planejamento-do-projeto.md](planejamento-do-projeto.md) | Inventário verificado, revisão final, backlog, diário e pacote para o próximo início. |
+
+Para continuar o desenvolvimento, use `$start` no início do dia e `$end` no fechamento. As fontes versionadas estão em [skills/start](../skills/start/SKILL.md) e [skills/end](../skills/end/SKILL.md); a forma de instalação e o comportamento diário estão no planejamento.
 
 ## Como usar no projeto
 
