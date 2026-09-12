@@ -1,12 +1,16 @@
+// Coordena mensagens recebidas, deduplicação persistente e respostas do menu demonstrativo.
 import { flowSetupText, shouldSendTestMenu, testMenuText } from './payload.js';
 
+/** Limita tamanho e caracteres do código registrado; não armazena o corpo completo de respostas externas. */
 function safeErrorCode(error) {
   const message = error?.message || 'ERRO_DESCONHECIDO';
   return message.slice(0, 80).replace(/[^A-Z0-9_:.-]/gi, '_');
 }
 
+/** Recebe persistência e cliente de envio, mantendo as regras independentes do Express. */
 export function createWhatsappService(prisma, client, config) {
   return {
+    /** Assume o evento uma vez, responde quando habilitado e registra sucesso ou falha para reentrega. */
     async handleMessage(message) {
       const claim = await claimMessage(prisma, message);
       if (!claim.shouldProcess) return { duplicate: true };
@@ -40,6 +44,7 @@ export function createWhatsappService(prisma, client, config) {
       }
     },
 
+    /** Registra falhas de entrega sem tratá-las como mensagem de usuário nem responder automaticamente. */
     handleStatus(status) {
       if (['failed', 'undelivered'].includes(status.status)) {
         console.warn('Falha de entrega reportada pelo WhatsApp', {
@@ -52,6 +57,9 @@ export function createWhatsappService(prisma, client, config) {
   };
 }
 
+/** Usa o ID único da Meta para deduplicar; apenas eventos FALHOU podem ser retomados.
+ * Eventos presos em PROCESSANDO após queda ainda não possuem expiração automática.
+ */
 async function claimMessage(prisma, message) {
   try {
     const event = await prisma.whatsappEvento.create({
@@ -70,6 +78,7 @@ async function claimMessage(prisma, message) {
   const existing = await prisma.whatsappEvento.findUnique({ where: { metaMessageId: message.id } });
   if (existing?.status !== 'FALHOU') return { shouldProcess: false, eventId: existing?.id };
 
+  // A condição FALHOU na própria escrita permite que só uma tentativa concorrente assuma a retomada.
   const update = await prisma.whatsappEvento.updateMany({
     where: { id: existing.id, status: 'FALHOU' },
     data: {

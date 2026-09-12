@@ -1,3 +1,4 @@
+/** Lista shoppings e gera acessos de demonstração usando o estado local do navegador. */
 import {
   Building2,
   Check,
@@ -47,6 +48,7 @@ const emptyForm: NewMallInput = {
   totalSpaces: 0,
 }
 
+/** Coordena formulário, listagem e exibição da senha gerada; ainda não consulta a API. */
 export function AdminPage() {
   const { malls, createMall } = useAppStore()
   const [form, setForm] = useState<NewMallInput>(emptyForm)
@@ -58,10 +60,12 @@ export function AdminPage() {
 
   const awaitingSensors = malls.filter((mall) => !mall.sensorsConnected).length
 
+  /** Atualiza um campo mantendo a relação de tipos entre a chave e seu valor. */
   function updateField<K extends keyof NewMallInput>(key: K, value: NewMallInput[K]) {
     setForm((current) => ({ ...current, [key]: value }))
   }
 
+  /** Envia o cadastro ao contexto local e preserva o formulário quando a validação falha. */
   async function handleSubmit(event: FormEvent<HTMLFormElement>) {
     event.preventDefault()
     setFormError("")
@@ -89,6 +93,7 @@ export function AdminPage() {
     }
   }
 
+  /** Copia o acesso demonstrativo mediante clique e mostra confirmação durante dois segundos. */
   async function copyCredentials() {
     if (!generatedAccess) return
 

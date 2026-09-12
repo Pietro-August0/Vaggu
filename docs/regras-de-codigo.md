@@ -42,6 +42,10 @@ Adotar “andar” na interface; “piso” em documentos antigos é o mesmo con
 
 Comentários devem acompanhar a alteração do código. Remover comentários que ficaram falsos. Não repetir cada atribuição, narrar imports ou explicar sintaxe óbvia. Arquivos gerados, lockfiles e bibliotecas de terceiros são exceções: documentar na origem ou no guia do módulo.
 
+O [mapa do projeto](mapa-do-projeto.md) explica cada arquivo versionável, inclusive os formatos sem comentários e os componentes de origem gerada. Em toda alteração, revisar o comentário e a linha do arquivo no mapa; atualizar finalidade, relações ou caminho quando mudarem. Adições e remoções devem aparecer no mapa na mesma entrega. O estado diário continua somente no planejamento, sem criar diários por módulo.
+
+Execute `node scripts/verificar-documentacao.mjs` na raiz para detectar arquivos sem explicação, entradas removidas e duplicações. Esse comando não comprova a qualidade das descrições: revisar se uma pessoa da equipe entende o papel, a origem dos dados, os efeitos e os limites do arquivo.
+
 Exemplo ilustrativo, sem obrigar a criação deste arquivo:
 
 ```ts

@@ -8,10 +8,11 @@
     "node": ">=22.12.0 <25"
   },
   "scripts": {
-    "dev": "npm run build && node --watch dist/server.js",
+    "dev": "npm run build && node --watch dist/src/server.js",
     "build": "tsc -p tsconfig.json",
-    "start": "node dist/server.js",
+    "start": "node dist/src/server.js",
     "test": "npm run build && node --test \"dist/test/**/*.test.js\"",
+    "test:integracao": "npm run build && node --env-file=.env.teste.local --test dist/test/integracao-acessos.test.js",
     "typecheck": "tsc -p tsconfig.json --noEmit",
     "admin:create": "npm run build && node dist/scripts/create-admin.js",
     "db:validate": "prisma validate",

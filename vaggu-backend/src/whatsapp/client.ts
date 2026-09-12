@@ -1,5 +1,8 @@
+// Cliente de envio de texto pela API da Meta; recebe configuração privada e transporte substituível em testes.
+/** Cria o adaptador HTTP utilizado pelo serviço de mensagens. */
 export function createWhatsappClient(config, { fetchImpl = globalThis.fetch } = {}) {
   return {
+    /** Envia uma mensagem ao contato recebido do serviço e interrompe a espera após oito segundos. */
     async sendText(to, body) {
       if (!config.accessToken || !config.phoneNumberId || !config.apiVersion) {
         throw new Error('WHATSAPP_ENVIO_NAO_CONFIGURADO');

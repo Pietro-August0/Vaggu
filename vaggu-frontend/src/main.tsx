@@ -1,3 +1,4 @@
+/** Inicializa o React e reúne tema, navegação, mensagens e sessão autenticada das páginas. */
 import { StrictMode } from "react"
 import { createRoot } from "react-dom/client"
 import { ThemeProvider } from "next-themes"
@@ -7,18 +8,20 @@ import "./index.css"
 import { AppStoreProvider } from "@/app/app-store"
 import { ProtectedRoute } from "@/components/protected-route"
 import { Toaster } from "@/components/ui/sonner"
-import { AdminPage } from "@/pages/admin-page"
+import { AreaAutenticada } from "@/pages/area-autenticada"
+import { TrocarSenhaPage } from "@/pages/trocar-senha-page"
 import { LandingPage } from "@/pages/landing-page"
 import { LoginPage } from "@/pages/login-page"
-import { MallPanelPage } from "@/pages/mall-panel-page"
 
+/** Define as rotas públicas, a troca obrigatória e os destinos por perfil validados pela API. */
 function App() {
   return (
     <Routes>
       <Route element={<LandingPage />} path="/" />
       <Route element={<LoginPage />} path="/login" />
-      <Route element={<ProtectedRoute role="admin"><AdminPage /></ProtectedRoute>} path="/admin" />
-      <Route element={<ProtectedRoute role="shopping"><MallPanelPage /></ProtectedRoute>} path="/painel" />
+      <Route element={<TrocarSenhaPage />} path="/trocar-senha" />
+      <Route element={<ProtectedRoute role="admin"><AreaAutenticada /></ProtectedRoute>} path="/admin" />
+      <Route element={<ProtectedRoute role="shopping"><AreaAutenticada /></ProtectedRoute>} path="/painel" />
       <Route element={<Navigate replace to="/" />} path="*" />
     </Routes>
   )

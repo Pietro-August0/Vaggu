@@ -1,3 +1,5 @@
+// Ponto de entrada executável: lê a configuração, conecta os serviços e inicia o HTTP.
+// Também encerra a conexão com o banco quando o processo recebe um sinal de parada.
 import 'dotenv/config';
 import { readEnv } from './config/env.js';
 import { createPrisma } from './lib/prisma.js';
@@ -7,6 +9,7 @@ import { createWhatsappClient } from './whatsapp/client.js';
 import { createWhatsappService } from './whatsapp/service.js';
 import { createShoppingsService } from './shoppings/service.js';
 import { createContaService } from './conta/service.js';
+import { createEstruturaService } from './estrutura/service.js';
 
 const config = readEnv();
 const prisma = createPrisma(config.databaseUrl);
@@ -18,6 +21,7 @@ const app = createApp({
   whatsapp: { config: config.whatsapp, service: whatsappService },
   shoppings: createShoppingsService(prisma),
   conta: createContaService(prisma),
+  estrutura: createEstruturaService(prisma),
 });
 
 const server = app.listen(config.port, config.host, () => {
@@ -34,6 +38,7 @@ server.on('error', async (error: NodeJS.ErrnoException) => {
 });
 
 let closing = false;
+/** Impede encerramentos duplicados e limita a cinco segundos a espera por conexões abertas. */
 async function shutdown() {
   if (closing) return;
   closing = true;

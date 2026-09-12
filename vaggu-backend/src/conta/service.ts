@@ -2,6 +2,7 @@
 // perfil, shopping, e-mail e status sob regras administrativas.
 import { ApiError, publicUser } from '../auth/service.js';
 
+/** Valida um campo textual quando presente na alteração; ausência é tratada pelo chamador. */
 function validarTextoOpcional(value, nomeCampo, min = 2, max = 120) {
   if (typeof value !== 'string') {
     throw new ApiError(400, 'DADOS_INVALIDOS', `${nomeCampo} deve ser texto.`);
@@ -13,6 +14,7 @@ function validarTextoOpcional(value, nomeCampo, min = 2, max = 120) {
   return text;
 }
 
+/** Permite limpar o telefone com valor vazio e limita seu tamanho, sem impor formato internacional. */
 function validarTelefone(value) {
   if (value === null || value === undefined || value === '') return null;
   if (typeof value !== 'string') {
@@ -29,12 +31,14 @@ function validarTelefone(value) {
 // Perfil, shopping, e-mail, senhaHash e status ativo continuam sob controle do backend/Admin.
 export function createContaService(prisma) {
   return {
+    /** Consulta dados públicos da própria conta; o ID deve vir da sessão validada pela rota. */
     async buscarMinhaConta(usuarioId) {
       const usuario = await prisma.usuario.findUnique({ where: { id: usuarioId } });
       if (!usuario) throw new ApiError(401, 'NAO_AUTENTICADO', 'Sessão inválida ou expirada.');
       return { usuario: publicUser(usuario) };
     },
 
+    /** Copia somente nome e telefone para a gravação, ignorando campos de privilégio enviados no corpo. */
     async atualizarMinhaConta(usuarioId, body: Record<string, any> = {}) {
       const dados = body ?? {};
       const data: Record<string, unknown> = {};

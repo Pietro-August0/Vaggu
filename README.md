@@ -20,12 +20,11 @@ Este repositório reúne o MVP acadêmico da solução, desenvolvido como projet
 
 ### Frontend
 
-- Landing page institucional com contato pelo WhatsApp.
-- Login demonstrativo para os perfis Admin VAGGU e Shopping.
-- Área administrativa para cadastro de shopping e geração de acesso temporário.
-- Painel responsivo do shopping com navegação protegida por perfil.
-- Estados informativos para recursos que dependem da conexão com sensores.
-- Persistência local dos dados de demonstração no navegador.
+- Landing institucional; contato depende do número oficial da equipe.
+- Login integrado à API para Admin e gerente, sem contas de demonstração.
+- Troca obrigatória da senha provisória, verificação da sessão e logout no servidor.
+- Listagem real de shoppings para Admin e área de preparação para gerente.
+- Token somente em memória; recarregar a página exige novo login.
 
 ### Backend
 
@@ -74,7 +73,7 @@ npm ci
 npm run dev
 ```
 
-O Vite exibirá no terminal o endereço local da aplicação. Para validar uma entrega do frontend:
+O Vite exibirá no terminal o endereço local da aplicação. O proxy de /api usa http://127.0.0.1:3000; API_PROXY_TARGET permite alterar esse destino local. Em produção, configurar proxy reverso de /api para a API e fallback das demais rotas para index.html. VITE_WHATSAPP_NUMBER deve ser definido somente após a equipe fornecer o número oficial. Para validar uma entrega do frontend:
 
 ```bash
 npm run lint
@@ -103,18 +102,13 @@ npm test
 
 As instruções completas de configuração e os contratos da API estão no [README do backend](./vaggu-backend/README.md).
 
-## Acessos da demonstração
+## Acessos
 
-| Perfil | E-mail | Senha |
-| --- | --- | --- |
-| Admin VAGGU | `admin@vaggu.com` | `Vaggu#Admin2026` |
-| Shopping | `shopping@vaggu.com` | `Vaggu#Shopping2026` |
-
-Essas credenciais pertencem somente ao protótipo local do frontend. O backend não cria contas ou senhas reais automaticamente.
+O frontend não cria nem preenche contas. A equipe deve cadastrar o administrador pelo procedimento do backend e emitir acessos individuais aos gerentes. Nunca publicar credenciais em documentação ou na interface.
 
 ## Estado atual
 
-O frontend é um protótipo funcional que usa `localStorage`; os módulos da API PostgreSQL estão implementados separadamente neste monorepo. A revisão de 10/09 identificou pendências nos comandos de inicialização e na execução dos cenários de autenticação/gerentes, que ainda precisam ser validados com PostgreSQL de teste. A integração direta entre frontend e API, a telemetria de sensores, o mapa operacional completo e o Power BI permanecem como próximas etapas.
+A autenticação do frontend está integrada à API. Em 11/09, 47 testes do backend e 12 cenários no navegador passaram com PostgreSQL isolado. O acabamento visual do login aguarda a foto original do Figma; o MCP está conectado, mas a cota de leitura/exportação foi atingida. Cadastro administrativo na interface, operação, telemetria e Power BI continuam pendentes. Veja a [validação do login](./docs/validacao-login-2026-09-11.md).
 
 O [planejamento do projeto](./docs/planejamento-do-projeto.md) registra o estado real, os resultados da revisão e a próxima entrega. As skills `$start` e `$end` usam esse documento para iniciar e encerrar o trabalho diário.
 

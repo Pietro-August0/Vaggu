@@ -3,6 +3,7 @@
 import { Router } from 'express';
 import { requireAuth, requirePasswordReady, requirePerfil } from '../auth/middleware.js';
 
+/** Expõe cadastro/listagem de shoppings e criação/listagem de seus gerentes para o administrador. */
 export function shoppingsRoutes(auth, shoppings) {
   const router = Router();
   router.use(requireAuth(auth), requirePasswordReady, requirePerfil('VAGGU'));
@@ -13,6 +14,10 @@ export function shoppingsRoutes(auth, shoppings) {
 
   router.post('/', async (req, res) => {
     res.status(201).json(await shoppings.criarShopping(req.body));
+  });
+
+  router.patch('/:shoppingId/implantacao', async (req, res) => {
+    res.json(await shoppings.atualizarImplantacao(req.params.shoppingId, req.body));
   });
 
   router.get('/:shoppingId/gerentes', async (req, res) => {
@@ -26,6 +31,7 @@ export function shoppingsRoutes(auth, shoppings) {
   return router;
 }
 
+/** Expõe alteração individual e redefinição de senha de gerente para o administrador. */
 export function gerentesRoutes(auth, shoppings) {
   const router = Router();
   router.use(requireAuth(auth), requirePasswordReady, requirePerfil('VAGGU'));

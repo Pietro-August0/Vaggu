@@ -1,7 +1,9 @@
+// Recebe o desafio de configuração e os eventos da Meta, validando sua origem antes de processá-los.
 import { Router } from 'express';
 import { validateMetaSignature } from './signature.js';
 import { extractWhatsappEvents } from './payload.js';
 
+/** Monta o webhook; o POST depende de express.raw para preservar os bytes assinados pela Meta. */
 export function whatsappRoutes({ config, service }) {
   const router = Router();
 

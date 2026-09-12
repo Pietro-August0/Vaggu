@@ -1,3 +1,5 @@
+// Interpreta o formato externo do webhook e mantém os textos do menu demonstrativo.
+/** Extrai mensagens e status separadamente, ignorando trechos sem a estrutura esperada. */
 export function extractWhatsappEvents(payload) {
   const events = { messages: [], statuses: [] };
   if (!payload || typeof payload !== 'object' || !Array.isArray(payload.entry)) return events;
@@ -35,18 +37,21 @@ export function extractWhatsappEvents(payload) {
   return events;
 }
 
+/** Seleciona apenas o primeiro código de falha de entrega, sem guardar o conteúdo completo. */
 function firstStatusErrorCode(status) {
   const error = Array.isArray(status.errors) ? status.errors[0] : null;
   const code = error?.code;
   return code === undefined || code === null ? '' : String(code);
 }
 
+/** Reconhece saudações e MENU sem diferenciar acentos ou maiúsculas; ignora mídia. */
 export function shouldSendTestMenu(message) {
   if (message.type !== 'text') return false;
   const normalized = message.text.trim().normalize('NFD').replace(/\p{Diacritic}/gu, '').toUpperCase();
   return ['OI', 'OLA', 'MENU'].includes(normalized);
 }
 
+// Menu de demonstração: as opções ainda não executam os fluxos comerciais completos.
 export const testMenuText = 'Olá! 👋 Bem-vindo à VAGGU.\n\n'
   + 'Como podemos ajudar?\n\n'
   + '1 — Conhecer a VAGGU\n'

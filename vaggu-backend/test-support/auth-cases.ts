@@ -1,4 +1,7 @@
+// Cenários sequenciais de autenticação e isolamento, usados pelo runner com banco exclusivo.
 import assert from 'node:assert/strict';
+import type { TestContext } from 'node:test';
+import type { PrismaClient, Shopping } from '@prisma/client';
 import express from 'express';
 import request from 'supertest';
 import { createApp } from '../src/app.js';
@@ -8,10 +11,14 @@ import { requireAuth, requirePerfil, shoppingScope, loginLimiter } from '../src/
 import { createInitialAdmin } from '../src/auth/bootstrap.js';
 import { createContaService } from '../src/conta/service.js';
 
-export async function runAuthCases(t, prisma, shoppingA, shoppingB) {
+/** Verifica identidade, sessão e escopo usando somente as fixtures do banco de teste. */
+export async function runAuthCases(t: TestContext, prisma: PrismaClient, shoppingA: Shopping, shoppingB: Shopping) {
   const password = 'SenhaFicticiaSomenteTeste!';
   const senhaHash = await hashPassword(password);
-  await prisma.usuario.updateMany({ data: { senhaHash } });
+  await prisma.usuario.updateMany({
+    where: { email: { in: ['vaggu@example.com', 'shopping@example.com'] } },
+    data: { senhaHash },
+  });
   const auth = createAuthService(prisma);
   const conta = createContaService(prisma);
   const newApp = () => createApp({ checkDatabase: () => prisma.$queryRaw`SELECT 1`, auth, conta });
@@ -69,7 +76,7 @@ export async function runAuthCases(t, prisma, shoppingA, shoppingB) {
     const response = await me(adminToken).expect(200);
     assert.equal(response.body.usuario.email, 'vaggu@example.com');
     assert.deepEqual(Object.keys(response.body.usuario).sort(), [
-      'email', 'id', 'nome', 'perfil', 'shoppingId', 'telefone', 'trocarSenhaObrigatoria',
+      'ativo', 'email', 'id', 'nome', 'perfil', 'shoppingId', 'telefone', 'trocarSenhaObrigatoria',
     ]);
   });
 
@@ -219,7 +226,7 @@ export async function runAuthCases(t, prisma, shoppingA, shoppingB) {
 
   await t.test('bootstrap não sobrescreve administrador existente', async () => {
     await assert.rejects(() => createInitialAdmin(prisma, { nome: 'Outro admin', email: 'outro@example.com' }),
-      (error: any) => error.codigo === 'ADMIN_JA_EXISTE');
+      (error: unknown) => error instanceof Error && 'codigo' in error && error.codigo === 'ADMIN_JA_EXISTE');
     assert.equal(await prisma.usuario.count({ where: { perfil: 'VAGGU' } }), 1);
   });
 }

@@ -1,5 +1,8 @@
+// Converte variáveis do processo em configuração da API e valida banco e porta.
+// Segredos do WhatsApp permanecem no backend; a resposta automática exige habilitação explícita.
 import { resolveDatabaseUrl } from './database.js';
 
+/** Lê um ambiente informado ou o processo atual e falha cedo diante de configuração obrigatória inválida. */
 export function readEnv(env: NodeJS.ProcessEnv = process.env) {
   const databaseUrl = resolveDatabaseUrl(env.DATABASE_URL);
 

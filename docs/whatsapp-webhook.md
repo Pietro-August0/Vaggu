@@ -1,13 +1,13 @@
 # Webhook WhatsApp Cloud API
 
-## Arquivos alterados
+## Como o código se organiza
 
-- `src/app.ts`: registra `/api/v1/whatsapp/webhook` antes do `express.json`, usando `express.raw` somente nessa rota.
-- `src/server.ts`: cria o cliente e o serviço WhatsApp com a configuração do ambiente.
-- `src/config/env.ts`: lê variáveis do WhatsApp sem exigir credenciais de envio para inicializar.
-- `src/whatsapp/*`: valida assinatura, extrai eventos, deduplica mensagens e encapsula o envio pela API oficial.
-- `prisma/schema.prisma` e `prisma/migrations/20260909000100_whatsapp_eventos/migration.sql`: tabela técnica `whatsapp_eventos`.
-- `test/whatsapp.test.ts`: testes HTTP e de processamento simulando a Meta.
+- `vaggu-backend/src/app.ts`: registra `/api/v1/whatsapp/webhook` antes do `express.json`, usando `express.raw` somente nessa rota.
+- `vaggu-backend/src/server.ts`: cria o cliente e o serviço WhatsApp com a configuração do ambiente.
+- `vaggu-backend/src/config/env.ts`: lê variáveis do WhatsApp sem exigir credenciais de envio para inicializar.
+- `vaggu-backend/src/whatsapp/*`: valida assinatura, extrai eventos, deduplica mensagens e encapsula o envio pela API oficial.
+- `vaggu-backend/prisma/schema.prisma` e a migration inicial `20260909000300_inicial_postgresql`: tabela técnica `whatsapp_eventos`.
+- `vaggu-backend/test/whatsapp.test.ts`: testes HTTP e de processamento simulando a Meta.
 
 ## Variáveis
 
@@ -22,7 +22,7 @@ WHATSAPP_AUTO_REPLY_ENABLED=false
 
 `WHATSAPP_VERIFY_TOKEN` é um segredo criado por você e repetido no campo "Verificar token" da Meta para validar o GET. `META_APP_SECRET` é o segredo do aplicativo Meta usado para HMAC do POST. `WHATSAPP_ACCESS_TOKEN` é o token usado somente no header `Authorization` para envio de mensagens.
 
-## Rodar localmente
+## Executar o backend
 
 ```sh
 npm.cmd ci
@@ -30,6 +30,8 @@ npm.cmd run db:setup
 npm.cmd test
 npm.cmd run dev
 ```
+
+Os comandos acima são executados em `vaggu-backend`, após configurar PostgreSQL conforme [configuração](configuracao.md).
 
 Callback local: `http://127.0.0.1:3000/api/v1/whatsapp/webhook`.
 

@@ -17,17 +17,76 @@ enum EstadoVaga {
   DESCONHECIDA
 }
 
+enum TipoVaga {
+  COMUM
+  PCD
+  IDOSO
+  ELETRICA
+}
+
+enum SituacaoImplantacao {
+  NOVO_ATENDIMENTO
+  EM_ANALISE
+  DOCUMENTACAO_PENDENTE
+  APROVADO
+  EM_CONFIGURACAO
+  AGUARDANDO_INSTALACAO
+  ATIVO
+  REJEITADO
+  INATIVO
+}
+
 model Shopping {
   id           String        @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
   nome         String
   endereco     String?
   ativo        Boolean       @default(true)
+  situacaoImplantacao SituacaoImplantacao @default(EM_CONFIGURACAO) @map("situacao_implantacao")
   criadoEm     DateTime      @default(now()) @map("criado_em")
   usuarios     Usuario[]
   dispositivos Dispositivo[]
   vagas        Vaga[]
+  andares      Andar[]
+  setores      Setor[]
 
   @@map("shoppings")
+}
+
+model Andar {
+  id          String   @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  shoppingId  String   @map("shopping_id") @db.Uuid
+  nome        String
+  ordem       Int
+  imagemMapa  String?  @map("imagem_mapa")
+  revisaoMapa Int      @default(0) @map("revisao_mapa")
+  ativo       Boolean  @default(true)
+  criadoEm    DateTime @default(now()) @map("criado_em")
+  shopping    Shopping @relation(fields: [shoppingId], references: [id], onDelete: Restrict)
+  setores     Setor[]
+  vagas       Vaga[]
+
+  @@unique([id, shoppingId])
+  @@unique([shoppingId, nome])
+  @@unique([shoppingId, ordem])
+  @@index([shoppingId, ativo, ordem])
+  @@map("andares")
+}
+
+model Setor {
+  id         String   @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  shoppingId String   @map("shopping_id") @db.Uuid
+  andarId    String   @map("andar_id") @db.Uuid
+  nome       String
+  ativo      Boolean  @default(true)
+  criadoEm   DateTime @default(now()) @map("criado_em")
+  shopping   Shopping @relation(fields: [shoppingId], references: [id], onDelete: Restrict)
+  andar      Andar    @relation(fields: [andarId, shoppingId], references: [id, shoppingId], onDelete: Restrict)
+  vagas      Vaga[]
+
+  @@unique([id, shoppingId, andarId])
+  @@unique([andarId, nome])
+  @@index([shoppingId, andarId, ativo])
+  @@map("setores")
 }
 
 model Usuario {
@@ -82,18 +141,29 @@ model Vaga {
   id              String          @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
   shoppingId      String          @map("shopping_id") @db.Uuid
   dispositivoId   String?         @map("dispositivo_id") @db.Uuid
+  andarId         String?         @map("andar_id") @db.Uuid
+  setorId         String?         @map("setor_id") @db.Uuid
   codigo          String
+  tipo            TipoVaga        @default(COMUM)
+  posicaoX        Decimal?         @map("posicao_x") @db.Decimal(7, 6)
+  posicaoY        Decimal?         @map("posicao_y") @db.Decimal(7, 6)
+  largura         Decimal?         @db.Decimal(7, 6)
+  altura          Decimal?         @db.Decimal(7, 6)
+  rotacao         Decimal?         @db.Decimal(6, 2)
   canalSensor     String?         @map("canal_sensor")
   estadoAtual     EstadoVaga      @default(DESCONHECIDA) @map("estado_atual")
   ultimaLeituraEm DateTime?       @map("ultima_leitura_em")
   ativo           Boolean         @default(true)
   shopping        Shopping        @relation(fields: [shoppingId], references: [id], onDelete: Restrict)
   dispositivo     Dispositivo?    @relation(fields: [dispositivoId, shoppingId], references: [id, shoppingId], onDelete: Restrict)
+  andar           Andar?          @relation(fields: [andarId, shoppingId], references: [id, shoppingId], onDelete: Restrict)
+  setor           Setor?          @relation(fields: [setorId, shoppingId, andarId], references: [id, shoppingId, andarId], onDelete: Restrict)
   historico       HistoricoVaga[]
 
   @@unique([shoppingId, codigo])
   @@unique([dispositivoId, canalSensor])
   @@index([dispositivoId, shoppingId])
+  @@index([shoppingId, andarId, setorId, ativo])
   @@map("vagas")
 }
 

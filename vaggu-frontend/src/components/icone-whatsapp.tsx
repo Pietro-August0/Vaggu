@@ -1,3 +1,4 @@
+/** Disponibiliza o símbolo usado nos links de atendimento, sem requisições externas. */
 import type { SVGProps } from "react"
 
 /**

@@ -1,6 +1,6 @@
 // Hook para animações de scroll usando Motion
 // Gerencia variantes de animação baseadas na posição da viewport
-import { useScroll, useTransform, useMotionTemplate } from "motion/react"
+import { useScroll, useTransform } from "motion/react"
 import { useRef } from "react"
 
 export function useScrollAnimations() {

@@ -4,6 +4,9 @@ import { randomBytes } from 'node:crypto';
 import { hashPassword } from '../auth/password.js';
 import { ApiError, normalizeEmail, publicUser } from '../auth/service.js';
 
+const SITUACOES_IMPLANTACAO = new Set(['NOVO_ATENDIMENTO', 'EM_ANALISE', 'DOCUMENTACAO_PENDENTE', 'APROVADO', 'EM_CONFIGURACAO', 'AGUARDANDO_INSTALACAO', 'ATIVO', 'REJEITADO', 'INATIVO']);
+
+/** Recusa identificadores fora do formato básico esperado antes de consultar o banco. */
 function validarId(value, nomeCampo = 'id') {
   if (typeof value !== 'string' || !/^[0-9a-f-]{36}$/i.test(value)) {
     throw new ApiError(400, 'ID_INVALIDO', `Informe um ${nomeCampo} válido.`);
@@ -11,6 +14,7 @@ function validarId(value, nomeCampo = 'id') {
   return value;
 }
 
+/** Normaliza espaços externos e exige texto dentro dos limites do campo. */
 function textoObrigatorio(value, nomeCampo, min = 2, max = 120) {
   if (typeof value !== 'string') {
     throw new ApiError(400, 'DADOS_INVALIDOS', `Informe ${nomeCampo}.`);
@@ -22,6 +26,7 @@ function textoObrigatorio(value, nomeCampo, min = 2, max = 120) {
   return text;
 }
 
+/** Converte ausência em null e limita textos opcionais recebidos da API. */
 function textoOpcional(value, nomeCampo, max = 200) {
   if (value === undefined || value === null || value === '') return null;
   if (typeof value !== 'string') {
@@ -34,21 +39,25 @@ function textoOpcional(value, nomeCampo, max = 200) {
   return text || null;
 }
 
+/** Seleciona os dados cadastrais públicos e a contagem de usuários quando consultada. */
 function publicShopping(shopping) {
   return {
     id: shopping.id,
     nome: shopping.nome,
     endereco: shopping.endereco ?? null,
     ativo: shopping.ativo,
+    situacaoImplantacao: shopping.situacaoImplantacao,
     criadoEm: shopping.criadoEm,
     totalGerentes: shopping._count?.usuarios,
   };
 }
 
+/** Gera uma credencial individual aleatória, entregue apenas na criação ou redefinição. */
 function gerarSenhaProvisoria() {
   return randomBytes(18).toString('base64url');
 }
 
+/** Valida o ID e exige um shopping existente antes das operações com seus gerentes. */
 async function exigirShopping(prisma, shoppingId) {
   const id = validarId(shoppingId, 'shoppingId');
   const shopping = await prisma.shopping.findUnique({ where: { id } });
@@ -56,6 +65,7 @@ async function exigirShopping(prisma, shoppingId) {
   return shopping;
 }
 
+/** Traduz conflito de unicidade de e-mail; outros erros seguem para o tratamento geral. */
 function tratarConflitoUnico(error) {
   if (error?.code === 'P2002') {
     throw new ApiError(409, 'EMAIL_EM_USO', 'Esse e-mail já está cadastrado.');
@@ -67,6 +77,7 @@ function tratarConflitoUnico(error) {
 // nunca por cadastro público ou por dados enviados por um gerente autenticado.
 export function createShoppingsService(prisma) {
   return {
+    /** Ordena clientes ativos primeiro e inclui a quantidade de usuários de cada shopping. */
     async listarShoppings() {
       const rows = await prisma.shopping.findMany({
         orderBy: [{ ativo: 'desc' }, { nome: 'asc' }],
@@ -75,6 +86,7 @@ export function createShoppingsService(prisma) {
       return { shoppings: rows.map(publicShopping) };
     },
 
+    /** Cria somente os dados institucionais; acessos individuais são cadastrados separadamente. */
     async criarShopping(body) {
       const nome = textoObrigatorio(body?.nome, 'nome do shopping');
       const endereco = textoOpcional(body?.endereco, 'endereço');
@@ -85,6 +97,17 @@ export function createShoppingsService(prisma) {
       return { shopping: publicShopping(shopping) };
     },
 
+    /** Atualiza a etapa operacional separadamente do bloqueio institucional do shopping. */
+    async atualizarImplantacao(shoppingId, body: Record<string, unknown> = {}) {
+      const shopping = await exigirShopping(prisma, shoppingId);
+      if (typeof body.situacao !== 'string' || !SITUACOES_IMPLANTACAO.has(body.situacao)) {
+        throw new ApiError(400, 'SITUACAO_INVALIDA', 'Informe uma situação de implantação válida.');
+      }
+      const atualizado = await prisma.shopping.update({ where: { id: shopping.id }, data: { situacaoImplantacao: body.situacao } });
+      return { shopping: publicShopping(atualizado) };
+    },
+
+    /** Restringe a busca ao shopping validado e ao perfil de gerente, sem retornar credenciais. */
     async listarGerentes(shoppingId) {
       await exigirShopping(prisma, shoppingId);
       const gerentes = await prisma.usuario.findMany({
@@ -94,6 +117,7 @@ export function createShoppingsService(prisma) {
       return { gerentes: gerentes.map(publicUser) };
     },
 
+    /** Exige shopping ativo e cria uma conta com senha provisória e troca obrigatória. */
     async criarGerente(shoppingId, body) {
       const shopping = await exigirShopping(prisma, shoppingId);
       if (!shopping.ativo) throw new ApiError(409, 'SHOPPING_INATIVO', 'Reative o shopping antes de criar gerentes.');
@@ -122,6 +146,7 @@ export function createShoppingsService(prisma) {
       }
     },
 
+    /** Permite nome, telefone e bloqueio individual; preserva perfil, e-mail e vínculo existentes. */
     async atualizarGerente(gerenteId, body: Record<string, any> = {}) {
       const dados = body ?? {};
       const id = validarId(gerenteId, 'id do gerente');
@@ -141,9 +166,18 @@ export function createShoppingsService(prisma) {
       if (Object.keys(data).length === 0) {
         throw new ApiError(400, 'DADOS_INVALIDOS', 'Informe ao menos um campo permitido para alteração.');
       }
-      return { gerente: publicUser(await prisma.usuario.update({ where: { id }, data })) };
+      const usuario = await prisma.$transaction(async (tx) => {
+        const atualizado = await tx.usuario.update({ where: { id }, data });
+        // O bloqueio administrativo encerra imediatamente todas as sessões desse acesso.
+        if (data.ativo === false) {
+          await tx.sessao.deleteMany({ where: { usuarioId: id } });
+        }
+        return atualizado;
+      });
+      return { gerente: publicUser(usuario) };
     },
 
+    /** Substitui a senha e revoga todas as sessões do gerente na mesma transação. */
     async redefinirSenhaGerente(gerenteId) {
       const id = validarId(gerenteId, 'id do gerente');
       const gerente = await prisma.usuario.findUnique({ where: { id } });

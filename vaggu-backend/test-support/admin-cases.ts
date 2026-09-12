@@ -1,10 +1,14 @@
+// Cenários administrativos sequenciais, com usuários fictícios no banco exclusivo do runner.
 import assert from 'node:assert/strict';
+import type { TestContext } from 'node:test';
+import type { PrismaClient } from '@prisma/client';
 import request from 'supertest';
 import { createApp } from '../src/app.js';
 import { createAuthService } from '../src/auth/service.js';
 import { createShoppingsService } from '../src/shoppings/service.js';
 
-export async function runAdminCases(t, prisma, senhaAdmin) {
+/** Confere múltiplos gerentes, primeira senha e bloqueio individual após preparar o admin. */
+export async function runAdminCases(t: TestContext, prisma: PrismaClient, senhaAdmin: string) {
   const auth = createAuthService(prisma);
   const shoppings = createShoppingsService(prisma);
   const app = createApp({ checkDatabase: () => prisma.$queryRaw`SELECT 1`, auth, shoppings });
@@ -34,6 +38,7 @@ export async function runAdminCases(t, prisma, senhaAdmin) {
 
     assert.notEqual(gerenteA.body.senhaProvisoria, gerenteB.body.senhaProvisoria);
     assert.equal(gerenteA.body.gerente.shoppingId, shopping.id);
+    assert.equal(gerenteA.body.gerente.ativo, true);
     assert.equal(gerenteA.body.gerente.trocarSenhaObrigatoria, true);
     assert.equal(gerenteA.body.gerente.senhaHash, undefined);
 
@@ -48,6 +53,7 @@ export async function runAdminCases(t, prisma, senhaAdmin) {
     assert.equal(login.body.erro.codigo, 'CREDENCIAIS_INVALIDAS');
 
     const gerente = await prisma.usuario.findUnique({ where: { email: 'gerente.a@example.com' } });
+    assert.ok(gerente);
     const reset = await request(app).post(`/api/v1/gerentes/${gerente.id}/redefinir-senha`)
       .set(adminHeader).expect(200);
     const acessoProvisorio = await request(app).post('/api/v1/auth/login')
@@ -67,6 +73,8 @@ export async function runAdminCases(t, prisma, senhaAdmin) {
   await t.test('bloquear um gerente invalida sua sessão sem suspender outro gerente', async () => {
     const gerenteA = await prisma.usuario.findUnique({ where: { email: 'gerente.a@example.com' } });
     const gerenteB = await prisma.usuario.findUnique({ where: { email: 'gerente.b@example.com' } });
+    assert.ok(gerenteA);
+    assert.ok(gerenteB);
     const redefinicaoB = await request(app).post(`/api/v1/gerentes/${gerenteB.id}/redefinir-senha`)
       .set(adminHeader).expect(200);
     const tokenA = (await request(app).post('/api/v1/auth/login')
@@ -76,6 +84,7 @@ export async function runAdminCases(t, prisma, senhaAdmin) {
 
     await request(app).patch(`/api/v1/gerentes/${gerenteA.id}`)
       .set(adminHeader).send({ ativo: false }).expect(200);
+    assert.equal(await prisma.sessao.count({ where: { usuarioId: gerenteA.id } }), 0);
     await request(app).get('/api/v1/auth/me').set('Authorization', `Bearer ${tokenA}`).expect(401);
     const gerenteBMe = await request(app).get('/api/v1/auth/me')
       .set('Authorization', `Bearer ${tokenB}`).expect(200);

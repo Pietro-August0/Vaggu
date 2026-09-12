@@ -1,3 +1,4 @@
+/** Apresenta o cadastro demonstrativo do shopping vinculado, com análises ainda inativas. */
 import {
   Building2,
   CalendarClock,
@@ -21,6 +22,7 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/com
 import { Separator } from "@/components/ui/separator"
 import { WHATSAPP_URL } from "@/lib/constants"
 
+/** Padroniza a apresentação de um dado cadastral recebido pela página. */
 function DataRow({ icon: Icon, label, value }: { icon: typeof Building2; label: string; value: string }) {
   return (
     <div className="flex gap-3 py-4">
@@ -33,6 +35,7 @@ function DataRow({ icon: Icon, label, value }: { icon: typeof Building2; label: 
   )
 }
 
+/** Lê o shopping do contexto local; a área de gráficos é somente uma indicação de entrega futura. */
 export function MallPanelPage() {
   const { currentMall } = useAppStore()
 

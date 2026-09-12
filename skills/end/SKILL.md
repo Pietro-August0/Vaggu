@@ -19,6 +19,8 @@ Se não houve `start`, crie a entrada de fechamento com essa observação e reco
 
 ## Documentar e preparar a retomada
 
+Confira `docs/mapa-do-projeto.md` contra os arquivos alterados: comentários e descrições devem acompanhar mudanças de responsabilidade, uso e caminho. Execute `node scripts/verificar-documentacao.mjs` antes do fechamento. Registre o resultado no planejamento, sem duplicar o diário no mapa. Não recrie nem inclua ferramentas portáteis, caches ou bancos locais na entrega.
+
 1. Confira as verificações já realizadas contra o diff atual. Execute somente as verificações relevantes que faltarem; não repita uma bateria que já passou sobre o mesmo código. Registre falhas e verificações não executadas com o motivo. Fechamento não transforma pendência em aprovação.
 2. Atualize o inventário do planejamento e os estados do backlog. Marque **concluído** somente com o aceite satisfeito; código parcial ou validação externa pendente permanece **em andamento** ou **bloqueado**, conforme o impedimento.
 3. Complete a entrada do dia com objetivo, alterações e arquivos, verificações/resultados, decisões, pendências, bloqueios, situação Git e primeira ação de retomada. Preserve entradas anteriores. Em um segundo `end` no mesmo dia, atualize o fechamento existente, registrando apenas novidades.

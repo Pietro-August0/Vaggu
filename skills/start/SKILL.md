@@ -13,6 +13,8 @@ Localize a raiz pelo diretório atual e pelo Git. Confirme `AGENTS.md`, `docs/SS
 
 Leia as instruções aplicáveis, o planejamento completo e as regras/critério de aceite da entrega selecionada. Compare `git status`, diff e histórico recente com o último registro: o documento pode estar desatualizado. Não confunda “presente no código” com comportamento testado.
 
+Consulte `docs/mapa-do-projeto.md` para localizar o papel de cada arquivo. Em cada mudança, revise comentários e a descrição correspondente; atualize o mapa quando mudar finalidade, uso ou caminho e inclua/remova entradas junto dos arquivos. Antes de concluir, execute `node scripts/verificar-documentacao.mjs` e revise a clareza das descrições. Não recrie o ambiente portátil removido pela equipe; confira runtime e conexão PostgreSQL disponíveis conforme `docs/configuracao.md`.
+
 ## Abrir e executar o dia
 
 1. Obtenha a data real em `America/Sao_Paulo`. Abra uma entrada no “Registro diário” com data, estado **aberto**, pacote, objetivo e situação de entrada. Se já existir um dia aberto na mesma data, retome-o; se estiver encerrado, registre retomada e altere seu estado para **aberto**, preservando o fechamento anterior nessa entrada. Não avance a data artificialmente.

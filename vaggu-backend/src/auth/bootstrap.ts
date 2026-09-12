@@ -1,7 +1,9 @@
+// Cria o primeiro administrador por uma operação de terminal, sem cadastro público.
 import { randomBytes } from 'node:crypto';
 import { hashPassword } from './password.js';
 import { ApiError, normalizeEmail, publicUser } from './service.js';
 
+/** Valida nome/e-mail e gera uma senha; recusa um administrador já existente sem sobrescrevê-lo. */
 export async function createInitialAdmin(prisma, { nome, email: rawEmail }) {
   const email = normalizeEmail(rawEmail);
   if (typeof nome !== 'string' || nome.trim().length < 2 || nome.trim().length > 100 || !email) {

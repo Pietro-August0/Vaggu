@@ -1,290 +1,174 @@
-import {
-  createContext,
-  useContext,
-  useEffect,
-  useMemo,
-  useState,
-  type ReactNode,
-} from "react"
-
-import { DEMO_ACCOUNTS, STORAGE_KEY } from "@/lib/constants"
-import type {
-  AppData,
-  GeneratedAccess,
-  Mall,
-  NewMallInput,
-  UserAccount,
-} from "@/types/app"
+/** Controla a identidade validada pela API. Não lê contas, hashes ou permissões do navegador. */
+import { createContext, useCallback, useContext, useEffect, useRef, useState, type ReactNode } from "react"
+import { ErroApi, objeto, requisitarApi } from "@/servicos/api"
+import type { GeneratedAccess, Mall, NewMallInput, UserAccount } from "@/types/app"
 
 interface AppStoreValue {
   ready: boolean
   currentUser: UserAccount | null
   currentMall: Mall | null
   malls: Mall[]
-  login: (email: string, password: string) => Promise<UserAccount | null>
-  logout: () => void
+  erroSessao: string
+  mensagemSessao: string
+  login: (email: string, senha: string) => Promise<UserAccount>
+  logout: () => Promise<void>
+  trocarSenha: (senhaAtual: string, novaSenha: string) => Promise<UserAccount>
+  verificarSessao: () => Promise<void>
+  consultar: (caminho: string, corpo?: unknown, metodo?: "GET" | "POST" | "PATCH") => Promise<unknown>
+  atualizarMinhaConta: (nome: string, telefone: string) => Promise<UserAccount>
   createMall: (input: NewMallInput) => Promise<GeneratedAccess>
 }
 
 const AppStoreContext = createContext<AppStoreValue | null>(null)
 
-async function hashPassword(password: string) {
-  const encoded = new TextEncoder().encode(password)
-  const digest = await crypto.subtle.digest("SHA-256", encoded)
-
-  return Array.from(new Uint8Array(digest))
-    .map((byte) => byte.toString(16).padStart(2, "0"))
-    .join("")
-}
-
-function generateTemporaryPassword() {
-  const alphabet = "ABCDEFGHJKLMNPQRSTUVWXYZabcdefghijkmnopqrstuvwxyz23456789!@#"
-  const bytes = new Uint32Array(14)
-  crypto.getRandomValues(bytes)
-
-  return Array.from(bytes, (value) => alphabet[value % alphabet.length]).join("")
-}
-
-function persist(data: AppData) {
-  try {
-    localStorage.setItem(STORAGE_KEY, JSON.stringify(data))
-    return true
-  } catch {
-    return false
+/** Aceita somente o DTO público e a combinação de perfil/vínculo definida no backend. */
+function lerUsuario(dados: unknown): UserAccount {
+  const usuario = objeto(dados) ? dados.usuario : null
+  if (!objeto(usuario) || typeof usuario.id !== "string" || typeof usuario.nome !== "string"
+    || typeof usuario.email !== "string" || typeof usuario.trocarSenhaObrigatoria !== "boolean"
+    || !((usuario.perfil === "VAGGU" && usuario.shoppingId === null)
+      || (usuario.perfil === "SHOPPING" && typeof usuario.shoppingId === "string" && usuario.shoppingId.length > 0))) {
+    throw new ErroApi("RESPOSTA_INVALIDA", "Não foi possível confirmar seu acesso. Tente novamente.")
   }
-}
-
-function isAppData(value: unknown): value is AppData {
-  if (!value || typeof value !== "object") return false
-
-  const candidate = value as Partial<AppData>
-  const validUsers =
-    Array.isArray(candidate.users) &&
-    candidate.users.every(
-      (user) =>
-        typeof user?.id === "string" &&
-        typeof user.email === "string" &&
-        typeof user.passwordHash === "string" &&
-        (user.role === "admin" || user.role === "shopping"),
-    )
-  const validMalls =
-    Array.isArray(candidate.malls) &&
-    candidate.malls.every(
-      (mall) =>
-        typeof mall?.id === "string" &&
-        typeof mall.name === "string" &&
-        typeof mall.managerEmail === "string" &&
-        typeof mall.totalSpaces === "number" &&
-        typeof mall.sensorsConnected === "boolean" &&
-        typeof mall.insightsActive === "boolean",
-    )
-
-  return (
-    candidate.version === 1 &&
-    validUsers &&
-    validMalls &&
-    (candidate.sessionUserId === null || typeof candidate.sessionUserId === "string")
-  )
-}
-
-function readStoredData(): AppData | null {
-  try {
-    const value = localStorage.getItem(STORAGE_KEY)
-    if (!value) return null
-
-    const parsed: unknown = JSON.parse(value)
-    return isAppData(parsed) ? parsed : null
-  } catch {
-    return null
-  }
-}
-
-async function createSeedData(): Promise<AppData> {
-  const demoMall: Mall = {
-    id: "shopping-demo",
-    name: "Shopping VAGGU Demo",
-    cnpj: "12.345.678/0001-90",
-    address: "Av. Paulista, 1000 — São Paulo, SP",
-    managerName: "Marina Oliveira",
-    managerEmail: DEMO_ACCOUNTS.shopping.email,
-    managerPhone: "(11) 99999-9999",
-    totalSpaces: 480,
-    sensorsConnected: false,
-    insightsActive: false,
-    createdAt: new Date().toISOString(),
-  }
-
   return {
-    version: 1,
-    sessionUserId: null,
-    malls: [demoMall],
-    users: [
-      {
-        id: "admin-demo",
-        email: DEMO_ACCOUNTS.admin.email,
-        passwordHash: await hashPassword(DEMO_ACCOUNTS.admin.password),
-        role: "admin",
-      },
-      {
-        id: "shopping-user-demo",
-        email: DEMO_ACCOUNTS.shopping.email,
-        passwordHash: await hashPassword(DEMO_ACCOUNTS.shopping.password),
-        role: "shopping",
-        mallId: demoMall.id,
-      },
-    ],
+    id: usuario.id, nome: usuario.nome, email: usuario.email,
+    telefone: typeof usuario.telefone === "string" ? usuario.telefone : null,
+    role: usuario.perfil === "VAGGU" ? "admin" : "shopping",
+    mallId: typeof usuario.shoppingId === "string" ? usuario.shoppingId : undefined,
+    trocarSenhaObrigatoria: usuario.trocarSenhaObrigatoria,
   }
 }
 
+/** Mantém a sessão na aba; recarregar a página exige novo login, conforme o contrato atual. */
 export function AppStoreProvider({ children }: { children: ReactNode }) {
-  const [data, setData] = useState<AppData | null>(null)
+  const [currentUser, setCurrentUser] = useState<UserAccount | null>(null)
+  const [expiraEm, setExpiraEm] = useState(0)
+  const [erroSessao, setErroSessao] = useState("")
+  const [mensagemSessao, setMensagemSessao] = useState("")
+  const tokenAtual = useRef<string | null>(null)
+  const versao = useRef(0)
 
-  useEffect(() => {
-    let active = true
-
-    async function initialize() {
-      const stored = readStoredData()
-      const initial = stored ?? (await createSeedData())
-      if (!stored) persist(initial)
-      if (active) setData(initial)
-    }
-
-    void initialize()
-    return () => {
-      active = false
-    }
+  const limparSessao = useCallback((mensagem = "") => {
+    versao.current++
+    tokenAtual.current = null
+    setCurrentUser(null)
+    setExpiraEm(0)
+    setErroSessao("")
+    setMensagemSessao(mensagem)
   }, [])
 
-  const currentUser = useMemo(
-    () => data?.users.find((user) => user.id === data.sessionUserId) ?? null,
-    [data],
-  )
+  /** Não confunde senha atual incorreta com uma sessão revogada. */
+  const consultar = useCallback(async (caminho: string, corpo?: unknown, metodo?: "GET" | "POST" | "PATCH") => {
+    const token = tokenAtual.current
+    if (!token) throw new ErroApi("NAO_AUTENTICADO", "Entre novamente para continuar.")
+    try {
+      const dados = await requisitarApi(caminho, token, corpo, metodo)
+      if (tokenAtual.current !== token) throw new ErroApi("SESSAO_ALTERADA", "O acesso foi encerrado. Entre novamente.")
+      return dados
+    } catch (erro) {
+      if (tokenAtual.current === token && erro instanceof ErroApi) {
+        if (erro.codigo === "NAO_AUTENTICADO") limparSessao("Sua sessão expirou ou foi encerrada. Entre novamente.")
+        if (erro.codigo === "TROCA_SENHA_OBRIGATORIA") {
+          setCurrentUser(usuario => usuario ? { ...usuario, trocarSenhaObrigatoria: true } : null)
+        }
+      }
+      throw erro
+    }
+  }, [limparSessao])
 
-  const currentMall = useMemo(
-    () => data?.malls.find((mall) => mall.id === currentUser?.mallId) ?? null,
-    [currentUser, data],
-  )
+  const verificarSessao = useCallback(async () => {
+    const token = tokenAtual.current
+    if (!token) return
+    const revisao = ++versao.current
+    try {
+      const usuario = lerUsuario(await consultar("/auth/me"))
+      if (tokenAtual.current === token && versao.current === revisao) {
+        setCurrentUser(usuario)
+        setErroSessao("")
+      }
+    } catch (erro) {
+      if (tokenAtual.current === token && versao.current === revisao) {
+        setErroSessao(erro instanceof Error ? erro.message : "Não foi possível verificar seu acesso.")
+      }
+    }
+  }, [consultar])
 
-  async function login(email: string, password: string) {
-    if (!data) return null
+  useEffect(() => {
+    if (!expiraEm) return
+    const prazo = window.setTimeout(() => limparSessao("Sua sessão expirou. Entre novamente."), Math.max(0, expiraEm - Date.now()))
+    const intervalo = window.setInterval(() => { if (document.visibilityState === "visible") void verificarSessao() }, 30000)
+    const aoRetornar = () => { if (document.visibilityState === "visible") void verificarSessao() }
+    window.addEventListener("focus", aoRetornar)
+    document.addEventListener("visibilitychange", aoRetornar)
+    return () => {
+      window.clearTimeout(prazo)
+      window.clearInterval(intervalo)
+      window.removeEventListener("focus", aoRetornar)
+      document.removeEventListener("visibilitychange", aoRetornar)
+    }
+  }, [expiraEm, limparSessao, verificarSessao])
 
-    const normalizedEmail = email.trim().toLowerCase()
-    const passwordHash = await hashPassword(password)
-    const user = data.users.find(
-      (item) =>
-        item.email.toLowerCase() === normalizedEmail &&
-        item.passwordHash === passwordHash,
-    )
-
-    if (!user) return null
-
-    const next = { ...data, sessionUserId: user.id }
-    persist(next)
-    setData(next)
-    return user
+  /** Login nunca cai para dados demonstrativos caso o serviço esteja fora do ar. */
+  async function login(email: string, senha: string) {
+    const revisao = ++versao.current
+    const dados = await requisitarApi("/auth/login", undefined, { email: email.trim().toLowerCase(), senha })
+    if (!objeto(dados) || typeof dados.token !== "string" || !/^[A-Za-z0-9_-]{43}$/.test(dados.token)
+      || dados.tipo !== "Bearer" || typeof dados.expiraEm !== "string"
+      || !Number.isFinite(Date.parse(dados.expiraEm)) || Date.parse(dados.expiraEm) <= Date.now()) {
+      throw new ErroApi("RESPOSTA_INVALIDA", "Não foi possível confirmar seu acesso. Tente novamente.")
+    }
+    const usuario = lerUsuario(await requisitarApi("/auth/me", dados.token))
+    if (revisao !== versao.current) throw new ErroApi("SESSAO_ALTERADA", "Tente entrar novamente.")
+    tokenAtual.current = dados.token
+    setCurrentUser(usuario)
+    setExpiraEm(Date.parse(dados.expiraEm))
+    setErroSessao("")
+    setMensagemSessao("")
+    return usuario
   }
 
-  function logout() {
-    if (!data) return
-    const next = { ...data, sessionUserId: null }
-    persist(next)
-    setData(next)
+  /** A navegação só anuncia saída após a revogação confirmada ou sessão já inválida. */
+  async function logout() {
+    if (!tokenAtual.current) return
+    try {
+      await consultar("/auth/logout", {})
+      limparSessao()
+    } catch (erro) {
+      if (erro instanceof ErroApi && erro.codigo === "NAO_AUTENTICADO") return
+      throw erro
+    }
   }
 
-  async function createMall(input: NewMallInput) {
-    if (!data) throw new Error("O protótipo ainda está carregando.")
-
-    const cleanedInput: NewMallInput = {
-      ...input,
-      name: input.name.trim(),
-      cnpj: input.cnpj.trim(),
-      address: input.address.trim(),
-      managerName: input.managerName.trim(),
-      managerEmail: input.managerEmail.trim(),
-      managerPhone: input.managerPhone.trim(),
-      totalSpaces: Number(input.totalSpaces),
-    }
-    const requiredText = [
-      cleanedInput.name,
-      cleanedInput.cnpj,
-      cleanedInput.address,
-      cleanedInput.managerName,
-      cleanedInput.managerEmail,
-      cleanedInput.managerPhone,
-    ]
-
-    if (requiredText.some((value) => !value)) {
-      throw new Error("Preencha todos os dados do shopping e do responsável.")
-    }
-    if (cleanedInput.cnpj.replace(/\D/g, "").length !== 14) {
-      throw new Error("Informe um CNPJ com 14 dígitos.")
-    }
-    const phoneLength = cleanedInput.managerPhone.replace(/\D/g, "").length
-    if (phoneLength < 10 || phoneLength > 13) {
-      throw new Error("Informe um telefone ou WhatsApp válido, com DDD.")
-    }
-    if (!/^\S+@\S+\.\S+$/.test(cleanedInput.managerEmail)) {
-      throw new Error("Informe um e-mail corporativo válido.")
-    }
-    if (!Number.isInteger(cleanedInput.totalSpaces) || cleanedInput.totalSpaces < 1) {
-      throw new Error("O total previsto de vagas deve ser um número inteiro maior que zero.")
-    }
-
-    const normalizedEmail = cleanedInput.managerEmail.toLowerCase()
-    if (data.users.some((user) => user.email.toLowerCase() === normalizedEmail)) {
-      throw new Error("Já existe um acesso associado a este e-mail.")
-    }
-
-    const id = crypto.randomUUID()
-    const temporaryPassword = generateTemporaryPassword()
-    const mall: Mall = {
-      ...cleanedInput,
-      id,
-      managerEmail: normalizedEmail,
-      sensorsConnected: false,
-      insightsActive: false,
-      createdAt: new Date().toISOString(),
-    }
-    const user: UserAccount = {
-      id: crypto.randomUUID(),
-      email: normalizedEmail,
-      passwordHash: await hashPassword(temporaryPassword),
-      role: "shopping",
-      mallId: id,
-    }
-    const next: AppData = {
-      ...data,
-      malls: [mall, ...data.malls],
-      users: [...data.users, user],
-    }
-
-    persist(next)
-    setData(next)
-    return { mall, email: normalizedEmail, temporaryPassword }
+  async function trocarSenha(senhaAtual: string, novaSenha: string) {
+    const usuario = lerUsuario(await consultar("/auth/change-password", { senhaAtual, novaSenha }))
+    versao.current++
+    setCurrentUser(usuario)
+    setErroSessao("")
+    return usuario
   }
 
-  return (
-    <AppStoreContext.Provider
-      value={{
-        ready: Boolean(data),
-        currentUser,
-        currentMall,
-        malls: data?.malls ?? [],
-        login,
-        logout,
-        createMall,
-      }}
-    >
-      {children}
-    </AppStoreContext.Provider>
-  )
+  /** Atualiza apenas os campos pessoais aceitos pelo backend e sincroniza a identidade exibida. */
+  async function atualizarMinhaConta(nome: string, telefone: string) {
+    const usuario = lerUsuario(await consultar("/minha-conta", { nome, telefone }, "PATCH"))
+    setCurrentUser(usuario)
+    return usuario
+  }
+
+  /** Compatibilidade temporária com a antiga tela: nunca cria contas locais como alternativa à API. */
+  async function createMall(_input: NewMallInput): Promise<GeneratedAccess> {
+    void _input
+    throw new Error("O cadastro de shoppings estará disponível após a integração administrativa.")
+  }
+
+  return <AppStoreContext.Provider value={{
+    ready: true, currentUser, currentMall: null, malls: [], erroSessao, mensagemSessao,
+    login, logout, trocarSenha, verificarSessao, consultar, atualizarMinhaConta, createMall,
+  }}>{children}</AppStoreContext.Provider>
 }
 
+/** Exige o provedor para evitar acesso fora do ciclo de sessão. */
 export function useAppStore() {
-  const context = useContext(AppStoreContext)
-  if (!context) {
-    throw new Error("useAppStore deve ser usado dentro de AppStoreProvider")
-  }
-
-  return context
+  const contexto = useContext(AppStoreContext)
+  if (!contexto) throw new Error("useAppStore requer AppStoreProvider.")
+  return contexto
 }

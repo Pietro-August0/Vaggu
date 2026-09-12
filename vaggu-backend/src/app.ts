@@ -1,3 +1,5 @@
+// Monta a API Express, suas rotas e respostas de erro, sem abrir uma porta de rede.
+// Os serviços são recebidos do servidor ou substituídos por simuladores nos testes.
 import express, { type ErrorRequestHandler } from 'express';
 import helmet from 'helmet';
 import { authRoutes } from './auth/routes.js';
@@ -5,6 +7,7 @@ import { ApiError } from './auth/service.js';
 import { whatsappRoutes } from './whatsapp/routes.js';
 import { gerentesRoutes, shoppingsRoutes } from './shoppings/routes.js';
 import { contaRoutes } from './conta/routes.js';
+import { estruturaAdminRoutes, estruturaGerenteRoutes } from './estrutura/routes.js';
 
 type AppServices = {
   checkDatabase: () => Promise<unknown> | unknown;
@@ -12,13 +15,15 @@ type AppServices = {
   whatsapp?: any;
   shoppings?: any;
   conta?: any;
+  estrutura?: any;
 };
 
 // Injeção da consulta facilita testar HTTP sem um banco real.
-export function createApp({ checkDatabase, auth, whatsapp, shoppings, conta }: AppServices) {
+export function createApp({ checkDatabase, auth, whatsapp, shoppings, conta, estrutura }: AppServices) {
   const app = express();
   app.disable('x-powered-by');
   app.use(helmet());
+  // A assinatura da Meta depende dos bytes originais, antes da conversão para JSON.
   if (whatsapp) {
     app.use('/api/v1/whatsapp/webhook', express.raw({ type: 'application/json', limit: '64kb' }), whatsappRoutes(whatsapp));
   }
@@ -50,6 +55,10 @@ export function createApp({ checkDatabase, auth, whatsapp, shoppings, conta }: A
     app.use('/api/v1/shoppings', shoppingsRoutes(auth, shoppings));
     app.use('/api/v1/gerentes', gerentesRoutes(auth, shoppings));
   }
+  if (auth && estrutura) {
+    app.use('/api/v1/estacionamento/estrutura', estruturaGerenteRoutes(auth, estrutura));
+    app.use('/api/v1', estruturaAdminRoutes(auth, estrutura));
+  }
 
   app.use((_req, res) => {
     res.status(404).json({
@@ -57,6 +66,7 @@ export function createApp({ checkDatabase, auth, whatsapp, shoppings, conta }: A
     });
   });
 
+  // Só erros de domínio conhecidos podem expor sua mensagem; falhas internas recebem texto genérico.
   const errorHandler: ErrorRequestHandler = (error: any, _req, res, _next) => {
     if (error instanceof ApiError) {
       return res.status(error.status).json({ erro: { codigo: error.codigo, mensagem: error.message } });

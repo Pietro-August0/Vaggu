@@ -3,6 +3,7 @@
 import { Router } from 'express';
 import { requireAuth } from '../auth/middleware.js';
 
+/** Monta consulta e edição pessoal usando exclusivamente o ID obtido na sessão autenticada. */
 export function contaRoutes(auth, conta) {
   const router = Router();
   router.use(requireAuth(auth));

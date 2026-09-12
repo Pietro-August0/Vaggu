@@ -3,7 +3,9 @@ export type UserRole = "admin" | "shopping"
 export interface UserAccount {
   id: string
   email: string
-  passwordHash: string
+  nome: string
+  trocarSenhaObrigatoria: boolean
+  telefone?: string | null
   role: UserRole
   mallId?: string
 }

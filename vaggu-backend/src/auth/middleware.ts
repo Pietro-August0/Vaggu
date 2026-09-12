@@ -2,6 +2,7 @@
 // a partir da sessão validada, nunca de filtros enviados pelo navegador.
 import { ApiError } from './service.js';
 
+/** Valida o Bearer e disponibiliza a identidade confirmada apenas durante esta requisição. */
 export function requireAuth(auth) {
   return async (req, res, next) => {
     res.locals.auth = await auth.authenticate(req.get('Authorization'));
@@ -9,6 +10,7 @@ export function requireAuth(auth) {
   };
 }
 
+/** Autoriza somente o perfil exigido pela rota, após a autenticação. */
 export function requirePerfil(perfil) {
   return (_req, res, next) => {
     if (!res.locals.auth) throw new ApiError(401, 'NAO_AUTENTICADO', 'Faça login para continuar.');
@@ -19,6 +21,7 @@ export function requirePerfil(perfil) {
   };
 }
 
+/** Bloqueia áreas protegidas enquanto o usuário ainda usa a senha provisória. */
 export function requirePasswordReady(_req, res, next) {
   const user = res.locals.auth?.usuario;
   if (!user) throw new ApiError(401, 'NAO_AUTENTICADO', 'Faça login para continuar.');

@@ -16,6 +16,7 @@ import { Card, CardContent } from "@/components/ui/card"
 import { useScrollReveal } from "@/hooks/use-scroll-reveal"
 import { WHATSAPP_URL } from "@/lib/constants"
 
+/** Reúne conteúdo comercial estático, imagens e animações; o contato usa o link compartilhado. */
 export function LandingPage() {
   useScrollReveal()
 

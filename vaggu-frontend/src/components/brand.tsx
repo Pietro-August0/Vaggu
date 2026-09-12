@@ -1,7 +1,9 @@
+/** Reutiliza os arquivos de marca publicados em public/assets nos links para a página inicial. */
 import { Link } from "react-router-dom"
 
 import { cn } from "@/lib/utils"
 
+/** Escolhe a marca clara com inverted; className permite ajustar o tamanho no contexto. */
 export function Brand({
   className,
   inverted = false,

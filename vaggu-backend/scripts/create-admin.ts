@@ -1,3 +1,4 @@
+// Comando interativo para criar o primeiro administrador e exibir a senha gerada uma única vez no terminal.
 import 'dotenv/config';
 import { createInterface } from 'node:readline/promises';
 import { stdin, stdout } from 'node:process';

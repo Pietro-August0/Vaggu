@@ -3,6 +3,7 @@
 import { Router } from 'express';
 import { loginLimiter, requireAuth } from './middleware.js';
 
+/** Liga login, consulta da identidade, troca de senha e logout ao serviço, impedindo cache das respostas. */
 export function authRoutes(auth) {
   const router = Router();
   router.use((_req, res, next) => { res.set('Cache-Control', 'no-store'); next(); });

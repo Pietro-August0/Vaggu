@@ -1,3 +1,4 @@
+/** Compartilha cabeçalho, menu responsivo e saída da sessão entre os painéis autenticados. */
 import type { LucideIcon } from "lucide-react"
 import {
   Building2,
@@ -7,7 +8,7 @@ import {
   Menu,
   MessageCircle,
 } from "lucide-react"
-import type { ReactNode } from "react"
+import { useState, type ReactNode } from "react"
 import { Link, useLocation, useNavigate } from "react-router-dom"
 
 import { useAppStore } from "@/app/app-store"
@@ -30,6 +31,7 @@ interface NavItem {
   icon: LucideIcon
 }
 
+/** Exibe os atalhos recebidos e destaca aquele cujo endereço coincide com a rota atual. */
 function Navigation({ items }: { items: NavItem[] }) {
   const { pathname } = useLocation()
 
@@ -62,6 +64,7 @@ function Navigation({ items }: { items: NavItem[] }) {
   )
 }
 
+/** Recebe títulos e conteúdo da página; escolhe os atalhos pelo perfil do contexto autenticado. */
 export function DashboardShell({
   title,
   eyebrow,
@@ -73,14 +76,26 @@ export function DashboardShell({
 }) {
   const { currentUser, logout } = useAppStore()
   const navigate = useNavigate()
+  const [saindo, setSaindo] = useState(false)
+  const [erroSaida, setErroSaida] = useState("")
   const isAdmin = currentUser?.role === "admin"
   const navItems: NavItem[] = isAdmin
     ? [{ label: "Shoppings", href: "/admin", icon: Building2 }]
     : [{ label: "Visão geral", href: "/painel", icon: LayoutDashboard }]
 
-  function handleLogout() {
-    logout()
-    navigate("/login", { replace: true })
+  /** Limpa a sessão na API e substitui a rota atual pela tela de entrada. */
+  async function handleLogout() {
+    if (saindo) return
+    setSaindo(true)
+    setErroSaida("")
+    try {
+      await logout()
+      navigate("/login", { replace: true })
+    } catch (error) {
+      setErroSaida(error instanceof Error ? error.message : "Não foi possível encerrar a sessão. Tente novamente.")
+    } finally {
+      setSaindo(false)
+    }
   }
 
   const sideContent = (
@@ -93,7 +108,7 @@ export function DashboardShell({
       </div>
       <Navigation items={navItems} />
       <div className="mt-auto grid gap-2 pt-8">
-        {!isAdmin && (
+        {!isAdmin && WHATSAPP_URL && (
           <Button asChild className="justify-start gap-3" variant="outline">
             <a href={WHATSAPP_URL} rel="noreferrer" target="_blank">
               <MessageCircle className="size-4" aria-hidden="true" />
@@ -104,11 +119,12 @@ export function DashboardShell({
         )}
         <Button
           className="justify-start gap-3 text-neutral-400 hover:bg-neutral-900 hover:text-white"
-          onClick={handleLogout}
+          disabled={saindo}
+          onClick={() => void handleLogout()}
           variant="ghost"
         >
           <LogOut className="size-4" aria-hidden="true" />
-          Sair
+          {saindo ? "Saindo..." : "Sair"}
         </Button>
       </div>
     </>
@@ -143,11 +159,11 @@ export function DashboardShell({
             </div>
             <div className="ml-auto hidden items-center gap-2 rounded-full border border-black/10 bg-white px-3 py-2 text-xs font-medium text-neutral-600 sm:flex">
               <span className="size-2 rounded-full bg-[#ffe100]" aria-hidden="true" />
-              Protótipo local
+              Acesso autenticado
             </div>
           </div>
         </header>
-        <main className="px-4 py-8 sm:px-6 lg:px-10 lg:py-10">{children}</main>
+        <main className="px-4 py-8 sm:px-6 lg:px-10 lg:py-10">{erroSaida && <p role="alert" className="mb-5 text-red-700">{erroSaida}</p>}{children}</main>
       </div>
     </div>
   )

@@ -1,3 +1,4 @@
+// Configura a CLI do Prisma: schema, migrations e conexão obtida do ambiente, sem credenciais no código.
 import 'dotenv/config';
 import { defineConfig } from 'prisma/config';
 
