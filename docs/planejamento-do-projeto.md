@@ -193,4 +193,4 @@ Se a lista de skills da conversa atual ainda não refletir a instalação, abrir
 - **Resultado:** P04 concluído. P05 está pronto para a próxima retomada.
 - **Limites:** ainda não há importação CSV/XLSX, ingestão de sensores, atualização em tempo real ou telão. O mapa atual usa uma base neutra e posições proporcionais; uma planta ilustrada poderá ser associada depois. Nenhum dado exibido foi apresentado como leitura real de sensor.
 - **Ambiente:** PostgreSQL local permanece iniciado para uso da equipe; o Vite temporário de validação foi encerrado. O dia continua aberto até pedido de fechamento.
-- **Git:** alterações locais preservadas, sem commit, push ou deploy.
+- **Git:** P01–P04 e a reorganização documental publicados na `main` no commit `dc316b2`. Nenhum deploy foi solicitado.
