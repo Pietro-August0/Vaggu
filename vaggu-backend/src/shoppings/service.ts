@@ -5,6 +5,8 @@ import { hashPassword } from '../auth/password.js';
 import { ApiError, normalizeEmail, publicUser } from '../auth/service.js';
 
 const SITUACOES_IMPLANTACAO = new Set(['NOVO_ATENDIMENTO', 'EM_ANALISE', 'DOCUMENTACAO_PENDENTE', 'APROVADO', 'EM_CONFIGURACAO', 'AGUARDANDO_INSTALACAO', 'ATIVO', 'REJEITADO', 'INATIVO']);
+const PRAZO_DESFAZER_EXCLUSAO_MS = 7_000;
+const MARGEM_TRANSPORTE_DESFAZER_MS = 1_000;
 
 /** Recusa identificadores fora do formato básico esperado antes de consultar o banco. */
 function validarId(value, nomeCampo = 'id') {
@@ -75,13 +77,17 @@ function tratarConflitoUnico(error) {
 
 // Regras administrativas da parceria: shoppings e gerentes nascem pelo Admin,
 // nunca por cadastro público ou por dados enviados por um gerente autenticado.
-export function createShoppingsService(prisma) {
+export function createShoppingsService(prisma, { now = () => new Date() } = {}) {
+  const contagemGerentesVisiveis = {
+    select: { usuarios: { where: { perfil: 'SHOPPING', excluidoEm: null } } },
+  };
+
   return {
     /** Ordena clientes ativos primeiro e inclui a quantidade de usuários de cada shopping. */
     async listarShoppings() {
       const rows = await prisma.shopping.findMany({
         orderBy: [{ ativo: 'desc' }, { nome: 'asc' }],
-        include: { _count: { select: { usuarios: true } } },
+        include: { _count: contagemGerentesVisiveis },
       });
       return { shoppings: rows.map(publicShopping) };
     },
@@ -92,7 +98,7 @@ export function createShoppingsService(prisma) {
       const endereco = textoOpcional(body?.endereco, 'endereço');
       const shopping = await prisma.shopping.create({
         data: { nome, endereco },
-        include: { _count: { select: { usuarios: true } } },
+        include: { _count: contagemGerentesVisiveis },
       });
       return { shopping: publicShopping(shopping) };
     },
@@ -111,7 +117,7 @@ export function createShoppingsService(prisma) {
     async listarGerentes(shoppingId) {
       await exigirShopping(prisma, shoppingId);
       const gerentes = await prisma.usuario.findMany({
-        where: { shoppingId, perfil: 'SHOPPING' },
+        where: { shoppingId, perfil: 'SHOPPING', excluidoEm: null },
         orderBy: [{ ativo: 'desc' }, { nome: 'asc' }],
       });
       return { gerentes: gerentes.map(publicUser) };
@@ -129,19 +135,22 @@ export function createShoppingsService(prisma) {
       const senha = gerarSenhaProvisoria();
       const senhaHash = await hashPassword(senha);
       try {
-        const usuario = await prisma.usuario.create({
-          data: {
-            nome,
-            email,
-            telefone,
-            senhaHash,
-            perfil: 'SHOPPING',
-            shoppingId: shopping.id,
-            trocarSenhaObrigatoria: true,
-          },
-        });
+        const existente = await prisma.usuario.findUnique({ where: { email } });
+        if (existente && (existente.perfil !== 'SHOPPING' || !existente.excluidoEm
+          || now().getTime() <= existente.excluidoEm.getTime() + PRAZO_DESFAZER_EXCLUSAO_MS + MARGEM_TRANSPORTE_DESFAZER_MS)) {
+          throw new ApiError(409, 'EMAIL_EM_USO', 'Esse e-mail já está cadastrado.');
+        }
+        const data = {
+          nome, email, telefone, senhaHash, perfil: 'SHOPPING', shoppingId: shopping.id,
+          ativo: true, trocarSenhaObrigatoria: true, excluidoEm: null, ativoAntesExclusao: null,
+        };
+        // Após o prazo de desfazer, o mesmo e-mail pode ganhar um novo acesso sem duplicar a identidade.
+        const usuario = existente
+          ? await prisma.usuario.update({ where: { id: existente.id }, data })
+          : await prisma.usuario.create({ data });
         return { gerente: publicUser(usuario), senhaProvisoria: senha };
       } catch (error) {
+        if (error instanceof ApiError) throw error;
         tratarConflitoUnico(error);
       }
     },
@@ -151,7 +160,7 @@ export function createShoppingsService(prisma) {
       const dados = body ?? {};
       const id = validarId(gerenteId, 'id do gerente');
       const gerente = await prisma.usuario.findUnique({ where: { id } });
-      if (!gerente || gerente.perfil !== 'SHOPPING') {
+      if (!gerente || gerente.perfil !== 'SHOPPING' || gerente.excluidoEm) {
         throw new ApiError(404, 'GERENTE_NAO_ENCONTRADO', 'Gerente não encontrado.');
       }
       const data: Record<string, unknown> = {};
@@ -181,7 +190,7 @@ export function createShoppingsService(prisma) {
     async redefinirSenhaGerente(gerenteId) {
       const id = validarId(gerenteId, 'id do gerente');
       const gerente = await prisma.usuario.findUnique({ where: { id } });
-      if (!gerente || gerente.perfil !== 'SHOPPING') {
+      if (!gerente || gerente.perfil !== 'SHOPPING' || gerente.excluidoEm) {
         throw new ApiError(404, 'GERENTE_NAO_ENCONTRADO', 'Gerente não encontrado.');
       }
       const senha = gerarSenhaProvisoria();
@@ -195,6 +204,50 @@ export function createShoppingsService(prisma) {
         return updated;
       });
       return { gerente: publicUser(usuario), senhaProvisoria: senha };
+    },
+
+    /** Oculta o gerente, encerra suas sessões e abre uma janela curta para desfazer. */
+    async excluirGerente(gerenteId) {
+      const id = validarId(gerenteId, 'id do gerente');
+      const gerente = await prisma.usuario.findUnique({ where: { id } });
+      if (!gerente || gerente.perfil !== 'SHOPPING' || gerente.excluidoEm) {
+        throw new ApiError(404, 'GERENTE_NAO_ENCONTRADO', 'Gerente não encontrado.');
+      }
+      const excluidoEm = now();
+      const usuario = await prisma.$transaction(async (tx) => {
+        const atualizado = await tx.usuario.update({
+          where: { id },
+          data: { ativoAntesExclusao: gerente.ativo, ativo: false, excluidoEm },
+        });
+        await tx.sessao.deleteMany({ where: { usuarioId: id } });
+        return atualizado;
+      });
+      return {
+        gerente: publicUser(usuario),
+        desfazerAte: new Date(excluidoEm.getTime() + PRAZO_DESFAZER_EXCLUSAO_MS),
+      };
+    },
+
+    /** Restaura o estado anterior somente dentro da janela informada na exclusão. */
+    async desfazerExclusaoGerente(gerenteId) {
+      const id = validarId(gerenteId, 'id do gerente');
+      const gerente = await prisma.usuario.findUnique({ where: { id } });
+      if (!gerente || gerente.perfil !== 'SHOPPING' || !gerente.excluidoEm) {
+        throw new ApiError(404, 'EXCLUSAO_NAO_ENCONTRADA', 'Não há uma exclusão para desfazer.');
+      }
+      // A margem absorve o tempo da requisição; o aviso continua visível por sete segundos.
+      if (now().getTime() > gerente.excluidoEm.getTime() + PRAZO_DESFAZER_EXCLUSAO_MS + MARGEM_TRANSPORTE_DESFAZER_MS) {
+        throw new ApiError(409, 'PRAZO_DESFAZER_EXPIRADO', 'O prazo de sete segundos para desfazer terminou.');
+      }
+      const usuario = await prisma.usuario.update({
+        where: { id },
+        data: {
+          ativo: gerente.ativoAntesExclusao ?? true,
+          excluidoEm: null,
+          ativoAntesExclusao: null,
+        },
+      });
+      return { gerente: publicUser(usuario) };
     },
   };
 }

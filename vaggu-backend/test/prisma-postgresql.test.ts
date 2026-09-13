@@ -28,3 +28,11 @@ test('migration P04 preserva hierarquia, posição proporcional e revisão do ma
   assert.match(sql, /vagas_posicao_check/);
   assert.match(sql, /revisao_mapa/);
 });
+
+test('migration de exclusão reversível preserva gerente e estado anterior', () => {
+  const sql = readFileSync(join(projectRoot, 'prisma/migrations/20260912000200_exclusao_reversivel_gerentes/migration.sql'), 'utf8');
+  assert.match(sql, /"excluido_em" TIMESTAMP\(3\)/);
+  assert.match(sql, /"ativo_antes_exclusao" BOOLEAN/);
+  assert.match(sql, /usuarios_exclusao_check/);
+  assert.doesNotMatch(sql, /DELETE\s+FROM\s+"usuarios"/i);
+});

@@ -1,10 +1,10 @@
 # VAGGU — planejamento e continuidade do projeto
 
-Última atualização: **12/09/2026**, fuso **America/Sao_Paulo**. A revisão da landing e seu fechamento permanecem atribuídos a **09/09/2026**, conforme solicitado. Base de P01: `c127b5e`; registros das entregas na seção 7. Este documento registra evidências e orienta o trabalho diário; não substitui o [SSD](SSD-VAGGU.md) nem os [critérios de aceite](plano-e-aceite.md).
+Última atualização: **13/09/2026**, fuso **America/Sao_Paulo**. A revisão da landing e seu fechamento permanecem atribuídos a **09/09/2026**, conforme solicitado. Base de P01: `c127b5e`; registros das entregas na seção 7. Este documento registra evidências e orienta o trabalho diário; não substitui o [SSD](SSD-VAGGU.md) nem os [critérios de aceite](plano-e-aceite.md).
 
 ## 1. Situação atual
 
-A autenticação do frontend usa a API real: login, identidade, primeira senha, revogação e expiração. Os acessos demonstrativos foram removidos. O Admin configura shoppings, gerentes, andares, setores, vagas, categorias e posições no mapa. O gerente consulta o mapa do próprio shopping, alterna andares e localiza vagas. Telemetria, telões e Power BI continuam pendentes.
+A autenticação do frontend usa a API real: login, identidade, primeira senha, revogação e expiração. A senha definitiva possui política explícita e erros por campo na API e na interface. Os acessos demonstrativos foram removidos. O Admin configura shoppings, gerentes, andares, setores, vagas, categorias e posições no mapa. O gerente consulta o mapa do próprio shopping, alterna andares e localiza vagas. Telemetria, telões e Power BI continuam pendentes.
 
 P01 foi concluído em 10/09 e P02 em 11/09, incluindo autenticação e acabamento visual. P03 foi concluído em 12/09 com gestão administrativa, vários gerentes e Minha conta. P04 foi concluído em 12/09 com estrutura e mapa validados em PostgreSQL real e no navegador. A base local está verificável; o sistema ainda não está liberado para operação com clientes. Depois, prosseguir para P05.
 
@@ -19,7 +19,7 @@ Classificações: **verificado** exige execução do comportamento indicado; **p
 | Movimento e responsividade da seção Sobre | Verificado durante esta sessão | Pontos percorrem os anéis, pausam fora da tela e por controle do usuário; movimento reduzido desativa a animação. Conexões das etapas e benefícios acompanham o layout. Conferências entre 320 e 1440 px registradas na sessão. |
 | Seção abaixo do Sobre | Verificado | [Operação VAGGU](../vaggu-frontend/src/components/operacao-vaggu.tsx): foto urbana, título, explicação, benefícios e contato. Conteúdo usa hierarquia mais leve e altura ajustada. |
 | Remoção das legendas | Verificado novamente nesta revisão | Não há legenda visível do notebook nem texto de pausa. Permanece botão por ícone com nome acessível; o `alt` do notebook informa que é ilustração. |
-| Login e destinos autenticados | Integração verificada em 11/09 | API real, token em memória, primeira senha e logout; sem contas locais. Telas antigas preservadas fora das rotas. Cadastro na interface continua pendente. |
+| Login e destinos autenticados | Integração verificada e política de senha reforçada em 13/09 | API real, token em memória, primeira senha e logout; sem contas locais. Troca exige seis critérios, mostra checklist, olhos independentes e erros por campo. Cadastro na interface continua pendente. |
 | Estado sem sensores | Verificado no recorte de P04 | O gerente recebe da API a situação de implantação do próprio shopping. Enquanto não estiver ativa, a interface apresenta a configuração em andamento sem inventar leituras de sensores. |
 | Base Express e saúde | Verificado em 10/09 | `start` e `dev` iniciaram a saída compilada; health e readiness responderam 200 com PostgreSQL local. Processos de API usados na verificação encerrados. |
 | Autenticação e conta na API | Verificado nos cenários de integração em 10/09 | [Runner](../vaggu-backend/test/integracao-acessos.test.ts): identidade, hash, sessão, primeira senha, conta, expiração, logout e escopo entre shoppings. Frontend integrado em 11/09; rotas de vagas usadas nos testes são exclusivas da suíte. |
@@ -106,11 +106,11 @@ Preservar os limites do produto: web responsiva, sem cadastro público de gerent
 ## 6. Próximo início
 
 - **Pacote:** P05 — importação CSV/XLSX com prévia e preservação de histórico.
-- **Primeira ação:** definir o contrato do arquivo, as chaves de correspondência e o formato da prévia de erros antes de gravar qualquer linha.
+- **Primeira ação:** criar os tipos do contrato de importação e o parser de prévia sem persistência, começando por CSV com as colunas código, andar, setor e tipo; definir a mesma representação intermediária para XLSX.
 - **Base já validada:** P04 concluído: estrutura hierárquica e mapa proporcional, com revisão concorrente, isolamento e fluxo Admin/gerente aprovados no PostgreSQL e no navegador em 12/09.
 - **Aceite e verificação a confirmar:** prévia, erros por linha, confirmação atômica, atualização sem apagar histórico e CA13–CA14.
 - **Limites:** WhatsApp oficial não existe ainda; não inventar número. Preservar alterações Git e não publicar sem solicitação.
-- **Estado diário:** aberto em 12/09; P03 concluído. O dia permanece aberto até pedido de fechamento.
+- **Estado diário:** encerrado na virada de 12 para 13/09 por solicitação de Pietro; P05 permanece preparado e não foi iniciado.
 
 ## 7. Registro diário
 
@@ -194,3 +194,15 @@ Se a lista de skills da conversa atual ainda não refletir a instalação, abrir
 - **Limites:** ainda não há importação CSV/XLSX, ingestão de sensores, atualização em tempo real ou telão. O mapa atual usa uma base neutra e posições proporcionais; uma planta ilustrada poderá ser associada depois. Nenhum dado exibido foi apresentado como leitura real de sensor.
 - **Ambiente:** PostgreSQL local permanece iniciado para uso da equipe; o Vite temporário de validação foi encerrado. O dia continua aberto até pedido de fechamento.
 - **Git:** P01–P04 e a reorganização documental publicados na `main` no commit `dc316b2`. Nenhum deploy foi solicitado.
+
+### 12–13/09/2026 — melhorias de interação, gerentes e senha
+
+- **Estado:** encerrado por solicitação de Pietro; a implementação começou em 12/09 e o fechamento terminou após a virada para 13/09, no fuso America/Sao_Paulo.
+- **Objetivo:** acrescentar resposta de clique aos cards, animar o rabisco em torno de “vagas”, permitir excluir um gerente com confirmação e sete segundos para desfazer e reforçar a criação da senha definitiva.
+- **Decisão:** exclusão lógica preserva o ID e o estado anterior, encerra sessões imediatamente e oculta o acesso. O desfazer restaura o mesmo registro dentro da janela; depois dela, o e-mail pode ser cadastrado novamente sem duplicar a identidade.
+- **Entrega presente no código:** migration incremental; rotas `DELETE /gerentes/:id` e `POST /gerentes/:id/desfazer-exclusao`; modal acessível; aviso Sonner com ação; microinterações de cards e rabisco SVG com movimento reduzido. A troca de senha agora exige 12–128 caracteres, minúscula, maiúscula, número, símbolo e ausência de espaços; possui olhos independentes, checklist vivo, confirmação e erros associados aos campos. A API é a autoridade e usa códigos distintos para cada requisito.
+- **Verificações:** suíte completa 54/54 e integração PostgreSQL 29/29; os cenários cobrem sete falhas da política, repetição, senha atual incorreta e sucesso. Lint e build aprovados, com o aviso conhecido do bundle. Navegador aprovou rabisco, pressão do card, confirmação, encerramento do acesso, aviso e restauração do mesmo gerente; na troca de senha, aprovou os três olhos, checklist, confirmação, erros por campo, desktop 1440×1024 e viewport móvel, sem erros de console. A submissão válida pela interface não foi repetida porque a política de controle do navegador exige entrega ao usuário nesse passo; o mesmo contrato foi comprovado pela integração HTTP. Migration aplicada ao banco persistente `vaggu_local`; conta temporária e servidores de QA removidos.
+- **Evidências visuais:** três capturas guardadas em `Minha segunda mente/Vaggu/Evidências visuais/Melhorias - interações e gerentes`.
+- **Resultado:** melhorias concluídas e dia encerrado; P05 continua sendo a próxima entrega planejada, sem início automático.
+- **Próxima ação:** criar o contrato intermediário da importação e a prévia CSV sem escrita no banco, preparando a leitura XLSX sobre a mesma estrutura.
+- **Git:** publicação na `main` autorizada por Pietro; este registro integra o fechamento. Conferir o hash e o alinhamento com `origin/main` após o push. Nenhum deploy foi solicitado.

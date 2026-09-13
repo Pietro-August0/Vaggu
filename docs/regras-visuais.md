@@ -64,6 +64,7 @@ Os nomes são uma proposta de organização; adaptar aos tokens existentes. Não
 | Botão principal | Ação prioritária evidente, com contraste adequado e estados de foco/carregamento. |
 | Botão secundário | Menor peso visual, mantendo leitura e área de interação. |
 | Campo | Rótulo persistente, ajuda quando necessária e erro próximo do campo. |
+| Criação de senha | Olho independente por campo, requisitos atualizados em tempo real, confirmação explícita e erro junto ao campo responsável. |
 | Card de indicador | Título, valor, unidade/recorte e indicação de indisponibilidade. |
 | Tabela/lista | Cabeçalhos claros, filtros visíveis, linha selecionada e alternativas em telas menores. |
 | Modal | Título, ação clara, foco administrado e comportamento previsível. |
@@ -72,6 +73,10 @@ Os nomes são uma proposta de organização; adaptar aos tokens existentes. Não
 | Erro de conexão | Explicar perda de atualização, permitir recuperação sem esconder dados expirados. |
 
 Estados a implementar: padrão, hover onde aplicável, foco, pressionado/selecionado, desabilitado, carregando, vazio, erro, sucesso e dados desatualizados. Usar padrões existentes e evitar uma versão diferente de modal para cada tela.
+
+Cards acionáveis usam uma resposta curta de elevação e pressão, sem animações decorativas longas. O contorno da palavra “vagas” no login pode se desenhar como rabisco ao carregar; com movimento reduzido, aparece completo e estático.
+
+Na troca obrigatória de senha, não depender da mensagem nativa do navegador. Informar separadamente senha provisória incorreta, senha repetida, requisito ausente e confirmação divergente. Cor e ícone podem reforçar o estado de cada requisito, mas o texto continua sendo a fonte da informação.
 
 ## 6. Layout por área
 

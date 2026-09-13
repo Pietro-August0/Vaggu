@@ -44,5 +44,13 @@ export function gerentesRoutes(auth, shoppings) {
     res.json(await shoppings.redefinirSenhaGerente(req.params.gerenteId));
   });
 
+  router.delete('/:gerenteId', async (req, res) => {
+    res.json(await shoppings.excluirGerente(req.params.gerenteId));
+  });
+
+  router.post('/:gerenteId/desfazer-exclusao', async (req, res) => {
+    res.json(await shoppings.desfazerExclusaoGerente(req.params.gerenteId));
+  });
+
   return router;
 }

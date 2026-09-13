@@ -85,6 +85,8 @@ Todas as rotas abaixo exigem `Authorization: Bearer TOKEN`, perfil `VAGGU` e sen
 | POST | /shoppings/:shoppingId/gerentes | nome, email e telefone opcional | Cria gerente SHOPPING e retorna senha provisória uma única vez. |
 | PATCH | /gerentes/:gerenteId | nome, telefone e/ou ativo | Edita cadastro permitido ou bloqueia/reativa gerente. |
 | POST | /gerentes/:gerenteId/redefinir-senha | Sem corpo | Revoga sessões do gerente e retorna nova senha provisória. |
+| DELETE | /gerentes/:gerenteId | Sem corpo | Oculta o gerente, encerra sessões e informa o prazo para desfazer. |
+| POST | /gerentes/:gerenteId/desfazer-exclusao | Sem corpo | Restaura o mesmo acesso durante os sete segundos seguintes. |
 | GET | /shoppings/:shoppingId/estrutura | Sem corpo | Lista situação, andares, setores, vagas e revisão do mapa. |
 | POST | /shoppings/:shoppingId/andares | nome, ordem e código opcional | Cria um andar no shopping. |
 | POST | /andares/:andarId/setores | nome e código | Cria um setor no andar. |
@@ -103,6 +105,7 @@ As posições do mapa usam valores proporcionais de 0 a 1 (`x`, `y`, largura e a
 ## Segurança e frontend
 
 - Senhas: scrypt com sal aleatório por senha; somente hash no banco.
+- Senha definitiva: de 12 a 128 caracteres, com letra minúscula, letra maiúscula, número, símbolo e sem espaços. A API devolve um código e uma mensagem próprios para cada requisito não atendido; a nova senha também precisa ser diferente da atual.
 - Sessões: tokens opacos aleatórios de 256 bits; somente SHA-256 do token no banco. Não é JWT e não exige JWT_SECRET.
 - Primeiro acesso: gerentes criados ou redefinidos pelo Admin recebem `trocarSenhaObrigatoria=true`; rotas protegidas por `requirePasswordReady` recusam acesso até a troca.
 - Validade fixa de 8 horas. Logout apaga apenas a sessão atual. Sessões expiradas são recusadas imediatamente e removidas no próximo login bem-sucedido.
@@ -132,7 +135,7 @@ NODE_ENV=development
 
 Configure `DATABASE_URL` com um PostgreSQL acessível pelo backend. `npm run db:studio` permite inspecionar tabelas; não preencha `senha_hash` manualmente. Faça backup antes de migrations em ambiente compartilhado.
 
-Modelos de negócio: Shopping, Andar, Setor, Vaga, Usuario, Dispositivo e HistoricoVaga. Sessao e WhatsappEvento são tabelas técnicas. Usuario guarda telefone e troca obrigatória de senha. Permanecem restrições de perfis, estados, vínculo da placa com shopping, código/canal únicos, hierarquia interna e histórico de eventos. CHECKs estão no SQL e devem ser preservados em futuras migrations.
+Modelos de negócio: Shopping, Andar, Setor, Vaga, Usuario, Dispositivo e HistoricoVaga. Sessao e WhatsappEvento são tabelas técnicas. Usuario guarda telefone, troca obrigatória de senha e os campos da exclusão lógica reversível. Permanecem restrições de perfis, estados, vínculo da placa com shopping, código/canal únicos, hierarquia interna e histórico de eventos. CHECKs estão no SQL e devem ser preservados em futuras migrations.
 
 ## Organização
 
@@ -159,8 +162,8 @@ Para integração local, crie `.env.teste.local` (ignorado pelo Git) contendo `T
 
 A conexão deve apontar para um banco de controle dedicado, cujo nome termine em `_teste` ou `_test`, sem parâmetros na URL. O usuário precisa de `CREATEDB`. Cada execução cria `vaggu_teste_<uuid>`, aplica as migrations SQL versionadas em ordem e prepara usuários/shoppings fictícios. Os cenários executam sequencialmente, e o encerramento remove somente esse banco gerado, inclusive quando um cenário falha. O runner nunca usa `DATABASE_URL` como alternativa nem limpa tabelas do banco de controle. Se o processo for encerrado à força, o banco descartável pode permanecer para inspeção; não há limpeza ampla automática.
 
-Os cenários verificam múltiplos gerentes, primeira senha, bloqueio individual, sessões, dois andares, categorias de vaga, revisão do mapa e isolamento. Isso não valida exportação, tempo real, hardware ou telões. Consulte também [ambiente local no Windows](../docs/ambiente-local.md) e a [arquitetura de estrutura, sensores e telões](../docs/arquitetura-estrutura-sensores-telao.md).
+Os cenários verificam múltiplos gerentes, política e troca da primeira senha, bloqueio individual, sessões, dois andares, categorias de vaga, revisão do mapa e isolamento. Isso não valida exportação, tempo real, hardware ou telões. Consulte também [ambiente local no Windows](../docs/ambiente-local.md) e a [arquitetura de estrutura, sensores e telões](../docs/arquitetura-estrutura-sensores-telao.md).
 
 Testado no Windows com Node compatível: `npm run typecheck`, `DATABASE_URL=postgresql://... npm run db:validate` e `cmd /c npm test` passaram. Prisma fixado em 7.10.0. Revise npm audit antes de publicar; não execute npm audit fix --force automaticamente.
 
-P04 concluído em 12/09/2026: migration aplicada, estrutura e mapa integrados, 52 testes aprovados com PostgreSQL real e fluxo principal validado no navegador. A próxima entrega é P05: importação CSV/XLSX com prévia e preservação de histórico, conforme o [planejamento](../docs/planejamento-do-projeto.md).
+P04 e as melhorias administrativas concluídas em 12–13/09/2026 estão entregues: migrations aplicadas, estrutura, mapa, exclusão reversível e política de senha definitiva integrados, 54 testes aprovados com PostgreSQL real e fluxos principais validados no navegador. A próxima entrega é P05: importação CSV/XLSX com prévia e preservação de histórico, conforme o [planejamento](../docs/planejamento-do-projeto.md).

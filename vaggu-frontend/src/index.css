@@ -1,5 +1,6 @@
 @import "tailwindcss";
 @import "tw-animate-css";
+
 @import "shadcn/tailwind.css";
 @import "@fontsource-variable/geist";
 @import "@fontsource/poppins/300.css";
@@ -10,6 +11,19 @@
 @import "@fontsource/poppins/600-italic.css";
 @import "@fontsource/poppins/700.css";
 @import "@fontsource/poppins/700-italic.css";
+
+/* Resposta tátil curta para cards acionáveis das áreas autenticadas. */
+.cartao-clicavel {
+  transition: transform 160ms ease, box-shadow 160ms ease, border-color 160ms ease, background-color 160ms ease;
+}
+@media (hover: hover) {
+  .cartao-clicavel:hover { transform: translateY(-2px); box-shadow: 0 10px 24px rgb(0 0 0 / 8%); }
+}
+.cartao-clicavel:active { transform: scale(.975); }
+@media (prefers-reduced-motion: reduce) {
+  .cartao-clicavel { transition: none; }
+  .cartao-clicavel:hover, .cartao-clicavel:active { transform: none; }
+}
 
 @custom-variant dark (&:is(.dark *));
 

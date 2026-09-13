@@ -33,15 +33,16 @@ Documentos e regras ficam em docs; skills/start e skills/end usam o planejamento
 | `vaggu-backend/prisma.config.mjs` | Configura a CLI do Prisma: schema, migrations e conexão obtida do ambiente, sem credenciais no código. |
 | `vaggu-backend/prisma/migrations/20260909000300_inicial_postgresql/migration.sql` | Configuração de migration.sql utilizada pelo módulo backend. |
 | `vaggu-backend/prisma/migrations/20260912000100_estrutura_estacionamento/migration.sql` | Cria hierarquia, tipos, implantação, posições e relações compostas do P04. |
+| `vaggu-backend/prisma/migrations/20260912000200_exclusao_reversivel_gerentes/migration.sql` | Acrescenta exclusão lógica de gerente, estado anterior e restrição de consistência para o desfazer. |
 | `vaggu-backend/prisma/migrations/migration_lock.toml` | Registra o provedor PostgreSQL das migrations do Prisma. |
-| `vaggu-backend/prisma/schema.prisma` | Define entidades, relacionamentos, índices e restrições de persistência. |
+| `vaggu-backend/prisma/schema.prisma` | Define entidades, relações e restrições, incluindo estrutura e exclusão lógica de usuários. |
 | `vaggu-backend/scripts/create-admin.ts` | Comando interativo para criar o primeiro administrador e exibir a senha gerada uma única vez no terminal. |
 | `vaggu-backend/src/app.ts` | Monta a API Express, suas rotas e respostas de erro, sem abrir uma porta de rede. |
 | `vaggu-backend/src/auth/bootstrap.ts` | Cria o primeiro administrador por uma operação de terminal, sem cadastro público. |
 | `vaggu-backend/src/auth/middleware.ts` | Middlewares de autorização usados pelas rotas HTTP. Eles constroem o escopo |
 | `vaggu-backend/src/auth/password.ts` | Protege senhas com scrypt e sal aleatório; guarda o resultado derivado, nunca a senha original. |
 | `vaggu-backend/src/auth/routes.ts` | Rotas HTTP de autenticação. A regra de sessão fica no serviço para ser |
-| `vaggu-backend/src/auth/service.ts` | Serviço de autenticação humana: valida credenciais, emite sessões opacas, |
+| `vaggu-backend/src/auth/service.ts` | Serviço de autenticação humana: valida credenciais, emite sessões opacas e recusa contas excluídas. |
 | `vaggu-backend/src/config/database.ts` | Configuração de banco do backend. A especificação VAGGU define PostgreSQL |
 | `vaggu-backend/src/config/env.ts` | Converte variáveis do processo em configuração da API e valida banco e porta. |
 | `vaggu-backend/src/estrutura/routes.ts` | Expõe configuração administrativa e consulta isolada da estrutura pelo gerente. |
@@ -50,21 +51,21 @@ Documentos e regras ficam em docs; skills/start e skills/end usam o planejamento
 | `vaggu-backend/src/conta/service.ts` | Serviço de conta própria. Só permite alterações pessoais simples, mantendo |
 | `vaggu-backend/src/lib/prisma.ts` | Cliente Prisma do PostgreSQL. Regras de domínio recebem o cliente por injeção |
 | `vaggu-backend/src/server.ts` | Ponto de entrada executável: lê a configuração, conecta os serviços e inicia o HTTP. |
-| `vaggu-backend/src/shoppings/routes.ts` | Rotas HTTP administrativas de shoppings e gerentes. Todas exigem Admin VAGGU |
-| `vaggu-backend/src/shoppings/service.ts` | Serviço administrativo de shoppings e gerentes. Centraliza a regra de que |
+| `vaggu-backend/src/shoppings/routes.ts` | Rotas administrativas de shoppings, gerentes, exclusão reversível e senha provisória. |
+| `vaggu-backend/src/shoppings/service.ts` | Administra shoppings e gerentes, incluindo bloqueio, exclusão lógica e restauração por sete segundos. |
 | `vaggu-backend/src/whatsapp/client.ts` | Cliente de envio de texto pela API da Meta; recebe configuração privada e transporte substituível em testes. |
 | `vaggu-backend/src/whatsapp/payload.ts` | Interpreta o formato externo do webhook e mantém os textos do menu demonstrativo. |
 | `vaggu-backend/src/whatsapp/routes.ts` | Recebe o desafio de configuração e os eventos da Meta, validando sua origem antes de processá-los. |
 | `vaggu-backend/src/whatsapp/service.ts` | Coordena mensagens recebidas, deduplicação persistente e respostas do menu demonstrativo. |
 | `vaggu-backend/src/whatsapp/signature.ts` | Calcula e verifica assinaturas HMAC para confirmar que o corpo recebido veio de quem possui o segredo Meta. |
-| `vaggu-backend/test-support/admin-cases.ts` | Cenários administrativos sequenciais, com usuários fictícios no banco exclusivo do runner. |
+| `vaggu-backend/test-support/admin-cases.ts` | Verifica acessos administrativos, bloqueio, exclusão, prazo para desfazer e reutilização segura do e-mail. |
 | `vaggu-backend/test-support/auth-cases.ts` | Cenários sequenciais de autenticação e isolamento, usados pelo runner com banco exclusivo. |
 | `vaggu-backend/test-support/banco-de-teste.ts` | Prepara um banco PostgreSQL exclusivo por execução e aplica as migrations versionadas. |
 | `vaggu-backend/test-support/estrutura-cases.ts` | Verifica hierarquia, mapa, implantação e isolamento do P04 em PostgreSQL real. |
 | `vaggu-backend/test/app.test.ts` | Configuração de app.test.ts utilizada pelo módulo backend. |
 | `vaggu-backend/test/env.test.ts` | Configuração de env.test.ts utilizada pelo módulo backend. |
 | `vaggu-backend/test/integracao-acessos.test.ts` | Executa os cenários HTTP de autenticação e administração em PostgreSQL descartável. |
-| `vaggu-backend/test/prisma-postgresql.test.ts` | Configuração de prisma-postgresql.test.ts utilizada pelo módulo backend. |
+| `vaggu-backend/test/prisma-postgresql.test.ts` | Confere provider, relações, índices e migrations PostgreSQL relevantes. |
 | `vaggu-backend/test/whatsapp.test.ts` | Configuração de whatsapp.test.ts utilizada pelo módulo backend. |
 | `vaggu-backend/tsconfig.json` | Configura compilação TypeScript e limites dos arquivos incluídos neste projeto. |
 | `vaggu-frontend/components.json` | Configura aliases e estilo de geração dos componentes shadcn. |
@@ -108,18 +109,18 @@ Documentos e regras ficam em docs; skills/start e skills/end usam o planejamento
 | `vaggu-frontend/src/components/ui/tooltip.tsx` | Componente de interface reutilizável tooltip; usado para controles, estados e composição acessível. |
 | `vaggu-frontend/src/hooks/use-scroll-animations.ts` | Hook para animações de scroll usando Motion |
 | `vaggu-frontend/src/hooks/use-scroll-reveal.ts` | Revela blocos da landing conforme entram na viewport, respeitando movimento reduzido. |
-| `vaggu-frontend/src/index.css` | Estilos e estados responsivos de index. |
+| `vaggu-frontend/src/index.css` | Reúne tema global, responsividade e microinterações dos cards acionáveis. |
 | `vaggu-frontend/src/lib/constants.ts` | Publica links de contato somente após configurar o número oficial da equipe. |
 | `vaggu-frontend/src/lib/utils.ts` | Configuração de utils.ts utilizada pelo módulo frontend. |
 | `vaggu-frontend/src/main.tsx` | Inicializa o React e reúne tema, navegação, mensagens e sessão autenticada das páginas. |
 | `vaggu-frontend/src/pages/admin-page.tsx` | Preserva a tela administrativa do protótipo; não está montada nas rotas autenticadas atuais. |
-| `vaggu-frontend/src/pages/area-autenticada.tsx` | Integra o P03: cadastro de shoppings, vários gerentes, bloqueio, redefinição de senha e edição da própria conta. |
+| `vaggu-frontend/src/pages/area-autenticada.tsx` | Integra cadastro, acessos, confirmação de exclusão, desfazer, estrutura e edição da própria conta. |
 | `vaggu-frontend/src/pages/landing-page.tsx` | Compõe a landing pública e encaminha o contato comercial ao WhatsApp. |
-| `vaggu-frontend/src/pages/login-page.css` | Define composição responsiva do login e troca de senha; foto do Figma ainda pendente. |
-| `vaggu-frontend/src/pages/login-page.tsx` | Entrada única para Admin e gerente; composição baseada no frame Figma 2580:30. |
+| `vaggu-frontend/src/pages/login-page.css` | Define composição responsiva do login, troca de senha e desenho animado do rabisco em “vagas”. |
+| `vaggu-frontend/src/pages/login-page.tsx` | Entrada única para Admin e gerente, com manifesto e rabisco SVG animado. |
 | `vaggu-frontend/src/pages/mall-panel-page.tsx` | Preserva o painel demonstrativo antigo; não está montado nas rotas autenticadas atuais. |
 | `vaggu-frontend/src/pages/trocar-senha-page.tsx` | Exige uma senha definitiva antes de qualquer acesso operacional. |
-| `vaggu-frontend/src/servicos/api.ts` | Cliente da API na mesma origem para GET, POST e PATCH autenticados; tokens ficam somente em memória. |
+| `vaggu-frontend/src/servicos/api.ts` | Cliente autenticado da API para GET, POST, PATCH e DELETE; tokens ficam somente em memória. |
 | `vaggu-frontend/src/servicos/estrutura.ts` | Valida a árvore pública de andares, setores, vagas e posições recebida da API. |
 | `vaggu-frontend/src/types/app.ts` | Declara identidade pública validada e tipos legados das telas preservadas. |
 | `vaggu-frontend/src/types/estrutura.ts` | Declara os contratos TypeScript da estrutura, implantação, tipos e mapa. |

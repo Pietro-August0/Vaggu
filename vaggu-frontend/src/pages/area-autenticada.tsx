@@ -9,6 +9,9 @@ import { Label } from "@/components/ui/label"
 import { objeto } from "@/servicos/api"
 import { EstruturaAdmin } from "@/components/estrutura-admin"
 import { MapaEstacionamento } from "@/components/mapa-estacionamento"
+import { Dialog, DialogClose, DialogContent, DialogDescription, DialogFooter, DialogHeader, DialogTitle } from "@/components/ui/dialog"
+import { Trash2 } from "lucide-react"
+import { toast } from "sonner"
 
 interface ShoppingResumo { id: string; nome: string; endereco: string | null; ativo: boolean; totalGerentes: number }
 interface GerenteResumo { id: string; nome: string; email: string; telefone: string | null; ativo: boolean; trocarSenhaObrigatoria: boolean }
@@ -40,6 +43,7 @@ function PainelAdmin() {
   const [erro, setErro] = useState("")
   const [ocupado, setOcupado] = useState(false)
   const [credencial, setCredencial] = useState<{ email: string; senha: string } | null>(null)
+  const [gerenteParaExcluir, setGerenteParaExcluir] = useState<GerenteResumo | null>(null)
 
   const carregarShoppings = useCallback(async () => {
     const lista = lerShoppings(await consultar("/shoppings"))
@@ -95,13 +99,44 @@ function PainelAdmin() {
     })
   }
 
+  /** Remove o acesso da lista e oferece restauração durante a janela aceita pelo servidor. */
+  async function confirmarExclusao() {
+    const gerente = gerenteParaExcluir
+    if (!gerente) return
+    setOcupado(true); setErro(""); setCredencial(null)
+    try {
+      const resposta = await consultar(`/gerentes/${gerente.id}`, undefined, "DELETE")
+      if (!objeto(resposta) || typeof resposta.desfazerAte !== "string") throw new Error("A exclusão não pôde ser confirmada.")
+      setGerentes(atuais => atuais?.filter(item => item.id !== gerente.id) ?? [])
+      setGerenteParaExcluir(null)
+      toast.success(`${gerente.nome} foi excluído.`, {
+        description: "O acesso foi encerrado. Você tem sete segundos para desfazer.",
+        duration: 7000,
+        action: {
+          label: "Desfazer",
+          onClick: () => {
+            void consultar(`/gerentes/${gerente.id}/desfazer-exclusao`, {}).then(async () => {
+              await Promise.all([carregarGerentes(shoppingId), carregarShoppings()])
+              toast.success(`${gerente.nome} foi restaurado.`)
+            }).catch(falha => toast.error(falha instanceof Error ? falha.message : "Não foi possível desfazer a exclusão."))
+          },
+        },
+      })
+      await carregarShoppings()
+    } catch (falha) {
+      setErro(falha instanceof Error ? falha.message : "Não foi possível excluir o gerente.")
+    } finally {
+      setOcupado(false)
+    }
+  }
+
   return <section className="grid max-w-6xl gap-6">
     {erro && <div role="alert" className="rounded-xl border border-red-200 bg-red-50 p-4 text-red-800">{erro}</div>}
     {credencial && <div role="status" className="rounded-xl border border-yellow-300 bg-yellow-50 p-4"><strong>Guarde e entregue esta senha uma única vez.</strong><p className="mt-2 break-all">{credencial.email} · <code>{credencial.senha}</code></p></div>}
     <div className="grid gap-6 lg:grid-cols-[minmax(0,1fr)_minmax(18rem,0.7fr)]">
       <div className="rounded-2xl bg-white p-6"><h2 className="text-xl font-semibold">Shoppings cadastrados</h2>
         {shoppings === null ? <p role="status" className="mt-4">Carregando...</p> : shoppings.length === 0 ? <p className="mt-4 text-neutral-600">Nenhum shopping cadastrado.</p>
-          : <div className="mt-4 grid gap-2">{shoppings.map(shopping => <button key={shopping.id} type="button" onClick={() => setShoppingId(shopping.id)} className={`rounded-xl border p-4 text-left ${shoppingId === shopping.id ? "border-yellow-400 bg-yellow-50" : "border-neutral-200"}`}><span className="flex justify-between gap-3"><strong>{shopping.nome}</strong><Badge variant="secondary">{shopping.totalGerentes} gerente(s)</Badge></span><span className="mt-1 block text-sm text-neutral-600">{shopping.endereco || "Endereço não informado"}</span></button>)}</div>}
+          : <div className="mt-4 grid gap-2">{shoppings.map(shopping => <button key={shopping.id} type="button" onClick={() => setShoppingId(shopping.id)} className={`cartao-clicavel rounded-xl border p-4 text-left ${shoppingId === shopping.id ? "border-yellow-400 bg-yellow-50" : "border-neutral-200"}`}><span className="flex justify-between gap-3"><strong>{shopping.nome}</strong><Badge variant="secondary">{shopping.totalGerentes} gerente(s)</Badge></span><span className="mt-1 block text-sm text-neutral-600">{shopping.endereco || "Endereço não informado"}</span></button>)}</div>}
       </div>
       <form className="rounded-2xl bg-white p-6" onSubmit={criarShopping}><h2 className="text-xl font-semibold">Cadastrar shopping</h2>
         <div className="mt-4 grid gap-2"><Label htmlFor="shopping-nome">Nome</Label><Input id="shopping-nome" name="nome" required minLength={2} maxLength={120} /></div>
@@ -111,7 +146,7 @@ function PainelAdmin() {
     {shoppingId && <div className="grid gap-6 lg:grid-cols-[minmax(0,1.2fr)_minmax(18rem,0.8fr)]">
       <div className="rounded-2xl bg-white p-6"><h2 className="text-xl font-semibold">Acessos de gerentes</h2>
         {gerentes === null ? <p role="status" className="mt-4">Carregando acessos...</p> : gerentes.length === 0 ? <p className="mt-4 text-neutral-600">Nenhum gerente cadastrado neste shopping.</p>
-          : <ul className="mt-4 divide-y divide-neutral-200">{gerentes.map(gerente => <li key={gerente.id} className="py-4"><div className="flex flex-wrap items-start justify-between gap-3"><div><strong>{gerente.nome}</strong><p className="text-sm text-neutral-600">{gerente.email}{gerente.telefone ? ` · ${gerente.telefone}` : ""}</p></div><Badge variant={gerente.ativo ? "default" : "destructive"}>{gerente.ativo ? "Ativo" : "Bloqueado"}</Badge></div><div className="mt-3 flex flex-wrap gap-2"><Button type="button" size="sm" variant="outline" disabled={ocupado} onClick={() => alterarStatus(gerente)}>{gerente.ativo ? "Bloquear" : "Reativar"}</Button><Button type="button" size="sm" variant="outline" disabled={ocupado || !gerente.ativo} onClick={() => redefinirSenha(gerente)}>Redefinir senha</Button></div></li>)}</ul>}
+          : <ul className="mt-4 divide-y divide-neutral-200">{gerentes.map(gerente => <li key={gerente.id} className="py-4"><div className="flex flex-wrap items-start justify-between gap-3"><div><strong>{gerente.nome}</strong><p className="text-sm text-neutral-600">{gerente.email}{gerente.telefone ? ` · ${gerente.telefone}` : ""}</p></div><Badge variant={gerente.ativo ? "default" : "destructive"}>{gerente.ativo ? "Ativo" : "Bloqueado"}</Badge></div><div className="mt-3 flex flex-wrap gap-2"><Button type="button" size="sm" variant="outline" disabled={ocupado} onClick={() => alterarStatus(gerente)}>{gerente.ativo ? "Bloquear" : "Reativar"}</Button><Button type="button" size="sm" variant="outline" disabled={ocupado || !gerente.ativo} onClick={() => redefinirSenha(gerente)}>Redefinir senha</Button><Button type="button" size="sm" variant="destructive" disabled={ocupado} onClick={() => setGerenteParaExcluir(gerente)}><Trash2 />Excluir</Button></div></li>)}</ul>}
       </div>
       <form className="rounded-2xl bg-white p-6" onSubmit={criarGerente}><h2 className="text-xl font-semibold">Criar acesso individual</h2>
         <div className="mt-4 grid gap-2"><Label htmlFor="gerente-nome">Nome</Label><Input id="gerente-nome" name="nome" required minLength={2} maxLength={120} /></div>
@@ -120,6 +155,12 @@ function PainelAdmin() {
       </form>
     </div>}
     {shoppingId && <EstruturaAdmin shoppingId={shoppingId} />}
+    <Dialog open={gerenteParaExcluir !== null} onOpenChange={aberto => { if (!aberto) setGerenteParaExcluir(null) }}>
+      <DialogContent>
+        <DialogHeader><DialogTitle>Excluir acesso de gerente?</DialogTitle><DialogDescription>O acesso de {gerenteParaExcluir?.nome} será encerrado imediatamente. Depois da confirmação, você terá sete segundos para desfazer.</DialogDescription></DialogHeader>
+        <DialogFooter><DialogClose asChild><Button type="button" variant="outline">Cancelar</Button></DialogClose><Button type="button" variant="destructive" disabled={ocupado} onClick={() => void confirmarExclusao()}>{ocupado ? "Excluindo..." : "Sim, excluir"}</Button></DialogFooter>
+      </DialogContent>
+    </Dialog>
   </section>
 }
 

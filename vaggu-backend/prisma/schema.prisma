@@ -99,11 +99,13 @@ model Usuario {
   perfil                   Perfil
   ativo                    Boolean @default(true)
   trocarSenhaObrigatoria   Boolean @default(false) @map("trocar_senha_obrigatoria")
+  excluidoEm               DateTime? @map("excluido_em")
+  ativoAntesExclusao       Boolean? @map("ativo_antes_exclusao")
 
   shopping Shopping? @relation(fields: [shoppingId], references: [id], onDelete: Restrict)
   sessoes  Sessao[]
 
-  @@index([shoppingId])
+  @@index([shoppingId, excluidoEm])
   @@map("usuarios")
 }
 

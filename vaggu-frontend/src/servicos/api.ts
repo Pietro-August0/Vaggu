@@ -15,7 +15,7 @@ export async function requisitarApi(
   caminho: string,
   token?: string,
   corpo?: unknown,
-  metodo?: "GET" | "POST" | "PATCH",
+  metodo?: "GET" | "POST" | "PATCH" | "DELETE",
 ): Promise<unknown> {
   const controle = new AbortController()
   const prazo = window.setTimeout(() => controle.abort(), 15000)

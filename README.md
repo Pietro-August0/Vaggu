@@ -23,7 +23,9 @@ Este repositório reúne o MVP acadêmico da solução, desenvolvido como projet
 - Landing institucional; contato depende do número oficial da equipe.
 - Login integrado à API para Admin e gerente, sem contas de demonstração.
 - Troca obrigatória da senha provisória, verificação da sessão e logout no servidor.
-- Listagem real de shoppings para Admin e área de preparação para gerente.
+- Gestão real de shoppings, gerentes, andares, setores, vagas e implantação.
+- Exclusão reversível de gerente, com confirmação e sete segundos para desfazer.
+- Mapa do gerente com troca de andar, categorias, seleção e busca.
 - Token somente em memória; recarregar a página exige novo login.
 
 ### Backend
@@ -108,7 +110,7 @@ O frontend não cria nem preenche contas. A equipe deve cadastrar o administrado
 
 ## Estado atual
 
-A autenticação do frontend está integrada à API. Em 11/09, 47 testes do backend e 12 cenários no navegador passaram com PostgreSQL isolado. O acabamento visual do login aguarda a foto original do Figma; o MCP está conectado, mas a cota de leitura/exportação foi atingida. Cadastro administrativo na interface, operação, telemetria e Power BI continuam pendentes. Veja a [validação do login](./docs/validacao-login-2026-09-11.md).
+A autenticação, a gestão administrativa e o mapa estão integrados à API. Em 12–13/09, 54 testes do backend passaram com PostgreSQL real; os fluxos principais também foram aprovados no navegador. A interface permite excluir um gerente com confirmação e desfazer por sete segundos. A troca obrigatória mostra os requisitos de senha, permite visualizar os três campos e explica o erro junto ao campo responsável. Importação, telemetria, telões e Power BI continuam pendentes.
 
 O [planejamento do projeto](./docs/planejamento-do-projeto.md) registra o estado real, os resultados da revisão e a próxima entrega. As skills `$start` e `$end` usam esse documento para iniciar e encerrar o trabalho diário.
 

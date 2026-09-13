@@ -110,7 +110,7 @@ export async function runAuthCases(t: TestContext, prisma: PrismaClient, shoppin
 
   await t.test('senha provisória exige troca e não permanece válida depois da alteração', async () => {
     const senhaProvisoria = 'SenhaProvisoriaTeste!';
-    const senhaNova = 'NovaSenhaDefinitivaTeste!';
+    const senhaNova = 'NovaSenhaDefinitivaTeste1!';
     await prisma.usuario.create({ data: {
       nome: 'Gerente provisório',
       email: 'provisorio@example.com',
@@ -125,9 +125,26 @@ export async function runAuthCases(t: TestContext, prisma: PrismaClient, shoppin
     await request(app).post('/api/v1/auth/change-password')
       .set('Authorization', `Bearer ${loginProvisorio.body.token}`)
       .send({ senhaAtual: 'errada', novaSenha: senhaNova }).expect(401);
-    await request(app).post('/api/v1/auth/change-password')
+    const senhasInvalidas = [
+      ['curta', 'SENHA_CURTA'],
+      ['A'.repeat(128) + '1!', 'SENHA_LONGA'],
+      ['Nova Senha Teste1!', 'SENHA_COM_ESPACO'],
+      ['NOVASENHATESTE1!', 'SENHA_SEM_MINUSCULA'],
+      ['novasenhateste1!', 'SENHA_SEM_MAIUSCULA'],
+      ['NovaSenhaTeste!!', 'SENHA_SEM_NUMERO'],
+      ['NovaSenhaTeste12', 'SENHA_SEM_SIMBOLO'],
+    ];
+    for (const [novaSenha, codigo] of senhasInvalidas) {
+      const rejected = await request(app).post('/api/v1/auth/change-password')
+        .set('Authorization', `Bearer ${loginProvisorio.body.token}`)
+        .send({ senhaAtual: senhaProvisoria, novaSenha }).expect(400);
+      assert.equal(rejected.body.erro.codigo, codigo);
+      assert.ok(rejected.body.erro.mensagem);
+    }
+    const repeated = await request(app).post('/api/v1/auth/change-password')
       .set('Authorization', `Bearer ${loginProvisorio.body.token}`)
-      .send({ senhaAtual: senhaProvisoria, novaSenha: 'curta' }).expect(400);
+      .send({ senhaAtual: senhaProvisoria, novaSenha: senhaProvisoria }).expect(400);
+    assert.equal(repeated.body.erro.codigo, 'SENHA_REPETIDA');
     const changed = await request(app).post('/api/v1/auth/change-password')
       .set('Authorization', `Bearer ${loginProvisorio.body.token}`)
       .send({ senhaAtual: senhaProvisoria, novaSenha: senhaNova }).expect(200);

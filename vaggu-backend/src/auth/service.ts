@@ -26,9 +26,34 @@ export function normalizeEmail(value) {
 export const digestToken = (token) => createHash('sha256').update(token).digest('hex');
 const unauthorized = () => new ApiError(401, 'NAO_AUTENTICADO', 'Sessão inválida ou expirada.');
 
+/** Aplica a política de senha definitiva e informa exatamente qual requisito falhou. */
+export function validateNewPassword(password) {
+  if (password.length < 12) {
+    throw new ApiError(400, 'SENHA_CURTA', 'A nova senha deve ter pelo menos 12 caracteres.');
+  }
+  if (password.length > 128) {
+    throw new ApiError(400, 'SENHA_LONGA', 'A nova senha deve ter no máximo 128 caracteres.');
+  }
+  if (/\s/u.test(password)) {
+    throw new ApiError(400, 'SENHA_COM_ESPACO', 'A nova senha não pode conter espaços.');
+  }
+  if (!/\p{Ll}/u.test(password)) {
+    throw new ApiError(400, 'SENHA_SEM_MINUSCULA', 'Inclua pelo menos uma letra minúscula na nova senha.');
+  }
+  if (!/\p{Lu}/u.test(password)) {
+    throw new ApiError(400, 'SENHA_SEM_MAIUSCULA', 'Inclua pelo menos uma letra maiúscula na nova senha.');
+  }
+  if (!/\p{N}/u.test(password)) {
+    throw new ApiError(400, 'SENHA_SEM_NUMERO', 'Inclua pelo menos um número na nova senha.');
+  }
+  if (!/[^\p{L}\p{N}\s]/u.test(password)) {
+    throw new ApiError(400, 'SENHA_SEM_SIMBOLO', 'Inclua pelo menos um símbolo na nova senha.');
+  }
+}
+
 /** Exige conta ativa e vínculo coerente; gerente de shopping inativo também perde acesso. */
 function allowedUser(user) {
-  return user?.ativo && (
+  return user?.ativo && !user.excluidoEm && (
     (user.perfil === 'VAGGU' && user.shoppingId === null)
     || (user.perfil === 'SHOPPING' && user.shoppingId && user.shopping?.ativo)
   );
@@ -103,9 +128,6 @@ export function createAuthService(prisma, { now = () => new Date() } = {}) {
       if (typeof senhaAtual !== 'string' || typeof novaSenha !== 'string') {
         throw new ApiError(400, 'DADOS_INVALIDOS', 'Informe a senha atual e a nova senha.');
       }
-      if (novaSenha.length < 12 || novaSenha.length > 128) {
-        throw new ApiError(400, 'SENHA_INVALIDA', 'A nova senha deve ter entre 12 e 128 caracteres.');
-      }
       const session = await prisma.sessao.findUnique({
         where: { id: sessionId },
         include: { usuario: { include: { shopping: true } } },
@@ -117,6 +139,7 @@ export function createAuthService(prisma, { now = () => new Date() } = {}) {
       if (senhaAtual === novaSenha) {
         throw new ApiError(400, 'SENHA_REPETIDA', 'A nova senha deve ser diferente da senha atual.');
       }
+      validateNewPassword(novaSenha);
       const senhaHash = await hashPassword(novaSenha);
       const usuario = await prisma.usuario.update({
         where: { id: session.usuario.id },

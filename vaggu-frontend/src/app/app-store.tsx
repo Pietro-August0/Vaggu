@@ -14,7 +14,7 @@ interface AppStoreValue {
   logout: () => Promise<void>
   trocarSenha: (senhaAtual: string, novaSenha: string) => Promise<UserAccount>
   verificarSessao: () => Promise<void>
-  consultar: (caminho: string, corpo?: unknown, metodo?: "GET" | "POST" | "PATCH") => Promise<unknown>
+  consultar: (caminho: string, corpo?: unknown, metodo?: "GET" | "POST" | "PATCH" | "DELETE") => Promise<unknown>
   atualizarMinhaConta: (nome: string, telefone: string) => Promise<UserAccount>
   createMall: (input: NewMallInput) => Promise<GeneratedAccess>
 }
@@ -58,7 +58,7 @@ export function AppStoreProvider({ children }: { children: ReactNode }) {
   }, [])
 
   /** Não confunde senha atual incorreta com uma sessão revogada. */
-  const consultar = useCallback(async (caminho: string, corpo?: unknown, metodo?: "GET" | "POST" | "PATCH") => {
+  const consultar = useCallback(async (caminho: string, corpo?: unknown, metodo?: "GET" | "POST" | "PATCH" | "DELETE") => {
     const token = tokenAtual.current
     if (!token) throw new ErroApi("NAO_AUTENTICADO", "Entre novamente para continuar.")
     try {

@@ -96,6 +96,8 @@ Manter dois perfis humanos autenticados: Admin e gerente. Uma conta Admin inicia
 6. Recuperação é solicitada à equipe; Admin verifica o solicitante e redefine o acesso com nova senha provisória.
 7. Bloqueio de conta deve interromper acesso também com sessão previamente emitida.
 
+A senha definitiva deve ter de 12 a 128 caracteres, ao menos uma letra minúscula, uma maiúscula, um número e um símbolo, sem espaços, e não pode repetir a senha atual. A interface mostra os requisitos em tempo real, permite visualizar cada campo separadamente e associa o erro ao campo correspondente. O backend reaplica a política e retorna um código específico por requisito; validação apenas no navegador não é suficiente.
+
 Vários gerentes compartilham o recorte do shopping, não a senha. Suspender um gerente não suspende o shopping nem os demais. No MVP, cada gerente pertence a um único shopping. Não tornar `shoppingId` único na tabela de usuários.
 
 ### 3.3 Isolamento
@@ -399,7 +401,7 @@ Não são um schema Prisma pronto. Tipos, índices e campos precisam ser concili
 
 | Entidade | Campos essenciais e finalidade |
 | --- | --- |
-| Usuario | ID, nome, e-mail único, telefone, senhaHash, perfil, ativo, trocarSenhaObrigatoria, shoppingId quando gerente, datas. |
+| Usuario | ID, nome, e-mail único, telefone, senhaHash, perfil, ativo, trocarSenhaObrigatoria, shoppingId quando gerente, exclusão lógica e estado anterior, datas. |
 | Shopping | ID, dados institucionais, endereço, contato, fuso, horários, etapa, ativo e datas. |
 | Andar | ID, shoppingId, código, nome, ordem e ativo. |
 | Setor | ID, andarId, código, nome e ativo. |
@@ -475,6 +477,8 @@ Novos contratos próprios devem priorizar português e termos claros, com exceç
 | GET/POST | `/shoppings/:id/gerentes` | Admin | Listar/criar vários logins no mesmo shopping. |
 | PATCH | `/gerentes/:id` | Admin | Editar cadastro, suspender ou reativar. |
 | POST | `/gerentes/:id/redefinir-senha` | Admin | Emitir senha provisória individual. |
+| DELETE | `/gerentes/:id` | Admin | Excluir logicamente, encerrar sessões e abrir sete segundos para desfazer. |
+| POST | `/gerentes/:id/desfazer-exclusao` | Admin | Restaurar o mesmo ID e estado anterior dentro da janela. |
 | GET/POST | `/shoppings/:id/documentos` | Admin | Listar/enviar arquivos da implantação. |
 | GET/PATCH | `/documentos/:id` | Admin | Acesso privado e revisão de metadados/situação. |
 | GET/POST | `/shoppings/:id/andares` | Consulta autorizada/Admin escrita | Estrutura de andares do recorte. |
