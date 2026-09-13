@@ -14,7 +14,7 @@ import { Trash2 } from "lucide-react"
 import { toast } from "sonner"
 
 interface ShoppingResumo { id: string; nome: string; endereco: string | null; ativo: boolean; totalGerentes: number }
-interface GerenteResumo { id: string; nome: string; email: string; telefone: string | null; ativo: boolean; trocarSenhaObrigatoria: boolean }
+interface GerenteResumo { id: string; nome: string; email: string; telefone: string | null; ativo: boolean; trocarSenhaObrigatoria: boolean; senhaProvisoria: string | null }
 
 /** Valida a coleção de shoppings recebida da API. */
 function lerShoppings(dados: unknown): ShoppingResumo[] {
@@ -29,8 +29,8 @@ function lerShoppings(dados: unknown): ShoppingResumo[] {
 function lerGerentes(dados: unknown): GerenteResumo[] {
   if (!objeto(dados) || !Array.isArray(dados.gerentes)) throw new Error("Não foi possível consultar os gerentes.")
   return dados.gerentes.map(valor => {
-    if (!objeto(valor) || typeof valor.id !== "string" || typeof valor.nome !== "string" || typeof valor.email !== "string" || typeof valor.ativo !== "boolean" || typeof valor.trocarSenhaObrigatoria !== "boolean") throw new Error("Não foi possível consultar os gerentes.")
-    return { id: valor.id, nome: valor.nome, email: valor.email, telefone: typeof valor.telefone === "string" ? valor.telefone : null, ativo: valor.ativo, trocarSenhaObrigatoria: valor.trocarSenhaObrigatoria }
+    if (!objeto(valor) || typeof valor.id !== "string" || typeof valor.nome !== "string" || typeof valor.email !== "string" || typeof valor.ativo !== "boolean" || typeof valor.trocarSenhaObrigatoria !== "boolean" || !(typeof valor.senhaProvisoria === "string" || valor.senhaProvisoria === null)) throw new Error("Não foi possível consultar os gerentes.")
+    return { id: valor.id, nome: valor.nome, email: valor.email, telefone: typeof valor.telefone === "string" ? valor.telefone : null, ativo: valor.ativo, trocarSenhaObrigatoria: valor.trocarSenhaObrigatoria, senhaProvisoria: valor.senhaProvisoria }
   })
 }
 
@@ -44,11 +44,12 @@ function PainelAdmin() {
   const [ocupado, setOcupado] = useState(false)
   const [credencial, setCredencial] = useState<{ email: string; senha: string } | null>(null)
   const [gerenteParaExcluir, setGerenteParaExcluir] = useState<GerenteResumo | null>(null)
+  const [shoppingParaExcluir, setShoppingParaExcluir] = useState<ShoppingResumo | null>(null)
 
   const carregarShoppings = useCallback(async () => {
     const lista = lerShoppings(await consultar("/shoppings"))
     setShoppings(lista)
-    setShoppingId(atual => atual || lista[0]?.id || "")
+    setShoppingId(atual => lista.some(shopping => shopping.id === atual) ? atual : lista[0]?.id || "")
   }, [consultar])
   const carregarGerentes = useCallback(async (id: string) => {
     if (!id) return setGerentes([])
@@ -87,6 +88,24 @@ function PainelAdmin() {
       setCredencial({ email: dados.gerente.email, senha: dados.senhaProvisoria }); elemento.reset()
       await Promise.all([carregarGerentes(shoppingId), carregarShoppings()])
     })
+  }
+
+  /** Exclui o shopping da operação e seleciona o próximo cartão disponível. */
+  async function confirmarExclusaoShopping() {
+    const shopping = shoppingParaExcluir
+    if (!shopping) return
+    setOcupado(true); setErro(""); setCredencial(null)
+    try {
+      await consultar(`/shoppings/${shopping.id}`, undefined, "DELETE")
+      setShoppingParaExcluir(null)
+      setGerentes(null)
+      await carregarShoppings()
+      toast.success(`${shopping.nome} foi excluído.`)
+    } catch (falha) {
+      setErro(falha instanceof Error ? falha.message : "Não foi possível excluir o shopping.")
+    } finally {
+      setOcupado(false)
+    }
   }
   function alterarStatus(gerente: GerenteResumo) {
     void executar(async () => { await consultar(`/gerentes/${gerente.id}`, { ativo: !gerente.ativo }, "PATCH"); await carregarGerentes(shoppingId) })
@@ -132,9 +151,9 @@ function PainelAdmin() {
 
   return <section className="grid max-w-6xl gap-6">
     {erro && <div role="alert" className="rounded-xl border border-red-200 bg-red-50 p-4 text-red-800">{erro}</div>}
-    {credencial && <div role="status" className="rounded-xl border border-yellow-300 bg-yellow-50 p-4"><strong>Guarde e entregue esta senha uma única vez.</strong><p className="mt-2 break-all">{credencial.email} · <code>{credencial.senha}</code></p></div>}
+    {credencial && <div role="status" className="rounded-xl border border-yellow-300 bg-yellow-50 p-4"><strong>Senha provisória disponível até o gerente definir a senha dele.</strong><p className="mt-2 break-all">{credencial.email} · <code>{credencial.senha}</code></p></div>}
     <div className="grid gap-6 lg:grid-cols-[minmax(0,1fr)_minmax(18rem,0.7fr)]">
-      <div className="rounded-2xl bg-white p-6"><h2 className="text-xl font-semibold">Shoppings cadastrados</h2>
+      <div className="rounded-2xl bg-white p-6"><div className="flex flex-wrap items-center justify-between gap-3"><h2 className="text-xl font-semibold">Shoppings cadastrados</h2>{shoppingId && <Button type="button" size="sm" variant="destructive" disabled={ocupado} onClick={() => setShoppingParaExcluir(shoppings?.find(shopping => shopping.id === shoppingId) ?? null)}><Trash2 />Excluir shopping</Button>}</div>
         {shoppings === null ? <p role="status" className="mt-4">Carregando...</p> : shoppings.length === 0 ? <p className="mt-4 text-neutral-600">Nenhum shopping cadastrado.</p>
           : <div className="mt-4 grid gap-2">{shoppings.map(shopping => <button key={shopping.id} type="button" onClick={() => setShoppingId(shopping.id)} className={`cartao-clicavel rounded-xl border p-4 text-left ${shoppingId === shopping.id ? "border-yellow-400 bg-yellow-50" : "border-neutral-200"}`}><span className="flex justify-between gap-3"><strong>{shopping.nome}</strong><Badge variant="secondary">{shopping.totalGerentes} gerente(s)</Badge></span><span className="mt-1 block text-sm text-neutral-600">{shopping.endereco || "Endereço não informado"}</span></button>)}</div>}
       </div>
@@ -146,7 +165,7 @@ function PainelAdmin() {
     {shoppingId && <div className="grid gap-6 lg:grid-cols-[minmax(0,1.2fr)_minmax(18rem,0.8fr)]">
       <div className="rounded-2xl bg-white p-6"><h2 className="text-xl font-semibold">Acessos de gerentes</h2>
         {gerentes === null ? <p role="status" className="mt-4">Carregando acessos...</p> : gerentes.length === 0 ? <p className="mt-4 text-neutral-600">Nenhum gerente cadastrado neste shopping.</p>
-          : <ul className="mt-4 divide-y divide-neutral-200">{gerentes.map(gerente => <li key={gerente.id} className="py-4"><div className="flex flex-wrap items-start justify-between gap-3"><div><strong>{gerente.nome}</strong><p className="text-sm text-neutral-600">{gerente.email}{gerente.telefone ? ` · ${gerente.telefone}` : ""}</p></div><Badge variant={gerente.ativo ? "default" : "destructive"}>{gerente.ativo ? "Ativo" : "Bloqueado"}</Badge></div><div className="mt-3 flex flex-wrap gap-2"><Button type="button" size="sm" variant="outline" disabled={ocupado} onClick={() => alterarStatus(gerente)}>{gerente.ativo ? "Bloquear" : "Reativar"}</Button><Button type="button" size="sm" variant="outline" disabled={ocupado || !gerente.ativo} onClick={() => redefinirSenha(gerente)}>Redefinir senha</Button><Button type="button" size="sm" variant="destructive" disabled={ocupado} onClick={() => setGerenteParaExcluir(gerente)}><Trash2 />Excluir</Button></div></li>)}</ul>}
+          : <ul className="mt-4 divide-y divide-neutral-200">{gerentes.map(gerente => <li key={gerente.id} className="py-4"><div className="flex flex-wrap items-start justify-between gap-3"><div><strong>{gerente.nome}</strong><p className="text-sm text-neutral-600">{gerente.email}{gerente.telefone ? ` · ${gerente.telefone}` : ""}</p>{gerente.trocarSenhaObrigatoria ? gerente.senhaProvisoria ? <p className="mt-2 rounded-lg bg-yellow-50 px-3 py-2 text-sm text-neutral-800"><span className="font-medium">Senha provisória:</span> <code className="break-all">{gerente.senhaProvisoria}</code></p> : <p className="mt-2 text-sm text-amber-700">Senha provisória indisponível. Redefina para gerar uma nova.</p> : <p className="mt-2 text-sm text-green-700">Senha redefinida pelo gerente.</p>}</div><Badge variant={gerente.ativo ? "default" : "destructive"}>{gerente.ativo ? "Ativo" : "Bloqueado"}</Badge></div><div className="mt-3 flex flex-wrap gap-2"><Button type="button" size="sm" variant="outline" disabled={ocupado} onClick={() => alterarStatus(gerente)}>{gerente.ativo ? "Bloquear" : "Reativar"}</Button><Button type="button" size="sm" variant="outline" disabled={ocupado || !gerente.ativo} onClick={() => redefinirSenha(gerente)}>Redefinir senha</Button><Button type="button" size="sm" variant="destructive" disabled={ocupado} onClick={() => setGerenteParaExcluir(gerente)}><Trash2 />Excluir</Button></div></li>)}</ul>}
       </div>
       <form className="rounded-2xl bg-white p-6" onSubmit={criarGerente}><h2 className="text-xl font-semibold">Criar acesso individual</h2>
         <div className="mt-4 grid gap-2"><Label htmlFor="gerente-nome">Nome</Label><Input id="gerente-nome" name="nome" required minLength={2} maxLength={120} /></div>
@@ -159,6 +178,12 @@ function PainelAdmin() {
       <DialogContent>
         <DialogHeader><DialogTitle>Excluir acesso de gerente?</DialogTitle><DialogDescription>O acesso de {gerenteParaExcluir?.nome} será encerrado imediatamente. Depois da confirmação, você terá sete segundos para desfazer.</DialogDescription></DialogHeader>
         <DialogFooter><DialogClose asChild><Button type="button" variant="outline">Cancelar</Button></DialogClose><Button type="button" variant="destructive" disabled={ocupado} onClick={() => void confirmarExclusao()}>{ocupado ? "Excluindo..." : "Sim, excluir"}</Button></DialogFooter>
+      </DialogContent>
+    </Dialog>
+    <Dialog open={shoppingParaExcluir !== null} onOpenChange={aberto => { if (!aberto) setShoppingParaExcluir(null) }}>
+      <DialogContent>
+        <DialogHeader><DialogTitle>Excluir shopping?</DialogTitle><DialogDescription>{shoppingParaExcluir?.nome} será retirado da administração e todos os acessos de gerente serão encerrados. A estrutura e o histórico permanecem preservados.</DialogDescription></DialogHeader>
+        <DialogFooter><DialogClose asChild><Button type="button" variant="outline">Cancelar</Button></DialogClose><Button type="button" variant="destructive" disabled={ocupado} onClick={() => void confirmarExclusaoShopping()}>{ocupado ? "Excluindo..." : "Sim, excluir shopping"}</Button></DialogFooter>
       </DialogContent>
     </Dialog>
   </section>

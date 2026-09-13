@@ -90,11 +90,12 @@ Manter dois perfis humanos autenticados: Admin e gerente. Uma conta Admin inicia
 
 1. Admin cadastra nome, e-mail de login, telefone e shopping de cada gerente.
 2. E-mail identifica a conta; o sistema não cria uma caixa postal.
-3. Sistema emite senha provisória individual, armazenada como hash e exibida apenas na emissão.
+3. Sistema emite senha provisória individual. O login usa seu hash; uma cópia cifrada fica visível somente ao Admin enquanto a troca obrigatória estiver pendente.
 4. Equipe entrega o acesso pelo processo de atendimento no WhatsApp.
 5. Primeiro login deve exigir troca de senha. Backend bloqueia acesso operacional até concluir.
 6. Recuperação é solicitada à equipe; Admin verifica o solicitante e redefine o acesso com nova senha provisória.
 7. Bloqueio de conta deve interromper acesso também com sessão previamente emitida.
+8. Quando o gerente define a senha definitiva, a cópia cifrada da provisória é apagada e o Admin passa a ver apenas o estado “senha redefinida”.
 
 A senha definitiva deve ter de 12 a 128 caracteres, ao menos uma letra minúscula, uma maiúscula, um número e um símbolo, sem espaços, e não pode repetir a senha atual. A interface mostra os requisitos em tempo real, permite visualizar cada campo separadamente e associa o erro ao campo correspondente. O backend reaplica a política e retorna um código específico por requisito; validação apenas no navegador não é suficiente.
 
@@ -473,6 +474,7 @@ Novos contratos próprios devem priorizar português e termos claros, com exceç
 | GET/PATCH | `/minha-conta` | Usuário | Consultar/editar campos pessoais permitidos. |
 | GET/POST | `/shoppings` | Admin | Listar/cadastrar clientes. |
 | GET/PATCH | `/shoppings/:id` | Admin | Ficha e alterações institucionais. |
+| DELETE | `/shoppings/:id` | Admin | Excluir logicamente o shopping, ocultá-lo da administração e encerrar os acessos vinculados, preservando sua estrutura e seu histórico. |
 | PATCH | `/shoppings/:id/implantacao` | Admin | Atualizar etapa com validação de pré-condições. |
 | GET/POST | `/shoppings/:id/gerentes` | Admin | Listar/criar vários logins no mesmo shopping. |
 | PATCH | `/gerentes/:id` | Admin | Editar cadastro, suspender ou reativar. |
@@ -529,7 +531,7 @@ Criar gerente, **proposta**:
 }
 ```
 
-Shopping vem da rota administrativa validada. Sistema gera a senha provisória. Não retornar hash; senha provisória não reaparece em GETs futuros. O exemplo não define formato final de telefone nem credencial real.
+Shopping vem da rota administrativa validada. Sistema gera a senha provisória. Nunca retornar hash. Enquanto a troca obrigatória estiver pendente, a listagem administrativa pode retornar a senha provisória cifrada em repouso; depois da troca, retorna apenas que a senha foi redefinida. O exemplo não define formato final de telefone nem credencial real.
 
 Resposta conceitual do mapa:
 

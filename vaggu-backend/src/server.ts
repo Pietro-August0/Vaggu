@@ -19,7 +19,7 @@ const app = createApp({
   checkDatabase: () => prisma.$queryRaw`SELECT 1`,
   auth: createAuthService(prisma),
   whatsapp: { config: config.whatsapp, service: whatsappService },
-  shoppings: createShoppingsService(prisma),
+  shoppings: createShoppingsService(prisma, { credencialSecret: config.credencialSecret }),
   conta: createContaService(prisma),
   estrutura: createEstruturaService(prisma),
 });

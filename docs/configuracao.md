@@ -42,6 +42,8 @@ if (-not (Test-Path .env)) { Copy-Item .env.example .env }
 
 Edite `.env` e preencha `DATABASE_URL` com a conexão de desenvolvimento fornecida pela equipe. O exemplo contém apenas valores ilustrativos. As variáveis `HOST` e `PORT` controlam o endereço da API; mantenha o envio automático do WhatsApp desativado enquanto não estiver testando essa integração autorizada.
 
+Defina também `CREDENTIAL_ENCRYPTION_KEY` com um segredo aleatório e estável. Essa chave protege a cópia temporária das senhas provisórias que o Admin pode consultar antes da primeira troca. Não altere a chave enquanto houver senhas provisórias pendentes: os valores antigos deixam de ser legíveis e precisarão ser redefinidos. Para compatibilidade local, a API usa `DATABASE_URL` como alternativa quando a chave não foi configurada, mas ambientes compartilhados devem usar uma chave exclusiva.
+
 Com o destino do banco conferido:
 
 ```powershell

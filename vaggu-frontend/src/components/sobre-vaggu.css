@@ -23,10 +23,6 @@
 .sobre-satelite-base { top: calc(50% + var(--diametro-anel) / 2); white-space: nowrap; }
 .sobre-satelite-esquerda { left: calc(50% - var(--diametro-anel) / 2); width: 145px; transform: translate(calc(-100% + 8px), -50%); }
 .sobre-satelite-direita { left: calc(50% + var(--diametro-anel) / 2); width: 132px; transform: translate(-8px, -50%); }
-.sobre-movimento { position: absolute; bottom: -12px; left: 50%; transform: translateX(-50%); display: grid; place-items: center; width: 28px; height: 28px; padding: 4px; color: #a3a3a3; cursor: pointer; border-radius: 50%; }
-.sobre-movimento svg { width: 12px; height: 12px; }
-.sobre-movimento:hover { color: #fff; }
-.sobre-movimento:focus-visible { outline: 2px solid var(--primary); outline-offset: 3px; }
 .sobre-comecar { margin-top: 64px; }
 .sobre-vaggu h3 { text-align: center; font-size: clamp(23px, 2vw, 28px); font-weight: 400; letter-spacing: -0.025em; }
 .sobre-etapas { --conectar: 100%; display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 32px; padding: 0; margin: 36px 0 0; list-style: none; }
@@ -93,6 +89,5 @@
 }
 @media (prefers-reduced-motion: reduce) {
   .sobre-vaggu *, .sobre-vaggu *::before { animation: none !important; transition: none !important; clip-path: none !important; }
-  .sobre-movimento { display: none; }
 }
 .sobre-vaggu[data-movimento-reduzido] *, .sobre-vaggu[data-movimento-reduzido] *::before { animation: none !important; transition: none !important; clip-path: none !important; }

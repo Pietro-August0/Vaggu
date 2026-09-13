@@ -81,8 +81,9 @@ Todas as rotas abaixo exigem `Authorization: Bearer TOKEN`, perfil `VAGGU` e sen
 | --- | --- | --- | --- |
 | GET | /shoppings | Sem corpo | Lista shoppings, situação e total de gerentes. |
 | POST | /shoppings | JSON com nome e endereço opcional | Cria shopping. |
-| GET | /shoppings/:shoppingId/gerentes | Sem corpo | Lista gerentes do shopping. |
-| POST | /shoppings/:shoppingId/gerentes | nome, email e telefone opcional | Cria gerente SHOPPING e retorna senha provisória uma única vez. |
+| DELETE | /shoppings/:shoppingId | Sem corpo | Exclui logicamente o shopping, encerra seus acessos e preserva os registros. |
+| GET | /shoppings/:shoppingId/gerentes | Sem corpo | Lista gerentes e mostra a senha provisória ao Admin enquanto a troca obrigatória estiver pendente. |
+| POST | /shoppings/:shoppingId/gerentes | nome, email e telefone opcional | Cria gerente SHOPPING e retorna senha provisória. |
 | PATCH | /gerentes/:gerenteId | nome, telefone e/ou ativo | Edita cadastro permitido ou bloqueia/reativa gerente. |
 | POST | /gerentes/:gerenteId/redefinir-senha | Sem corpo | Revoga sessões do gerente e retorna nova senha provisória. |
 | DELETE | /gerentes/:gerenteId | Sem corpo | Oculta o gerente, encerra sessões e informa o prazo para desfazer. |
@@ -104,7 +105,8 @@ As posições do mapa usam valores proporcionais de 0 a 1 (`x`, `y`, largura e a
 
 ## Segurança e frontend
 
-- Senhas: scrypt com sal aleatório por senha; somente hash no banco.
+- Senhas definitivas: scrypt com sal aleatório por senha; somente hash no banco.
+- Senha provisória: além do hash usado no login, uma cópia cifrada fica disponível somente ao Admin até o gerente concluir a troca obrigatória. Na troca, essa cópia é apagada; registros antigos sem cópia aparecem como indisponíveis e podem ser redefinidos pelo Admin.
 - Senha definitiva: de 12 a 128 caracteres, com letra minúscula, letra maiúscula, número, símbolo e sem espaços. A API devolve um código e uma mensagem próprios para cada requisito não atendido; a nova senha também precisa ser diferente da atual.
 - Sessões: tokens opacos aleatórios de 256 bits; somente SHA-256 do token no banco. Não é JWT e não exige JWT_SECRET.
 - Primeiro acesso: gerentes criados ou redefinidos pelo Admin recebem `trocarSenhaObrigatoria=true`; rotas protegidas por `requirePasswordReady` recusam acesso até a troca.
@@ -142,6 +144,7 @@ Modelos de negócio: Shopping, Andar, Setor, Vaga, Usuario, Dispositivo e Histor
 | Arquivo/pasta | Responsabilidade |
 | --- | --- |
 | src/auth/password.ts | Hash e verificação de senha. |
+| src/auth/credencial-provisoria.ts | Cifra e revela a senha provisória somente durante o primeiro acesso. |
 | src/auth/service.ts | Login, sessão, troca de senha e logout. |
 | src/auth/middleware.ts | Autenticação, senha provisória, perfis, escopo e limite. |
 | src/auth/routes.ts | Rotas HTTP de autenticação. |

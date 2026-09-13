@@ -1,6 +1,6 @@
 /** Apresenta a solução, a jornada comercial e os benefícios conectados ao painel. */
-import { useRef, useState } from "react"
-import { CalendarClock, Car, Monitor, Pause, Play } from "lucide-react"
+import { useRef } from "react"
+import { CalendarClock, Car, Monitor } from "lucide-react"
 import { motion, useInView, useReducedMotion } from "motion/react"
 import { IconeWhatsApp } from "@/components/icone-whatsapp"
 import { WHATSAPP_URL } from "@/lib/constants"
@@ -19,15 +19,14 @@ const beneficios = [
   { titulo: "Indicadores em tempo real", descricao: "Acompanhe a ocupação com as atualizações dos sensores das vagas." },
 ]
 
-/** Pontos orbitais representam circulação de dados; pausa fora da tela e por preferência. */
+/** Pontos orbitais representam circulação de dados; pausam fora da tela e com movimento reduzido. */
 function DiagramaDaVaggu() {
   const referencia = useRef<HTMLDivElement>(null)
   const visivel = useInView(referencia, { amount: 0.3 })
   const reduzirMovimento = useReducedMotion()
-  const [pausada, definirPausada] = useState(false)
 
   return (
-    <div ref={referencia} className="sobre-orbitas" data-animando={visivel && !reduzirMovimento && !pausada}>
+    <div ref={referencia} className="sobre-orbitas" data-animando={visivel && !reduzirMovimento}>
       <div className="sobre-aneis" aria-hidden="true">
         <i /><i /><i />
         <div className="sobre-marca"><img src="/assets/vaggu-logo.svg" alt="" /></div>
@@ -36,11 +35,6 @@ function DiagramaDaVaggu() {
       <span className="sobre-satelite sobre-satelite-esquerda">Planejamento da operação</span>
       <span className="sobre-satelite sobre-satelite-direita">Visão da ocupação</span>
       <span className="sobre-satelite sobre-satelite-base">Estatísticas do estacionamento</span>
-      {!reduzirMovimento && (
-        <button type="button" className="sobre-movimento" aria-pressed={pausada} aria-label={pausada ? "Retomar animação dos anéis" : "Pausar animação dos anéis"} onClick={() => definirPausada(!pausada)}>
-          {pausada ? <Play aria-hidden="true" /> : <Pause aria-hidden="true" />}
-        </button>
-      )}
     </div>
   )
 }

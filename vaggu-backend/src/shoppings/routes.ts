@@ -16,6 +16,10 @@ export function shoppingsRoutes(auth, shoppings) {
     res.status(201).json(await shoppings.criarShopping(req.body));
   });
 
+  router.delete('/:shoppingId', async (req, res) => {
+    res.json(await shoppings.excluirShopping(req.params.shoppingId));
+  });
+
   router.patch('/:shoppingId/implantacao', async (req, res) => {
     res.json(await shoppings.atualizarImplantacao(req.params.shoppingId, req.body));
   });

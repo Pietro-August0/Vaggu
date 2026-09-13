@@ -88,6 +88,8 @@ Não carregar skills de pagamento, app nativo ou geração de imagem apenas porq
 | CA03 | RF02 | Mesma mensagem de demonstração reenviada | Não duplica pedido; evento de status não é tratado como texto do cliente. |
 | CA04 | RF03/RF04 | Admin cria shopping e dois gerentes | Contas distintas, e-mails únicos, mesmo shopping e senhas individuais. |
 | CA05 | RF05 | Gerente entra com senha provisória | Backend permite apenas ações necessárias à troca antes do painel operacional. |
+| CA05A | RF04/RF05 | Admin consulta o gerente antes e depois da primeira troca | Antes, vê a senha provisória; depois, vê “senha redefinida” sem acesso à senha definitiva. |
+| CA05B | RF03/RF17 | Admin exclui um shopping | Shopping some da listagem, sessões e acessos dos gerentes são encerrados e os registros operacionais permanecem preservados. |
 | CA06 | RF05 | Admin bloqueia um gerente já logado | A sessão perde acesso; outro gerente do shopping continua operando. |
 | CA07 | RF17 | Gerente A tenta ID, filtro, exportação ou download de shopping B | Nenhum dado de B é retornado. Testar também o canal de atualização escolhido. |
 | CA08 | RF03 | Gerente entra antes da ativação | Aviso “em configuração”; ausência de leituras não aparece como estacionamento vazio. |

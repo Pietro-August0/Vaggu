@@ -3,6 +3,7 @@
 import { randomBytes } from 'node:crypto';
 import { hashPassword } from '../auth/password.js';
 import { ApiError, normalizeEmail, publicUser } from '../auth/service.js';
+import { protegerSenhaProvisoria, revelarSenhaProvisoria } from '../auth/credencial-provisoria.js';
 
 const SITUACOES_IMPLANTACAO = new Set(['NOVO_ATENDIMENTO', 'EM_ANALISE', 'DOCUMENTACAO_PENDENTE', 'APROVADO', 'EM_CONFIGURACAO', 'AGUARDANDO_INSTALACAO', 'ATIVO', 'REJEITADO', 'INATIVO']);
 const PRAZO_DESFAZER_EXCLUSAO_MS = 7_000;
@@ -63,8 +64,22 @@ function gerarSenhaProvisoria() {
 async function exigirShopping(prisma, shoppingId) {
   const id = validarId(shoppingId, 'shoppingId');
   const shopping = await prisma.shopping.findUnique({ where: { id } });
-  if (!shopping) throw new ApiError(404, 'SHOPPING_NAO_ENCONTRADO', 'Shopping não encontrado.');
+  if (!shopping || shopping.excluidoEm) throw new ApiError(404, 'SHOPPING_NAO_ENCONTRADO', 'Shopping não encontrado.');
   return shopping;
+}
+
+/** Expõe a senha somente ao serviço administrativo e apenas enquanto ela ainda é provisória. */
+function publicGerente(gerente, credencialSecret: string) {
+  let senhaProvisoria: string | null = null;
+  if (gerente.trocarSenhaObrigatoria && gerente.senhaProvisoriaProtegida) {
+    try {
+      senhaProvisoria = revelarSenhaProvisoria(gerente.senhaProvisoriaProtegida, credencialSecret);
+    } catch {
+      // Uma chave alterada não deve derrubar a listagem; o Admin pode gerar uma nova senha provisória.
+      senhaProvisoria = null;
+    }
+  }
+  return { ...publicUser(gerente), senhaProvisoria };
 }
 
 /** Traduz conflito de unicidade de e-mail; outros erros seguem para o tratamento geral. */
@@ -77,7 +92,10 @@ function tratarConflitoUnico(error) {
 
 // Regras administrativas da parceria: shoppings e gerentes nascem pelo Admin,
 // nunca por cadastro público ou por dados enviados por um gerente autenticado.
-export function createShoppingsService(prisma, { now = () => new Date() } = {}) {
+export function createShoppingsService(prisma, {
+  now = () => new Date(),
+  credencialSecret = process.env.CREDENTIAL_ENCRYPTION_KEY || process.env.DATABASE_URL || '',
+} = {}) {
   const contagemGerentesVisiveis = {
     select: { usuarios: { where: { perfil: 'SHOPPING', excluidoEm: null } } },
   };
@@ -86,6 +104,7 @@ export function createShoppingsService(prisma, { now = () => new Date() } = {}) 
     /** Ordena clientes ativos primeiro e inclui a quantidade de usuários de cada shopping. */
     async listarShoppings() {
       const rows = await prisma.shopping.findMany({
+        where: { excluidoEm: null },
         orderBy: [{ ativo: 'desc' }, { nome: 'asc' }],
         include: { _count: contagemGerentesVisiveis },
       });
@@ -101,6 +120,25 @@ export function createShoppingsService(prisma, { now = () => new Date() } = {}) 
         include: { _count: contagemGerentesVisiveis },
       });
       return { shopping: publicShopping(shopping) };
+    },
+
+    /** Oculta o shopping sem apagar sua estrutura ou histórico e encerra os acessos vinculados. */
+    async excluirShopping(shoppingId) {
+      const shopping = await exigirShopping(prisma, shoppingId);
+      const atualizado = await prisma.$transaction(async (tx) => {
+        const excluido = await tx.shopping.update({
+          where: { id: shopping.id },
+          data: { ativo: false, excluidoEm: now() },
+          include: { _count: contagemGerentesVisiveis },
+        });
+        await tx.usuario.updateMany({
+          where: { shoppingId: shopping.id, perfil: 'SHOPPING', excluidoEm: null },
+          data: { ativo: false, senhaProvisoriaProtegida: null },
+        });
+        await tx.sessao.deleteMany({ where: { usuario: { shoppingId: shopping.id } } });
+        return excluido;
+      });
+      return { shopping: publicShopping(atualizado) };
     },
 
     /** Atualiza a etapa operacional separadamente do bloqueio institucional do shopping. */
@@ -120,7 +158,7 @@ export function createShoppingsService(prisma, { now = () => new Date() } = {}) 
         where: { shoppingId, perfil: 'SHOPPING', excluidoEm: null },
         orderBy: [{ ativo: 'desc' }, { nome: 'asc' }],
       });
-      return { gerentes: gerentes.map(publicUser) };
+      return { gerentes: gerentes.map(gerente => publicGerente(gerente, credencialSecret)) };
     },
 
     /** Exige shopping ativo e cria uma conta com senha provisória e troca obrigatória. */
@@ -134,6 +172,7 @@ export function createShoppingsService(prisma, { now = () => new Date() } = {}) 
 
       const senha = gerarSenhaProvisoria();
       const senhaHash = await hashPassword(senha);
+      const senhaProvisoriaProtegida = protegerSenhaProvisoria(senha, credencialSecret);
       try {
         const existente = await prisma.usuario.findUnique({ where: { email } });
         if (existente && (existente.perfil !== 'SHOPPING' || !existente.excluidoEm
@@ -141,7 +180,7 @@ export function createShoppingsService(prisma, { now = () => new Date() } = {}) 
           throw new ApiError(409, 'EMAIL_EM_USO', 'Esse e-mail já está cadastrado.');
         }
         const data = {
-          nome, email, telefone, senhaHash, perfil: 'SHOPPING', shoppingId: shopping.id,
+          nome, email, telefone, senhaHash, senhaProvisoriaProtegida, perfil: 'SHOPPING', shoppingId: shopping.id,
           ativo: true, trocarSenhaObrigatoria: true, excluidoEm: null, ativoAntesExclusao: null,
         };
         // Após o prazo de desfazer, o mesmo e-mail pode ganhar um novo acesso sem duplicar a identidade.
@@ -195,10 +234,11 @@ export function createShoppingsService(prisma, { now = () => new Date() } = {}) 
       }
       const senha = gerarSenhaProvisoria();
       const senhaHash = await hashPassword(senha);
+      const senhaProvisoriaProtegida = protegerSenhaProvisoria(senha, credencialSecret);
       const usuario = await prisma.$transaction(async (tx) => {
         const updated = await tx.usuario.update({
           where: { id },
-          data: { senhaHash, trocarSenhaObrigatoria: true },
+          data: { senhaHash, senhaProvisoriaProtegida, trocarSenhaObrigatoria: true },
         });
         await tx.sessao.deleteMany({ where: { usuarioId: id } });
         return updated;

@@ -24,7 +24,9 @@ Este repositório reúne o MVP acadêmico da solução, desenvolvido como projet
 - Login integrado à API para Admin e gerente, sem contas de demonstração.
 - Troca obrigatória da senha provisória, verificação da sessão e logout no servidor.
 - Gestão real de shoppings, gerentes, andares, setores, vagas e implantação.
+- Exclusão lógica de shopping, com encerramento dos acessos vinculados e preservação do histórico.
 - Exclusão reversível de gerente, com confirmação e sete segundos para desfazer.
+- Consulta administrativa da senha provisória enquanto o gerente ainda não a redefiniu.
 - Mapa do gerente com troca de andar, categorias, seleção e busca.
 - Token somente em memória; recarregar a página exige novo login.
 
@@ -33,6 +35,7 @@ Este repositório reúne o MVP acadêmico da solução, desenvolvido como projet
 - API REST em Node.js, Express e TypeScript.
 - Autenticação com sessões opacas, hash seguro de senhas e troca obrigatória no primeiro acesso.
 - Cadastro de shoppings e múltiplos gerentes com isolamento por shopping.
+- Proteção reversível da senha provisória até a primeira troca; a senha definitiva continua armazenada somente como hash.
 - Consulta e edição segura dos dados permitidos da conta.
 - Webhook da WhatsApp Cloud API com validação de assinatura e deduplicação de eventos.
 - Persistência PostgreSQL com Prisma e migrations versionadas.

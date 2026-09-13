@@ -11,16 +11,19 @@ import { createShoppingsService } from '../src/shoppings/service.js';
 export async function runAdminCases(t: TestContext, prisma: PrismaClient, senhaAdmin: string) {
   const auth = createAuthService(prisma);
   let agoraAdministrativa = new Date();
-  const shoppings = createShoppingsService(prisma, { now: () => agoraAdministrativa });
+  const credencialSecret = 'segredo-fixo-exclusivo-dos-testes-de-integracao';
+  const shoppings = createShoppingsService(prisma, { now: () => agoraAdministrativa, credencialSecret });
   const app = createApp({ checkDatabase: () => prisma.$queryRaw`SELECT 1`, auth, shoppings });
   const adminLogin = await request(app).post('/api/v1/auth/login')
     .send({ email: 'vaggu@example.com', senha: senhaAdmin }).expect(200);
   const adminHeader = { Authorization: `Bearer ${adminLogin.body.token}` };
+  let shoppingCentralId = '';
 
   await t.test('Admin cadastra shopping e dois gerentes com senhas individuais', async () => {
     const shoppingResponse = await request(app).post('/api/v1/shoppings')
       .set(adminHeader).send({ nome: 'Shopping Central', endereco: 'Rua de teste, 100' }).expect(201);
     const shopping = shoppingResponse.body.shopping;
+    shoppingCentralId = shopping.id;
     assert.equal(shopping.nome, 'Shopping Central');
     assert.equal(shopping.totalGerentes, 0);
 
@@ -46,6 +49,10 @@ export async function runAdminCases(t: TestContext, prisma: PrismaClient, senhaA
     const list = await request(app).get(`/api/v1/shoppings/${shopping.id}/gerentes`)
       .set(adminHeader).expect(200);
     assert.equal(list.body.gerentes.length, 2);
+    assert.equal(list.body.gerentes.find((item) => item.id === gerenteA.body.gerente.id).senhaProvisoria, gerenteA.body.senhaProvisoria);
+    const persistido = await prisma.usuario.findUniqueOrThrow({ where: { id: gerenteA.body.gerente.id } });
+    assert.ok(persistido.senhaProvisoriaProtegida);
+    assert.notEqual(persistido.senhaProvisoriaProtegida, gerenteA.body.senhaProvisoria);
   });
 
   await t.test('senha provisória bloqueia área administrativa e troca libera a sessão', async () => {
@@ -66,6 +73,12 @@ export async function runAdminCases(t: TestContext, prisma: PrismaClient, senhaA
       .set('Authorization', `Bearer ${acessoProvisorio.body.token}`)
       .send({ senhaAtual: reset.body.senhaProvisoria, novaSenha: 'SenhaDefinitivaGerenteA1!' }).expect(200);
     assert.equal(changed.body.usuario.trocarSenhaObrigatoria, false);
+    const listaDepoisDaTroca = await request(app).get(`/api/v1/shoppings/${gerente.shoppingId}/gerentes`)
+      .set(adminHeader).expect(200);
+    const gerenteDepoisDaTroca = listaDepoisDaTroca.body.gerentes.find((item) => item.id === gerente.id);
+    assert.equal(gerenteDepoisDaTroca.senhaProvisoria, null);
+    assert.equal(gerenteDepoisDaTroca.trocarSenhaObrigatoria, false);
+    assert.equal((await prisma.usuario.findUniqueOrThrow({ where: { id: gerente.id } })).senhaProvisoriaProtegida, null);
     const stillNotAdmin = await request(app).get('/api/v1/shoppings')
       .set('Authorization', `Bearer ${acessoProvisorio.body.token}`).expect(403);
     assert.equal(stillNotAdmin.body.erro.codigo, 'ACESSO_NEGADO');
@@ -125,5 +138,28 @@ export async function runAdminCases(t: TestContext, prisma: PrismaClient, senhaA
     const bloqueadoRestaurado = await request(app).post(`/api/v1/gerentes/${gerenteA.id}/desfazer-exclusao`)
       .set(adminHeader).expect(200);
     assert.equal(bloqueadoRestaurado.body.gerente.ativo, false);
+  });
+
+  await t.test('excluir shopping oculta a operação, encerra acessos e preserva os registros', async () => {
+    const gerente = await prisma.usuario.findFirstOrThrow({
+      where: { shoppingId: shoppingCentralId, perfil: 'SHOPPING', excluidoEm: null },
+    });
+    const reset = await request(app).post(`/api/v1/gerentes/${gerente.id}/redefinir-senha`)
+      .set(adminHeader).expect(200);
+    const login = await request(app).post('/api/v1/auth/login')
+      .send({ email: gerente.email, senha: reset.body.senhaProvisoria }).expect(200);
+
+    await request(app).delete(`/api/v1/shoppings/${shoppingCentralId}`)
+      .set(adminHeader).expect(200);
+
+    const shoppingPreservado = await prisma.shopping.findUniqueOrThrow({ where: { id: shoppingCentralId } });
+    assert.equal(shoppingPreservado.ativo, false);
+    assert.ok(shoppingPreservado.excluidoEm);
+    assert.ok(await prisma.usuario.count({ where: { shoppingId: shoppingCentralId } }));
+    assert.equal(await prisma.sessao.count({ where: { usuario: { shoppingId: shoppingCentralId } } }), 0);
+    await request(app).get('/api/v1/auth/me').set('Authorization', `Bearer ${login.body.token}`).expect(401);
+    const lista = await request(app).get('/api/v1/shoppings').set(adminHeader).expect(200);
+    assert.equal(lista.body.shoppings.some((item) => item.id === shoppingCentralId), false);
+    await request(app).get(`/api/v1/shoppings/${shoppingCentralId}/gerentes`).set(adminHeader).expect(404);
   });
 }

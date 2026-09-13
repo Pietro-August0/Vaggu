@@ -143,7 +143,8 @@ export function createAuthService(prisma, { now = () => new Date() } = {}) {
       const senhaHash = await hashPassword(novaSenha);
       const usuario = await prisma.usuario.update({
         where: { id: session.usuario.id },
-        data: { senhaHash, trocarSenhaObrigatoria: false },
+        // A senha recuperável deixa de existir assim que a conta passa a usar a senha definitiva.
+        data: { senhaHash, senhaProvisoriaProtegida: null, trocarSenhaObrigatoria: false },
         include: { shopping: true },
       });
       return { usuario: publicUser(usuario) };
