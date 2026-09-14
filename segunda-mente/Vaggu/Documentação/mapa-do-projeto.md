@@ -47,6 +47,10 @@ Conhecimento, documentos e regras ficam em `segunda-mente`; `docs/README.md` é 
 | `vaggu-backend/src/estrutura/service.ts` | Valida hierarquia, tipos, posições e revisões concorrentes do mapa. |
 | `vaggu-backend/src/importacao/contratos.ts` | Define a representação intermediária e os erros da prévia de importação reutilizáveis por CSV e XLSX. |
 | `vaggu-backend/src/importacao/parser-csv.ts` | Converte CSV em uma prévia validada por linha e campo, sem persistir alterações. |
+| `vaggu-backend/src/importacao/parser-tabela.ts` | Centraliza cabeçalhos, tipos, duplicatas e erros usados igualmente pelas prévias CSV e XLSX. |
+| `vaggu-backend/src/importacao/parser-xlsx.ts` | Lê a primeira planilha XLSX com limites explícitos e a converte para o contrato tabular comum. |
+| `vaggu-backend/src/importacao/routes.ts` | Expõe ao Admin as prévias CSV e XLSX com limites próprios, sem oferecer confirmação ou escrita. |
+| `vaggu-backend/src/importacao/service.ts` | Isola a prévia por shopping e identifica vagas que devem preservar o ID em uma atualização posterior. |
 | `vaggu-backend/src/conta/routes.ts` | Rotas HTTP da conta do usuário autenticado. Usam a identidade da sessão para |
 | `vaggu-backend/src/conta/service.ts` | Serviço de conta própria. Só permite alterações pessoais simples, mantendo |
 | `vaggu-backend/src/lib/prisma.ts` | Cliente Prisma do PostgreSQL. Regras de domínio recebem o cliente por injeção |
@@ -66,6 +70,7 @@ Conhecimento, documentos e regras ficam em `segunda-mente`; `docs/README.md` é 
 | `vaggu-backend/test/env.test.ts` | Configuração de env.test.ts utilizada pelo módulo backend. |
 | `vaggu-backend/test/integracao-acessos.test.ts` | Executa os cenários HTTP de autenticação e administração em PostgreSQL descartável. |
 | `vaggu-backend/test/importacao-csv.test.ts` | Verifica a prévia CSV do P05, incluindo normalização, duplicatas, colunas ausentes e sintaxe inválida. |
+| `vaggu-backend/test/importacao-routes.test.ts` | Verifica autorização e transporte HTTP da prévia CSV administrativa. |
 | `vaggu-backend/test/prisma-postgresql.test.ts` | Confere provider, relações, índices e migrations PostgreSQL relevantes. |
 | `vaggu-backend/test/whatsapp.test.ts` | Configuração de whatsapp.test.ts utilizada pelo módulo backend. |
 | `vaggu-backend/tsconfig.json` | Configura compilação TypeScript e limites dos arquivos incluídos neste projeto. |

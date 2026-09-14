@@ -11,6 +11,8 @@ export type RegistroImportacao = {
   andar: string;
   setor: string;
   tipo: TipoVagaImportacao;
+  acao: 'CRIAR' | 'ATUALIZAR';
+  vagaId: string | null;
 };
 
 export type ErroImportacao = {
@@ -27,7 +29,8 @@ export type PreviaImportacao = {
     totalLinhas: number;
     registrosValidos: number;
     totalErros: number;
+    novos: number;
+    atualizacoes: number;
   };
   podeConfirmar: boolean;
 };
-

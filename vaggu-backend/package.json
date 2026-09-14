@@ -28,7 +28,8 @@
     "dotenv": "^17.2.3",
     "express": "^5.1.0",
     "helmet": "^8.1.0",
-    "pg": "^8.23.0"
+    "pg": "^8.23.0",
+    "read-excel-file": "^9.3.10"
   },
   "devDependencies": {
     "@types/express": "^5.0.6",

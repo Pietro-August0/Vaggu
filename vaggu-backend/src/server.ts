@@ -10,6 +10,7 @@ import { createWhatsappService } from './whatsapp/service.js';
 import { createShoppingsService } from './shoppings/service.js';
 import { createContaService } from './conta/service.js';
 import { createEstruturaService } from './estrutura/service.js';
+import { createImportacaoService } from './importacao/service.js';
 
 const config = readEnv();
 const prisma = createPrisma(config.databaseUrl);
@@ -22,6 +23,7 @@ const app = createApp({
   shoppings: createShoppingsService(prisma, { credencialSecret: config.credencialSecret }),
   conta: createContaService(prisma),
   estrutura: createEstruturaService(prisma),
+  importacao: createImportacaoService(prisma),
 });
 
 const server = app.listen(config.port, config.host, () => {
