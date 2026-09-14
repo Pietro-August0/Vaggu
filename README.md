@@ -57,7 +57,8 @@ Este repositório reúne o MVP acadêmico da solução, desenvolvido como projet
 Vaggu/
 ├── vaggu-frontend/   # Interface web e protótipo navegável
 ├── vaggu-backend/    # API, autenticação, banco e webhook
-├── docs/             # Especificação, regras e critérios de aceite
+├── segunda-mente/    # Cofre Obsidian e documentação canônica compartilhada
+├── docs/             # Ponte de compatibilidade para a segunda mente
 ├── AGENTS.md         # Acordos de desenvolvimento do projeto
 └── README.md
 ```
@@ -115,6 +116,6 @@ O frontend não cria nem preenche contas. A equipe deve cadastrar o administrado
 
 A autenticação, a gestão administrativa e o mapa estão integrados à API. Em 12–13/09, 54 testes do backend passaram com PostgreSQL real; os fluxos principais também foram aprovados no navegador. A interface permite excluir um gerente com confirmação e desfazer por sete segundos. A troca obrigatória mostra os requisitos de senha, permite visualizar os três campos e explica o erro junto ao campo responsável. Importação, telemetria, telões e Power BI continuam pendentes.
 
-O [planejamento do projeto](./docs/planejamento-do-projeto.md) registra o estado real, os resultados da revisão e a próxima entrega. As skills `$start` e `$end` usam esse documento para iniciar e encerrar o trabalho diário.
+O [planejamento do projeto](./segunda-mente/Vaggu/Documentação/planejamento-do-projeto.md) registra o estado real, os resultados da revisão e a próxima entrega. As skills `$start` e `$end` usam esse documento para iniciar e encerrar o trabalho diário.
 
-Consulte a [documentação do produto](./docs/README.md) para conhecer o escopo, as decisões técnicas e os critérios de aceite sem confundir funcionalidades planejadas com funcionalidades já entregues.
+Consulte a [segunda mente](./segunda-mente/Vaggu/Vaggu.md) para conhecer o escopo, as decisões técnicas e os critérios de aceite sem confundir funcionalidades planejadas com funcionalidades já entregues. A pasta `docs` existe apenas como ponte para o novo local canônico.

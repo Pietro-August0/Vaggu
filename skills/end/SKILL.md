@@ -9,7 +9,7 @@ Deixe uma passagem de trabalho que permita ao próximo `start` continuar sem dep
 
 ## Reconstruir o dia com evidências
 
-Localize e confirme a raiz da VAGGU a partir do diretório atual/Git. Leia `AGENTS.md` e `docs/planejamento-do-projeto.md`; os caminhos são relativos à raiz, não à instalação da skill. Consulte as regras e critérios da entrega quando necessário. Em outro repositório, peça a localização correta antes de editar.
+Localize e confirme a raiz da VAGGU a partir do diretório atual/Git. Leia `AGENTS.md` e `segunda-mente/Vaggu/Documentação/planejamento-do-projeto.md`; os caminhos são relativos à raiz, não à instalação da skill. Consulte as regras e critérios da entrega quando necessário. Em outro repositório, peça a localização correta antes de editar.
 
 Use a data real em `America/Sao_Paulo`, a entrada aberta, a conversa, `git status`, diffs e commits do período para identificar o que mudou. Inclua arquivos não rastreados relevantes. Diferencie alterações já existentes, trabalho desta sessão e origem desconhecida; não atribua automaticamente todo o diff ao trabalho do dia.
 
@@ -19,7 +19,7 @@ Se não houve `start`, crie a entrada de fechamento com essa observação e reco
 
 ## Documentar e preparar a retomada
 
-Confira `docs/mapa-do-projeto.md` contra os arquivos alterados: comentários e descrições devem acompanhar mudanças de responsabilidade, uso e caminho. Execute `node scripts/verificar-documentacao.mjs` antes do fechamento. Registre o resultado no planejamento, sem duplicar o diário no mapa. Não recrie nem inclua ferramentas portáteis, caches ou bancos locais na entrega.
+Confira `segunda-mente/Vaggu/Documentação/mapa-do-projeto.md` contra os arquivos alterados: comentários e descrições devem acompanhar mudanças de responsabilidade, uso e caminho. Execute `node scripts/verificar-documentacao.mjs` antes do fechamento. Registre o resultado no planejamento, sem duplicar o diário no mapa. Não recrie nem inclua ferramentas portáteis, caches ou bancos locais na entrega.
 
 1. Confira as verificações já realizadas contra o diff atual. Execute somente as verificações relevantes que faltarem; não repita uma bateria que já passou sobre o mesmo código. Registre falhas e verificações não executadas com o motivo. Fechamento não transforma pendência em aprovação.
 2. Atualize o inventário do planejamento e os estados do backlog. Marque **concluído** somente com o aceite satisfeito; código parcial ou validação externa pendente permanece **em andamento** ou **bloqueado**, conforme o impedimento.

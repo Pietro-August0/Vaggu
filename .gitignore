@@ -24,5 +24,7 @@ src/generated/
 # Editores e sistema operacional
 .idea/
 .vscode/
+segunda-mente/.obsidian/workspace.json
+segunda-mente/.obsidian/workspace-mobile.json
 .DS_Store
 Thumbs.db

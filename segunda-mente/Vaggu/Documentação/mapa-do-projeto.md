@@ -2,7 +2,7 @@
 
 O frontend começa em main.tsx, monta o provedor de sessão e encaminha /login, /trocar-senha, /admin e /painel. O cliente HTTP chama /api/v1 pelo proxy local do Vite; o backend server.ts conecta os serviços e app.ts monta as rotas. Serviços validam permissões antes de acessar o Prisma/PostgreSQL. A sessão do navegador permanece somente em memória.
 
-Documentos e regras ficam em docs; skills/start e skills/end usam o planejamento como registro diário. Assets ficam no public do frontend. Dependências, builds, segredos e bancos ignorados não integram o mapa.
+Conhecimento, documentos e regras ficam em `segunda-mente`; `docs/README.md` é somente uma ponte de compatibilidade. As skills `start` e `end` usam o planejamento canônico da segunda mente como registro diário. Assets da aplicação ficam no `public` do frontend; o cofre mantém cópias próprias das evidências necessárias ao Obsidian. Dependências, builds, segredos e bancos ignorados não integram o mapa.
 
 | Arquivo | Responsabilidade |
 | --- | --- |
@@ -10,20 +10,16 @@ Documentos e regras ficam em docs; skills/start e skills/end usam o planejamento
 | `.gitignore` | Exclui ferramentas locais, segredos, dependências e saídas de build. |
 | `AGENTS.md` | Define escopo, regras de implementação, documentação e verificação para agentes. |
 | `README.md` | Apresenta o produto, recursos entregues e comandos de execução. |
-| `docs/README.md` | Documentação: Documentação da VAGGU. |
-| `docs/SSD-VAGGU.md` | Documentação: SSD VAGGU — especificação de produto e desenho do sistema. |
-| `docs/arquitetura-estrutura-sensores-telao.md` | Documenta configuração, mapa, sensores e telões nos pacotes P04–P07. |
-| `docs/configuracao.md` | Documentação: Configuração e execução da VAGGU. |
-| `docs/mapa-do-projeto.md` | Relaciona responsabilidades, caminhos e fluxo de execução dos arquivos versionáveis. |
-| `docs/planejamento-do-projeto.md` | Documentação: VAGGU — planejamento e continuidade do projeto. |
-| `docs/plano-e-aceite.md` | Documentação: VAGGU — plano de implementação e critérios de aceite. |
-| `docs/regras-de-codigo.md` | Documentação: VAGGU — regras de código e organização. |
-| `docs/regras-visuais.md` | Documentação: VAGGU — regras visuais permanentes. |
-| `docs/validacao-login-2026-09-11.md` | Registra evidências e limites da integração do login com a API. |
-| `docs/whatsapp-webhook.md` | Documentação: Webhook WhatsApp Cloud API. |
-| `scripts/verificar-documentacao.mjs` | Confere se o mapa explica todos os arquivos versionáveis, sem percorrer dependências ou segredos ignorados. |
+| `docs/README.md` | Mantém um ponto de compatibilidade curto e direciona para a documentação canônica da segunda mente. |
+| `segunda-mente/` | Cofre Obsidian compartilhado: fonte canônica de produto, decisões, continuidade, documentação, fontes e evidências da VAGGU. |
+| `scripts/verificar-documentacao.mjs` | Confere se o mapa canônico da segunda mente explica os arquivos versionáveis; o cofre é coberto por sua entrada de diretório. |
 | `skills/end/SKILL.md` | Documentação: Fechamento do dia — VAGGU. |
 | `skills/end/agents/openai.yaml` | Metadados de descoberta e apresentação da skill no Codex. |
+| `skills/rotear-trabalho-equipe/SKILL.md` | Roteia cada tarefa para o integrante responsável e seleciona ou cria uma branch segura e rastreável. |
+| `skills/rotear-trabalho-equipe/agents/openai.yaml` | Metadados de descoberta e apresentação do roteador de trabalho da equipe. |
+| `skills/rotear-trabalho-equipe/references/equipe.md` | Registra papéis, branches-base e critérios de desempate entre áreas da equipe. |
+| `skills/rotear-trabalho-equipe/references/autoria-coletiva.md` | Define a atribuição honesta de coautoria para trabalho coletivo realizado em uma única máquina. |
+| `skills/rotear-trabalho-equipe/scripts/gerar-coautoria.mjs` | Gera trailers `Co-authored-by` a partir da configuração local ignorada pelo Git, sem trocar identidades nem criar commits. |
 | `skills/start/SKILL.md` | Documentação: Início do dia — VAGGU. |
 | `skills/start/agents/openai.yaml` | Metadados de descoberta e apresentação da skill no Codex. |
 | `vaggu-backend/.env.example` | Documenta variáveis de ambiente sem incluir credenciais reais. |
@@ -85,6 +81,7 @@ Documentos e regras ficam em docs; skills/start e skills/end usam o planejamento
 | `vaggu-frontend/public/assets/vaggu-logo-yellow.svg` | Asset visual vaggu-logo-yellow.svg; reutilizado na identidade e composição da interface. |
 | `vaggu-frontend/public/assets/vaggu-logo.svg` | Asset visual vaggu-logo.svg; reutilizado na identidade e composição da interface. |
 | `vaggu-frontend/src/app/app-store.tsx` | Mantém token apenas em memória, valida identidade na API e gerencia sessão, troca de senha, consultas autenticadas e atualização da própria conta. |
+| `vaggu-frontend/src/app/preferencia-animacoes.tsx` | Ativa animações por padrão, persiste a escolha explícita do usuário e coordena CSS e Motion. |
 | `vaggu-frontend/src/components/brand.tsx` | Reutiliza os arquivos de marca publicados em public/assets nos links para a página inicial. |
 | `vaggu-frontend/src/components/dashboard-shell.tsx` | Compartilha cabeçalho, menu responsivo e saída da sessão entre os painéis autenticados. |
 | `vaggu-frontend/src/components/estrutura-admin.tsx` | Permite ao Admin criar a hierarquia, escolher implantação e salvar posições do mapa. |
@@ -110,7 +107,7 @@ Documentos e regras ficam em docs; skills/start e skills/end usam o planejamento
 | `vaggu-frontend/src/components/ui/table.tsx` | Componente de interface reutilizável table; usado para controles, estados e composição acessível. |
 | `vaggu-frontend/src/components/ui/tooltip.tsx` | Componente de interface reutilizável tooltip; usado para controles, estados e composição acessível. |
 | `vaggu-frontend/src/hooks/use-scroll-animations.ts` | Hook para animações de scroll usando Motion |
-| `vaggu-frontend/src/hooks/use-scroll-reveal.ts` | Revela blocos da landing conforme entram na viewport, respeitando movimento reduzido. |
+| `vaggu-frontend/src/hooks/use-scroll-reveal.ts` | Revela blocos da landing conforme entram na viewport e respeita a preferência explícita de pausar animações. |
 | `vaggu-frontend/src/index.css` | Reúne tema global, responsividade e microinterações dos cards acionáveis. |
 | `vaggu-frontend/src/lib/constants.ts` | Publica links de contato somente após configurar o número oficial da equipe. |
 | `vaggu-frontend/src/lib/utils.ts` | Configuração de utils.ts utilizada pelo módulo frontend. |

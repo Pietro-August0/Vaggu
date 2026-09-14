@@ -1,6 +1,6 @@
 # VAGGU — planejamento e continuidade do projeto
 
-Última atualização: **13/09/2026**, fuso **America/Sao_Paulo**. A revisão da landing e seu fechamento permanecem atribuídos a **09/09/2026**, conforme solicitado. Base de P01: `c127b5e`; registros das entregas na seção 7. Este documento registra evidências e orienta o trabalho diário; não substitui o [SSD](SSD-VAGGU.md) nem os [critérios de aceite](plano-e-aceite.md).
+Última atualização: **14/09/2026**, fuso **America/Sao_Paulo**. A revisão da landing e seu fechamento permanecem atribuídos a **09/09/2026**, conforme solicitado. Base de P01: `c127b5e`; registros das entregas na seção 7. Este documento registra evidências e orienta o trabalho diário; não substitui o [SSD](SSD-VAGGU.md) nem os [critérios de aceite](plano-e-aceite.md).
 
 ## 1. Situação atual
 
@@ -14,19 +14,19 @@ Classificações: **verificado** exige execução do comportamento indicado; **p
 
 | Área | Estado atual | Evidência e limite |
 | --- | --- | --- |
-| Landing, marca, login separado e contato comercial | Verificado na interface; contato real pendente | [Landing](../vaggu-frontend/src/pages/landing-page.tsx). Número de exemplo removido em 11/09; equipe ainda não possui número oficial. Não foi enviada mensagem. |
-| Seção Sobre | Verificado | [Componente](../vaggu-frontend/src/components/sobre-vaggu.tsx) e [estilos](../vaggu-frontend/src/components/sobre-vaggu.css): texto de apresentação, anéis, etapas, notebook e benefícios. |
-| Movimento e responsividade da seção Sobre | Verificado durante esta sessão | Pontos percorrem os anéis automaticamente e pausam fora da tela; movimento reduzido desativa a animação. O controle manual de pausa foi removido em 13/09 por decisão de produto. Conexões das etapas e benefícios acompanham o layout. Conferências entre 320 e 1440 px registradas na sessão. |
-| Seção abaixo do Sobre | Verificado | [Operação VAGGU](../vaggu-frontend/src/components/operacao-vaggu.tsx): foto urbana, título, explicação, benefícios e contato. Conteúdo usa hierarquia mais leve e altura ajustada. |
+| Landing, marca, login separado e contato comercial | Verificado na interface; contato real pendente | [Landing](../../../vaggu-frontend/src/pages/landing-page.tsx). Número de exemplo removido em 11/09; equipe ainda não possui número oficial. Não foi enviada mensagem. |
+| Seção Sobre | Verificado | [Componente](../../../vaggu-frontend/src/components/sobre-vaggu.tsx) e [estilos](../../../vaggu-frontend/src/components/sobre-vaggu.css): texto de apresentação, anéis, etapas, notebook e benefícios. |
+| Movimento e responsividade da seção Sobre | Verificado durante esta sessão | Pontos percorrem os anéis automaticamente e pausam fora da tela. Em 14/09, nova decisão explícita reativou um controle simples para pausar/ativar animações e fez a escolha do app prevalecer sobre a preferência do sistema. Conexões das etapas e benefícios acompanham o layout. Conferências entre 320 e 1440 px registradas na sessão. |
+| Seção abaixo do Sobre | Verificado | [Operação VAGGU](../../../vaggu-frontend/src/components/operacao-vaggu.tsx): foto urbana, título, explicação, benefícios e contato. Conteúdo usa hierarquia mais leve e altura ajustada. |
 | Remoção das legendas | Verificado novamente nesta revisão | Não há legenda visível do notebook nem texto de pausa. Permanece botão por ícone com nome acessível; o `alt` do notebook informa que é ilustração. |
 | Login e destinos autenticados | Integração verificada e política de senha reforçada em 13/09 | API real, token em memória, primeira senha e logout; sem contas locais. Troca exige seis critérios, mostra checklist, olhos independentes e erros por campo. Cadastro na interface continua pendente. |
 | Estado sem sensores | Verificado no recorte de P04 | O gerente recebe da API a situação de implantação do próprio shopping. Enquanto não estiver ativa, a interface apresenta a configuração em andamento sem inventar leituras de sensores. |
 | Base Express e saúde | Verificado em 10/09 | `start` e `dev` iniciaram a saída compilada; health e readiness responderam 200 com PostgreSQL local. Processos de API usados na verificação encerrados. |
-| Autenticação e conta na API | Verificado nos cenários de integração em 10/09 | [Runner](../vaggu-backend/test/integracao-acessos.test.ts): identidade, hash, sessão, primeira senha, conta, expiração, logout e escopo entre shoppings. Frontend integrado em 11/09; rotas de vagas usadas nos testes são exclusivas da suíte. |
+| Autenticação e conta na API | Verificado nos cenários de integração em 10/09 | [Runner](../../../vaggu-backend/test/integracao-acessos.test.ts): identidade, hash, sessão, primeira senha, conta, expiração, logout e escopo entre shoppings. Frontend integrado em 11/09; rotas de vagas usadas nos testes são exclusivas da suíte. |
 | Shoppings e vários gerentes | Verificado no recorte entregue | Cadastro e exclusão lógica de shopping, dois gerentes, redefinição e bloqueio individual aprovados no PostgreSQL e na interface. O Admin vê a senha provisória cifrada até a primeira troca; depois vê somente “senha redefinida”. A implantação possui situação própria; ficha comercial completa continua fora deste recorte. |
 | Persistência PostgreSQL | Migration aplicada e integração local verificada | PostgreSQL 17.11 portátil, bancos de desenvolvimento e controle de teste separados. Migrations aplicadas a cada banco descartável; descarte e ausência de fixtures nos bancos persistentes conferidos. Isso não valida histórico/telemetria ainda ausentes. |
-| Webhook WhatsApp | Parcial | [WhatsApp](../vaggu-backend/src/whatsapp/service.ts): assinatura, distinção entre mensagens/status, deduplicação e cliente Meta. Conversa contém menu de teste; fluxos de demonstração/suporte não estão concluídos. |
-| Skills de continuidade | Criadas, validadas e instaladas | Fontes versionadas em [start](../skills/start/SKILL.md) e [end](../skills/end/SKILL.md); cópias em `C:/Users/CASA/.codex/skills/start` e `end` conferidas por hash. Usam este documento como registro compartilhado. |
+| Webhook WhatsApp | Parcial | [WhatsApp](../../../vaggu-backend/src/whatsapp/service.ts): assinatura, distinção entre mensagens/status, deduplicação e cliente Meta. Conversa contém menu de teste; fluxos de demonstração/suporte não estão concluídos. |
+| Skills de continuidade | Criadas, validadas e instaladas | Fontes versionadas em [start](../../../skills/start/SKILL.md) e [end](../../../skills/end/SKILL.md); cópias em `C:/Users/CASA/.codex/skills/start` e `end` conferidas por hash. Usam este documento como registro compartilhado. |
 | Andares, setores, tipos e mapa | Verificado em P04 | Hierarquia por shopping, coordenadas proporcionais, revisão concorrente, dois andares, categorias, filtros, seleção e busca entre andares aprovados. O mapa usa base neutra; associação de planta ilustrada permanece uma evolução. |
 | Importação CSV/XLSX | Ausente | Cadastro manual está disponível. Prévia, erros por linha e confirmação da importação pertencem ao P05. |
 | ESP32, sensores, confirmação e expiração | Ausentes como fluxo funcional | Entidades iniciais não equivalem a ingestão, confirmação consistente de 30 s, ordenação, expiração ou manutenção. |
@@ -218,3 +218,11 @@ Se a lista de skills da conversa atual ainda não refletir a instalação, abrir
 - **Próxima ação:** P05, começando pelo contrato intermediário da importação e pela prévia CSV sem escrita no banco, preparando XLSX sobre a mesma estrutura. Validar com testes de parser, integração do endpoint, lint, build e fluxo de prévia no navegador.
 - **Ambiente:** API, frontend e PostgreSQL locais encerrados ao concluir o dia.
 - **Git:** entrega funcional publicada na `main` no commit `8cf06f0` (`feat: amplia controle administrativo de acessos`); este fechamento documental foi preparado em seguida. Nenhum deploy foi realizado.
+
+### 14/09/2026 — segunda mente canônica e animações
+
+- **Objetivo:** compartilhar o cofre pelo repositório, eliminar fontes documentais concorrentes e reativar as animações no ambiente atual.
+- **Decisões:** `segunda-mente/Vaggu/Vaggu.md` tornou-se o índice canônico. `docs/README.md` é somente uma ponte. Animações ficam ativas por padrão e podem ser pausadas por um controle acessível cuja escolha persiste no navegador.
+- **Preservação:** 73 arquivos e 20.877.712 bytes foram copiados; `.obsidian/workspace.json` ficou de fora por ser estado local. Quatro deltas mais recentes de `docs` foram incorporados antes da remoção das cópias.
+- **Verificações:** lint e build aprovados; mapa com 191 arquivos cobertos; localhost sem overlay ou erros; CSS de entrada ativo; órbitas em execução; pausa, persistência após recarga e reativação confirmadas.
+- **Limites:** o bundle principal ainda gera o aviso conhecido de tamanho acima de 500 kB. As mudanças estão locais e ainda não foram publicadas no remoto.

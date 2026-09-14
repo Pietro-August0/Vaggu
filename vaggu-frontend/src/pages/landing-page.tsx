@@ -3,10 +3,13 @@ import {
   ArrowRight,
   ExternalLink,
   LogIn,
+  Pause,
+  Play,
 } from "lucide-react"
 import { Link } from "react-router-dom"
 import { motion } from "motion/react"
 
+import { usePreferenciaAnimacoes } from "@/app/preferencia-animacoes"
 import { OperacaoVaggu } from "@/components/operacao-vaggu"
 import { SobreVaggu } from "@/components/sobre-vaggu"
 import { Brand } from "@/components/brand"
@@ -18,7 +21,8 @@ import { WHATSAPP_URL } from "@/lib/constants"
 
 /** Reúne conteúdo comercial estático, imagens e animações; o contato usa o link compartilhado. */
 export function LandingPage() {
-  useScrollReveal()
+  const { animacoesAtivas, alternarAnimacoes } = usePreferenciaAnimacoes()
+  useScrollReveal(animacoesAtivas)
 
   return (
     <div className="overflow-hidden bg-white font-landing font-light text-neutral-950">
@@ -26,6 +30,17 @@ export function LandingPage() {
         <div className="mx-auto flex max-w-[1440px] items-center justify-between px-5 py-6 sm:px-8 lg:px-12">
           <Brand inverted />
           <nav aria-label="Navegação principal" className="flex items-center gap-2 sm:gap-3">
+            <Button
+              aria-label={animacoesAtivas ? "Pausar animações" : "Ativar animações"}
+              aria-pressed={!animacoesAtivas}
+              className="rounded-full text-white hover:bg-white/10"
+              onClick={alternarAnimacoes}
+              size="icon"
+              title={animacoesAtivas ? "Pausar animações" : "Ativar animações"}
+              variant="ghost"
+            >
+              {animacoesAtivas ? <Pause aria-hidden="true" className="size-4" /> : <Play aria-hidden="true" className="size-4" />}
+            </Button>
             <Button asChild className="hidden rounded-full text-white hover:bg-white/10 sm:inline-flex" variant="ghost">
               <a href="#sobre">Sobre nós</a>
             </Button>
@@ -158,7 +173,7 @@ export function LandingPage() {
           </motion.div>
         </section>
 
-        <SobreVaggu />
+        <SobreVaggu animacoesAtivas={animacoesAtivas} />
 
         <OperacaoVaggu />
       </main>

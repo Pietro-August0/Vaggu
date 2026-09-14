@@ -5,7 +5,7 @@ import { dirname, resolve } from 'node:path';
 import { fileURLToPath } from 'node:url';
 
 const raiz = resolve(dirname(fileURLToPath(import.meta.url)), '..');
-const caminhoMapa = 'docs/mapa-do-projeto.md';
+const caminhoMapa = 'segunda-mente/Vaggu/Documentação/mapa-do-projeto.md';
 const mapa = readFileSync(resolve(raiz, caminhoMapa), 'utf8');
 
 /** Lê os caminhos reais do Git; -z preserva espaços e caracteres especiais dos nomes. */
@@ -20,8 +20,14 @@ function listarArquivos() {
 const arquivos = listarArquivos();
 const entradas = [...mapa.matchAll(/^\| `([^`]+)` \| (.+) \|$/gm)];
 const descritos = new Set(entradas.map((entrada) => entrada[1]));
-const faltantes = arquivos.filter((arquivo) => !descritos.has(arquivo));
-const obsoletos = [...descritos].filter((arquivo) => !arquivos.includes(arquivo));
+const faltantes = arquivos.filter((arquivo) => {
+  if (arquivo.startsWith('segunda-mente/') && descritos.has('segunda-mente/')) return false;
+  return !descritos.has(arquivo);
+});
+const obsoletos = [...descritos].filter((arquivo) => {
+  if (arquivo.endsWith('/')) return !arquivos.some((caminho) => caminho.startsWith(arquivo));
+  return !arquivos.includes(arquivo);
+});
 const repetidos = entradas.map((entrada) => entrada[1]).filter((arquivo, indice, lista) => lista.indexOf(arquivo) !== indice);
 
 if (faltantes.length || obsoletos.length || repetidos.length) {

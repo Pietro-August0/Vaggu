@@ -87,7 +87,6 @@
   .sobre-beneficios li { min-height: 100px; padding: 16px; }
   .sobre-beneficios li::after { content: ""; position: absolute; width: 16px; left: -17px; top: 50%; border-top: 1px dashed #ffe10080; }
 }
-@media (prefers-reduced-motion: reduce) {
+html[data-animacoes="reduzidas"] {
   .sobre-vaggu *, .sobre-vaggu *::before { animation: none !important; transition: none !important; clip-path: none !important; }
 }
-.sobre-vaggu[data-movimento-reduzido] *, .sobre-vaggu[data-movimento-reduzido] *::before { animation: none !important; transition: none !important; clip-path: none !important; }

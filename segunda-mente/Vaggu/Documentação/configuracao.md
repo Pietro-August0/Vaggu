@@ -61,7 +61,7 @@ Com a porta padrão, consulte:
 - `http://127.0.0.1:3000/api/v1/health`: a API está respondendo.
 - `http://127.0.0.1:3000/api/v1/health/ready`: a API consegue consultar o PostgreSQL.
 
-Ctrl+C encerra a API. O backend não cria administrador real automaticamente; o procedimento está no [README do backend](../vaggu-backend/README.md).
+Ctrl+C encerra a API. O backend não cria administrador real automaticamente; o procedimento está no [README do backend](../../../vaggu-backend/README.md).
 
 ## Testes com e sem banco
 
