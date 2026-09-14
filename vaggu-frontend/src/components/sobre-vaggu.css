@@ -10,11 +10,10 @@
 /* Os rótulos usam o mesmo centro e raio dos anéis, nunca as bordas da coluna. */
 .sobre-orbitas { --diametro-anel: clamp(230px, 20vw, 260px); position: relative; width: 100%; max-width: 540px; height: 350px; justify-self: center; }
 .sobre-aneis { position: absolute; width: var(--diametro-anel); height: var(--diametro-anel); top: 50%; left: 50%; transform: translate(-50%, -50%); display: grid; place-items: center; }
-.sobre-aneis i { position: absolute; inset: 0; border: 1px solid color-mix(in srgb, var(--primary) 45%, transparent); border-radius: 50%; animation: circular-dados 18s linear infinite; animation-play-state: paused; }
+.sobre-aneis i { position: absolute; inset: 0; border: 1px solid color-mix(in srgb, var(--primary) 45%, transparent); border-radius: 50%; animation: circular-dados 18s linear infinite; }
 .sobre-aneis i:nth-child(2) { inset: 28px; animation-duration: 24s; animation-delay: -8s; animation-direction: reverse; }
 .sobre-aneis i:nth-child(3) { inset: 56px; animation-duration: 14s; animation-delay: -4s; }
 .sobre-aneis i::after { content: ""; position: absolute; width: 5px; height: 5px; left: calc(50% - 2.5px); top: -3px; background: var(--primary); border-radius: 50%; box-shadow: 0 0 9px 2px #ffe10070; }
-.sobre-orbitas[data-animando="true"] .sobre-aneis i { animation-play-state: running; }
 @keyframes circular-dados { to { transform: rotate(360deg); } }
 .sobre-marca { display: grid; place-items: center; width: 100px; height: 100px; border-radius: 50%; background: var(--primary); }
 .sobre-marca img { width: 76px; height: 32px; object-fit: contain; }
@@ -86,7 +85,4 @@
   .sobre-beneficios::before { content: ""; position: absolute; left: -16px; top: -30px; bottom: 50px; border-left: 1px dashed #ffe10080; clip-path: inset(0 0 var(--conectar) 0); transition: clip-path 1.8s ease; }
   .sobre-beneficios li { min-height: 100px; padding: 16px; }
   .sobre-beneficios li::after { content: ""; position: absolute; width: 16px; left: -17px; top: 50%; border-top: 1px dashed #ffe10080; }
-}
-@media (prefers-reduced-motion: reduce) {
-  .sobre-vaggu *, .sobre-vaggu *::before { animation: none !important; transition: none !important; clip-path: none !important; }
 }

@@ -236,7 +236,7 @@ Se a lista de skills da conversa atual ainda não refletir a instalação, abrir
 ### 14/09/2026 — segunda mente canônica e animações
 
 - **Objetivo:** compartilhar o cofre pelo repositório, eliminar fontes documentais concorrentes e reativar as animações no ambiente atual.
-- **Decisões:** `segunda-mente/Vaggu/Vaggu.md` tornou-se o índice canônico. `docs/README.md` é somente uma ponte. Animações ficam ativas por padrão e podem ser pausadas por um controle acessível cuja escolha persiste no navegador.
+- **Decisões:** `segunda-mente/Vaggu/Vaggu.md` tornou-se o índice canônico. `docs/README.md` é somente uma ponte. Pela decisão mais recente da equipe, as animações da landing são automáticas, inclusive quando o navegador informa movimento reduzido, e não possuem botão ou controle manual de pausa.
 - **Preservação:** 73 arquivos e 20.877.712 bytes foram copiados; `.obsidian/workspace.json` ficou de fora por ser estado local. Quatro deltas mais recentes de `docs` foram incorporados antes da remoção das cópias.
-- **Verificações:** lint e build aprovados; mapa com 191 arquivos cobertos; localhost sem overlay ou erros; CSS de entrada ativo; órbitas em execução; pausa, persistência após recarga e reativação confirmadas.
+- **Verificações:** lint e build aprovados; mapa com 195 arquivos cobertos; localhost respondeu 200. No Edge, mesmo com `prefers-reduced-motion: reduce`, as três órbitas permaneceram em execução e mudaram de transformação entre duas medições; as conexões das etapas e do painel passaram de `100%` para `0%` ao entrar na tela. Nenhum controle de pausa ou animação foi encontrado no DOM.
 - **Limites:** o bundle principal ainda gera o aviso conhecido de tamanho acima de 500 kB. As mudanças estão locais e ainda não foram publicadas no remoto.

@@ -235,21 +235,3 @@ body {
 .landing-benefits [data-reveal]:nth-child(3) {
   transition-delay: 180ms;
 }
-
-@media (prefers-reduced-motion: reduce) {
-  html { scroll-behavior: auto; }
-
-  .landing-header,
-  .landing-hero-media,
-  .landing-hero-title,
-  .landing-hero-action,
-  .landing-hero-description {
-    animation: none;
-  }
-
-  [data-reveal].reveal-pending {
-    opacity: 1;
-    transform: none;
-    transition: none;
-  }
-}

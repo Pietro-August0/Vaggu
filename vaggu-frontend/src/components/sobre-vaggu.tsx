@@ -1,7 +1,6 @@
 /** Apresenta a solução, a jornada comercial e os benefícios conectados ao painel. */
-import { useRef } from "react"
 import { CalendarClock, Car, Monitor } from "lucide-react"
-import { motion, useInView } from "motion/react"
+import { motion } from "motion/react"
 import { IconeWhatsApp } from "@/components/icone-whatsapp"
 import { WHATSAPP_URL } from "@/lib/constants"
 import "./sobre-vaggu.css"
@@ -19,13 +18,10 @@ const beneficios = [
   { titulo: "Indicadores em tempo real", descricao: "Acompanhe a ocupação com as atualizações dos sensores das vagas." },
 ]
 
-/** Pontos orbitais representam circulação de dados e pausam fora da tela. */
+/** Pontos orbitais representam a circulação contínua de dados ao redor da marca. */
 function DiagramaDaVaggu() {
-  const referencia = useRef<HTMLDivElement>(null)
-  const visivel = useInView(referencia, { amount: 0.3 })
-
   return (
-    <div ref={referencia} className="sobre-orbitas" data-animando={visivel}>
+    <div className="sobre-orbitas">
       <div className="sobre-aneis" aria-hidden="true">
         <i /><i /><i />
         <div className="sobre-marca"><img src="/assets/vaggu-logo.svg" alt="" /></div>
@@ -38,12 +34,16 @@ function DiagramaDaVaggu() {
   )
 }
 
-/** As conexões entram em sequência ao rolar; movimento reduzido mantém tudo visível. */
+/** As conexões entram em sequência quando cada grupo aparece pela primeira vez. */
 export function SobreVaggu() {
   const entrada = {
-    initial: false as const,
+    initial: "desconectado",
     whileInView: "conectado",
     viewport: { once: true, amount: 0.25 },
+    variants: {
+      desconectado: { "--conectar": "100%" },
+      conectado: { "--conectar": "0%" },
+    },
   }
 
   return (
@@ -60,7 +60,7 @@ export function SobreVaggu() {
 
         <div className="sobre-comecar">
           <h3>Saiba como começar</h3>
-          <motion.ol className="sobre-etapas" {...entrada} variants={{ conectado: { "--conectar": "0%" } }}>
+          <motion.ol className="sobre-etapas" {...entrada}>
             {etapas.map(({ icone: Icone, texto }, indice) => (
               <li key={indice} className="sobre-etapa" style={{ transitionDelay: `${indice * 0.45}s` }}>
                 <p>{texto}</p>
@@ -76,7 +76,7 @@ export function SobreVaggu() {
 
         <div className="sobre-visualiza">
           <h3>Você visualiza</h3>
-          <motion.div className="sobre-painel" {...entrada} variants={{ conectado: { "--conectar": "0%" } }}>
+          <motion.div className="sobre-painel" {...entrada}>
             {/* Trajetos decorativos compartilham a grade dos destinos e ficam atrás do notebook. */}
             <svg className="sobre-conexoes" viewBox="0 0 1200 420" preserveAspectRatio="none" aria-hidden="true">
               <path d="M 220 225 C 400 30 510 -30 660 70" />
