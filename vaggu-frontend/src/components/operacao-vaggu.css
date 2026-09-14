@@ -29,6 +29,6 @@
   .operacao-texto h2 { font-size: 27px; }
   .operacao-beneficios { margin-block: 24px 16px; }
 }
-@media (prefers-reduced-motion: reduce) {
+html[data-animacoes="reduzidas"] {
   .operacao-contato svg { transition: none; }
 }

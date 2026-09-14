@@ -20,7 +20,7 @@
   .cartao-clicavel:hover { transform: translateY(-2px); box-shadow: 0 10px 24px rgb(0 0 0 / 8%); }
 }
 .cartao-clicavel:active { transform: scale(.975); }
-@media (prefers-reduced-motion: reduce) {
+html[data-animacoes="reduzidas"] {
   .cartao-clicavel { transition: none; }
   .cartao-clicavel:hover, .cartao-clicavel:active { transform: none; }
 }
@@ -236,10 +236,8 @@ body {
   transition-delay: 180ms;
 }
 
-@media (prefers-reduced-motion: reduce) {
-  html {
-    scroll-behavior: auto;
-  }
+html[data-animacoes="reduzidas"] {
+  scroll-behavior: auto;
 
   .landing-header,
   .landing-hero-media,

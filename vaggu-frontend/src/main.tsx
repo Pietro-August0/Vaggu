@@ -6,6 +6,7 @@ import { BrowserRouter, Navigate, Route, Routes } from "react-router-dom"
 
 import "./index.css"
 import { AppStoreProvider } from "@/app/app-store"
+import { PreferenciaAnimacoesProvider } from "@/app/preferencia-animacoes"
 import { ProtectedRoute } from "@/components/protected-route"
 import { Toaster } from "@/components/ui/sonner"
 import { AreaAutenticada } from "@/pages/area-autenticada"
@@ -30,12 +31,14 @@ function App() {
 createRoot(document.getElementById("root")!).render(
   <StrictMode>
     <ThemeProvider attribute="class" defaultTheme="light" enableSystem={false}>
-      <BrowserRouter>
-        <AppStoreProvider>
-          <App />
-          <Toaster position="top-right" richColors />
-        </AppStoreProvider>
-      </BrowserRouter>
+      <PreferenciaAnimacoesProvider>
+        <BrowserRouter>
+          <AppStoreProvider>
+            <App />
+            <Toaster position="top-right" richColors />
+          </AppStoreProvider>
+        </BrowserRouter>
+      </PreferenciaAnimacoesProvider>
     </ThemeProvider>
   </StrictMode>,
 )

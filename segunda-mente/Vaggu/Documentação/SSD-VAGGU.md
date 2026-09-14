@@ -24,7 +24,7 @@
 
 ## 1. Contexto, fontes e autoridade
 
-A VAGGU é o TCC de Desenvolvimento de Sistemas de uma equipe de seis integrantes: Pietro, Ana, Kamilly, Samuel, Juan e Elisa. A base anterior de organização indicava Pietro no fullstack, Ana no frontend e Scrum, Kamilly e Samuel no backend, Juan em frontend/UI e Elisa em frontend/UX. Esses papéis são contexto, não distribuição automática de tarefas. O horizonte informado é a apresentação até dezembro de 2026; não existe cronograma diário aprovado neste pacote.
+A VAGGU é o TCC de Desenvolvimento de Sistemas de uma equipe de seis integrantes. A organização confirmada em 14/09/2026 é: Pietro em fullstack e liderança; Ana Clara como Scrum Master, documentação e frontend; Elisa em frontend, UX e QA; Juan em frontend, UI e design; Samuel em backend, gestão de dados e Product Owner; Kamilly em backend, Arduino e IoT. O roteamento operacional e os usernames ficam em `skills/rotear-trabalho-equipe/references/equipe.md`. O horizonte informado é a apresentação até dezembro de 2026; não existe cronograma diário aprovado neste pacote.
 
 O sistema recebe dados de sensores em vagas de estacionamento de shoppings, apresenta ocupação e disponibilidade por andar/setor, oferece mapa operacional e telões e preserva histórico para análise. A equipe VAGGU administra implantação, acessos e equipamentos; gerentes acompanham a operação.
 

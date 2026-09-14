@@ -9,11 +9,11 @@ Transforme o registro do último dia em trabalho concreto, sem perder alteraçõ
 
 ## Contexto obrigatório
 
-Localize a raiz pelo diretório atual e pelo Git. Confirme `AGENTS.md`, `docs/SSD-VAGGU.md` e `docs/planejamento-do-projeto.md` da VAGGU. Todos os caminhos deste fluxo são relativos à raiz do projeto, não à pasta instalada da skill. Se estiver em outro projeto, peça a localização da VAGGU antes de editar.
+Localize a raiz pelo diretório atual e pelo Git. Confirme `AGENTS.md`, `segunda-mente/Vaggu/Documentação/SSD-VAGGU.md` e `segunda-mente/Vaggu/Documentação/planejamento-do-projeto.md` da VAGGU. Todos os caminhos deste fluxo são relativos à raiz do projeto, não à pasta instalada da skill. Se estiver em outro projeto, peça a localização da VAGGU antes de editar.
 
 Leia as instruções aplicáveis, o planejamento completo e as regras/critério de aceite da entrega selecionada. Compare `git status`, diff e histórico recente com o último registro: o documento pode estar desatualizado. Não confunda “presente no código” com comportamento testado.
 
-Consulte `docs/mapa-do-projeto.md` para localizar o papel de cada arquivo. Em cada mudança, revise comentários e a descrição correspondente; atualize o mapa quando mudar finalidade, uso ou caminho e inclua/remova entradas junto dos arquivos. Antes de concluir, execute `node scripts/verificar-documentacao.mjs` e revise a clareza das descrições. Não recrie o ambiente portátil removido pela equipe; confira runtime e conexão PostgreSQL disponíveis conforme `docs/configuracao.md`.
+Consulte `segunda-mente/Vaggu/Documentação/mapa-do-projeto.md` para localizar o papel de cada arquivo. Em cada mudança, revise comentários e a descrição correspondente; atualize o mapa quando mudar finalidade, uso ou caminho e inclua/remova entradas junto dos arquivos. Antes de concluir, execute `node scripts/verificar-documentacao.mjs` e revise a clareza das descrições. Não recrie o ambiente portátil removido pela equipe; confira runtime e conexão PostgreSQL disponíveis conforme `segunda-mente/Vaggu/Documentação/configuracao.md`.
 
 ## Abrir e executar o dia
 

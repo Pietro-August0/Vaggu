@@ -1,0 +1,4 @@
+interface:
+  display_name: "Roteador de trabalho VAGGU"
+  short_description: "Escolhe responsável e branch para cada tarefa"
+  default_prompt: "Use $rotear-trabalho-equipe para escolher o integrante responsável e preparar a branch correta para esta tarefa."

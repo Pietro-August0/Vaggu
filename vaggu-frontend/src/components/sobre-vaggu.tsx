@@ -1,7 +1,7 @@
 /** Apresenta a solução, a jornada comercial e os benefícios conectados ao painel. */
 import { useRef } from "react"
 import { CalendarClock, Car, Monitor } from "lucide-react"
-import { motion, useInView, useReducedMotion } from "motion/react"
+import { motion, useInView } from "motion/react"
 import { IconeWhatsApp } from "@/components/icone-whatsapp"
 import { WHATSAPP_URL } from "@/lib/constants"
 import "./sobre-vaggu.css"
@@ -20,13 +20,12 @@ const beneficios = [
 ]
 
 /** Pontos orbitais representam circulação de dados; pausam fora da tela e com movimento reduzido. */
-function DiagramaDaVaggu() {
+function DiagramaDaVaggu({ animacoesAtivas }: { animacoesAtivas: boolean }) {
   const referencia = useRef<HTMLDivElement>(null)
   const visivel = useInView(referencia, { amount: 0.3 })
-  const reduzirMovimento = useReducedMotion()
 
   return (
-    <div ref={referencia} className="sobre-orbitas" data-animando={visivel && !reduzirMovimento}>
+    <div ref={referencia} className="sobre-orbitas" data-animando={visivel && animacoesAtivas}>
       <div className="sobre-aneis" aria-hidden="true">
         <i /><i /><i />
         <div className="sobre-marca"><img src="/assets/vaggu-logo.svg" alt="" /></div>
@@ -40,8 +39,7 @@ function DiagramaDaVaggu() {
 }
 
 /** As conexões entram em sequência ao rolar; movimento reduzido mantém tudo visível. */
-export function SobreVaggu() {
-  const reduzirMovimento = useReducedMotion()
+export function SobreVaggu({ animacoesAtivas }: { animacoesAtivas: boolean }) {
   const entrada = {
     initial: false as const,
     whileInView: "conectado",
@@ -49,7 +47,7 @@ export function SobreVaggu() {
   }
 
   return (
-    <section id="sobre" aria-labelledby="titulo-sobre" className="sobre-vaggu" data-movimento-reduzido={reduzirMovimento || undefined}>
+    <section id="sobre" aria-labelledby="titulo-sobre" className="sobre-vaggu">
       <div className="sobre-conteudo">
         <div className="sobre-introducao">
           <div>
@@ -57,7 +55,7 @@ export function SobreVaggu() {
             <h2 id="titulo-sobre">Solução <span>inteligente</span> para shoppings mais eficientes e com grande fluxo</h2>
             <p className="sobre-descricao">A Vaggu é uma solução para gestão inteligente de estacionamentos de shoppings, conectando dados, vagas e visão estratégica.</p>
           </div>
-          <DiagramaDaVaggu />
+          <DiagramaDaVaggu animacoesAtivas={animacoesAtivas} />
         </div>
 
         <div className="sobre-comecar">
