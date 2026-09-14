@@ -12,7 +12,7 @@
     "build": "tsc -p tsconfig.json",
     "start": "node dist/src/server.js",
     "test": "npm run build && node --test \"dist/test/**/*.test.js\"",
-    "test:integracao": "npm run build && node --env-file=.env.teste.local --test dist/test/integracao-acessos.test.js",
+    "test:integracao": "npm run build && node --env-file=.env.teste.local --test dist/test/integracao-acessos.test.js dist/test/importacao-postgresql.test.js",
     "typecheck": "tsc -p tsconfig.json --noEmit",
     "admin:create": "npm run build && node dist/scripts/create-admin.js",
     "db:validate": "prisma validate",
@@ -28,7 +28,8 @@
     "dotenv": "^17.2.3",
     "express": "^5.1.0",
     "helmet": "^8.1.0",
-    "pg": "^8.23.0"
+    "pg": "^8.23.0",
+    "read-excel-file": "^9.3.10"
   },
   "devDependencies": {
     "@types/express": "^5.0.6",

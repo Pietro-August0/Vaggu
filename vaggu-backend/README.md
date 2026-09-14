@@ -1,6 +1,6 @@
 # Vaggu Backend — 0.5.0
 
-TypeScript + Node.js + Express + Prisma 7 + PostgreSQL. A base inclui autenticação, administração de shoppings e gerentes, estrutura do estacionamento e webhook do WhatsApp.
+TypeScript + Node.js + Express + Prisma 7 + PostgreSQL. A base inclui autenticação, administração de shoppings e gerentes, estrutura do estacionamento, prévia de importação CSV/XLSX e webhook do WhatsApp.
 
 ## Atualizar a pasta atual
 
@@ -92,6 +92,8 @@ Todas as rotas abaixo exigem `Authorization: Bearer TOKEN`, perfil `VAGGU` e sen
 | POST | /shoppings/:shoppingId/andares | nome, ordem e código opcional | Cria um andar no shopping. |
 | POST | /andares/:andarId/setores | nome e código | Cria um setor no andar. |
 | POST | /setores/:setorId/vagas | código, tipo e posição opcional | Cria uma vaga vinculada ao setor e ao andar. |
+| POST | /shoppings/:shoppingId/importacoes/previa-csv | Corpo `text/csv` ou `text/plain`, até 1 MB | Valida a planilha, informa erros por linha/campo e indica criação ou atualização sem gravar no banco. |
+| POST | /shoppings/:shoppingId/importacoes/previa-xlsx | Corpo binário XLSX, até 2 MB | Lê a primeira planilha e produz a mesma prévia do CSV sem gravar no banco. |
 | PATCH | /andares/:andarId/mapa | revisão esperada e posições das vagas | Salva o mapa de forma atômica; revisão desatualizada retorna 409. |
 | PATCH | /shoppings/:shoppingId/implantacao | situação | Atualiza a etapa de implantação do shopping. |
 
@@ -102,6 +104,14 @@ O gerente não cria sua própria conta e não escolhe `shoppingId`; o vínculo v
 `GET /estacionamento/estrutura` exige perfil `SHOPPING`. O backend deriva o shopping da sessão autenticada e não aceita um `shoppingId` enviado pelo cliente. A resposta contém a situação de implantação e a hierarquia `andar → setor → vaga`. Tipos de vaga: `COMUM`, `PCD`, `IDOSO` e `ELETRICA`.
 
 As posições do mapa usam valores proporcionais de 0 a 1 (`x`, `y`, largura e altura), para que a mesma configuração funcione em telas diferentes. O salvamento de um andar exige a revisão atual e ocorre em transação serializável; vagas de outro andar são recusadas. A migration mantém `andarId` e `setorId` opcionais para registros legados, mas novos cadastros pela API sempre criam o vínculo completo.
+
+## Prévia de importação
+
+CSV e XLSX exigem as colunas `codigo` (ou `código`), `andar`, `setor` e `tipo`. Os tipos permitidos são `COMUM`, `PCD`, `IDOSO` e `ELETRICA`; diferenças de caixa e acentos são normalizadas para validação. Duplicatas e campos inválidos retornam linha, campo, código e mensagem. Uma vaga já existente no shopping aparece com ação `ATUALIZAR` e seu ID atual; as demais aparecem como `CRIAR`.
+
+Essas rotas persistem a prévia na tabela PostgreSQL `importacoes_estrutura`, sem modificar vagas ou histórico. A resposta acrescenta `importacaoId` e `criadoEm`. O Admin consulta o resultado por `GET /shoppings/:shoppingId/importacoes/:importacaoId`; outro shopping ou shopping excluído retorna 404. Prévias com erros também são armazenadas; os bytes originais do arquivo não são guardados.
+
+A migration incremental `20260914000100_previas_importacao` deve ser aplicada pelo fluxo `db:deploy` ao banco configurado pela equipe. Identificação de vagas e persistência usam uma transação consistente. A confirmação ainda está pendente: `podeConfirmar` indica somente a validação da prévia. O XLSX usa a primeira planilha, até 10.000 registros e 50 colunas, por meio de `read-excel-file`.
 
 ## Segurança e frontend
 
@@ -151,6 +161,7 @@ Modelos de negócio: Shopping, Andar, Setor, Vaga, Usuario, Dispositivo e Histor
 | src/auth/bootstrap.ts | Criação do primeiro administrador. |
 | src/shoppings/ | Shoppings, gerentes, senha provisória e redefinição administrativa. |
 | src/estrutura/ | Hierarquia do estacionamento, mapa, revisão concorrente e escopo do gerente. |
+| src/importacao/ | Contratos, leitores CSV/XLSX, validação tabular, identificação de IDs e rotas de prévia. |
 | scripts/create-admin.ts | Comando interativo do administrador. |
 | src/app.ts e src/server.ts | Express e inicialização. |
 | src/config/ e src/lib/ | Configuração e Prisma. |
@@ -169,4 +180,4 @@ Os cenários verificam múltiplos gerentes, política e troca da primeira senha,
 
 Testado no Windows com Node compatível: `npm run typecheck`, `DATABASE_URL=postgresql://... npm run db:validate` e `cmd /c npm test` passaram. Prisma fixado em 7.10.0. Revise npm audit antes de publicar; não execute npm audit fix --force automaticamente.
 
-P04 e as melhorias administrativas concluídas em 12–13/09/2026 estão entregues: migrations aplicadas, estrutura, mapa, exclusão reversível e política de senha definitiva integrados, 54 testes aprovados com PostgreSQL real e fluxos principais validados no navegador. A próxima entrega é P05: importação CSV/XLSX com prévia e preservação de histórico, conforme o [planejamento](../segunda-mente/Vaggu/Documentação/planejamento-do-projeto.md).
+P04 e as melhorias administrativas concluídas em 12–13/09/2026 estão entregues: migrations aplicadas, estrutura, mapa, exclusão reversível e política de senha definitiva integrados, 54 testes aprovados com PostgreSQL real e fluxos principais validados no navegador. O P05 está em andamento com prévias CSV/XLSX sem persistência; confirmação atômica e preservação de histórico permanecem pendentes, conforme o [planejamento](../segunda-mente/Vaggu/Documentação/planejamento-do-projeto.md).

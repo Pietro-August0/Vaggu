@@ -8,6 +8,7 @@ import { whatsappRoutes } from './whatsapp/routes.js';
 import { gerentesRoutes, shoppingsRoutes } from './shoppings/routes.js';
 import { contaRoutes } from './conta/routes.js';
 import { estruturaAdminRoutes, estruturaGerenteRoutes } from './estrutura/routes.js';
+import { importacaoRoutes } from './importacao/routes.js';
 
 type AppServices = {
   checkDatabase: () => Promise<unknown> | unknown;
@@ -16,10 +17,11 @@ type AppServices = {
   shoppings?: any;
   conta?: any;
   estrutura?: any;
+  importacao?: any;
 };
 
 // Injeção da consulta facilita testar HTTP sem um banco real.
-export function createApp({ checkDatabase, auth, whatsapp, shoppings, conta, estrutura }: AppServices) {
+export function createApp({ checkDatabase, auth, whatsapp, shoppings, conta, estrutura, importacao }: AppServices) {
   const app = express();
   app.disable('x-powered-by');
   app.use(helmet());
@@ -59,6 +61,7 @@ export function createApp({ checkDatabase, auth, whatsapp, shoppings, conta, est
     app.use('/api/v1/estacionamento/estrutura', estruturaGerenteRoutes(auth, estrutura));
     app.use('/api/v1', estruturaAdminRoutes(auth, estrutura));
   }
+  if (auth && importacao) app.use('/api/v1', importacaoRoutes(auth, importacao));
 
   app.use((_req, res) => {
     res.status(404).json({
@@ -78,7 +81,7 @@ export function createApp({ checkDatabase, auth, whatsapp, shoppings, conta, est
     }
     if (error.type === 'entity.too.large') {
       return res.status(413).json({
-        erro: { codigo: 'CORPO_MUITO_GRANDE', mensagem: 'O limite é 32 KB.' },
+        erro: { codigo: 'CORPO_MUITO_GRANDE', mensagem: 'O conteúdo excede o limite permitido para esta rota.' },
       });
     }
     return res.status(500).json({

@@ -49,9 +49,23 @@ model Shopping {
   vagas        Vaga[]
   andares      Andar[]
   setores      Setor[]
+  importacoes  ImportacaoEstrutura[]
 
   @@map("shoppings")
   @@index([excluidoEm, ativo, nome])
+}
+
+// Guarda o resultado imutável da prévia; a confirmação estrutural será uma etapa posterior.
+model ImportacaoEstrutura {
+  id         String   @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  shoppingId String   @map("shopping_id") @db.Uuid
+  formato    String   @db.VarChar(4)
+  previa     Json     @db.JsonB
+  criadoEm   DateTime @default(now()) @map("criado_em")
+  shopping   Shopping @relation(fields: [shoppingId], references: [id], onDelete: Restrict)
+
+  @@index([shoppingId, criadoEm])
+  @@map("importacoes_estrutura")
 }
 
 model Andar {
