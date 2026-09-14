@@ -216,5 +216,5 @@ Se a lista de skills da conversa atual ainda não refletir a instalação, abrir
 - **Verificações:** migration aplicada ao PostgreSQL local; integração 30/30; suíte básica 26 aprovações e uma integração explicitamente pulada; lint e build do frontend aprovados, com aviso conhecido de chunk acima de 500 kB; landing e login carregaram sem overlay ou erros de console; ausência do controle de pausa confirmada no DOM; documentação e `git diff --check` aprovados, com 125 arquivos cobertos.
 - **Limites:** contas provisórias criadas antes da migration não possuem cópia recuperável e precisam de redefinição administrativa. Importação, telemetria, telões e Power BI continuam pendentes. Nenhum deploy foi realizado.
 - **Próxima ação:** P05, começando pelo contrato intermediário da importação e pela prévia CSV sem escrita no banco, preparando XLSX sobre a mesma estrutura. Validar com testes de parser, integração do endpoint, lint, build e fluxo de prévia no navegador.
-- **Ambiente:** PostgreSQL, API em `http://127.0.0.1:3000` e frontend em `http://127.0.0.1:5173` permanecem ativos para testes locais.
-- **Git:** commit e push para `main` autorizados nesta sessão; conferir os hashes local e remoto após a publicação.
+- **Ambiente:** API, frontend e PostgreSQL locais encerrados ao concluir o dia.
+- **Git:** entrega funcional publicada na `main` no commit `8cf06f0` (`feat: amplia controle administrativo de acessos`); este fechamento documental foi preparado em seguida. Nenhum deploy foi realizado.
