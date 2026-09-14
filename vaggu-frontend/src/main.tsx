@@ -3,10 +3,10 @@ import { StrictMode } from "react"
 import { createRoot } from "react-dom/client"
 import { ThemeProvider } from "next-themes"
 import { BrowserRouter, Navigate, Route, Routes } from "react-router-dom"
+import { MotionConfig } from "motion/react"
 
 import "./index.css"
 import { AppStoreProvider } from "@/app/app-store"
-import { PreferenciaAnimacoesProvider } from "@/app/preferencia-animacoes"
 import { ProtectedRoute } from "@/components/protected-route"
 import { Toaster } from "@/components/ui/sonner"
 import { AreaAutenticada } from "@/pages/area-autenticada"
@@ -31,14 +31,14 @@ function App() {
 createRoot(document.getElementById("root")!).render(
   <StrictMode>
     <ThemeProvider attribute="class" defaultTheme="light" enableSystem={false}>
-      <PreferenciaAnimacoesProvider>
+      <MotionConfig reducedMotion="user">
         <BrowserRouter>
           <AppStoreProvider>
             <App />
             <Toaster position="top-right" richColors />
           </AppStoreProvider>
         </BrowserRouter>
-      </PreferenciaAnimacoesProvider>
+      </MotionConfig>
     </ThemeProvider>
   </StrictMode>,
 )

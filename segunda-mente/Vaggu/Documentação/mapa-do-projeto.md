@@ -81,7 +81,6 @@ Conhecimento, documentos e regras ficam em `segunda-mente`; `docs/README.md` é 
 | `vaggu-frontend/public/assets/vaggu-logo-yellow.svg` | Asset visual vaggu-logo-yellow.svg; reutilizado na identidade e composição da interface. |
 | `vaggu-frontend/public/assets/vaggu-logo.svg` | Asset visual vaggu-logo.svg; reutilizado na identidade e composição da interface. |
 | `vaggu-frontend/src/app/app-store.tsx` | Mantém token apenas em memória, valida identidade na API e gerencia sessão, troca de senha, consultas autenticadas e atualização da própria conta. |
-| `vaggu-frontend/src/app/preferencia-animacoes.tsx` | Ativa animações por padrão, persiste a escolha explícita do usuário e coordena CSS e Motion. |
 | `vaggu-frontend/src/components/brand.tsx` | Reutiliza os arquivos de marca publicados em public/assets nos links para a página inicial. |
 | `vaggu-frontend/src/components/dashboard-shell.tsx` | Compartilha cabeçalho, menu responsivo e saída da sessão entre os painéis autenticados. |
 | `vaggu-frontend/src/components/estrutura-admin.tsx` | Permite ao Admin criar a hierarquia, escolher implantação e salvar posições do mapa. |
@@ -107,7 +106,7 @@ Conhecimento, documentos e regras ficam em `segunda-mente`; `docs/README.md` é 
 | `vaggu-frontend/src/components/ui/table.tsx` | Componente de interface reutilizável table; usado para controles, estados e composição acessível. |
 | `vaggu-frontend/src/components/ui/tooltip.tsx` | Componente de interface reutilizável tooltip; usado para controles, estados e composição acessível. |
 | `vaggu-frontend/src/hooks/use-scroll-animations.ts` | Hook para animações de scroll usando Motion |
-| `vaggu-frontend/src/hooks/use-scroll-reveal.ts` | Revela blocos da landing conforme entram na viewport e respeita a preferência explícita de pausar animações. |
+| `vaggu-frontend/src/hooks/use-scroll-reveal.ts` | Revela blocos da landing conforme entram na viewport e respeita a preferência de movimento reduzido do sistema. |
 | `vaggu-frontend/src/index.css` | Reúne tema global, responsividade e microinterações dos cards acionáveis. |
 | `vaggu-frontend/src/lib/constants.ts` | Publica links de contato somente após configurar o número oficial da equipe. |
 | `vaggu-frontend/src/lib/utils.ts` | Configuração de utils.ts utilizada pelo módulo frontend. |
