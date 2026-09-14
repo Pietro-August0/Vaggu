@@ -1,4 +1,4 @@
-// Testes HTTP da prévia de importação: autorização, transporte textual e ausência de persistência.
+// Testes HTTP da prévia de importação: autorização, transporte e consulta da persistência.
 import test from 'node:test';
 import assert from 'node:assert/strict';
 import request from 'supertest';
@@ -8,6 +8,21 @@ import { ApiError } from '../src/auth/service.js';
 const usuarioAdmin = { perfil: 'VAGGU', trocarSenhaObrigatoria: false };
 const auth = (usuario = usuarioAdmin) => ({ authenticate: async () => ({ sessionId: 'sessao', usuario }) });
 const shoppingId = '11111111-1111-4111-8111-111111111111';
+const importacaoId = '22222222-2222-4222-8222-222222222222';
+
+test('Admin consulta uma prévia persistida sem permitir cache', async () => {
+  let consulta: { shoppingId: string; importacaoId: string } | undefined;
+  const importacao = { buscarPrevia: async (idShopping: string, idImportacao: string) => {
+    consulta = { shoppingId: idShopping, importacaoId: idImportacao };
+    return { id: idImportacao, shoppingId: idShopping, formato: 'CSV', previa: {}, criadoEm: new Date() };
+  } };
+  const app = createApp({ checkDatabase: async () => 1, auth: auth(), importacao });
+  const resposta = await request(app).get(`/api/v1/shoppings/${shoppingId}/importacoes/${importacaoId}`)
+    .set('Authorization', 'Bearer teste').expect(200);
+  assert.deepEqual(consulta, { shoppingId, importacaoId });
+  assert.equal(resposta.headers['cache-control'], 'no-store');
+  assert.equal(resposta.body.id, importacaoId);
+});
 
 test('Admin envia CSV e recebe a prévia sem confirmação', async () => {
   let chamada: { shoppingId: string; conteudo: unknown } | undefined;

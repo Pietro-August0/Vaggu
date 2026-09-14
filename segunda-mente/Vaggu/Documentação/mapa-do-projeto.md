@@ -49,8 +49,10 @@ Conhecimento, documentos e regras ficam em `segunda-mente`; `docs/README.md` é 
 | `vaggu-backend/src/importacao/parser-csv.ts` | Converte CSV em uma prévia validada por linha e campo, sem persistir alterações. |
 | `vaggu-backend/src/importacao/parser-tabela.ts` | Centraliza cabeçalhos, tipos, duplicatas e erros usados igualmente pelas prévias CSV e XLSX. |
 | `vaggu-backend/src/importacao/parser-xlsx.ts` | Lê a primeira planilha XLSX com limites explícitos e a converte para o contrato tabular comum. |
-| `vaggu-backend/src/importacao/routes.ts` | Expõe ao Admin as prévias CSV e XLSX com limites próprios, sem oferecer confirmação ou escrita. |
-| `vaggu-backend/src/importacao/service.ts` | Isola a prévia por shopping e identifica vagas que devem preservar o ID em uma atualização posterior. |
+| `vaggu-backend/src/importacao/routes.ts` | Expõe criação e consulta de prévias persistidas ao Admin, sem confirmar mudanças nas vagas. |
+| `vaggu-backend/src/importacao/service.ts` | Persiste prévias em transação e restringe a consulta ao shopping indicado. |
+| `vaggu-backend/prisma/migrations/20260914000100_previas_importacao/migration.sql` | Cria armazenamento JSONB de prévias com vínculo ao shopping, índice e restrições de formato. |
+| `vaggu-backend/test/importacao-postgresql.test.ts` | Verifica persistência, isolamento de consulta e preservação de vagas e histórico em PostgreSQL descartável. |
 | `vaggu-backend/src/conta/routes.ts` | Rotas HTTP da conta do usuário autenticado. Usam a identidade da sessão para |
 | `vaggu-backend/src/conta/service.ts` | Serviço de conta própria. Só permite alterações pessoais simples, mantendo |
 | `vaggu-backend/src/lib/prisma.ts` | Cliente Prisma do PostgreSQL. Regras de domínio recebem o cliente por injeção |

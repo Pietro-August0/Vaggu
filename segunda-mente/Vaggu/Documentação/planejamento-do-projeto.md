@@ -93,7 +93,7 @@ Estados do backlog: **pronto**, **em andamento**, **bloqueado**, **concluído**.
 | P02 | Integrar login, sessão, troca obrigatória e saída | Concluído em 11/09 | P01 concluído. Contratos `/api/v1/auth/login`, `/me`, `/change-password` e `/logout` integrados pelo proxy local; token fica apenas em memória. | Frontend consulta identidade da API; senha provisória restringe acesso, troca libera; expiração e logout revogam acesso. Fluxos validados no navegador/API. |
 | P03 | Integrar Admin, vários gerentes e minha conta | Concluído em 12/09 | Contratos reais integrados; DTO informa situação ativa e bloqueio remove sessões na transação. | CA04, CA06 e o recorte disponível de CA07 aprovados em PostgreSQL real; fluxos principais aprovados no navegador. |
 | P04 | Estrutura e implantação: andares, setores, vagas, categorias e mapa | Concluído em 12/09 | P03 concluído; migration e contratos incrementais entregues. | CA08–CA12 cobertos: estado de configuração, dois andares, filtros, seleção, busca entre andares, rejeição de vaga de outro andar, revisão concorrente e isolamento. |
-| P05 | Importação CSV/XLSX com prévia e preservação de histórico | Em andamento | Prévias administrativas CSV/XLSX usam validação comum e não persistem; confirmação permanece pendente. | Erros por linha, confirmação consistente e atualização sem apagar histórico. CA13–CA14. |
+| P05 | Importação CSV/XLSX com prévia e preservação de histórico | Em andamento | Persistência PostgreSQL das prévias validada em banco real; confirmação pendente. | Erros por linha, confirmação consistente e atualização sem apagar histórico. CA13–CA14. |
 | P06 | ESP32/sensores, ingestão e estados confiáveis | Bloqueado por P04 | Contrato de firmware: autenticação, sensor, inicialização, sequência, frequência e expiração. | Confirmação de 30 s com evidência, deduplicação, ordem e expiração por sensor; histórico transacional. CA15–CA24. |
 | P07 | Operação, manutenção, contagens e telões | Bloqueado por P06 | Observações confiáveis e ocorrências. | Contagens reconciliadas sem duplicar categorias; dado vencido não vira livre. CA23–CA26. |
 | P08 | Histórico, métricas e exportações | Bloqueado por P06/P07 | Intervalos confirmados, cobertura e recortes. | Cálculos reproduzem conjunto controlado; exportações respeitam shopping e filtros. CA27–CA31. |
@@ -106,11 +106,25 @@ Preservar os limites do produto: web responsiva, sem cadastro público de gerent
 ## 6. Próximo início
 
 - **Pacote:** P05 — importação CSV/XLSX com prévia e preservação de histórico.
-- **Primeira ação:** modelar a prévia persistida e a confirmação atômica idempotente, preservando IDs e registros ausentes da planilha.
+- **Primeira ação:** implementar a confirmação atômica idempotente, revalidando estrutura, IDs e registros ausentes; PostgreSQL e persistência de prévias já validados.
 - **Base já validada:** P04 concluído: estrutura hierárquica e mapa proporcional, com revisão concorrente, isolamento e fluxo Admin/gerente aprovados no PostgreSQL e no navegador em 12/09.
 - **Aceite e verificação a confirmar:** prévia, erros por linha, confirmação atômica, atualização sem apagar histórico e CA13–CA14.
 - **Limites:** WhatsApp oficial não existe ainda; não inventar número. Preservar alterações Git e não publicar sem solicitação.
-- **Estado diário:** P05 em andamento em 14/09 por Samuel na branch `feat/p05-importacao-samuel`; CSV e XLSX possuem validação tabular comum, identificação de IDs existentes, endpoints administrativos e testes, sem escrita no banco. A confirmação ainda não foi iniciada.
+- **Estado diário:** P05 em andamento em 14/09 por Samuel na branch `feat/p05-importacao-samuel`; PostgreSQL 17.11 instalado no Windows e persistência das prévias validada. A confirmação ainda não foi iniciada.
+
+### 14/09/2026 — PostgreSQL local instalado e configurado
+
+- Instalador oficial EDB 17.11-3 com assinatura válida; instalação em `C:/Program Files/PostgreSQL/17`, fora do repositório. Serviço `postgresql-vaggu-17` automático e em execução, porta 5432; autenticação SCRAM restrita a loopback pelo pg_hba.
+- Bancos `vaggu` e `vaggu_teste` com usuários separados. Usuário de desenvolvimento sem superusuário/CREATEDB; teste com CREATEDB para bancos descartáveis. Segredos somente em `.env`, `.env.teste.local` ignorados e credencial administrativa protegida pelo Windows no perfil local.
+- Cinco migrations aplicadas ao novo banco `vaggu`. Suíte completa com `.env.teste.local`: 68 aprovados, zero falhas, zero skips; bancos descartáveis removidos pela suíte. API `/api/v1/health/ready` respondeu `status=ok`, `banco=conectado`.
+- Comentários e mapa revisados; configuração descartável removida após uso. Pendência anterior de conexão resolvida; confirmação de importação continua pendente.
+
+### 14/09/2026 — persistência inicial do P05 (Samuel)
+
+- Migration incremental adiciona `importacoes_estrutura`, JSONB, vínculo ao shopping e restrições de formato; não modifica vagas ou histórico.
+- Prévia gravada em transação Repeatable Read, com ID retornado e consulta administrativa por shopping/ID; shopping excluído não permite consulta.
+- Na primeira verificação desta etapa, cliente Prisma, typecheck e build foram aprovados; 37 testes passaram e 2 integrações ficaram pendentes porque ainda não havia `TEST_DATABASE_URL` ou serviço detectado. A instalação e a validação posteriores estão registradas na entrada imediatamente anterior.
+- Comentários e mapa revisados; schema, serviço e rotas documentam as novas responsabilidades. Sem confirmação de importação, política de retenção ou substituição de artefato ativo nesta etapa.
 
 ## 7. Registro diário
 

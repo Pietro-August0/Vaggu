@@ -109,7 +109,9 @@ As posições do mapa usam valores proporcionais de 0 a 1 (`x`, `y`, largura e a
 
 CSV e XLSX exigem as colunas `codigo` (ou `código`), `andar`, `setor` e `tipo`. Os tipos permitidos são `COMUM`, `PCD`, `IDOSO` e `ELETRICA`; diferenças de caixa e acentos são normalizadas para validação. Duplicatas e campos inválidos retornam linha, campo, código e mensagem. Uma vaga já existente no shopping aparece com ação `ATUALIZAR` e seu ID atual; as demais aparecem como `CRIAR`.
 
-Essas rotas são somente de prévia: não criam, atualizam ou removem registros. A confirmação atômica ainda pertence ao próximo recorte do P05. O XLSX usa somente a primeira planilha, aceita no máximo 10.000 registros e 50 colunas e é lido pela dependência `read-excel-file`.
+Essas rotas persistem a prévia na tabela PostgreSQL `importacoes_estrutura`, sem modificar vagas ou histórico. A resposta acrescenta `importacaoId` e `criadoEm`. O Admin consulta o resultado por `GET /shoppings/:shoppingId/importacoes/:importacaoId`; outro shopping ou shopping excluído retorna 404. Prévias com erros também são armazenadas; os bytes originais do arquivo não são guardados.
+
+A migration incremental `20260914000100_previas_importacao` deve ser aplicada pelo fluxo `db:deploy` ao banco configurado pela equipe. Identificação de vagas e persistência usam uma transação consistente. A confirmação ainda está pendente: `podeConfirmar` indica somente a validação da prévia. O XLSX usa a primeira planilha, até 10.000 registros e 50 colunas, por meio de `read-excel-file`.
 
 ## Segurança e frontend
 
