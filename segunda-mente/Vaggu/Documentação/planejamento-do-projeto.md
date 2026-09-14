@@ -93,7 +93,7 @@ Estados do backlog: **pronto**, **em andamento**, **bloqueado**, **concluído**.
 | P02 | Integrar login, sessão, troca obrigatória e saída | Concluído em 11/09 | P01 concluído. Contratos `/api/v1/auth/login`, `/me`, `/change-password` e `/logout` integrados pelo proxy local; token fica apenas em memória. | Frontend consulta identidade da API; senha provisória restringe acesso, troca libera; expiração e logout revogam acesso. Fluxos validados no navegador/API. |
 | P03 | Integrar Admin, vários gerentes e minha conta | Concluído em 12/09 | Contratos reais integrados; DTO informa situação ativa e bloqueio remove sessões na transação. | CA04, CA06 e o recorte disponível de CA07 aprovados em PostgreSQL real; fluxos principais aprovados no navegador. |
 | P04 | Estrutura e implantação: andares, setores, vagas, categorias e mapa | Concluído em 12/09 | P03 concluído; migration e contratos incrementais entregues. | CA08–CA12 cobertos: estado de configuração, dois andares, filtros, seleção, busca entre andares, rejeição de vaga de outro andar, revisão concorrente e isolamento. |
-| P05 | Importação CSV/XLSX com prévia e preservação de histórico | Pronto | IDs e modelo de estrutura definidos em P04. | Erros por linha, confirmação consistente e atualização sem apagar histórico. CA13–CA14. |
+| P05 | Importação CSV/XLSX com prévia e preservação de histórico | Em andamento | Contrato intermediário e parser CSV sem persistência iniciados; XLSX, endpoint e confirmação permanecem pendentes. | Erros por linha, confirmação consistente e atualização sem apagar histórico. CA13–CA14. |
 | P06 | ESP32/sensores, ingestão e estados confiáveis | Bloqueado por P04 | Contrato de firmware: autenticação, sensor, inicialização, sequência, frequência e expiração. | Confirmação de 30 s com evidência, deduplicação, ordem e expiração por sensor; histórico transacional. CA15–CA24. |
 | P07 | Operação, manutenção, contagens e telões | Bloqueado por P06 | Observações confiáveis e ocorrências. | Contagens reconciliadas sem duplicar categorias; dado vencido não vira livre. CA23–CA26. |
 | P08 | Histórico, métricas e exportações | Bloqueado por P06/P07 | Intervalos confirmados, cobertura e recortes. | Cálculos reproduzem conjunto controlado; exportações respeitam shopping e filtros. CA27–CA31. |
@@ -106,11 +106,11 @@ Preservar os limites do produto: web responsiva, sem cadastro público de gerent
 ## 6. Próximo início
 
 - **Pacote:** P05 — importação CSV/XLSX com prévia e preservação de histórico.
-- **Primeira ação:** criar os tipos do contrato de importação e o parser de prévia sem persistência, começando por CSV com as colunas código, andar, setor e tipo; definir a mesma representação intermediária para XLSX.
+- **Primeira ação:** integrar a prévia CSV a um endpoint administrativo sem persistência e preparar o leitor XLSX sobre o contrato intermediário já criado.
 - **Base já validada:** P04 concluído: estrutura hierárquica e mapa proporcional, com revisão concorrente, isolamento e fluxo Admin/gerente aprovados no PostgreSQL e no navegador em 12/09.
 - **Aceite e verificação a confirmar:** prévia, erros por linha, confirmação atômica, atualização sem apagar histórico e CA13–CA14.
 - **Limites:** WhatsApp oficial não existe ainda; não inventar número. Preservar alterações Git e não publicar sem solicitação.
-- **Estado diário:** encerrado na virada de 12 para 13/09 por solicitação de Pietro; P05 permanece preparado e não foi iniciado.
+- **Estado diário:** P05 iniciado em 14/09 por Samuel na branch `feat/p05-importacao-samuel`, com contrato intermediário, prévia CSV e testes unitários; confirmação no banco ainda não foi iniciada.
 
 ## 7. Registro diário
 
