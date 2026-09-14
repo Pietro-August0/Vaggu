@@ -5,7 +5,7 @@ import {
   LogIn,
 } from "lucide-react"
 import { Link } from "react-router-dom"
-import { motion } from "motion/react"
+import { motion, MotionConfig } from "motion/react"
 
 import { OperacaoVaggu } from "@/components/operacao-vaggu"
 import { SobreVaggu } from "@/components/sobre-vaggu"
@@ -21,7 +21,8 @@ export function LandingPage() {
   useScrollReveal()
 
   return (
-    <div className="overflow-hidden bg-white font-landing font-light text-neutral-950">
+    <MotionConfig reducedMotion="never">
+      <div className="overflow-hidden bg-white font-landing font-light text-neutral-950">
       <header className="landing-header absolute inset-x-0 top-0 z-30">
         <div className="mx-auto flex max-w-[1440px] items-center justify-between px-5 py-6 sm:px-8 lg:px-12">
           <Brand inverted />
@@ -215,6 +216,7 @@ export function LandingPage() {
           </div>
         </div>
       </footer>
-    </div>
+      </div>
+    </MotionConfig>
   )
 }

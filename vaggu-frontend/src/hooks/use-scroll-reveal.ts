@@ -1,12 +1,10 @@
-// Revela blocos da landing conforme entram na viewport, respeitando movimento reduzido do sistema.
+// Revela blocos da landing conforme entram na viewport, sem depender da preferência do sistema.
 import { useEffect } from "react"
 
 export function useScrollReveal() {
   useEffect(() => {
     const elements = Array.from(document.querySelectorAll<HTMLElement>("[data-reveal]"))
-    const prefereMovimentoReduzido = window.matchMedia("(prefers-reduced-motion: reduce)").matches
-
-    if (prefereMovimentoReduzido || !("IntersectionObserver" in window)) {
+    if (!("IntersectionObserver" in window)) {
       elements.forEach((element) => element.classList.add("is-visible"))
       return
     }
