@@ -19,13 +19,13 @@ const beneficios = [
   { titulo: "Indicadores em tempo real", descricao: "Acompanhe a ocupação com as atualizações dos sensores das vagas." },
 ]
 
-/** Pontos orbitais representam circulação de dados; pausam fora da tela e com movimento reduzido. */
-function DiagramaDaVaggu({ animacoesAtivas }: { animacoesAtivas: boolean }) {
+/** Pontos orbitais representam circulação de dados e pausam fora da tela. */
+function DiagramaDaVaggu() {
   const referencia = useRef<HTMLDivElement>(null)
   const visivel = useInView(referencia, { amount: 0.3 })
 
   return (
-    <div ref={referencia} className="sobre-orbitas" data-animando={visivel && animacoesAtivas}>
+    <div ref={referencia} className="sobre-orbitas" data-animando={visivel}>
       <div className="sobre-aneis" aria-hidden="true">
         <i /><i /><i />
         <div className="sobre-marca"><img src="/assets/vaggu-logo.svg" alt="" /></div>
@@ -39,7 +39,7 @@ function DiagramaDaVaggu({ animacoesAtivas }: { animacoesAtivas: boolean }) {
 }
 
 /** As conexões entram em sequência ao rolar; movimento reduzido mantém tudo visível. */
-export function SobreVaggu({ animacoesAtivas }: { animacoesAtivas: boolean }) {
+export function SobreVaggu() {
   const entrada = {
     initial: false as const,
     whileInView: "conectado",
@@ -55,7 +55,7 @@ export function SobreVaggu({ animacoesAtivas }: { animacoesAtivas: boolean }) {
             <h2 id="titulo-sobre">Solução <span>inteligente</span> para shoppings mais eficientes e com grande fluxo</h2>
             <p className="sobre-descricao">A Vaggu é uma solução para gestão inteligente de estacionamentos de shoppings, conectando dados, vagas e visão estratégica.</p>
           </div>
-          <DiagramaDaVaggu animacoesAtivas={animacoesAtivas} />
+          <DiagramaDaVaggu />
         </div>
 
         <div className="sobre-comecar">

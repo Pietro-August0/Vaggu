@@ -54,6 +54,6 @@
   .login-apresentacao { display: none; }
   .login-requisitos { grid-template-columns: 1fr; }
 }
-html[data-animacoes="reduzidas"] {
+@media (prefers-reduced-motion: reduce) {
   .login-vagas-rabisco path { animation: none; stroke-dashoffset: 0; }
 }
