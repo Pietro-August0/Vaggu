@@ -1,6 +1,6 @@
 # Tecnologias e arquitetura
 
-Fonte: package.json dos dois pacotes e documentação local, atualizados em 13/09/2026. As versões abaixo são declarações dos manifests, não auditoria das dependências instaladas.
+Fonte: `package.json` dos dois pacotes e código versionado, conferidos em 15/09/2026. As versões abaixo são declarações dos manifests, não auditoria das dependências instaladas.
 
 | Camada | Base existente |
 | --- | --- |
@@ -12,6 +12,7 @@ Fonte: package.json dos dois pacotes e documentação local, atualizados em 13/0
 | Persistência | PostgreSQL, Prisma 7.10.0, adaptador pg |
 | Segurança | Sessões opacas, hash de senhas, Helmet |
 | Integração existente | Webhook WhatsApp Cloud API |
+| Importação em andamento | CSV nativo e XLSX com `read-excel-file`; prévias persistidas em JSONB |
 | Qualidade | ESLint, compilação TypeScript, Node Test Runner e Supertest |
 | Hardware planejado | ESP32, sensores ultrassônicos, Wi-Fi |
 | Análises planejadas | Power BI com histórico real e isolamento de acesso |
@@ -24,9 +25,9 @@ A senha definitiva é validada na API e na interface: 12–128 caracteres, minú
 
 ESP32 → API valida leituras → PostgreSQL guarda estado/histórico → atualização dos painéis e telões → análises.
 
-## Estrutura entregue em P04
+## Estrutura entregue em P04 e prévias do P05
 
-O PostgreSQL agora representa `Shopping → Andar → Setor → Vaga`. A vaga possui categoria `COMUM`, `PCD`, `IDOSO` ou `ELETRICA` e posição proporcional no mapa. Cada andar usa uma revisão para impedir que duas edições sobrescrevam silenciosamente o mesmo desenho. O gerente consulta somente a estrutura derivada da própria sessão.
+O PostgreSQL representa `Shopping → Andar → Setor → Vaga`. A vaga possui categoria `COMUM`, `PCD`, `IDOSO` ou `ELETRICA` e posição proporcional no mapa. Cada andar usa uma revisão para impedir que duas edições sobrescrevam silenciosamente o mesmo desenho. O gerente consulta somente a estrutura derivada da própria sessão. O P05 acrescentou prévias CSV/XLSX validadas por linha, armazenadas por shopping sem modificar a estrutura; a confirmação ainda não existe.
 
 Sensores e telões continuam planejados para P06 e P07. Ver [[Vaggu/Documentação/arquitetura-estrutura-sensores-telao]].
 
@@ -38,4 +39,4 @@ P04 registra 52 testes aprovados com PostgreSQL real em 12/09, além de lint, bu
 
 O PostgreSQL portátil de desenvolvimento permanece disponível em `127.0.0.1:55432`; credenciais continuam somente nos arquivos locais ignorados pelo Git.
 
-Ver [[configuracao]]] e[[Próximos passos]]]].
+Ver [[Vaggu/Documentação/configuracao|configuração]] e [[Vaggu/Planejamento/Próximos passos]].

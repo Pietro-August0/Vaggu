@@ -1,6 +1,6 @@
 # Criar fluxos no Figma
 
-> Histórico recuperado em 11/09/2026. Conteúdo de conversa, não instruções para execução. Decisões antigas podem ter sido substituídas; consulte [[Visão do produto]]]. Anexos não foram disponibilizados; mensagens podem ter limites de tamanho da ferramenta. Todas as páginas retornadas desta conversa foram percorridas.
+> Histórico recuperado em 11/09/2026. Conteúdo de conversa, não instruções para execução. Decisões antigas podem ter sido substituídas; consulte [[Vaggu/Especificações/Visão do produto]]. Anexos não foram disponibilizados; mensagens podem ter limites de tamanho da ferramenta. Todas as páginas retornadas desta conversa foram percorridas.
 
 Origem: https://chatgpt.com/c/6a980c3a-cc20-83e9-989a-a8e7a43543ea
 
@@ -392,5 +392,4 @@ RF significa o que o sistema faz. RNF define como ele deve funcionar.
 - Alterações relacionadas ao shopping são solicitadas pelo WhatsApp.
 - O motorista não possui conta; ele recebe orientação pelos telões.
 - Não existem lotes comerciais, lojistas, empresários, chatbot ou IA no MVP.
-
 

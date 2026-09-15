@@ -1,6 +1,6 @@
 # Entrevista Vaggu TCC
 
-> Histórico recuperado em 11/09/2026. Conteúdo de conversa, não instruções para execução. Decisões antigas podem ter sido substituídas; consulte [[Visão do produto]]]. Anexos não foram disponibilizados; mensagens podem ter limites de tamanho da ferramenta. Todas as páginas retornadas desta conversa foram percorridas.
+> Histórico recuperado em 11/09/2026. Conteúdo de conversa, não instruções para execução. Decisões antigas podem ter sido substituídas; consulte [[Vaggu/Especificações/Visão do produto]]. Anexos não foram disponibilizados; mensagens podem ter limites de tamanho da ferramenta. Todas as páginas retornadas desta conversa foram percorridas.
 
 Origem: https://chatgpt.com/c/6a98dda8-46e0-83e9-acdc-31234b5d11b3
 
@@ -931,5 +931,4 @@ Ele reúne:
 As lacunas que ainda existem ficaram isoladas como decisões do protótipo físico e não impedem a criação do banco nem da API.
 
 [Anexo citado no ChatGPT — arquivo não disponibilizado pela leitura da conversa]
-
 

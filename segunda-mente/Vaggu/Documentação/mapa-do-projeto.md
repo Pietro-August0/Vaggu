@@ -12,7 +12,7 @@ Conhecimento, documentos e regras ficam em `segunda-mente`; `docs/README.md` é 
 | `README.md` | Apresenta o produto, recursos entregues e comandos de execução. |
 | `docs/README.md` | Mantém um ponto de compatibilidade curto e direciona para a documentação canônica da segunda mente. |
 | `segunda-mente/` | Cofre Obsidian compartilhado: fonte canônica de produto, decisões, continuidade, documentação, fontes e evidências da VAGGU. |
-| `scripts/verificar-documentacao.mjs` | Confere se o mapa canônico da segunda mente explica os arquivos versionáveis; o cofre é coberto por sua entrada de diretório. |
+| `scripts/verificar-documentacao.mjs` | Confere se o mapa canônico explica os arquivos versionáveis e se os links internos da segunda mente possuem destino válido. |
 | `skills/end/SKILL.md` | Documentação: Fechamento do dia — VAGGU. |
 | `skills/end/agents/openai.yaml` | Metadados de descoberta e apresentação da skill no Codex. |
 | `skills/rotear-trabalho-equipe/SKILL.md` | Roteia cada tarefa para o integrante responsável e seleciona ou cria uma branch segura e rastreável. |
@@ -32,7 +32,7 @@ Conhecimento, documentos e regras ficam em `segunda-mente`; `docs/README.md` é 
 | `vaggu-backend/prisma/migrations/20260912000200_exclusao_reversivel_gerentes/migration.sql` | Acrescenta exclusão lógica de gerente, estado anterior e restrição de consistência para o desfazer. |
 | `vaggu-backend/prisma/migrations/20260913000100_senha_provisoria_e_exclusao_shopping/migration.sql` | Acrescenta exclusão lógica de shopping e a cópia cifrada temporária da senha provisória. |
 | `vaggu-backend/prisma/migrations/migration_lock.toml` | Registra o provedor PostgreSQL das migrations do Prisma. |
-| `vaggu-backend/prisma/schema.prisma` | Define entidades, relações e restrições, incluindo estrutura e exclusão lógica de usuários. |
+| `vaggu-backend/prisma/schema.prisma` | Define entidades, relações e restrições, incluindo estrutura, exclusão lógica e prévias de importação. |
 | `vaggu-backend/scripts/create-admin.ts` | Comando interativo para criar o primeiro administrador e exibir a senha gerada uma única vez no terminal. |
 | `vaggu-backend/src/app.ts` | Monta a API Express, suas rotas e respostas de erro, sem abrir uma porta de rede. |
 | `vaggu-backend/src/auth/bootstrap.ts` | Cria o primeiro administrador por uma operação de terminal, sem cadastro público. |
@@ -116,7 +116,7 @@ Conhecimento, documentos e regras ficam em `segunda-mente`; `docs/README.md` é 
 | `vaggu-frontend/src/components/ui/table.tsx` | Componente de interface reutilizável table; usado para controles, estados e composição acessível. |
 | `vaggu-frontend/src/components/ui/tooltip.tsx` | Componente de interface reutilizável tooltip; usado para controles, estados e composição acessível. |
 | `vaggu-frontend/src/hooks/use-scroll-animations.ts` | Hook para animações de scroll usando Motion |
-| `vaggu-frontend/src/hooks/use-scroll-reveal.ts` | Revela blocos da landing conforme entram na viewport e respeita a preferência de movimento reduzido do sistema. |
+| `vaggu-frontend/src/hooks/use-scroll-reveal.ts` | Revela uma vez os blocos da landing conforme entram na viewport; a decisão atual mantém esse movimento automático. |
 | `vaggu-frontend/src/index.css` | Reúne tema global, responsividade e microinterações dos cards acionáveis. |
 | `vaggu-frontend/src/lib/constants.ts` | Publica links de contato somente após configurar o número oficial da equipe. |
 | `vaggu-frontend/src/lib/utils.ts` | Configuração de utils.ts utilizada pelo módulo frontend. |

@@ -4,7 +4,7 @@
 
 O Admin configura a hierarquia `Shopping → Andar → Setor → Vaga`. Um shopping aceita vários andares; cada andar aceita vários setores; cada setor aceita várias vagas. A vaga possui código único no shopping e tipo `COMUM`, `PCD`, `IDOSO` ou `ELETRICA`. O tipo não representa ocupação.
 
-O cadastro manual atende estruturas pequenas. O P05 acrescentará importação CSV/XLSX com prévia e confirmação. A importação deve preservar os IDs das vagas existentes e nunca apagar histórico por ausência de uma linha.
+O cadastro manual atende estruturas pequenas. O P05 já acrescentou leitura CSV/XLSX, validação e persistência da prévia; a confirmação que aplica os dados ainda está pendente. Essa confirmação deve preservar os IDs das vagas existentes e nunca apagar histórico por ausência de uma linha.
 
 ## Mapa
 

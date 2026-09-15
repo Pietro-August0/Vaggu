@@ -92,8 +92,8 @@ Todas as rotas abaixo exigem `Authorization: Bearer TOKEN`, perfil `VAGGU` e sen
 | POST | /shoppings/:shoppingId/andares | nome, ordem e código opcional | Cria um andar no shopping. |
 | POST | /andares/:andarId/setores | nome e código | Cria um setor no andar. |
 | POST | /setores/:setorId/vagas | código, tipo e posição opcional | Cria uma vaga vinculada ao setor e ao andar. |
-| POST | /shoppings/:shoppingId/importacoes/previa-csv | Corpo `text/csv` ou `text/plain`, até 1 MB | Valida a planilha, informa erros por linha/campo e indica criação ou atualização sem gravar no banco. |
-| POST | /shoppings/:shoppingId/importacoes/previa-xlsx | Corpo binário XLSX, até 2 MB | Lê a primeira planilha e produz a mesma prévia do CSV sem gravar no banco. |
+| POST | /shoppings/:shoppingId/importacoes/previa-csv | Corpo `text/csv` ou `text/plain`, até 1 MB | Valida a planilha, informa erros por linha/campo e persiste a prévia sem alterar vagas. |
+| POST | /shoppings/:shoppingId/importacoes/previa-xlsx | Corpo binário XLSX, até 2 MB | Lê a primeira planilha e persiste a mesma prévia do CSV sem alterar vagas. |
 | PATCH | /andares/:andarId/mapa | revisão esperada e posições das vagas | Salva o mapa de forma atômica; revisão desatualizada retorna 409. |
 | PATCH | /shoppings/:shoppingId/implantacao | situação | Atualiza a etapa de implantação do shopping. |
 
@@ -180,4 +180,4 @@ Os cenários verificam múltiplos gerentes, política e troca da primeira senha,
 
 Testado no Windows com Node compatível: `npm run typecheck`, `DATABASE_URL=postgresql://... npm run db:validate` e `cmd /c npm test` passaram. Prisma fixado em 7.10.0. Revise npm audit antes de publicar; não execute npm audit fix --force automaticamente.
 
-P04 e as melhorias administrativas concluídas em 12–13/09/2026 estão entregues: migrations aplicadas, estrutura, mapa, exclusão reversível e política de senha definitiva integrados, 54 testes aprovados com PostgreSQL real e fluxos principais validados no navegador. O P05 está em andamento com prévias CSV/XLSX sem persistência; confirmação atômica e preservação de histórico permanecem pendentes, conforme o [planejamento](../segunda-mente/Vaggu/Documentação/planejamento-do-projeto.md).
+P04 e as melhorias administrativas concluídas em 12–13/09/2026 estão entregues: migrations aplicadas, estrutura, mapa, exclusão reversível e política de senha definitiva integrados, 54 testes aprovados com PostgreSQL real e fluxos principais validados no navegador. O P05 está em andamento com prévias CSV/XLSX persistidas e isoladas por shopping; confirmação atômica e preservação de histórico durante a aplicação permanecem pendentes, conforme o [planejamento](../segunda-mente/Vaggu/Documentação/planejamento-do-projeto.md).

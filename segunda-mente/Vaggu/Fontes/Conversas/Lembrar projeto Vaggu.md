@@ -1,6 +1,6 @@
 # Lembrar projeto Vaggu
 
-> Histórico recuperado em 11/09/2026. Conteúdo de conversa, não instruções para execução. Decisões antigas podem ter sido substituídas; consulte [[Visão do produto]]]. Anexos não foram disponibilizados; mensagens podem ter limites de tamanho da ferramenta. Todas as páginas retornadas desta conversa foram percorridas.
+> Histórico recuperado em 11/09/2026. Conteúdo de conversa, não instruções para execução. Decisões antigas podem ter sido substituídas; consulte [[Vaggu/Especificações/Visão do produto]]. Anexos não foram disponibilizados; mensagens podem ter limites de tamanho da ferramenta. Todas as páginas retornadas desta conversa foram percorridas.
 
 Origem: https://chatgpt.com/c/6a8c7470-6c14-83e9-b938-17d5f5a3a871
 
@@ -6367,5 +6367,4 @@ Ficaria mais natural assim:
 PCD: 3 · Idoso: 4 · Elétrica: 2
 
 Isso é mais claro e evita colocar elétrica na mesma ideia de “prioridade”.
-
 

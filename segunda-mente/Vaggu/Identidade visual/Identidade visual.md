@@ -31,10 +31,9 @@ Fonte: vaggu-frontend/src/index.css, 11/09/2026.
 
 ## Assets preservados
 
-![[vaggu-logo-yellow.svg]]]
-![[hero-vaggu.png]]]]
+![[Vaggu/Identidade visual/Assets/vaggu-logo-yellow.svg]]
+![[Vaggu/Identidade visual/Assets/hero-vaggu.png]]
 
 As três variantes de logo, imagens da landing, mockup de notebook e referências Group 132 foram copiadas para Assets. São arquivos existentes, não novas artes.
 
-Regras completas[[regras-visuais]]s]].
-
+Regras completas: [[Vaggu/Documentação/regras-visuais]].

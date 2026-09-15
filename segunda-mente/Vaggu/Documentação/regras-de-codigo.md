@@ -80,7 +80,8 @@ Esta é uma **proposta para adaptação**, não uma ordem de mover todo o reposi
 | Caminho proposto | Responsabilidade |
 | --- | --- |
 | `AGENTS.md` | Regras de trabalho e referências. |
-| `docs/` | Especificação, decisões, contratos, operação e identidade visual. |
+| `segunda-mente/Vaggu/Documentação/` | Especificação, decisões, contratos, operação e identidade visual canônicos. |
+| `docs/` | Ponte de compatibilidade que direciona para a segunda mente. |
 | `frontend/src/aplicacao/` | Composição, rotas, provedores e inicialização. |
 | `frontend/src/modulos/autenticacao/` | Login, sessão e troca de senha. |
 | `frontend/src/modulos/estacionamento/` | Mapa, filtros, lista e detalhe de vaga. |

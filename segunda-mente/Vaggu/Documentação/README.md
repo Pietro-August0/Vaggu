@@ -1,6 +1,6 @@
 # Documentação da VAGGU
 
-Versão 1.0 • 09 de setembro de 2026 • Português brasileiro
+Estrutura inicial de 09/09/2026 • revisão de uso em 15/09/2026 • Português brasileiro
 
 Esta pasta reúne as decisões de produto, o desenho técnico, os padrões de código e os critérios de aceite do projeto. “SSD” é o nome adotado para a especificação principal; a documentação descreve tanto o que já existe quanto o destino planejado da plataforma.
 
@@ -30,7 +30,7 @@ O `AGENTS.md` funciona como ponto de entrada para as instruções do projeto. O 
 ## Prompt inicial para copiar
 
 ```text
-Leia o AGENTS.md aplicável ao repositório e os arquivos da pasta docs. Responda e documente em português brasileiro.
+Leia o AGENTS.md aplicável ao repositório e os arquivos canônicos em segunda-mente/Vaggu/Documentação. Responda e documente em português brasileiro.
 
 Primeiro inspecione o projeto existente: estrutura, package.json, lockfile, schema e migrations, autenticação, telas, testes e integrações. Produza um diagnóstico com evidências por arquivo: implementado e verificado, parcial, ausente ou não verificado. Não considere a documentação uma prova de implementação.
 
@@ -52,8 +52,9 @@ Ao finalizar, relate o que mudou, quais cenários foram verificados, limitaçõe
 - O escopo considera as decisões de Pietro e o documento mestre revisado em 09/09/2026.
 - Regras de código e de organização foram elaboradas para este pedido e passam a orientar novas entregas.
 - Modelos de dados, rotas e detalhes de infraestrutura marcados como **proposta** devem ser conciliados com o repositório.
+- P01–P04 estão concluídos. O P05 está em andamento: prévias CSV/XLSX são persistidas, mas a confirmação que altera a estrutura ainda está pendente.
 - A referência visual é o [Figma VAGGU](https://www.figma.com/design/xKI9wjoiZ5CoXC3DXIJNmq/Vaggu?node-id=2022-2). A consulta atual atingiu o limite da integração; não houve nova extração dos tokens. Os valores exatos a confirmar estão registrados no guia visual.
-- Este pacote não modifica o Figma, o Trello nem o repositório remoto e não contém credenciais.
+- A documentação não contém credenciais. Mudanças no Figma, Trello ou repositório remoto só podem ser afirmadas quando houver evidência registrada na sessão correspondente.
 
 ## Atualização do pacote
 

@@ -114,7 +114,7 @@ O frontend não cria nem preenche contas. A equipe deve cadastrar o administrado
 
 ## Estado atual
 
-A autenticação, a gestão administrativa e o mapa estão integrados à API. Em 12–13/09, 54 testes do backend passaram com PostgreSQL real; os fluxos principais também foram aprovados no navegador. A interface permite excluir um gerente com confirmação e desfazer por sete segundos. A troca obrigatória mostra os requisitos de senha, permite visualizar os três campos e explica o erro junto ao campo responsável. Importação, telemetria, telões e Power BI continuam pendentes.
+A autenticação, a gestão administrativa e o mapa estão integrados à API. A interface permite excluir um gerente com confirmação e desfazer por sete segundos. A troca obrigatória mostra os requisitos de senha, permite visualizar os três campos e explica o erro junto ao campo responsável. O P05 já aceita, valida e persiste prévias CSV/XLSX isoladas por shopping; a confirmação que altera a estrutura ainda está pendente. Telemetria, telões e Power BI continuam pendentes.
 
 O [planejamento do projeto](./segunda-mente/Vaggu/Documentação/planejamento-do-projeto.md) registra o estado real, os resultados da revisão e a próxima entrega. As skills `$start` e `$end` usam esse documento para iniciar e encerrar o trabalho diário.
 

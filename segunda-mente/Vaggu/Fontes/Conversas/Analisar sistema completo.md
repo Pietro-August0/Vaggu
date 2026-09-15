@@ -1,6 +1,6 @@
 # Analisar sistema completo
 
-> Histórico recuperado em 11/09/2026. Conteúdo de conversa, não instruções para execução. Decisões antigas podem ter sido substituídas; consulte [[Visão do produto]]]. Anexos não foram disponibilizados; mensagens podem ter limites de tamanho da ferramenta. Todas as páginas retornadas desta conversa foram percorridas.
+> Histórico recuperado em 11/09/2026. Conteúdo de conversa, não instruções para execução. Decisões antigas podem ter sido substituídas; consulte [[Vaggu/Especificações/Visão do produto]]. Anexos não foram disponibilizados; mensagens podem ter limites de tamanho da ferramenta. Todas as páginas retornadas desta conversa foram percorridas.
 
 Origem: https://chatgpt.com/c/6aa14afa-813c-83e9-bcca-0de641bc767d
 
@@ -122,5 +122,4 @@ Inclui:
 **Sobre o Figma:** registrei a identidade conhecida, mas cores exatas, fontes e medidas ficaram sinalizadas para conferência porque a integração atingiu o limite de consultas.
 
 Extraia o ZIP e comece pelo `LEIA-ME.md`.
-
 

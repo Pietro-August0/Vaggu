@@ -15,4 +15,4 @@ As fontes operacionais do repositório prevalecem para a execução das skills; 
 
 Português brasileiro, comentários que expliquem responsabilidades e regras, assets com nomes descritivos, organização por domínio, testes com evidência e manutenção do mapa de arquivos. O mapa canônico fica em `Vaggu/Documentação/mapa-do-projeto.md`.
 
-Nenhuma skill de desenvolvimento foi executada para iniciar P02 nesta organização. A rotina de memória está em [[Rotina de registro]].
+O registro histórico informa quais skills foram executadas em cada sessão. Para trabalho novo, consulte primeiro o roteador e depois a rotina de memória em [[Rotina de registro]].
