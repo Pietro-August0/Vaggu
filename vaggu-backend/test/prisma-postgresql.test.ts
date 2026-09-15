@@ -36,3 +36,11 @@ test('migration de exclusão reversível preserva gerente e estado anterior', ()
   assert.match(sql, /usuarios_exclusao_check/);
   assert.doesNotMatch(sql, /DELETE\s+FROM\s+"usuarios"/i);
 });
+
+test('migration de confirmação registra idempotência da importação', () => {
+  const sql = readFileSync(join(projectRoot, 'prisma/migrations/20260915000100_confirmacao_importacao/migration.sql'), 'utf8');
+  assert.match(sql, /"resultado_confirmacao" JSONB/);
+  assert.match(sql, /"confirmado_em" TIMESTAMP\(3\)/);
+  assert.match(sql, /importacoes_estrutura_confirmacao_check/);
+  assert.match(sql, /jsonb_typeof\("resultado_confirmacao"\) = 'object'/);
+});

@@ -6,7 +6,7 @@
 
 A autenticação do frontend usa a API real: login, identidade, primeira senha, revogação e expiração. A senha definitiva possui política explícita e erros por campo na API e na interface. Os acessos demonstrativos foram removidos. O Admin configura e exclui logicamente shoppings, administra gerentes e consulta a senha provisória apenas até a primeira troca. Também configura andares, setores, vagas, categorias e posições no mapa. O gerente consulta o mapa do próprio shopping, alterna andares e localiza vagas. Telemetria, telões e Power BI continuam pendentes.
 
-P01 foi concluído em 10/09 e P02 em 11/09, incluindo autenticação e acabamento visual. P03 foi concluído em 12/09 com gestão administrativa, vários gerentes e Minha conta. P04 foi concluído em 12/09 com estrutura e mapa validados em PostgreSQL real e no navegador. O P05 está em andamento: prévias CSV/XLSX já são validadas, persistidas e consultadas; a confirmação ainda falta. A base local está verificável, mas o sistema ainda não está liberado para operação com clientes.
+P01 foi concluído em 10/09 e P02 em 11/09, incluindo autenticação e acabamento visual. P03 foi concluído em 12/09 com gestão administrativa, vários gerentes e Minha conta. P04 foi concluído em 12/09 com estrutura e mapa validados em PostgreSQL real e no navegador. O P05 está em andamento: prévias CSV/XLSX já são validadas, persistidas e consultadas; a confirmação atômica está presente no backend, com validação básica, mas ainda precisa de execução PostgreSQL real nesta retomada e de interface administrativa. A base local está verificável, mas o sistema ainda não está liberado para operação com clientes.
 
 Classificações: **verificado** exige execução do comportamento indicado; **presente no código** significa inspeção estática; **parcial** identifica uma entrega incompleta; **ausente** indica que não foi encontrada implementação no escopo inspecionado. Um teste simulado não comprova banco, hardware ou serviço externo real.
 
@@ -28,7 +28,7 @@ Classificações: **verificado** exige execução do comportamento indicado; **p
 | Webhook WhatsApp | Parcial | [WhatsApp](../../../vaggu-backend/src/whatsapp/service.ts): assinatura, distinção entre mensagens/status, deduplicação e cliente Meta. Conversa contém menu de teste; fluxos de demonstração/suporte não estão concluídos. |
 | Skills de continuidade | Criadas, validadas e instaladas | Fontes versionadas em [start](../../../skills/start/SKILL.md) e [end](../../../skills/end/SKILL.md); cópias em `C:/Users/CASA/.codex/skills/start` e `end` conferidas por hash. Usam este documento como registro compartilhado. |
 | Andares, setores, tipos e mapa | Verificado em P04 | Hierarquia por shopping, coordenadas proporcionais, revisão concorrente, dois andares, categorias, filtros, seleção e busca entre andares aprovados. O mapa usa base neutra; associação de planta ilustrada permanece uma evolução. |
-| Importação CSV/XLSX | Parcial, P05 em andamento | API aceita CSV e XLSX, valida por linha/campo, identifica criação ou atualização e persiste a prévia isolada por shopping. Ainda não há tela administrativa nem confirmação que altere a estrutura. |
+| Importação CSV/XLSX | Parcial, P05 em andamento | API aceita CSV e XLSX, valida por linha/campo, identifica criação ou atualização, persiste a prévia isolada por shopping e possui confirmação idempotente no backend. Ainda não há tela administrativa; a confirmação precisa ser reaplicada com PostgreSQL real neste ambiente. |
 | ESP32, sensores, confirmação e expiração | Ausentes como fluxo funcional | Entidades iniciais não equivalem a ingestão, confirmação consistente de 30 s, ordenação, expiração ou manutenção. |
 | Histórico consultável, contagens, telões e exportações | Ausentes como fluxo funcional | Exigem observações confirmadas e isolamento; não confundir a imagem da landing com um painel de dados real. |
 | Power BI | Ausente | Nenhum relatório funcional com histórico e atualização foi verificado/encontrado no projeto. |
@@ -93,7 +93,7 @@ Estados do backlog: **pronto**, **em andamento**, **bloqueado**, **concluído**.
 | P02 | Integrar login, sessão, troca obrigatória e saída | Concluído em 11/09 | P01 concluído. Contratos `/api/v1/auth/login`, `/me`, `/change-password` e `/logout` integrados pelo proxy local; token fica apenas em memória. | Frontend consulta identidade da API; senha provisória restringe acesso, troca libera; expiração e logout revogam acesso. Fluxos validados no navegador/API. |
 | P03 | Integrar Admin, vários gerentes e minha conta | Concluído em 12/09 | Contratos reais integrados; DTO informa situação ativa e bloqueio remove sessões na transação. | CA04, CA06 e o recorte disponível de CA07 aprovados em PostgreSQL real; fluxos principais aprovados no navegador. |
 | P04 | Estrutura e implantação: andares, setores, vagas, categorias e mapa | Concluído em 12/09 | P03 concluído; migration e contratos incrementais entregues. | CA08–CA12 cobertos: estado de configuração, dois andares, filtros, seleção, busca entre andares, rejeição de vaga de outro andar, revisão concorrente e isolamento. |
-| P05 | Importação CSV/XLSX com prévia e preservação de histórico | Em andamento | Persistência PostgreSQL das prévias validada em banco real; confirmação pendente. | Erros por linha, confirmação consistente e atualização sem apagar histórico. CA13–CA14. |
+| P05 | Importação CSV/XLSX com prévia e preservação de histórico | Em andamento | Persistência PostgreSQL das prévias validada em banco real; confirmação atômica implementada no backend e coberta por testes básicos, com integração real pendente nesta retomada. | Erros por linha, confirmação consistente e atualização sem apagar histórico. CA13–CA14. |
 | P06 | ESP32/sensores, ingestão e estados confiáveis | Bloqueado por P04 | Contrato de firmware: autenticação, sensor, inicialização, sequência, frequência e expiração. | Confirmação de 30 s com evidência, deduplicação, ordem e expiração por sensor; histórico transacional. CA15–CA24. |
 | P07 | Operação, manutenção, contagens e telões | Bloqueado por P06 | Observações confiáveis e ocorrências. | Contagens reconciliadas sem duplicar categorias; dado vencido não vira livre. CA23–CA26. |
 | P08 | Histórico, métricas e exportações | Bloqueado por P06/P07 | Intervalos confirmados, cobertura e recortes. | Cálculos reproduzem conjunto controlado; exportações respeitam shopping e filtros. CA27–CA31. |
@@ -106,11 +106,11 @@ Preservar os limites do produto: web responsiva, sem cadastro público de gerent
 ## 6. Próximo início
 
 - **Pacote:** P05 — importação CSV/XLSX com prévia e preservação de histórico.
-- **Primeira ação:** implementar a confirmação atômica idempotente, revalidando estrutura, IDs e registros ausentes; PostgreSQL e persistência de prévias já validados.
+- **Primeira ação:** validar a confirmação atômica idempotente em PostgreSQL real e depois integrar a interface administrativa de importação; PostgreSQL e persistência de prévias já foram validados anteriormente.
 - **Base já validada:** P04 concluído: estrutura hierárquica e mapa proporcional, com revisão concorrente, isolamento e fluxo Admin/gerente aprovados no PostgreSQL e no navegador em 12/09.
-- **Aceite e verificação a confirmar:** prévia, erros por linha, confirmação atômica, atualização sem apagar histórico e CA13–CA14.
+- **Aceite e verificação a confirmar:** confirmação atômica em banco real, fluxo administrativo da tela, atualização sem apagar histórico e CA13–CA14 completos.
 - **Limites:** WhatsApp oficial não existe ainda; não inventar número. Preservar alterações Git e não publicar sem solicitação.
-- **Estado diário:** P05 em andamento em 14/09 por Samuel na branch `feat/p05-importacao-samuel`; PostgreSQL 17.11 instalado no Windows e persistência das prévias validada. A confirmação ainda não foi iniciada.
+- **Estado diário:** P05 em andamento por Samuel. A branch local `feat-p05-confirmacao-importacao-samuel` acrescentou confirmação backend; PostgreSQL 17.11 havia sido validado anteriormente, mas esta retomada não possui `.env.teste.local` para reexecutar integração real.
 
 ### 14/09/2026 — PostgreSQL local instalado e configurado
 
@@ -250,3 +250,11 @@ Se a lista de skills da conversa atual ainda não refletir a instalação, abrir
 - **Próxima ação:** concluir P05 pela confirmação atômica e idempotente da prévia, preservando IDs e histórico, antes de criar a interface administrativa.
 - **Git:** trabalho preparado em `docs/revisao-segunda-mente-ana`, baseada em `99125ef`; nenhuma publicação remota foi solicitada nesta revisão.
 - **Limites:** o bundle principal ainda gera o aviso conhecido de tamanho acima de 500 kB. As mudanças estão locais e ainda não foram publicadas no remoto.
+
+### 15/09/2026 — P05: confirmação backend da importação
+
+- **Estado:** implementação backend em andamento na branch local `feat-p05-confirmacao-importacao-samuel`; responsável primário Samuel.
+- **Entrega:** migration `20260915000100_confirmacao_importacao`; rota `POST /shoppings/:shoppingId/importacoes/:importacaoId/confirmar`; serviço idempotente que cria andares/setores ausentes, cria ou atualiza vagas pelo código do shopping, preserva IDs e histórico e não remove vagas ausentes da planilha. Um advisory lock transacional serializa confirmações estruturais por shopping e permite que uma repetição simultânea releia o resultado já confirmado.
+- **Verificações:** cliente Prisma gerado com `DATABASE_URL` fictícia válida; `npm.cmd run typecheck` aprovado; `npm.cmd test` aprovado com 41 testes, 0 falhas e 3 skips explícitos por falta de `TEST_DATABASE_URL`; `git diff --check` aprovado. A suíte cobre parser, rota de confirmação, autorização e contrato SQL da migration, e o cenário de integração agora dispara duas confirmações concorrentes. O PostgreSQL 17 documentado em outra máquina não está instalado neste computador; o cenário real ficou pendente porque também não há `TEST_DATABASE_URL` nem `.env.teste.local` nesta retomada.
+- **Limites:** ainda não há interface administrativa para importar/confirmar; a migration não foi aplicada ao banco local nesta sessão; telemetria, telões, histórico analítico e Power BI continuam fora deste pacote.
+- **Próxima ação:** configurar `TEST_DATABASE_URL`, executar `npm.cmd run test:integracao`, aplicar `db:deploy` no banco local correto e só então conectar a confirmação ao painel Admin.

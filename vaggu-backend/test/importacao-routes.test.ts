@@ -37,6 +37,28 @@ test('Admin envia CSV e recebe a prévia sem confirmação', async () => {
   assert.equal(resposta.body.podeConfirmar, false);
 });
 
+test('Admin confirma uma prévia persistida pela rota administrativa', async () => {
+  let chamada: { shoppingId: string; importacaoId: string } | undefined;
+  const importacao = { confirmarImportacao: async (idShopping: string, idImportacao: string) => {
+    chamada = { shoppingId: idShopping, importacaoId: idImportacao };
+    return { importacaoId: idImportacao, confirmadoEm: new Date(), resultado: { vagasCriadas: 1 }, idempotente: false };
+  } };
+  const app = createApp({ checkDatabase: async () => 1, auth: auth(), importacao });
+  const resposta = await request(app).post(`/api/v1/shoppings/${shoppingId}/importacoes/${importacaoId}/confirmar`)
+    .set('Authorization', 'Bearer teste').expect(200);
+  assert.deepEqual(chamada, { shoppingId, importacaoId });
+  assert.equal(resposta.body.importacaoId, importacaoId);
+  assert.equal(resposta.body.idempotente, false);
+});
+
+test('Gerente não pode confirmar importação estrutural', async () => {
+  const importacao = { confirmarImportacao: async () => { throw new Error('não deveria executar'); } };
+  const app = createApp({ checkDatabase: async () => 1, auth: auth({ perfil: 'SHOPPING', trocarSenhaObrigatoria: false }), importacao });
+  const resposta = await request(app).post(`/api/v1/shoppings/${shoppingId}/importacoes/${importacaoId}/confirmar`)
+    .set('Authorization', 'Bearer teste').expect(403);
+  assert.equal(resposta.body.erro.codigo, 'ACESSO_NEGADO');
+});
+
 test('Gerente não pode gerar prévia administrativa', async () => {
   const importacao = { criarPreviaCsv: async () => { throw new Error('não deveria executar'); } };
   const app = createApp({ checkDatabase: async () => 1, auth: auth({ perfil: 'SHOPPING', trocarSenhaObrigatoria: false }), importacao });

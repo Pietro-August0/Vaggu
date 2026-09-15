@@ -32,7 +32,7 @@ Conhecimento, documentos e regras ficam em `segunda-mente`; `docs/README.md` é 
 | `vaggu-backend/prisma/migrations/20260912000200_exclusao_reversivel_gerentes/migration.sql` | Acrescenta exclusão lógica de gerente, estado anterior e restrição de consistência para o desfazer. |
 | `vaggu-backend/prisma/migrations/20260913000100_senha_provisoria_e_exclusao_shopping/migration.sql` | Acrescenta exclusão lógica de shopping e a cópia cifrada temporária da senha provisória. |
 | `vaggu-backend/prisma/migrations/migration_lock.toml` | Registra o provedor PostgreSQL das migrations do Prisma. |
-| `vaggu-backend/prisma/schema.prisma` | Define entidades, relações e restrições, incluindo estrutura, exclusão lógica e prévias de importação. |
+| `vaggu-backend/prisma/schema.prisma` | Define entidades, relações e restrições, incluindo estrutura, exclusão lógica, prévias e confirmação de importação. |
 | `vaggu-backend/scripts/create-admin.ts` | Comando interativo para criar o primeiro administrador e exibir a senha gerada uma única vez no terminal. |
 | `vaggu-backend/src/app.ts` | Monta a API Express, suas rotas e respostas de erro, sem abrir uma porta de rede. |
 | `vaggu-backend/src/auth/bootstrap.ts` | Cria o primeiro administrador por uma operação de terminal, sem cadastro público. |
@@ -49,10 +49,11 @@ Conhecimento, documentos e regras ficam em `segunda-mente`; `docs/README.md` é 
 | `vaggu-backend/src/importacao/parser-csv.ts` | Converte CSV em uma prévia validada por linha e campo, sem persistir alterações. |
 | `vaggu-backend/src/importacao/parser-tabela.ts` | Centraliza cabeçalhos, tipos, duplicatas e erros usados igualmente pelas prévias CSV e XLSX. |
 | `vaggu-backend/src/importacao/parser-xlsx.ts` | Lê a primeira planilha XLSX com limites explícitos e a converte para o contrato tabular comum. |
-| `vaggu-backend/src/importacao/routes.ts` | Expõe criação e consulta de prévias persistidas ao Admin, sem confirmar mudanças nas vagas. |
-| `vaggu-backend/src/importacao/service.ts` | Persiste prévias em transação e restringe a consulta ao shopping indicado. |
+| `vaggu-backend/src/importacao/routes.ts` | Expõe criação, consulta e confirmação administrativa de importações estruturais. |
+| `vaggu-backend/src/importacao/service.ts` | Persiste prévias, confirma a estrutura de forma idempotente e restringe consultas ao shopping indicado. |
 | `vaggu-backend/prisma/migrations/20260914000100_previas_importacao/migration.sql` | Cria armazenamento JSONB de prévias com vínculo ao shopping, índice e restrições de formato. |
-| `vaggu-backend/test/importacao-postgresql.test.ts` | Verifica persistência, isolamento de consulta e preservação de vagas e histórico em PostgreSQL descartável. |
+| `vaggu-backend/prisma/migrations/20260915000100_confirmacao_importacao/migration.sql` | Acrescenta registro de confirmação idempotente para prévias de importação estrutural. |
+| `vaggu-backend/test/importacao-postgresql.test.ts` | Verifica persistência, isolamento, confirmação idempotente e preservação de vagas e histórico em PostgreSQL descartável. |
 | `vaggu-backend/src/conta/routes.ts` | Rotas HTTP da conta do usuário autenticado. Usam a identidade da sessão para |
 | `vaggu-backend/src/conta/service.ts` | Serviço de conta própria. Só permite alterações pessoais simples, mantendo |
 | `vaggu-backend/src/lib/prisma.ts` | Cliente Prisma do PostgreSQL. Regras de domínio recebem o cliente por injeção |
