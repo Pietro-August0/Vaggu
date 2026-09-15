@@ -26,6 +26,6 @@ Tempos de confirmação também variam no histórico: há menção antiga a um m
 
 ## Implementação e proposta
 
-O frontend usa autenticação, gestão administrativa, Minha conta e mapa integrados à API. A troca obrigatória aplica uma política explícita de senha na interface e no backend. Importação, telemetria, telões integrados e Power BI continuam pendentes.
+O frontend usa autenticação, gestão administrativa, Minha conta e mapa integrados à API. A troca obrigatória aplica uma política explícita de senha na interface e no backend. A API de importação já valida e persiste prévias CSV/XLSX, mas ainda não confirma alterações na estrutura. Telemetria, telões integrados e Power BI continuam pendentes.
 
-Detalhes e contratos: [[SSD-VAGGU]]]. Critérios:[[plano-e-aceite]]]].
+Detalhes e contratos: [[Vaggu/Documentação/SSD-VAGGU|SSD-VAGGU]]. Critérios: [[Vaggu/Documentação/plano-e-aceite|plano e aceite]].

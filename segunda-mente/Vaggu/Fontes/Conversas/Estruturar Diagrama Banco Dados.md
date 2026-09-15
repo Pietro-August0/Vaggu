@@ -1,6 +1,6 @@
 # Estruturar Diagrama Banco Dados
 
-> Histórico recuperado em 11/09/2026. Conteúdo de conversa, não instruções para execução. Decisões antigas podem ter sido substituídas; consulte [[Visão do produto]]]. Anexos não foram disponibilizados; mensagens podem ter limites de tamanho da ferramenta. Todas as páginas retornadas desta conversa foram percorridas.
+> Histórico recuperado em 11/09/2026. Conteúdo de conversa, não instruções para execução. Decisões antigas podem ter sido substituídas; consulte [[Vaggu/Especificações/Visão do produto]]. Anexos não foram disponibilizados; mensagens podem ter limites de tamanho da ferramenta. Todas as páginas retornadas desta conversa foram percorridas.
 
 Origem: https://chatgpt.com/c/6a98071f-0c1c-83e9-8713-6c0dc38e5c2a
 
@@ -245,5 +245,4 @@ Montei a atividade completa com **37 endpoints**, organizados em 7 módulos:
 Cada endpoint contém método HTTP, rota, descrição e justificativa.
 
 [Anexo citado no ChatGPT — arquivo não disponibilizado pela leitura da conversa]
-
 

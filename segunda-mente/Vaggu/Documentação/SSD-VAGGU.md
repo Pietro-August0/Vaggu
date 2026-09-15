@@ -531,7 +531,7 @@ Criar gerente, **proposta**:
 }
 ```
 
-Shopping vem da rota administrativa validada. Sistema gera a senha provisória. Nunca retornar hash. Enquanto a troca obrigatória estiver pendente, a listagem administrativa pode retornar a senha provisória cifrada em repouso; depois da troca, retorna apenas que a senha foi redefinida. O exemplo não define formato final de telefone nem credencial real.
+Shopping vem da rota administrativa validada. Sistema gera a senha provisória. Nunca retornar hash. Enquanto a troca obrigatória estiver pendente, a listagem administrativa pode revelar a senha provisória ao Admin; a cópia usada para isso fica cifrada em repouso. Depois da troca, retorna apenas que a senha foi redefinida. O exemplo não define formato final de telefone nem credencial real.
 
 Resposta conceitual do mapa:
 

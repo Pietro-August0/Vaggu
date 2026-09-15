@@ -15,11 +15,15 @@ Origem histórica: repositório local VAGGU. Desde 14/09/2026, este cofre fica e
 
 ## Conversas do ChatGPT
 
-[[Analisar sistema completo]]o]] — 6 turnos recuperados.[[Lembrar projeto Vaggu]]gu]] — 142 turnos recuperados[[Estruturar Diagrama Banco Dados]]dos]] — 4 turnos recuperado[[Criar fluxos no Figma]]igma]] — 15 turnos recuperad[[Entrevista Vaggu TCC]]u TCC]] — 16 turnos recuperados.
+- [[Vaggu/Fontes/Conversas/Analisar sistema completo]] — 6 turnos recuperados.
+- [[Vaggu/Fontes/Conversas/Lembrar projeto Vaggu]] — 142 turnos recuperados.
+- [[Vaggu/Fontes/Conversas/Estruturar Diagrama Banco Dados]] — 4 turnos recuperados.
+- [[Vaggu/Fontes/Conversas/Criar fluxos no Figma]] — 15 turnos recuperados.
+- [[Vaggu/Fontes/Conversas/Entrevista Vaggu TCC]] — 16 turnos recuperados.
 
 Total: 183 turnos. Todas as páginas dessas cinco conversas foram percorridas. Isso não equivale a uma exportação da conta inteira; a ferramenta pode limitar mensagens a 20.000 caracteres e não fornece o conteúdo dos anexos. Datas no arquivo de transcrição estão em UTC; os diários usam America/Sao_Paulo.
 
-A tarefa Codex “Ajustar alterações para 09/09” também foi consultada para confirmar P01 e a interrupção da reorganização. Seus resultados pertinentes es[[Vaggu/Diário/2026-09-11]]-09-11]].
+A tarefa Codex “Ajustar alterações para 09/09” também foi consultada para confirmar P01 e a interrupção da reorganização. Seus resultados pertinentes estão em [[Vaggu/Diário/2026-09-11]].
 
 ## Materiais ainda não recuperados
 
