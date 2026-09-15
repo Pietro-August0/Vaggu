@@ -91,10 +91,11 @@ Conhecimento, documentos e regras ficam em `segunda-mente`; `docs/README.md` é 
 | `vaggu-frontend/public/assets/vaggu-logo-white.svg` | Asset visual vaggu-logo-white.svg; reutilizado na identidade e composição da interface. |
 | `vaggu-frontend/public/assets/vaggu-logo-yellow.svg` | Asset visual vaggu-logo-yellow.svg; reutilizado na identidade e composição da interface. |
 | `vaggu-frontend/public/assets/vaggu-logo.svg` | Asset visual vaggu-logo.svg; reutilizado na identidade e composição da interface. |
-| `vaggu-frontend/src/app/app-store.tsx` | Mantém token apenas em memória, valida identidade na API e gerencia sessão, troca de senha, consultas autenticadas e atualização da própria conta. |
+| `vaggu-frontend/src/app/app-store.tsx` | Mantém token apenas em memória, valida identidade na API e gerencia sessão, troca de senha, consultas autenticadas, envio de arquivos e atualização da própria conta. |
 | `vaggu-frontend/src/components/brand.tsx` | Reutiliza os arquivos de marca publicados em public/assets nos links para a página inicial. |
 | `vaggu-frontend/src/components/dashboard-shell.tsx` | Compartilha cabeçalho, menu responsivo e saída da sessão entre os painéis autenticados. |
 | `vaggu-frontend/src/components/estrutura-admin.tsx` | Permite ao Admin criar a hierarquia, escolher implantação e salvar posições do mapa. |
+| `vaggu-frontend/src/components/importacao-estrutura.tsx` | Permite ao Admin baixar o modelo CSV, enviar CSV/XLSX, revisar registros e erros, confirmar a importação e consultar o resumo aplicado. |
 | `vaggu-frontend/src/components/mapa-estacionamento.tsx` | Exibe ao gerente andares, busca, filtros, posições e estados do próprio shopping. |
 | `vaggu-frontend/src/components/icone-whatsapp.tsx` | Disponibiliza o símbolo usado nos links de atendimento, sem requisições externas. |
 | `vaggu-frontend/src/components/operacao-vaggu.css` | Foto e conteúdo dividem a seção sem impor uma altura vazia acima dos benefícios. |
@@ -123,16 +124,18 @@ Conhecimento, documentos e regras ficam em `segunda-mente`; `docs/README.md` é 
 | `vaggu-frontend/src/lib/utils.ts` | Configuração de utils.ts utilizada pelo módulo frontend. |
 | `vaggu-frontend/src/main.tsx` | Inicializa o React e reúne tema, navegação, mensagens e sessão autenticada das páginas. |
 | `vaggu-frontend/src/pages/admin-page.tsx` | Preserva a tela administrativa do protótipo; não está montada nas rotas autenticadas atuais. |
-| `vaggu-frontend/src/pages/area-autenticada.tsx` | Integra cadastro, acessos, senha provisória, exclusão de shopping e gerente, desfazer, estrutura e edição da própria conta. |
+| `vaggu-frontend/src/pages/area-autenticada.tsx` | Integra cadastro, acessos, senha provisória, exclusão de shopping e gerente, desfazer, importação, estrutura e edição da própria conta. |
 | `vaggu-frontend/src/pages/landing-page.tsx` | Compõe a landing pública e encaminha o contato comercial ao WhatsApp. |
 | `vaggu-frontend/src/pages/login-page.css` | Define composição responsiva do login, troca de senha e desenho animado do rabisco em “vagas”. |
 | `vaggu-frontend/src/pages/login-page.tsx` | Entrada única para Admin e gerente, com manifesto e rabisco SVG animado. |
 | `vaggu-frontend/src/pages/mall-panel-page.tsx` | Preserva o painel demonstrativo antigo; não está montado nas rotas autenticadas atuais. |
 | `vaggu-frontend/src/pages/trocar-senha-page.tsx` | Exige uma senha definitiva antes de qualquer acesso operacional. |
-| `vaggu-frontend/src/servicos/api.ts` | Cliente autenticado da API para GET, POST, PATCH e DELETE; tokens ficam somente em memória. |
+| `vaggu-frontend/src/servicos/api.ts` | Cliente autenticado da API para JSON e arquivos CSV/XLSX; tokens ficam somente em memória. |
 | `vaggu-frontend/src/servicos/estrutura.ts` | Valida a árvore pública de andares, setores, vagas e posições recebida da API. |
+| `vaggu-frontend/src/servicos/importacao.ts` | Mantém o modelo CSV e valida prévias e resultados de confirmação recebidos da API antes de exibi-los. |
 | `vaggu-frontend/src/types/app.ts` | Declara identidade pública validada e tipos legados das telas preservadas. |
 | `vaggu-frontend/src/types/estrutura.ts` | Declara os contratos TypeScript da estrutura, implantação, tipos e mapa. |
+| `vaggu-frontend/src/types/importacao.ts` | Declara os contratos TypeScript da prévia, erros por linha e confirmação da importação. |
 | `vaggu-frontend/src/vite-env.d.ts` | / <reference types="vite/client" /> |
 | `vaggu-frontend/tsconfig.app.json` | Configura compilação TypeScript e limites dos arquivos incluídos neste projeto. |
 | `vaggu-frontend/tsconfig.json` | Configura compilação TypeScript e limites dos arquivos incluídos neste projeto. |

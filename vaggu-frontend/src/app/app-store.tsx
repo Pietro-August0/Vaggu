@@ -1,6 +1,6 @@
 /** Controla a identidade validada pela API. Não lê contas, hashes ou permissões do navegador. */
 import { createContext, useCallback, useContext, useEffect, useRef, useState, type ReactNode } from "react"
-import { ErroApi, objeto, requisitarApi } from "@/servicos/api"
+import { ErroApi, objeto, requisitarApi, requisitarArquivoApi } from "@/servicos/api"
 import type { GeneratedAccess, Mall, NewMallInput, UserAccount } from "@/types/app"
 
 interface AppStoreValue {
@@ -15,6 +15,7 @@ interface AppStoreValue {
   trocarSenha: (senhaAtual: string, novaSenha: string) => Promise<UserAccount>
   verificarSessao: () => Promise<void>
   consultar: (caminho: string, corpo?: unknown, metodo?: "GET" | "POST" | "PATCH" | "DELETE") => Promise<unknown>
+  enviarArquivo: (caminho: string, arquivo: File, tipoConteudo: string) => Promise<unknown>
   atualizarMinhaConta: (nome: string, telefone: string) => Promise<UserAccount>
   createMall: (input: NewMallInput) => Promise<GeneratedAccess>
 }
@@ -93,6 +94,20 @@ export function AppStoreProvider({ children }: { children: ReactNode }) {
     }
   }, [consultar])
 
+  /** Usa a mesma sessão em memória para arquivos e preserva as regras de revogação. */
+  const enviarArquivo = useCallback(async (caminho: string, arquivo: File, tipoConteudo: string) => {
+    const token = tokenAtual.current
+    if (!token) throw new ErroApi("NAO_AUTENTICADO", "Entre novamente para continuar.")
+    try {
+      return await requisitarArquivoApi(caminho, token, arquivo, tipoConteudo)
+    } catch (erro) {
+      if (tokenAtual.current === token && erro instanceof ErroApi && erro.codigo === "NAO_AUTENTICADO") {
+        limparSessao("Sua sessão expirou ou foi encerrada. Entre novamente.")
+      }
+      throw erro
+    }
+  }, [limparSessao])
+
   useEffect(() => {
     if (!expiraEm) return
     const prazo = window.setTimeout(() => limparSessao("Sua sessão expirou. Entre novamente."), Math.max(0, expiraEm - Date.now()))
@@ -162,7 +177,7 @@ export function AppStoreProvider({ children }: { children: ReactNode }) {
 
   return <AppStoreContext.Provider value={{
     ready: true, currentUser, currentMall: null, malls: [], erroSessao, mensagemSessao,
-    login, logout, trocarSenha, verificarSessao, consultar, atualizarMinhaConta, createMall,
+    login, logout, trocarSenha, verificarSessao, consultar, enviarArquivo, atualizarMinhaConta, createMall,
   }}>{children}</AppStoreContext.Provider>
 }
 

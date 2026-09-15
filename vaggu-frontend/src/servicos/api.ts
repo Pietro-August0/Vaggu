@@ -48,3 +48,41 @@ export async function requisitarApi(
     window.clearTimeout(prazo)
   }
 }
+
+/** Envia bytes de CSV/XLSX sem converter o arquivo para JSON ou expor o token. */
+export async function requisitarArquivoApi(
+  caminho: string,
+  token: string,
+  arquivo: File,
+  tipoConteudo: string,
+): Promise<unknown> {
+  const controle = new AbortController()
+  const prazo = window.setTimeout(() => controle.abort(), 30000)
+  try {
+    const resposta = await fetch("/api/v1" + caminho, {
+      method: "POST",
+      headers: { Authorization: `Bearer ${token}`, "Content-Type": tipoConteudo },
+      body: arquivo,
+      cache: "no-store",
+      credentials: "omit",
+      signal: controle.signal,
+    })
+    const dados: unknown = await resposta.json().catch(() => null)
+    if (!resposta.ok) {
+      const erro = objeto(dados) && objeto(dados.erro) ? dados.erro : null
+      throw new ErroApi(
+        typeof erro?.codigo === "string" ? erro.codigo : "SERVICO_INDISPONIVEL",
+        resposta.status < 500 && typeof erro?.mensagem === "string"
+          ? erro.mensagem : "Não foi possível conectar à VAGGU. Tente novamente em instantes.",
+        resposta.status,
+      )
+    }
+    if (!objeto(dados)) throw new ErroApi("RESPOSTA_INVALIDA", "Não foi possível confirmar os dados recebidos. Tente novamente.")
+    return dados
+  } catch (erro) {
+    if (erro instanceof ErroApi) throw erro
+    throw new ErroApi("SEM_CONEXAO", "Não foi possível conectar à VAGGU. Verifique sua conexão e tente novamente.")
+  } finally {
+    window.clearTimeout(prazo)
+  }
+}

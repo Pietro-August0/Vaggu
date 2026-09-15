@@ -153,9 +153,9 @@ export function DashboardShell({
                 {sideContent}
               </SheetContent>
             </Sheet>
-            <div>
+            <div className="min-w-0">
               <p className="text-xs font-bold uppercase tracking-[0.18em] text-neutral-500">{eyebrow}</p>
-              <h1 className="font-heading text-xl font-black tracking-tight sm:text-2xl">{title}</h1>
+              <h1 className="break-words font-heading text-xl font-black tracking-tight sm:text-2xl">{title}</h1>
             </div>
             <div className="ml-auto hidden items-center gap-2 rounded-full border border-black/10 bg-white px-3 py-2 text-xs font-medium text-neutral-600 sm:flex">
               <span className="size-2 rounded-full bg-[#ffe100]" aria-hidden="true" />

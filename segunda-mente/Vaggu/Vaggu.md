@@ -32,7 +32,7 @@ Plataforma web responsiva para gestão de estacionamentos de shopping centers, d
 
 O próprio cofre está versionado na pasta `segunda-mente/` do repositório VAGGU.
 
-**Estado atual:** P01–P04 concluídos. O P05 está em andamento: a API cria, persiste e consulta prévias CSV/XLSX sem alterar vagas; a confirmação atômica está implementada no backend, com validação PostgreSQL real e interface administrativa ainda pendentes. Autenticação, gestão administrativa, Minha conta, estrutura e mapa estão integrados. Ver [[Vaggu/Planejamento/Próximos passos]].
+**Estado atual:** P01–P04 concluídos. O P05 está em andamento: backend e interface Admin de prévia/confirmação CSV/XLSX estão implementados; a validação completa com PostgreSQL real e navegador autenticado permanece pendente. Autenticação, gestão administrativa, Minha conta, estrutura e mapa estão integrados. Ver [[Vaggu/Planejamento/Próximos passos]].
 
 
 **Atualização de 11/09:** autenticação real integrada e validada. Foto original do login ainda pendente. [[Vaggu/Documentação/validacao-login-2026-09-11|Ver resultados]].
@@ -43,4 +43,4 @@ O próprio cofre está versionado na pasta `segunda-mente/` do repositório VAGG
 
 **Atualização de 14/09:** a segunda mente passou a integrar o repositório. O P05 recebeu leitores CSV/XLSX, validação por linha, identificação de criação/atualização e persistência isolada das prévias no PostgreSQL.
 
-**Atualização de 15/09:** a confirmação backend do P05 foi implementada de forma idempotente e serializada por shopping para criar/atualizar estrutura sem apagar histórico; falta reexecutar integração PostgreSQL real nesta retomada e criar a tela administrativa.
+**Atualização de 15/09:** a confirmação backend do P05 foi implementada de forma idempotente e serializada por shopping; a tela Admin envia CSV/XLSX, oferece modelo CSV, apresenta prévia/erros e confirma a aplicação. Falta reexecutar integração PostgreSQL real e validar o fluxo autenticado contra a API real.

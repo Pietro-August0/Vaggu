@@ -8,6 +8,7 @@ import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
 import { objeto } from "@/servicos/api"
 import { EstruturaAdmin } from "@/components/estrutura-admin"
+import { ImportacaoEstrutura } from "@/components/importacao-estrutura"
 import { MapaEstacionamento } from "@/components/mapa-estacionamento"
 import { Dialog, DialogClose, DialogContent, DialogDescription, DialogFooter, DialogHeader, DialogTitle } from "@/components/ui/dialog"
 import { Trash2 } from "lucide-react"
@@ -45,6 +46,7 @@ function PainelAdmin() {
   const [credencial, setCredencial] = useState<{ email: string; senha: string } | null>(null)
   const [gerenteParaExcluir, setGerenteParaExcluir] = useState<GerenteResumo | null>(null)
   const [shoppingParaExcluir, setShoppingParaExcluir] = useState<ShoppingResumo | null>(null)
+  const [revisaoEstrutura, setRevisaoEstrutura] = useState(0)
 
   const carregarShoppings = useCallback(async () => {
     const lista = lerShoppings(await consultar("/shoppings"))
@@ -173,7 +175,8 @@ function PainelAdmin() {
         <div className="mt-4 grid gap-2"><Label htmlFor="gerente-telefone">Telefone</Label><Input id="gerente-telefone" name="telefone" maxLength={40} /></div><Button className="mt-5" disabled={ocupado}>Criar acesso</Button>
       </form>
     </div>}
-    {shoppingId && <EstruturaAdmin shoppingId={shoppingId} />}
+    {shoppingId && <ImportacaoEstrutura key={shoppingId} shoppingId={shoppingId} aoConfirmar={() => setRevisaoEstrutura(revisao => revisao + 1)} />}
+    {shoppingId && <EstruturaAdmin key={`${shoppingId}-${revisaoEstrutura}`} shoppingId={shoppingId} />}
     <Dialog open={gerenteParaExcluir !== null} onOpenChange={aberto => { if (!aberto) setGerenteParaExcluir(null) }}>
       <DialogContent>
         <DialogHeader><DialogTitle>Excluir acesso de gerente?</DialogTitle><DialogDescription>O acesso de {gerenteParaExcluir?.nome} será encerrado imediatamente. Depois da confirmação, você terá sete segundos para desfazer.</DialogDescription></DialogHeader>
