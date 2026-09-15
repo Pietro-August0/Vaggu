@@ -94,6 +94,8 @@ Todas as rotas abaixo exigem `Authorization: Bearer TOKEN`, perfil `VAGGU` e sen
 | POST | /setores/:setorId/vagas | código, tipo e posição opcional | Cria uma vaga vinculada ao setor e ao andar. |
 | POST | /shoppings/:shoppingId/importacoes/previa-csv | Corpo `text/csv` ou `text/plain`, até 1 MB | Valida a planilha, informa erros por linha/campo e persiste a prévia sem alterar vagas. |
 | POST | /shoppings/:shoppingId/importacoes/previa-xlsx | Corpo binário XLSX, até 2 MB | Lê a primeira planilha e persiste a mesma prévia do CSV sem alterar vagas. |
+| GET | /shoppings/:shoppingId/importacoes/:importacaoId | Sem corpo | Consulta a prévia persistida no mesmo shopping. |
+| POST | /shoppings/:shoppingId/importacoes/:importacaoId/confirmar | Sem corpo | Aplica a prévia uma única vez, criando/atualizando estrutura sem apagar histórico. |
 | PATCH | /andares/:andarId/mapa | revisão esperada e posições das vagas | Salva o mapa de forma atômica; revisão desatualizada retorna 409. |
 | PATCH | /shoppings/:shoppingId/implantacao | situação | Atualiza a etapa de implantação do shopping. |
 
@@ -111,7 +113,9 @@ CSV e XLSX exigem as colunas `codigo` (ou `código`), `andar`, `setor` e `tipo`.
 
 Essas rotas persistem a prévia na tabela PostgreSQL `importacoes_estrutura`, sem modificar vagas ou histórico. A resposta acrescenta `importacaoId` e `criadoEm`. O Admin consulta o resultado por `GET /shoppings/:shoppingId/importacoes/:importacaoId`; outro shopping ou shopping excluído retorna 404. Prévias com erros também são armazenadas; os bytes originais do arquivo não são guardados.
 
-A migration incremental `20260914000100_previas_importacao` deve ser aplicada pelo fluxo `db:deploy` ao banco configurado pela equipe. Identificação de vagas e persistência usam uma transação consistente. A confirmação ainda está pendente: `podeConfirmar` indica somente a validação da prévia. O XLSX usa a primeira planilha, até 10.000 registros e 50 colunas, por meio de `read-excel-file`.
+A confirmação por `POST /shoppings/:shoppingId/importacoes/:importacaoId/confirmar` exige `podeConfirmar=true`, reavalia a estrutura dentro de uma transação e registra `confirmadoEm` com um resumo da aplicação. Um advisory lock transacional serializa confirmações do mesmo shopping, inclusive requisições simultâneas. A operação cria andares e setores ausentes, cria vagas novas e atualiza o andar, setor e tipo de vagas existentes pelo código do shopping, preservando o ID e o histórico. Vagas que não aparecem na planilha não são removidas nem desativadas. Repetir a confirmação da mesma prévia devolve o resultado já gravado com `idempotente=true`.
+
+As migrations incrementais `20260914000100_previas_importacao` e `20260915000100_confirmacao_importacao` devem ser aplicadas pelo fluxo `db:deploy` ao banco configurado pela equipe. Identificação de vagas e persistência usam transações consistentes. O XLSX usa a primeira planilha, até 10.000 registros e 50 colunas, por meio de `read-excel-file`.
 
 ## Segurança e frontend
 
@@ -161,7 +165,7 @@ Modelos de negócio: Shopping, Andar, Setor, Vaga, Usuario, Dispositivo e Histor
 | src/auth/bootstrap.ts | Criação do primeiro administrador. |
 | src/shoppings/ | Shoppings, gerentes, senha provisória e redefinição administrativa. |
 | src/estrutura/ | Hierarquia do estacionamento, mapa, revisão concorrente e escopo do gerente. |
-| src/importacao/ | Contratos, leitores CSV/XLSX, validação tabular, identificação de IDs e rotas de prévia. |
+| src/importacao/ | Contratos, leitores CSV/XLSX, validação tabular, identificação de IDs, prévia e confirmação atômica. |
 | scripts/create-admin.ts | Comando interativo do administrador. |
 | src/app.ts e src/server.ts | Express e inicialização. |
 | src/config/ e src/lib/ | Configuração e Prisma. |
@@ -180,4 +184,4 @@ Os cenários verificam múltiplos gerentes, política e troca da primeira senha,
 
 Testado no Windows com Node compatível: `npm run typecheck`, `DATABASE_URL=postgresql://... npm run db:validate` e `cmd /c npm test` passaram. Prisma fixado em 7.10.0. Revise npm audit antes de publicar; não execute npm audit fix --force automaticamente.
 
-P04 e as melhorias administrativas concluídas em 12–13/09/2026 estão entregues: migrations aplicadas, estrutura, mapa, exclusão reversível e política de senha definitiva integrados, 54 testes aprovados com PostgreSQL real e fluxos principais validados no navegador. O P05 está em andamento com prévias CSV/XLSX persistidas e isoladas por shopping; confirmação atômica e preservação de histórico durante a aplicação permanecem pendentes, conforme o [planejamento](../segunda-mente/Vaggu/Documentação/planejamento-do-projeto.md).
+P04 e as melhorias administrativas concluídas em 12–13/09/2026 estão entregues: migrations aplicadas, estrutura, mapa, exclusão reversível e política de senha definitiva integrados, 54 testes aprovados com PostgreSQL real e fluxos principais validados no navegador. O P05 possui prévias CSV/XLSX persistidas e isoladas por shopping e confirmação atômica no backend; a interface administrativa de importação continua pendente, conforme o [planejamento](../segunda-mente/Vaggu/Documentação/planejamento-do-projeto.md).

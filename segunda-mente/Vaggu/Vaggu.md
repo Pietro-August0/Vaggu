@@ -32,7 +32,7 @@ Plataforma web responsiva para gestão de estacionamentos de shopping centers, d
 
 O próprio cofre está versionado na pasta `segunda-mente/` do repositório VAGGU.
 
-**Estado atual:** P01–P04 concluídos. O P05 está em andamento: a API cria, persiste e consulta prévias CSV/XLSX sem alterar vagas; a confirmação atômica ainda falta. Autenticação, gestão administrativa, Minha conta, estrutura e mapa estão integrados. Ver [[Vaggu/Planejamento/Próximos passos]].
+**Estado atual:** P01–P04 concluídos. O P05 está em andamento: backend e interface Admin de prévia/confirmação CSV/XLSX estão implementados; a validação completa com PostgreSQL real e navegador autenticado permanece pendente. Autenticação, gestão administrativa, Minha conta, estrutura e mapa estão integrados. Ver [[Vaggu/Planejamento/Próximos passos]].
 
 
 **Atualização de 11/09:** autenticação real integrada e validada. Foto original do login ainda pendente. [[Vaggu/Documentação/validacao-login-2026-09-11|Ver resultados]].
@@ -41,4 +41,6 @@ O próprio cofre está versionado na pasta `segunda-mente/` do repositório VAGG
 
 **Atualização de 13/09:** o Admin pode excluir logicamente um shopping e consultar a senha provisória de cada gerente até a primeira troca. A exclusão encerra os acessos e preserva estrutura e histórico; depois da troca, a senha provisória é apagada e aparece apenas “senha redefinida”.
 
-**Atualização de 14/09:** a segunda mente passou a integrar o repositório. O P05 recebeu leitores CSV/XLSX, validação por linha, identificação de criação/atualização e persistência isolada das prévias no PostgreSQL. A confirmação permanece pendente.
+**Atualização de 14/09:** a segunda mente passou a integrar o repositório. O P05 recebeu leitores CSV/XLSX, validação por linha, identificação de criação/atualização e persistência isolada das prévias no PostgreSQL.
+
+**Atualização de 15/09:** a confirmação backend do P05 foi implementada de forma idempotente e serializada por shopping; a tela Admin envia CSV/XLSX, oferece modelo CSV, apresenta prévia/erros e confirma a aplicação. Falta reexecutar integração PostgreSQL real e validar o fluxo autenticado contra a API real.

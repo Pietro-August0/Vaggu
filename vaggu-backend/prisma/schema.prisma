@@ -55,14 +55,16 @@ model Shopping {
   @@index([excluidoEm, ativo, nome])
 }
 
-// Guarda o resultado imutável da prévia; a confirmação estrutural será uma etapa posterior.
+// Guarda o resultado da prévia e a fotografia da confirmação para impedir reaplicação duplicada.
 model ImportacaoEstrutura {
-  id         String   @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
-  shoppingId String   @map("shopping_id") @db.Uuid
-  formato    String   @db.VarChar(4)
-  previa     Json     @db.JsonB
-  criadoEm   DateTime @default(now()) @map("criado_em")
-  shopping   Shopping @relation(fields: [shoppingId], references: [id], onDelete: Restrict)
+  id                    String    @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  shoppingId            String    @map("shopping_id") @db.Uuid
+  formato               String    @db.VarChar(4)
+  previa                Json      @db.JsonB
+  resultadoConfirmacao  Json?     @map("resultado_confirmacao") @db.JsonB
+  criadoEm              DateTime  @default(now()) @map("criado_em")
+  confirmadoEm          DateTime? @map("confirmado_em")
+  shopping              Shopping  @relation(fields: [shoppingId], references: [id], onDelete: Restrict)
 
   @@index([shoppingId, criadoEm])
   @@map("importacoes_estrutura")

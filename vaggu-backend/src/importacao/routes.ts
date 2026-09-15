@@ -10,6 +10,9 @@ export function importacaoRoutes(auth: unknown, importacao: ReturnType<typeof im
     res.set('Cache-Control', 'no-store');
     res.json(await importacao.buscarPrevia(req.params.shoppingId, req.params.importacaoId));
   });
+  router.post('/shoppings/:shoppingId/importacoes/:importacaoId/confirmar', async (req, res) => {
+    res.json(await importacao.confirmarImportacao(req.params.shoppingId, req.params.importacaoId));
+  });
   router.post('/shoppings/:shoppingId/importacoes/previa-csv', text({ type: ['text/csv', 'text/plain'], limit: '1mb' }),
     async (req, res) => res.json(await importacao.criarPreviaCsv(req.params.shoppingId, req.body)));
   router.post('/shoppings/:shoppingId/importacoes/previa-xlsx',
