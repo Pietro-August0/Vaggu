@@ -37,10 +37,25 @@ enum SituacaoImplantacao {
 }
 
 model Shopping {
-  id           String        @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
-  nome         String
-  endereco     String?
-  ativo        Boolean       @default(true)
+  id                    String        @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  nome                  String
+  cnpj                  String?
+  responsavelNome       String?       @map("responsavel_nome")
+  responsavelCpf        String?       @map("responsavel_cpf")
+  emailCorporativo      String?       @map("email_corporativo")
+  telefone              String?
+  cep                   String?
+  uf                    String?       @db.VarChar(2)
+  cidade                String?
+  bairro                String?
+  logradouro            String?
+  numero                String?
+  complemento           String?
+  endereco              String?
+  horarioAbertura       String?       @map("horario_abertura") @db.VarChar(5)
+  horarioFechamento     String?       @map("horario_fechamento") @db.VarChar(5)
+  fusoHorario           String?       @map("fuso_horario")
+  ativo                 Boolean       @default(true)
   situacaoImplantacao SituacaoImplantacao @default(EM_CONFIGURACAO) @map("situacao_implantacao")
   criadoEm     DateTime      @default(now()) @map("criado_em")
   excluidoEm   DateTime?     @map("excluido_em")

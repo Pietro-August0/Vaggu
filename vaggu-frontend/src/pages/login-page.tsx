@@ -36,12 +36,12 @@ export function LoginPage() {
       <div className="login-conteudo">
         <h1 id="titulo-login">Acesse a VAGGU</h1>
         <p className="login-introducao">Use as credenciais enviadas pela equipe VAGGU.</p>
-        <form onSubmit={entrar} aria-busy={enviando}>
+        <form onSubmit={entrar} aria-busy={enviando} autoComplete="off">
           <label htmlFor="email">E-mail</label>
-          <input id="email" name="email" type="email" autoComplete="username" maxLength={254} placeholder="Digite seu e-mail" value={email} onChange={evento => setEmail(evento.target.value)} required disabled={enviando} />
+          <input id="email" name="email" type="email" autoComplete="off" maxLength={254} placeholder="Digite ou escolha seu e-mail" value={email} onChange={evento => setEmail(evento.target.value)} required disabled={enviando} />
           <label htmlFor="senha">Senha</label>
           <div className="login-senha">
-            <input id="senha" name="senha" type={mostrarSenha ? "text" : "password"} autoComplete="current-password" maxLength={128} placeholder="Digite sua senha" value={senha} onChange={evento => setSenha(evento.target.value)} required disabled={enviando} />
+            <input id="senha" name="senha" type={mostrarSenha ? "text" : "password"} autoComplete="off" maxLength={128} placeholder="Digite ou escolha sua senha" value={senha} onChange={evento => setSenha(evento.target.value)} required disabled={enviando} />
             <button type="button" className="login-olho" aria-label={mostrarSenha ? "Ocultar senha" : "Mostrar senha"} aria-pressed={mostrarSenha} onClick={() => setMostrarSenha(!mostrarSenha)}>{mostrarSenha ? <EyeOff aria-hidden="true" size={20} /> : <Eye aria-hidden="true" size={20} />}</button>
           </div>
           <button type="button" className="login-recuperar" onClick={() => setAjuda(!ajuda)} aria-expanded={ajuda} aria-controls="ajuda-acesso">Esqueci minha senha</button>

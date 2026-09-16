@@ -21,11 +21,27 @@ export async function runAdminCases(t: TestContext, prisma: PrismaClient, senhaA
 
   await t.test('Admin cadastra shopping e dois gerentes com senhas individuais', async () => {
     const shoppingResponse = await request(app).post('/api/v1/shoppings')
-      .set(adminHeader).send({ nome: 'Shopping Central', endereco: 'Rua de teste, 100' }).expect(201);
+      .set(adminHeader).send({
+        nome: 'Shopping Central', cnpj: '12.345.678/0001-90', responsavelNome: 'Ana Responsável',
+        emailCorporativo: 'contato@shopping.example', telefone: '+55 11 90000-0000', cep: '01001-000',
+        uf: 'sp', cidade: 'São Paulo', bairro: 'Centro', logradouro: 'Rua de teste', numero: '100',
+        horarioAbertura: '06:00', horarioFechamento: '23:59', fusoHorario: 'America/Sao_Paulo',
+      }).expect(201);
     const shopping = shoppingResponse.body.shopping;
     shoppingCentralId = shopping.id;
     assert.equal(shopping.nome, 'Shopping Central');
     assert.equal(shopping.totalGerentes, 0);
+    assert.equal(shopping.cnpj, '12345678000190');
+    assert.equal(shopping.cep, '01001000');
+    assert.equal(shopping.uf, 'SP');
+
+    const ficha = await request(app).get(`/api/v1/shoppings/${shopping.id}`)
+      .set(adminHeader).expect(200);
+    assert.equal(ficha.body.shopping.responsavelNome, 'Ana Responsável');
+    const atualizada = await request(app).patch(`/api/v1/shoppings/${shopping.id}`)
+      .set(adminHeader).send({ bairro: 'Bela Vista', horarioAbertura: '07:00' }).expect(200);
+    assert.equal(atualizada.body.shopping.bairro, 'Bela Vista');
+    assert.equal(atualizada.body.shopping.horarioAbertura, '07:00');
 
     const gerenteA = await request(app).post(`/api/v1/shoppings/${shopping.id}/gerentes`)
       .set(adminHeader).send({

@@ -16,6 +16,14 @@ export function shoppingsRoutes(auth, shoppings) {
     res.status(201).json(await shoppings.criarShopping(req.body));
   });
 
+  router.get('/:shoppingId', async (req, res) => {
+    res.json(await shoppings.buscarShopping(req.params.shoppingId));
+  });
+
+  router.patch('/:shoppingId', async (req, res) => {
+    res.json(await shoppings.atualizarShopping(req.params.shoppingId, req.body));
+  });
+
   router.delete('/:shoppingId', async (req, res) => {
     res.json(await shoppings.excluirShopping(req.params.shoppingId));
   });

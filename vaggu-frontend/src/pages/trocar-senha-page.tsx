@@ -25,8 +25,8 @@ const codigosNovaSenha = new Set([
 ])
 
 export function TrocarSenhaPage() {
-  const { currentUser, trocarSenha, logout } = useAppStore()
-  const [senhaAtual, setSenhaAtual] = useState("")
+  const { currentUser, trocarSenha, logout, senhaProvisoriaPendente } = useAppStore()
+  const [senhaAtual, setSenhaAtual] = useState(senhaProvisoriaPendente)
   const [novaSenha, setNovaSenha] = useState("")
   const [confirmacao, setConfirmacao] = useState("")
   const [visiveis, setVisiveis] = useState<Record<CampoSenha, boolean>>({ senhaAtual: false, novaSenha: false, confirmacao: false })

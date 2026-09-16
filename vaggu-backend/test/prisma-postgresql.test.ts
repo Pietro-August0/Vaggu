@@ -44,3 +44,10 @@ test('migration de confirmação registra idempotência da importação', () => 
   assert.match(sql, /importacoes_estrutura_confirmacao_check/);
   assert.match(sql, /jsonb_typeof\("resultado_confirmacao"\) = 'object'/);
 });
+test('migration cadastral amplia a ficha sem invalidar shoppings existentes', () => {
+  const sql = readFileSync(join(projectRoot, 'prisma/migrations/20260914000200_dados_cadastrais_shopping/migration.sql'), 'utf8');
+  assert.match(sql, /ADD COLUMN "cnpj" TEXT/);
+  assert.match(sql, /ADD COLUMN "fuso_horario" TEXT/);
+  assert.match(sql, /shoppings_uf_formato_check/);
+  assert.doesNotMatch(sql, /DROP\s+(TABLE|COLUMN)/i);
+});

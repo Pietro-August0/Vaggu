@@ -10,6 +10,7 @@ interface AppStoreValue {
   malls: Mall[]
   erroSessao: string
   mensagemSessao: string
+  senhaProvisoriaPendente: string
   login: (email: string, senha: string) => Promise<UserAccount>
   logout: () => Promise<void>
   trocarSenha: (senhaAtual: string, novaSenha: string) => Promise<UserAccount>
@@ -46,6 +47,7 @@ export function AppStoreProvider({ children }: { children: ReactNode }) {
   const [expiraEm, setExpiraEm] = useState(0)
   const [erroSessao, setErroSessao] = useState("")
   const [mensagemSessao, setMensagemSessao] = useState("")
+  const [senhaProvisoriaPendente, setSenhaProvisoriaPendente] = useState("")
   const tokenAtual = useRef<string | null>(null)
   const versao = useRef(0)
 
@@ -56,6 +58,7 @@ export function AppStoreProvider({ children }: { children: ReactNode }) {
     setExpiraEm(0)
     setErroSessao("")
     setMensagemSessao(mensagem)
+    setSenhaProvisoriaPendente("")
   }, [])
 
   /** Não confunde senha atual incorreta com uma sessão revogada. */
@@ -126,6 +129,7 @@ export function AppStoreProvider({ children }: { children: ReactNode }) {
   /** Login nunca cai para dados demonstrativos caso o serviço esteja fora do ar. */
   async function login(email: string, senha: string) {
     const revisao = ++versao.current
+    setSenhaProvisoriaPendente("")
     const dados = await requisitarApi("/auth/login", undefined, { email: email.trim().toLowerCase(), senha })
     if (!objeto(dados) || typeof dados.token !== "string" || !/^[A-Za-z0-9_-]{43}$/.test(dados.token)
       || dados.tipo !== "Bearer" || typeof dados.expiraEm !== "string"
@@ -139,6 +143,8 @@ export function AppStoreProvider({ children }: { children: ReactNode }) {
     setExpiraEm(Date.parse(dados.expiraEm))
     setErroSessao("")
     setMensagemSessao("")
+    // A senha permanece somente na memória desta aba e apenas durante a troca obrigatória.
+    setSenhaProvisoriaPendente(usuario.trocarSenhaObrigatoria ? senha : "")
     return usuario
   }
 
@@ -159,6 +165,7 @@ export function AppStoreProvider({ children }: { children: ReactNode }) {
     versao.current++
     setCurrentUser(usuario)
     setErroSessao("")
+    setSenhaProvisoriaPendente("")
     return usuario
   }
 
@@ -176,8 +183,8 @@ export function AppStoreProvider({ children }: { children: ReactNode }) {
   }
 
   return <AppStoreContext.Provider value={{
-    ready: true, currentUser, currentMall: null, malls: [], erroSessao, mensagemSessao,
-    login, logout, trocarSenha, verificarSessao, consultar, enviarArquivo, atualizarMinhaConta, createMall,
+    ready: true, currentUser, currentMall: null, malls: [], erroSessao, mensagemSessao, senhaProvisoriaPendente,
+    login, logout, trocarSenha, verificarSessao, consultar, atualizarMinhaConta, createMall,
   }}>{children}</AppStoreContext.Provider>
 }
 

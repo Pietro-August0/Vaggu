@@ -42,12 +42,93 @@ function textoOpcional(value, nomeCampo, max = 200) {
   return text || null;
 }
 
+/** Mantém apenas dígitos e valida documentos/CEP pelo tamanho esperado. */
+function digitosOpcionais(value: unknown, nomeCampo: string, tamanho: number): string | null {
+  const texto = textoOpcional(value, nomeCampo, tamanho + 6);
+  if (texto === null) return null;
+  const digitos = texto.replace(/\D/g, '');
+  if (digitos.length !== tamanho) {
+    throw new ApiError(400, 'DADOS_INVALIDOS', `${nomeCampo} deve ter ${tamanho} dígitos.`);
+  }
+  return digitos;
+}
+
+/** Normaliza e valida e-mail corporativo sem alterar o e-mail de acesso dos gerentes. */
+function emailOpcional(value: unknown): string | null {
+  if (value === undefined || value === null || value === '') return null;
+  const email = normalizeEmail(value);
+  if (!email) throw new ApiError(400, 'DADOS_INVALIDOS', 'Informe um e-mail corporativo válido.');
+  return email;
+}
+
+/** Aceita somente horários de 24 horas e fusos IANA reconhecidos pelo servidor. */
+function horarioOpcional(value: unknown, nomeCampo: string): string | null {
+  const horario = textoOpcional(value, nomeCampo, 5);
+  if (horario !== null && !/^([01]\d|2[0-3]):[0-5]\d$/.test(horario)) {
+    throw new ApiError(400, 'DADOS_INVALIDOS', `${nomeCampo} deve usar o formato HH:MM.`);
+  }
+  return horario;
+}
+
+function fusoOpcional(value: unknown): string | null {
+  const fuso = textoOpcional(value, 'fuso horário', 80);
+  if (fuso === null) return null;
+  try { new Intl.DateTimeFormat('pt-BR', { timeZone: fuso }).format(); }
+  catch { throw new ApiError(400, 'DADOS_INVALIDOS', 'Informe um fuso horário válido.'); }
+  return fuso;
+}
+
+/** Converte os campos permitidos em dados prontos para criação ou atualização. */
+function dadosShopping(body: Record<string, unknown> = {}, exigeNome = false) {
+  const data: Record<string, unknown> = {};
+  const campo = (nome: string, converter: (valor: unknown) => unknown): void => {
+    if (nome in body) data[nome] = converter(body[nome]);
+  };
+  if (exigeNome || 'nome' in body) data.nome = textoObrigatorio(body.nome, 'nome do shopping');
+  campo('cnpj', valor => digitosOpcionais(valor, 'CNPJ', 14));
+  campo('responsavelNome', valor => textoOpcional(valor, 'nome do responsável', 120));
+  campo('responsavelCpf', valor => digitosOpcionais(valor, 'CPF do responsável', 11));
+  campo('emailCorporativo', emailOpcional);
+  campo('telefone', valor => textoOpcional(valor, 'telefone', 40));
+  campo('cep', valor => digitosOpcionais(valor, 'CEP', 8));
+  campo('uf', valor => {
+    const uf = textoOpcional(valor, 'UF', 2)?.toUpperCase() ?? null;
+    if (uf !== null && !/^[A-Z]{2}$/.test(uf)) throw new ApiError(400, 'DADOS_INVALIDOS', 'UF deve ter duas letras.');
+    return uf;
+  });
+  campo('cidade', valor => textoOpcional(valor, 'cidade', 100));
+  campo('bairro', valor => textoOpcional(valor, 'bairro', 100));
+  campo('logradouro', valor => textoOpcional(valor, 'logradouro', 160));
+  campo('numero', valor => textoOpcional(valor, 'número', 20));
+  campo('complemento', valor => textoOpcional(valor, 'complemento', 80));
+  campo('horarioAbertura', valor => horarioOpcional(valor, 'horário de abertura'));
+  campo('horarioFechamento', valor => horarioOpcional(valor, 'horário de fechamento'));
+  campo('fusoHorario', fusoOpcional);
+  campo('endereco', valor => textoOpcional(valor, 'endereço', 240));
+  return data;
+}
+
 /** Seleciona os dados cadastrais públicos e a contagem de usuários quando consultada. */
 function publicShopping(shopping) {
   return {
     id: shopping.id,
     nome: shopping.nome,
+    cnpj: shopping.cnpj ?? null,
+    responsavelNome: shopping.responsavelNome ?? null,
+    responsavelCpf: shopping.responsavelCpf ?? null,
+    emailCorporativo: shopping.emailCorporativo ?? null,
+    telefone: shopping.telefone ?? null,
+    cep: shopping.cep ?? null,
+    uf: shopping.uf ?? null,
+    cidade: shopping.cidade ?? null,
+    bairro: shopping.bairro ?? null,
+    logradouro: shopping.logradouro ?? null,
+    numero: shopping.numero ?? null,
+    complemento: shopping.complemento ?? null,
     endereco: shopping.endereco ?? null,
+    horarioAbertura: shopping.horarioAbertura ?? null,
+    horarioFechamento: shopping.horarioFechamento ?? null,
+    fusoHorario: shopping.fusoHorario ?? null,
     ativo: shopping.ativo,
     situacaoImplantacao: shopping.situacaoImplantacao,
     criadoEm: shopping.criadoEm,
@@ -113,13 +194,28 @@ export function createShoppingsService(prisma, {
 
     /** Cria somente os dados institucionais; acessos individuais são cadastrados separadamente. */
     async criarShopping(body) {
-      const nome = textoObrigatorio(body?.nome, 'nome do shopping');
-      const endereco = textoOpcional(body?.endereco, 'endereço');
       const shopping = await prisma.shopping.create({
-        data: { nome, endereco },
+        data: dadosShopping(body, true),
         include: { _count: contagemGerentesVisiveis },
       });
       return { shopping: publicShopping(shopping) };
+    },
+
+    /** Consulta a ficha completa para que o Admin não dependa de dados mantidos no navegador. */
+    async buscarShopping(shoppingId) {
+      const shopping = await exigirShopping(prisma, shoppingId);
+      return { shopping: publicShopping(shopping) };
+    },
+
+    /** Atualiza somente dados cadastrais permitidos, preservando estrutura e vínculos. */
+    async atualizarShopping(shoppingId, body: Record<string, unknown> = {}) {
+      const shopping = await exigirShopping(prisma, shoppingId);
+      const data = dadosShopping(body);
+      if (Object.keys(data).length === 0) {
+        throw new ApiError(400, 'DADOS_INVALIDOS', 'Informe ao menos um dado do shopping para alterar.');
+      }
+      const atualizado = await prisma.shopping.update({ where: { id: shopping.id }, data });
+      return { shopping: publicShopping(atualizado) };
     },
 
     /** Oculta o shopping sem apagar sua estrutura ou histórico e encerra os acessos vinculados. */
