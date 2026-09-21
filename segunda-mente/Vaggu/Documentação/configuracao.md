@@ -1,169 +1,6 @@
 # Configuração e execução da VAGGU
 
-Este é o guia canônico para executar a VAGGU com Docker ou diretamente com npm. O Compose prepara um banco próprio de desenvolvimento; a execução nativa usa a conexão PostgreSQL configurada pela equipe. Ferramentas, credenciais reais e dados não integram os arquivos versionados. O PostgreSQL portátil citado nos registros históricos não é requisito e não é montado no Docker.
-
-## Executar com Docker
-
-### Preparar o computador e iniciar
-
-1. Instale Git e Docker Desktop. No Windows, habilite o backend WSL 2 solicitado pelo instalador e use contêineres Linux. No macOS, escolha a versão para Intel ou Apple Silicon. No Linux, Docker Engine com o plugin Compose também é uma alternativa ao Desktop.
-2. Inicie o Docker e confira `docker version` e `docker compose version`. Use Compose v2 (mínimo 2.20), com o comando `docker compose`, sem hífen. Não é necessário instalar Node, npm ou PostgreSQL no host. O primeiro build precisa de internet para baixar imagens e dependências.
-3. Clone e entre no repositório:
-
-```sh
-git clone https://github.com/Pietro-August0/Vaggu.git
-cd Vaggu
-docker compose up --build
-```
-
-Os comandos Docker deste guia funcionam no PowerShell e nos terminais Linux/macOS. Execute-os sempre na raiz, onde está `compose.yaml`. Mantenha o terminal aberto; alternativamente, use `docker compose up --build -d` para segundo plano.
-
-Nenhum arquivo de ambiente é obrigatório para começar. Os valores padrão de banco e criptografia são públicos, exclusivos de desenvolvimento local. Não use dados de clientes nem credenciais externas neste ambiente. Para personalizar, copie `.env.example` para `.env` na raiz **somente se não existir**:
-
-```powershell
-if (-not (Test-Path .env)) { Copy-Item .env.example .env }
-```
-
-No Linux/macOS: `test -f .env || cp .env.example .env`. Edite esse arquivo antes da primeira subida. Ele é ignorado pelo Git. O `.env` nativo de `vaggu-backend` não é lido nem montado pelo Compose.
-
-### O que é automatizado
-
-| Serviço | Responsabilidade e condição |
-| --- | --- |
-| `postgres` | PostgreSQL 17.9, banco e usuário `vaggu_dev`, volume persistente. Healthcheck TCP com `pg_isready`. |
-| `migracoes` | Aguarda banco saudável e executa `npm run db:deploy` (`prisma migrate deploy`). Finaliza com código 0; não é servidor permanente. Falha impede a primeira subida da API. |
-| `backend` | Aguarda banco saudável e migrations concluídas; gera Prisma, compila e observa os fontes TypeScript, reiniciando a API após mudanças compiladas. Prontidão consulta o banco. |
-| `frontend` | Aguarda API pronta, inicia Vite com HMR e polling e encaminha `/api` para `http://backend:3000`. Seu healthcheck confere a página e a prontidão pelo proxy. |
-
-O Compose instala dependências com `npm ci` dentro das imagens. `node_modules` e `dist` ficam no Linux do contêiner, sem copiar artefatos Windows. Os fontes são montados para leitura: edite no seu editor local. Polling do Vite e do TypeScript atende pastas compartilhadas do Docker Desktop; pode consumir mais CPU que observação nativa. Não há mudança de UI ou regras de negócio.
-
-Versões escolhidas: imagens `node:24.14.0-bookworm-slim` nos dois pacotes (npm 11.9.0 incluído) e `postgres:17.9-bookworm`. Node 24.14.0 já é citado como compatível no backend e atende a faixa `>=22.12.0 <25`; o frontend não declara engines próprios, mas Vite 8.2.2 aceita essa versão. Locks v3 preservados: Prisma/client/adapter 7.10.0, TypeScript backend 7.0.2 e frontend 6.0.3. O PostgreSQL 17.11 citado no histórico pertence a outra instalação; o volume Docker novo usa a versão fixada acima, sem migrar aquele banco. Tags fixam versões de aplicação, mas imagens base podem receber reconstruções; não há promessa de imagem bit a bit imutável por digest.
-
-O usuário ainda instala/inicia Docker, clona o código, cria o administrador e configura integrações autorizadas quando necessário. WhatsApp automático permanece desativado e nenhuma credencial Meta é repassada. Não são criados shoppings, gerentes, vagas ou fixtures na subida.
-
-### Endereços e personalização
-
-| Acesso no computador | Padrão | Opção no `.env` da raiz |
-| --- | --- | --- |
-| Aplicação | `http://localhost:5173` | `PORTA_FRONTEND=5173` |
-| API pronta | `http://localhost:3000/api/v1/health/ready` | `PORTA_BACKEND=3000` |
-| PostgreSQL, por cliente externo | `localhost:5433`, banco/usuário `vaggu_dev` | `PORTA_POSTGRES=5433` |
-
-As três portas são publicadas apenas em `127.0.0.1`. Nos contêineres, as portas continuam 5173, 3000 e 5432; mudar a porta do computador não altera proxy ou conexão interna. O navegador usa `/api/v1` na origem do Vite, sem depender de CORS entre portas. A rede bridge `interna` é criada para o projeto e resolve `postgres`/`backend` por nome; não é rede de produção nem usa IP fixo. Ela permite saída para internet, mas a configuração não habilita integrações externas.
-
-`DATABASE_URL` é montada pelo Compose com host `postgres`, nunca `localhost`. Não aceita a URL nativa ou de produção por herança. O usuário e banco de desenvolvimento são fixos. Para senha personalizada em `POSTGRES_PASSWORD`, use letras, números, `_` e `-`, pois o valor entra diretamente na URL. A chave `CREDENTIAL_ENCRYPTION_KEY` deve ser longa e estável quando personalizada.
-
-Não altere a senha apenas no `.env` depois de criar o volume: a imagem PostgreSQL não atualiza contas existentes dessa forma. Mantenha o valor original ou faça a rotação explícita no banco e na configuração. Não altere a chave de criptografia enquanto houver senhas provisórias pendentes; cópias antigas deixam de ser recuperáveis e precisarão ser redefinidas pelo Admin.
-
-O projeto se chama `vaggu`; o volume padrão é `vaggu_dados-postgres`. Para outra cópia isolada, defina `COMPOSE_PROJECT_NAME` e portas diferentes antes de iniciar. Trocar esse nome seleciona outro volume, não transfere nem apaga os dados anteriores. Mantenha o mesmo nome nos comandos futuros.
-
-### Criar o primeiro administrador
-
-Após a subida, em outro terminal na raiz:
-
-```sh
-docker compose exec backend npm run admin:create
-```
-
-O comando interativo pergunta nome e e-mail e mostra uma senha gerada uma única vez. Guarde-a em gerenciador de senhas e use-a no login da aplicação. Não redirecione essa saída para logs, documentação ou capturas compartilhadas. O comando recusa outro administrador, mesmo desativado, e não substitui contas. A criação de gerentes continua sendo feita pelo Admin após a parceria.
-
-### Saúde, logs e diagnóstico
-
-```sh
-docker compose ps -a
-docker compose logs --tail=100 postgres migracoes backend frontend
-docker compose logs -f backend frontend
-docker compose exec postgres pg_isready -h 127.0.0.1 -U vaggu_dev -d vaggu_dev
-docker compose exec backend npm exec -- prisma migrate status
-```
-
-Resultado esperado: PostgreSQL, backend e frontend `healthy`, e `migracoes` como `Exited (0)`. A prontidão usa `SELECT 1`; confirme também `prisma migrate status` e os logs das migrations. `unhealthy` não provoca reinício automático por si só; investigue os logs. `restart: unless-stopped` recupera processos encerrados inesperadamente, sem apagar dados.
-
-Abra `/api/v1/health/ready` também pela porta **5173** para confirmar frontend → API → banco. Um 503 da API indica banco indisponível; 502/erro de proxy sugere que o backend não está acessível. Se o build falhar ao baixar imagens/pacotes, confira conexão, proxy corporativo e espaço do Docker, preservando o volume.
-
-Porta ocupada: confira `docker compose ps -a` e os demais programas. No Windows, `Get-NetTCPConnection -State Listen -LocalPort 5173,3000,5433`; Linux: `ss -ltnp`; macOS: `lsof -nP -iTCP -sTCP:LISTEN`. Altere somente a opção `PORTA_*` em conflito no `.env` e execute `docker compose up --build -d`; não encerre processos de outra pessoa. Use o novo endereço no navegador.
-
-Para falha de montagem no Desktop, confira compartilhamento/permissões da pasta clonada. No Windows, o checkout dentro do filesystem WSL pode melhorar desempenho; não é necessário mover um checkout existente. Se a edição não aparecer, acompanhe os logs de compilação; arquivos de configuração não montados e dependências exigem reconstrução. Erro de TypeScript pode manter a última versão compilada; corrija o erro antes de validar a alteração.
-
-### Migrations e atualização
-
-Na primeira subida, o serviço `migracoes` aplica **somente** migrations versionadas. Não usa `migrate reset`, não importa bancos existentes e não insere fixtures. Confira a conexão/destino antes de usar comandos fora deste Compose.
-
-Após receber novas migrations ou alterar schema/dependências, pare os serviços preservando o banco e suba novamente. Isso garante que a migration termine antes de iniciar a nova API:
-
-```sh
-docker compose down
-docker compose up --build
-```
-
-Para aplicar explicitamente migrations com a API parada, mas mantendo o banco iniciado:
-
-```sh
-docker compose stop frontend backend
-docker compose run --rm migracoes
-docker compose up --build -d
-```
-
-Falha de migration exige inspecionar logs e corrigir a causa, preservando o banco. Não marque migration como aplicada nem use reset para contornar o erro. O SQL e schema montados são somente leitura. Para **criar** uma nova migration, use o fluxo nativo `db:migrate` em banco próprio de desenvolvimento ou monte explicitamente `prisma` para escrita em um contêiner de trabalho; a subida normal apenas aplica arquivos já revisados.
-
-Alterações em `src` e assets aparecem pelo watcher. Alterações em `package.json`, lockfiles, Dockerfiles ou configurações copiadas exigem o ciclo `down` / `up --build`; dependências não ficam em volumes antigos. Para atualizar dependências sem Node no computador, use um contêiner temporário montando apenas os dois manifestos para escrita; os módulos instalados ficam no contêiner descartável. Exemplo para o frontend, substituindo NOME e VERSAO pelo pacote aprovado:
-
-```sh
-docker compose run --rm --no-deps --user 0 -v ./vaggu-frontend/package.json:/aplicacao/package.json -v ./vaggu-frontend/package-lock.json:/aplicacao/package-lock.json frontend npm install NOME@VERSAO
-```
-
-O usuário 0 é usado somente nesse comando explícito de manutenção dos manifestos montados, não nos servidores. Para backend, substitua os nomes `frontend`/`vaggu-frontend` por `backend`/`vaggu-backend`. Revise `package.json` e lockfile e reconstrua; não rode esse exemplo literalmente com NOME/VERSAO. Para atualizar a base já fixada, `docker compose build --pull`; `--no-cache` fica reservado ao diagnóstico de cache. Mudanças de versão principal do PostgreSQL exigem backup e migração próprios, nunca reutilização cega do diretório de dados.
-
-### Parar, retomar e remover dados
-
-Ctrl+C para a execução em primeiro plano. `docker compose stop` para os serviços; `docker compose start` retoma os contêineres existentes. Para remover contêineres e rede preservando o banco, use `docker compose down`. A retomada recomendada, que também verifica migrations, é `docker compose up --build`.
-
-**Destrutivo e opcional:** `docker compose down --volumes` apaga o volume PostgreSQL deste projeto, incluindo administrador, shoppings e histórico locais. Só execute se decidir descartar esses dados e já tiver backup do que precisa. Isso não foi executado nesta entrega. Não use limpeza global de volumes. Sem `--volumes`, o banco é preservado.
-
-### Roteiro de validação em uma máquina com Docker
-
-Este roteiro permanece pendente nesta entrega: Docker não está instalado/disponível no computador usado. Parsing YAML, builds npm e testes locais não substituem execução de contêineres.
-
-```sh
-docker compose config --quiet
-docker compose build
-docker compose up -d
-docker compose ps -a
-docker compose logs migracoes
-docker compose exec postgres pg_isready -h 127.0.0.1 -U vaggu_dev -d vaggu_dev
-docker compose exec backend npm exec -- prisma migrate status
-docker compose exec backend node -e "fetch('http://127.0.0.1:3000/api/v1/health/ready').then(async r=>{console.log(r.status,await r.text());process.exit(r.ok?0:1)})"
-docker compose exec frontend node -e "Promise.all(['/', '/api/v1/health/ready'].map(async p=>{const r=await fetch('http://127.0.0.1:5173'+p);console.log(p,r.status);if(!r.ok)process.exitCode=1}))"
-docker compose exec backend npm run typecheck
-docker compose exec backend npm test
-docker compose exec frontend npm run lint
-docker compose exec frontend npm run build
-```
-
-Aguarde a prontidão antes dos `exec`. Sem `TEST_DATABASE_URL`, `npm test` pula as integrações explicitamente. Depois crie o administrador pelo comando acima, entre no navegador e confira uma chamada autenticada da aplicação à API. Anote o ID do administrador pela consulta abaixo (não revela credenciais), execute `docker compose restart postgres backend frontend`, aguarde a prontidão e consulte novamente. Repita com `docker compose down` / `docker compose up -d`: deve retornar o mesmo ID e permitir o mesmo login.
-
-```sh
-docker compose exec postgres psql -U vaggu_dev -d vaggu_dev -c "SELECT id FROM usuarios WHERE shopping_id IS NULL;"
-```
-
-Edite um texto de teste no frontend e um comentário no backend; confira HMR e recompilação nos logs e desfaça apenas essas edições de teste. Verifique também a parada sem encerramento forçado. Essa validação de Docker Desktop/Windows, Linux ou macOS ainda não foi executada.
-
-Para os testes PostgreSQL isolados no Docker, crie explicitamente um banco de controle vazio **uma vez** e execute a suíte com a URL de teste construída a partir das mesmas credenciais locais. O nome termina em `_teste`, como exige o runner:
-
-```sh
-docker compose exec postgres createdb -U vaggu_dev vaggu_teste
-docker compose exec backend sh -c 'export TEST_DATABASE_URL="${DATABASE_URL%/*}/vaggu_teste"; npm test'
-```
-
-Se `createdb` indicar que já existe, confira que é o banco de controle vazio antes de continuar; não o remova. O runner cria fixtures somente nos bancos aleatórios próprios e remove esses bancos ao concluir. Não use o banco da aplicação como banco de controle. Não foi executado nesta entrega.
-
-### Desenvolvimento e produção
-
-Este Compose usa servidores de desenvolvimento, portas locais, credenciais ilustrativas e o usuário administrativo do PostgreSQL restrito a esta instância local. Produção exige segredos privados, usuário de banco com permissões apropriadas, TLS, backup, hospedagem e processo de migrations revisado. Docker aqui não resolve nem substitui essas decisões. O fluxo npm abaixo permanece disponível.
-
-Referências oficiais usadas para as escolhas: [ordem e condições de inicialização do Compose](https://docs.docker.com/compose/how-tos/startup-order/), [redes do Compose](https://docs.docker.com/reference/compose-file/networks/), [Node 24.14.0 e npm incluído](https://nodejs.org/en/blog/release/v24.14.0).
-
-## Executar sem Docker
+Este guia explica como executar o código usando um PostgreSQL configurado pela equipe. Ferramentas e bancos não integram os arquivos versionados. Em 11/09, a pasta local ignorada ambiente.local ainda existia e foi reutilizada nos testes; a remoção descrita anteriormente não estava efetivada. Nenhum ambiente novo foi criado nesta retomada.
 
 ## O que instalar e configurar
 
@@ -237,7 +74,72 @@ npm.cmd test
 
 Sem `TEST_DATABASE_URL` no ambiente, a suíte marca a integração como **PENDENTE/skip**. Os demais testes HTTP/configuração rodam, mas isso não comprova a persistência real.
 
-Para testar a persistência, crie `.env.teste.local` com a variável `TEST_DATABASE_URL` e uma conexão própria de teste. O nome do banco de controle deve terminar em `_teste` ou `_test`, sem parâmetros extras na URL; o usuário precisa de `CREATEDB`. Se o provedor não permitir criação de bancos, essa limitação precisa ser resolvida antes de declarar a integração validada.
+### Criar o banco local de testes
+
+Cada integrante deve criar seu próprio banco de controle no PostgreSQL local. Ele não substitui o banco de desenvolvimento configurado em `DATABASE_URL`, não recebe dados da aplicação e nunca deve apontar para produção. O runner conecta nesse banco somente para criar e remover bancos descartáveis com nomes aleatórios.
+
+1. Instale o PostgreSQL local. No Windows, use o instalador oficial e mantenha o serviço PostgreSQL iniciado; o pgAdmin incluído pode executar o SQL abaixo. No Linux ou macOS, use o pacote PostgreSQL da sua distribuição ou gerenciador e confirme que o serviço está em execução.
+2. Abra o **Query Tool** do pgAdmin conectado ao banco `postgres` como administrador local. Quem usa terminal pode abrir `psql -U postgres -d postgres`.
+3. Escolha uma senha local própria, sem reutilizar credenciais reais, e execute:
+
+```sql
+CREATE ROLE vaggu_teste_runner
+  WITH LOGIN CREATEDB PASSWORD 'troque-por-uma-senha-local';
+
+CREATE DATABASE vaggu_teste
+  WITH OWNER vaggu_teste_runner
+  ENCODING 'UTF8'
+  TEMPLATE template0;
+```
+
+O nome `vaggu_teste` é obrigatório neste exemplo porque o runner aceita apenas bancos terminados em `_teste` ou `_test`. `CREATEDB` também é necessário: cada execução cria um banco `vaggu_teste_<identificador>`, aplica as migrations e remove somente esse banco descartável ao concluir. O banco de controle `vaggu_teste` permanece vazio e não é apagado.
+
+Se o papel ou banco já existir, não repita o comando às cegas. Confira no pgAdmin ou com `\du vaggu_teste_runner` e `\l vaggu_teste`; reutilize-os somente se forem locais e exclusivos dos testes VAGGU. Nunca conceda `SUPERUSER`, nunca use uma conexão de produção e não aponte os testes para o banco normal de desenvolvimento.
+
+4. Na pasta `vaggu-backend`, crie o arquivo ignorado `.env.teste.local`:
+
+```dotenv
+TEST_DATABASE_URL="postgresql://vaggu_teste_runner:troque-por-uma-senha-local@127.0.0.1:5432/vaggu_teste"
+```
+
+Não copie essa senha para `.env.example`, documentação, commit ou mensagem. Se a senha contiver `@`, `:`, `/`, `?`, `#` ou `%`, codifique esses caracteres para URL ou escolha uma senha local alfanumérica longa para evitar erro de conexão. A URL de teste não aceita parâmetros ou fragmentos adicionais.
+
+5. Confira a conexão sem expor a senha no terminal. No PowerShell, carregue a variável do arquivo apenas no processo atual:
+
+```powershell
+Set-Location vaggu-backend
+$linhaTeste = Get-Content .env.teste.local | Where-Object { $_ -match '^TEST_DATABASE_URL=' }
+$env:TEST_DATABASE_URL = ($linhaTeste -replace '^TEST_DATABASE_URL=', '').Trim('"')
+psql $env:TEST_DATABASE_URL -c 'SELECT current_database(), current_user;'
+Remove-Item Env:TEST_DATABASE_URL
+```
+
+Se `psql` não estiver no `PATH` no Windows, use o **SQL Shell (psql)** instalado com o PostgreSQL ou confirme a conexão pelo pgAdmin. Não altere a política do PowerShell para executar o projeto; use `npm.cmd` quando necessário.
+
+6. Instale as dependências pelo lockfile, gere o cliente Prisma e execute a integração:
+
+```powershell
+npm.cmd ci
+$env:DATABASE_URL='postgresql://geracao:geracao@127.0.0.1:5432/geracao'
+npm.cmd run db:generate
+Remove-Item Env:DATABASE_URL
+npm.cmd run test:integracao
+```
+
+A URL temporária de `db:generate` precisa apenas ter formato PostgreSQL; esse comando não conecta ao endereço ilustrativo. `test:integracao` lê `.env.teste.local`, compila o backend e executa os cenários reais de autenticação, administração e importação. Um resultado aprovado não deixa fixtures no banco de controle.
+
+No Linux ou macOS, depois de criar o mesmo `.env.teste.local`, use `npm ci`, execute `DATABASE_URL='postgresql://geracao:geracao@127.0.0.1:5432/geracao' npm run db:generate` e depois `npm run test:integracao`.
+
+### Diagnosticar a conexão de teste
+
+- `ECONNREFUSED`: confirme que o serviço PostgreSQL está iniciado e escuta em `127.0.0.1:5432`. No Windows, confira em **Serviços**; no Linux, use `systemctl status postgresql`; no macOS com Homebrew, `brew services list`.
+- Falha de autenticação: revise usuário e senha no arquivo local. Não envie a URL completa em capturas ou mensagens.
+- “banco terminado em `_teste` ou `_test`”: remova parâmetros da URL e use exatamente o banco de controle dedicado.
+- “permissão CREATEDB”: conectado como administrador local, execute `ALTER ROLE vaggu_teste_runner CREATEDB;` somente para esse usuário de testes.
+- Banco descartável remanescente após interrupção forçada: identifique exatamente o nome `vaggu_teste_<identificador>`, confirme que nenhuma conexão o utiliza e remova apenas esse banco pelo pgAdmin. Não faça limpeza ampla nem apague `vaggu_teste`.
+- Porta diferente de 5432: ajuste apenas a porta em `.env.teste.local` conforme sua instalação local.
+
+Para testar a persistência, mantenha `.env.teste.local` com a variável `TEST_DATABASE_URL` e a conexão própria criada acima. Se o PostgreSQL local não permitir criação de bancos, essa limitação precisa ser resolvida antes de declarar a integração validada.
 
 ```powershell
 npm.cmd run test:integracao

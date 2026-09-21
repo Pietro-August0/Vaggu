@@ -10,13 +10,10 @@ P01 foi concluído em 10/09 e P02 em 11/09, incluindo autenticação e acabament
 
 Classificações: **verificado** exige execução do comportamento indicado; **presente no código** significa inspeção estática; **parcial** identifica uma entrega incompleta; **ausente** indica que não foi encontrada implementação no escopo inspecionado. Um teste simulado não comprova banco, hardware ou serviço externo real.
 
-O ambiente Docker de desenvolvimento está presente no código: PostgreSQL, migrations sem reset, API e Vite, com volume persistente e fontes editáveis. A validação estática e os checks npm foram executados; Docker não está disponível neste computador, portanto build das imagens, subida, migrations reais e persistência do volume continuam pendentes. O fluxo npm permanece documentado em [configuração](configuracao.md).
-
 ## 2. O que foi implementado
 
 | Área | Estado atual | Evidência e limite |
 | --- | --- | --- |
-| Ambiente reproduzível com Docker | Presente no código; execução pendente | Compose, Dockerfiles e exclusões preparados; YAML e proxy Vite verificados localmente. Não houve execução de contêineres, banco Docker ou teste de preservação do volume. |
 | Landing, marca, login separado e contato comercial | Verificado na interface; contato real pendente | [Landing](../../../vaggu-frontend/src/pages/landing-page.tsx). Número de exemplo removido em 11/09; equipe ainda não possui número oficial. Não foi enviada mensagem. |
 | Seção Sobre | Verificado | [Componente](../../../vaggu-frontend/src/components/sobre-vaggu.tsx) e [estilos](../../../vaggu-frontend/src/components/sobre-vaggu.css): texto de apresentação, anéis, etapas, notebook e benefícios. |
 | Movimento e responsividade da seção Sobre | Verificado em 14/09 | Pontos percorrem os anéis automaticamente. A versão integrada à `main` não possui controle manual e mantém as animações mesmo quando o navegador informa movimento reduzido. Conexões das etapas e benefícios acompanham o layout. |
@@ -109,7 +106,7 @@ Preservar os limites do produto: web responsiva, sem cadastro público de gerent
 ## 6. Próximo início
 
 - **Pacote:** P05 — importação CSV/XLSX com prévia e preservação de histórico.
-- **Primeira ação:** em máquina com Docker, executar o roteiro de validação de [configuração](configuracao.md): construir/subir, conferir migrations, prontidão, proxy e preservação do volume. Depois preparar o banco de controle de teste e executar os cenários PostgreSQL de P05, além do fluxo autenticado no navegador. Sem Docker, continua válido configurar `TEST_DATABASE_URL` dedicada terminada em `_teste` ou `_test` e executar `npm.cmd run test:integracao` no backend.
+- **Primeira ação:** confirmar a disponibilidade de uma `TEST_DATABASE_URL` dedicada terminada em `_teste` ou `_test`, executar `npm.cmd run test:integracao` no backend e validar o fluxo autenticado no navegador.
 - **Arquivos de entrada:** `vaggu-backend/test/importacao-postgresql.test.ts`, `vaggu-backend/prisma/migrations/20260915000100_confirmacao_importacao/migration.sql`, `vaggu-frontend/src/components/importacao-estrutura.tsx` e `vaggu-frontend/src/servicos/importacao.ts`.
 - **Base já validada:** P04 concluído: estrutura hierárquica e mapa proporcional, com revisão concorrente, isolamento e fluxo Admin/gerente aprovados no PostgreSQL e no navegador em 12/09.
 - **Aceite e verificação a confirmar:** em API/banco reais, prévia inválida não altera estrutura; confirmação concorrente aplica uma única vez; IDs, histórico e vagas ausentes são preservados; interface recarrega a estrutura. Concluir CA13–CA14 somente após essas evidências.
@@ -135,18 +132,12 @@ Preservar os limites do produto: web responsiva, sem cadastro público de gerent
 
 Cada entrada mantém: data local, estado do dia, pacote/objetivo, evidências de entrada, alterações, verificações e resultados, pendências/bloqueios, primeira ação da retomada e situação Git. Acrescentar entradas sem apagar dias anteriores. O resumo das seções 1–6 deve acompanhar o estado mais recente.
 
-### 21/09/2026 — ambiente Docker de desenvolvimento
+### 21/09/2026 — banco local de testes para a equipe
 
-- **Objetivo:** permitir frontend, backend e PostgreSQL pelo Compose em outro computador, preservando npm, produto e dados existentes. Não houve invocação de `start` ou `end`.
-- **Roteamento:** Pietro, pela integração entre infraestrutura, frontend/backend e documentação. Revisões humanas indicadas: Samuel para dados e Elisa para reprodução do ambiente; não foram solicitadas externamente nem atribuída coautoria. Revisão técnica automatizada somente de leitura realizada em paralelo.
-- **Base e Git:** árvore inicial limpa em `docs/auditoria-estrutura-ana`. Após `git fetch origin`, criada somente a branch local `codex/chore/docker-desenvolvimento-pietro`, baseada em `origin/main`, commit `03b9412c` (inclui a auditoria anterior). Nenhuma identidade Git alterada; nenhum commit, push, PR, merge ou deploy nesta entrega.
-- **Entrega:** Compose com banco `vaggu_dev`, volume nomeado, rede bridge própria e portas publicadas em loopback; serviço explícito de migrations que bloqueia a primeira subida da API em caso de falha; healthchecks; Dockerfiles com Node 24.14.0/npm 11.9.0, PostgreSQL 17.9 e locks existentes; allowlists `.dockerignore`; `.env.example` opcional na raiz; polling TypeScript/Vite. O backend npm original continua disponível. Nenhum schema, migration, dependência ou regra de negócio alterado.
-- **Documentação:** README com Docker e npm separados; configuração canônica inclui operação, diagnóstico, administrador, migrations, atualização, versões, diferenças de produção e descarte consciente. Mapa revisado para todos os arquivos tocados; descrições ainda corretas preservadas. Próximo início aponta à validação Docker antes da retomada de P05.
-- **Verificações executadas:** Node local 24.21.0/npm 11.19.0; backend `typecheck`, `build` via suíte, `db:validate` e `db:generate` aprovados (Prisma 7.10.0, URL ilustrativa sem conexão); `npm.cmd test`: 42 aprovados, 0 falhas, 3 skips por ausência de `TEST_DATABASE_URL`. Frontend lint/build aprovados; aviso conhecido de chunk de aproximadamente 565 kB. Vite real em porta temporária serviu HTML, confirmou polling e encaminhou `/api/v1/health/ready` a uma API simulada; servidores temporários encerrados. Parsing YAML conferiu dependências, portas, mounts, proxy e banco; ambos os locks foram lidos e comparados aos manifestos, sem alterações.
-- **Limitações da execução:** `docker compose config` não executou porque `docker` não foi encontrado no PATH, na instalação padrão nem como serviço. Imagens não construídas; saúde dos contêineres, migrations reais, login Docker, hot reload no Desktop, parada e persistência do volume não testados. Comandos exatos de validação posterior constam em configuração. As primeiras tentativas de suíte/build falharam com `spawn EPERM` na sandbox e passaram ao repetir com permissão de subprocessos. Uma tentativa de lint na raiz retornou ausência de `package.json`; o comando correto é no pacote frontend.
-- **Preservação:** nenhum volume, banco, arquivo de ambiente real, ferramenta portátil ou trabalho anterior apagado. Nenhuma conta criada automaticamente. Valores versionados são exemplos públicos exclusivos de desenvolvimento, sem tokens ou credenciais externas.
-- **Conferência final:** `node scripts/verificar-documentacao.mjs` aprovado com 217 arquivos cobertos e links internos válidos, após permitir seu subprocesso Git bloqueado na sandbox. `git diff --check` aprovado; status e diff revisados; `.env`, ferramentas locais, módulos e builds ignorados. Nenhum arquivo removido, lockfile ou migration alterado.
-- **Próxima ação:** executar o roteiro Docker em máquina equipada e só então registrar critérios de ambiente como verificados; P05 continua aguardando integração real, sem avanço de escopo nesta entrega.
+- **Decisão:** a proposta Docker da branch foi cancelada pela equipe. Todos os arquivos e ajustes do commit `c957f349` foram revertidos sem reescrever o histórico; execução e instalação permanecem pelo fluxo npm/PostgreSQL anterior.
+- **Documentação:** o guia canônico agora ensina cada integrante a criar o papel local `vaggu_teste_runner`, o banco de controle `vaggu_teste`, o arquivo ignorado `.env.teste.local` e executar `test:integracao`. Também explica isolamento, limpeza automática e diagnóstico sem expor credenciais.
+- **Segurança:** o banco de teste é local e separado de desenvolvimento/produção; o usuário possui `LOGIN` e `CREATEDB`, sem `SUPERUSER`. Nenhuma senha, banco ou arquivo local foi versionado.
+- **Git:** correção preparada na mesma branch da proposta cancelada, com Juan como identidade executora e Pietro como coautor confirmado pela configuração local da equipe.
 
 ### 21/09/2026 — auditoria de documentação e estrutura
 
