@@ -64,7 +64,29 @@ Vaggu/
 └── README.md
 ```
 
-## Como executar
+## Executar com Docker
+
+Instale Git e Docker Desktop, inicie o Docker em modo de contêineres Linux e, na pasta clonada, execute:
+
+```bash
+git clone https://github.com/Pietro-August0/Vaggu.git
+cd Vaggu
+docker compose up --build
+```
+
+Não é necessário instalar Node ou PostgreSQL no computador. O Compose prepara PostgreSQL, aplica migrations pendentes sem reset e inicia API e Vite. Os padrões são públicos e exclusivos de desenvolvimento local; o `.env` da raiz é opcional, a partir de `.env.example`, para personalizar portas e valores locais.
+
+Abra [a aplicação](http://localhost:5173). A [prontidão da API](http://localhost:3000/api/v1/health/ready) fica na porta 3000; PostgreSQL em `localhost:5433`. Em outro terminal na raiz, crie seu primeiro administrador:
+
+```bash
+docker compose exec backend npm run admin:create
+```
+
+Informe nome e e-mail e guarde a senha gerada. Não há conta automática. Para parar preservando os dados, use `docker compose down`; para retomar, `docker compose up --build`.
+
+Consulte o [guia canônico de configuração](./segunda-mente/Vaggu/Documentação/configuracao.md) para Windows/Linux/macOS, versões, logs, migrations, atualização, testes e remoção consciente dos dados. Este Compose é de desenvolvimento; não configura produção. A execução dos contêineres ainda precisa ser validada em uma máquina com Docker, conforme o planejamento.
+
+## Executar sem Docker
 
 ### Pré-requisitos
 
@@ -92,12 +114,13 @@ npm run build
 ```bash
 cd vaggu-backend
 npm ci
-cp .env.example .env
+test -f .env || cp .env.example .env
+# Edite o .env com seu PostgreSQL de desenvolvimento antes do próximo comando.
 npm run db:setup
 npm run dev
 ```
 
-Atualize o `.env` com a conexão PostgreSQL e as credenciais de integração adequadas ao seu ambiente. Segredos reais nunca devem ser versionados.
+Crie o `.env` somente se ele ainda não existir. No PowerShell, use `Copy-Item .env.example .env` e `npm.cmd` se necessário. Atualize a conexão PostgreSQL e a chave estável de proteção das senhas provisórias antes de aplicar migrations. Segredos reais nunca devem ser versionados.
 
 Com a configuração padrão, a API responde em `http://127.0.0.1:3000/api/v1`.
 

@@ -1,0 +1,115 @@
+# Desenvolvimento local: banco saudável -> migrations concluídas -> API pronta -> Vite.
+# Valores padrão são exclusivos de desenvolvimento, sem credenciais de serviços externos.
+name: vaggu
+
+x-backend: &backend
+  image: ${COMPOSE_PROJECT_NAME:-vaggu}-backend:desenvolvimento
+  build:
+    context: ./vaggu-backend
+  init: true
+  environment:
+    DATABASE_URL: postgresql://vaggu_dev:${POSTGRES_PASSWORD:-vaggu_somente_desenvolvimento}@postgres:5432/vaggu_dev
+    CREDENTIAL_ENCRYPTION_KEY: ${CREDENTIAL_ENCRYPTION_KEY:-vaggu-chave-publica-exclusiva-de-desenvolvimento}
+    NODE_ENV: development
+    HOST: 0.0.0.0
+    PORT: "3000"
+    WHATSAPP_AUTO_REPLY_ENABLED: "false"
+  networks:
+    - interna
+
+services:
+  postgres:
+    image: postgres:17.9-bookworm
+    environment:
+      POSTGRES_USER: vaggu_dev
+      POSTGRES_DB: vaggu_dev
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:-vaggu_somente_desenvolvimento}
+    ports:
+      - "127.0.0.1:${PORTA_POSTGRES:-5433}:5432"
+    volumes:
+      - dados-postgres:/var/lib/postgresql/data
+    healthcheck:
+      # TCP evita considerar pronto o servidor temporário de inicialização da imagem.
+      test: ["CMD-SHELL", "pg_isready -h 127.0.0.1 -U $${POSTGRES_USER} -d $${POSTGRES_DB}"]
+      interval: 5s
+      timeout: 5s
+      retries: 12
+      start_period: 10s
+    restart: unless-stopped
+    stop_grace_period: 30s
+    networks:
+      - interna
+
+  migracoes:
+    <<: *backend
+    command: ["npm", "run", "db:deploy"]
+    volumes:
+      - ./vaggu-backend/prisma:/aplicacao/prisma:ro
+    depends_on:
+      postgres:
+        condition: service_healthy
+    restart: "no"
+
+  backend:
+    <<: *backend
+    ports:
+      - "127.0.0.1:${PORTA_BACKEND:-3000}:3000"
+    # Somente fontes são montados; node_modules e dist pertencem à imagem/contêiner Linux.
+    volumes:
+      - ./vaggu-backend/src:/aplicacao/src:ro
+      - ./vaggu-backend/scripts:/aplicacao/scripts:ro
+      - ./vaggu-backend/test:/aplicacao/test:ro
+      - ./vaggu-backend/test-support:/aplicacao/test-support:ro
+      - ./vaggu-backend/prisma:/aplicacao/prisma:ro
+      - ./vaggu-backend/tsconfig.json:/aplicacao/tsconfig.json:ro
+    depends_on:
+      postgres:
+        condition: service_healthy
+      migracoes:
+        condition: service_completed_successfully
+    healthcheck:
+      test: ["CMD", "node", "-e", "fetch('http://127.0.0.1:3000/api/v1/health/ready').then(r=>process.exit(r.ok?0:1)).catch(()=>process.exit(1))"]
+      interval: 5s
+      timeout: 5s
+      retries: 12
+      start_period: 30s
+    restart: unless-stopped
+    stop_grace_period: 15s
+
+  frontend:
+    build:
+      context: ./vaggu-frontend
+    init: true
+    environment:
+      API_PROXY_TARGET: http://backend:3000
+      VAGGU_POLLING: "true"
+      VITE_WHATSAPP_NUMBER: ${VITE_WHATSAPP_NUMBER:-}
+    ports:
+      - "127.0.0.1:${PORTA_FRONTEND:-5173}:5173"
+    volumes:
+      - ./vaggu-frontend/src:/aplicacao/src:ro
+      - ./vaggu-frontend/public:/aplicacao/public:ro
+      - ./vaggu-frontend/index.html:/aplicacao/index.html:ro
+      - ./vaggu-frontend/vite.config.ts:/aplicacao/vite.config.ts:ro
+    depends_on:
+      backend:
+        condition: service_healthy
+    healthcheck:
+      # Confere também o caminho usado pelo navegador para alcançar a API.
+      test: ["CMD", "node", "-e", "Promise.all(['/', '/api/v1/health/ready'].map(p=>fetch('http://127.0.0.1:5173'+p))).then(rs=>process.exit(rs.every(r=>r.ok)?0:1)).catch(()=>process.exit(1))"]
+      interval: 10s
+      timeout: 5s
+      retries: 6
+      start_period: 15s
+    restart: unless-stopped
+    networks:
+      - interna
+
+volumes:
+  # docker compose down preserva este volume; down --volumes apaga o banco local.
+  dados-postgres:
+
+networks:
+  # Rede própria do projeto; serviços são resolvidos pelo nome, sem IP fixo.
+  interna:
+    driver: bridge
