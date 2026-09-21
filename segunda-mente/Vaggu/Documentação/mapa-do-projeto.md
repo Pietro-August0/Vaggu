@@ -4,8 +4,6 @@ O frontend começa em main.tsx, monta o provedor de sessão e encaminha /login, 
 
 Conhecimento, documentos e regras ficam em `segunda-mente`. As skills `start` e `end` usam o planejamento canônico da segunda mente como registro diário. Assets da aplicação ficam no `public` do frontend; o cofre mantém cópias próprias das evidências necessárias ao Obsidian. Dependências, builds, segredos e bancos ignorados não integram o mapa.
 
-No Docker, `compose.yaml` encadeia `postgres` saudável, `migracoes` concluído, `backend` pronto e `frontend`. A rede bridge `interna` é própria do projeto e resolve nomes dos serviços; somente portas locais são publicadas. O volume nomeado `dados-postgres` persiste o banco fora do repositório. Os fontes são montados para leitura nos contêineres; dependências Linux e builds permanecem neles e são recriados a partir das imagens. Não se monta a pasta `ambiente.local` nem os `.env` nativos. Operação completa em [configuração](configuracao.md).
-
 ## Pastas principais
 
 | Pasta | Finalidade |
@@ -24,8 +22,6 @@ As cópias de imagens entre `segunda-mente/Vaggu/Identidade visual/Assets/` e `v
 | --- | --- |
 | `.gitattributes` | Padroniza tratamento de arquivos e terminações de linha no Git. |
 | `.gitignore` | Exclui ferramentas locais, segredos, dependências e saídas de build. |
-| `.env.example` | Lista personalizações opcionais do Compose e padrões públicos exclusivos de desenvolvimento; o .env local permanece ignorado. |
-| `compose.yaml` | Orquestra PostgreSQL 17.9, migrations explícitas, API e Vite, com saúde, portas locais configuráveis, rede interna do projeto e volume persistente. |
 | `AGENTS.md` | Define escopo, regras de implementação, documentação e verificação para agentes. |
 | `README.md` | Apresenta o produto, recursos entregues e comandos de execução. |
 | `scripts/verificar-documentacao.mjs` | Confere se o mapa canônico explica os arquivos versionáveis e se os links internos da segunda mente possuem destino válido. |
@@ -39,8 +35,6 @@ As cópias de imagens entre `segunda-mente/Vaggu/Identidade visual/Assets/` e `v
 | `skills/start/SKILL.md` | Documentação: Início do dia — VAGGU. |
 | `skills/start/agents/openai.yaml` | Metadados de descoberta e apresentação da skill no Codex. |
 | `vaggu-backend/.env.example` | Documenta variáveis de ambiente sem incluir credenciais reais. |
-| `vaggu-backend/.dockerignore` | Limita o contexto de build aos fontes e configurações necessários, excluindo segredos, dependências, bancos e artefatos locais. |
-| `vaggu-backend/Dockerfile` | Prepara Node/npm fixados, dependências Linux, cliente Prisma e compilação; recompila fontes por polling e reinicia a API no desenvolvimento. |
 | `vaggu-backend/README.md` | Documentação: Vaggu Backend — 0.5.0. |
 | `vaggu-backend/package-lock.json` | Fixa a árvore de dependências e integridade para instalação reproduzível via npm ci. |
 | `vaggu-backend/package.json` | Declara dependências, faixa do Node e scripts de desenvolvimento, build e verificação. |
@@ -97,8 +91,6 @@ As cópias de imagens entre `segunda-mente/Vaggu/Identidade visual/Assets/` e `v
 | `vaggu-backend/test/whatsapp.test.ts` | Verifica assinatura, desafio, interpretação, deduplicação e respostas do webhook WhatsApp. |
 | `vaggu-backend/tsconfig.json` | Configura compilação TypeScript e limites dos arquivos incluídos neste projeto. |
 | `vaggu-frontend/components.json` | Configura aliases e estilo de geração dos componentes shadcn. |
-| `vaggu-frontend/.dockerignore` | Permite somente entradas da imagem web e impede incluir ambientes, segredos, bancos, caches ou perfis locais. |
-| `vaggu-frontend/Dockerfile` | Instala dependências do lockfile com Node/npm fixados e inicia Vite de desenvolvimento acessível pelas portas do Compose. |
 | `vaggu-frontend/eslint.config.js` | Configura o ESLint para TypeScript, React Hooks e recarga do Vite. |
 | `vaggu-frontend/index.html` | Documento de entrada do Vite e ponto de montagem do React. |
 | `vaggu-frontend/package-lock.json` | Fixa a árvore de dependências e integridade para instalação reproduzível via npm ci. |
@@ -162,4 +154,4 @@ As cópias de imagens entre `segunda-mente/Vaggu/Identidade visual/Assets/` e `v
 | `vaggu-frontend/tsconfig.app.json` | Configura compilação TypeScript e limites dos arquivos incluídos neste projeto. |
 | `vaggu-frontend/tsconfig.json` | Configura compilação TypeScript e limites dos arquivos incluídos neste projeto. |
 | `vaggu-frontend/tsconfig.node.json` | Configura compilação TypeScript e limites dos arquivos incluídos neste projeto. |
-| `vaggu-frontend/vite.config.ts` | Configura React, Tailwind, aliases, proxy /api para o backend e polling opcional dos fontes no Docker Desktop. |
+| `vaggu-frontend/vite.config.ts` | Configura React, Tailwind, aliases e proxy local de /api para o backend. |
