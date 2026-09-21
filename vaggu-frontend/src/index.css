@@ -16,13 +16,27 @@
 .cartao-clicavel {
   transition: transform 160ms ease, box-shadow 160ms ease, border-color 160ms ease, background-color 160ms ease;
 }
+
 @media (hover: hover) {
-  .cartao-clicavel:hover { transform: translateY(-2px); box-shadow: 0 10px 24px rgb(0 0 0 / 8%); }
+  .cartao-clicavel:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 10px 24px rgb(0 0 0 / 8%);
+  }
 }
-.cartao-clicavel:active { transform: scale(.975); }
+
+.cartao-clicavel:active {
+  transform: scale(.975);
+}
+
 @media (prefers-reduced-motion: reduce) {
-  .cartao-clicavel { transition: none; }
-  .cartao-clicavel:hover, .cartao-clicavel:active { transform: none; }
+  .cartao-clicavel {
+    transition: none;
+  }
+
+  .cartao-clicavel:hover,
+  .cartao-clicavel:active {
+    transform: none;
+  }
 }
 
 @custom-variant dark (&:is(.dark *));
@@ -156,12 +170,15 @@ body {
   * {
     @apply border-border outline-ring/50;
   }
+
   body {
     @apply bg-background text-foreground;
   }
+
   html {
     @apply font-sans;
   }
+
   ::selection {
     background: #ffe100;
     color: #0a0a0a;
