@@ -12,6 +12,8 @@ Atualizado em 21/09/2026. Ordem de trabalho, sem promessa de datas.
 
 ## Entrega atual de produto: P05
 
+Antes da validação de produto em outro computador, executar o roteiro Docker em [[Vaggu/Documentação/configuracao|configuração]]: validar Compose, construir imagens, subir serviços, conferir migrations, prontidão, proxy e persistência após reinício e `down`. Os arquivos estão preparados, mas os contêineres não foram executados no computador desta entrega por ausência de Docker. Depois criar o administrador e o banco de controle dedicado de teste. A execução npm permanece como alternativa.
+
 Validar de ponta a ponta a importação CSV/XLSX da estrutura. Leitura, validação, persistência das prévias e confirmação idempotente já estão implementadas no backend e na interface; falta executar os cenários com PostgreSQL real e navegador autenticado.
 
 Entrada: hierarquia e contratos entregues no P04, migration incremental, serviço de estrutura e interface administrativa.
