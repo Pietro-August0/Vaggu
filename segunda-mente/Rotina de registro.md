@@ -17,4 +17,4 @@ As instruções em `AGENTS.md`, na raiz do repositório VAGGU, orientam agentes 
 
 Isso não captura automaticamente todas as conversas de ChatGPT ou tarefas em outros computadores. Históricos só são importados quando acessíveis. O registro diário é uma síntese fiel do conteúdo e das ações; transcrições recuperadas ficam em Fontes.
 
-A segunda mente dentro do repositório é a fonte canônica de produto, decisões, documentação e continuidade. `docs/README.md` é somente uma ponte para este cofre. As skills `start` e `end` continuam a controlar o dia técnico no planejamento canônico em `Vaggu/Documentação`; os diários preservam o histórico sem criar outra versão das decisões atuais.
+A segunda mente dentro do repositório é a fonte canônica de produto, decisões, documentação e continuidade. As skills `start` e `end` continuam a controlar o dia técnico no planejamento canônico em `Vaggu/Documentação`; os diários preservam o histórico sem criar outra versão das decisões atuais.

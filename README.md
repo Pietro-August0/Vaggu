@@ -58,7 +58,8 @@ Vaggu/
 ├── vaggu-frontend/   # Interface web e protótipo navegável
 ├── vaggu-backend/    # API, autenticação, banco e webhook
 ├── segunda-mente/    # Cofre Obsidian e documentação canônica compartilhada
-├── docs/             # Ponte de compatibilidade para a segunda mente
+├── scripts/          # Verificações de documentação do repositório
+├── skills/           # Rotinas operacionais versionadas da equipe
 ├── AGENTS.md         # Acordos de desenvolvimento do projeto
 └── README.md
 ```
@@ -114,8 +115,8 @@ O frontend não cria nem preenche contas. A equipe deve cadastrar o administrado
 
 ## Estado atual
 
-A autenticação, a gestão administrativa e o mapa estão integrados à API. A interface permite excluir um gerente com confirmação e desfazer por sete segundos. A troca obrigatória mostra os requisitos de senha, permite visualizar os três campos e explica o erro junto ao campo responsável. O P05 já aceita, valida e persiste prévias CSV/XLSX isoladas por shopping; a confirmação que altera a estrutura ainda está pendente. Telemetria, telões e Power BI continuam pendentes.
+A autenticação, a gestão administrativa e o mapa estão integrados à API. A interface permite excluir um gerente com confirmação e desfazer por sete segundos. A troca obrigatória mostra os requisitos de senha, permite visualizar os três campos e explica o erro junto ao campo responsável. O P05 aceita CSV/XLSX, persiste prévias isoladas por shopping e possui confirmação idempotente no backend e na interface; a validação completa com PostgreSQL real e navegador autenticado permanece pendente. Telemetria, telões e Power BI continuam pendentes.
 
 O [planejamento do projeto](./segunda-mente/Vaggu/Documentação/planejamento-do-projeto.md) registra o estado real, os resultados da revisão e a próxima entrega. As skills `$start` e `$end` usam esse documento para iniciar e encerrar o trabalho diário.
 
-Consulte a [segunda mente](./segunda-mente/Vaggu/Vaggu.md) para conhecer o escopo, as decisões técnicas e os critérios de aceite sem confundir funcionalidades planejadas com funcionalidades já entregues. A pasta `docs` existe apenas como ponte para o novo local canônico.
+Consulte a [segunda mente](./segunda-mente/Vaggu/Vaggu.md) para conhecer o escopo, as decisões técnicas e os critérios de aceite sem confundir funcionalidades planejadas com funcionalidades já entregues.

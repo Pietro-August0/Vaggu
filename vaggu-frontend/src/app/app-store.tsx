@@ -1,13 +1,11 @@
 /** Controla a identidade validada pela API. Não lê contas, hashes ou permissões do navegador. */
 import { createContext, useCallback, useContext, useEffect, useRef, useState, type ReactNode } from "react"
 import { ErroApi, objeto, requisitarApi, requisitarArquivoApi } from "@/servicos/api"
-import type { GeneratedAccess, Mall, NewMallInput, UserAccount } from "@/types/app"
+import type { UserAccount } from "@/types/app"
 
 interface AppStoreValue {
   ready: boolean
   currentUser: UserAccount | null
-  currentMall: Mall | null
-  malls: Mall[]
   erroSessao: string
   mensagemSessao: string
   senhaProvisoriaPendente: string
@@ -18,7 +16,6 @@ interface AppStoreValue {
   consultar: (caminho: string, corpo?: unknown, metodo?: "GET" | "POST" | "PATCH" | "DELETE") => Promise<unknown>
   enviarArquivo: (caminho: string, arquivo: File, tipoConteudo: string) => Promise<unknown>
   atualizarMinhaConta: (nome: string, telefone: string) => Promise<UserAccount>
-  createMall: (input: NewMallInput) => Promise<GeneratedAccess>
 }
 
 const AppStoreContext = createContext<AppStoreValue | null>(null)
@@ -176,15 +173,9 @@ export function AppStoreProvider({ children }: { children: ReactNode }) {
     return usuario
   }
 
-  /** Compatibilidade temporária com a antiga tela: nunca cria contas locais como alternativa à API. */
-  async function createMall(_input: NewMallInput): Promise<GeneratedAccess> {
-    void _input
-    throw new Error("O cadastro de shoppings estará disponível após a integração administrativa.")
-  }
-
   return <AppStoreContext.Provider value={{
-    ready: true, currentUser, currentMall: null, malls: [], erroSessao, mensagemSessao, senhaProvisoriaPendente,
-    login, logout, trocarSenha, verificarSessao, consultar, atualizarMinhaConta, createMall,
+    ready: true, currentUser, erroSessao, mensagemSessao, senhaProvisoriaPendente,
+    login, logout, trocarSenha, verificarSessao, consultar, enviarArquivo, atualizarMinhaConta,
   }}>{children}</AppStoreContext.Provider>
 }
 

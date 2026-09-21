@@ -1,12 +1,12 @@
 # VAGGU — planejamento e continuidade do projeto
 
-Última atualização: **15/09/2026**, fuso **America/Sao_Paulo**. A revisão da landing e seu fechamento permanecem atribuídos a **09/09/2026**, conforme solicitado. Base de P01: `c127b5e`; registros das entregas na seção 7. Este documento registra evidências e orienta o trabalho diário; não substitui o [SSD](SSD-VAGGU.md) nem os [critérios de aceite](plano-e-aceite.md).
+Última atualização: **21/09/2026**, fuso **America/Sao_Paulo**. A revisão da landing e seu fechamento permanecem atribuídos a **09/09/2026**, conforme solicitado. Base de P01: `c127b5e`; registros das entregas na seção 7. Este documento registra evidências e orienta o trabalho diário; não substitui o [SSD](SSD-VAGGU.md) nem os [critérios de aceite](plano-e-aceite.md).
 
 ## 1. Situação atual
 
 A autenticação do frontend usa a API real: login, identidade, primeira senha, revogação e expiração. A senha definitiva possui política explícita e erros por campo na API e na interface. Os acessos demonstrativos foram removidos. O Admin configura e exclui logicamente shoppings, administra gerentes e consulta a senha provisória apenas até a primeira troca. Também configura andares, setores, vagas, categorias e posições no mapa. O gerente consulta o mapa do próprio shopping, alterna andares e localiza vagas. Telemetria, telões e Power BI continuam pendentes.
 
-P01 foi concluído em 10/09 e P02 em 11/09, incluindo autenticação e acabamento visual. P03 foi concluído em 12/09 com gestão administrativa, vários gerentes e Minha conta. P04 foi concluído em 12/09 com estrutura e mapa validados em PostgreSQL real e no navegador. O P05 está em andamento: prévias CSV/XLSX já são validadas, persistidas e consultadas; a confirmação atômica está presente no backend, com validação básica, mas ainda precisa de execução PostgreSQL real nesta retomada e de interface administrativa. A base local está verificável, mas o sistema ainda não está liberado para operação com clientes.
+P01 foi concluído em 10/09 e P02 em 11/09, incluindo autenticação e acabamento visual. P03 foi concluído em 12/09 com gestão administrativa, vários gerentes e Minha conta. P04 foi concluído em 12/09 com estrutura e mapa validados em PostgreSQL real e no navegador. O P05 está em andamento: prévias CSV/XLSX são validadas, persistidas e consultadas; a confirmação idempotente está presente no backend e na interface administrativa, mas ainda precisa de execução com PostgreSQL real e navegador autenticado nesta retomada. A base local está verificável, mas o sistema ainda não está liberado para operação com clientes.
 
 Classificações: **verificado** exige execução do comportamento indicado; **presente no código** significa inspeção estática; **parcial** identifica uma entrega incompleta; **ausente** indica que não foi encontrada implementação no escopo inspecionado. Um teste simulado não comprova banco, hardware ou serviço externo real.
 
@@ -106,13 +106,13 @@ Preservar os limites do produto: web responsiva, sem cadastro público de gerent
 ## 6. Próximo início
 
 - **Pacote:** P05 — importação CSV/XLSX com prévia e preservação de histórico.
-- **Primeira ação:** obter uma `TEST_DATABASE_URL` dedicada terminada em `_teste` ou `_test`, executar `npm.cmd run test:integracao` no backend e aplicar `npm.cmd run db:deploy` somente no banco local identificado.
+- **Primeira ação:** confirmar a disponibilidade de uma `TEST_DATABASE_URL` dedicada terminada em `_teste` ou `_test`, executar `npm.cmd run test:integracao` no backend e validar o fluxo autenticado no navegador.
 - **Arquivos de entrada:** `vaggu-backend/test/importacao-postgresql.test.ts`, `vaggu-backend/prisma/migrations/20260915000100_confirmacao_importacao/migration.sql`, `vaggu-frontend/src/components/importacao-estrutura.tsx` e `vaggu-frontend/src/servicos/importacao.ts`.
 - **Base já validada:** P04 concluído: estrutura hierárquica e mapa proporcional, com revisão concorrente, isolamento e fluxo Admin/gerente aprovados no PostgreSQL e no navegador em 12/09.
 - **Aceite e verificação a confirmar:** em API/banco reais, prévia inválida não altera estrutura; confirmação concorrente aplica uma única vez; IDs, histórico e vagas ausentes são preservados; interface recarrega a estrutura. Concluir CA13–CA14 somente após essas evidências.
 - **Comandos a confirmar:** backend `npm.cmd run test:integracao`; frontend `npm.cmd run lint` e `npm.cmd run build`; raiz `node scripts/verificar-documentacao.mjs`; navegador com API real nos cenários válido e inválido.
 - **Limites:** WhatsApp oficial não existe ainda; não inventar número. Preservar alterações Git e não publicar sem solicitação.
-- **Estado diário:** fechamento de 15/09 encerrado; P05 permanece em andamento por depender da validação PostgreSQL real. A branch local `feat-p05-confirmacao-importacao-samuel` contém backend e interface; este computador não possui `.env.teste.local` nem serviço PostgreSQL.
+- **Estado atual:** P05 permanece em andamento por depender da validação PostgreSQL real e do navegador autenticado. Backend e interface de confirmação já integram a `origin/main`; a auditoria documental ocorre na branch local `docs/auditoria-estrutura-ana`.
 
 ### 14/09/2026 — PostgreSQL local instalado e configurado
 
@@ -131,6 +131,14 @@ Preservar os limites do produto: web responsiva, sem cadastro público de gerent
 ## 7. Registro diário
 
 Cada entrada mantém: data local, estado do dia, pacote/objetivo, evidências de entrada, alterações, verificações e resultados, pendências/bloqueios, primeira ação da retomada e situação Git. Acrescentar entradas sem apagar dias anteriores. O resumo das seções 1–6 deve acompanhar o estado mais recente.
+
+### 21/09/2026 — auditoria de documentação e estrutura
+
+- **Objetivo:** confirmar que pastas e arquivos versionáveis possuem finalidade clara, reconciliar o estado atual e remover redundâncias sem uso.
+- **Decisões:** removidos o painel demonstrativo sem rota e o hook de animação nunca importado; retirados seus tipos e estado locais legados e uma regra CSS órfã. Cópias de assets do cofre e índices documentais das skills foram mantidos porque atendem consumidores diferentes. A ponte `docs/` foi removida após confirmação da equipe, pois não possuía consumidor necessário.
+- **Documentação:** o mapa passou a explicar as pastas principais e os 212 arquivos versionáveis; descrições genéricas foram corrigidas e o estado do P05 foi alinhado à implementação presente.
+- **Verificação:** `node scripts/verificar-documentacao.mjs`, `npm.cmd run lint`, `npm.cmd run build` e `git diff --check` concluídos com código 0. O build mantém o aviso conhecido de chunk JavaScript acima de 500 kB.
+- **Git:** trabalho local na branch `docs/auditoria-estrutura-ana`, criada a partir de `origin/main`; sem commit, push ou PR nesta sessão.
 
 ### 09/09/2026 — fechamento da revisão e preparação da continuidade
 
