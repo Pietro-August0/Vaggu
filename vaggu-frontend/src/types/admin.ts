@@ -18,6 +18,7 @@ export interface ShoppingAdmin {
   horarioAbertura: string | null
   horarioFechamento: string | null
   fusoHorario: string | null
+  possuiFoto: boolean
   ativo: boolean
   situacaoImplantacao: string
   totalGerentes: number
@@ -33,4 +34,4 @@ export interface GerenteAdmin {
   senhaProvisoria: string | null
 }
 
-export type DadosShopping = Omit<ShoppingAdmin, "id" | "ativo" | "situacaoImplantacao" | "totalGerentes" | "endereco">
+export type DadosShopping = Omit<ShoppingAdmin, "id" | "ativo" | "situacaoImplantacao" | "totalGerentes" | "endereco" | "possuiFoto">

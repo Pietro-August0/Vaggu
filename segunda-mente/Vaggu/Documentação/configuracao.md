@@ -1,90 +1,78 @@
-# Configuração e execução da VAGGU
+# Como executar a VAGGU localmente
 
-Este guia explica como executar o código usando um PostgreSQL configurado pela equipe. Ferramentas e bancos não integram os arquivos versionados. Em 11/09, a pasta local ignorada ambiente.local ainda existia e foi reutilizada nos testes; a remoção descrita anteriormente não estava efetivada. Nenhum ambiente novo foi criado nesta retomada.
+Este guia é para integrantes e parceiros que precisam testar o sistema em um computador próprio. Os comandos abaixo foram escritos para Windows e PowerShell.
 
-## O que instalar e configurar
+Ao terminar, você terá:
 
-- Node.js compatível com `>=22.12.0 <25` (Node 24 foi usado na verificação de P01) e npm.
-- Uma conexão PostgreSQL de desenvolvimento, obtida com a equipe ou no provedor escolhido.
-- Uma conexão separada de teste para executar os cenários com persistência real.
+- PostgreSQL executando no computador;
+- API em `http://127.0.0.1:3000`;
+- interface em `http://127.0.0.1:5173`;
+- um banco persistente de desenvolvimento;
+- um banco separado para testes automatizados.
 
-Confira `node --version` no terminal. Dependências são instaladas dentro de cada pacote com `npm ci`; `node_modules` é gerado pelo npm e não deve ser enviado ao Git. No PowerShell, use `npm.cmd` se `npm.ps1` estiver bloqueado.
+## Antes de começar
 
-## Interface web
+Instale:
 
-Na raiz do projeto:
+- Git;
+- Node.js entre `22.12.0` e `24.x`;
+- PostgreSQL;
+- pgAdmin, normalmente incluído no instalador do PostgreSQL.
 
-```powershell
-Set-Location vaggu-frontend
-npm.cmd ci
-npm.cmd run dev
-```
-
-Use o endereço informado pelo Vite. O frontend autentica pela API. O proxy /api aponta para http://127.0.0.1:3000; use API_PROXY_TARGET para outro destino local. Sem API disponível, o login apresenta erro e não oferece acesso demonstrativo. A sessão fica em memória: recarregar exige nova entrada. Configure VITE_WHATSAPP_NUMBER somente quando houver número oficial; atualmente os links não têm destinatário.
-
-Para verificar uma alteração, na mesma pasta:
+Confira o Node.js:
 
 ```powershell
-npm.cmd run lint
-npm.cmd run build
+node --version
+npm.cmd --version
 ```
 
-`dist` é a saída gerada do build e pode ser recriada. Faça alterações em `src`, nunca em `dist`.
+Não altere a política de execução do PowerShell. Neste guia usamos `npm.cmd` porque `npm.ps1` pode estar bloqueado no Windows.
 
-## API e PostgreSQL
+## Entenda os dois bancos locais
 
-Na pasta `vaggu-backend`, instale dependências e crie sua configuração caso ainda não exista:
+| Banco | Finalidade | Pode ser apagado pelos testes? |
+| --- | --- | --- |
+| `vaggu_local` | Uso normal da API durante o desenvolvimento | Não |
+| `vaggu_teste` | Controle dos testes automatizados | Não; o runner apaga somente bancos temporários criados por ele |
 
-```powershell
-npm.cmd ci
-if (-not (Test-Path .env)) { Copy-Item .env.example .env }
-```
+Nenhum deles é produção. Atualmente o projeto não possui banco de produção provisionado.
 
-Edite `.env` e preencha `DATABASE_URL` com a conexão de desenvolvimento fornecida pela equipe. O exemplo contém apenas valores ilustrativos. As variáveis `HOST` e `PORT` controlam o endereço da API; mantenha o envio automático do WhatsApp desativado enquanto não estiver testando essa integração autorizada.
+## Primeira configuração
 
-Defina também `CREDENTIAL_ENCRYPTION_KEY` com um segredo aleatório e estável. Essa chave protege a cópia temporária das senhas provisórias que o Admin pode consultar antes da primeira troca. Não altere a chave enquanto houver senhas provisórias pendentes: os valores antigos deixam de ser legíveis e precisarão ser redefinidos. Para compatibilidade local, a API usa `DATABASE_URL` como alternativa quando a chave não foi configurada, mas ambientes compartilhados devem usar uma chave exclusiva.
+Faça esta seção uma única vez em cada computador.
 
-Com o destino do banco conferido:
+### 1. Obtenha o projeto
 
-```powershell
-npm.cmd run db:generate
-npm.cmd run db:validate
-npm.cmd run db:deploy
-npm.cmd run build
-npm.cmd start
-```
+Abra o PowerShell na pasta em que deseja guardar o projeto e clone o repositório. Se recebeu um arquivo ZIP, extraia-o e abra o PowerShell na pasta `Vaggu`.
 
-`db:generate` gera o cliente Prisma a partir do schema. `db:deploy` aplica migrations pendentes ao banco indicado por `DATABASE_URL`; não o execute em outro ambiente por engano. `start` executa `dist/src/server.js`. `dev` compila uma vez e observa o JavaScript gerado; edições no TypeScript precisam ser recompiladas.
+Os próximos comandos partem da raiz do projeto, que contém as pastas `vaggu-backend` e `vaggu-frontend`.
 
-Com a porta padrão, consulte:
+### 2. Inicie o PostgreSQL
 
-- `http://127.0.0.1:3000/api/v1/health`: a API está respondendo.
-- `http://127.0.0.1:3000/api/v1/health/ready`: a API consegue consultar o PostgreSQL.
+Abra **Serviços** no Windows, localize o serviço cujo nome começa com `postgresql` e clique em **Iniciar**.
 
-Ctrl+C encerra a API. O backend não cria administrador real automaticamente; o procedimento está no [README do backend](../../../vaggu-backend/README.md).
+Se o serviço já estiver com o estado **Em execução**, siga para a próxima etapa.
 
-## Testes com e sem banco
+### 3. Crie os bancos e usuários
 
-Na pasta `vaggu-backend`, após gerar o cliente:
-
-```powershell
-npm.cmd run typecheck
-npm.cmd test
-```
-
-Sem `TEST_DATABASE_URL` no ambiente, a suíte marca a integração como **PENDENTE/skip**. Os demais testes HTTP/configuração rodam, mas isso não comprova a persistência real.
-
-### Criar o banco local de testes
-
-Cada integrante deve criar seu próprio banco de controle no PostgreSQL local. Ele não substitui o banco de desenvolvimento configurado em `DATABASE_URL`, não recebe dados da aplicação e nunca deve apontar para produção. O runner conecta nesse banco somente para criar e remover bancos descartáveis com nomes aleatórios.
-
-1. Instale o PostgreSQL local. No Windows, use o instalador oficial e mantenha o serviço PostgreSQL iniciado; o pgAdmin incluído pode executar o SQL abaixo. No Linux ou macOS, use o pacote PostgreSQL da sua distribuição ou gerenciador e confirme que o serviço está em execução.
-2. Abra o **Query Tool** do pgAdmin conectado ao banco `postgres` como administrador local. Quem usa terminal pode abrir `psql -U postgres -d postgres`.
-3. Escolha uma senha local própria, sem reutilizar credenciais reais, e execute:
+1. Abra o pgAdmin.
+2. Conecte-se ao servidor PostgreSQL local.
+3. Selecione o banco `postgres`.
+4. Abra **Tools → Query Tool**.
+5. Troque as duas senhas de exemplo abaixo por senhas locais próprias.
+6. Execute o SQL:
 
 ```sql
+CREATE ROLE vaggu_local_usuario
+  WITH LOGIN PASSWORD 'troque-por-uma-senha-local';
+
+CREATE DATABASE vaggu_local
+  WITH OWNER vaggu_local_usuario
+  ENCODING 'UTF8'
+  TEMPLATE template0;
+
 CREATE ROLE vaggu_teste_runner
-  WITH LOGIN CREATEDB PASSWORD 'troque-por-uma-senha-local';
+  WITH LOGIN CREATEDB PASSWORD 'troque-por-outra-senha-local';
 
 CREATE DATABASE vaggu_teste
   WITH OWNER vaggu_teste_runner
@@ -92,74 +80,278 @@ CREATE DATABASE vaggu_teste
   TEMPLATE template0;
 ```
 
-O nome `vaggu_teste` é obrigatório neste exemplo porque o runner aceita apenas bancos terminados em `_teste` ou `_test`. `CREATEDB` também é necessário: cada execução cria um banco `vaggu_teste_<identificador>`, aplica as migrations e remove somente esse banco descartável ao concluir. O banco de controle `vaggu_teste` permanece vazio e não é apagado.
+Resultado esperado: o pgAdmin passa a mostrar `vaggu_local` e `vaggu_teste` em **Databases**.
 
-Se o papel ou banco já existir, não repita o comando às cegas. Confira no pgAdmin ou com `\du vaggu_teste_runner` e `\l vaggu_teste`; reutilize-os somente se forem locais e exclusivos dos testes VAGGU. Nunca conceda `SUPERUSER`, nunca use uma conexão de produção e não aponte os testes para o banco normal de desenvolvimento.
+Execute esse SQL somente uma vez. Se aparecer que o usuário ou o banco já existe, não tente recriá-lo: confirme no pgAdmin se ele pertence à instalação local da VAGGU.
 
-4. Na pasta `vaggu-backend`, crie o arquivo ignorado `.env.teste.local`:
+O usuário `vaggu_local_usuario` não precisa de `SUPERUSER` nem de `CREATEDB`. Somente `vaggu_teste_runner` recebe `CREATEDB`, pois os testes criam bancos temporários isolados.
 
-```dotenv
-TEST_DATABASE_URL="postgresql://vaggu_teste_runner:troque-por-uma-senha-local@127.0.0.1:5432/vaggu_teste"
-```
+### 4. Configure a API
 
-Não copie essa senha para `.env.example`, documentação, commit ou mensagem. Se a senha contiver `@`, `:`, `/`, `?`, `#` ou `%`, codifique esses caracteres para URL ou escolha uma senha local alfanumérica longa para evitar erro de conexão. A URL de teste não aceita parâmetros ou fragmentos adicionais.
-
-5. Confira a conexão sem expor a senha no terminal. No PowerShell, carregue a variável do arquivo apenas no processo atual:
+No PowerShell, partindo da raiz do projeto:
 
 ```powershell
-Set-Location vaggu-backend
-$linhaTeste = Get-Content .env.teste.local | Where-Object { $_ -match '^TEST_DATABASE_URL=' }
-$env:TEST_DATABASE_URL = ($linhaTeste -replace '^TEST_DATABASE_URL=', '').Trim('"')
-psql $env:TEST_DATABASE_URL -c 'SELECT current_database(), current_user;'
-Remove-Item Env:TEST_DATABASE_URL
+Set-Location .\vaggu-backend
+if (-not (Test-Path .env)) { Copy-Item .env.example .env }
 ```
 
-Se `psql` não estiver no `PATH` no Windows, use o **SQL Shell (psql)** instalado com o PostgreSQL ou confirme a conexão pelo pgAdmin. Não altere a política do PowerShell para executar o projeto; use `npm.cmd` quando necessário.
+Abra `vaggu-backend/.env` em um editor e ajuste:
 
-6. Instale as dependências pelo lockfile, gere o cliente Prisma e execute a integração:
+```dotenv
+DATABASE_URL="postgresql://vaggu_local_usuario:SUA_SENHA_LOCAL@127.0.0.1:5432/vaggu_local"
+CREDENTIAL_ENCRYPTION_KEY="COLOQUE_UM_SEGREDO_LOCAL_LONGO"
+HOST="127.0.0.1"
+PORT="3000"
+NODE_ENV="development"
+```
+
+Use a senha definida na etapa anterior. Se o PostgreSQL estiver em outra porta, substitua `5432` pela porta correta.
+
+Para gerar um valor seguro para `CREDENTIAL_ENCRYPTION_KEY`, execute no PowerShell e copie o resultado para o `.env`:
+
+```powershell
+[Convert]::ToHexString([Security.Cryptography.RandomNumberGenerator]::GetBytes(32))
+```
+
+Não compartilhe nem envie `.env` ao Git. Se a senha possuir `@`, `:`, `/`, `?`, `#` ou `%`, esses caracteres precisam ser codificados para URL. Para um ambiente local, uma senha alfanumérica longa evita esse problema.
+
+### 5. Configure os testes
+
+Ainda em `vaggu-backend`, crie o arquivo `.env.teste.local`:
+
+```dotenv
+TEST_DATABASE_URL="postgresql://vaggu_teste_runner:SUA_SENHA_DE_TESTE@127.0.0.1:5432/vaggu_teste"
+```
+
+O nome do banco deve terminar em `_teste` ou `_test`. Nunca use aqui o banco `vaggu_local` ou um banco de produção.
+
+Os arquivos `.env` e `.env.teste.local` são locais e ignorados pelo Git.
+
+### 6. Prepare o backend e o banco
+
+Execute um comando de cada vez:
 
 ```powershell
 npm.cmd ci
-$env:DATABASE_URL='postgresql://geracao:geracao@127.0.0.1:5432/geracao'
 npm.cmd run db:generate
-Remove-Item Env:DATABASE_URL
-npm.cmd run test:integracao
-```
-
-A URL temporária de `db:generate` precisa apenas ter formato PostgreSQL; esse comando não conecta ao endereço ilustrativo. `test:integracao` lê `.env.teste.local`, compila o backend e executa os cenários reais de autenticação, administração e importação. Um resultado aprovado não deixa fixtures no banco de controle.
-
-No Linux ou macOS, depois de criar o mesmo `.env.teste.local`, use `npm ci`, execute `DATABASE_URL='postgresql://geracao:geracao@127.0.0.1:5432/geracao' npm run db:generate` e depois `npm run test:integracao`.
-
-### Diagnosticar a conexão de teste
-
-- `ECONNREFUSED`: confirme que o serviço PostgreSQL está iniciado e escuta em `127.0.0.1:5432`. No Windows, confira em **Serviços**; no Linux, use `systemctl status postgresql`; no macOS com Homebrew, `brew services list`.
-- Falha de autenticação: revise usuário e senha no arquivo local. Não envie a URL completa em capturas ou mensagens.
-- “banco terminado em `_teste` ou `_test`”: remova parâmetros da URL e use exatamente o banco de controle dedicado.
-- “permissão CREATEDB”: conectado como administrador local, execute `ALTER ROLE vaggu_teste_runner CREATEDB;` somente para esse usuário de testes.
-- Banco descartável remanescente após interrupção forçada: identifique exatamente o nome `vaggu_teste_<identificador>`, confirme que nenhuma conexão o utiliza e remova apenas esse banco pelo pgAdmin. Não faça limpeza ampla nem apague `vaggu_teste`.
-- Porta diferente de 5432: ajuste apenas a porta em `.env.teste.local` conforme sua instalação local.
-
-Para testar a persistência, mantenha `.env.teste.local` com a variável `TEST_DATABASE_URL` e a conexão própria criada acima. Se o PostgreSQL local não permitir criação de bancos, essa limitação precisa ser resolvida antes de declarar a integração validada.
-
-```powershell
-npm.cmd run test:integracao
-```
-
-O runner cria um banco exclusivo com nome aleatório, aplica as migrations versionadas, cria dados fictícios e remove somente esse banco ao concluir. Não reutiliza `DATABASE_URL`, não limpa o banco de controle e não testa contra produção. Arquivo de configuração ausente causa erro no comando específico; conexão presente mas inválida/inacessível também falha.
-
-Para executar toda a suíte com a configuração de teste:
-
-```powershell
+npm.cmd run db:validate
+npm.cmd run db:deploy
 npm.cmd run build
-node --env-file=.env.teste.local --test 'dist/test/**/*.test.js'
 ```
 
-## Documentação em cada alteração
+Resultado esperado:
 
-Na raiz do repositório:
+- o Prisma informa que o schema é válido;
+- `db:deploy` aplica as migrations ou informa `No pending migrations to apply`;
+- o build termina sem erro.
+
+`db:deploy` altera o banco indicado por `DATABASE_URL`. Antes de executá-lo, confira sempre se o `.env` aponta para o banco local correto.
+
+### 7. Crie o primeiro administrador
 
 ```powershell
-node scripts/verificar-documentacao.mjs
+npm.cmd run admin:create
 ```
 
-Esse comando confere se todo arquivo versionável está explicado no [mapa do projeto](mapa-do-projeto.md). Revise também os comentários e as descrições quando mudar o papel de um arquivo. Não registre credenciais nos documentos.
+Informe nome e e-mail quando solicitado. O comando mostra uma senha apenas uma vez. Guarde-a em local seguro e não envie capturas de tela.
+
+Não existe administrador padrão nem cadastro público. Se o banco já possuir um administrador, o comando recusará a criação de outro.
+
+### 8. Instale o frontend
+
+Abra outro PowerShell na raiz do projeto:
+
+```powershell
+Set-Location .\vaggu-frontend
+npm.cmd ci
+npm.cmd run build
+```
+
+Resultado esperado: o build termina sem erro. Um aviso sobre o tamanho do arquivo JavaScript pode aparecer; ele é conhecido e não impede o teste local.
+
+## Como abrir o sistema diariamente
+
+Depois da primeira configuração, use três etapas.
+
+### 1. Confirme que o PostgreSQL está iniciado
+
+Abra **Serviços** no Windows e confirme que o serviço `postgresql` está **Em execução**.
+
+### 2. Inicie a API
+
+No primeiro PowerShell, a partir da raiz:
+
+```powershell
+Set-Location .\vaggu-backend
+npm.cmd run build
+npm.cmd start
+```
+
+Mantenha esse terminal aberto. A mensagem esperada contém:
+
+```text
+Vaggu API: http://127.0.0.1:3000/api/v1/health
+```
+
+### 3. Inicie a interface
+
+No segundo PowerShell, a partir da raiz:
+
+```powershell
+Set-Location .\vaggu-frontend
+npm.cmd run dev
+```
+
+Abra o endereço mostrado pelo Vite, normalmente `http://127.0.0.1:5173`.
+
+O frontend envia chamadas `/api` para `http://127.0.0.1:3000`. Sem a API, o login apresentará erro; não existe acesso demonstrativo local.
+
+## Como confirmar que está funcionando
+
+Com a API aberta, execute em outro PowerShell:
+
+```powershell
+Invoke-RestMethod http://127.0.0.1:3000/api/v1/health
+Invoke-RestMethod http://127.0.0.1:3000/api/v1/health/ready
+```
+
+Os dois comandos devem retornar `status` igual a `ok`.
+
+- `/health` confirma que a API iniciou.
+- `/health/ready` confirma que a API conseguiu consultar o PostgreSQL.
+
+Se `/health` funcionar e `/health/ready` falhar, o problema está na conexão indicada por `DATABASE_URL`.
+
+## Como ver as tabelas e os dados
+
+Na pasta `vaggu-backend`, execute:
+
+```powershell
+npm.cmd run db:studio
+```
+
+O Prisma Studio abrirá um endereço local no navegador. Use-o somente para consultar dados durante o desenvolvimento. Não altere manualmente hashes, sessões ou relacionamentos que normalmente são controlados pela API.
+
+Use `Ctrl+C` no terminal para encerrar o Prisma Studio.
+
+## Como executar os testes com PostgreSQL
+
+Confirme que `.env.teste.local` existe e execute na pasta `vaggu-backend`:
+
+```powershell
+npm.cmd run test:integracao
+```
+
+O runner:
+
+1. conecta em `vaggu_teste`;
+2. cria um banco temporário `vaggu_teste_<identificador>`;
+3. aplica as migrations;
+4. cria somente dados fictícios do cenário;
+5. executa os testes;
+6. remove o banco temporário.
+
+Ele não limpa `vaggu_local` nem usa `DATABASE_URL` como alternativa. Uma interrupção forçada pode deixar um banco temporário; remova somente o banco cujo nome completo começa com `vaggu_teste_`, depois de confirmar que nenhum teste o utiliza.
+
+Para executar também os testes que não dependem do banco:
+
+```powershell
+npm.cmd run typecheck
+npm.cmd test
+```
+
+## Como encerrar
+
+- API: pressione `Ctrl+C` no terminal do backend.
+- Frontend: pressione `Ctrl+C` no terminal do frontend.
+- Prisma Studio: pressione `Ctrl+C` no terminal correspondente.
+- PostgreSQL instalado como serviço pode continuar ligado. Se desejar pará-lo, use **Serviços** do Windows.
+
+## Ambiente portátil usado nesta máquina da equipe
+
+Esta máquina possui uma instalação portátil e ignorada pelo Git em `ambiente.local`. Ela não acompanha o repositório e não deve ser copiada como requisito para parceiros.
+
+Em 21/09/2026, a validação local usou:
+
+- PostgreSQL `17.11`;
+- banco `vaggu_p05_local`;
+- endereço `127.0.0.1:55432`;
+- API em `127.0.0.1:3000`;
+- 7 migrations aplicadas, sem pendências;
+- `/health` e `/health/ready` com resposta `ok`.
+
+Nesta máquina específica, o PostgreSQL portátil é iniciado, a partir da raiz, com:
+
+```powershell
+.\ambiente.local\postgresql\pgsql\bin\pg_ctl.exe start `
+  -D ".\ambiente.local\dados" `
+  -l ".\ambiente.local\postgresql.log" `
+  -o "-p 55432" `
+  -w
+```
+
+Para encerrá-lo de forma segura:
+
+```powershell
+.\ambiente.local\postgresql\pgsql\bin\pg_ctl.exe stop `
+  -D ".\ambiente.local\dados" `
+  -m fast `
+  -w
+```
+
+Parceiros devem seguir a instalação normal deste guia e usar a porta `5432`, salvo se a própria instalação do PostgreSQL informar outra porta.
+
+## Problemas comuns
+
+### `ECONNREFUSED` ou conexão recusada
+
+- Confirme que o serviço PostgreSQL está iniciado.
+- Confira a porta no `.env`.
+- Confirme que o nome do banco existe no pgAdmin.
+
+### Falha de autenticação do PostgreSQL
+
+- Confira usuário e senha no `.env`.
+- Não envie a URL completa em mensagens ou capturas.
+- Se alterou a senha, atualize somente o arquivo local correspondente.
+
+### `db:deploy` não conecta
+
+- Teste primeiro `/health/ready` se a API já estiver aberta.
+- Confira `DATABASE_URL`.
+- Não use `prisma migrate reset`: esse comando apaga dados.
+
+### Porta `3000` já está em uso
+
+Encerre a API antiga com `Ctrl+C`. Se realmente precisar usar outra porta, altere `PORT` no `.env` e configure o destino correspondente no frontend por meio de `API_PROXY_TARGET`.
+
+### O frontend abre, mas o login falha
+
+- Confirme `/api/v1/health` e `/api/v1/health/ready`.
+- Confirme que o primeiro administrador foi criado.
+- Use o e-mail e a senha gerados por `admin:create`.
+
+### Teste pede banco terminado em `_teste` ou `_test`
+
+Confira se `TEST_DATABASE_URL` aponta exatamente para `vaggu_teste`, sem parâmetros ou fragmentos adicionais.
+
+### Teste informa falta de `CREATEDB`
+
+No Query Tool, conectado como administrador local, execute somente para o usuário de testes:
+
+```sql
+ALTER ROLE vaggu_teste_runner CREATEDB;
+```
+
+## Regras de segurança
+
+- Nunca publique `.env` ou `.env.teste.local`.
+- Nunca execute testes contra produção.
+- Nunca use `prisma migrate reset` em banco com dados importantes.
+- Nunca envie senha, token ou URL completa do banco em prints.
+- Antes de migrations em ambiente compartilhado, faça backup e confirme o destino.
+- Dados fictícios devem permanecer apenas nos bancos locais e temporários.
+
+## Produção
+
+Este guia configura somente desenvolvimento e testes locais. Publicar a VAGGU exige uma etapa separada: provedor PostgreSQL, hospedagem da API e frontend, HTTPS, variáveis secretas, backups, monitoramento, CORS e revisão de segurança. Nada nesta página significa que o sistema já está em produção.

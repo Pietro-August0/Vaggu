@@ -15,7 +15,7 @@ Esta pasta reúne as decisões de produto, o desenho técnico, os padrões de c�
 | [plano-e-aceite.md](plano-e-aceite.md) | Etapas, testes concretos, trabalho com agentes e definição de pronto. |
 | [planejamento-do-projeto.md](planejamento-do-projeto.md) | Inventário verificado, revisão final, backlog, diário e pacote para o próximo início. |
 | [mapa-do-projeto.md](mapa-do-projeto.md) | Explica a estrutura do repositório e a responsabilidade de cada arquivo versionável. |
-| [configuracao.md](configuracao.md) | Prepara o ambiente local sem versionar runtime, banco ou segredos. |
+| [configuracao.md](configuracao.md) | Guia sequencial para um parceiro instalar, iniciar, verificar, testar e encerrar o sistema local sem publicar segredos. |
 | [whatsapp-webhook.md](whatsapp-webhook.md) | Detalha configuração, segurança e limites do webhook da Meta. |
 | [arquitetura-estrutura-sensores-telao.md](arquitetura-estrutura-sensores-telao.md) | Separa estrutura, telemetria, estados confiáveis e contagens dos telões. |
 | [validacao-login-2026-09-11.md](validacao-login-2026-09-11.md) | Preserva a evidência datada da validação do login. |
@@ -24,11 +24,12 @@ Para continuar o desenvolvimento, use `$start` no início do dia e `$end` no fec
 
 ## Como usar no projeto
 
-1. Leia o `AGENTS.md` da raiz antes de alterar o projeto.
-2. Consulte o SSD para entender escopo, regras de negócio e decisões pendentes.
-3. Use os guias de código e interface conforme a área modificada.
-4. Relacione cada entrega aos cenários do plano de aceite.
-5. Confira o código e os testes: documentação planejada não comprova implementação.
+1. Para executar ou testar o sistema, comece pelo [guia de configuração](configuracao.md).
+2. Antes de alterar o projeto, leia o `AGENTS.md` da raiz.
+3. Consulte o SSD para entender escopo, regras de negócio e decisões pendentes.
+4. Use os guias de código e interface conforme a área modificada.
+5. Relacione cada entrega aos cenários do plano de aceite.
+6. Confira o código e os testes: documentação planejada não comprova implementação.
 
 O `AGENTS.md` funciona como ponto de entrada para as instruções do projeto. O SSD é uma referência explicitamente indicada por ele, não um arquivo que depende de reconhecimento automático pelo nome. As fontes externas usadas na especificação estão nas [referências](SSD-VAGGU.md#referencias).
 
@@ -57,7 +58,7 @@ Ao finalizar, relate o que mudou, quais cenários foram verificados, limitaçõe
 - O escopo considera as decisões de Pietro e o documento mestre revisado em 09/09/2026.
 - Regras de código e de organização foram elaboradas para este pedido e passam a orientar novas entregas.
 - Modelos de dados, rotas e detalhes de infraestrutura marcados como **proposta** devem ser conciliados com o repositório.
-- P01–P04 estão concluídos. O P05 está em andamento: backend e interface de prévia/confirmação CSV/XLSX estão presentes; a validação completa com PostgreSQL real e navegador autenticado permanece pendente.
+- P01–P05 estão concluídos. A importação CSV/XLSX foi validada no PostgreSQL real e na interface Admin autenticada; P06 é a próxima entrega de produto.
 - A referência visual é o [Figma VAGGU](https://www.figma.com/design/xKI9wjoiZ5CoXC3DXIJNmq/Vaggu?node-id=2022-2). A consulta atual atingiu o limite da integração; não houve nova extração dos tokens. Os valores exatos a confirmar estão registrados no guia visual.
 - A documentação não contém credenciais. Mudanças no Figma, Trello ou repositório remoto só podem ser afirmadas quando houver evidência registrada na sessão correspondente.
 

@@ -8,6 +8,25 @@ Código deve ser legível pela equipe, previsível, testável e proporcional ao 
 
 A stack definida é React, TypeScript, Tailwind, Node.js, Express, Prisma e PostgreSQL. Vite consta da base do projeto. Verificar versões e organização reais antes de alterar configurações. Não migrar para Next.js, outro ORM, outro banco, microserviços ou outra biblioteca visual por preferência do agente.
 
+### Clareza da documentação
+
+Toda documentação deve ser compreensível por uma pessoa que conhece desenvolvimento, mas ainda não conhece a VAGGU. Escrever para execução e decisão, não para registrar raciocínio interno.
+
+- Começar pelo objetivo, pelo público e pelo resultado esperado.
+- Usar títulos que respondam a uma pergunta concreta, como “Como iniciar a API”.
+- Separar primeira instalação, uso diário, testes, produção e diagnóstico.
+- Apresentar ações na ordem em que devem ser executadas.
+- Colocar um comando por etapa e indicar o diretório em que ele deve rodar.
+- Depois de uma etapa importante, informar o resultado esperado e como verificá-lo.
+- Definir siglas e termos técnicos na primeira ocorrência quando forem necessários.
+- Diferenciar claramente comportamento implementado, proposta, ambiente local e produção.
+- Evitar repetir histórico, justificativas ou detalhes de implementação em um guia operacional.
+- Nunca presumir que o leitor possui arquivos locais ignorados pelo Git.
+- Usar exemplos seguros com placeholders evidentes e nunca incluir credenciais reais.
+- Manter uma única fonte canônica por assunto e usar links nas demais páginas, em vez de copiar instruções que podem divergir.
+
+Antes de concluir uma alteração documental, faça uma leitura como parceiro novo: ele deve identificar rapidamente pré-requisitos, sequência, resultado, verificação, forma de encerrar e problemas comuns. Se precisar conhecer uma conversa anterior para seguir o texto, a documentação ainda não está pronta.
+
 ## 2. Português brasileiro
 
 | Elemento | Convenção | Exemplo |

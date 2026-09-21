@@ -137,7 +137,7 @@ export function DashboardShell({
         {sideContent}
       </aside>
 
-      <div className="lg:pl-64">
+      <div className="min-w-0 max-w-full lg:pl-64">
         <header className={isAdmin ? "sticky top-0 z-30 border-b border-white/10 bg-[#171717]/90 text-white backdrop-blur-xl" : "sticky top-0 z-30 border-b border-black/5 bg-[#f5f5f3]/90 backdrop-blur-xl"}>
           <div className="flex min-h-20 items-center gap-4 px-4 sm:px-6 lg:px-10">
             <Sheet>
@@ -164,7 +164,7 @@ export function DashboardShell({
             </div>
           </div>
         </header>
-        <main className={isAdmin ? "px-0 py-0" : "px-4 py-8 sm:px-6 lg:px-10 lg:py-10"}>{erroSaida && <p role="alert" className="m-5 text-red-700">{erroSaida}</p>}{children}</main>
+        <main className={isAdmin ? "min-w-0 max-w-full overflow-x-hidden px-0 py-0" : "min-w-0 max-w-full overflow-x-hidden px-4 py-8 sm:px-6 lg:px-10 lg:py-10"}>{erroSaida && <p role="alert" className="m-5 text-red-700">{erroSaida}</p>}{children}</main>
       </div>
     </div>
   )

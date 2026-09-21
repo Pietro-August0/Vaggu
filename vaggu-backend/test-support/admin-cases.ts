@@ -34,6 +34,7 @@ export async function runAdminCases(t: TestContext, prisma: PrismaClient, senhaA
     assert.equal(shopping.cnpj, '12345678000190');
     assert.equal(shopping.cep, '01001000');
     assert.equal(shopping.uf, 'SP');
+    assert.equal(shopping.possuiFoto, false);
 
     const ficha = await request(app).get(`/api/v1/shoppings/${shopping.id}`)
       .set(adminHeader).expect(200);
@@ -42,6 +43,18 @@ export async function runAdminCases(t: TestContext, prisma: PrismaClient, senhaA
       .set(adminHeader).send({ bairro: 'Bela Vista', horarioAbertura: '07:00' }).expect(200);
     assert.equal(atualizada.body.shopping.bairro, 'Bela Vista');
     assert.equal(atualizada.body.shopping.horarioAbertura, '07:00');
+
+    const fotoPng = Buffer.from([0x89, 0x50, 0x4e, 0x47, 0x0d, 0x0a, 0x1a, 0x0a, 0x00]);
+    await request(app).post(`/api/v1/shoppings/${shopping.id}/foto`)
+      .set(adminHeader).set('Content-Type', 'image/png').send(fotoPng).expect(200);
+    const foto = await request(app).get(`/api/v1/shoppings/${shopping.id}/foto`)
+      .set(adminHeader).expect('Content-Type', /image\/png/).expect(200);
+    assert.deepEqual(foto.body, fotoPng);
+    const fichaComFoto = await request(app).get(`/api/v1/shoppings/${shopping.id}`)
+      .set(adminHeader).expect(200);
+    assert.equal(fichaComFoto.body.shopping.possuiFoto, true);
+    await request(app).post(`/api/v1/shoppings/${shopping.id}/foto`)
+      .set(adminHeader).set('Content-Type', 'image/jpeg').send(fotoPng).expect(400);
 
     const gerenteA = await request(app).post(`/api/v1/shoppings/${shopping.id}/gerentes`)
       .set(adminHeader).send({

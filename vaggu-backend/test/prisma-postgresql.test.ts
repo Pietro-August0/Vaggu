@@ -51,3 +51,12 @@ test('migration cadastral amplia a ficha sem invalidar shoppings existentes', ()
   assert.match(sql, /shoppings_uf_formato_check/);
   assert.doesNotMatch(sql, /DROP\s+(TABLE|COLUMN)/i);
 });
+
+test('migration da foto mantém bytes privados fora da tabela principal de shoppings', () => {
+  const sql = readFileSync(join(projectRoot, 'prisma/migrations/20260921000100_foto_shopping/migration.sql'), 'utf8');
+  assert.match(sql, /CREATE TABLE "fotos_shopping"/);
+  assert.match(sql, /octet_length\("dados"\) BETWEEN 1 AND 2097152/);
+  assert.match(sql, /"mime" IN \('image\/jpeg', 'image\/png', 'image\/webp'\)/);
+  assert.match(sql, /ON DELETE CASCADE/);
+  assert.doesNotMatch(sql, /ALTER TABLE "shoppings"[\s\S]*ADD COLUMN "foto_dados"/);
+});

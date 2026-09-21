@@ -7,6 +7,7 @@ import { useAppStore } from "@/app/app-store"
 import { DashboardShell } from "@/components/dashboard-shell"
 import { EstruturaAdmin } from "@/components/estrutura-admin"
 import { FormularioShopping } from "@/components/formulario-shopping"
+import { ImportacaoEstrutura } from "@/components/importacao-estrutura"
 import { Badge } from "@/components/ui/badge"
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
@@ -124,16 +125,19 @@ function FichaShopping({ shoppingId }: { shoppingId: string }) {
   const [gerentes, setGerentes] = useState<GerenteAdmin[]>([])
   const [ocupado, setOcupado] = useState(false)
   const [erro, setErro] = useState("")
+  const [revisaoEstrutura, setRevisaoEstrutura] = useState(0)
   const carregar = useCallback(async () => { const [dadosShopping, dadosEstrutura, dadosGerentes] = await Promise.all([consultar(`/shoppings/${shoppingId}`), consultar(`/shoppings/${shoppingId}/estrutura`), consultar(`/shoppings/${shoppingId}/gerentes`)]); setShopping(lerRespostaShopping(dadosShopping)); setEstrutura(lerEstrutura(dadosEstrutura)); setGerentes(lerGerentesAdmin(dadosGerentes)) }, [consultar, shoppingId])
   useEffect(() => { let ativo = true; Promise.all([consultar(`/shoppings/${shoppingId}`), consultar(`/shoppings/${shoppingId}/estrutura`), consultar(`/shoppings/${shoppingId}/gerentes`)]).then(([a,b,c]) => { if (ativo) { setShopping(lerRespostaShopping(a)); setEstrutura(lerEstrutura(b)); setGerentes(lerGerentesAdmin(c)) } }).catch(falha => { if (ativo) setErro(falha instanceof Error ? falha.message : "Não foi possível abrir a ficha.") }); return () => { ativo = false } }, [consultar, shoppingId])
   function salvar(dados: DadosShopping) { setOcupado(true); setErro(""); void consultar(`/shoppings/${shoppingId}`, dados, "PATCH").then(lerRespostaShopping).then(atualizado => { setShopping(atualizado); toast.success("Dados do shopping atualizados.") }).catch(falha => setErro(falha instanceof Error ? falha.message : "Não foi possível atualizar o shopping.")).finally(() => setOcupado(false)) }
+  function recarregarAposImportacao() { setRevisaoEstrutura(revisao => revisao + 1); void carregar() }
   if (erro && !shopping) return <section className="mx-auto max-w-6xl"><p role="alert" className="rounded-xl border border-red-500/30 bg-red-950/40 p-4 text-red-200">{erro}</p><Button asChild className="mt-4"><Link to="/admin/shoppings">Voltar aos shoppings</Link></Button></section>
   if (!shopping || !estrutura) return <p role="status" className="text-neutral-300">Carregando ficha do shopping...</p>
-  return <section className="mx-auto grid max-w-6xl gap-10"><header className="flex flex-wrap items-center gap-4"><Button asChild variant="outline" size="icon" className="border-white/20 bg-transparent text-white"><Link to="/admin/shoppings" aria-label="Voltar aos shoppings"><ArrowLeft aria-hidden="true"/></Link></Button><div><h2 className="text-3xl font-black text-white">{shopping.nome}</h2><p className="mt-1 text-sm text-neutral-400">{enderecoResumido(shopping)}</p></div><Badge className="ml-auto bg-[#ffe100] text-black">{rotulosSituacao[shopping.situacaoImplantacao] ?? shopping.situacaoImplantacao}</Badge></header>
+  return <section className="mx-auto grid w-full min-w-0 max-w-6xl grid-cols-[minmax(0,1fr)] gap-10"><header className="flex min-w-0 flex-wrap items-center gap-4"><Button asChild variant="outline" size="icon" className="border-white/20 bg-transparent text-white"><Link to="/admin/shoppings" aria-label="Voltar aos shoppings"><ArrowLeft aria-hidden="true"/></Link></Button><div className="min-w-0 flex-1"><h2 className="break-words text-3xl font-black text-white">{shopping.nome}</h2><p className="mt-1 break-words text-sm text-neutral-400">{enderecoResumido(shopping)}</p></div><Badge className="bg-[#ffe100] text-black sm:ml-auto">{rotulosSituacao[shopping.situacaoImplantacao] ?? shopping.situacaoImplantacao}</Badge></header>
     {erro && <p role="alert" className="rounded-xl border border-red-500/30 bg-red-950/40 p-4 text-red-200">{erro}</p>}
-    <div className="rounded-3xl border border-white/10 bg-[#202020] p-5 sm:p-8"><h3 className="mb-6 text-xl font-bold text-white">Dados da administração</h3><FormularioShopping key={shopping.id + JSON.stringify(shopping)} shopping={shopping} ocupado={ocupado} rotuloBotao="Salvar alterações" aoEnviar={salvar}/></div>
+    <div className="min-w-0 rounded-3xl border border-white/10 bg-[#202020] p-5 sm:p-8"><h3 className="mb-6 text-xl font-bold text-white">Dados da administração</h3><FormularioShopping key={shopping.id + JSON.stringify(shopping)} shopping={shopping} ocupado={ocupado} rotuloBotao="Salvar alterações" aoEnviar={salvar}/></div>
     <ResumoVagas estrutura={estrutura}/>
-    <div><h3 className="mb-5 text-2xl font-bold text-white">Estrutura do estacionamento</h3><EstruturaAdmin shoppingId={shoppingId}/></div>
+    <ImportacaoEstrutura shoppingId={shoppingId} aoConfirmar={recarregarAposImportacao}/>
+    <div><h3 className="mb-5 text-2xl font-bold text-white">Estrutura do estacionamento</h3><EstruturaAdmin key={`${shoppingId}-${revisaoEstrutura}`} shoppingId={shoppingId}/></div>
     <GerentesShopping shoppingId={shoppingId} gerentes={gerentes} recarregar={carregar}/>
   </section>
 }
@@ -143,5 +147,5 @@ export function AdminPage() {
   const { shoppingId } = useParams()
   const { pathname } = useLocation()
   const titulo = shoppingId ? "Ficha do shopping" : pathname === "/admin/shoppings" ? "Shoppings" : "Cadastrar shopping"
-  return <DashboardShell eyebrow="Administração VAGGU" title={titulo}><div className="min-h-[calc(100vh-5rem)] bg-[#171717] px-4 py-8 sm:px-7 lg:px-10">{shoppingId ? <FichaShopping shoppingId={shoppingId}/> : pathname === "/admin/shoppings" ? <ListaShoppings/> : <CadastroShopping/>}</div></DashboardShell>
+  return <DashboardShell eyebrow="Administração VAGGU" title={titulo}><div className="min-h-[calc(100vh-5rem)] min-w-0 overflow-x-hidden bg-[#171717] px-4 py-8 sm:px-7 lg:px-10">{shoppingId ? <FichaShopping shoppingId={shoppingId}/> : pathname === "/admin/shoppings" ? <ListaShoppings/> : <CadastroShopping/>}</div></DashboardShell>
 }

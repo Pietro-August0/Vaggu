@@ -66,50 +66,29 @@ Vaggu/
 
 ## Como executar
 
-### Pré-requisitos
+Use o [guia de configuração local](./segunda-mente/Vaggu/Documentação/configuracao.md). Ele ensina, em ordem:
 
-- Node.js 22.12 ou superior e anterior à versão 25.
-- npm.
-- PostgreSQL para executar a API com persistência.
+1. instalar os pré-requisitos;
+2. criar os bancos PostgreSQL de desenvolvimento e teste;
+3. configurar os arquivos locais sem publicar segredos;
+4. aplicar migrations e criar o primeiro administrador;
+5. iniciar API e frontend;
+6. verificar a conexão e executar os testes.
 
-Cada integrante deve manter um banco PostgreSQL local exclusivo para os testes de integração. O passo a passo para instalar o PostgreSQL, criar o usuário e o banco de controle e configurar `.env.teste.local` está no [guia canônico de configuração](./segunda-mente/Vaggu/Documentação/configuracao.md#criar-o-banco-local-de-testes).
+Depois da primeira configuração, o uso diário exige somente iniciar o PostgreSQL e abrir dois terminais:
 
-### Frontend
+```powershell
+# Terminal 1
+Set-Location .\vaggu-backend
+npm.cmd run build
+npm.cmd start
 
-```bash
-cd vaggu-frontend
-npm ci
-npm run dev
+# Terminal 2
+Set-Location .\vaggu-frontend
+npm.cmd run dev
 ```
 
-O Vite exibirá no terminal o endereço local da aplicação. O proxy de /api usa http://127.0.0.1:3000; API_PROXY_TARGET permite alterar esse destino local. Em produção, configurar proxy reverso de /api para a API e fallback das demais rotas para index.html. VITE_WHATSAPP_NUMBER deve ser definido somente após a equipe fornecer o número oficial. Para validar uma entrega do frontend:
-
-```bash
-npm run lint
-npm run build
-```
-
-### Backend
-
-```bash
-cd vaggu-backend
-npm ci
-cp .env.example .env
-npm run db:setup
-npm run dev
-```
-
-Atualize o `.env` com a conexão PostgreSQL e as credenciais de integração adequadas ao seu ambiente. Segredos reais nunca devem ser versionados.
-
-Com a configuração padrão, a API responde em `http://127.0.0.1:3000/api/v1`.
-
-```bash
-npm run typecheck
-npm run db:validate
-npm test
-```
-
-As instruções completas de configuração e os contratos da API estão no [README do backend](./vaggu-backend/README.md).
+A API responde em `http://127.0.0.1:3000/api/v1` e o Vite informa no segundo terminal o endereço da interface. Consulte o [README do backend](./vaggu-backend/README.md) somente para contratos e detalhes da API.
 
 ## Acessos
 
@@ -117,7 +96,7 @@ O frontend não cria nem preenche contas. A equipe deve cadastrar o administrado
 
 ## Estado atual
 
-A autenticação, a gestão administrativa e o mapa estão integrados à API. A interface permite excluir um gerente com confirmação e desfazer por sete segundos. A troca obrigatória mostra os requisitos de senha, permite visualizar os três campos e explica o erro junto ao campo responsável. O P05 aceita CSV/XLSX, persiste prévias isoladas por shopping e possui confirmação idempotente no backend e na interface; a validação completa com PostgreSQL real e navegador autenticado permanece pendente. Telemetria, telões e Power BI continuam pendentes.
+A autenticação, a gestão administrativa e o mapa estão integrados à API. A interface permite excluir um gerente com confirmação e desfazer por sete segundos. A troca obrigatória mostra os requisitos de senha, permite visualizar os três campos e explica o erro junto ao campo responsável. O P05 aceita CSV/XLSX, persiste prévias isoladas por shopping e possui confirmação idempotente no backend e na interface; a validação completa com PostgreSQL real e navegador autenticado foi concluída em 21/09/2026. Telemetria, telões e Power BI continuam pendentes.
 
 O [planejamento do projeto](./segunda-mente/Vaggu/Documentação/planejamento-do-projeto.md) registra o estado real, os resultados da revisão e a próxima entrega. As skills `$start` e `$end` usam esse documento para iniciar e encerrar o trabalho diário.
 

@@ -65,9 +65,21 @@ model Shopping {
   andares      Andar[]
   setores      Setor[]
   importacoes  ImportacaoEstrutura[]
+  foto         FotoShopping?
 
   @@map("shoppings")
   @@index([excluidoEm, ativo, nome])
+}
+
+// Mantém o arquivo fora das consultas cadastrais comuns e preserva acesso autenticado.
+model FotoShopping {
+  shoppingId  String   @id @map("shopping_id") @db.Uuid
+  dados       Bytes
+  mime        String
+  atualizadoEm DateTime @default(now()) @updatedAt @map("atualizado_em")
+  shopping    Shopping @relation(fields: [shoppingId], references: [id], onDelete: Cascade)
+
+  @@map("fotos_shopping")
 }
 
 // Guarda o resultado da prévia e a fotografia da confirmação para impedir reaplicação duplicada.

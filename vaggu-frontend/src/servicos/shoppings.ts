@@ -13,7 +13,8 @@ export function lerShopping(valor: unknown): ShoppingAdmin {
     opcionais[campo] = typeof valor[campo] === "string" ? valor[campo] : null
   }
   return { id: valor.id, nome: valor.nome, ativo: valor.ativo, situacaoImplantacao: valor.situacaoImplantacao,
-    totalGerentes: typeof valor.totalGerentes === "number" ? valor.totalGerentes : 0, ...opcionais } as ShoppingAdmin
+    totalGerentes: typeof valor.totalGerentes === "number" ? valor.totalGerentes : 0,
+    possuiFoto: valor.possuiFoto === true, ...opcionais } as ShoppingAdmin
 }
 
 export function lerListaShoppings(dados: unknown): ShoppingAdmin[] {

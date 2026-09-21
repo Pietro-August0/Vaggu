@@ -8,6 +8,32 @@ import { protegerSenhaProvisoria, revelarSenhaProvisoria } from '../auth/credenc
 const SITUACOES_IMPLANTACAO = new Set(['NOVO_ATENDIMENTO', 'EM_ANALISE', 'DOCUMENTACAO_PENDENTE', 'APROVADO', 'EM_CONFIGURACAO', 'AGUARDANDO_INSTALACAO', 'ATIVO', 'REJEITADO', 'INATIVO']);
 const PRAZO_DESFAZER_EXCLUSAO_MS = 7_000;
 const MARGEM_TRANSPORTE_DESFAZER_MS = 1_000;
+const LIMITE_FOTO_SHOPPING_BYTES = 2 * 1024 * 1024;
+const TIPOS_FOTO_SHOPPING = new Set(['image/jpeg', 'image/png', 'image/webp']);
+
+/** Confere a assinatura real do arquivo para não confiar somente no Content-Type enviado. */
+function detectarTipoFoto(dados: Buffer): string | null {
+  if (dados.length >= 8 && dados.subarray(0, 8).equals(Buffer.from([0x89, 0x50, 0x4e, 0x47, 0x0d, 0x0a, 0x1a, 0x0a]))) return 'image/png';
+  if (dados.length >= 3 && dados[0] === 0xff && dados[1] === 0xd8 && dados[2] === 0xff) return 'image/jpeg';
+  if (dados.length >= 12 && dados.subarray(0, 4).toString('ascii') === 'RIFF' && dados.subarray(8, 12).toString('ascii') === 'WEBP') return 'image/webp';
+  return null;
+}
+
+/** Limita tamanho e formatos antes de persistir bytes recebidos pela rota autenticada. */
+function validarFotoShopping(conteudo: unknown, tipoInformado: unknown) {
+  if (!Buffer.isBuffer(conteudo) || conteudo.length === 0) {
+    throw new ApiError(400, 'FOTO_INVALIDA', 'Selecione uma foto JPEG, PNG ou WebP.');
+  }
+  if (conteudo.length > LIMITE_FOTO_SHOPPING_BYTES) {
+    throw new ApiError(413, 'FOTO_MUITO_GRANDE', 'A foto deve ter no máximo 2 MB.');
+  }
+  const tipo = typeof tipoInformado === 'string' ? tipoInformado.split(';', 1)[0].trim().toLowerCase() : '';
+  const tipoDetectado = detectarTipoFoto(conteudo);
+  if (!TIPOS_FOTO_SHOPPING.has(tipo) || tipoDetectado !== tipo) {
+    throw new ApiError(400, 'FOTO_INVALIDA', 'O conteúdo da foto deve corresponder a JPEG, PNG ou WebP.');
+  }
+  return { dados: conteudo, mime: tipo };
+}
 
 /** Recusa identificadores fora do formato básico esperado antes de consultar o banco. */
 function validarId(value, nomeCampo = 'id') {
@@ -129,6 +155,7 @@ function publicShopping(shopping) {
     horarioAbertura: shopping.horarioAbertura ?? null,
     horarioFechamento: shopping.horarioFechamento ?? null,
     fusoHorario: shopping.fusoHorario ?? null,
+    possuiFoto: Boolean(shopping.foto),
     ativo: shopping.ativo,
     situacaoImplantacao: shopping.situacaoImplantacao,
     criadoEm: shopping.criadoEm,
@@ -144,7 +171,10 @@ function gerarSenhaProvisoria() {
 /** Valida o ID e exige um shopping existente antes das operações com seus gerentes. */
 async function exigirShopping(prisma, shoppingId) {
   const id = validarId(shoppingId, 'shoppingId');
-  const shopping = await prisma.shopping.findUnique({ where: { id } });
+  const shopping = await prisma.shopping.findUnique({
+    where: { id },
+    include: { foto: { select: { shoppingId: true } } },
+  });
   if (!shopping || shopping.excluidoEm) throw new ApiError(404, 'SHOPPING_NAO_ENCONTRADO', 'Shopping não encontrado.');
   return shopping;
 }
@@ -180,6 +210,10 @@ export function createShoppingsService(prisma, {
   const contagemGerentesVisiveis = {
     select: { usuarios: { where: { perfil: 'SHOPPING', excluidoEm: null } } },
   };
+  const detalhesPublicos = {
+    _count: contagemGerentesVisiveis,
+    foto: { select: { shoppingId: true } },
+  };
 
   return {
     /** Ordena clientes ativos primeiro e inclui a quantidade de usuários de cada shopping. */
@@ -187,7 +221,7 @@ export function createShoppingsService(prisma, {
       const rows = await prisma.shopping.findMany({
         where: { excluidoEm: null },
         orderBy: [{ ativo: 'desc' }, { nome: 'asc' }],
-        include: { _count: contagemGerentesVisiveis },
+        include: detalhesPublicos,
       });
       return { shoppings: rows.map(publicShopping) };
     },
@@ -196,7 +230,7 @@ export function createShoppingsService(prisma, {
     async criarShopping(body) {
       const shopping = await prisma.shopping.create({
         data: dadosShopping(body, true),
-        include: { _count: contagemGerentesVisiveis },
+        include: detalhesPublicos,
       });
       return { shopping: publicShopping(shopping) };
     },
@@ -214,8 +248,28 @@ export function createShoppingsService(prisma, {
       if (Object.keys(data).length === 0) {
         throw new ApiError(400, 'DADOS_INVALIDOS', 'Informe ao menos um dado do shopping para alterar.');
       }
-      const atualizado = await prisma.shopping.update({ where: { id: shopping.id }, data });
+      const atualizado = await prisma.shopping.update({ where: { id: shopping.id }, data, include: detalhesPublicos });
       return { shopping: publicShopping(atualizado) };
+    },
+
+    /** Substitui a foto do shopping sem tornar o arquivo público nem misturá-lo ao cadastro JSON. */
+    async salvarFotoShopping(shoppingId, conteudo: unknown, tipoConteudo: unknown) {
+      const shopping = await exigirShopping(prisma, shoppingId);
+      const foto = validarFotoShopping(conteudo, tipoConteudo);
+      await prisma.fotoShopping.upsert({
+        where: { shoppingId: shopping.id },
+        create: { shoppingId: shopping.id, ...foto },
+        update: foto,
+      });
+      return { possuiFoto: true };
+    },
+
+    /** Entrega bytes somente depois que a rota administrativa confirmou a sessão e o perfil. */
+    async buscarFotoShopping(shoppingId) {
+      const shopping = await exigirShopping(prisma, shoppingId);
+      const foto = await prisma.fotoShopping.findUnique({ where: { shoppingId: shopping.id } });
+      if (!foto) throw new ApiError(404, 'FOTO_NAO_ENCONTRADA', 'Este shopping ainda não possui foto.');
+      return { dados: Buffer.from(foto.dados), mime: foto.mime };
     },
 
     /** Oculta o shopping sem apagar sua estrutura ou histórico e encerra os acessos vinculados. */
@@ -225,7 +279,7 @@ export function createShoppingsService(prisma, {
         const excluido = await tx.shopping.update({
           where: { id: shopping.id },
           data: { ativo: false, excluidoEm: now() },
-          include: { _count: contagemGerentesVisiveis },
+          include: detalhesPublicos,
         });
         await tx.usuario.updateMany({
           where: { shoppingId: shopping.id, perfil: 'SHOPPING', excluidoEm: null },
@@ -243,7 +297,7 @@ export function createShoppingsService(prisma, {
       if (typeof body.situacao !== 'string' || !SITUACOES_IMPLANTACAO.has(body.situacao)) {
         throw new ApiError(400, 'SITUACAO_INVALIDA', 'Informe uma situação de implantação válida.');
       }
-      const atualizado = await prisma.shopping.update({ where: { id: shopping.id }, data: { situacaoImplantacao: body.situacao } });
+      const atualizado = await prisma.shopping.update({ where: { id: shopping.id }, data: { situacaoImplantacao: body.situacao }, include: detalhesPublicos });
       return { shopping: publicShopping(atualizado) };
     },
 

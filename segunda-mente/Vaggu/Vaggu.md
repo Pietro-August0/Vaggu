@@ -32,7 +32,7 @@ Plataforma web responsiva para gestão de estacionamentos de shopping centers, d
 
 O próprio cofre está versionado na pasta `segunda-mente/` do repositório VAGGU.
 
-**Estado atual:** P01–P04 concluídos. O P05 está em andamento: backend e interface Admin de prévia/confirmação CSV/XLSX estão implementados; a validação completa com PostgreSQL real e navegador autenticado permanece pendente. Autenticação, gestão administrativa, Minha conta, estrutura e mapa estão integrados. Ver [[Vaggu/Planejamento/Próximos passos]].
+**Estado atual:** P01–P05 concluídos. A importação CSV/XLSX foi validada no PostgreSQL real e na interface Admin autenticada, incluindo prévia inválida, confirmação concorrente, preservação de IDs/histórico e recarga da estrutura. Autenticação, gestão administrativa, Minha conta, estrutura e mapa estão integrados. O próximo pacote é o P06, de telemetria e estados confiáveis. Ver [[Vaggu/Planejamento/Próximos passos]].
 
 
 **Atualização de 11/09:** autenticação real integrada e validada. Foto original do login ainda pendente. [[Vaggu/Documentação/validacao-login-2026-09-11|Ver resultados]].
@@ -44,3 +44,5 @@ O próprio cofre está versionado na pasta `segunda-mente/` do repositório VAGG
 **Atualização de 14/09:** a segunda mente passou a integrar o repositório. O P05 recebeu leitores CSV/XLSX, validação por linha, identificação de criação/atualização e persistência isolada das prévias no PostgreSQL.
 
 **Atualização de 15/09:** a confirmação backend do P05 foi implementada de forma idempotente e serializada por shopping; a tela Admin envia CSV/XLSX, oferece modelo CSV, apresenta prévia/erros e confirma a aplicação. Falta reexecutar integração PostgreSQL real e validar o fluxo autenticado contra a API real.
+
+**Atualização de 21/09:** P05 concluído após corrigir o advisory lock para o Prisma 7 e montar a importação na ficha administrativa correta. A integração PostgreSQL aprovou 32/32 cenários; o navegador autenticado confirmou o fluxo válido e inválido, a atualização da estrutura e a responsividade sem transbordamento da página.

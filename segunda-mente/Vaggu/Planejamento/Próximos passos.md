@@ -10,13 +10,13 @@ Atualizado em 21/09/2026. Ordem de trabalho, sem promessa de datas.
 - [x] Conferir runtime e conexão PostgreSQL disponíveis, sem transportar credenciais para o Obsidian.
 - [x] Executar os checks exigidos pela reorganização antes de declarar sua conclusão.
 
-## Entrega atual de produto: P05
+## Entrega atual de produto: P06
 
-Validar de ponta a ponta a importação CSV/XLSX da estrutura. Leitura, validação, persistência das prévias e confirmação idempotente já estão implementadas no backend e na interface; falta executar os cenários com PostgreSQL real e navegador autenticado.
+Implementar a base confiável de telemetria para placas ESP32 e sensores, preservando o isolamento por shopping e o histórico operacional.
 
-Entrada: hierarquia e contratos entregues no P04, migration incremental, serviço de estrutura e interface administrativa.
+Entrada: estrutura e importação concluídas no P04–P05, entidades iniciais de placa/sensor e decisões registradas na arquitetura de sensores e telões.
 
-Aceite: arquivo inválido não altera o banco; a prévia mostra erros por linha; a confirmação atualiza vagas identificadas sem apagar histórico nem registros ausentes. Cobrir CA13–CA14.
+Aceite: autenticar a origem, rejeitar vínculos de outro shopping, deduplicar e ordenar eventos, confirmar mudanças somente após 30 segundos consistentes e nunca converter dado expirado em vaga livre. Cobrir CA15–CA24.
 
 ## Sequência preservada do backlog
 
@@ -26,8 +26,8 @@ Aceite: arquivo inválido não altera o banco; a prévia mostra erros por linha;
 | P02 | Autenticação real do frontend — concluída em 11/09 |
 | P03 | Admin, múltiplos gerentes e minha conta — concluído em 12/09 |
 | P04 | Andares, setores, vagas e mapa — concluído em 12/09 |
-| P05 | Importação CSV/XLSX com prévia — em andamento; validação integrada pendente |
-| P06 | Telemetria, confirmação e expiração |
+| P05 | Importação CSV/XLSX com prévia — concluída em 21/09 |
+| P06 | Telemetria, confirmação e expiração — próxima entrega |
 | P07 | Operação, manutenção e telões |
 | P08 | Histórico, métricas e exportações |
 | P09 | Relatório funcional Power BI |
@@ -42,7 +42,7 @@ O P05 passou a aceitar CSV e XLSX, validar erros por linha, identificar vagas a 
 
 ## Atualização de 21/09
 
-A confirmação atômica e idempotente e a tela administrativa passaram a existir depois do registro histórico de 14/09. A retomada deve validar arquivo válido e inválido, concorrência, preservação de IDs/histórico e recarga da estrutura usando API, PostgreSQL e navegador reais.
+A confirmação atômica e idempotente foi validada em PostgreSQL descartável, inclusive com duas requisições concorrentes. A jornada Admin autenticada cobriu arquivo inválido, arquivo válido, confirmação e recarga da estrutura em desktop e viewport móvel. P05 está concluído; a próxima retomada inicia o contrato de telemetria do P06.
 
 ## Histórico de 12/09
 

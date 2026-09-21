@@ -136,7 +136,7 @@ As cópias de imagens entre `segunda-mente/Vaggu/Identidade visual/Assets/` e `v
 | `vaggu-frontend/src/lib/constants.ts` | Publica links de contato somente após configurar o número oficial da equipe. |
 | `vaggu-frontend/src/lib/utils.ts` | Combina classes condicionais e resolve conflitos de utilitários Tailwind. |
 | `vaggu-frontend/src/main.tsx` | Inicializa o React e reúne tema, navegação, mensagens e sessão autenticada das páginas. |
-| `vaggu-frontend/src/pages/admin-page.tsx` | Implementa o fluxo autenticado de cadastrar, listar e abrir a ficha do shopping com dados, vagas, estrutura e gerentes. |
+| `vaggu-frontend/src/pages/admin-page.tsx` | Implementa o fluxo autenticado de cadastrar, listar e abrir a ficha do shopping com dados, vagas, importação, estrutura e gerentes. |
 | `vaggu-frontend/src/pages/area-autenticada.tsx` | Mantém o painel operacional e a edição da própria conta do gerente; o Admin usa a página administrativa dedicada. |
 | `vaggu-frontend/src/pages/landing-page.tsx` | Compõe a landing pública e encaminha o contato comercial ao WhatsApp. |
 | `vaggu-frontend/src/pages/login-page.css` | Define composição responsiva do login, troca de senha e desenho animado do rabisco em “vagas”. |

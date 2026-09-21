@@ -86,3 +86,41 @@ export async function requisitarArquivoApi(
     window.clearTimeout(prazo)
   }
 }
+
+/** Baixa uma imagem privada usando a sessão em memória, sem colocar token na URL. */
+export async function requisitarImagemApi(caminho: string, token: string): Promise<Blob> {
+  const controle = new AbortController()
+  const prazo = window.setTimeout(() => controle.abort(), 15000)
+  try {
+    const resposta = await fetch("/api/v1" + caminho, {
+      headers: { Authorization: `Bearer ${token}` },
+      cache: "no-store",
+      credentials: "omit",
+      signal: controle.signal,
+    })
+    if (!resposta.ok) {
+      const dados: unknown = await resposta.json().catch(() => null)
+      const erro = objeto(dados) && objeto(dados.erro) ? dados.erro : null
+      throw new ErroApi(
+        typeof erro?.codigo === "string" ? erro.codigo : "SERVICO_INDISPONIVEL",
+        resposta.status < 500 && typeof erro?.mensagem === "string"
+          ? erro.mensagem : "Não foi possível carregar a foto do shopping.",
+        resposta.status,
+      )
+    }
+    const tipo = resposta.headers.get("content-type")?.split(";", 1)[0] ?? ""
+    if (!["image/jpeg", "image/png", "image/webp"].includes(tipo)) {
+      throw new ErroApi("RESPOSTA_INVALIDA", "A foto recebida possui formato inválido.")
+    }
+    const imagem = await resposta.blob()
+    if (imagem.size === 0 || imagem.size > 2 * 1024 * 1024) {
+      throw new ErroApi("RESPOSTA_INVALIDA", "A foto recebida possui tamanho inválido.")
+    }
+    return imagem
+  } catch (erro) {
+    if (erro instanceof ErroApi) throw erro
+    throw new ErroApi("SEM_CONEXAO", "Não foi possível carregar a foto do shopping.")
+  } finally {
+    window.clearTimeout(prazo)
+  }
+}

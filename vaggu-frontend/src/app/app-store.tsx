@@ -1,6 +1,6 @@
 /** Controla a identidade validada pela API. Não lê contas, hashes ou permissões do navegador. */
 import { createContext, useCallback, useContext, useEffect, useRef, useState, type ReactNode } from "react"
-import { ErroApi, objeto, requisitarApi, requisitarArquivoApi } from "@/servicos/api"
+import { ErroApi, objeto, requisitarApi, requisitarArquivoApi, requisitarImagemApi } from "@/servicos/api"
 import type { UserAccount } from "@/types/app"
 
 interface AppStoreValue {
@@ -15,6 +15,7 @@ interface AppStoreValue {
   verificarSessao: () => Promise<void>
   consultar: (caminho: string, corpo?: unknown, metodo?: "GET" | "POST" | "PATCH" | "DELETE") => Promise<unknown>
   enviarArquivo: (caminho: string, arquivo: File, tipoConteudo: string) => Promise<unknown>
+  consultarImagem: (caminho: string) => Promise<Blob>
   atualizarMinhaConta: (nome: string, telefone: string) => Promise<UserAccount>
 }
 
@@ -108,6 +109,20 @@ export function AppStoreProvider({ children }: { children: ReactNode }) {
     }
   }, [limparSessao])
 
+  /** Lê imagens privadas sem expor o token em atributos src ou endereços compartilháveis. */
+  const consultarImagem = useCallback(async (caminho: string) => {
+    const token = tokenAtual.current
+    if (!token) throw new ErroApi("NAO_AUTENTICADO", "Entre novamente para continuar.")
+    try {
+      return await requisitarImagemApi(caminho, token)
+    } catch (erro) {
+      if (tokenAtual.current === token && erro instanceof ErroApi && erro.codigo === "NAO_AUTENTICADO") {
+        limparSessao("Sua sessão expirou ou foi encerrada. Entre novamente.")
+      }
+      throw erro
+    }
+  }, [limparSessao])
+
   useEffect(() => {
     if (!expiraEm) return
     const prazo = window.setTimeout(() => limparSessao("Sua sessão expirou. Entre novamente."), Math.max(0, expiraEm - Date.now()))
@@ -175,7 +190,7 @@ export function AppStoreProvider({ children }: { children: ReactNode }) {
 
   return <AppStoreContext.Provider value={{
     ready: true, currentUser, erroSessao, mensagemSessao, senhaProvisoriaPendente,
-    login, logout, trocarSenha, verificarSessao, consultar, enviarArquivo, atualizarMinhaConta,
+    login, logout, trocarSenha, verificarSessao, consultar, enviarArquivo, consultarImagem, atualizarMinhaConta,
   }}>{children}</AppStoreContext.Provider>
 }
 

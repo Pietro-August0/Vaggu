@@ -6,7 +6,7 @@
 
 A autenticação do frontend usa a API real: login, identidade, primeira senha, revogação e expiração. A senha definitiva possui política explícita e erros por campo na API e na interface. Os acessos demonstrativos foram removidos. O Admin configura e exclui logicamente shoppings, administra gerentes e consulta a senha provisória apenas até a primeira troca. Também configura andares, setores, vagas, categorias e posições no mapa. O gerente consulta o mapa do próprio shopping, alterna andares e localiza vagas. Telemetria, telões e Power BI continuam pendentes.
 
-P01 foi concluído em 10/09 e P02 em 11/09, incluindo autenticação e acabamento visual. P03 foi concluído em 12/09 com gestão administrativa, vários gerentes e Minha conta. P04 foi concluído em 12/09 com estrutura e mapa validados em PostgreSQL real e no navegador. O P05 está em andamento: prévias CSV/XLSX são validadas, persistidas e consultadas; a confirmação idempotente está presente no backend e na interface administrativa, mas ainda precisa de execução com PostgreSQL real e navegador autenticado nesta retomada. A base local está verificável, mas o sistema ainda não está liberado para operação com clientes.
+P01 foi concluído em 10/09 e P02 em 11/09, incluindo autenticação e acabamento visual. P03 foi concluído em 12/09 com gestão administrativa, vários gerentes e Minha conta. P04 foi concluído em 12/09 com estrutura e mapa validados em PostgreSQL real e no navegador. O P05 foi concluído em 21/09: prévias CSV/XLSX, confirmação idempotente e preservação de IDs/histórico foram executadas no PostgreSQL; a jornada Admin autenticada foi validada no navegador em desktop e viewport móvel. A base local está verificável, mas o sistema ainda não está liberado para operação com clientes.
 
 Classificações: **verificado** exige execução do comportamento indicado; **presente no código** significa inspeção estática; **parcial** identifica uma entrega incompleta; **ausente** indica que não foi encontrada implementação no escopo inspecionado. Um teste simulado não comprova banco, hardware ou serviço externo real.
 
@@ -28,7 +28,7 @@ Classificações: **verificado** exige execução do comportamento indicado; **p
 | Webhook WhatsApp | Parcial | [WhatsApp](../../../vaggu-backend/src/whatsapp/service.ts): assinatura, distinção entre mensagens/status, deduplicação e cliente Meta. Conversa contém menu de teste; fluxos de demonstração/suporte não estão concluídos. |
 | Skills de continuidade | Criadas, validadas e instaladas | Fontes versionadas em [start](../../../skills/start/SKILL.md) e [end](../../../skills/end/SKILL.md); cópias em `C:/Users/CASA/.codex/skills/start` e `end` conferidas por hash. Usam este documento como registro compartilhado. |
 | Andares, setores, tipos e mapa | Verificado em P04 | Hierarquia por shopping, coordenadas proporcionais, revisão concorrente, dois andares, categorias, filtros, seleção e busca entre andares aprovados. O mapa usa base neutra; associação de planta ilustrada permanece uma evolução. |
-| Importação CSV/XLSX | Parcial, P05 em andamento | API aceita CSV e XLSX, valida por linha/campo, identifica criação ou atualização, persiste a prévia isolada por shopping e possui confirmação idempotente. A tela Admin envia o arquivo, exibe resumo/erros/registros e pede confirmação explícita. O fluxo completo ainda precisa ser executado com PostgreSQL real neste ambiente. |
+| Importação CSV/XLSX | Verificado, P05 concluído em 21/09 | API aceita CSV e XLSX, valida por linha/campo, identifica criação ou atualização, persiste a prévia isolada por shopping e confirma de forma idempotente. PostgreSQL real comprovou concorrência, preservação de IDs/histórico e manutenção das vagas ausentes. A ficha Admin autenticada foi validada com arquivo inválido e válido, confirmação explícita e recarga da estrutura. |
 | ESP32, sensores, confirmação e expiração | Ausentes como fluxo funcional | Entidades iniciais não equivalem a ingestão, confirmação consistente de 30 s, ordenação, expiração ou manutenção. |
 | Histórico consultável, contagens, telões e exportações | Ausentes como fluxo funcional | Exigem observações confirmadas e isolamento; não confundir a imagem da landing com um painel de dados real. |
 | Power BI | Ausente | Nenhum relatório funcional com histórico e atualização foi verificado/encontrado no projeto. |
@@ -93,8 +93,8 @@ Estados do backlog: **pronto**, **em andamento**, **bloqueado**, **concluído**.
 | P02 | Integrar login, sessão, troca obrigatória e saída | Concluído em 11/09 | P01 concluído. Contratos `/api/v1/auth/login`, `/me`, `/change-password` e `/logout` integrados pelo proxy local; token fica apenas em memória. | Frontend consulta identidade da API; senha provisória restringe acesso, troca libera; expiração e logout revogam acesso. Fluxos validados no navegador/API. |
 | P03 | Integrar Admin, vários gerentes e minha conta | Concluído em 12/09 | Contratos reais integrados; DTO informa situação ativa e bloqueio remove sessões na transação. | CA04, CA06 e o recorte disponível de CA07 aprovados em PostgreSQL real; fluxos principais aprovados no navegador. |
 | P04 | Estrutura e implantação: andares, setores, vagas, categorias e mapa | Concluído em 12/09 | P03 concluído; migration e contratos incrementais entregues. | CA08–CA12 cobertos: estado de configuração, dois andares, filtros, seleção, busca entre andares, rejeição de vaga de outro andar, revisão concorrente e isolamento. |
-| P05 | Importação CSV/XLSX com prévia e preservação de histórico | Em andamento | Backend e interface Admin implementados; confirmação concorrente, lint e build cobertos, com integração PostgreSQL e navegador autenticado pendentes nesta retomada. | Erros por linha, confirmação consistente e atualização sem apagar histórico. CA13–CA14. |
-| P06 | ESP32/sensores, ingestão e estados confiáveis | Bloqueado por P04 | Contrato de firmware: autenticação, sensor, inicialização, sequência, frequência e expiração. | Confirmação de 30 s com evidência, deduplicação, ordem e expiração por sensor; histórico transacional. CA15–CA24. |
+| P05 | Importação CSV/XLSX com prévia e preservação de histórico | Concluído em 21/09 | Backend, PostgreSQL e interface Admin autenticada validados; confirmação concorrente e recarga da estrutura aprovadas. | CA13–CA14 cobertos sem alteração parcial, perda de ID/histórico ou remoção silenciosa de vaga ausente. |
+| P06 | ESP32/sensores, ingestão e estados confiáveis | Pronto | P04–P05 concluídos; falta estabilizar o contrato de firmware: autenticação, sensor, inicialização, sequência, frequência e expiração. | Confirmação de 30 s com evidência, deduplicação, ordem e expiração por sensor; histórico transacional. CA15–CA24. |
 | P07 | Operação, manutenção, contagens e telões | Bloqueado por P06 | Observações confiáveis e ocorrências. | Contagens reconciliadas sem duplicar categorias; dado vencido não vira livre. CA23–CA26. |
 | P08 | Histórico, métricas e exportações | Bloqueado por P06/P07 | Intervalos confirmados, cobertura e recortes. | Cálculos reproduzem conjunto controlado; exportações respeitam shopping e filtros. CA27–CA31. |
 | P09 | Primeiro relatório funcional Power BI | Bloqueado por P08 | Histórico disponível e decisão de distribuição/acesso. | Atualização funcional e métricas reconciliadas (CA32); isolamento de acesso (CA33) só concluído na distribuição efetiva. |
@@ -105,14 +105,14 @@ Preservar os limites do produto: web responsiva, sem cadastro público de gerent
 
 ## 6. Próximo início
 
-- **Pacote:** P05 — importação CSV/XLSX com prévia e preservação de histórico.
-- **Primeira ação:** confirmar a disponibilidade de uma `TEST_DATABASE_URL` dedicada terminada em `_teste` ou `_test`, executar `npm.cmd run test:integracao` no backend e validar o fluxo autenticado no navegador.
-- **Arquivos de entrada:** `vaggu-backend/test/importacao-postgresql.test.ts`, `vaggu-backend/prisma/migrations/20260915000100_confirmacao_importacao/migration.sql`, `vaggu-frontend/src/components/importacao-estrutura.tsx` e `vaggu-frontend/src/servicos/importacao.ts`.
-- **Base já validada:** P04 concluído: estrutura hierárquica e mapa proporcional, com revisão concorrente, isolamento e fluxo Admin/gerente aprovados no PostgreSQL e no navegador em 12/09.
-- **Aceite e verificação a confirmar:** em API/banco reais, prévia inválida não altera estrutura; confirmação concorrente aplica uma única vez; IDs, histórico e vagas ausentes são preservados; interface recarrega a estrutura. Concluir CA13–CA14 somente após essas evidências.
-- **Comandos a confirmar:** backend `npm.cmd run test:integracao`; frontend `npm.cmd run lint` e `npm.cmd run build`; raiz `node scripts/verificar-documentacao.mjs`; navegador com API real nos cenários válido e inválido.
-- **Limites:** WhatsApp oficial não existe ainda; não inventar número. Preservar alterações Git e não publicar sem solicitação.
-- **Estado atual:** P05 permanece em andamento por depender da validação PostgreSQL real e do navegador autenticado. Backend e interface de confirmação já integram a `origin/main`; a auditoria documental ocorre na branch local `docs/auditoria-estrutura-ana`.
+- **Pacote:** P06 — ESP32/sensores, ingestão e estados confiáveis.
+- **Primeira ação:** consolidar o contrato de firmware e telemetria antes de criar endpoints: autenticação da placa, identificador do sensor, inicialização, sequência, frequência e prazo de expiração.
+- **Arquivos de entrada:** `segunda-mente/Vaggu/Documentação/arquitetura-estrutura-sensores-telao.md`, `segunda-mente/Vaggu/Documentação/SSD-VAGGU.md`, `vaggu-backend/prisma/schema.prisma` e os cenários CA15–CA24 de `plano-e-aceite.md`.
+- **Base já validada:** P05 concluído no PostgreSQL e no navegador em 21/09; estrutura, IDs e histórico permanecem preservados durante importações.
+- **Aceite e verificação a confirmar:** isolamento por shopping/placa, deduplicação, ordenação, confirmação após 30 segundos consistentes, expiração sem assumir vaga livre e histórico transacional.
+- **Comandos a confirmar:** detectar scripts reais após definir o recorte; manter backend build/test/integração, frontend lint/build quando houver interface e `node scripts/verificar-documentacao.mjs`.
+- **Limites:** não iniciar P07 antes de existir estado confiável; heartbeat da placa não comprova sensores; WhatsApp oficial continua indisponível.
+- **Estado atual:** P05 concluído; P06 está pronto para começar pelo contrato de firmware e telemetria. A entrega atual permanece local na branch `test/p05-integracao-samuel` até nova autorização de Git.
 
 ### 14/09/2026 — PostgreSQL local instalado e configurado
 
@@ -132,10 +132,30 @@ Preservar os limites do produto: web responsiva, sem cadastro público de gerent
 
 Cada entrada mantém: data local, estado do dia, pacote/objetivo, evidências de entrada, alterações, verificações e resultados, pendências/bloqueios, primeira ação da retomada e situação Git. Acrescentar entradas sem apagar dias anteriores. O resumo das seções 1–6 deve acompanhar o estado mais recente.
 
+### 21/09/2026 — retomada do P05: validação integrada
+
+- **Estado:** aberto; pacote P05 concluído nesta retomada. O dia permanece aberto até solicitação explícita de fechamento.
+- **Pacote e objetivo:** concluir o P05 validando a importação CSV/XLSX no PostgreSQL descartável e o fluxo administrativo autenticado contra a API real, sem declarar CA13–CA14 antes das evidências.
+- **Situação de entrada:** implementação do backend e da interface já integrada à `origin/main`; árvore de trabalho limpa. A máquina possui artefatos locais ignorados de PostgreSQL, mas não há processo escutando nem `.env.teste.local` configurado no início da retomada.
+- **Roteamento:** Samuel como responsável primário; revisões indicadas para Pietro, Ana Clara e Elisa. Branch local `test/p05-integracao-samuel`, baseada em `origin/main` no commit `e5cfcc84`.
+- **Primeira ação:** conferir o runtime e o PostgreSQL locais sem expor credenciais, preparar uma conexão exclusiva terminada em `_teste` e executar a integração do backend.
+- **Correções:** o advisory lock passou a converter o retorno `void` para texto antes da leitura pelo Prisma 7, preservando a serialização por shopping. A importação foi retirada do painel administrativo legado sem rota e montada na ficha Admin real; a área do gerente ficou somente com mapa e Minha conta. Grids e contêineres compartilhados foram restringidos para não ampliar a página em telas menores.
+- **Verificações:** `npm.cmd run test:integracao` aprovou 32/32 cenários em PostgreSQL descartável. `npm.cmd test` aprovou 42 testes e manteve três integrações explicitamente puladas por não carregar `.env.teste.local` nesse comando. Frontend `npm.cmd run lint` e `npm.cmd run build` passaram; permanece apenas o aviso conhecido de bundle acima de 500 kB.
+- **Navegador real:** Edge headless autenticou o Admin contra API e banco locais, cadastrou shopping, bloqueou confirmação de CSV inválido, confirmou CSV válido e mostrou a estrutura recarregada. Desktop e viewport móvel ficaram sem erro de console; a página móvel não apresentou transbordamento horizontal e as tabelas largas permaneceram em contêiner rolável.
+- **Documentação e comentários:** responsabilidades revisadas nos arquivos tocados; o mapa foi atualizado somente onde a ficha Admin ganhou a importação. Índice, próximos passos, situação, backlog e próximo início foram reconciliados para P05 concluído e P06 pronto.
+- **Limites:** XLSX foi coberto pelo leitor real e pelas rotas automatizadas, enquanto a jornada visual usou CSV. Meta, hardware, telemetria e Power BI não foram validados. O banco, credenciais, logs, capturas e scripts de verificação usados localmente permanecem ignorados pelo Git.
+- **Próxima ação:** iniciar P06 estabilizando o contrato de firmware/telemetria e os testes CA15–CA24 antes da implementação.
+- **Git:** alterações locais na branch `test/p05-integracao-samuel`, baseada em `origin/main` (`e5cfcc84`); nenhum commit, push, PR ou deploy solicitado.
+
 ### 21/09/2026 — banco local de testes para a equipe
 
 - **Decisão:** a proposta Docker da branch foi cancelada pela equipe. Todos os arquivos e ajustes do commit `c957f349` foram revertidos sem reescrever o histórico; execução e instalação permanecem pelo fluxo npm/PostgreSQL anterior.
 - **Documentação:** o guia canônico agora ensina cada integrante a criar o papel local `vaggu_teste_runner`, o banco de controle `vaggu_teste`, o arquivo ignorado `.env.teste.local` e executar `test:integracao`. Também explica isolamento, limpeza automática e diagnóstico sem expor credenciais.
+- **Execução local da API:** o mesmo guia passou a diferenciar explicitamente produção, desenvolvimento e integração e inclui o fluxo Windows para criar `vaggu_local`, configurar o `.env`, aplicar migrations, iniciar a API e verificar os endpoints de saúde e prontidão.
+- **Revisão de clareza:** `configuracao.md` foi reorganizado para parceiros novos, com pré-requisitos, primeira instalação, uso diário, resultados esperados, Prisma Studio, testes, encerramento, diagnóstico e distinção explícita entre o ambiente portátil desta máquina e uma instalação comum. O README da raiz agora aponta para esse guia como fonte única, sem duplicar uma configuração incompleta.
+- **Evidência de execução:** PostgreSQL 17.11 iniciado em `127.0.0.1:55432`, banco `vaggu_p05_local` acessado, 7 migrations conferidas sem pendências, API iniciada em `127.0.0.1:3000` e endpoints `/health` e `/health/ready` aprovados.
+- **Padrão documental:** `regras-de-codigo.md` agora exige instruções ordenadas, resultado verificável, separação entre instalação/uso/testes/produção e texto compreensível sem conversas anteriores ou arquivos ignorados.
+- **Revisão do mapa:** as finalidades dos arquivos documentais e do README continuam corretas no mapa do projeto; nenhuma responsabilidade ou caminho estrutural mudou.
 - **Segurança:** o banco de teste é local e separado de desenvolvimento/produção; o usuário possui `LOGIN` e `CREATEDB`, sem `SUPERUSER`. Nenhuma senha, banco ou arquivo local foi versionado.
 - **Git:** correção preparada na mesma branch da proposta cancelada, com Juan como identidade executora e Pietro como coautor confirmado pela configuração local da equipe.
 

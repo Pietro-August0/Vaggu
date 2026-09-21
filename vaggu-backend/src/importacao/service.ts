@@ -78,7 +78,10 @@ export function createImportacaoService(prisma: PrismaClient) {
       const idImportacao = idValido(importacaoId, 'importacaoId');
       return prisma.$transaction(async tx => {
         // Uma importacao estrutural por shopping evita disputas de ordem, setores e codigos de vaga.
-        await tx.$queryRaw`SELECT pg_advisory_xact_lock(hashtextextended(${idShopping}, 0))`;
+        // O cast preserva o bloqueio e evita que o Prisma tente desserializar o retorno void do PostgreSQL.
+        await tx.$queryRaw<Array<{ bloqueioAdquirido: string }>>`
+          SELECT pg_advisory_xact_lock(hashtextextended(${idShopping}, 0))::text AS "bloqueioAdquirido"
+        `;
         const importacao = await tx.importacaoEstrutura.findFirst({
           where: { id: idImportacao, shoppingId: idShopping, shopping: { excluidoEm: null } },
           select: { id: true, previa: true, confirmadoEm: true, resultadoConfirmacao: true },
