@@ -1,6 +1,6 @@
 # Próximos passos
 
-Atualizado em 15/09/2026. Ordem de trabalho, sem promessa de datas.
+Atualizado em 21/09/2026. Ordem de trabalho, sem promessa de datas.
 
 ## Antes de retomar a implementação
 
@@ -12,7 +12,7 @@ Atualizado em 15/09/2026. Ordem de trabalho, sem promessa de datas.
 
 ## Entrega atual de produto: P05
 
-Concluir a importação CSV/XLSX da estrutura. Leitura, validação, identificação de ações e persistência das prévias já foram entregues; falta a confirmação atômica que aplica a estrutura preservando IDs e histórico.
+Validar de ponta a ponta a importação CSV/XLSX da estrutura. Leitura, validação, persistência das prévias e confirmação idempotente já estão implementadas no backend e na interface; falta executar os cenários com PostgreSQL real e navegador autenticado.
 
 Entrada: hierarquia e contratos entregues no P04, migration incremental, serviço de estrutura e interface administrativa.
 
@@ -26,7 +26,7 @@ Aceite: arquivo inválido não altera o banco; a prévia mostra erros por linha;
 | P02 | Autenticação real do frontend — concluída em 11/09 |
 | P03 | Admin, múltiplos gerentes e minha conta — concluído em 12/09 |
 | P04 | Andares, setores, vagas e mapa — concluído em 12/09 |
-| P05 | Importação CSV/XLSX com prévia — em andamento; confirmação pendente |
+| P05 | Importação CSV/XLSX com prévia — em andamento; validação integrada pendente |
 | P06 | Telemetria, confirmação e expiração |
 | P07 | Operação, manutenção e telões |
 | P08 | Histórico, métricas e exportações |
@@ -39,6 +39,10 @@ O estado diário técnico permanece em [[Vaggu/Documentação/planejamento-do-pr
 ## Atualização de 14/09
 
 O P05 passou a aceitar CSV e XLSX, validar erros por linha, identificar vagas a criar ou atualizar e persistir as prévias no PostgreSQL com isolamento por shopping. A próxima ação é implementar a confirmação atômica; não há tela de importação no frontend. Ver [[Vaggu/Diário/2026-09-14]].
+
+## Atualização de 21/09
+
+A confirmação atômica e idempotente e a tela administrativa passaram a existir depois do registro histórico de 14/09. A retomada deve validar arquivo válido e inválido, concorrência, preservação de IDs/histórico e recarga da estrutura usando API, PostgreSQL e navegador reais.
 
 ## Histórico de 12/09
 
