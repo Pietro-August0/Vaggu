@@ -64,7 +64,7 @@ Em conflitos de produto, as decisões mais recentes do usuário prevalecem sobre
 - TypeScript com contratos explícitos. Validar dados nas fronteiras; não usar `any`, casts ou `!` para encobrir incertezas.
 - Backend é a autoridade das regras e permissões. Ocultar botão não implementa autorização.
 - Usar transações nas mudanças que precisam ocorrer juntas e idempotência nos eventos reenviáveis.
-- Nunca enviar hash, senha definitiva, credencial de placa ou conexão do banco ao frontend ou aos relatórios. A única exceção aprovada é a senha provisória: sua cópia fica cifrada em repouso e pode ser revelada apenas ao Admin enquanto a troca obrigatória estiver pendente; ela deve ser apagada quando o gerente definir a senha definitiva.
+- Nunca enviar hash, senha definitiva, credencial de placa ou conexão do banco ao frontend ou aos relatórios. A senha provisória aparece somente na resposta imediata de criação ou redefinição para o Admin copiar por um canal seguro; o banco mantém apenas o hash e a listagem posterior nunca a revela novamente.
 - Criar migrations incrementais compatíveis com os dados existentes. Não resetar banco real.
 - Não instalar uma dependência se o projeto já resolve a necessidade. Conferir documentação compatível com a versão usada.
 - Evitar abstrações sem uso concreto, módulos gigantes e duplicação das fórmulas de negócio.

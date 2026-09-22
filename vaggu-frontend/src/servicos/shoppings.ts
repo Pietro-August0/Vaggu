@@ -14,6 +14,7 @@ export function lerShopping(valor: unknown): ShoppingAdmin {
   }
   return { id: valor.id, nome: valor.nome, ativo: valor.ativo, situacaoImplantacao: valor.situacaoImplantacao,
     totalGerentes: typeof valor.totalGerentes === "number" ? valor.totalGerentes : 0,
+    imagemUrl: typeof valor.imagemUrl === "string" && /^https:\/\//.test(valor.imagemUrl) ? valor.imagemUrl : null,
     possuiFoto: valor.possuiFoto === true, ...opcionais } as ShoppingAdmin
 }
 

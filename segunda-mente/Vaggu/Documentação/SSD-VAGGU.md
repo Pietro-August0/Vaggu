@@ -90,12 +90,12 @@ Manter dois perfis humanos autenticados: Admin e gerente. Uma conta Admin inicia
 
 1. Admin cadastra nome, e-mail de login, telefone e shopping de cada gerente.
 2. E-mail identifica a conta; o sistema não cria uma caixa postal.
-3. Sistema emite senha provisória individual. O login usa seu hash; uma cópia cifrada fica visível somente ao Admin enquanto a troca obrigatória estiver pendente.
+3. Sistema emite senha provisória individual. O login usa seu hash; o texto aparece somente na resposta imediata de criação ou redefinição para o Admin copiar por um canal seguro.
 4. Equipe entrega o acesso pelo processo de atendimento no WhatsApp.
 5. Primeiro login deve exigir troca de senha. Backend bloqueia acesso operacional até concluir.
 6. Recuperação é solicitada à equipe; Admin verifica o solicitante e redefine o acesso com nova senha provisória.
 7. Bloqueio de conta deve interromper acesso também com sessão previamente emitida.
-8. Quando o gerente define a senha definitiva, a cópia cifrada da provisória é apagada e o Admin passa a ver apenas o estado “senha redefinida”.
+8. Listagens posteriores nunca revelam a senha provisória; se ela for perdida antes da troca, o Admin precisa redefinir o acesso e entregar a nova senha exibida naquele momento.
 
 A senha definitiva deve ter de 12 a 128 caracteres, ao menos uma letra minúscula, uma maiúscula, um número e um símbolo, sem espaços, e não pode repetir a senha atual. A interface mostra os requisitos em tempo real, permite visualizar cada campo separadamente e associa o erro ao campo correspondente. O backend reaplica a política e retorna um código específico por requisito; validação apenas no navegador não é suficiente.
 
@@ -133,7 +133,7 @@ O Admin trata pedidos de demonstração e suporte no painel, mas credenciais nã
 
 ### 5.1 Dados do shopping
 
-Nome, identificação institucional pertinente, endereço, contato, responsável, situação da implantação, fuso e horários de operação. Documentos e planta chegam principalmente pelo WhatsApp e são associados pelo Admin. Guardar metadados e referência de armazenamento privado persistente; não colocar documentos no bundle público.
+Nome, identificação institucional pertinente, endereço, contato, responsável, situação da implantação, fuso e horários de operação. A foto representativa é pública, fica em armazenamento externo persistente e o PostgreSQL guarda somente sua URL HTTPS. Documentos e planta chegam principalmente pelo WhatsApp e exigem armazenamento privado; não confundir esses materiais com a foto nem colocá-los no bundle público.
 
 Etapas de implantação preservadas como base a conciliar: novo atendimento, em análise, documentação pendente, aprovado, em configuração, aguardando instalação, ativo, rejeitado e inativo. Não confundir etapa com suspensão de um gerente. Entrada inválida numa etapa deve retornar erro compreensível.
 
@@ -187,7 +187,7 @@ Interface precisa tratar carregamento, ausência de registros, ausência de obse
 
 ### 7.1 Mapa
 
-Mapa é funcionalidade obrigatória. Selecionar andar carrega sua base e vagas, com código, categoria, estado e detalhe. Busca por vaga de outro andar navega e destaca a posição. Filtros por setor, tipo e estado devem ter comportamento visível; não misturar total do shopping com total filtrado sem rótulo.
+Mapa é funcionalidade obrigatória e compartilha a mesma representação visual entre Admin e gerente. Selecionar andar carrega sua base e vagas, com código, setor, categoria, estado e detalhe. Busca por vaga de outro andar navega e destaca a posição. Filtros por setor, tipo e estado devem ter comportamento visível; não misturar total do shopping com total filtrado sem rótulo. No Admin, mutações de estrutura recarregam o estado exibido sem exigir atualização manual da página.
 
 **Proposta técnica do MVP:** representação 2D simples por andar, base visual e coordenadas normalizadas. Posição usa `x`/`y` do canto superior esquerdo e largura/altura em relação às dimensões da base; rotação em graus, com âncora documentada. Definir validação de limites, inclusive elemento rotacionado. A proposta evita depender de coordenadas absolutas de um único monitor.
 
@@ -392,7 +392,7 @@ Se um relatório reúne vários shoppings, definir RLS e identidade autorizada n
 | Firmware ESP32 | Leitura local, envio autenticado e recuperação de comunicação. |
 | Views + Power BI | Análise histórica, sem depender do relatório para operar o estacionamento. |
 
-O frontend tem Vercel como destino definido. Hospedagem da API, banco e arquivos deve ser verificada antes da implantação. **Proposta de atualização:** polling controlado pode servir ao MVP; Socket.IO requer suporte a conexões persistentes. Manter a experiência sem recarga manual, informando atualidade. Não colocar uma rotina crítica apenas em timer de função efêmera.
+O frontend tem Vercel como destino definido. Hospedagem da API e banco deve ser verificada antes da implantação. A foto pública de cada shopping usa Vercel Blob e requer `BLOB_READ_WRITE_TOKEN` no backend; o banco persiste apenas `imagemUrl`. **Proposta de atualização:** polling controlado pode servir ao MVP para telemetria; Socket.IO requer suporte a conexões persistentes. Mutações administrativas já devem atualizar por estado local ou refetch, sem recarga manual. Não colocar uma rotina crítica apenas em timer de função efêmera.
 
 Separar consulta operacional de análise. Falha do Power BI não interrompe leitura das vagas. Organizar módulos conforme [regras-de-codigo.md](regras-de-codigo.md), conciliando com o repositório existente.
 
@@ -531,7 +531,7 @@ Criar gerente, **proposta**:
 }
 ```
 
-Shopping vem da rota administrativa validada. Sistema gera a senha provisória. Nunca retornar hash. Enquanto a troca obrigatória estiver pendente, a listagem administrativa pode revelar a senha provisória ao Admin; a cópia usada para isso fica cifrada em repouso. Depois da troca, retorna apenas que a senha foi redefinida. O exemplo não define formato final de telefone nem credencial real.
+Shopping vem da rota administrativa validada. Sistema gera a senha provisória. Nunca retornar hash. Somente as respostas de criação e redefinição entregam o texto da senha ao Admin; a listagem administrativa informa o estado da troca, mas não reapresenta a credencial. O exemplo não define formato final de telefone nem credencial real.
 
 Resposta conceitual do mapa:
 

@@ -39,10 +39,12 @@ O próprio cofre está versionado na pasta `segunda-mente/` do repositório VAGG
 
 **Atualização de 12/09:** P03 e P04 concluídos e validados. O mapa usa dois andares, setores, categorias e posições proporcionais; sensores e telões continuam em pacotes posteriores.
 
-**Atualização de 13/09:** o Admin pode excluir logicamente um shopping e consultar a senha provisória de cada gerente até a primeira troca. A exclusão encerra os acessos e preserva estrutura e histórico; depois da troca, a senha provisória é apagada e aparece apenas “senha redefinida”.
+**Atualização de 13/09, substituída em 21/09 para a credencial:** o Admin pode excluir logicamente um shopping; a exclusão encerra os acessos e preserva estrutura e histórico. A senha provisória agora aparece somente na criação ou redefinição e não é armazenada de forma reversível.
 
 **Atualização de 14/09:** a segunda mente passou a integrar o repositório. O P05 recebeu leitores CSV/XLSX, validação por linha, identificação de criação/atualização e persistência isolada das prévias no PostgreSQL.
 
 **Atualização de 15/09:** a confirmação backend do P05 foi implementada de forma idempotente e serializada por shopping; a tela Admin envia CSV/XLSX, oferece modelo CSV, apresenta prévia/erros e confirma a aplicação. Falta reexecutar integração PostgreSQL real e validar o fluxo autenticado contra a API real.
 
 **Atualização de 21/09:** P05 concluído após corrigir o advisory lock para o Prisma 7 e montar a importação na ficha administrativa correta. A integração PostgreSQL aprovou 32/32 cenários; o navegador autenticado confirmou o fluxo válido e inválido, a atualização da estrutura e a responsividade sem transbordamento da página.
+
+**Atualização de 21/09 — mapa e foto:** Admin e gerente passaram a compartilhar a visualização 2D responsiva. O gerente vê a estrutura mesmo antes da ativação, mutações administrativas recarregam o mapa sem refresh, a senha provisória pode ser copiada somente quando é emitida e a foto do shopping usa referência HTTPS do Vercel Blob em vez de binário no PostgreSQL.

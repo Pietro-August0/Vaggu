@@ -1,6 +1,8 @@
 /** Reúne dados institucionais, endereço e foto usados no cadastro e na edição do shopping. */
 import { useEffect, useState, type ChangeEvent, type ComponentProps, type FormEvent } from "react"
+import { Trash2 } from "lucide-react"
 import { Button } from "@/components/ui/button"
+import { FotoShopping } from "@/components/foto-shopping"
 import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
 import type { DadosShopping, ShoppingAdmin } from "@/types/admin"
@@ -10,12 +12,13 @@ interface FormularioShoppingProps {
   ocupado: boolean
   rotuloBotao: string
   aoEnviar: (dados: DadosShopping, formulario: HTMLFormElement, foto: File | null) => void
+  aoRemoverFoto?: () => void
 }
 
 const valor = (dados: FormData, campo: keyof DadosShopping) => String(dados.get(campo) ?? "").trim()
 
 /** Valida a foto no navegador para feedback imediato; a API repete toda validação antes de persistir. */
-export function FormularioShopping({ shopping, ocupado, rotuloBotao, aoEnviar }: FormularioShoppingProps) {
+export function FormularioShopping({ shopping, ocupado, rotuloBotao, aoEnviar, aoRemoverFoto }: FormularioShoppingProps) {
   const [foto, setFoto] = useState<File | null>(null)
   const [fotoPreview, setFotoPreview] = useState("")
   const [erroFoto, setErroFoto] = useState("")
@@ -70,7 +73,7 @@ export function FormularioShopping({ shopping, ocupado, rotuloBotao, aoEnviar }:
     <div className="grid gap-5 md:grid-cols-3">{campo("horarioAbertura", "Abertura", { type: "time" })}{campo("horarioFechamento", "Fechamento", { type: "time" })}{campo("fusoHorario", "Fuso horário", { maxLength: 80, placeholder: "America/Sao_Paulo" })}</div>
     <div className="grid gap-3 rounded-2xl border border-white/10 bg-black/15 p-4 sm:grid-cols-[minmax(0,1fr)_8rem] sm:items-center">
       <div className="grid gap-2"><Label htmlFor="shopping-foto" className="text-neutral-100">Foto do shopping</Label><Input id="shopping-foto" name="foto" type="file" accept="image/jpeg,image/png,image/webp" disabled={ocupado} onChange={selecionarFoto} className="h-auto min-h-11 border-white/15 bg-white/5 py-2 text-white file:mr-3 file:rounded-md file:border-0 file:bg-[#ffe100] file:px-3 file:py-2 file:font-semibold file:text-black"/><p className="text-xs text-neutral-400">JPEG, PNG ou WebP, com até 2 MB. Uma nova foto substitui a anterior.</p>{erroFoto && <p role="alert" className="text-sm text-red-300">{erroFoto}</p>}</div>
-      {fotoPreview && <img src={fotoPreview} alt="Prévia da foto selecionada para o shopping" className="aspect-square w-28 rounded-xl object-cover sm:w-full"/>}
+      {fotoPreview ? <img src={fotoPreview} alt="Prévia da foto selecionada para o shopping" className="aspect-square w-28 rounded-xl object-cover sm:w-full"/> : shopping && <div className="grid gap-2"><FotoShopping nome={shopping.nome} imagemUrl={shopping.imagemUrl} className="aspect-square w-28 rounded-xl sm:w-full"/>{shopping.imagemUrl && aoRemoverFoto && <Button type="button" variant="outline" size="sm" className="border-white/20 bg-transparent text-white" disabled={ocupado} onClick={aoRemoverFoto}><Trash2 aria-hidden="true"/>Remover</Button>}</div>}
     </div>
     <Button type="submit" className="mt-2 h-11 w-full px-8 font-bold sm:w-fit" disabled={ocupado || Boolean(erroFoto)}>{ocupado ? "Salvando..." : rotuloBotao}</Button>
   </form>

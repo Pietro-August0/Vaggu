@@ -88,15 +88,16 @@ Não carregar skills de pagamento, app nativo ou geração de imagem apenas porq
 | CA03 | RF02 | Mesma mensagem de demonstração reenviada | Não duplica pedido; evento de status não é tratado como texto do cliente. |
 | CA04 | RF03/RF04 | Admin cria shopping e dois gerentes | Contas distintas, e-mails únicos, mesmo shopping e senhas individuais. |
 | CA05 | RF05 | Gerente entra com senha provisória | Backend permite apenas ações necessárias à troca antes do painel operacional. |
-| CA05A | RF04/RF05 | Admin consulta o gerente antes e depois da primeira troca | Antes, vê a senha provisória; depois, vê “senha redefinida” sem acesso à senha definitiva. |
+| CA05A | RF04/RF05 | Admin cria ou redefine um gerente e depois recarrega a ficha | A resposta imediata exibe a senha provisória com ação de copiar; a listagem posterior não a revela e nunca expõe hash ou senha definitiva. |
 | CA05B | RF03/RF17 | Admin exclui um shopping | Shopping some da listagem, sessões e acessos dos gerentes são encerrados e os registros operacionais permanecem preservados. |
 | CA06 | RF05 | Admin bloqueia um gerente já logado | A sessão perde acesso; outro gerente do shopping continua operando. |
 | CA07 | RF17 | Gerente A tenta ID, filtro, exportação ou download de shopping B | Nenhum dado de B é retornado. Testar também o canal de atualização escolhido. |
-| CA08 | RF03 | Gerente entra antes da ativação | Aviso “em configuração”; ausência de leituras não aparece como estacionamento vazio. |
+| CA08 | RF03/RF06 | Gerente entra antes da ativação | Aviso “em configuração”; a estrutura cadastrada e suas vagas continuam visíveis, e ausência de leitura permanece indisponível em vez de parecer livre. |
 | CA09 | RF06 | Alternar entre dois andares rapidamente | Mapa, dados e seleção correspondem ao último andar escolhido, sem corrida de respostas. |
 | CA10 | RF06 | Buscar vaga de outro andar | Navega ao andar correto e destaca a vaga. |
 | CA11 | RF07 | Salvar posição de vaga incompatível | Rejeita vínculo com andar/shopping errado ou duplicação da vaga. |
 | CA12 | RF07 | Dois Admins/sessões gravam revisões do mapa | Política de revisão impede sobrescrita silenciosa. |
+| CA12A | RF03/RF07 | Admin configura vagas e seleciona uma foto do shopping | O mapa compartilhado reflete a mutação sem refresh; a prévia pode ser trocada antes de salvar e a persistência guarda somente URL HTTPS de armazenamento externo. |
 | CA13 | RF08 | CSV/XLSX com duplicata e categoria inválida | Prévia informa linha/campo; confirmação bloqueada sem alteração parcial. |
 | CA14 | RF08/RF13 | Nova importação contém vaga já existente | Preserva ID, vínculo e histórico; ausência de registro na planilha não apaga silenciosamente. |
 | CA15 | RF09/RF17 | Placa tenta enviar sensor de outra placa/shopping | Rejeita sem atualizar estado nem último contato dos sensores indevidos. |

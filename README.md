@@ -26,8 +26,9 @@ Este repositório reúne o MVP acadêmico da solução, desenvolvido como projet
 - Gestão real de shoppings, gerentes, andares, setores, vagas e implantação.
 - Exclusão lógica de shopping, com encerramento dos acessos vinculados e preservação do histórico.
 - Exclusão reversível de gerente, com confirmação e sete segundos para desfazer.
-- Consulta administrativa da senha provisória enquanto o gerente ainda não a redefiniu.
-- Mapa do gerente com troca de andar, categorias, seleção e busca.
+- Exibição e cópia da senha provisória somente no instante da criação ou redefinição do gerente.
+- Mapa 2D compartilhado entre Admin e gerente, com troca de andar, setor, categorias, estados e busca.
+- Foto representativa do shopping com preview e armazenamento externo por URL.
 - Token somente em memória; recarregar a página exige novo login.
 
 ### Backend
@@ -35,7 +36,8 @@ Este repositório reúne o MVP acadêmico da solução, desenvolvido como projet
 - API REST em Node.js, Express e TypeScript.
 - Autenticação com sessões opacas, hash seguro de senhas e troca obrigatória no primeiro acesso.
 - Cadastro de shoppings e múltiplos gerentes com isolamento por shopping.
-- Proteção reversível da senha provisória até a primeira troca; a senha definitiva continua armazenada somente como hash.
+- Senhas provisória e definitiva armazenadas somente como hash; o texto provisório existe apenas na resposta imediata de emissão.
+- Fotos públicas no Vercel Blob, com apenas a URL HTTPS persistida no PostgreSQL.
 - Consulta e edição segura dos dados permitidos da conta.
 - Webhook da WhatsApp Cloud API com validação de assinatura e deduplicação de eventos.
 - Persistência PostgreSQL com Prisma e migrations versionadas.
@@ -48,7 +50,7 @@ Este repositório reúne o MVP acadêmico da solução, desenvolvido como projet
 | Interface | React 19, TypeScript, Vite, Tailwind CSS e Radix UI |
 | API | Node.js, Express, TypeScript e Helmet |
 | Dados | PostgreSQL e Prisma ORM |
-| Integração | WhatsApp Cloud API |
+| Integração | WhatsApp Cloud API e Vercel Blob |
 | Qualidade | ESLint, TypeScript e Node Test Runner |
 
 ## Estrutura do repositório

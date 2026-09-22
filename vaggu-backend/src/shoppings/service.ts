@@ -3,7 +3,7 @@
 import { randomBytes } from 'node:crypto';
 import { hashPassword } from '../auth/password.js';
 import { ApiError, normalizeEmail, publicUser } from '../auth/service.js';
-import { protegerSenhaProvisoria, revelarSenhaProvisoria } from '../auth/credencial-provisoria.js';
+import type { ArmazenamentoFotosShopping } from './armazenamento-fotos.js';
 
 const SITUACOES_IMPLANTACAO = new Set(['NOVO_ATENDIMENTO', 'EM_ANALISE', 'DOCUMENTACAO_PENDENTE', 'APROVADO', 'EM_CONFIGURACAO', 'AGUARDANDO_INSTALACAO', 'ATIVO', 'REJEITADO', 'INATIVO']);
 const PRAZO_DESFAZER_EXCLUSAO_MS = 7_000;
@@ -19,7 +19,7 @@ function detectarTipoFoto(dados: Buffer): string | null {
   return null;
 }
 
-/** Limita tamanho e formatos antes de persistir bytes recebidos pela rota autenticada. */
+/** Limita tamanho e formatos antes de encaminhar os bytes ao armazenamento externo. */
 function validarFotoShopping(conteudo: unknown, tipoInformado: unknown) {
   if (!Buffer.isBuffer(conteudo) || conteudo.length === 0) {
     throw new ApiError(400, 'FOTO_INVALIDA', 'Selecione uma foto JPEG, PNG ou WebP.');
@@ -32,7 +32,7 @@ function validarFotoShopping(conteudo: unknown, tipoInformado: unknown) {
   if (!TIPOS_FOTO_SHOPPING.has(tipo) || tipoDetectado !== tipo) {
     throw new ApiError(400, 'FOTO_INVALIDA', 'O conteúdo da foto deve corresponder a JPEG, PNG ou WebP.');
   }
-  return { dados: conteudo, mime: tipo };
+  return { conteudo, tipoConteudo: tipo };
 }
 
 /** Recusa identificadores fora do formato básico esperado antes de consultar o banco. */
@@ -155,7 +155,8 @@ function publicShopping(shopping) {
     horarioAbertura: shopping.horarioAbertura ?? null,
     horarioFechamento: shopping.horarioFechamento ?? null,
     fusoHorario: shopping.fusoHorario ?? null,
-    possuiFoto: Boolean(shopping.foto),
+    imagemUrl: shopping.imagemUrl ?? null,
+    possuiFoto: Boolean(shopping.imagemUrl),
     ativo: shopping.ativo,
     situacaoImplantacao: shopping.situacaoImplantacao,
     criadoEm: shopping.criadoEm,
@@ -171,26 +172,9 @@ function gerarSenhaProvisoria() {
 /** Valida o ID e exige um shopping existente antes das operações com seus gerentes. */
 async function exigirShopping(prisma, shoppingId) {
   const id = validarId(shoppingId, 'shoppingId');
-  const shopping = await prisma.shopping.findUnique({
-    where: { id },
-    include: { foto: { select: { shoppingId: true } } },
-  });
+  const shopping = await prisma.shopping.findUnique({ where: { id } });
   if (!shopping || shopping.excluidoEm) throw new ApiError(404, 'SHOPPING_NAO_ENCONTRADO', 'Shopping não encontrado.');
   return shopping;
-}
-
-/** Expõe a senha somente ao serviço administrativo e apenas enquanto ela ainda é provisória. */
-function publicGerente(gerente, credencialSecret: string) {
-  let senhaProvisoria: string | null = null;
-  if (gerente.trocarSenhaObrigatoria && gerente.senhaProvisoriaProtegida) {
-    try {
-      senhaProvisoria = revelarSenhaProvisoria(gerente.senhaProvisoriaProtegida, credencialSecret);
-    } catch {
-      // Uma chave alterada não deve derrubar a listagem; o Admin pode gerar uma nova senha provisória.
-      senhaProvisoria = null;
-    }
-  }
-  return { ...publicUser(gerente), senhaProvisoria };
 }
 
 /** Traduz conflito de unicidade de e-mail; outros erros seguem para o tratamento geral. */
@@ -205,14 +189,16 @@ function tratarConflitoUnico(error) {
 // nunca por cadastro público ou por dados enviados por um gerente autenticado.
 export function createShoppingsService(prisma, {
   now = () => new Date(),
-  credencialSecret = process.env.CREDENTIAL_ENCRYPTION_KEY || process.env.DATABASE_URL || '',
+  armazenamentoFotos,
+}: {
+  now?: () => Date;
+  armazenamentoFotos?: ArmazenamentoFotosShopping;
 } = {}) {
   const contagemGerentesVisiveis = {
     select: { usuarios: { where: { perfil: 'SHOPPING', excluidoEm: null } } },
   };
   const detalhesPublicos = {
     _count: contagemGerentesVisiveis,
-    foto: { select: { shoppingId: true } },
   };
 
   return {
@@ -252,24 +238,37 @@ export function createShoppingsService(prisma, {
       return { shopping: publicShopping(atualizado) };
     },
 
-    /** Substitui a foto do shopping sem tornar o arquivo público nem misturá-lo ao cadastro JSON. */
+    /** Envia a foto ao Blob e grava somente sua URL, removendo a versão anterior após a troca. */
     async salvarFotoShopping(shoppingId, conteudo: unknown, tipoConteudo: unknown) {
       const shopping = await exigirShopping(prisma, shoppingId);
       const foto = validarFotoShopping(conteudo, tipoConteudo);
-      await prisma.fotoShopping.upsert({
-        where: { shoppingId: shopping.id },
-        create: { shoppingId: shopping.id, ...foto },
-        update: foto,
-      });
-      return { possuiFoto: true };
+      if (!armazenamentoFotos) {
+        throw new ApiError(503, 'ARMAZENAMENTO_NAO_CONFIGURADO', 'O armazenamento de fotos ainda não foi configurado neste ambiente.');
+      }
+      const imagemUrl = await armazenamentoFotos.salvar(shopping.id, foto.conteudo, foto.tipoConteudo);
+      try {
+        await prisma.shopping.update({ where: { id: shopping.id }, data: { imagemUrl } });
+      } catch (erro) {
+        // Uma falha no banco não deve deixar o arquivo recém-enviado sem referência.
+        await armazenamentoFotos.remover(imagemUrl).catch(() => undefined);
+        throw erro;
+      }
+      if (shopping.imagemUrl && shopping.imagemUrl !== imagemUrl) {
+        await armazenamentoFotos.remover(shopping.imagemUrl).catch(() => undefined);
+      }
+      return { imagemUrl, possuiFoto: true };
     },
 
-    /** Entrega bytes somente depois que a rota administrativa confirmou a sessão e o perfil. */
-    async buscarFotoShopping(shoppingId) {
+    /** Remove a referência antes de apagar o arquivo para nunca manter uma URL quebrada no cadastro. */
+    async removerFotoShopping(shoppingId) {
       const shopping = await exigirShopping(prisma, shoppingId);
-      const foto = await prisma.fotoShopping.findUnique({ where: { shoppingId: shopping.id } });
-      if (!foto) throw new ApiError(404, 'FOTO_NAO_ENCONTRADA', 'Este shopping ainda não possui foto.');
-      return { dados: Buffer.from(foto.dados), mime: foto.mime };
+      if (!shopping.imagemUrl) return { imagemUrl: null, possuiFoto: false };
+      if (!armazenamentoFotos) {
+        throw new ApiError(503, 'ARMAZENAMENTO_NAO_CONFIGURADO', 'O armazenamento de fotos ainda não foi configurado neste ambiente.');
+      }
+      await prisma.shopping.update({ where: { id: shopping.id }, data: { imagemUrl: null } });
+      await armazenamentoFotos.remover(shopping.imagemUrl).catch(() => undefined);
+      return { imagemUrl: null, possuiFoto: false };
     },
 
     /** Oculta o shopping sem apagar sua estrutura ou histórico e encerra os acessos vinculados. */
@@ -283,7 +282,7 @@ export function createShoppingsService(prisma, {
         });
         await tx.usuario.updateMany({
           where: { shoppingId: shopping.id, perfil: 'SHOPPING', excluidoEm: null },
-          data: { ativo: false, senhaProvisoriaProtegida: null },
+          data: { ativo: false },
         });
         await tx.sessao.deleteMany({ where: { usuario: { shoppingId: shopping.id } } });
         return excluido;
@@ -308,7 +307,7 @@ export function createShoppingsService(prisma, {
         where: { shoppingId, perfil: 'SHOPPING', excluidoEm: null },
         orderBy: [{ ativo: 'desc' }, { nome: 'asc' }],
       });
-      return { gerentes: gerentes.map(gerente => publicGerente(gerente, credencialSecret)) };
+      return { gerentes: gerentes.map(gerente => ({ ...publicUser(gerente), senhaProvisoria: null })) };
     },
 
     /** Exige shopping ativo e cria uma conta com senha provisória e troca obrigatória. */
@@ -322,7 +321,6 @@ export function createShoppingsService(prisma, {
 
       const senha = gerarSenhaProvisoria();
       const senhaHash = await hashPassword(senha);
-      const senhaProvisoriaProtegida = protegerSenhaProvisoria(senha, credencialSecret);
       try {
         const existente = await prisma.usuario.findUnique({ where: { email } });
         if (existente && (existente.perfil !== 'SHOPPING' || !existente.excluidoEm
@@ -330,7 +328,7 @@ export function createShoppingsService(prisma, {
           throw new ApiError(409, 'EMAIL_EM_USO', 'Esse e-mail já está cadastrado.');
         }
         const data = {
-          nome, email, telefone, senhaHash, senhaProvisoriaProtegida, perfil: 'SHOPPING', shoppingId: shopping.id,
+          nome, email, telefone, senhaHash, perfil: 'SHOPPING', shoppingId: shopping.id,
           ativo: true, trocarSenhaObrigatoria: true, excluidoEm: null, ativoAntesExclusao: null,
         };
         // Após o prazo de desfazer, o mesmo e-mail pode ganhar um novo acesso sem duplicar a identidade.
@@ -384,11 +382,10 @@ export function createShoppingsService(prisma, {
       }
       const senha = gerarSenhaProvisoria();
       const senhaHash = await hashPassword(senha);
-      const senhaProvisoriaProtegida = protegerSenhaProvisoria(senha, credencialSecret);
       const usuario = await prisma.$transaction(async (tx) => {
         const updated = await tx.usuario.update({
           where: { id },
-          data: { senhaHash, senhaProvisoriaProtegida, trocarSenhaObrigatoria: true },
+          data: { senhaHash, trocarSenhaObrigatoria: true },
         });
         await tx.sessao.deleteMany({ where: { usuarioId: id } });
         return updated;

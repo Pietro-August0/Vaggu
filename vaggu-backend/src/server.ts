@@ -11,16 +11,20 @@ import { createShoppingsService } from './shoppings/service.js';
 import { createContaService } from './conta/service.js';
 import { createEstruturaService } from './estrutura/service.js';
 import { createImportacaoService } from './importacao/service.js';
+import { criarArmazenamentoFotosBlob } from './shoppings/armazenamento-fotos.js';
 
 const config = readEnv();
 const prisma = createPrisma(config.databaseUrl);
 const whatsappClient = createWhatsappClient(config.whatsapp);
 const whatsappService = createWhatsappService(prisma, whatsappClient, config.whatsapp);
+const armazenamentoFotos = config.blobReadWriteToken
+  ? criarArmazenamentoFotosBlob(config.blobReadWriteToken)
+  : undefined;
 const app = createApp({
   checkDatabase: () => prisma.$queryRaw`SELECT 1`,
   auth: createAuthService(prisma),
   whatsapp: { config: config.whatsapp, service: whatsappService },
-  shoppings: createShoppingsService(prisma, { credencialSecret: config.credencialSecret }),
+  shoppings: createShoppingsService(prisma, { armazenamentoFotos }),
   conta: createContaService(prisma),
   estrutura: createEstruturaService(prisma),
   importacao: createImportacaoService(prisma),
