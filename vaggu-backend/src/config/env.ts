@@ -14,8 +14,7 @@ export function readEnv(env: NodeJS.ProcessEnv = process.env) {
 
   return {
     databaseUrl,
-    // Uma chave dedicada é preferível; o segredo da conexão mantém compatibilidade nos ambientes já configurados.
-    credencialSecret: env.CREDENTIAL_ENCRYPTION_KEY || databaseUrl,
+    blobReadWriteToken: env.BLOB_READ_WRITE_TOKEN?.trim() || '',
     port,
     host: env.HOST || '127.0.0.1',
     whatsapp: {

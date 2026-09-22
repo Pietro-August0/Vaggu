@@ -99,7 +99,7 @@ Abra `vaggu-backend/.env` em um editor e ajuste:
 
 ```dotenv
 DATABASE_URL="postgresql://vaggu_local_usuario:SUA_SENHA_LOCAL@127.0.0.1:5432/vaggu_local"
-CREDENTIAL_ENCRYPTION_KEY="COLOQUE_UM_SEGREDO_LOCAL_LONGO"
+BLOB_READ_WRITE_TOKEN="vercel_blob_rw_TOKEN_DO_PROJETO"
 HOST="127.0.0.1"
 PORT="3000"
 NODE_ENV="development"
@@ -107,11 +107,7 @@ NODE_ENV="development"
 
 Use a senha definida na etapa anterior. Se o PostgreSQL estiver em outra porta, substitua `5432` pela porta correta.
 
-Para gerar um valor seguro para `CREDENTIAL_ENCRYPTION_KEY`, execute no PowerShell e copie o resultado para o `.env`:
-
-```powershell
-[Convert]::ToHexString([Security.Cryptography.RandomNumberGenerator]::GetBytes(32))
-```
+`BLOB_READ_WRITE_TOKEN` é necessário somente para salvar ou remover a foto representativa de um shopping. Obtenha-o no armazenamento Blob vinculado ao projeto Vercel e mantenha-o apenas no ambiente do backend. Sem essa variável, o restante do cadastro funciona e a tentativa de alterar a foto falha explicitamente; não use pasta local como substituto em produção. A imagem fica no Vercel Blob e o PostgreSQL guarda somente sua URL HTTPS.
 
 Não compartilhe nem envie `.env` ao Git. Se a senha possuir `@`, `:`, `/`, `?`, `#` ou `%`, esses caracteres precisam ser codificados para URL. Para um ambiente local, uma senha alfanumérica longa evita esse problema.
 
@@ -277,7 +273,7 @@ Em 21/09/2026, a validação local usou:
 - banco `vaggu_p05_local`;
 - endereço `127.0.0.1:55432`;
 - API em `127.0.0.1:3000`;
-- 7 migrations aplicadas, sem pendências;
+- 9 migrations aplicadas, sem pendências;
 - `/health` e `/health/ready` com resposta `ok`.
 
 Nesta máquina específica, o PostgreSQL portátil é iniciado, a partir da raiz, com:

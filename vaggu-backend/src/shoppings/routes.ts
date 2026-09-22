@@ -16,14 +16,12 @@ export function shoppingsRoutes(auth, shoppings) {
     res.status(201).json(await shoppings.criarShopping(req.body));
   });
 
-  router.get('/:shoppingId/foto', async (req, res) => {
-    const foto = await shoppings.buscarFotoShopping(req.params.shoppingId);
-    res.set('Cache-Control', 'private, no-store');
-    res.type(foto.mime).send(foto.dados);
-  });
-
   router.post('/:shoppingId/foto', raw({ type: ['image/jpeg', 'image/png', 'image/webp'], limit: '2mb' }), async (req, res) => {
     res.json(await shoppings.salvarFotoShopping(req.params.shoppingId, req.body, req.headers['content-type']));
+  });
+
+  router.delete('/:shoppingId/foto', async (req, res) => {
+    res.json(await shoppings.removerFotoShopping(req.params.shoppingId));
   });
 
   router.get('/:shoppingId', async (req, res) => {

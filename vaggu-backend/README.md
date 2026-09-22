@@ -82,7 +82,7 @@ Todas as rotas abaixo exigem `Authorization: Bearer TOKEN`, perfil `VAGGU` e sen
 | GET | /shoppings | Sem corpo | Lista shoppings, situação e total de gerentes. |
 | POST | /shoppings | JSON com nome e endereço opcional | Cria shopping. |
 | DELETE | /shoppings/:shoppingId | Sem corpo | Exclui logicamente o shopping, encerra seus acessos e preserva os registros. |
-| GET | /shoppings/:shoppingId/gerentes | Sem corpo | Lista gerentes e mostra a senha provisória ao Admin enquanto a troca obrigatória estiver pendente. |
+| GET | /shoppings/:shoppingId/gerentes | Sem corpo | Lista gerentes sem expor hashes ou senhas provisórias anteriores. |
 | POST | /shoppings/:shoppingId/gerentes | nome, email e telefone opcional | Cria gerente SHOPPING e retorna senha provisória. |
 | PATCH | /gerentes/:gerenteId | nome, telefone e/ou ativo | Edita cadastro permitido ou bloqueia/reativa gerente. |
 | POST | /gerentes/:gerenteId/redefinir-senha | Sem corpo | Revoga sessões do gerente e retorna nova senha provisória. |
@@ -98,6 +98,8 @@ Todas as rotas abaixo exigem `Authorization: Bearer TOKEN`, perfil `VAGGU` e sen
 | POST | /shoppings/:shoppingId/importacoes/:importacaoId/confirmar | Sem corpo | Aplica a prévia uma única vez, criando/atualizando estrutura sem apagar histórico. |
 | PATCH | /andares/:andarId/mapa | revisão esperada e posições das vagas | Salva o mapa de forma atômica; revisão desatualizada retorna 409. |
 | PATCH | /shoppings/:shoppingId/implantacao | situação | Atualiza a etapa de implantação do shopping. |
+| POST | /shoppings/:shoppingId/foto | Imagem JPEG, PNG ou WebP, até 2 MB | Armazena a imagem no Vercel Blob e salva somente sua URL no shopping. |
+| DELETE | /shoppings/:shoppingId/foto | Sem corpo | Remove a referência da foto e tenta excluir o arquivo externo. |
 
 O gerente não cria sua própria conta e não escolhe `shoppingId`; o vínculo vem da rota administrativa validada.
 
@@ -120,7 +122,7 @@ As migrations incrementais `20260914000100_previas_importacao` e `20260915000100
 ## Segurança e frontend
 
 - Senhas definitivas: scrypt com sal aleatório por senha; somente hash no banco.
-- Senha provisória: além do hash usado no login, uma cópia cifrada fica disponível somente ao Admin até o gerente concluir a troca obrigatória. Na troca, essa cópia é apagada; registros antigos sem cópia aparecem como indisponíveis e podem ser redefinidos pelo Admin.
+- Senha provisória: o banco mantém somente seu hash. O valor em texto é retornado ao Admin apenas na resposta imediata de criação ou redefinição e não reaparece em listagens posteriores.
 - Senha definitiva: de 12 a 128 caracteres, com letra minúscula, letra maiúscula, número, símbolo e sem espaços. A API devolve um código e uma mensagem próprios para cada requisito não atendido; a nova senha também precisa ser diferente da atual.
 - Sessões: tokens opacos aleatórios de 256 bits; somente SHA-256 do token no banco. Não é JWT e não exige JWT_SECRET.
 - Primeiro acesso: gerentes criados ou redefinidos pelo Admin recebem `trocarSenhaObrigatoria=true`; rotas protegidas por `requirePasswordReady` recusam acesso até a troca.
@@ -147,9 +149,10 @@ DATABASE_URL="postgresql://vaggu:vaggu@localhost:5432/vaggu"
 PORT=3000
 HOST=127.0.0.1
 NODE_ENV=development
+BLOB_READ_WRITE_TOKEN="vercel_blob_rw_..."
 ~~~
 
-Configure `DATABASE_URL` com um PostgreSQL acessível pelo backend. `npm run db:studio` permite inspecionar tabelas; não preencha `senha_hash` manualmente. Faça backup antes de migrations em ambiente compartilhado.
+Configure `DATABASE_URL` com um PostgreSQL acessível pelo backend. `BLOB_READ_WRITE_TOKEN` habilita fotos públicas representativas dos shoppings no Vercel Blob; sem ele, a API mantém cadastro e edição textual funcionando, mas devolve `503 ARMAZENAMENTO_NAO_CONFIGURADO` ao tentar gravar ou remover uma foto. O PostgreSQL guarda somente `imagem_url`, nunca os bytes. `npm run db:studio` permite inspecionar tabelas; não preencha `senha_hash` manualmente. Faça backup antes de migrations em ambiente compartilhado.
 
 Modelos de negócio: Shopping, Andar, Setor, Vaga, Usuario, Dispositivo e HistoricoVaga. Sessao e WhatsappEvento são tabelas técnicas. Usuario guarda telefone, troca obrigatória de senha e os campos da exclusão lógica reversível. Permanecem restrições de perfis, estados, vínculo da placa com shopping, código/canal únicos, hierarquia interna e histórico de eventos. CHECKs estão no SQL e devem ser preservados em futuras migrations.
 
@@ -158,12 +161,11 @@ Modelos de negócio: Shopping, Andar, Setor, Vaga, Usuario, Dispositivo e Histor
 | Arquivo/pasta | Responsabilidade |
 | --- | --- |
 | src/auth/password.ts | Hash e verificação de senha. |
-| src/auth/credencial-provisoria.ts | Cifra e revela a senha provisória somente durante o primeiro acesso. |
 | src/auth/service.ts | Login, sessão, troca de senha e logout. |
 | src/auth/middleware.ts | Autenticação, senha provisória, perfis, escopo e limite. |
 | src/auth/routes.ts | Rotas HTTP de autenticação. |
 | src/auth/bootstrap.ts | Criação do primeiro administrador. |
-| src/shoppings/ | Shoppings, gerentes, senha provisória e redefinição administrativa. |
+| src/shoppings/ | Shoppings, foto externa, gerentes, senha provisória e redefinição administrativa. |
 | src/estrutura/ | Hierarquia do estacionamento, mapa, revisão concorrente e escopo do gerente. |
 | src/importacao/ | Contratos, leitores CSV/XLSX, validação tabular, identificação de IDs, prévia e confirmação atômica. |
 | scripts/create-admin.ts | Comando interativo do administrador. |

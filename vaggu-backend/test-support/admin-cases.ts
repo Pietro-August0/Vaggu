@@ -11,8 +11,15 @@ import { createShoppingsService } from '../src/shoppings/service.js';
 export async function runAdminCases(t: TestContext, prisma: PrismaClient, senhaAdmin: string) {
   const auth = createAuthService(prisma);
   let agoraAdministrativa = new Date();
-  const credencialSecret = 'segredo-fixo-exclusivo-dos-testes-de-integracao';
-  const shoppings = createShoppingsService(prisma, { now: () => agoraAdministrativa, credencialSecret });
+  const fotosRemovidas: string[] = [];
+  const armazenamentoFotos = {
+    async salvar(shoppingId: string, _conteudo: Buffer, tipoConteudo: string) {
+      const extensao = tipoConteudo === 'image/png' ? 'png' : tipoConteudo === 'image/webp' ? 'webp' : 'jpg';
+      return `https://arquivos.public.blob.vercel-storage.com/shoppings/${shoppingId}/foto-teste.${extensao}`;
+    },
+    async remover(url: string) { fotosRemovidas.push(url); },
+  };
+  const shoppings = createShoppingsService(prisma, { now: () => agoraAdministrativa, armazenamentoFotos });
   const app = createApp({ checkDatabase: () => prisma.$queryRaw`SELECT 1`, auth, shoppings });
   const adminLogin = await request(app).post('/api/v1/auth/login')
     .send({ email: 'vaggu@example.com', senha: senhaAdmin }).expect(200);
@@ -45,16 +52,17 @@ export async function runAdminCases(t: TestContext, prisma: PrismaClient, senhaA
     assert.equal(atualizada.body.shopping.horarioAbertura, '07:00');
 
     const fotoPng = Buffer.from([0x89, 0x50, 0x4e, 0x47, 0x0d, 0x0a, 0x1a, 0x0a, 0x00]);
-    await request(app).post(`/api/v1/shoppings/${shopping.id}/foto`)
+    const foto = await request(app).post(`/api/v1/shoppings/${shopping.id}/foto`)
       .set(adminHeader).set('Content-Type', 'image/png').send(fotoPng).expect(200);
-    const foto = await request(app).get(`/api/v1/shoppings/${shopping.id}/foto`)
-      .set(adminHeader).expect('Content-Type', /image\/png/).expect(200);
-    assert.deepEqual(foto.body, fotoPng);
+    assert.match(foto.body.imagemUrl, /^https:\/\/arquivos\.public\.blob\.vercel-storage\.com\//);
     const fichaComFoto = await request(app).get(`/api/v1/shoppings/${shopping.id}`)
       .set(adminHeader).expect(200);
     assert.equal(fichaComFoto.body.shopping.possuiFoto, true);
+    assert.equal(fichaComFoto.body.shopping.imagemUrl, foto.body.imagemUrl);
     await request(app).post(`/api/v1/shoppings/${shopping.id}/foto`)
       .set(adminHeader).set('Content-Type', 'image/jpeg').send(fotoPng).expect(400);
+    await request(app).delete(`/api/v1/shoppings/${shopping.id}/foto`).set(adminHeader).expect(200);
+    assert.deepEqual(fotosRemovidas, [foto.body.imagemUrl]);
 
     const gerenteA = await request(app).post(`/api/v1/shoppings/${shopping.id}/gerentes`)
       .set(adminHeader).send({
@@ -78,10 +86,9 @@ export async function runAdminCases(t: TestContext, prisma: PrismaClient, senhaA
     const list = await request(app).get(`/api/v1/shoppings/${shopping.id}/gerentes`)
       .set(adminHeader).expect(200);
     assert.equal(list.body.gerentes.length, 2);
-    assert.equal(list.body.gerentes.find((item) => item.id === gerenteA.body.gerente.id).senhaProvisoria, gerenteA.body.senhaProvisoria);
+    assert.equal(list.body.gerentes.find((item) => item.id === gerenteA.body.gerente.id).senhaProvisoria, null);
     const persistido = await prisma.usuario.findUniqueOrThrow({ where: { id: gerenteA.body.gerente.id } });
-    assert.ok(persistido.senhaProvisoriaProtegida);
-    assert.notEqual(persistido.senhaProvisoriaProtegida, gerenteA.body.senhaProvisoria);
+    assert.notEqual(persistido.senhaHash, gerenteA.body.senhaProvisoria);
   });
 
   await t.test('senha provisória bloqueia área administrativa e troca libera a sessão', async () => {
@@ -107,7 +114,6 @@ export async function runAdminCases(t: TestContext, prisma: PrismaClient, senhaA
     const gerenteDepoisDaTroca = listaDepoisDaTroca.body.gerentes.find((item) => item.id === gerente.id);
     assert.equal(gerenteDepoisDaTroca.senhaProvisoria, null);
     assert.equal(gerenteDepoisDaTroca.trocarSenhaObrigatoria, false);
-    assert.equal((await prisma.usuario.findUniqueOrThrow({ where: { id: gerente.id } })).senhaProvisoriaProtegida, null);
     const stillNotAdmin = await request(app).get('/api/v1/shoppings')
       .set('Authorization', `Bearer ${acessoProvisorio.body.token}`).expect(403);
     assert.equal(stillNotAdmin.body.erro.codigo, 'ACESSO_NEGADO');
