@@ -1,6 +1,6 @@
 # Documentação da VAGGU
 
-Estrutura inicial de 09/09/2026 • revisão de uso em 21/09/2026 • Português brasileiro
+Estrutura inicial de 09/09/2026 • revisão de uso em 23/09/2026 • Português brasileiro
 
 Esta pasta reúne as decisões de produto, o desenho técnico, os padrões de código e os critérios de aceite do projeto. “SSD” é o nome adotado para a especificação principal; a documentação descreve tanto o que já existe quanto o destino planejado da plataforma.
 
@@ -14,6 +14,8 @@ Esta pasta reúne as decisões de produto, o desenho técnico, os padrões de c�
 | [regras-visuais.md](regras-visuais.md) | Identidade da VAGGU, componentes, mapa, telões, responsividade e conferência do Figma. |
 | [plano-e-aceite.md](plano-e-aceite.md) | Etapas, testes concretos, trabalho com agentes e definição de pronto. |
 | [planejamento-do-projeto.md](planejamento-do-projeto.md) | Inventário verificado, revisão final, backlog, diário e pacote para o próximo início. |
+| [fluxo-de-telas.md](fluxo-de-telas.md) | Rotas e jornadas atuais por perfil, páginas planejadas e divergências encontradas entre interface e backend. |
+| [modelo-de-dados.md](modelo-de-dados.md) | Entidades e relações implementadas no Prisma/PostgreSQL, limites atuais e evolução prevista para a telemetria. |
 | [mapa-do-projeto.md](mapa-do-projeto.md) | Explica a estrutura do repositório e a responsabilidade de cada arquivo versionável. |
 | [configuracao.md](configuracao.md) | Guia sequencial para um parceiro instalar, iniciar, verificar, testar e encerrar o sistema local sem publicar segredos. |
 | [whatsapp-webhook.md](whatsapp-webhook.md) | Detalha configuração, segurança e limites do webhook da Meta. |
@@ -58,7 +60,7 @@ Ao finalizar, relate o que mudou, quais cenários foram verificados, limitaçõe
 - O escopo considera as decisões de Pietro e o documento mestre revisado em 09/09/2026.
 - Regras de código e de organização foram elaboradas para este pedido e passam a orientar novas entregas.
 - Modelos de dados, rotas e detalhes de infraestrutura marcados como **proposta** devem ser conciliados com o repositório.
-- P01–P05 estão concluídos. A importação CSV/XLSX foi validada no PostgreSQL real e na interface Admin autenticada; P06 é a próxima entrega de produto.
+- P01–P05 estão concluídos. A importação CSV/XLSX foi validada no PostgreSQL real e na interface Admin autenticada. A correção de interface C01 precede o P06, que continua como a próxima entrega de produto.
 - A referência visual é o [Figma VAGGU](https://www.figma.com/design/xKI9wjoiZ5CoXC3DXIJNmq/Vaggu?node-id=2022-2). A consulta atual atingiu o limite da integração; não houve nova extração dos tokens. Os valores exatos a confirmar estão registrados no guia visual.
 - A documentação não contém credenciais. Mudanças no Figma, Trello ou repositório remoto só podem ser afirmadas quando houver evidência registrada na sessão correspondente.
 

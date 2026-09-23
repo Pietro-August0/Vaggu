@@ -14,6 +14,8 @@ Plataforma web responsiva para gestão de estacionamentos de shopping centers, d
 - [[Vaggu/Tecnologias/Tecnologias e arquitetura]]
 - [[Vaggu/Identidade visual/Identidade visual]]
 - [[Vaggu/Evidências visuais/Índice de evidências|Evidências visuais]]
+- [[Vaggu/Planejamento/Sprints do projeto|Sprints do projeto]]
+- [[Vaggu/Planejamento/Plano de correção e implementação|Plano de correção e implementação]]
 - [[Vaggu/Planejamento/Próximos passos]]
 - [[Vaggu/Skills/Skills e regras]]
 - [[Vaggu/Fontes/Fontes e limites da importação]]
@@ -24,6 +26,8 @@ Plataforma web responsiva para gestão de estacionamentos de shopping centers, d
 - [[Vaggu/Documentação/SSD-VAGGU|Especificação completa]]
 - [[Vaggu/Documentação/plano-e-aceite|Plano e critérios de aceite]]
 - [[Vaggu/Documentação/planejamento-do-projeto|Planejamento técnico e continuidade]]
+- [[Vaggu/Documentação/fluxo-de-telas|Fluxo de telas atual e planejado]]
+- [[Vaggu/Documentação/modelo-de-dados|Modelo de dados atual e evolução prevista]]
 - [[Vaggu/Documentação/regras-de-codigo|Regras de código]]
 - [[Vaggu/Documentação/regras-visuais|Regras visuais]]
 - [[Vaggu/Documentação/configuracao|Configuração]]
@@ -32,7 +36,7 @@ Plataforma web responsiva para gestão de estacionamentos de shopping centers, d
 
 O próprio cofre está versionado na pasta `segunda-mente/` do repositório VAGGU.
 
-**Estado atual:** P01–P05 concluídos. A importação CSV/XLSX foi validada no PostgreSQL real e na interface Admin autenticada, incluindo prévia inválida, confirmação concorrente, preservação de IDs/histórico e recarga da estrutura. Autenticação, gestão administrativa, Minha conta, estrutura e mapa estão integrados. O próximo pacote é o P06, de telemetria e estados confiáveis. Ver [[Vaggu/Planejamento/Próximos passos]].
+**Estado atual:** P01–P05 concluídos. A consolidação documental D01 foi concluída em 23/09/2026 com o histórico das Sprints 1–4, PRD, TRD, fluxo, modelo de dados, API, identidade e evidências reconciliados. A próxima implementação é C01, para restaurar e revalidar na interface as exclusões administrativas já suportadas pelo backend; depois dela, o próximo pacote de produto é o P06, de telemetria e estados confiáveis. Ver [[Vaggu/Planejamento/Próximos passos]].
 
 
 **Atualização de 11/09:** autenticação real integrada e validada. Foto original do login ainda pendente. [[Vaggu/Documentação/validacao-login-2026-09-11|Ver resultados]].

@@ -80,7 +80,9 @@ Todas as rotas abaixo exigem `Authorization: Bearer TOKEN`, perfil `VAGGU` e sen
 | Método | Rota | Entrada | Resultado |
 | --- | --- | --- | --- |
 | GET | /shoppings | Sem corpo | Lista shoppings, situação e total de gerentes. |
-| POST | /shoppings | JSON com nome e endereço opcional | Cria shopping. |
+| POST | /shoppings | JSON com nome e dados cadastrais opcionais | Cria shopping. |
+| GET | /shoppings/:shoppingId | Sem corpo | Consulta a ficha cadastral do shopping. |
+| PATCH | /shoppings/:shoppingId | Um ou mais dados cadastrais permitidos | Atualiza a ficha sem alterar estrutura ou acessos. |
 | DELETE | /shoppings/:shoppingId | Sem corpo | Exclui logicamente o shopping, encerra seus acessos e preserva os registros. |
 | GET | /shoppings/:shoppingId/gerentes | Sem corpo | Lista gerentes sem expor hashes ou senhas provisórias anteriores. |
 | POST | /shoppings/:shoppingId/gerentes | nome, email e telefone opcional | Cria gerente SHOPPING e retorna senha provisória. |
@@ -89,9 +91,9 @@ Todas as rotas abaixo exigem `Authorization: Bearer TOKEN`, perfil `VAGGU` e sen
 | DELETE | /gerentes/:gerenteId | Sem corpo | Oculta o gerente, encerra sessões e informa o prazo para desfazer. |
 | POST | /gerentes/:gerenteId/desfazer-exclusao | Sem corpo | Restaura o mesmo acesso durante os sete segundos seguintes. |
 | GET | /shoppings/:shoppingId/estrutura | Sem corpo | Lista situação, andares, setores, vagas e revisão do mapa. |
-| POST | /shoppings/:shoppingId/andares | nome, ordem e código opcional | Cria um andar no shopping. |
-| POST | /andares/:andarId/setores | nome e código | Cria um setor no andar. |
-| POST | /setores/:setorId/vagas | código, tipo e posição opcional | Cria uma vaga vinculada ao setor e ao andar. |
+| POST | /shoppings/:shoppingId/andares | nome e ordem | Cria um andar no shopping. |
+| POST | /andares/:andarId/setores | nome | Cria um setor no andar. |
+| POST | /setores/:setorId/vagas | código e tipo | Cria uma vaga vinculada ao setor e ao andar, ainda sem posição no mapa. |
 | POST | /shoppings/:shoppingId/importacoes/previa-csv | Corpo `text/csv` ou `text/plain`, até 1 MB | Valida a planilha, informa erros por linha/campo e persiste a prévia sem alterar vagas. |
 | POST | /shoppings/:shoppingId/importacoes/previa-xlsx | Corpo binário XLSX, até 2 MB | Lê a primeira planilha e persiste a mesma prévia do CSV sem alterar vagas. |
 | GET | /shoppings/:shoppingId/importacoes/:importacaoId | Sem corpo | Consulta a prévia persistida no mesmo shopping. |
@@ -128,7 +130,7 @@ As migrations incrementais `20260914000100_previas_importacao` e `20260915000100
 - Primeiro acesso: gerentes criados ou redefinidos pelo Admin recebem `trocarSenhaObrigatoria=true`; rotas protegidas por `requirePasswordReady` recusam acesso até a troca.
 - Validade fixa de 8 horas. Logout apaga apenas a sessão atual. Sessões expiradas são recusadas imediatamente e removidas no próximo login bem-sucedido.
 - Perfil, vínculo e status ativo são lidos do banco em cada requisição autenticada, nunca dos campos enviados pelo cliente.
-- Usuário ou shopping desativado não faz login nem usa sessão existente. Reativação pode tornar uma sessão ainda não expirada utilizável novamente; revogação administrativa permanente ficará para outra etapa.
+- Usuário ou shopping desativado não faz login nem usa sessão existente. O bloqueio de gerente e a exclusão lógica de shopping apagam as sessões vinculadas. Reativar um gerente com `PATCH /gerentes/:gerenteId` e `ativo=true` não recupera os tokens apagados: ele precisa fazer um novo login. A API atual não expõe reativação de shopping excluído.
 - Limite de 10 chamadas de login por IP a cada 15 minutos, incluindo sucessos e corpos inválidos. Máximo de quatro verificações de senha simultâneas. Proteção local em memória, reiniciada com o processo.
 - Frontend: mantenha token em memória nesta etapa, envie no header Authorization e descarte no logout. Recarregar a página exigirá novo login. Não grave tokens/senhas em código ou URLs.
 - Não usa cookies de autenticação e não implementa refresh token. CORS entre origens ainda não foi configurado: cliente desktop de API funciona, mas frontend em outra porta precisará de configuração explícita.
@@ -154,7 +156,7 @@ BLOB_READ_WRITE_TOKEN="vercel_blob_rw_..."
 
 Configure `DATABASE_URL` com um PostgreSQL acessível pelo backend. `BLOB_READ_WRITE_TOKEN` habilita fotos públicas representativas dos shoppings no Vercel Blob; sem ele, a API mantém cadastro e edição textual funcionando, mas devolve `503 ARMAZENAMENTO_NAO_CONFIGURADO` ao tentar gravar ou remover uma foto. O PostgreSQL guarda somente `imagem_url`, nunca os bytes. `npm run db:studio` permite inspecionar tabelas; não preencha `senha_hash` manualmente. Faça backup antes de migrations em ambiente compartilhado.
 
-Modelos de negócio: Shopping, Andar, Setor, Vaga, Usuario, Dispositivo e HistoricoVaga. Sessao e WhatsappEvento são tabelas técnicas. Usuario guarda telefone, troca obrigatória de senha e os campos da exclusão lógica reversível. Permanecem restrições de perfis, estados, vínculo da placa com shopping, código/canal únicos, hierarquia interna e histórico de eventos. CHECKs estão no SQL e devem ser preservados em futuras migrations.
+Modelos persistidos atuais: Shopping, Andar, Setor, Vaga, Usuario, Dispositivo, HistoricoVaga e ImportacaoEstrutura. Sessao e WhatsappEvento são tabelas técnicas. Usuario guarda telefone, troca obrigatória de senha e os campos da exclusão lógica reversível. Permanecem restrições de perfis, estados, vínculo do dispositivo com shopping, código/canal únicos, hierarquia interna e histórico de eventos. CHECKs estão no SQL e devem ser preservados em futuras migrations. O [modelo de dados atual](../segunda-mente/Vaggu/Documentação/modelo-de-dados.md) separa essas tabelas das entidades ainda planejadas para telemetria e operação.
 
 ## Organização
 
@@ -184,6 +186,13 @@ A conexão deve apontar para um banco de controle dedicado, cujo nome termine em
 
 Os cenários verificam múltiplos gerentes, política e troca da primeira senha, bloqueio individual, sessões, dois andares, categorias de vaga, revisão do mapa e isolamento. Isso não valida exportação, tempo real, hardware ou telões. Consulte também a [configuração local](../segunda-mente/Vaggu/Documentação/configuracao.md) e a [arquitetura de estrutura, sensores e telões](../segunda-mente/Vaggu/Documentação/arquitetura-estrutura-sensores-telao.md).
 
-Testado no Windows com Node compatível: `npm run typecheck`, `DATABASE_URL=postgresql://... npm run db:validate` e `cmd /c npm test` passaram. Prisma fixado em 7.10.0. Revise npm audit antes de publicar; não execute npm audit fix --force automaticamente.
+No PowerShell, defina uma variável de ambiente temporária com a sintaxe própria do terminal antes de validar o schema:
+
+~~~powershell
+$env:DATABASE_URL = "postgresql://vaggu:vaggu@localhost:5432/vaggu"
+npm.cmd run db:validate
+~~~
+
+No Windows com Node compatível, `npm.cmd run typecheck`, o comando de validação acima e `npm.cmd test` passaram. Prisma fixado em 7.10.0. Revise `npm audit` antes de publicar; não execute `npm audit fix --force` automaticamente.
 
 P04 e as melhorias administrativas concluídas em 12–13/09/2026 estão entregues: migrations aplicadas, estrutura, mapa, exclusão reversível e política de senha definitiva integrados, 54 testes aprovados com PostgreSQL real e fluxos principais validados no navegador. O P05 foi concluído em 21/09/2026: prévias CSV/XLSX, confirmação atômica, interface administrativa e validação com PostgreSQL real e navegador autenticado estão entregues. Consulte o estado e os limites atuais no [planejamento](../segunda-mente/Vaggu/Documentação/planejamento-do-projeto.md).

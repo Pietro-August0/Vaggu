@@ -1,12 +1,14 @@
 # VAGGU — planejamento e continuidade do projeto
 
-Última atualização: **21/09/2026**, fuso **America/Sao_Paulo**. A revisão da landing e seu fechamento permanecem atribuídos a **09/09/2026**, conforme solicitado. Base de P01: `c127b5e`; registros das entregas na seção 7. Este documento registra evidências e orienta o trabalho diário; não substitui o [SSD](SSD-VAGGU.md) nem os [critérios de aceite](plano-e-aceite.md).
+Última atualização: **23/09/2026**, fuso **America/Sao_Paulo**. A revisão da landing e seu fechamento permanecem atribuídos a **09/09/2026**, conforme solicitado. Base de P01: `c127b5e`; registros das entregas na seção 7. Este documento registra evidências e orienta o trabalho diário; não substitui o [SSD](SSD-VAGGU.md) nem os [critérios de aceite](plano-e-aceite.md).
 
 ## 1. Situação atual
 
-A autenticação do frontend usa a API real: login, identidade, primeira senha, revogação e expiração. A senha definitiva possui política explícita e erros por campo na API e na interface. Os acessos demonstrativos foram removidos. O Admin configura e exclui logicamente shoppings, administra gerentes e recebe a senha provisória somente no instante da criação ou redefinição. Também configura foto externa, andares, setores, vagas, categorias e posições no mapa 2D compartilhado. O gerente consulta o mapa do próprio shopping mesmo durante a configuração, alterna andares e localiza vagas. Telemetria, telões e Power BI continuam pendentes.
+A autenticação do frontend usa a API real: login, identidade, primeira senha, revogação e expiração. A senha definitiva possui política explícita e erros por campo na API e na interface. Os acessos demonstrativos foram removidos. O backend cadastra e exclui logicamente shoppings e gerentes, mas a auditoria do código atual em 23/09 não encontrou na interface as ações de exclusão e desfazer antes registradas como entregues. A interface continua oferecendo cadastro, edição, bloqueio, reativação, redefinição, foto externa, andares, setores, vagas, categorias, importação e mapa 2D compartilhado. O gerente consulta o mapa do próprio shopping mesmo durante a configuração, alterna andares e localiza vagas. Telemetria, telões e Power BI continuam pendentes.
 
 P01 foi concluído em 10/09 e P02 em 11/09, incluindo autenticação e acabamento visual. P03 foi concluído em 12/09 com gestão administrativa, vários gerentes e Minha conta. P04 foi concluído em 12/09 com estrutura e mapa validados em PostgreSQL real e no navegador. O P05 foi concluído em 21/09: prévias CSV/XLSX, confirmação idempotente e preservação de IDs/histórico foram executadas no PostgreSQL; a jornada Admin autenticada foi validada no navegador em desktop e viewport móvel. A base local está verificável, mas o sistema ainda não está liberado para operação com clientes.
+
+As Sprints 1 e 2 foram confirmadas pela equipe como etapas de descoberta, definição da ideia e planejamento inicial do Figma. As fotografias das Sprints 3 e 4 foram incorporadas como evidências históricas. O registro consolidado está em [Sprints do projeto](../Planejamento/Sprints%20do%20projeto.md); essa numeração não corresponde aos pacotes técnicos P01–P11.
 
 Classificações: **verificado** exige execução do comportamento indicado; **presente no código** significa inspeção estática; **parcial** identifica uma entrega incompleta; **ausente** indica que não foi encontrada implementação no escopo inspecionado. Um teste simulado não comprova banco, hardware ou serviço externo real.
 
@@ -47,6 +49,8 @@ Classificações: **verificado** exige execução do comportamento indicado; **p
 | R08 | Resolvido em P03 e endurecido em 21/09 | A resposta administrativa informa `ativo` sem expor hash, senha definitiva ou token. A senha provisória em texto existe somente na resposta imediata de criação ou redefinição. | Listagem, bloqueio e reativação foram validados; a migration remove a cópia reversível e os testes asseguram que a listagem não reapresente a senha. |
 | R09 | Média, evolução do backend | `tsconfig.json`: `strict` e `noImplicitAny` desativados; contratos de serviços incompletos. | Tipar fronteiras e módulos tocados progressivamente; evitar refatoração global junto da integração. |
 | R10 | Baixa, acabamento | CSS ainda contém regra de `figcaption` removido; pacote frontend gera aviso de bundle acima de 500 kB. | Remover estilo sem uso na próxima manutenção focalizada. Avaliar divisão por rotas quando a integração aumentar o bundle. Não é falha de build. |
+| R11 | Alta, correção de interface | A auditoria de 23/09 não encontrou no frontend atual ações para excluir shopping, excluir gerente ou desfazer a exclusão, embora o backend e registros históricos as descrevam. | Revalidar a jornada atual, restaurar as ações com confirmação e feedback ou registrar decisão explícita de remoção. Não declarar o fluxo atual como verificado antes dessa correção. |
+| R12 | Alta, consistência documental — resolvida no D01 | A auditoria encontrou Visão do produto e tecnologias descrevendo P05 como parcial; evidências visuais antigas apareciam sem aviso histórico. | Resumos corrigidos, novas evidências catalogadas e estados implementado, histórico e planejado separados em 23/09. |
 
 Revisão visual: composição, tipografia, cores, imagens, conexões e comportamento em telas menores foram comparados com os anexos e com as correções posteriores da equipe. Não houve nova extração de medidas do Figma: a integração retornou erro de seleção na etapa anterior. Mantêm-se as pendências do [guia visual](regras-visuais.md).
 
@@ -87,8 +91,12 @@ O PostgreSQL portátil escuta somente em `127.0.0.1:55432`. Configurações loca
 
 Estados do backlog: **pronto**, **em andamento**, **bloqueado**, **concluído**. Dependências ainda não entregues permanecem explícitas. A prioridade não é uma promessa de prazo.
 
+As sprints reais da equipe estão registradas em [Sprints do projeto](../Planejamento/Sprints%20do%20projeto.md). Os itens abaixo são pacotes técnicos e de correção; a numeração não deve ser confundida.
+
 | ID | Entrega | Estado | Dependências | Critério para concluir |
 | --- | --- | --- | --- | --- |
+| D01 | Consolidar documentação, sprints e evidências após a auditoria de 23/09 | Concluído em 23/09 | Auditoria concluída e fontes fornecidas pela equipe. | PRD, TRD, fluxo, modelo de dados, API, identidade, sprints, índices e mapa coerentes; verificador documental aprovado. |
+| C01 | Corrigir divergências funcionais da interface atual | Pronto | D01 concluído; confirmar R11 no navegador ao iniciar a implementação. | Exclusões e desfazer reconciliados com o backend; estados e evidências atualizados; frontend lint/build e fluxos afetados aprovados. |
 | P01 | Base local verificável: R01, R02, R03 e R05 | Concluído em 10/09 | Runtime compatível e PostgreSQL local preparados; evidências na seção 4.1. | API inicia pelo caminho gerado; frontend lint/build aprovados; cenários auth/admin executados em banco real isolado. |
 | P02 | Integrar login, sessão, troca obrigatória e saída | Concluído em 11/09 | P01 concluído. Contratos `/api/v1/auth/login`, `/me`, `/change-password` e `/logout` integrados pelo proxy local; token fica apenas em memória. | Frontend consulta identidade da API; senha provisória restringe acesso, troca libera; expiração e logout revogam acesso. Fluxos validados no navegador/API. |
 | P03 | Integrar Admin, vários gerentes e minha conta | Concluído em 12/09 | Contratos reais integrados; DTO informa situação ativa e bloqueio remove sessões na transação. | CA04, CA06 e o recorte disponível de CA07 aprovados em PostgreSQL real; fluxos principais aprovados no navegador. |
@@ -103,16 +111,19 @@ Estados do backlog: **pronto**, **em andamento**, **bloqueado**, **concluído**.
 
 Preservar os limites do produto: web responsiva, sem cadastro público de gerente, sem reservas/pagamentos/reconhecimento de veículos/chatbot de IA. Power BI e hardware não podem ser declarados integrados a partir de imagens, fixtures ou espaços reservados.
 
-## 6. Próximo início
+## 6. Trabalho atual e próxima implementação
 
-- **Pacote:** P06 — ESP32/sensores, ingestão e estados confiáveis.
-- **Primeira ação:** consolidar o contrato de firmware e telemetria antes de criar endpoints: autenticação da placa, identificador do sensor, inicialização, sequência, frequência e prazo de expiração.
+- **Pacote documental concluído:** D01 — consolidação documental e das sprints, finalizada em 23/09/2026.
+- **Pacote atual para implementação:** C01 — corrigir as divergências confirmadas da interface antes de avançar o produto.
+- **Primeira ação:** revalidar no navegador a ficha Admin atual e registrar o ponto de partida antes de restaurar exclusões e desfazer.
+- **Pacote de produto seguinte:** P06 — ESP32/sensores, ingestão e estados confiáveis.
+- **Primeira ação do P06:** consolidar o contrato de firmware e telemetria antes de criar endpoints: autenticação da placa, identificador do sensor, inicialização, sequência, frequência e prazo de expiração.
 - **Arquivos de entrada:** `segunda-mente/Vaggu/Documentação/arquitetura-estrutura-sensores-telao.md`, `segunda-mente/Vaggu/Documentação/SSD-VAGGU.md`, `vaggu-backend/prisma/schema.prisma` e os cenários CA15–CA24 de `plano-e-aceite.md`.
 - **Base já validada:** P05 concluído no PostgreSQL e no navegador em 21/09; estrutura, IDs e histórico permanecem preservados durante importações.
 - **Aceite e verificação a confirmar:** isolamento por shopping/placa, deduplicação, ordenação, confirmação após 30 segundos consistentes, expiração sem assumir vaga livre e histórico transacional.
 - **Comandos a confirmar:** detectar scripts reais após definir o recorte; manter backend build/test/integração, frontend lint/build quando houver interface e `node scripts/verificar-documentacao.mjs`.
 - **Limites:** não iniciar P07 antes de existir estado confiável; heartbeat da placa não comprova sensores; WhatsApp oficial continua indisponível.
-- **Estado atual:** P05 concluído; P06 está pronto para começar pelo contrato de firmware e telemetria. A entrega atual permanece local na branch `test/p05-integracao-samuel` até nova autorização de Git.
+- **Estado atual:** P05 e D01 concluídos; C01 pronto para implementação; P06 continua pronto tecnicamente, mas começa depois das correções prioritárias. A entrega atual permanece local na branch `test/p05-integracao-samuel` até nova autorização de Git.
 
 ### 14/09/2026 — PostgreSQL local instalado e configurado
 
@@ -131,6 +142,18 @@ Preservar os limites do produto: web responsiva, sem cadastro público de gerent
 ## 7. Registro diário
 
 Cada entrada mantém: data local, estado do dia, pacote/objetivo, evidências de entrada, alterações, verificações e resultados, pendências/bloqueios, primeira ação da retomada e situação Git. Acrescentar entradas sem apagar dias anteriores. O resumo das seções 1–6 deve acompanhar o estado mais recente.
+
+### 23/09/2026 — consolidação das sprints e plano de correção
+
+- **Estado:** D01 concluído; C01 planejado e pronto para implementação.
+- **Pacote e objetivo:** corrigir contradições documentais encontradas na auditoria, incorporar o relato das Sprints 1–2 e as fotografias das Sprints 3–4 e ordenar a próxima correção funcional.
+- **Situação de entrada:** P01–P05 constavam como concluídos, mas documentos ainda tratavam P05 como parcial, misturavam proposta com implementação e apresentavam ações administrativas históricas como se existissem no frontend atual.
+- **Roteamento:** Ana como responsável principal pela documentação; Samuel revisa produto, API e dados; Juan revisa identidade; Elisa revisa jornada; Pietro revisa integração. A branch local `test/p05-integracao-samuel` foi preservada porque já continha trabalho e acompanha `origin/main`; não foi criada nova branch em árvore suja.
+- **Entrega:** PRD e TRD consolidados; Sprints 1–4 registradas; paleta e Poppins catalogadas a partir da evidência fornecida; fluxo de telas, modelo de dados, inventário da API, decisões, matriz de rastreabilidade, índices e mapa atualizados. Capturas antigas de exclusão foram marcadas como históricas. O plano coloca C01 antes do P06.
+- **Verificações:** `git diff --check` e `node scripts/verificar-documentacao.mjs` aprovados sobre o conjunto integrado. Não houve mudança funcional no frontend ou backend, portanto as suítes de código não foram repetidas nesta etapa documental.
+- **Limites:** datas e divisão individual das Sprints 1–2, período da Sprint 4 e personas continuam como informação a ser fornecida. O Figma não foi alterado nem teve novos tokens atribuídos; a evidência de identidade é uma imagem fornecida pela equipe. PostgreSQL, navegador, Meta, hardware e Power BI não foram executados nesta etapa.
+- **Próxima ação:** iniciar C01 revalidando a ficha Admin no navegador e restaurar os fluxos de exclusão de gerente, desfazer por sete segundos e exclusão de shopping conforme os contratos reais.
+- **Git:** alterações locais, sem commit, push, PR ou deploy; a modificação preexistente em `vaggu-backend/.env.example` foi preservada.
 
 ### 21/09/2026 — retomada segura: mapa, acessos e foto do shopping
 

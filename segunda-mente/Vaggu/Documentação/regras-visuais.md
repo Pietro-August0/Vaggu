@@ -10,7 +10,8 @@ Referência principal: [Figma VAGGU — página Web](https://www.figma.com/desig
 - Nó indicado: `2022:2`.
 - A referência já consultada na conversa e o documento mestre sustentam a direção visual: amarelo, tons escuros, textos claros, marca VAGGU e interface minimalista.
 - Em 09/09, a nova consulta à integração foi bloqueada por limite de chamadas. Não foi possível extrair novamente cores numéricas, fontes, espaçamentos e componentes deste nó.
-- As regras abaixo distinguem **identidade conhecida**, **regras de implementação** e **tokens a conferir**. Não há paleta hexadecimal nem família tipográfica inventada neste pacote.
+- Em 23/09, a equipe forneceu um guia de identidade com paleta hexadecimal e Poppins. Essa imagem é uma fonte entregue pela equipe, não uma extração do Figma.
+- As regras abaixo distinguem **identidade fornecida**, **tokens encontrados no código**, **regras de implementação** e **itens a conferir**.
 - Frames podem preservar escopo antigo, como motos. As decisões atuais de produto prevalecem; o estilo visual continua sendo a referência.
 
 ## 2. Identidade conhecida e obrigatória
@@ -27,21 +28,40 @@ Referência principal: [Figma VAGGU — página Web](https://www.figma.com/desig
 
 Não importar paletas ou logos de outros projetos do usuário. Não transformar a aplicação em um dashboard genérico com gradientes, efeitos e cores sem relação com o Figma. A biblioteca de componentes deve se adaptar à VAGGU.
 
-## 3. Registro de tokens a completar
+### Paleta e tipografia fornecidas pela equipe
+
+| Elemento | Valor confirmado na imagem fornecida |
+| --- | --- |
+| Amarelo principal | `#ffe100` |
+| Amarelo intermediário | `#ffeb54` |
+| Amarelo claro | `#fff49d` |
+| Cinza escuro | `#343231` |
+| Carvão | `#171717` |
+| Preto | `#000000` |
+| Branco | `#ffffff` |
+| Família tipográfica da identidade | Poppins |
+
+Evidência versionada: ![[Vaggu/Evidências visuais/Planejamento/guia-identidade-visual-vaggu.png]]
+
+Não atribuir automaticamente um papel funcional a cada cor apenas pela ordem do guia. Fundo, superfície, texto, borda, foco e estados precisam preservar contraste e ser verificados na tela. Cores semânticas de vaga livre, ocupada, indisponível, sucesso e erro não foram definidas por essa imagem.
+
+## 3. Registro de tokens e pendências
 
 Antes de introduzir valores novos, localizar os tokens no repositório e compará-los ao Figma. Registrar valor, origem, nó, modo e data. Até essa conferência, preservar o que já está implementado e marcar divergências.
 
-| Token semântico sugerido | Função | Valor exato |
+| Token semântico sugerido | Função | Valor/evidência atual |
 | --- | --- | --- |
-| `--cor-marca-primaria` | Amarelo principal | Pendente de extração |
-| `--cor-fundo-principal` | Fundo da aplicação | Pendente de extração |
-| `--cor-superficie` | Cards e áreas elevadas | Pendente de extração |
-| `--cor-texto-principal` | Texto de maior contraste | Pendente de extração |
-| `--cor-texto-secundario` | Metadados e apoio | Pendente de extração |
-| `--cor-borda` | Separação de elementos | Pendente de extração |
+| `--cor-marca-primaria` | Amarelo principal | `#ffe100`, fornecido pela equipe e encontrado como `--primary` no código |
+| `--cor-marca-intermediaria` | Variação da marca | `#ffeb54`, fornecido pela equipe; uso no código a conciliar |
+| `--cor-marca-clara` | Variação clara da marca | `#fff49d`, fornecido pela equipe; uso no código a conciliar |
+| `--cor-fundo-principal` | Fundo da aplicação | `#171717` aparece no painel Admin; confirmar aplicação por contexto |
+| `--cor-superficie` | Cards e áreas elevadas | Entre os tons fornecidos, papel exato ainda pendente de conciliação |
+| `--cor-texto-principal` | Texto de maior contraste | Preto ou branco conforme fundo; validar contraste por componente |
+| `--cor-texto-secundario` | Metadados e apoio | Papel exato pendente; não assumir que `#343231` atende a todo fundo |
+| `--cor-borda` | Separação de elementos | Pendente de conciliação com os tokens reais do código |
 | `--cor-foco` | Foco de teclado | Pendente de conferência de contraste |
-| `--fonte-principal` | Texto e controles | Família/pesos pendentes |
-| `--fonte-destaque` | Títulos, caso exista distinta | Pendente; não assumir que há duas fontes |
+| `--fonte-principal` | Identidade, texto e controles | Poppins foi fornecida pela equipe; o código ainda usa Geist como sans geral |
+| `--fonte-destaque` | Títulos, caso exista distinta | Não confirmada; não assumir que há duas famílias na identidade |
 | Espaçamentos, raios e sombras | Consistência de componentes | Extrair escala existente |
 | Cores semânticas dos estados | Livre, ocupada, indisponível, atenção | Conferir no design e validar legibilidade |
 
@@ -130,7 +150,7 @@ Se um asset exato vier do Figma, preservar o desenho e dar nome descritivo em po
 
 1. Localizar o nó da tela e ler o contexto de design com a skill de Figma disponível.
 2. Obter/revisar sua captura e os componentes associados.
-3. Inventariar tokens, fontes, assets, variantes e espaçamentos reais.
+3. Inventariar tokens, fontes, assets, variantes e espaçamentos reais, distinguindo o que veio do Figma do que foi fornecido diretamente pela equipe.
 4. Comparar com o repositório e reutilizar o que corresponde.
 5. Registrar divergências do escopo antigo, aplicando as decisões atuais.
 6. Implementar e comparar a página renderizada em tamanho equivalente, conferindo também versões menores.

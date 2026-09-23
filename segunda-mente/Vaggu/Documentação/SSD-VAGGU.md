@@ -51,16 +51,16 @@ Em conflito, decisão recente explícita prevalece sobre documentação antiga. 
 
 ## 2. Escopo e decisões atuais
 
-| ID | Decisão obrigatória | Regra anterior substituída |
-| --- | --- | --- |
-| DEC01 | Mapa operacional com navegação entre andares. | “Sem mapa”, apenas lista/tabela. |
-| DEC02 | Landing conduz ao WhatsApp, principal canal de atendimento e parceria. | Cadastro ou contratação pública pelo site. |
-| DEC03 | Admin cria login individual após a parceria. | Gerente cria seu próprio acesso. |
-| DEC04 | Um shopping pode ter vários gerentes. | Apenas uma conta de gerente por shopping. |
-| DEC05 | Telões destacam PCD, idosos e elétricas, além da disponibilidade geral. | Inclusão de motos no protótipo. |
-| DEC06 | Admin acompanha placas ESP32, comunicação e manutenção. | Apenas ocupação, sem visão dos controladores. |
-| DEC07 | Power BI começa a ser implementado com dados reais recebidos. | Analytics externo apenas como ideia futura. |
-| DEC08 | Confirmação inicial de ocupação em 30 segundos consistentes. | Confirmação antiga de um minuto. |
+| ID e data | Decisão | Motivo | Impacto | Regra anterior substituída |
+| --- | --- | --- | --- | --- |
+| DEC01 — 09/09/2026 | Mapa operacional com navegação entre andares. | Permitir localizar e acompanhar vagas no espaço real do shopping. | Exige hierarquia, posições, filtros, busca, interface responsiva e autorização por shopping. | “Sem mapa”, apenas lista/tabela. |
+| DEC02 — 09/09/2026 | Landing conduz ao WhatsApp, principal canal de atendimento e parceria. | Manter apresentação, negociação e fechamento com a equipe. | A landing usa CTA de contato; não existe cadastro ou contratação pública. | Cadastro ou contratação pública pelo site. |
+| DEC03 — 09/09/2026 | Admin cria login individual após a parceria. | Controlar quem recebe acesso operacional. | Cadastro de gerente fica em rota e tela administrativa; não há registro público. | Gerente cria seu próprio acesso. |
+| DEC04 — 09/09/2026 | Um shopping pode ter vários gerentes. | Permitir acessos pessoais sem compartilhar senha. | `shoppingId` não é único em usuários; bloqueio de uma conta não encerra as demais. | Apenas uma conta de gerente por shopping. |
+| DEC05 — 09/09/2026 | Telões destacam PCD, idosos e elétricas, além da disponibilidade geral. | Exibir categorias relevantes sem distorcer a capacidade. | Categorias especiais integram o total e não podem ser somadas novamente; motos ficam fora do escopo. | Inclusão de motos no protótipo. |
+| DEC06 — 09/09/2026 | Admin acompanha placas ESP32, comunicação e manutenção. | Separar ocupação da evidência técnica dos equipamentos. | P06/P07 precisam de placa, sensores, validade, ocorrências e telas administrativas. | Apenas ocupação, sem visão dos controladores. |
+| DEC07 — 09/09/2026 | Power BI começa com dados históricos reais recebidos. | Evitar relatório decorativo ou desconectado do sistema. | P09 depende do histórico do P08 e de medidas reconciliadas. | Analytics externo apenas como ideia futura. |
+| DEC08 — 09/09/2026 | Confirmação inicial de ocupação em 30 segundos consistentes. | Reduzir oscilações e impedir confirmação por leitura isolada. | Telemetria precisa de observações repetidas, lacuna definida e testes de tempo. | Confirmação antiga de um minuto. |
 
 ### 2.1 Entrega funcional planejada
 
@@ -159,11 +159,11 @@ Tipos aceitos: `COMUM`, `PCD`, `IDOSO`, `ELETRICA`. Rejeitar motos, categoria in
 
 **Proposta técnica:** processamento inicial gera uma prévia sem alterar a estrutura; confirmação aplica os registros válidos em transação ou estratégia atômica equivalente. Se houver erro bloqueante, nada é confirmado. Usar revisão/identificador para não confirmar duas vezes a mesma prévia.
 
-Manter somente a última importação como artefato ativo do MVP, sem apagar histórico operacional. Conciliar por código no shopping, preservando IDs. Registro ausente em uma nova planilha não deve ser apagado silenciosamente; eventual desativação precisa aparecer na prévia.
+O código atual preserva várias prévias de importação e não possui política automática de retenção. A proposta anterior de manter somente a última importação como artefato ativo permanece **PENDENTE DE DEFINIÇÃO**: a equipe deve decidir se ela continua necessária antes de alterar ou apagar prévias. Conciliar por código no shopping, preservando IDs. Registro ausente em uma nova planilha não deve ser apagado silenciosamente; eventual desativação precisa aparecer na prévia.
 
 ### 5.4 Desativação
 
-Desativação lógica com “Desfazer” por cerca de oito segundos e reativação posterior pelo Admin. Histórico continua disponível. Ações em cascata devem mostrar impacto e preservar integridade; não deixar vaga ativa com pai desativado sem regra explícita.
+A exclusão de gerente usa sete segundos para desfazer e preserva o mesmo ID. A exclusão de shopping está implementada no backend sem desfazer; reativação posterior de shopping e regras equivalentes para estrutura permanecem pendentes. O frontend atual precisa ser reconciliado com essas ações antes de o fluxo ser declarado verificado novamente. Histórico continua disponível. Ações em cascata devem mostrar impacto e preservar integridade; não deixar vaga ativa com pai desativado sem regra explícita.
 
 ## 6. Páginas e comportamento da interface
 
@@ -611,7 +611,7 @@ Para engenharia e comentários, seguir [regras-de-codigo.md](regras-de-codigo.md
 | Pendência | Evidência necessária | Não impede |
 | --- | --- | --- |
 | Cores, fontes, espaçamentos e assets exatos | Leitura do Figma/tokens do repositório | Especificar comportamentos e manter estilos existentes. |
-| Estado real do código | Arquivos, execução e testes no repositório correto | Planejar a verificação inicial. |
+| Revalidar regressões e divergências atuais do código | Auditoria, execução e testes do checkout atual | Manter histórico das validações anteriores sem tratá-lo como prova automática do código presente. |
 | Placas/sensores e topologia final | Montagem da maquete | Modelar placa 1:N sensores. |
 | Frequências, lacuna e relógio do firmware | Ensaio de mensagens e reinicialização | Escrever testes parametrizados. |
 | API, rotina de expiração e atualização web | Hospedagem e capacidade verificadas | Separar contratos do transporte. |

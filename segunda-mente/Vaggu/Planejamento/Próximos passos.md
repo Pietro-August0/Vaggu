@@ -1,6 +1,21 @@
 # Próximos passos
 
-Atualizado em 21/09/2026. Ordem de trabalho, sem promessa de datas.
+Atualizado em 23/09/2026. Ordem de trabalho, sem promessa de datas.
+
+As sprints históricas da equipe e sua diferença em relação aos pacotes técnicos estão em [[Vaggu/Planejamento/Sprints do projeto]]. A ordem executável das correções está em [[Vaggu/Planejamento/Plano de correção e implementação]].
+
+## Consolidação documental concluída em 23/09
+
+Antes de abrir o P06, a equipe corrigiu as divergências documentais encontradas na auditoria de 23/09:
+
+- registrar as Sprints 1 e 2 como descoberta, definição da ideia e planejamento inicial do Figma;
+- transcrever as evidências reais das Sprints 3 e 4;
+- consolidar PRD, TRD, fluxo de telas, modelo de dados e contratos atuais;
+- separar claramente funcionalidade implementada, registro histórico e planejamento futuro;
+- registrar a identidade visual fornecida pela equipe sem apresentá-la como nova extração do Figma;
+- preparar a rastreabilidade e a divisão da próxima sprint sem inventar datas.
+
+O D01 foi concluído com o verificador documental aprovado. A implementação atual passa ao C01: revalidar e restaurar na interface os fluxos administrativos de exclusão e desfazer já suportados pelo backend, além dos ajustes de clareza e acessibilidade descritos no plano.
 
 ## Antes de retomar a implementação
 
@@ -10,7 +25,11 @@ Atualizado em 21/09/2026. Ordem de trabalho, sem promessa de datas.
 - [x] Conferir runtime e conexão PostgreSQL disponíveis, sem transportar credenciais para o Obsidian.
 - [x] Executar os checks exigidos pela reorganização antes de declarar sua conclusão.
 
-## Entrega atual de produto: P06
+## Próxima correção: C01
+
+Reconciliar a ficha administrativa com os contratos reais: exclusão lógica de gerente, desfazer por sete segundos e exclusão lógica de shopping. A validação inclui desktop, celular, teclado, estados de erro/sucesso, lint e build.
+
+## Próxima entrega de produto após C01: P06
 
 Implementar a base confiável de telemetria para placas ESP32 e sensores, preservando o isolamento por shopping e o histórico operacional.
 
@@ -27,7 +46,8 @@ Aceite: autenticar a origem, rejeitar vínculos de outro shopping, deduplicar e 
 | P03 | Admin, múltiplos gerentes e minha conta — concluído em 12/09 |
 | P04 | Andares, setores, vagas e mapa — concluído em 12/09 |
 | P05 | Importação CSV/XLSX com prévia — concluída em 21/09 |
-| P06 | Telemetria, confirmação e expiração — próxima entrega |
+| C01 | Correções da interface administrativa — próxima implementação |
+| P06 | Telemetria, confirmação e expiração — próxima entrega de produto após C01 |
 | P07 | Operação, manutenção e telões |
 | P08 | Histórico, métricas e exportações |
 | P09 | Relatório funcional Power BI |
@@ -36,13 +56,13 @@ Aceite: autenticar a origem, rejeitar vínculos de outro shopping, deduplicar e 
 
 O estado diário técnico permanece em [[Vaggu/Documentação/planejamento-do-projeto|planejamento do projeto]], dentro da segunda mente. P04 e as melhorias de interação, gerentes e senha foram concluídos e validados com PostgreSQL real, frontend e navegador. O dia iniciado em 12/09 foi encerrado após a virada para 13/09.
 
-## Atualização de 14/09
+## Registro histórico de 14/09 — substituído pela atualização de 21/09
 
-O P05 passou a aceitar CSV e XLSX, validar erros por linha, identificar vagas a criar ou atualizar e persistir as prévias no PostgreSQL com isolamento por shopping. A próxima ação é implementar a confirmação atômica; não há tela de importação no frontend. Ver [[Vaggu/Diário/2026-09-14]].
+Naquele momento, o P05 aceitava CSV e XLSX, validava erros por linha, identificava vagas a criar ou atualizar e persistia as prévias no PostgreSQL com isolamento por shopping. A confirmação atômica e a tela ainda não existiam em 14/09. Esse estado foi substituído pela conclusão registrada em 21/09. Ver [[Vaggu/Diário/2026-09-14]].
 
 ## Atualização de 21/09
 
-A confirmação atômica e idempotente foi validada em PostgreSQL descartável, inclusive com duas requisições concorrentes. A jornada Admin autenticada cobriu arquivo inválido, arquivo válido, confirmação e recarga da estrutura em desktop e viewport móvel. P05 está concluído; a próxima retomada inicia o contrato de telemetria do P06.
+A confirmação atômica e idempotente foi validada em PostgreSQL descartável, inclusive com duas requisições concorrentes. A jornada Admin autenticada cobriu arquivo inválido, arquivo válido, confirmação e recarga da estrutura em desktop e viewport móvel. P05 foi concluído naquela retomada; a auditoria posterior de 23/09 inseriu C01 antes do contrato de telemetria do P06.
 
 ## Histórico de 12/09
 

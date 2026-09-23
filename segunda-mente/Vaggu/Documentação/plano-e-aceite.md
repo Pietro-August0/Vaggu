@@ -123,6 +123,23 @@ Não carregar skills de pagamento, app nativo ou geração de imagem apenas porq
 | CA35 | RNF visual | Navegar por teclado e em telas menores | Foco, textos, mapa e controles utilizáveis; nenhum corte ou sobreposição não intencional. |
 | CA36 | Regras de código | Revisar diff de uma entrega | Português consistente, comentários úteis, assets descritivos e módulos organizados. |
 
+### 5.1 Matriz de rastreabilidade resumida
+
+Esta matriz conecta o motivo da funcionalidade ao trabalho técnico. `Planejado` indica que tela, rota ou entidade ainda não pode ser apresentada como implementação.
+
+| Problema ou necessidade | Requisitos e aceite | Tela ou fluxo | API e dados | Implementação principal | Responsáveis de referência | Pacote e estado |
+| --- | --- | --- | --- | --- | --- | --- |
+| Apresentar a solução e iniciar o atendimento | RF01–RF02; CA01–CA03 | Landing → WhatsApp → atendimento humano | Webhook WhatsApp; `WhatsappEvento` | `landing-page.tsx`; `src/whatsapp/*` | Elisa/Ana no fluxo; Kamilly no backend; Pietro na integração | P10 — parcial/planejado |
+| Criar acessos individuais e proteger cada shopping | RF04–RF05/RF17; CA04–CA07 | Login → troca obrigatória → Admin ou painel | `/auth/*`, `/shoppings/*`, `/gerentes/*`, `/minha-conta`; `Usuario`, `Sessao`, `Shopping` | `app-store.tsx`, páginas de acesso e módulos `auth`, `shoppings`, `conta` | Pietro, Ana e Samuel | P02–P03 — implementado, com correções de interface em C01 |
+| Configurar e consultar o estacionamento | RF03/RF06–RF08; CA08–CA14 | Ficha Admin → estrutura/importação/mapa; gerente → mapa | Rotas de estrutura e importação; `Andar`, `Setor`, `Vaga`, `ImportacaoEstrutura` | `estrutura-admin.tsx`, `visualizacao-vagas.tsx`, módulos `estrutura` e `importacao` | Samuel nos dados; Juan/Elisa na interface; Pietro na integração | P04–P05 — implementado |
+| Receber estados confiáveis dos sensores | RF09–RF13; CA15–CA24 | Equipamentos e estado operacional | `/telemetria/heartbeat` e `/telemetria/estados` propostos; placa, sensor, eventos e ocorrências ainda incompletos | Ainda sem módulo funcional | Kamilly, Samuel e Pietro | P06 — planejado |
+| Exibir contagens sem duplicar categorias | RF14; CA25–CA26 | Mapa operacional e telões | Consultas agregadas e autorização do telão ainda planejadas | Ainda sem telas/rotas funcionais | Juan/Elisa na apresentação; Kamilly/Samuel nos dados | P07 — bloqueado por P06 |
+| Explicar o uso no tempo e exportar resultados | RF13/RF15; CA27–CA31 | Histórico, comparação e relatórios | Histórico temporal, métricas, PDF e CSV ainda planejados | Ainda sem fluxo funcional | Samuel nos dados; Ana/Elisa na interface; Pietro na integração | P08 — bloqueado por P06/P07 |
+| Produzir análise externa com os mesmos números | RF16–RF17; CA32–CA33 | Relatório Power BI | Views e modelo analítico planejados | Nenhum relatório funcional encontrado | Samuel e Pietro, com validação de Elisa | P09 — bloqueado por P08 |
+| Desativar sem apagar histórico | RF18; CA34 | Administração de shopping e gerente | Exclusão lógica implementada no backend; UI atual precisa ser reconciliada | Serviços `shoppings`; ações frontend pendentes em C01 | Samuel no dado; Ana/Elisa/Juan na jornada; Pietro na integração | P03 histórico; C01 em preparação |
+
+Detalhes de cada rota real ficam no README do backend; entidades atuais ficam em [modelo de dados](modelo-de-dados.md); telas reais e planejadas ficam em [fluxo de telas](fluxo-de-telas.md).
+
 CA33 só pode ser declarado concluído após implementar a forma de publicação/acesso. Enquanto a demonstração ficar apenas no Desktop, registrar a incorporação como pendente; não fingir teste de RLS no portal.
 
 ## 6. Conjunto controlado para reconciliar métricas

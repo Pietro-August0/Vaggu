@@ -16,6 +16,18 @@ Conhecimento, documentos e regras ficam em `segunda-mente`. As skills `start` e 
 
 As cópias de imagens entre `segunda-mente/Vaggu/Identidade visual/Assets/` e `vaggu-frontend/public/assets/` são intencionais: o cofre precisa renderizar a referência visual sem depender do bundle, enquanto a aplicação precisa publicar seus próprios arquivos. As notas em `segunda-mente/Vaggu/Skills/` são índices documentais, não implementações duplicadas.
 
+### Documentos e evidências acrescentados em 23/09/2026
+
+| Caminho | Responsabilidade |
+| --- | --- |
+| `segunda-mente/Vaggu/Documentação/fluxo-de-telas.md` | Registra rotas, jornadas por perfil, páginas planejadas e divergências atuais entre frontend, backend e evidências históricas. |
+| `segunda-mente/Vaggu/Documentação/modelo-de-dados.md` | Explica o schema Prisma/PostgreSQL implementado, suas restrições e os limites que ainda precisam ser resolvidos no P06. |
+| `segunda-mente/Vaggu/Planejamento/Sprints do projeto.md` | Preserva o relato confirmado das Sprints 1–2 e transcreve o planejamento fotografado das Sprints 3–4 sem confundi-las com P01–P11. |
+| `segunda-mente/Vaggu/Planejamento/Plano de correção e implementação.md` | Ordena D01, C01 e P06, com responsáveis, dependências, riscos e critérios de aceite. |
+| `segunda-mente/Vaggu/Evidências visuais/Planejamento/sprint-03-planejamento-09-09-2026.jpeg` | Cópia versionada da fotografia fornecida pela equipe com o planejamento da Sprint 3. |
+| `segunda-mente/Vaggu/Evidências visuais/Planejamento/sprint-04-divisao-equipe.jpeg` | Cópia versionada da fotografia fornecida pela equipe com a divisão registrada para a Sprint 4. |
+| `segunda-mente/Vaggu/Evidências visuais/Planejamento/guia-identidade-visual-vaggu.png` | Cópia versionada do guia visual fornecido pela equipe, usado como evidência para paleta e tipografia, sem atribuí-lo a uma extração do Figma. |
+
 ## Arquivos versionáveis
 
 | Arquivo | Responsabilidade |

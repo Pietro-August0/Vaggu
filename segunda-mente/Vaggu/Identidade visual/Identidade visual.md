@@ -4,6 +4,25 @@
 
 Marca VAGGU, amarelo em destaque, preto e cinzas, textos claros, interface minimalista e legível. Manter proporções dos assets, consistência dos ícones e responsividade web.
 
+## Guia fornecido pela equipe em 23/09/2026
+
+A equipe forneceu uma imagem de referência com a marca, a família Poppins e a paleta abaixo. Estes valores são **evidência entregue pela equipe**, não extração do Figma nem confirmação de medidas, espaçamentos ou componentes do arquivo de design.
+
+| Papel no guia | Valor |
+| --- | --- |
+| Amarelo principal | `#ffe100` |
+| Amarelo intermediário | `#ffeb54` |
+| Amarelo claro | `#fff49d` |
+| Cinza escuro | `#343231` |
+| Carvão | `#171717` |
+| Preto | `#000000` |
+| Branco | `#ffffff` |
+| Família tipográfica | Poppins |
+
+Referência visual versionada pela equipe: ![[Vaggu/Evidências visuais/Planejamento/guia-identidade-visual-vaggu.png]]
+
+Os papéis semânticos de cada tom na interface ainda devem ser conciliados com contraste, tokens reais do código e contexto da tela. Não substituir automaticamente cores de estado, foco ou feedback pelos amarelos da marca.
+
 ## Referências
 
 - [Figma principal — página Web](https://www.figma.com/design/xKI9wjoiZ5CoXC3DXIJNmq/Vaggu?node-id=2022-2)
@@ -27,7 +46,9 @@ Fonte: vaggu-frontend/src/index.css, 11/09/2026.
 | Fonte sans geral | Geist Variable |
 | Raio base | 0.625rem |
 
-**Pendência:** o tema .dark sobrescreve a primária com cinza e a primária da sidebar com outro valor. Isso é uma observação estática do código, não uma aprovação da paleta nem comprovação de qual tema está ativo.
+O amarelo `#FFE100`, o carvão `#171717`, o preto e o branco coincidem com valores do guia fornecido pela equipe. Essa coincidência não comprova fidelidade ao Figma. Os tons `#ffeb54`, `#fff49d` e `#343231` ainda precisam ser conciliados com os usos reais antes de virar novos tokens executáveis.
+
+**Pendência:** o tema `.dark` sobrescreve a primária com cinza e a primária da sidebar com outro valor. Isso é uma observação estática do código, não uma aprovação da paleta nem comprovação de qual tema está ativo.
 
 ## Assets preservados
 
