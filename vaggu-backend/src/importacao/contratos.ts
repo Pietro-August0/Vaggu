@@ -31,6 +31,20 @@ export type PreviaImportacao = {
     totalErros: number;
     novos: number;
     atualizacoes: number;
+    preservadasAusentes: number;
   };
   podeConfirmar: boolean;
+};
+
+export type ResumoConfirmacaoImportacao = {
+  novos: number;
+  atualizacoes: number;
+  preservadasAusentes: number;
+};
+
+export type ConfirmacaoImportacao = {
+  importacaoId: string;
+  confirmadaEm: Date;
+  resumo: ResumoConfirmacaoImportacao;
+  repetida: boolean;
 };

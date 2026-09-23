@@ -10,20 +10,14 @@ export function objeto(valor: unknown): valor is Record<string, unknown> {
   return typeof valor === "object" && valor !== null && !Array.isArray(valor)
 }
 
-/** Impõe prazo, rejeita respostas inválidas e preserva o código de erro de domínio. */
-export async function requisitarApi(
-  caminho: string,
-  token?: string,
-  corpo?: unknown,
-  metodo?: "GET" | "POST" | "PATCH" | "DELETE",
-): Promise<unknown> {
+/** Executa transportes JSON ou binários com o mesmo prazo e contrato seguro de erro. */
+async function executarRequisicao(caminho: string, token: string | undefined, opcoes: RequestInit): Promise<unknown> {
   const controle = new AbortController()
   const prazo = window.setTimeout(() => controle.abort(), 15000)
   try {
     const resposta = await fetch("/api/v1" + caminho, {
-      method: metodo ?? (corpo === undefined ? "GET" : "POST"),
-      headers: { ...(token ? { Authorization: `Bearer ${token}` } : {}), ...(corpo === undefined ? {} : { "Content-Type": "application/json" }) },
-      body: corpo === undefined ? undefined : JSON.stringify(corpo),
+      ...opcoes,
+      headers: { ...(token ? { Authorization: `Bearer ${token}` } : {}), ...opcoes.headers },
       cache: "no-store",
       credentials: "omit",
       signal: controle.signal,
@@ -47,4 +41,28 @@ export async function requisitarApi(
   } finally {
     window.clearTimeout(prazo)
   }
+}
+
+/** Impõe prazo, rejeita respostas inválidas e preserva o código de erro de domínio. */
+export function requisitarApi(
+  caminho: string,
+  token?: string,
+  corpo?: unknown,
+  metodo?: "GET" | "POST" | "PATCH" | "DELETE",
+): Promise<unknown> {
+  return executarRequisicao(caminho, token, {
+    method: metodo ?? (corpo === undefined ? "GET" : "POST"),
+    headers: corpo === undefined ? {} : { "Content-Type": "application/json" },
+    body: corpo === undefined ? undefined : JSON.stringify(corpo),
+  })
+}
+
+/** Envia o arquivo original somente à rota administrativa de prévia, sem convertê-lo em JSON. */
+export function requisitarArquivoApi(caminho: string, token: string, arquivo: File): Promise<unknown> {
+  const csv = arquivo.name.toLocaleLowerCase("pt-BR").endsWith(".csv")
+  return executarRequisicao(caminho, token, {
+    method: "POST",
+    headers: { "Content-Type": csv ? "text/csv;charset=UTF-8" : "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet" },
+    body: arquivo,
+  })
 }

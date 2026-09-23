@@ -8,7 +8,7 @@ import { criarPreviaXlsx } from '../src/importacao/parser-xlsx.js';
 test('cria prévia válida com vírgula, BOM e tipos normalizados', () => {
   const previa = criarPreviaCsv('\uFEFFcódigo,andar,setor,tipo\r\nA-001,Térreo,Setor A,comum\r\nA-002,Térreo,Setor A,elétrica');
   assert.equal(previa.podeConfirmar, true);
-  assert.deepEqual(previa.resumo, { totalLinhas: 2, registrosValidos: 2, totalErros: 0, novos: 2, atualizacoes: 0 });
+  assert.deepEqual(previa.resumo, { totalLinhas: 2, registrosValidos: 2, totalErros: 0, novos: 2, atualizacoes: 0, preservadasAusentes: 0 });
   assert.deepEqual(previa.registros.map(registro => registro.tipo), ['COMUM', 'ELETRICA']);
 });
 

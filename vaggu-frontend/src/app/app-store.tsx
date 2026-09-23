@@ -1,6 +1,6 @@
 /** Controla a identidade validada pela API. Não lê contas, hashes ou permissões do navegador. */
 import { createContext, useCallback, useContext, useEffect, useRef, useState, type ReactNode } from "react"
-import { ErroApi, objeto, requisitarApi } from "@/servicos/api"
+import { ErroApi, objeto, requisitarApi, requisitarArquivoApi } from "@/servicos/api"
 import type { GeneratedAccess, Mall, NewMallInput, UserAccount } from "@/types/app"
 
 interface AppStoreValue {
@@ -15,6 +15,7 @@ interface AppStoreValue {
   trocarSenha: (senhaAtual: string, novaSenha: string) => Promise<UserAccount>
   verificarSessao: () => Promise<void>
   consultar: (caminho: string, corpo?: unknown, metodo?: "GET" | "POST" | "PATCH" | "DELETE") => Promise<unknown>
+  enviarArquivo: (caminho: string, arquivo: File) => Promise<unknown>
   atualizarMinhaConta: (nome: string, telefone: string) => Promise<UserAccount>
   createMall: (input: NewMallInput) => Promise<GeneratedAccess>
 }
@@ -71,6 +72,22 @@ export function AppStoreProvider({ children }: { children: ReactNode }) {
         if (erro.codigo === "TROCA_SENHA_OBRIGATORIA") {
           setCurrentUser(usuario => usuario ? { ...usuario, trocarSenhaObrigatoria: true } : null)
         }
+      }
+      throw erro
+    }
+  }, [limparSessao])
+
+  /** Mantém upload autenticado no mesmo ciclo de sessão das chamadas JSON. */
+  const enviarArquivo = useCallback(async (caminho: string, arquivo: File) => {
+    const token = tokenAtual.current
+    if (!token) throw new ErroApi("NAO_AUTENTICADO", "Entre novamente para continuar.")
+    try {
+      const dados = await requisitarArquivoApi(caminho, token, arquivo)
+      if (tokenAtual.current !== token) throw new ErroApi("SESSAO_ALTERADA", "O acesso foi encerrado. Entre novamente.")
+      return dados
+    } catch (erro) {
+      if (tokenAtual.current === token && erro instanceof ErroApi && erro.codigo === "NAO_AUTENTICADO") {
+        limparSessao("Sua sessão expirou ou foi encerrada. Entre novamente.")
       }
       throw erro
     }
@@ -162,7 +179,7 @@ export function AppStoreProvider({ children }: { children: ReactNode }) {
 
   return <AppStoreContext.Provider value={{
     ready: true, currentUser, currentMall: null, malls: [], erroSessao, mensagemSessao,
-    login, logout, trocarSenha, verificarSessao, consultar, atualizarMinhaConta, createMall,
+    login, logout, trocarSenha, verificarSessao, consultar, enviarArquivo, atualizarMinhaConta, createMall,
   }}>{children}</AppStoreContext.Provider>
 }
 

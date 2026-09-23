@@ -67,6 +67,5 @@ export function criarPreviaTabela(tabela: LinhaTabelaImportacao[]): PreviaImport
 /** Consolida contagens usadas pela interface e impede confirmação de uma prévia vazia. */
 export function finalizarPrevia(registros: RegistroImportacao[], erros: ErroImportacao[], totalLinhas: number): PreviaImportacao {
   return { registros, erros, resumo: { totalLinhas, registrosValidos: registros.length, totalErros: erros.length,
-    novos: registros.length, atualizacoes: 0 }, podeConfirmar: erros.length === 0 && registros.length > 0 };
+    novos: registros.length, atualizacoes: 0, preservadasAusentes: 0 }, podeConfirmar: erros.length === 0 && registros.length > 0 };
 }
-

@@ -53,6 +53,7 @@ Conhecimento, documentos e regras ficam em `segunda-mente`; `docs/README.md` é 
 | `vaggu-backend/src/importacao/routes.ts` | Expõe criação e consulta de prévias persistidas ao Admin, sem confirmar mudanças nas vagas. |
 | `vaggu-backend/src/importacao/service.ts` | Persiste prévias em transação e restringe a consulta ao shopping indicado. |
 | `vaggu-backend/prisma/migrations/20260914000100_previas_importacao/migration.sql` | Cria armazenamento JSONB de prévias com vínculo ao shopping, índice e restrições de formato. |
+| `vaggu-backend/prisma/migrations/20260914000200_confirmacao_importacao/migration.sql` | Acrescenta o resultado e o instante da confirmação de importação, preservando a compatibilidade com prévias existentes. |
 | `vaggu-backend/test/importacao-postgresql.test.ts` | Verifica persistência, isolamento de consulta e preservação de vagas e histórico em PostgreSQL descartável. |
 | `vaggu-backend/src/conta/routes.ts` | Rotas HTTP da conta do usuário autenticado. Usam a identidade da sessão para |
 | `vaggu-backend/src/conta/service.ts` | Serviço de conta própria. Só permite alterações pessoais simples, mantendo |
@@ -82,6 +83,8 @@ Conhecimento, documentos e regras ficam em `segunda-mente`; `docs/README.md` é 
 | `vaggu-frontend/index.html` | Documento de entrada do Vite e ponto de montagem do React. |
 | `vaggu-frontend/package-lock.json` | Fixa a árvore de dependências e integridade para instalação reproduzível via npm ci. |
 | `vaggu-frontend/package.json` | Declara dependências, faixa do Node e scripts de desenvolvimento, build e verificação. |
+| `vaggu-frontend/src/components/importacao-admin.tsx` | Permite ao Admin enviar, revisar e confirmar arquivos CSV ou XLSX de estrutura do estacionamento. |
+| `vaggu-frontend/src/types/importacao.ts` | Define os contratos usados pela interface para prévias, erros e resultados da importação. |
 | `vaggu-frontend/public/assets/city-flow-vaggu.png` | Asset visual city-flow-vaggu.png; reutilizado na identidade e composição da interface. |
 | `vaggu-frontend/public/assets/hero-vaggu.png` | Asset visual hero-vaggu.png; reutilizado na identidade e composição da interface. |
 | `vaggu-frontend/public/assets/mockup-laptop-vaggu.svg` | Asset visual mockup-laptop-vaggu.svg; reutilizado na identidade e composição da interface. |

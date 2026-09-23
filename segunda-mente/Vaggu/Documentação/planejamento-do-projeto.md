@@ -130,6 +130,14 @@ Preservar os limites do produto: web responsiva, sem cadastro público de gerent
 
 Cada entrada mantém: data local, estado do dia, pacote/objetivo, evidências de entrada, alterações, verificações e resultados, pendências/bloqueios, primeira ação da retomada e situação Git. Acrescentar entradas sem apagar dias anteriores. O resumo das seções 1–6 deve acompanhar o estado mais recente.
 
+### 14/09/2026 — P05: confirmação da importação
+
+- **Estado:** aberto; retomada solicitada por Samuel.
+- **Pacote e objetivo:** concluir P05 com confirmação atômica e idempotente das prévias CSV/XLSX, preservando IDs, vínculos e histórico, integrar o fluxo ao painel Admin e validar CA13–CA14.
+- **Entrada:** branch `feat/p05-importacao-samuel` limpa e sincronizada com `origin` no commit `82da8f8`; prévias já persistem no PostgreSQL, mas ainda não alteram a estrutura.
+- **Primeira ação:** estabilizar o contrato de confirmação e o estado persistido da importação antes de integrar a interface.
+- **Git:** integração na `main` e publicação foram autorizadas para depois da revisão e de todos os testes aplicáveis.
+
 ### 09/09/2026 — fechamento da revisão e preparação da continuidade
 
 Por solicitação da equipe, as alterações e verificações desta sessão pertencem ao dia de trabalho **09/09/2026**, embora tenham avançado pela madrugada de **10/09/2026** (America/Sao_Paulo). A correção documental foi solicitada via `$start` em 10/09 e constitui o escopo desta retomada; P01 permanece preparado para o próximo início. Os horários originais dos commits permanecem preservados.
@@ -240,3 +248,20 @@ Se a lista de skills da conversa atual ainda não refletir a instalação, abrir
 - **Preservação:** 73 arquivos e 20.877.712 bytes foram copiados; `.obsidian/workspace.json` ficou de fora por ser estado local. Quatro deltas mais recentes de `docs` foram incorporados antes da remoção das cópias.
 - **Verificações:** lint e build aprovados; mapa com 191 arquivos cobertos; localhost sem overlay ou erros; CSS de entrada ativo; órbitas em execução; pausa, persistência após recarga e reativação confirmadas.
 - **Limites:** o bundle principal ainda gera o aviso conhecido de tamanho acima de 500 kB. As mudanças estão locais e ainda não foram publicadas no remoto.
+
+### 16/09/2026 — continuidade da revisão isolada
+
+- Trabalho local desta branch preservado integralmente. A revisão da main está na worktree .revisao-admin, branch fix/admin-atualizado-pietro, base e0299f0; correções e documentação atualizada estão nessa cópia. Não misturar as duas implementações de importação nem executar o backend antigo contra o banco compatibilizado.
+- Ajuste do banco autorizado e concluído com backup completo e comparação de todas as linhas das 10 tabelas. Histórico e colunas anteriores preservados; db:deploy da revisão sem migrations pendentes. Nenhum cadastro removido.
+- Interface corrigida em http://127.0.0.1:5175/login, API em 3002. Validação PostgreSQL 32/32, lint/build e documentação da revisão aprovados. Navegador indisponível; próxima ação: validação visual autenticada com API real. Sem commit, push ou hospedagem na nuvem.
+- Worktree excluída apenas do inventário Git desta raiz por .git/info/exclude; os arquivos continuam visíveis e versionáveis dentro da própria branch da revisão. Comentário e descrição deste planejamento revisados, sem mudança de responsabilidade.
+
+### 23/09/2026 — banco Neon e hospedagem pública
+
+- **Responsável:** Samuel Santos (`mukinha01`), confirmado pela conta GitHub autenticada; branch `feat/p05-importacao-samuel`.
+- **Banco:** estrutura e dados do PostgreSQL local migrados para o Neon. A comparação confirmou 11 tabelas, 107 colunas, 28 registros, 38 restrições funcionais e 38 índices.
+- **Hospedagem:** serviço `vaggu-tcc` criado no plano gratuito do Render, região Virgínia. API Express e build React usam a mesma origem HTTPS; `DATABASE_URL` e a chave de proteção ficam em variáveis secretas do provedor.
+- **Publicação:** commits `f43be99` e `5c7fa65` enviados ao GitHub. O segundo corrige a instalação das dependências de build quando `NODE_ENV=production`.
+- **Verificações:** deploy `dep-daq2523ncjis7398gajg` em estado `live`; `/api/v1/health/ready` confirmou o Neon; `/login` e `/admin` responderam 200; rota de API inexistente permaneceu 404. Backend com 40 testes aprovados e dois skips explícitos; frontend com lint e build aprovados; mapa documental com 210 arquivos cobertos.
+- **Acesso:** `https://vaggu-tcc.onrender.com`. No plano gratuito, o serviço pode suspender após 15 minutos sem tráfego e demorar na primeira abertura seguinte; o banco permanece persistido no Neon.
+- **Preservação:** alterações locais do P05 permaneceram fora dos commits de hospedagem. Nenhuma credencial foi adicionada ao Git.

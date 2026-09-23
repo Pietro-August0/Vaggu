@@ -24,6 +24,21 @@ test('Admin consulta uma prévia persistida sem permitir cache', async () => {
   assert.equal(resposta.body.id, importacaoId);
 });
 
+test('Admin confirma explicitamente a prévia pelo identificador persistido', async () => {
+  let confirmacao: { shoppingId: string; importacaoId: string } | undefined;
+  const importacao = { confirmarPrevia: async (idShopping: string, idImportacao: string) => {
+    confirmacao = { shoppingId: idShopping, importacaoId: idImportacao };
+    return { importacaoId: idImportacao, confirmadaEm: new Date(),
+      resumo: { novos: 1, atualizacoes: 0, preservadasAusentes: 2 }, repetida: false };
+  } };
+  const app = createApp({ checkDatabase: async () => 1, auth: auth(), importacao });
+  const resposta = await request(app).post(`/api/v1/shoppings/${shoppingId}/importacoes/${importacaoId}/confirmar`)
+    .set('Authorization', 'Bearer teste').expect(200);
+  assert.deepEqual(confirmacao, { shoppingId, importacaoId });
+  assert.equal(resposta.headers['cache-control'], 'no-store');
+  assert.equal(resposta.body.resumo.novos, 1);
+});
+
 test('Admin envia CSV e recebe a prévia sem confirmação', async () => {
   let chamada: { shoppingId: string; conteudo: unknown } | undefined;
   const importacao = { criarPreviaCsv: async (id: string, conteudo: unknown) => {

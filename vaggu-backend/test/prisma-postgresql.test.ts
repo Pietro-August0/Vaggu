@@ -36,3 +36,11 @@ test('migration de exclusão reversível preserva gerente e estado anterior', ()
   assert.match(sql, /usuarios_exclusao_check/);
   assert.doesNotMatch(sql, /DELETE\s+FROM\s+"usuarios"/i);
 });
+
+test('migration de confirmação mantém um único artefato ativo por shopping', () => {
+  const sql = readFileSync(join(projectRoot, 'prisma/migrations/20260914000200_confirmacao_importacao/migration.sql'), 'utf8');
+  assert.match(sql, /"resultado_confirmacao" JSONB/);
+  assert.match(sql, /"confirmada_em" TIMESTAMP\(3\)/);
+  assert.match(sql, /CREATE UNIQUE INDEX "importacoes_estrutura_ativa_por_shopping_key"/);
+  assert.match(sql, /WHERE "ativa" = true/);
+});
