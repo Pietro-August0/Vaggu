@@ -1,0 +1,25 @@
+# Publica a VAGGU como um único serviço: API Express e build React na mesma origem.
+# Credenciais são solicitadas pelo Render e nunca ficam versionadas neste arquivo.
+services:
+  - type: web
+    name: vaggu-tcc
+    runtime: node
+    plan: free
+    region: virginia
+    buildCommand: npm ci --prefix vaggu-backend && npm ci --prefix vaggu-frontend && npm run db:generate --prefix vaggu-backend && npm run build --prefix vaggu-backend && npm run build --prefix vaggu-frontend
+    startCommand: npm run db:deploy --prefix vaggu-backend && npm start --prefix vaggu-backend
+    healthCheckPath: /api/v1/health/ready
+    autoDeployTrigger: commit
+    envVars:
+      - key: DATABASE_URL
+        sync: false
+      - key: CREDENTIAL_ENCRYPTION_KEY
+        generateValue: true
+      - key: HOST
+        value: 0.0.0.0
+      - key: NODE_ENV
+        value: production
+      - key: FRONTEND_DIST_PATH
+        value: ../vaggu-frontend/dist
+      - key: WHATSAPP_AUTO_REPLY_ENABLED
+        value: "false"

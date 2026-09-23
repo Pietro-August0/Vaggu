@@ -18,6 +18,7 @@ const whatsappClient = createWhatsappClient(config.whatsapp);
 const whatsappService = createWhatsappService(prisma, whatsappClient, config.whatsapp);
 const app = createApp({
   checkDatabase: () => prisma.$queryRaw`SELECT 1`,
+  frontendDistPath: process.env.FRONTEND_DIST_PATH,
   auth: createAuthService(prisma),
   whatsapp: { config: config.whatsapp, service: whatsappService },
   shoppings: createShoppingsService(prisma, { credencialSecret: config.credencialSecret }),

@@ -98,3 +98,11 @@ node scripts/verificar-documentacao.mjs
 ```
 
 Esse comando confere se todo arquivo versionável está explicado no [mapa do projeto](mapa-do-projeto.md). Revise também os comentários e as descrições quando mudar o papel de um arquivo. Não registre credenciais nos documentos.
+
+## Hospedagem gratuita no Render
+
+O `render.yaml` da raiz publica a API e o build React no mesmo endereço HTTPS. O serviço usa o plano gratuito do Render e o PostgreSQL permanece no Neon. Durante a criação do Blueprint, informe `DATABASE_URL` somente no campo secreto apresentado pelo Render; nunca registre a conexão no Git.
+
+O Render gera uma chave estável para proteger novas senhas provisórias, usa `HOST=0.0.0.0` e aplica as migrations antes de iniciar a API. O endpoint `/api/v1/health/ready` valida a conexão com o Neon. Como o frontend fica na mesma origem, as requisições para `/api/v1` não exigem CORS.
+
+No plano gratuito, o serviço pode suspender após um período sem acessos. A primeira abertura seguinte pode demorar enquanto a instância reinicia; os dados continuam persistidos no Neon.

@@ -10,6 +10,7 @@ Conhecimento, documentos e regras ficam em `segunda-mente`; `docs/README.md` é 
 | `.gitignore` | Exclui ferramentas locais, segredos, dependências e saídas de build. |
 | `AGENTS.md` | Define escopo, regras de implementação, documentação e verificação para agentes. |
 | `README.md` | Apresenta o produto, recursos entregues e comandos de execução. |
+| `render.yaml` | Define a hospedagem gratuita da API e do frontend no mesmo serviço Render, com segredos fornecidos no painel. |
 | `docs/README.md` | Mantém um ponto de compatibilidade curto e direciona para a documentação canônica da segunda mente. |
 | `segunda-mente/` | Cofre Obsidian compartilhado: fonte canônica de produto, decisões, continuidade, documentação, fontes e evidências da VAGGU. |
 | `scripts/verificar-documentacao.mjs` | Confere se o mapa canônico da segunda mente explica os arquivos versionáveis; o cofre é coberto por sua entrada de diretório. |
@@ -34,7 +35,7 @@ Conhecimento, documentos e regras ficam em `segunda-mente`; `docs/README.md` é 
 | `vaggu-backend/prisma/migrations/migration_lock.toml` | Registra o provedor PostgreSQL das migrations do Prisma. |
 | `vaggu-backend/prisma/schema.prisma` | Define entidades, relações e restrições, incluindo estrutura e exclusão lógica de usuários. |
 | `vaggu-backend/scripts/create-admin.ts` | Comando interativo para criar o primeiro administrador e exibir a senha gerada uma única vez no terminal. |
-| `vaggu-backend/src/app.ts` | Monta a API Express, suas rotas e respostas de erro, sem abrir uma porta de rede. |
+| `vaggu-backend/src/app.ts` | Monta a API Express, suas rotas e respostas de erro e, quando configurado, entrega o build do frontend na mesma origem. |
 | `vaggu-backend/src/auth/bootstrap.ts` | Cria o primeiro administrador por uma operação de terminal, sem cadastro público. |
 | `vaggu-backend/src/auth/credencial-provisoria.ts` | Cifra e revela a senha provisória enquanto a troca obrigatória estiver pendente. |
 | `vaggu-backend/src/auth/middleware.ts` | Middlewares de autorização usados pelas rotas HTTP. Eles constroem o escopo |
@@ -56,7 +57,7 @@ Conhecimento, documentos e regras ficam em `segunda-mente`; `docs/README.md` é 
 | `vaggu-backend/src/conta/routes.ts` | Rotas HTTP da conta do usuário autenticado. Usam a identidade da sessão para |
 | `vaggu-backend/src/conta/service.ts` | Serviço de conta própria. Só permite alterações pessoais simples, mantendo |
 | `vaggu-backend/src/lib/prisma.ts` | Cliente Prisma do PostgreSQL. Regras de domínio recebem o cliente por injeção |
-| `vaggu-backend/src/server.ts` | Ponto de entrada executável: lê a configuração, conecta os serviços e inicia o HTTP. |
+| `vaggu-backend/src/server.ts` | Ponto de entrada executável: lê a configuração, conecta os serviços, associa opcionalmente o build web e inicia o HTTP. |
 | `vaggu-backend/src/shoppings/routes.ts` | Rotas administrativas de shoppings, gerentes, exclusões e senha provisória. |
 | `vaggu-backend/src/shoppings/service.ts` | Administra shoppings e gerentes, incluindo exclusão lógica de shopping, consulta temporária da senha provisória e restauração de gerente por sete segundos. |
 | `vaggu-backend/src/whatsapp/client.ts` | Cliente de envio de texto pela API da Meta; recebe configuração privada e transporte substituível em testes. |
