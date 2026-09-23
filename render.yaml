@@ -6,7 +6,7 @@ services:
     runtime: node
     plan: free
     region: virginia
-    buildCommand: npm ci --prefix vaggu-backend && npm ci --prefix vaggu-frontend && npm run db:generate --prefix vaggu-backend && npm run build --prefix vaggu-backend && npm run build --prefix vaggu-frontend
+    buildCommand: npm ci --include=dev --prefix vaggu-backend && npm ci --include=dev --prefix vaggu-frontend && npm run db:generate --prefix vaggu-backend && npm run build --prefix vaggu-backend && npm run build --prefix vaggu-frontend
     startCommand: npm run db:deploy --prefix vaggu-backend && npm start --prefix vaggu-backend
     healthCheckPath: /api/v1/health/ready
     autoDeployTrigger: commit
