@@ -355,3 +355,16 @@ O `render.yaml` da raiz publica a API e o build React no mesmo endereço HTTPS. 
 O Render usa `HOST=0.0.0.0`, aplica as migrations antes de iniciar a API e consulta `/api/v1/health/ready` para validar a conexão. `FRONTEND_DIST_PATH` faz o Express entregar o build React na mesma origem das rotas `/api/v1`, sem exigir CORS amplo.
 
 No plano gratuito, o serviço pode suspender após um período sem acesso. A primeira abertura seguinte pode demorar enquanto a instância reinicia; os dados continuam persistidos no Neon.
+
+### Publicação automática pela `main`
+
+O serviço foi criado a partir da URL pública do repositório. Nessa modalidade, o Render não recebe os eventos de push do GitHub mesmo quando `autoDeploy` está ativado. O workflow `.github/workflows/publicar-render.yml` resolve isso pelo Deploy Hook oficial do Render.
+
+O administrador do repositório deve concluir uma única configuração:
+
+1. No serviço `vaggu-tcc` do Render, abrir **Settings**, localizar **Deploy Hook** e copiar a URL secreta.
+2. No GitHub, abrir **Settings → Secrets and variables → Actions → New repository secret**.
+3. Criar o segredo `RENDER_DEPLOY_HOOK_URL` com a URL copiada. Não registrar essa URL em arquivos, mensagens ou capturas.
+4. Abrir **Actions → Publicar main no Render → Run workflow** para testar. Depois disso, cada push na `main` dispara uma nova publicação.
+
+Somente administradores de `Pietro-August0/Vaggu` podem cadastrar esse segredo. A conta de Samuel possui permissão de escrita, mas não de administração do repositório.

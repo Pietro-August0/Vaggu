@@ -33,6 +33,7 @@ As cópias de imagens entre `segunda-mente/Vaggu/Identidade visual/Assets/` e `v
 | Arquivo | Responsabilidade |
 | --- | --- |
 | `.gitattributes` | Padroniza tratamento de arquivos e terminações de linha no Git. |
+| `.github/workflows/publicar-render.yml` | Solicita ao Render um novo deploy após cada push na `main`, usando um Deploy Hook guardado como segredo do GitHub. |
 | `.gitignore` | Exclui ferramentas locais, segredos, dependências e saídas de build. |
 | `AGENTS.md` | Define escopo, regras de implementação, documentação e verificação para agentes. |
 | `README.md` | Apresenta o produto, recursos entregues e comandos de execução. |
