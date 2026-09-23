@@ -60,7 +60,7 @@ Ao finalizar, relate o que mudou, quais cenários foram verificados, limitaçõe
 - O escopo considera as decisões de Pietro e o documento mestre revisado em 09/09/2026.
 - Regras de código e de organização foram elaboradas para este pedido e passam a orientar novas entregas.
 - Modelos de dados, rotas e detalhes de infraestrutura marcados como **proposta** devem ser conciliados com o repositório.
-- P01–P05 estão concluídos. A importação CSV/XLSX foi validada no PostgreSQL real e na interface Admin autenticada. A correção de interface C01 precede o P06, que continua como a próxima entrega de produto.
+- P01–P05 e C01 estão concluídos. A importação CSV/XLSX foi validada no PostgreSQL real e na interface Admin autenticada; exclusões administrativas e desfazer foram restaurados na ficha atual. P06 é a próxima entrega de produto.
 - A referência visual é o [Figma VAGGU](https://www.figma.com/design/xKI9wjoiZ5CoXC3DXIJNmq/Vaggu?node-id=2022-2). A consulta atual atingiu o limite da integração; não houve nova extração dos tokens. Os valores exatos a confirmar estão registrados no guia visual.
 - A documentação não contém credenciais. Mudanças no Figma, Trello ou repositório remoto só podem ser afirmadas quando houver evidência registrada na sessão correspondente.
 

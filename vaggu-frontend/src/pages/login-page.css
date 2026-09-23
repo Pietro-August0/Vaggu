@@ -354,10 +354,3 @@
     grid-template-columns: 1fr;
   }
 }
-
-@media (prefers-reduced-motion: reduce) {
-  .login-vagas-rabisco path {
-    animation: none;
-    stroke-dashoffset: 0;
-  }
-}

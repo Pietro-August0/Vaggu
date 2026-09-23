@@ -55,7 +55,7 @@ export function FormularioShopping({ shopping, ocupado, rotuloBotao, aoEnviar, a
       responsavelCpf: valor(dados, "responsavelCpf"), emailCorporativo: valor(dados, "emailCorporativo"), telefone: valor(dados, "telefone"),
       cep: valor(dados, "cep"), uf: valor(dados, "uf"), cidade: valor(dados, "cidade"), bairro: valor(dados, "bairro"),
       logradouro: valor(dados, "logradouro"), numero: valor(dados, "numero"), complemento: valor(dados, "complemento"),
-      horarioAbertura: valor(dados, "horarioAbertura"), horarioFechamento: valor(dados, "horarioFechamento"), fusoHorario: valor(dados, "fusoHorario"),
+      horarioAbertura: valor(dados, "horarioAbertura"), horarioFechamento: valor(dados, "horarioFechamento"),
     }, formulario, foto)
   }
 
@@ -70,10 +70,20 @@ export function FormularioShopping({ shopping, ocupado, rotuloBotao, aoEnviar, a
     <div className="grid gap-5 md:grid-cols-3">{campo("responsavelCpf", "CPF do responsável", { inputMode: "numeric", maxLength: 14, placeholder: "Opcional" })}{campo("cep", "CEP", { required: true, inputMode: "numeric", maxLength: 9 })}{campo("uf", "Estado (UF)", { required: true, minLength: 2, maxLength: 2, placeholder: "SP" })}</div>
     <div className="grid gap-5 md:grid-cols-2">{campo("cidade", "Cidade", { required: true, maxLength: 100 })}{campo("bairro", "Bairro", { required: true, maxLength: 100 })}</div>
     <div className="grid gap-5 md:grid-cols-[minmax(0,2fr)_8rem_minmax(12rem,1fr)]">{campo("logradouro", "Logradouro", { required: true, maxLength: 160 })}{campo("numero", "Número", { required: true, maxLength: 20 })}{campo("complemento", "Complemento", { maxLength: 80, placeholder: "Opcional" })}</div>
-    <div className="grid gap-5 md:grid-cols-3">{campo("horarioAbertura", "Abertura", { type: "time" })}{campo("horarioFechamento", "Fechamento", { type: "time" })}{campo("fusoHorario", "Fuso horário", { maxLength: 80, placeholder: "America/Sao_Paulo" })}</div>
+    <div className="grid gap-5 md:grid-cols-2">{campo("horarioAbertura", "Abertura", { type: "time" })}{campo("horarioFechamento", "Fechamento", { type: "time" })}</div>
     <div className="grid gap-3 rounded-2xl border border-white/10 bg-black/15 p-4 sm:grid-cols-[minmax(0,1fr)_8rem] sm:items-center">
-      <div className="grid gap-2"><Label htmlFor="shopping-foto" className="text-neutral-100">Foto do shopping</Label><Input id="shopping-foto" name="foto" type="file" accept="image/jpeg,image/png,image/webp" disabled={ocupado} onChange={selecionarFoto} className="h-auto min-h-11 border-white/15 bg-white/5 py-2 text-white file:mr-3 file:rounded-md file:border-0 file:bg-[#ffe100] file:px-3 file:py-2 file:font-semibold file:text-black"/><p className="text-xs text-neutral-400">JPEG, PNG ou WebP, com até 2 MB. Uma nova foto substitui a anterior.</p>{erroFoto && <p role="alert" className="text-sm text-red-300">{erroFoto}</p>}</div>
-      {fotoPreview ? <img src={fotoPreview} alt="Prévia da foto selecionada para o shopping" className="aspect-square w-28 rounded-xl object-cover sm:w-full"/> : shopping && <div className="grid gap-2"><FotoShopping nome={shopping.nome} imagemUrl={shopping.imagemUrl} className="aspect-square w-28 rounded-xl sm:w-full"/>{shopping.imagemUrl && aoRemoverFoto && <Button type="button" variant="outline" size="sm" className="border-white/20 bg-transparent text-white" disabled={ocupado} onClick={aoRemoverFoto}><Trash2 aria-hidden="true"/>Remover</Button>}</div>}
+      <div className="grid gap-2"><Label htmlFor="shopping-foto" className="text-neutral-100">Foto do shopping</Label>
+        <div className="flex min-h-11 items-center gap-3 rounded-md border border-white/15 bg-white/5 px-3 py-1">
+          <Input id="shopping-foto" name="foto" type="file" accept="image/jpeg,image/png,image/webp" disabled={ocupado} onChange={selecionarFoto} className="peer sr-only" />
+          <label htmlFor="shopping-foto" className="inline-flex h-9 shrink-0 cursor-pointer items-center justify-center rounded-md bg-[#ffe100] px-3 text-center text-sm font-semibold text-black transition hover:bg-[#ffeb54] peer-focus-visible:ring-2 peer-focus-visible:ring-[#ffe100] peer-focus-visible:ring-offset-2 peer-focus-visible:ring-offset-[#171717]">Escolher arquivo</label>
+          <span className="min-w-0 truncate text-sm text-neutral-200">{foto?.name ?? "Nenhum arquivo escolhido"}</span>
+        </div>
+        <p className="text-xs text-neutral-400">
+          JPEG, PNG ou WebP, com até 2 MB. Uma nova foto substitui a anterior.
+        </p>
+        {erroFoto && <p role="alert" className="text-sm text-red-300">{erroFoto}</p>}
+      </div>
+      {fotoPreview ? <img src={fotoPreview} alt="Prévia da foto selecionada para o shopping" className="aspect-square w-28 rounded-xl object-cover sm:w-full" /> : shopping && <div className="grid gap-2"><FotoShopping nome={shopping.nome} imagemUrl={shopping.imagemUrl} className="aspect-square w-28 rounded-xl sm:w-full" />{shopping.imagemUrl && aoRemoverFoto && <Button type="button" variant="outline" size="sm" className="border-white/20 bg-transparent text-white" disabled={ocupado} onClick={aoRemoverFoto}><Trash2 aria-hidden="true" />Remover</Button>}</div>}
     </div>
     <Button type="submit" className="mt-2 h-11 w-full px-8 font-bold sm:w-fit" disabled={ocupado || Boolean(erroFoto)}>{ocupado ? "Salvando..." : rotuloBotao}</Button>
   </form>

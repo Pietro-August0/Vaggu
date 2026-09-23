@@ -17,7 +17,6 @@ export interface ShoppingAdmin {
   endereco: string | null
   horarioAbertura: string | null
   horarioFechamento: string | null
-  fusoHorario: string | null
   imagemUrl: string | null
   possuiFoto: boolean
   ativo: boolean

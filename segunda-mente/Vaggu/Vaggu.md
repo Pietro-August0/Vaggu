@@ -36,7 +36,7 @@ Plataforma web responsiva para gestão de estacionamentos de shopping centers, d
 
 O próprio cofre está versionado na pasta `segunda-mente/` do repositório VAGGU.
 
-**Estado atual:** P01–P05 concluídos. A consolidação documental D01 foi concluída em 23/09/2026 com o histórico das Sprints 1–4, PRD, TRD, fluxo, modelo de dados, API, identidade e evidências reconciliados. A próxima implementação é C01, para restaurar e revalidar na interface as exclusões administrativas já suportadas pelo backend; depois dela, o próximo pacote de produto é o P06, de telemetria e estados confiáveis. Ver [[Vaggu/Planejamento/Próximos passos]].
+**Estado atual:** P01–P05, D01 e C01 concluídos. Em 23/09/2026, a ficha administrativa recuperou a exclusão lógica de gerente com sete segundos para desfazer e a exclusão lógica de shopping, além das correções do formulário e da página 404. O próximo pacote de produto é o P06, de telemetria e estados confiáveis. Ver [[Vaggu/Planejamento/Próximos passos]].
 
 
 **Atualização de 11/09:** autenticação real integrada e validada. Foto original do login ainda pendente. [[Vaggu/Documentação/validacao-login-2026-09-11|Ver resultados]].

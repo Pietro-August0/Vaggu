@@ -136,7 +136,7 @@ Esta matriz conecta o motivo da funcionalidade ao trabalho técnico. `Planejado`
 | Exibir contagens sem duplicar categorias | RF14; CA25–CA26 | Mapa operacional e telões | Consultas agregadas e autorização do telão ainda planejadas | Ainda sem telas/rotas funcionais | Juan/Elisa na apresentação; Kamilly/Samuel nos dados | P07 — bloqueado por P06 |
 | Explicar o uso no tempo e exportar resultados | RF13/RF15; CA27–CA31 | Histórico, comparação e relatórios | Histórico temporal, métricas, PDF e CSV ainda planejados | Ainda sem fluxo funcional | Samuel nos dados; Ana/Elisa na interface; Pietro na integração | P08 — bloqueado por P06/P07 |
 | Produzir análise externa com os mesmos números | RF16–RF17; CA32–CA33 | Relatório Power BI | Views e modelo analítico planejados | Nenhum relatório funcional encontrado | Samuel e Pietro, com validação de Elisa | P09 — bloqueado por P08 |
-| Desativar sem apagar histórico | RF18; CA34 | Administração de shopping e gerente | Exclusão lógica implementada no backend; UI atual precisa ser reconciliada | Serviços `shoppings`; ações frontend pendentes em C01 | Samuel no dado; Ana/Elisa/Juan na jornada; Pietro na integração | P03 histórico; C01 em preparação |
+| Desativar sem apagar histórico | RF18; CA34 | Administração de shopping e gerente | Exclusão lógica confirmada; gerente pode ser restaurado por sete segundos | Serviços `shoppings`; ações e diálogos na ficha administrativa | Samuel no dado; Ana/Elisa/Juan na jornada; Pietro na integração | P03 e C01 implementados |
 
 Detalhes de cada rota real ficam no README do backend; entidades atuais ficam em [modelo de dados](modelo-de-dados.md); telas reais e planejadas ficam em [fluxo de telas](fluxo-de-telas.md).
 

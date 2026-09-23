@@ -5,6 +5,13 @@ export class ErroApi extends Error {
   }
 }
 
+/** Mantém mensagens acionáveis para erros de configuração conhecidos do ambiente local. */
+function mensagemErroApi(codigo: unknown, mensagem: unknown, status: number): string {
+  if (codigo === "ARMAZENAMENTO_NAO_CONFIGURADO") return "A foto foi validada, mas o armazenamento de fotos não está configurado no backend. Defina BLOB_READ_WRITE_TOKEN para salvar a imagem."
+  if (codigo === "FOTO_INVALIDA" || codigo === "FOTO_MUITO_GRANDE") return typeof mensagem === "string" ? mensagem : "A foto selecionada não atende aos formatos ou tamanho permitidos."
+  return status < 500 && typeof mensagem === "string" ? mensagem : "Não foi possível conectar à VAGGU. Verifique sua conexão e tente novamente."
+}
+
 /** Distingue objetos JSON válidos de valores arbitrários recebidos pela rede. */
 export function objeto(valor: unknown): valor is Record<string, unknown> {
   return typeof valor === "object" && valor !== null && !Array.isArray(valor)
@@ -34,8 +41,7 @@ export async function requisitarApi(
       const erro = objeto(dados) && objeto(dados.erro) ? dados.erro : null
       throw new ErroApi(
         typeof erro?.codigo === "string" ? erro.codigo : "SERVICO_INDISPONIVEL",
-        resposta.status < 500 && typeof erro?.mensagem === "string"
-          ? erro.mensagem : "Não foi possível conectar à VAGGU. Tente novamente em instantes.",
+        mensagemErroApi(erro?.codigo, erro?.mensagem, resposta.status),
         resposta.status,
       )
     }
@@ -72,8 +78,7 @@ export async function requisitarArquivoApi(
       const erro = objeto(dados) && objeto(dados.erro) ? dados.erro : null
       throw new ErroApi(
         typeof erro?.codigo === "string" ? erro.codigo : "SERVICO_INDISPONIVEL",
-        resposta.status < 500 && typeof erro?.mensagem === "string"
-          ? erro.mensagem : "Não foi possível conectar à VAGGU. Tente novamente em instantes.",
+        mensagemErroApi(erro?.codigo, erro?.mensagem, resposta.status),
         resposta.status,
       )
     }

@@ -61,8 +61,8 @@ Não foi criada uma pasta `docs/` paralela. A segunda mente já era a fonte can�
 ### 6. Ordem de ação
 
 1. D01 — consolidar documentação e evidências: concluído em 23/09.
-2. C01 — reconciliar a interface administrativa: próxima implementação.
-3. P06 — implementar telemetria confiável depois do contrato de hardware.
+2. C01 — reconciliar as exclusões da interface administrativa: concluído em 23/09.
+3. P06 — próxima implementação: telemetria confiável depois do contrato de hardware.
 4. P07–P09 — operação, telões, métricas e Power BI sobre dados confiáveis.
 5. P10–P11 — concluir WhatsApp e preparar a apresentação integrada conforme dependências.
 
@@ -70,7 +70,7 @@ Não foi criada uma pasta `docs/` paralela. A segunda mente já era a fonte can�
 
 | Integrante | Papel base | Responsabilidade inicial |
 | --- | --- | --- |
-| Pietro | Fullstack | Integrar C01 e revisar o contrato transversal do P06. |
+| Pietro | Fullstack | Revisar o contrato transversal do P06 e integrar seus módulos. |
 | Ana | Frontend e Scrum Master | Acompanhar a sprint, documentação e navegação da ficha Admin. |
 | Kamilly | Backend | Preparar e revisar regras de servidor e integração com o hardware. |
 | Samuel | Backend e dados | Validar isolamento, persistência, API e evolução do modelo. |
@@ -106,7 +106,7 @@ A divisão detalhada, dependências e critérios permanecem em [Sprints do proje
 
 **Resultado:** documentos e evidências foram reconciliados e o verificador foi aprovado sobre o conjunto integrado. Campos que dependem de confirmação da equipe continuam explicitamente pendentes.
 
-## Próximo — C01: reconciliar a interface administrativa
+## Concluído em 23/09/2026 — C01: reconciliar exclusões administrativas
 
 **Responsável principal:** Pietro, por atravessar frontend e backend.
 
@@ -117,19 +117,15 @@ A divisão detalhada, dependências e critérios permanecem em [Sprints do proje
 1. O backend possui exclusão lógica de shopping e gerente, mas o frontend atual não apresenta essas ações.
 2. O frontend não apresenta o desfazer da exclusão de gerente, embora o backend ofereça a rota.
 3. Evidências antigas mostram ações que não existem no checkout atual.
-4. A ficha administrativa reúne muitos blocos numa página longa e precisa de navegação mais clara.
-5. Alguns estados selecionados não expõem estado acessível equivalente; o mapa não oferece nova tentativa após erro.
-6. CTAs do WhatsApp podem ficar visualmente ativos sem destino quando o número oficial não está configurado.
+4. A ficha administrativa ainda reúne muitos blocos numa página longa; esse acabamento permanece separado para não ampliar a correção de regressão.
+5. Nova evidência visual autenticada da ficha atual continua pendente, embora os contratos e cenários de integração estejam validados.
 
 ### Ordem de implementação
 
-1. Revalidar manualmente a ficha Admin no navegador e registrar o comportamento atual.
-2. Restaurar exclusão de gerente com confirmação, bloqueio durante o envio, mensagem de sucesso e ação de desfazer por sete segundos.
-3. Restaurar exclusão de shopping com confirmação de impacto, sem inventar desfazer ou reativação ainda ausentes no backend.
-4. Recarregar lista/ficha após cada ação e tratar falha sem perder o contexto do usuário.
-5. Melhorar navegação interna da ficha e estados acessíveis dos controles tocados.
-6. Tratar o CTA de WhatsApp sem número oficial com mensagem clara, sem link vazio.
-7. Criar evidências atuais e substituir apenas referências que deixaram de representar a tela.
+1. Exclusão de gerente restaurada com confirmação, bloqueio durante o envio, mensagem de sucesso e ação de desfazer por sete segundos.
+2. Exclusão de shopping restaurada com confirmação de impacto, sem inventar desfazer ou reativação ausentes no backend.
+3. Lista e ficha recarregam ou navegam após as ações; falhas preservam o contexto e exibem mensagem compreensível.
+4. Evidências antigas permanecem identificadas como históricas até uma nova captura autenticada da ficha atual.
 
 ### Aceite
 

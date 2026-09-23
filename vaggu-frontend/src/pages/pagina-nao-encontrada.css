@@ -1,0 +1,273 @@
+/* Página 404: o carro libera a vaga uma vez e o sensor confirma visualmente o estado livre. */
+.pagina-404 {
+  display: grid;
+  grid-template-rows: auto 1fr auto;
+  min-height: 100svh;
+  overflow: hidden;
+  padding: clamp(1.25rem, 3vw, 3rem);
+  background: #ffe100;
+  color: #171717;
+  font-family: "Poppins", sans-serif;
+}
+
+.pagina-404__cabecalho {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+}
+
+.pagina-404__navegacao {
+  display: flex;
+  align-items: center;
+  gap: .65rem;
+}
+
+.pagina-404__atalho,
+.pagina-404__whatsapp {
+  display: inline-flex;
+  min-height: 2.5rem;
+  align-items: center;
+  justify-content: center;
+  border: 1px solid #171717;
+  border-radius: 999px;
+  padding: .55rem 1.1rem;
+  color: #171717;
+  font-size: .9rem;
+  font-weight: 600;
+  text-decoration: none;
+  transition: background-color 160ms ease, color 160ms ease, transform 160ms ease;
+}
+
+.pagina-404__whatsapp {
+  border-color: #171717;
+  background: #171717;
+  color: #ffe100;
+}
+
+.pagina-404__atalho:hover,
+.pagina-404__atalho:focus-visible {
+  background: #171717;
+  color: #ffe100;
+}
+
+.pagina-404__whatsapp:hover,
+.pagina-404__whatsapp:focus-visible {
+  background: #343231;
+}
+
+.pagina-404__atalho:active,
+.pagina-404__whatsapp:active {
+  transform: scale(.97);
+}
+
+.pagina-404__atalho:focus-visible,
+.pagina-404__whatsapp:focus-visible,
+.pagina-404__voltar:focus-visible {
+  outline: 3px solid #171717;
+  outline-offset: 3px;
+}
+
+.pagina-404__conteudo {
+  display: grid;
+  align-content: center;
+  justify-items: center;
+  gap: clamp(7rem, 15vh, 9rem);
+  min-width: 0;
+  padding-block: 2rem;
+  text-align: center;
+}
+
+.pagina-404__ilustracao {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) clamp(4.5rem, 10vw, 6.5rem) minmax(0, 1fr);
+  align-items: center;
+  justify-items: center;
+  width: min(100%, clamp(18rem, 42vw, 27rem));
+  line-height: 1;
+}
+
+.pagina-404__numero {
+  width: 100%;
+  font-size: clamp(6.5rem, 17vw, 10rem);
+  font-weight: 700;
+  letter-spacing: -.06em;
+  text-align: center;
+}
+
+.pagina-404__vaga {
+  position: relative;
+  width: clamp(4.5rem, 10vw, 6.5rem);
+  height: clamp(7.5rem, 16vw, 10rem);
+  border-inline: .45rem dashed #171717;
+}
+
+.pagina-404__sensor {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: clamp(2.25rem, 4.6vw, 3.35rem);
+  aspect-ratio: 1;
+  translate: -50% -50%;
+  border-radius: 999px;
+  color: #ff3838;
+  background: #f51d1d;
+  box-shadow:
+    0 0 .65rem rgb(255 23 23 / 78%),
+    0 0 1.5rem rgb(255 23 23 / 48%);
+  filter: blur(2.2px);
+  animation: pagina-404-sensor 4.5s linear both;
+}
+
+.pagina-404__sensor::before {
+  position: absolute;
+  z-index: -1;
+  inset: -32%;
+  border-radius: inherit;
+  background: currentColor;
+  content: "";
+  filter: blur(1rem);
+  opacity: .28;
+}
+
+.pagina-404__carro {
+  position: absolute;
+  z-index: 2;
+  top: calc(50% - clamp(2.05rem, 3.5vw, 2.6rem));
+  left: calc(50% - clamp(1.45rem, 2.6vw, 1.9rem));
+  width: clamp(2.9rem, 5.2vw, 3.8rem);
+  height: clamp(4.1rem, 7vw, 5.2rem);
+  border-radius: .7rem;
+  background: #171717;
+  box-shadow: 0 .35rem .45rem rgb(0 0 0 / 22%);
+  transform-origin: 50% 65%;
+  translate: 0 0;
+  animation:
+    pagina-404-percurso 4.5s linear both,
+    pagina-404-direcao 4.5s linear both;
+}
+
+.pagina-404__carro::before,
+.pagina-404__carro::after {
+  position: absolute;
+  top: 28%;
+  width: .45rem;
+  height: 48%;
+  border-radius: .2rem;
+  background: #171717;
+  content: "";
+}
+
+.pagina-404__carro::before { left: -.32rem; }
+.pagina-404__carro::after { right: -.32rem; }
+
+.pagina-404__mensagem h1 {
+  margin: 0;
+  font-size: clamp(2.5rem, 6vw, 4.25rem);
+  font-weight: 700;
+  letter-spacing: -.05em;
+  line-height: 1;
+}
+
+.pagina-404__mensagem > p:last-child {
+  margin: .8rem 0 0;
+  font-size: clamp(1rem, 2.4vw, 1.65rem);
+  font-weight: 300;
+}
+
+.pagina-404__codigo {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  white-space: nowrap;
+}
+
+.pagina-404__voltar {
+  justify-self: center;
+  min-height: 3.5rem;
+  border-color: #171717;
+  border-radius: 999px;
+  background: transparent;
+  padding-inline: clamp(1.35rem, 4vw, 2.25rem);
+  color: #171717;
+  font-size: clamp(.9rem, 2vw, 1.1rem);
+  font-weight: 700;
+}
+
+.pagina-404__voltar:hover {
+  background: #171717;
+  color: #ffe100;
+}
+
+@keyframes pagina-404-percurso {
+  0% {
+    translate: 0 0;
+  }
+
+  6% { translate: .1rem 2.3rem; }
+  12% { translate: .3rem 4.5rem; }
+  18% { translate: .7rem 6.2rem; }
+  26% { translate: 1.3rem 7.2rem; }
+
+  32% {
+    translate: 2rem 7.5rem;
+  }
+
+  40% {
+    translate: 3.2rem 7.5rem;
+  }
+
+  43% {
+    translate: 3.4rem 7.5rem;
+  }
+
+  100% { translate: calc(-55vw - 8rem) 7.5rem; }
+}
+
+@keyframes pagina-404-direcao {
+  0% { transform: rotate(0deg); }
+  6% { transform: rotate(-2deg); }
+  12% { transform: rotate(-5deg); }
+  18% { transform: rotate(-9deg); }
+  26% { transform: rotate(-16deg); }
+  32% { transform: rotate(-24deg); }
+  40%, 100% { transform: rotate(-90deg); }
+}
+
+@keyframes pagina-404-sensor {
+  0%, 37% {
+    color: #ff3838;
+    background: #f51d1d;
+    box-shadow: 0 0 .65rem rgb(255 23 23 / 78%), 0 0 1.5rem rgb(255 23 23 / 48%);
+  }
+
+  45%, 100% {
+    color: #3cf15a;
+    background: #20df3e;
+    box-shadow: 0 0 .65rem rgb(32 227 58 / 76%), 0 0 1.5rem rgb(32 227 58 / 46%);
+  }
+}
+
+@media (max-width: 520px) {
+  .pagina-404 {
+    padding: 1.1rem;
+    border-radius: 0;
+  }
+
+  .pagina-404__navegacao {
+    gap: .4rem;
+  }
+
+  .pagina-404__atalho,
+  .pagina-404__whatsapp {
+    min-height: 2.25rem;
+    padding: .45rem .75rem;
+    font-size: .75rem;
+  }
+
+  .pagina-404__conteudo {
+    padding-block: 1rem;
+  }
+}

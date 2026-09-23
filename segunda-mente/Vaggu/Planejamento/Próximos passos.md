@@ -15,7 +15,7 @@ Antes de abrir o P06, a equipe corrigiu as divergências documentais encontradas
 - registrar a identidade visual fornecida pela equipe sem apresentá-la como nova extração do Figma;
 - preparar a rastreabilidade e a divisão da próxima sprint sem inventar datas.
 
-O D01 foi concluído com o verificador documental aprovado. A implementação atual passa ao C01: revalidar e restaurar na interface os fluxos administrativos de exclusão e desfazer já suportados pelo backend, além dos ajustes de clareza e acessibilidade descritos no plano.
+O D01 e o C01 foram concluídos com documentação e contratos reconciliados. A ficha atual voltou a oferecer exclusão lógica de gerente, sete segundos para desfazer e exclusão lógica de shopping.
 
 ## Antes de retomar a implementação
 
@@ -25,11 +25,11 @@ O D01 foi concluído com o verificador documental aprovado. A implementação at
 - [x] Conferir runtime e conexão PostgreSQL disponíveis, sem transportar credenciais para o Obsidian.
 - [x] Executar os checks exigidos pela reorganização antes de declarar sua conclusão.
 
-## Próxima correção: C01
+## Correção concluída: C01
 
-Reconciliar a ficha administrativa com os contratos reais: exclusão lógica de gerente, desfazer por sete segundos e exclusão lógica de shopping. A validação inclui desktop, celular, teclado, estados de erro/sucesso, lint e build.
+A ficha administrativa foi reconciliada com os contratos reais: exclusão lógica de gerente, desfazer por sete segundos e exclusão lógica de shopping. Frontend e integração PostgreSQL foram aprovados; falta apenas substituir as capturas históricas por novas evidências visuais autenticadas.
 
-## Próxima entrega de produto após C01: P06
+## Próxima entrega de produto: P06
 
 Implementar a base confiável de telemetria para placas ESP32 e sensores, preservando o isolamento por shopping e o histórico operacional.
 
@@ -46,8 +46,8 @@ Aceite: autenticar a origem, rejeitar vínculos de outro shopping, deduplicar e 
 | P03 | Admin, múltiplos gerentes e minha conta — concluído em 12/09 |
 | P04 | Andares, setores, vagas e mapa — concluído em 12/09 |
 | P05 | Importação CSV/XLSX com prévia — concluída em 21/09 |
-| C01 | Correções da interface administrativa — próxima implementação |
-| P06 | Telemetria, confirmação e expiração — próxima entrega de produto após C01 |
+| C01 | Correções da interface administrativa — concluídas em 23/09 |
+| P06 | Telemetria, confirmação e expiração — próxima entrega de produto |
 | P07 | Operação, manutenção e telões |
 | P08 | Histórico, métricas e exportações |
 | P09 | Relatório funcional Power BI |

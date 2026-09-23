@@ -2,7 +2,7 @@
 import { objeto } from "@/servicos/api"
 import type { GerenteAdmin, ShoppingAdmin } from "@/types/admin"
 
-const camposOpcionais = ["cnpj", "responsavelNome", "responsavelCpf", "emailCorporativo", "telefone", "cep", "uf", "cidade", "bairro", "logradouro", "numero", "complemento", "endereco", "horarioAbertura", "horarioFechamento", "fusoHorario"] as const
+const camposOpcionais = ["cnpj", "responsavelNome", "responsavelCpf", "emailCorporativo", "telefone", "cep", "uf", "cidade", "bairro", "logradouro", "numero", "complemento", "endereco", "horarioAbertura", "horarioFechamento"] as const
 
 export function lerShopping(valor: unknown): ShoppingAdmin {
   if (!objeto(valor) || typeof valor.id !== "string" || typeof valor.nome !== "string" || typeof valor.ativo !== "boolean"

@@ -61,6 +61,7 @@ Em conflito, decisão recente explícita prevalece sobre documentação antiga. 
 | DEC06 — 09/09/2026 | Admin acompanha placas ESP32, comunicação e manutenção. | Separar ocupação da evidência técnica dos equipamentos. | P06/P07 precisam de placa, sensores, validade, ocorrências e telas administrativas. | Apenas ocupação, sem visão dos controladores. |
 | DEC07 — 09/09/2026 | Power BI começa com dados históricos reais recebidos. | Evitar relatório decorativo ou desconectado do sistema. | P09 depende do histórico do P08 e de medidas reconciliadas. | Analytics externo apenas como ideia futura. |
 | DEC08 — 09/09/2026 | Confirmação inicial de ocupação em 30 segundos consistentes. | Reduzir oscilações e impedir confirmação por leitura isolada. | Telemetria precisa de observações repetidas, lacuna definida e testes de tempo. | Confirmação antiga de um minuto. |
+| DEC09 — 23/09/2026 | Fuso horário não faz parte do cadastro atual do shopping. | Evitar um campo sem uso na operação presente e reduzir dados que o Admin precisa preencher. | A interface e o contrato administrativo deixam de expor o campo; a coluna nullable legada permanece apenas para compatibilidade até uma migration futura. | Campo de fuso obrigatório ou exibido no cadastro inicial. |
 
 ### 2.1 Entrega funcional planejada
 
@@ -133,7 +134,7 @@ O Admin trata pedidos de demonstração e suporte no painel, mas credenciais nã
 
 ### 5.1 Dados do shopping
 
-Nome, identificação institucional pertinente, endereço, contato, responsável, situação da implantação, fuso e horários de operação. A foto representativa é pública, fica em armazenamento externo persistente e o PostgreSQL guarda somente sua URL HTTPS. Documentos e planta chegam principalmente pelo WhatsApp e exigem armazenamento privado; não confundir esses materiais com a foto nem colocá-los no bundle público.
+Nome, identificação institucional pertinente, endereço, contato, responsável, situação da implantação e horários de operação. O fuso não é cadastrado no fluxo atual. A foto representativa é pública, fica em armazenamento externo persistente e o PostgreSQL guarda somente sua URL HTTPS. Documentos e planta chegam principalmente pelo WhatsApp e exigem armazenamento privado; não confundir esses materiais com a foto nem colocá-los no bundle público.
 
 Etapas de implantação preservadas como base a conciliar: novo atendimento, em análise, documentação pendente, aprovado, em configuração, aguardando instalação, ativo, rejeitado e inativo. Não confundir etapa com suspensão de um gerente. Entrada inválida numa etapa deve retornar erro compreensível.
 
@@ -403,7 +404,7 @@ Não são um schema Prisma pronto. Tipos, índices e campos precisam ser concili
 | Entidade | Campos essenciais e finalidade |
 | --- | --- |
 | Usuario | ID, nome, e-mail único, telefone, senhaHash, perfil, ativo, trocarSenhaObrigatoria, shoppingId quando gerente, exclusão lógica e estado anterior, datas. |
-| Shopping | ID, dados institucionais, endereço, contato, fuso, horários, etapa, ativo e datas. |
+| Shopping | ID, dados institucionais, endereço, contato, horários, etapa, ativo e datas. A coluna legada de fuso não participa do contrato atual. |
 | Andar | ID, shoppingId, código, nome, ordem e ativo. |
 | Setor | ID, andarId, código, nome e ativo. |
 | Vaga | ID, setorId, código, tipo, estado, candidato, início/última observação do candidato, ativo. |

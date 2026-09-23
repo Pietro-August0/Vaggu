@@ -23,9 +23,9 @@ O token existe somente na memória da aba. Portanto, recarregar a página exige 
 | `/trocar-senha` — Troca obrigatória | Admin ou gerente autenticado com senha provisória | Login; redirecionamento das rotas protegidas | `/admin` ou `/painel`; `/login` ao sair | Informar senha provisória, nova senha e confirmação; acompanhar requisitos; mostrar/ocultar cada campo; sair | Substitui a senha provisória antes de liberar a área operacional | Implementado para o primeiro acesso; não atende à troca voluntária posterior |
 | `/admin` — Cadastro de shopping | Admin | Login; navegação “Cadastrar”; redirecionamento por perfil | `/admin/shoppings/:shoppingId`; `/admin/shoppings` pelo menu | Cadastrar dados institucionais e operacionais e selecionar foto | Cria o shopping e abre sua ficha; esta rota **não** é uma visão geral administrativa | Implementado |
 | `/admin/shoppings` — Lista de shoppings | Admin | Menu “Shoppings”; retorno da ficha | `/admin/shoppings/:shoppingId`; `/admin` | Buscar por shopping/cidade, abrir ficha e iniciar novo cadastro | Lista os registros retornados pela API e informa carregamento ou ausência de resultados | Implementado |
-| `/admin/shoppings/:shoppingId` — Ficha do shopping | Admin | Lista; criação concluída; link direto autorizado | `/admin/shoppings`; permanece na ficha após mutações | Editar dados e foto; consultar resumo persistido; importar CSV/XLSX, revisar e confirmar; configurar andares, setores, vagas e posições; criar, editar, bloquear, reativar e redefinir senha de gerente | Recarrega dados, estrutura e acessos após alterações. Estados sem leitura confirmada continuam indisponíveis. Não há ação de exclusão de gerente ou shopping na interface atual | Implementado com lacunas descritas abaixo |
+| `/admin/shoppings/:shoppingId` — Ficha do shopping | Admin | Lista; criação concluída; link direto autorizado | `/admin/shoppings`; permanece na ficha após mutações e retorna à lista após excluir o shopping | Editar dados e foto; consultar resumo persistido; importar CSV/XLSX, revisar e confirmar; configurar andares, setores, vagas e posições; criar, editar, bloquear, reativar, redefinir senha e excluir gerente; excluir shopping | Confirma ações destrutivas. A exclusão de gerente oferece sete segundos para desfazer; a de shopping encerra acessos e preserva estrutura e histórico. Estados sem leitura confirmada continuam indisponíveis | Implementado |
 | `/painel` — Painel do shopping e Minha conta | Gerente | Login; navegação “Visão geral”; redirecionamento por perfil | WhatsApp externo para solicitar alteração, quando configurado; `/login` ao sair | Navegar por andares, buscar e filtrar vagas, consultar mapa/lista e editar o próprio nome e telefone | Usa somente o shopping derivado da sessão. Exibe aviso de implantação quando necessário. “Minha conta” está na mesma página e não permite trocar a senha definitiva | Parcial: mapa e dados pessoais existem; telemetria, atualização temporal e análises ainda não |
-| `*` — Endereço desconhecido | Qualquer | URL não reconhecida | `/` | Nenhuma ação de domínio | Redireciona para a landing | Implementado |
+| `*` — Página não encontrada | Qualquer | URL não reconhecida | `/`; seção Sobre; WhatsApp quando configurado | Assistir à vaga ser liberada uma vez e retornar à tela inicial | Exibe uma 404 própria; o carro sai da vaga, o sensor muda de vermelho para verde e a animação reinicia somente ao recarregar a página | Implementado |
 
 ## Conteúdo real da ficha administrativa
 
@@ -58,22 +58,20 @@ O WhatsApp é um canal externo à navegação web. Landing e login apenas abrem 
 
 ### Exclusão de gerente
 
-O backend mantém `DELETE /gerentes/:gerenteId` e `POST /gerentes/:gerenteId/desfazer-exclusao`, com janela de sete segundos para desfazer. A interface atual da ficha oferece editar, bloquear/reativar e redefinir senha, mas **não chama essas rotas de exclusão**.
+O backend mantém `DELETE /gerentes/:gerenteId` e `POST /gerentes/:gerenteId/desfazer-exclusao`, com janela de sete segundos para desfazer. A ficha atual confirma a exclusão, remove o acesso da lista e apresenta a ação “Desfazer” durante a mesma janela aceita pelo servidor.
 
-As imagens `confirmacao-excluir-gerente.png` e `aviso-desfazer-exclusao.png` documentam uma versão anterior e devem ser tratadas como evidência histórica, não como comprovação do frontend atual. Uma correção futura precisa escolher entre restaurar o fluxo de exclusão/desfazer na interface ou retirar/alterar o contrato depois de nova decisão explícita da equipe.
+As imagens `confirmacao-excluir-gerente.png` e `aviso-desfazer-exclusao.png` continuam sendo evidências históricas da versão anterior. A implementação atual foi revalidada pelo contrato e por testes; uma nova captura autenticada ainda deve substituir as imagens antigas como evidência visual da ficha atual.
 
 ### Exclusão de shopping
 
-O backend mantém `DELETE /shoppings/:shoppingId`, mas a listagem e a ficha atuais **não exibem ação para excluir shopping**. Também não existe, nas rotas atuais, uma operação web equivalente ao desfazer imediato documentado genericamente no SSD. Não afirmar que o Admin consegue excluir ou desfazer a exclusão de shopping pela interface atual.
+O backend mantém `DELETE /shoppings/:shoppingId`, e a ficha atual exibe a ação com confirmação explícita. Após a exclusão, o Admin retorna à lista; os acessos são encerrados e a estrutura e o histórico permanecem preservados. Não há desfazer para shopping no contrato atual.
 
 ### Evidências visuais anteriores
 
 As capturas de P02, P03, P04 e “Melhorias — interações e gerentes” preservam o estado observado em validações anteriores. Elas continuam úteis para histórico, comparação e regressão, mas não substituem uma captura da versão presente. Antes de declarar uma tela validada, gerar nova evidência a partir da rota atual e registrar data, viewport, perfil e cenário.
 
-## Próxima correção documental e de interface
+## Próxima revisão visual
 
-1. definir com a equipe o destino dos fluxos de exclusão de gerente e shopping;
-2. implementar e validar a decisão sem confundir bloqueio com exclusão lógica;
-3. criar evidências atuais da ficha, importação, mapa, estados vazios, erros e larguras menores;
-4. separar ou nomear claramente as próximas páginas antes de introduzir novas rotas;
-5. manter este documento sincronizado com `src/main.tsx` e com os itens reais da navegação.
+1. criar evidências atuais da ficha, exclusões, importação, mapa, estados vazios, erros e larguras menores;
+2. separar ou nomear claramente as próximas páginas antes de introduzir novas rotas;
+3. manter este documento sincronizado com `src/main.tsx` e com os itens reais da navegação.

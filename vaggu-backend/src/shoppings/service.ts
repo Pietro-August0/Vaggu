@@ -87,21 +87,13 @@ function emailOpcional(value: unknown): string | null {
   return email;
 }
 
-/** Aceita somente horários de 24 horas e fusos IANA reconhecidos pelo servidor. */
+/** Aceita somente horários de operação no formato de 24 horas. */
 function horarioOpcional(value: unknown, nomeCampo: string): string | null {
   const horario = textoOpcional(value, nomeCampo, 5);
   if (horario !== null && !/^([01]\d|2[0-3]):[0-5]\d$/.test(horario)) {
     throw new ApiError(400, 'DADOS_INVALIDOS', `${nomeCampo} deve usar o formato HH:MM.`);
   }
   return horario;
-}
-
-function fusoOpcional(value: unknown): string | null {
-  const fuso = textoOpcional(value, 'fuso horário', 80);
-  if (fuso === null) return null;
-  try { new Intl.DateTimeFormat('pt-BR', { timeZone: fuso }).format(); }
-  catch { throw new ApiError(400, 'DADOS_INVALIDOS', 'Informe um fuso horário válido.'); }
-  return fuso;
 }
 
 /** Converte os campos permitidos em dados prontos para criação ou atualização. */
@@ -129,7 +121,6 @@ function dadosShopping(body: Record<string, unknown> = {}, exigeNome = false) {
   campo('complemento', valor => textoOpcional(valor, 'complemento', 80));
   campo('horarioAbertura', valor => horarioOpcional(valor, 'horário de abertura'));
   campo('horarioFechamento', valor => horarioOpcional(valor, 'horário de fechamento'));
-  campo('fusoHorario', fusoOpcional);
   campo('endereco', valor => textoOpcional(valor, 'endereço', 240));
   return data;
 }
@@ -154,7 +145,6 @@ function publicShopping(shopping) {
     endereco: shopping.endereco ?? null,
     horarioAbertura: shopping.horarioAbertura ?? null,
     horarioFechamento: shopping.horarioFechamento ?? null,
-    fusoHorario: shopping.fusoHorario ?? null,
     imagemUrl: shopping.imagemUrl ?? null,
     possuiFoto: Boolean(shopping.imagemUrl),
     ativo: shopping.ativo,

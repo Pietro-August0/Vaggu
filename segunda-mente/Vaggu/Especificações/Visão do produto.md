@@ -86,7 +86,7 @@ O MVP-alvo do TCC inclui:
 - telões web com agregados por andar ou setor;
 - primeiro relatório funcional no Power BI baseado no histórico.
 
-P01–P05 estão concluídos. A correção de interface C01 deve ser executada antes do próximo pacote de produto. Em seguida, o P06 estabiliza o contrato de firmware e a confiabilidade da telemetria antes de P07–P09.
+P01–P05 e a correção de interface C01 estão concluídos. O P06 é o próximo pacote de produto e estabiliza o contrato de firmware e a confiabilidade da telemetria antes de P07–P09.
 
 ## Posterior ao MVP
 

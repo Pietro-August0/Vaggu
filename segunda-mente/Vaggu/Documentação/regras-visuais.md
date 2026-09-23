@@ -94,7 +94,7 @@ Os nomes são uma proposta de organização; adaptar aos tokens existentes. Não
 
 Estados a implementar: padrão, hover onde aplicável, foco, pressionado/selecionado, desabilitado, carregando, vazio, erro, sucesso e dados desatualizados. Usar padrões existentes e evitar uma versão diferente de modal para cada tela.
 
-Cards acionáveis usam uma resposta curta de elevação e pressão, sem animações decorativas longas. O contorno da palavra “vagas” no login pode se desenhar como rabisco ao carregar; com movimento reduzido, aparece completo e estático.
+Cards acionáveis usam uma resposta curta de elevação e pressão, sem animações decorativas longas. O contorno da palavra “vagas” no login se desenha como rabisco ao carregar.
 
 Na troca obrigatória de senha, não depender da mensagem nativa do navegador. Informar separadamente senha provisória incorreta, senha repetida, requisito ausente e confirmação divergente. Cor e ícone podem reforçar o estado de cada requisito, mas o texto continua sendo a fonte da informação.
 
@@ -136,7 +136,7 @@ Reutilizar a base visual, mas oferecer organização para shoppings, acessos e e
 
 Adotar layout fluido e breakpoints necessários ao conteúdo, conciliados com os frames existentes. Como **matriz de verificação proposta**, testar aproximadamente 360, 768, 1280 e 1920 pixels, além da resolução real do telão. Esses números não foram extraídos do Figma.
 
-Conferir navegação por teclado, foco visível, leitura dos controles por tecnologia assistiva, zoom do navegador, textos maiores e áreas de toque. Movimento funcional deve respeitar a preferência por movimento reduzido. A landing possui uma exceção decorativa aprovada em 14/09: suas animações permanecem automáticas, mas nenhuma informação essencial depende delas. Nenhuma informação essencial depende apenas de hover, animação ou cor.
+Conferir navegação por teclado, foco visível, leitura dos controles por tecnologia assistiva, zoom do navegador, textos maiores e áreas de toque. Por decisão da equipe em 23/09, as animações permanecem ativas independentemente da preferência de movimento do sistema. Nenhuma informação essencial depende apenas de hover, animação ou cor.
 
 Verificar contraste de texto/controles usando os valores reais; não declarar conformidade completa de acessibilidade sem auditoria. Scroll horizontal interno pode ser necessário no mapa; não deve fazer a página inteira escapar da tela.
 

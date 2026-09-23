@@ -28,17 +28,6 @@
   transform: scale(.975);
 }
 
-@media (prefers-reduced-motion: reduce) {
-  .cartao-clicavel {
-    transition: none;
-  }
-
-  .cartao-clicavel:hover,
-  .cartao-clicavel:active {
-    transform: none;
-  }
-}
-
 @custom-variant dark (&:is(.dark *));
 
 html {

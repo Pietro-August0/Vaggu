@@ -2,7 +2,7 @@
 import { StrictMode } from "react"
 import { createRoot } from "react-dom/client"
 import { ThemeProvider } from "next-themes"
-import { BrowserRouter, Navigate, Route, Routes } from "react-router-dom"
+import { BrowserRouter, Route, Routes } from "react-router-dom"
 import { MotionConfig } from "motion/react"
 
 import "./index.css"
@@ -14,6 +14,7 @@ import { AdminPage } from "@/pages/admin-page"
 import { TrocarSenhaPage } from "@/pages/trocar-senha-page"
 import { LandingPage } from "@/pages/landing-page"
 import { LoginPage } from "@/pages/login-page"
+import { PaginaNaoEncontrada } from "@/pages/pagina-nao-encontrada"
 
 /** Define as rotas públicas, a troca obrigatória e os destinos por perfil validados pela API. */
 function App() {
@@ -26,7 +27,7 @@ function App() {
       <Route element={<ProtectedRoute role="admin"><AdminPage /></ProtectedRoute>} path="/admin/shoppings" />
       <Route element={<ProtectedRoute role="admin"><AdminPage /></ProtectedRoute>} path="/admin/shoppings/:shoppingId" />
       <Route element={<ProtectedRoute role="shopping"><AreaAutenticada /></ProtectedRoute>} path="/painel" />
-      <Route element={<Navigate replace to="/" />} path="*" />
+      <Route element={<PaginaNaoEncontrada />} path="*" />
     </Routes>
   )
 }
@@ -34,7 +35,7 @@ function App() {
 createRoot(document.getElementById("root")!).render(
   <StrictMode>
     <ThemeProvider attribute="class" defaultTheme="light" enableSystem={false}>
-      <MotionConfig reducedMotion="user">
+      <MotionConfig reducedMotion="never">
         <BrowserRouter>
           <AppStoreProvider>
             <App />

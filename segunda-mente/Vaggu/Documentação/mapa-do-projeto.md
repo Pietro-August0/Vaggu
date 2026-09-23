@@ -153,11 +153,13 @@ As cópias de imagens entre `segunda-mente/Vaggu/Identidade visual/Assets/` e `v
 | `vaggu-frontend/src/lib/constants.ts` | Publica links de contato somente após configurar o número oficial da equipe. |
 | `vaggu-frontend/src/lib/utils.ts` | Combina classes condicionais e resolve conflitos de utilitários Tailwind. |
 | `vaggu-frontend/src/main.tsx` | Inicializa o React e reúne tema, navegação, mensagens e sessão autenticada das páginas. |
-| `vaggu-frontend/src/pages/admin-page.tsx` | Implementa cadastro, lista e ficha do shopping com foto, mapa, importação, estrutura, gerentes e cópia da senha recém-emitida. |
+| `vaggu-frontend/src/pages/admin-page.tsx` | Implementa cadastro, lista e ficha do shopping com foto, mapa, importação, estrutura, gerentes, cópia da senha recém-emitida e exclusões administrativas com desfazer para gerente. |
 | `vaggu-frontend/src/pages/area-autenticada.tsx` | Mantém o painel operacional e a edição da própria conta do gerente; o Admin usa a página administrativa dedicada. |
 | `vaggu-frontend/src/pages/landing-page.tsx` | Compõe a landing pública e encaminha o contato comercial ao WhatsApp. |
 | `vaggu-frontend/src/pages/login-page.css` | Define composição responsiva do login, troca de senha e desenho animado do rabisco em “vagas”. |
 | `vaggu-frontend/src/pages/login-page.tsx` | Entrada única para Admin e gerente, sem solicitar preenchimento automático das credenciais ao abrir a página. |
+| `vaggu-frontend/src/pages/pagina-nao-encontrada.tsx` | Exibe a rota 404 pública, oferece retorno à landing e compõe a animação semântica da vaga liberada. |
+| `vaggu-frontend/src/pages/pagina-nao-encontrada.css` | Define o layout responsivo e a sequência única em que o carro deixa o sensor vermelho, sai pela esquerda e libera o estado verde. |
 | `vaggu-frontend/src/pages/trocar-senha-page.tsx` | Exige uma senha definitiva e reaproveita na aba a senha provisória digitada no login. |
 | `vaggu-frontend/src/servicos/api.ts` | Cliente autenticado da API para JSON, corpos binários e exclusão; tokens ficam somente em memória. |
 | `vaggu-frontend/src/servicos/estrutura.ts` | Valida a árvore pública de andares, setores, vagas e posições recebida da API. |
