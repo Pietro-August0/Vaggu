@@ -348,6 +348,10 @@ ALTER ROLE vaggu_teste_runner CREATEDB;
 - Antes de migrations em ambiente compartilhado, faça backup e confirme o destino.
 - Dados fictícios devem permanecer apenas nos bancos locais e temporários.
 
-## Produção
+## Hospedagem no Render
 
-Este guia configura somente desenvolvimento e testes locais. Publicar a VAGGU exige uma etapa separada: provedor PostgreSQL, hospedagem da API e frontend, HTTPS, variáveis secretas, backups, monitoramento, CORS e revisão de segurança. Nada nesta página significa que o sistema já está em produção.
+O `render.yaml` da raiz publica a API e o build React no mesmo endereço HTTPS. O serviço usa o plano gratuito do Render e o PostgreSQL permanece no Neon. As credenciais ficam apenas nas variáveis secretas do provedor e não devem ser registradas no Git.
+
+O Render usa `HOST=0.0.0.0`, aplica as migrations antes de iniciar a API e consulta `/api/v1/health/ready` para validar a conexão. `FRONTEND_DIST_PATH` faz o Express entregar o build React na mesma origem das rotas `/api/v1`, sem exigir CORS amplo.
+
+No plano gratuito, o serviço pode suspender após um período sem acesso. A primeira abertura seguinte pode demorar enquanto a instância reinicia; os dados continuam persistidos no Neon.

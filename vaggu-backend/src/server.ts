@@ -22,6 +22,7 @@ const armazenamentoFotos = config.blobReadWriteToken
   : undefined;
 const app = createApp({
   checkDatabase: () => prisma.$queryRaw`SELECT 1`,
+  frontendDistPath: process.env.FRONTEND_DIST_PATH,
   auth: createAuthService(prisma),
   whatsapp: { config: config.whatsapp, service: whatsappService },
   shoppings: createShoppingsService(prisma, { armazenamentoFotos }),

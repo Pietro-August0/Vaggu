@@ -2,6 +2,7 @@
 // Os serviços são recebidos do servidor ou substituídos por simuladores nos testes.
 import express, { type ErrorRequestHandler } from 'express';
 import helmet from 'helmet';
+import { resolve } from 'node:path';
 import { authRoutes } from './auth/routes.js';
 import { ApiError } from './auth/service.js';
 import { whatsappRoutes } from './whatsapp/routes.js';
@@ -12,6 +13,7 @@ import { importacaoRoutes } from './importacao/routes.js';
 
 type AppServices = {
   checkDatabase: () => Promise<unknown> | unknown;
+  frontendDistPath?: string;
   auth?: any;
   whatsapp?: any;
   shoppings?: any;
@@ -21,7 +23,7 @@ type AppServices = {
 };
 
 // Injeção da consulta facilita testar HTTP sem um banco real.
-export function createApp({ checkDatabase, auth, whatsapp, shoppings, conta, estrutura, importacao }: AppServices) {
+export function createApp({ checkDatabase, frontendDistPath, auth, whatsapp, shoppings, conta, estrutura, importacao }: AppServices) {
   const app = express();
   app.disable('x-powered-by');
   app.use(helmet());
@@ -62,6 +64,16 @@ export function createApp({ checkDatabase, auth, whatsapp, shoppings, conta, est
     app.use('/api/v1', estruturaAdminRoutes(auth, estrutura));
   }
   if (auth && importacao) app.use('/api/v1', importacaoRoutes(auth, importacao));
+
+  // Na hospedagem, entrega o build React pelo mesmo domínio da API. Assim, login e
+  // chamadas autenticadas mantêm a política de mesma origem sem liberar CORS amplo.
+  if (frontendDistPath) {
+    const frontendIndexPath = resolve(frontendDistPath, 'index.html');
+    app.use(express.static(frontendDistPath, { index: false }));
+    app.get(/^\/(?!api(?:\/|$)).*/, (_req, res, next) => {
+      res.sendFile(frontendIndexPath, (error) => error ? next(error) : undefined);
+    });
+  }
 
   app.use((_req, res) => {
     res.status(404).json({

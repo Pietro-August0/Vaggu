@@ -349,3 +349,12 @@ Se a lista de skills da conversa atual ainda não refletir a instalação, abrir
 - **Segurança e dados:** a senha provisória digitada fica somente na memória da aba e é apagada ao trocar a senha, sair ou limpar a sessão. O login inicia vazio e não solicita autopreenchimento. Análises históricas continuam indisponíveis até existirem eventos reais; a ficha não exibe gráficos ou números inventados.
 - **Verificações:** migration aplicada ao `vaggu_local`; integração PostgreSQL isolada 31/31; suíte básica do backend com 39 aprovações e duas integrações puladas quando executada sem `TEST_DATABASE_URL`; build backend, lint e build frontend aprovados. Capturas em 1440×1024 e 390×844 conferiram cadastro, lista e ficha completa; o fluxo real levou o gerente a `/trocar-senha` com a senha provisória já preenchida.
 - **Limites:** documentos privados, telemetria e histórico analítico não foram implementados nesta entrega. O aviso conhecido de bundle acima de 500 kB permanece. Mudanças locais na branch `feat/admin-shoppings-juan`, sem commit, push ou deploy.
+
+### 23/09/2026 — banco Neon e hospedagem pública
+
+- **Responsável:** Samuel Santos (`mukinha01`).
+- **Banco:** estrutura e dados existentes migrados para o PostgreSQL gratuito do Neon; a API usa a conexão somente por variável secreta do Render.
+- **Hospedagem:** o serviço `vaggu-tcc` publica API e frontend na mesma origem, aplica migrations na inicialização e verifica o banco em `/api/v1/health/ready`.
+- **Git:** o trabalho local da Sprint 4 foi preservado em `feat/p05-importacao-samuel`; depois, a `main` foi atualizada por avanço rápido e recebeu somente a adaptação de hospedagem compatível com a versão mais nova do sistema.
+- **Verificações finais:** backend com 43 testes aprovados e três integrações puladas sem `TEST_DATABASE_URL`; frontend com lint e build aprovados; documentação com 223 arquivos cobertos e links internos válidos.
+- **Limite do plano:** o serviço gratuito pode suspender por inatividade e demorar na primeira abertura seguinte; os dados permanecem persistidos no Neon.

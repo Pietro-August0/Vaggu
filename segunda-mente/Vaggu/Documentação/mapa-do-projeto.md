@@ -36,6 +36,7 @@ As cópias de imagens entre `segunda-mente/Vaggu/Identidade visual/Assets/` e `v
 | `.gitignore` | Exclui ferramentas locais, segredos, dependências e saídas de build. |
 | `AGENTS.md` | Define escopo, regras de implementação, documentação e verificação para agentes. |
 | `README.md` | Apresenta o produto, recursos entregues e comandos de execução. |
+| `render.yaml` | Define build, inicialização, saúde e variáveis não secretas da hospedagem gratuita no Render. |
 | `scripts/verificar-documentacao.mjs` | Confere se o mapa canônico explica os arquivos versionáveis e se os links internos da segunda mente possuem destino válido. |
 | `skills/end/SKILL.md` | Documentação: Fechamento do dia — VAGGU. |
 | `skills/end/agents/openai.yaml` | Metadados de descoberta e apresentação da skill no Codex. |
@@ -58,7 +59,7 @@ As cópias de imagens entre `segunda-mente/Vaggu/Identidade visual/Assets/` e `v
 | `vaggu-backend/prisma/migrations/migration_lock.toml` | Registra o provedor PostgreSQL das migrations do Prisma. |
 | `vaggu-backend/prisma/schema.prisma` | Define entidades, relações e restrições, incluindo estrutura, exclusão lógica, importação e URL da foto do shopping. |
 | `vaggu-backend/scripts/create-admin.ts` | Comando interativo para criar o primeiro administrador e exibir a senha gerada uma única vez no terminal. |
-| `vaggu-backend/src/app.ts` | Monta a API Express, suas rotas e respostas de erro, sem abrir uma porta de rede. |
+| `vaggu-backend/src/app.ts` | Monta a API Express, suas rotas e respostas de erro e, quando configurado, entrega o build React na mesma origem. |
 | `vaggu-backend/src/auth/bootstrap.ts` | Cria o primeiro administrador por uma operação de terminal, sem cadastro público. |
 | `vaggu-backend/src/auth/middleware.ts` | Autentica sessões, exige perfis e fornece às rotas o escopo autorizado do usuário. |
 | `vaggu-backend/src/auth/password.ts` | Protege senhas com scrypt e sal aleatório; guarda o resultado derivado, nunca a senha original. |
@@ -83,7 +84,7 @@ As cópias de imagens entre `segunda-mente/Vaggu/Identidade visual/Assets/` e `v
 | `vaggu-backend/src/conta/routes.ts` | Expõe consulta e edição da conta usando exclusivamente a identidade da sessão. |
 | `vaggu-backend/src/conta/service.ts` | Atualiza somente dados pessoais permitidos, sem conceder mudanças de perfil ou shopping. |
 | `vaggu-backend/src/lib/prisma.ts` | Cria o cliente Prisma compartilhado; serviços aceitam cliente transacional por injeção. |
-| `vaggu-backend/src/server.ts` | Ponto de entrada executável: lê a configuração, conecta Prisma e armazenamento de fotos e inicia o HTTP. |
+| `vaggu-backend/src/server.ts` | Ponto de entrada executável: lê a configuração, conecta Prisma e armazenamento de fotos, informa o build do frontend e inicia o HTTP. |
 | `vaggu-backend/src/shoppings/armazenamento-fotos.ts` | Adapta gravação e remoção das fotos públicas no Vercel Blob sem acoplar o domínio ao SDK. |
 | `vaggu-backend/src/shoppings/routes.ts` | Rotas administrativas de cadastro, ficha, foto, gerentes, exclusões e emissão de senha provisória. |
 | `vaggu-backend/src/shoppings/service.ts` | Valida a ficha e a imagem, administra shoppings e gerentes e entrega a senha provisória somente na criação ou redefinição. |
