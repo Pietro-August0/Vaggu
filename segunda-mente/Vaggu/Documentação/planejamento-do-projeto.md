@@ -180,7 +180,7 @@ Cada entrada mantém: data local, estado do dia, pacote/objetivo, evidências de
 - **Verificações:** frontend lint e build aprovados; backend typecheck aprovado; suíte básica com 43 aprovações e três integrações explicitamente pendentes sem variável de teste; integração PostgreSQL oficial com 32/32 cenários, incluindo exclusão/desfazer de gerente e exclusão de shopping; verificador documental e `git diff --check` aprovados. A página 404 foi inspecionada em desktop e largura móvel. A ficha autenticada não recebeu nova captura visual neste fechamento, portanto as evidências antigas permanecem históricas.
 - **Decisões e limites:** exclusão de shopping não possui desfazer no contrato atual; exclusão de gerente mantém a janela de sete segundos. A foto exige `BLOB_READ_WRITE_TOKEN` no backend para persistir. O aviso conhecido de bundle acima de 500 kB permanece. Nenhum deploy foi solicitado.
 - **Próxima ação:** iniciar P06 consolidando o contrato de firmware e telemetria — autenticação da placa, identificação do sensor, sequência, frequência, confirmação de 30 segundos e expiração — antes de criar endpoints.
-- **Git:** commit e push na `main` autorizados pela equipe neste fechamento; registrar os identificadores após a publicação.
+- **Git:** entrega funcional publicada na `main` no commit `42ad219a` (`feat: conclui correcoes administrativas e pagina 404`), preservando antes dela o commit remoto `c7773a7e` de configuração do Render. Nenhum deploy manual adicional foi solicitado.
 
 ### 21/09/2026 — retomada segura: mapa, acessos e foto do shopping
 
