@@ -40,7 +40,7 @@ As cópias de imagens entre `segunda-mente/Vaggu/Identidade visual/Assets/` e `v
 | `.github/workflows/publicar-render.yml` | Solicita ao Render um novo deploy após cada push na `main`, usando um Deploy Hook guardado como segredo do GitHub. |
 | `.gitignore` | Exclui ferramentas locais, segredos, dependências e saídas de build. |
 | `AGENTS.md` | Define escopo, regras de implementação, documentação e verificação para agentes. |
-| `README.md` | Apresenta o produto no GitHub com recursos, limites, capturas datadas, tecnologias, início local e links para as fontes canônicas. |
+| `README.md` | Apresenta a VAGGU no GitHub com proposta, experiência por perfil, imagens comentadas, tecnologias, início local e links para a documentação técnica. |
 | `render.yaml` | Define build, inicialização, saúde e variáveis não secretas da hospedagem gratuita no Render. |
 | `scripts/verificar-documentacao.mjs` | Confere se o mapa canônico explica os arquivos versionáveis e se os links internos da segunda mente possuem destino válido. |
 | `skills/end/SKILL.md` | Documentação: Fechamento do dia — VAGGU. |
