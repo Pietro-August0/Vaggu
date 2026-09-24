@@ -89,6 +89,7 @@ As cópias de imagens entre `segunda-mente/Vaggu/Identidade visual/Assets/` e `v
 | `vaggu-backend/src/shoppings/armazenamento-fotos.ts` | Adapta gravação e remoção das fotos públicas no Vercel Blob sem acoplar o domínio ao SDK. |
 | `vaggu-backend/src/shoppings/routes.ts` | Rotas administrativas de cadastro, ficha, foto, gerentes, exclusões e emissão de senha provisória. |
 | `vaggu-backend/src/shoppings/service.ts` | Valida a ficha e a imagem, administra shoppings e gerentes e entrega a senha provisória somente na criação ou redefinição. |
+| `vaggu-backend/src/telemetria/confirmacao-estado.ts` | Calcula a confirmação temporal de leituras de vaga já validadas, sem receber telemetria ou persistir dados. |
 | `vaggu-backend/src/whatsapp/client.ts` | Cliente de envio de texto pela API da Meta; recebe configuração privada e transporte substituível em testes. |
 | `vaggu-backend/src/whatsapp/payload.ts` | Interpreta o formato externo do webhook e mantém os textos do menu demonstrativo. |
 | `vaggu-backend/src/whatsapp/routes.ts` | Recebe o desafio de configuração e os eventos da Meta, validando sua origem antes de processá-los. |
@@ -102,6 +103,7 @@ As cópias de imagens entre `segunda-mente/Vaggu/Identidade visual/Assets/` e `v
 | `vaggu-backend/test/env.test.ts` | Verifica leitura e rejeição das variáveis de ambiente obrigatórias. |
 | `vaggu-backend/test/integracao-acessos.test.ts` | Executa os cenários HTTP de autenticação e administração em PostgreSQL descartável. |
 | `vaggu-backend/test/importacao-csv.test.ts` | Verifica a prévia CSV do P05, incluindo normalização, duplicatas, colunas ausentes e sintaxe inválida. |
+| `vaggu-backend/test/confirmacao-estado.test.ts` | Verifica janela, continuidade, alternância e leituras repetidas na confirmação temporal do P06. |
 | `vaggu-backend/test/importacao-routes.test.ts` | Verifica autorização e transporte HTTP da prévia CSV administrativa. |
 | `vaggu-backend/test/prisma-postgresql.test.ts` | Confere provider, relações, índices e migrations PostgreSQL, inclusive URL da foto e remoção dos campos binário/reversível. |
 | `vaggu-backend/test/whatsapp.test.ts` | Verifica assinatura, desafio, interpretação, deduplicação e respostas do webhook WhatsApp. |

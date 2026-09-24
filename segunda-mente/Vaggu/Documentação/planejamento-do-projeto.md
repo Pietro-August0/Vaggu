@@ -110,7 +110,7 @@ As sprints reais da equipe estão registradas em [Sprints do projeto](../Planeja
 | P03 | Integrar Admin, vários gerentes e minha conta | Concluído em 12/09 | Contratos reais integrados; DTO informa situação ativa e bloqueio remove sessões na transação. | CA04, CA06 e o recorte disponível de CA07 aprovados em PostgreSQL real; fluxos principais aprovados no navegador. |
 | P04 | Estrutura e implantação: andares, setores, vagas, categorias e mapa | Concluído em 12/09 | P03 concluído; migration e contratos incrementais entregues. | CA08–CA12 cobertos: estado de configuração, dois andares, filtros, seleção, busca entre andares, rejeição de vaga de outro andar, revisão concorrente e isolamento. |
 | P05 | Importação CSV/XLSX com prévia e preservação de histórico | Concluído em 21/09 | Backend, PostgreSQL e interface Admin autenticada validados; confirmação concorrente e recarga da estrutura aprovadas. | CA13–CA14 cobertos sem alteração parcial, perda de ID/histórico ou remoção silenciosa de vaga ausente. |
-| P06 | ESP32/sensores, ingestão e estados confiáveis | Pronto | P04–P05 concluídos; falta estabilizar o contrato de firmware: autenticação, sensor, inicialização, sequência, frequência e expiração. | Confirmação de 30 s com evidência, deduplicação, ordem e expiração por sensor; histórico transacional. CA15–CA24. |
+| P06 | ESP32/sensores, ingestão e estados confiáveis | Em andamento: núcleo temporal isolado | P04–P05 concluídos; falta estabilizar o contrato de firmware: autenticação, sensor, inicialização, sequência, frequência e expiração. | Confirmação de 30 s com evidência, deduplicação, ordem e expiração por sensor; histórico transacional. CA15–CA24. |
 | P07 | Operação, manutenção, contagens e telões | Bloqueado por P06 | Observações confiáveis e ocorrências. | Contagens reconciliadas sem duplicar categorias; dado vencido não vira livre. CA23–CA26. |
 | P08 | Histórico, métricas e exportações | Bloqueado por P06/P07 | Intervalos confirmados, cobertura e recortes. | Cálculos reproduzem conjunto controlado; exportações respeitam shopping e filtros. CA27–CA31. |
 | P09 | Primeiro relatório funcional Power BI | Bloqueado por P08 | Histórico disponível e decisão de distribuição/acesso. | Atualização funcional e métricas reconciliadas (CA32); isolamento de acesso (CA33) só concluído na distribuição efetiva. |
@@ -130,7 +130,7 @@ Preservar os limites do produto: web responsiva, sem cadastro público de gerent
 - **Aceite e verificação a confirmar:** isolamento por shopping/placa, deduplicação, ordenação, confirmação após 30 segundos consistentes, expiração sem assumir vaga livre e histórico transacional.
 - **Comandos a confirmar:** detectar scripts reais após definir o recorte; manter backend build/test/integração, frontend lint/build quando houver interface e `node scripts/verificar-documentacao.mjs`.
 - **Limites:** não iniciar P07 antes de existir estado confiável; heartbeat da placa não comprova sensores; WhatsApp oficial continua indisponível.
-- **Estado atual:** P05, D01 e C01 concluídos; P06 está pronto para o próximo início. O fechamento de 23/09 foi autorizado para commit e publicação na `main`.
+- **Estado atual:** P05, D01 e C01 concluídos; P06 iniciado apenas pelo cálculo temporal isolado, ainda sem telemetria operacional. O fechamento anterior de 23/09 foi autorizado para commit e publicação na `main`.
 
 ### 14/09/2026 — PostgreSQL local instalado e configurado
 
@@ -149,6 +149,18 @@ Preservar os limites do produto: web responsiva, sem cadastro público de gerent
 ## 7. Registro diário
 
 Cada entrada mantém: data local, estado do dia, pacote/objetivo, evidências de entrada, alterações, verificações e resultados, pendências/bloqueios, primeira ação da retomada e situação Git. Acrescentar entradas sem apagar dias anteriores. O resumo das seções 1–6 deve acompanhar o estado mais recente.
+
+### 23/09/2026 — retomada do P06 após o fechamento
+
+- **Estado:** aberto; o fechamento anterior de C01 permanece preservado abaixo.
+- **Pacote e objetivo:** P06, primeiro recorte: estabelecer o núcleo testável de confirmação temporal de estados de vaga, sem criar contrato HTTP, migration ou processamento de dados reais antes de conhecer o firmware.
+- **Entrada:** `origin/main` em `f1172fa`, árvore limpa. A revisão documental de hospedagem permanece preservada no commit local `dc84a26` da branch `docs/hospedagem-render-ana`, ainda separada da `main`. Não havia código de telemetria operacional nem tabela `Sensor` no schema atual.
+- **Roteamento:** Kamilly conduz backend/IoT; Samuel revisa dados e Pietro integra o fluxo. A branch local `feat/p06-confirmacao-estado-kamilly` parte de `origin/main`. O Git mantém a identidade de quem realmente executar eventual commit.
+- **Dependência de contrato:** frequência das leituras, lacuna máxima, identidade de inicialização e sequência do ESP32 ainda precisam ser confirmadas com a equipe. Enquanto isso, o cálculo temporal pode exigir esses valores como parâmetros explícitos e ser testado sem rede ou banco.
+- **Aceite deste recorte:** CA16–CA17 para alternância, lacuna e leitura isolada. CA18–CA20 exigem deduplicação persistente e identidade de inicialização/ordem do firmware; não declarar CA15–CA24 ou P06 concluídos sem autenticação, persistência, expiração, hardware e integração.
+- **Entrega deste recorte:** `src/telemetria/confirmacao-estado.ts` calcula a janela de 30 segundos somente com leituras contínuas, reinicia após alternância ou lacuna e nunca transforma silêncio em vaga livre; `test/confirmacao-estado.test.ts` cobre os casos com tempo determinístico. A lacuna de 15 segundos usada nos testes não define frequência nem configuração de produção. Sem API, migration, escrita no banco ou alteração de estado visível ao gerente.
+- **Verificações:** compilação TypeScript aprovada com Node 24.18.0; seis testes novos aprovados; suíte básica do backend com 49 aprovações, zero falhas e três integrações pendentes sem `TEST_DATABASE_URL`. A primeira tentativa da suíte partiu incorretamente da raiz, onde os testes de migration não encontram caminhos relativos; a repetição no diretório `vaggu-backend` passou. Verificador documental cobriu 228 arquivos e validou os links internos; `git diff --check` não apontou erros.
+- **Próxima ação:** confirmar com a equipe o contrato do ESP32 — frequência, lacuna permitida, identificadores de placa/sensor e inicialização/sequência — e só então projetar deduplicação persistente, autenticação, expiração e histórico transacional. Não usar o cálculo isolado como evidência de integração real.
 
 ### 23/09/2026 — consolidação das sprints e plano de correção
 

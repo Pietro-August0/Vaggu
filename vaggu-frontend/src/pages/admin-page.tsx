@@ -153,7 +153,7 @@ function GerentesShopping({ shoppingId, gerentes, recarregar }: { shoppingId: st
           onClick: () => {
             void consultar(`/gerentes/${gerente.id}/desfazer-exclusao`, {}).then(async () => {
               await recarregar()
-              toast.success(`${gerente.nome} foi restaurado.`)
+              toast.success(`${gerente.nome} foi restaurado(a).`)
             }).catch(falha => toast.error(falha instanceof Error ? falha.message : "Não foi possível desfazer a exclusão."))
           },
         },
