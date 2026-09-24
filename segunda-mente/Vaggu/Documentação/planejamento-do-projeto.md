@@ -1,6 +1,6 @@
 # VAGGU — planejamento e continuidade do projeto
 
-Última atualização: **23/09/2026**, fuso **America/Sao_Paulo**. A revisão da landing e seu fechamento permanecem atribuídos a **09/09/2026**, conforme solicitado. Base de P01: `c127b5e`; registros das entregas na seção 7. Este documento registra evidências e orienta o trabalho diário; não substitui o [SSD](SSD-VAGGU.md) nem os [critérios de aceite](plano-e-aceite.md).
+Última atualização: **24/09/2026**, fuso **America/Sao_Paulo**. A revisão da landing e seu fechamento permanecem atribuídos a **09/09/2026**, conforme solicitado. Base de P01: `c127b5e`; registros das entregas na seção 7. Este documento registra evidências e orienta o trabalho diário; não substitui o [SSD](SSD-VAGGU.md) nem os [critérios de aceite](plano-e-aceite.md).
 
 ## 1. Situação atual
 
@@ -11,6 +11,14 @@ P01 foi concluído em 10/09 e P02 em 11/09, incluindo autenticação e acabament
 As Sprints 1 e 2 foram confirmadas pela equipe como etapas de descoberta, definição da ideia e planejamento inicial do Figma. As fotografias das Sprints 3 e 4 foram incorporadas como evidências históricas. O registro consolidado está em [Sprints do projeto](../Planejamento/Sprints%20do%20projeto.md); essa numeração não corresponde aos pacotes técnicos P01–P11.
 
 Classificações: **verificado** exige execução do comportamento indicado; **presente no código** significa inspeção estática; **parcial** identifica uma entrega incompleta; **ausente** indica que não foi encontrada implementação no escopo inspecionado. Um teste simulado não comprova banco, hardware ou serviço externo real.
+
+### Experiência dos painéis — trabalho local de 24/09
+
+- A pedido da equipe, a navegação Admin foi separada em visão geral, estrutura/mapa e gerentes; o painel Gerente separa estacionamento de Minha conta. A sidebar agrupa itens globais e contextuais, fecha no celular após navegar e oferece alternância clara/escura com ícones de sol e lua.
+- A área estrutural alterna configuração, mapa e posições. Importar e exportar abrem janelas. A exportação gera localmente um XLSX estilizado com abas Vagas e Resumo, filtro, primeira linha fixa, larguras legíveis e códigos textuais; não exporta histórico de ocupação nem usa uma rota nova da API.
+- O ensaio visual nesta tarefa usou frontend local e uma API **simulada** em `127.0.0.1`; verificou rotas Admin/Gerente, andares, janelas, temas e ausência de transbordamento horizontal nas larguras inspecionadas. Não comprova o deploy, PostgreSQL ou autenticação com contas reais. A comparação exata com o Figma e a abertura do arquivo no Microsoft Excel ficam pendentes.
+- Verificações finais: `npm.cmd run lint` e `npm.cmd run build` no frontend passaram; TypeScript foi conferido pelo build. O XLSX foi gerado e relido programaticamente, mas não aberto no Microsoft Excel. O navegador não registrou erros/avisos de console no ensaio. O build mantém aviso de chunk maior que 500 kB; ExcelJS carrega somente ao pedir o arquivo. O frontend não declara scripts `test` ou `typecheck` separados. `node scripts/verificar-documentacao.mjs` e `git diff --check` passaram na árvore local; ela também contém arquivos de P06 ainda não publicados.
+- A árvore já continha mudanças locais de P06 (`confirmacao-estado` e documentação), além de alterações em `index.html` e no texto de restauração da ficha Admin. Foram preservadas. A entrega de UX foi isolada para publicação em branch própria a partir de `main`, sem trocar o checkout da P06 nem atribuir autoria fictícia; Juan é o responsável técnico indicado e Elisa/Ana são revisoras indicadas.
 
 ## 2. O que foi implementado
 

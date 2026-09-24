@@ -1,14 +1,14 @@
 # VAGGU — fluxo de telas
 
-Este documento registra a navegação encontrada no frontend em 23/09/2026 e a compara com as páginas previstas no SSD. **Implementado** significa que existe rota e interface no código atual; não significa que integrações futuras, como telemetria e Power BI, estejam concluídas. **Parcial** indica que parte da experiência está na interface atual. **Ausente** indica que a página foi planejada, mas ainda não possui rota web.
+Este documento registra a navegação encontrada no frontend em 24/09/2026 e a compara com as páginas previstas no SSD. **Implementado** significa que existe rota e interface no código atual; não significa que integrações futuras, como telemetria e Power BI, estejam concluídas. **Parcial** indica que parte da experiência está na interface atual. **Ausente** indica que a página foi planejada, mas ainda não possui rota web.
 
 ## Perfis e regras comuns de navegação
 
 | Perfil | Escopo na interface atual |
 | --- | --- |
 | Visitante | Landing e login. O contato comercial sai da aplicação e continua no WhatsApp quando o número oficial está configurado. |
-| Admin VAGGU | Cadastro, listagem e ficha de shoppings, incluindo dados, foto, estrutura, mapa, importação e acessos de gerentes. |
-| Gerente | Painel do shopping vinculado, mapa e edição de nome e telefone da própria conta. |
+| Admin VAGGU | Cadastro e listagem de shoppings; na ficha, navegação separada entre visão geral, estrutura/mapa e gerentes. A importação e exportação estrutural abrem janelas na área de estrutura. |
+| Gerente | Painel do shopping vinculado e mapa; edição de nome e telefone em rota própria de conta. |
 
 As rotas administrativas e do gerente passam por proteção de sessão e perfil. Sem sessão, o usuário volta para `/login`; com troca de senha obrigatória, vai para `/trocar-senha`; com perfil incompatível, é redirecionado para `/admin` ou `/painel`. Qualquer endereço desconhecido volta para `/`.
 
@@ -23,20 +23,16 @@ O token existe somente na memória da aba. Portanto, recarregar a página exige 
 | `/trocar-senha` — Troca obrigatória | Admin ou gerente autenticado com senha provisória | Login; redirecionamento das rotas protegidas | `/admin` ou `/painel`; `/login` ao sair | Informar senha provisória, nova senha e confirmação; acompanhar requisitos; mostrar/ocultar cada campo; sair | Substitui a senha provisória antes de liberar a área operacional | Implementado para o primeiro acesso; não atende à troca voluntária posterior |
 | `/admin` — Cadastro de shopping | Admin | Login; navegação “Cadastrar”; redirecionamento por perfil | `/admin/shoppings/:shoppingId`; `/admin/shoppings` pelo menu | Cadastrar dados institucionais e operacionais e selecionar foto | Cria o shopping e abre sua ficha; esta rota **não** é uma visão geral administrativa | Implementado |
 | `/admin/shoppings` — Lista de shoppings | Admin | Menu “Shoppings”; retorno da ficha | `/admin/shoppings/:shoppingId`; `/admin` | Buscar por shopping/cidade, abrir ficha e iniciar novo cadastro | Lista os registros retornados pela API e informa carregamento ou ausência de resultados | Implementado |
-| `/admin/shoppings/:shoppingId` — Ficha do shopping | Admin | Lista; criação concluída; link direto autorizado | `/admin/shoppings`; permanece na ficha após mutações e retorna à lista após excluir o shopping | Editar dados e foto; consultar resumo persistido; importar CSV/XLSX, revisar e confirmar; configurar andares, setores, vagas e posições; criar, editar, bloquear, reativar, redefinir senha e excluir gerente; excluir shopping | Confirma ações destrutivas. A exclusão de gerente oferece sete segundos para desfazer; a de shopping encerra acessos e preserva estrutura e histórico. Estados sem leitura confirmada continuam indisponíveis | Implementado |
-| `/painel` — Painel do shopping e Minha conta | Gerente | Login; navegação “Visão geral”; redirecionamento por perfil | WhatsApp externo para solicitar alteração, quando configurado; `/login` ao sair | Navegar por andares, buscar e filtrar vagas, consultar mapa/lista e editar o próprio nome e telefone | Usa somente o shopping derivado da sessão. Exibe aviso de implantação quando necessário. “Minha conta” está na mesma página e não permite trocar a senha definitiva | Parcial: mapa e dados pessoais existem; telemetria, atualização temporal e análises ainda não |
+| `/admin/shoppings/:shoppingId` — Visão geral do shopping | Admin | Lista; criação concluída; link direto autorizado | `/admin/shoppings/:shoppingId/estrutura`, `/admin/shoppings/:shoppingId/gerentes`; `/admin/shoppings` após excluir | Editar dados e foto, consultar contagens da estrutura, excluir shopping com confirmação | A visão geral é curta; não repete os formulários de vagas e gerentes. Estados sem leitura confirmada continuam indisponíveis | Implementado |
+| `/admin/shoppings/:shoppingId/estrutura` — Estrutura e mapa | Admin | Menu contextual da ficha; atalho na visão geral | Visão geral e gerentes da mesma ficha | Configurar andares, setores, vagas e posições; alternar configuração, mapa e edição de posições; importar CSV/XLSX e exportar estrutura por janelas | O XLSX possui abas Vagas e Resumo, filtro, cabeçalho fixo e códigos como texto. É um retrato da estrutura, não relatório histórico de ocupação. As mutações recarregam a estrutura sem atualização manual da página | Implementado; interface conferida com dados locais simulados |
+| `/admin/shoppings/:shoppingId/gerentes` — Gerentes | Admin | Menu contextual da ficha | Visão geral e estrutura da mesma ficha | Criar, editar, bloquear, reativar, redefinir senha e excluir gerente; copiar senha provisória na resposta imediata | Exclusão oferece sete segundos para desfazer; senha provisória não volta na listagem | Implementado |
+| `/painel` — Estacionamento | Gerente | Login; menu “Estacionamento”; redirecionamento por perfil | `/painel/conta`; WhatsApp externo para solicitar alteração, quando configurado; `/login` ao sair | Navegar por andares, buscar e filtrar vagas, consultar mapa/lista | Usa somente o shopping derivado da sessão e mantém o aviso de implantação; não inclui o formulário da conta | Parcial: mapa existe; telemetria, atualização temporal e análises ainda não |
+| `/painel/conta` — Minha conta | Gerente | Menu “Minha conta” | `/painel`; `/login` ao sair | Editar o próprio nome e telefone | Rota separada do mapa; não permite trocar voluntariamente a senha definitiva | Parcial |
 | `*` — Página não encontrada | Qualquer | URL não reconhecida | `/`; seção Sobre; WhatsApp quando configurado | Assistir à vaga ser liberada uma vez e retornar à tela inicial | Exibe uma 404 própria; o carro sai da vaga, o sensor muda de vermelho para verde e a animação reinicia somente ao recarregar a página | Implementado |
 
 ## Conteúdo real da ficha administrativa
 
-A ficha concentra responsabilidades que ainda não foram separadas em rotas próprias:
-
-1. dados cadastrais, situação de implantação e foto pública;
-2. resumo das vagas com base no estado persistido;
-3. prévia e confirmação da importação estrutural;
-4. cadastro de andares, setores, vagas e posições no mapa;
-5. visualização 2D compartilhada com o gerente;
-6. criação, edição, bloqueio, reativação e redefinição de senha dos gerentes.
+A ficha possui três rotas contextuais: visão geral para dados, foto e resumo; estrutura para implantação, importação, exportação, cadastro e mapa 2D; gerentes para acessos individuais. A estrutura alterna configuração de vagas, visualização do mapa e edição de posições. Importação e exportação abrem janelas sem afastar o Admin do contexto do shopping.
 
 O resumo não converte ausência de telemetria em vaga livre. A área de análises históricas é apenas uma mensagem de indisponibilidade; não há gráfico ou relatório funcional nessa tela.
 
@@ -48,7 +44,7 @@ O resumo não converte ausência de telemetria em vaga livre. A área de anális
 | Equipamentos | Admin | Navegação administrativa ou ficha do shopping | Consultar placas ESP32, sensores, comunicação e ocorrências | Equipamentos e falhas vinculados ao shopping correto | Ausente; rota web não definida |
 | Atendimentos | Admin | Navegação administrativa | Consultar e encaminhar demonstrações e solicitações de suporte | Continuidade do contato no WhatsApp sem criar acesso automaticamente | Ausente; rota web não definida |
 | Análises e relatórios | Gerente | Navegação do painel | Selecionar período, consultar histórico e obter resumos autorizados | Comparações, indicadores e exportações restritos ao shopping da sessão | Ausente. Há somente um aviso textual de análise futura na ficha Admin |
-| Minha conta dedicada e troca voluntária de senha | Admin ou gerente | Menu da conta | Editar dados permitidos e alterar a senha definitiva | Conta atualizada sem mudar perfil ou vínculo com shopping | Parcial. Nome e telefone do gerente ficam dentro de `/painel`; Admin não possui tela equivalente e não há troca voluntária de senha |
+| Minha conta dedicada e troca voluntária de senha | Admin ou gerente | Menu da conta | Editar dados permitidos e alterar a senha definitiva | Conta atualizada sem mudar perfil ou vínculo com shopping | Parcial. Nome e telefone do gerente ficam em `/painel/conta`; Admin não possui tela equivalente e não há troca voluntária de senha |
 | Telão de entrada | Telão autorizado | Endereço de exibição ainda a definir | Exibir disponibilidade agregada por andar e validade dos dados | Vagas livres e categorias especiais sem duplicação | Ausente; rota web não definida |
 | Telão de andar | Telão autorizado | Endereço de exibição ainda a definir | Exibir disponibilidade agregada por setor | Vagas livres por setor e aviso de dados expirados | Ausente; rota web não definida |
 
@@ -73,5 +69,5 @@ As capturas de P02, P03, P04 e “Melhorias — interações e gerentes” prese
 ## Próxima revisão visual
 
 1. criar evidências atuais da ficha, exclusões, importação, mapa, estados vazios, erros e larguras menores;
-2. separar ou nomear claramente as próximas páginas antes de introduzir novas rotas;
+2. validar as novas rotas e janelas contra a API hospedada e com usuários reais, sem confundir o ensaio local simulado com essa integração;
 3. manter este documento sincronizado com `src/main.tsx` e com os itens reais da navegação.
