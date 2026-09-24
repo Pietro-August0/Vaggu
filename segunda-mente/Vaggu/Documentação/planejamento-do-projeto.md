@@ -8,6 +8,8 @@ A autenticação do frontend usa a API real: login, identidade, primeira senha, 
 
 P01 foi concluído em 10/09 e P02 em 11/09, incluindo autenticação e acabamento visual. P03 foi concluído em 12/09 com gestão administrativa, vários gerentes e Minha conta. P04 foi concluído em 12/09 com estrutura e mapa validados em PostgreSQL real e no navegador. O P05 foi concluído em 21/09: prévias CSV/XLSX, confirmação idempotente e preservação de IDs/histórico foram executadas no PostgreSQL; a jornada Admin autenticada foi validada no navegador em desktop e viewport móvel. A base local está verificável, mas o sistema ainda não está liberado para operação com clientes.
 
+A equipe registrou em 23/09 a hospedagem do frontend e da API no mesmo serviço Render, com banco PostgreSQL no Neon. O repositório contém o manifesto e o workflow de solicitação de deploy; URL pública, segredo do hook e resultado da última publicação não foram verificados nesta revisão documental. Veja [configuração](configuracao.md#hospedagem-no-render).
+
 As Sprints 1 e 2 foram confirmadas pela equipe como etapas de descoberta, definição da ideia e planejamento inicial do Figma. As fotografias das Sprints 3 e 4 foram incorporadas como evidências históricas. O registro consolidado está em [Sprints do projeto](../Planejamento/Sprints%20do%20projeto.md); essa numeração não corresponde aos pacotes técnicos P01–P11.
 
 Classificações: **verificado** exige execução do comportamento indicado; **presente no código** significa inspeção estática; **parcial** identifica uma entrega incompleta; **ausente** indica que não foi encontrada implementação no escopo inspecionado. Um teste simulado não comprova banco, hardware ou serviço externo real.
@@ -141,6 +143,16 @@ Preservar os limites do produto: web responsiva, sem cadastro público de gerent
 ## 7. Registro diário
 
 Cada entrada mantém: data local, estado do dia, pacote/objetivo, evidências de entrada, alterações, verificações e resultados, pendências/bloqueios, primeira ação da retomada e situação Git. Acrescentar entradas sem apagar dias anteriores. O resumo das seções 1–6 deve acompanhar o estado mais recente.
+
+### 23/09/2026 — atualização local e reconciliação da hospedagem
+
+- **Pedido:** descartar as alterações não commitadas da auditoria interrompida, atualizar a `main` e documentar a hospedagem com o que o repositório comprova.
+- **Entrada e Git:** 18 arquivos rastreados modificados e sete arquivos novos não commitados pertenciam à auditoria local interrompida. Após conferir a lista, as alterações foram removidas a pedido do usuário. `git pull --ff-only origin main` avançou de `4261b16` para `f1172fa`, sem conflito nem merge novo; `HEAD` e `origin/main` coincidiram e a árvore ficou limpa antes desta revisão. A documentação foi preparada em `docs/hospedagem-render-ana` a partir da `main` atualizada.
+- **Commits recebidos:** `ee5b407` integrou mapa/foto; `ebcdaed` consolidou sprints/documentação; `c7773a7` configurou o serviço Render; `42ad219` corrigiu a ficha administrativa e a página 404; `480b01a` registrou o fechamento C01; `f1172fa` acrescentou o workflow de deploy. Esses commits estão na `main` remota, não são alterações pendentes da auditoria descartada.
+- **Conferência técnica:** `render.yaml` descreve build e inicialização do único serviço; `app.ts` entrega o build React e `/api/v1` na mesma origem; `server.ts` recebe `FRONTEND_DIST_PATH`; o frontend chama `/api/v1` relativamente. O registro anterior informa PostgreSQL no Neon, com `DATABASE_URL` fora do Git. O workflow solicita deploy por hook, mas seu segredo e execuções não são visíveis no repositório.
+- **Documentação:** guia de configuração, TRD, SSD, READMEs e índice reconciliados com a topologia recebida. Descrições do mapa de arquivos revisadas; responsabilidades e caminhos permanecem corretos.
+- **Limites:** esta revisão não comprova a URL, a saúde atual do serviço, a conclusão do último deploy, a versão do PostgreSQL remoto, backup nem configuração real do Blob. Nenhuma credencial foi lida ou publicada. Telemetria e demais pacotes seguem seu estado anterior.
+- **Verificações:** `node scripts/verificar-documentacao.mjs` aprovou 226 arquivos e os links internos; `git diff --check` não apontou erros. Os comandos de lint, build e testes de aplicação não foram repetidos, pois esta entrega alterou somente documentação. A branch documental permanece local, sem push desta revisão.
 
 ### 23/09/2026 — consolidação das sprints e plano de correção
 

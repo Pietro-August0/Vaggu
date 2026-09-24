@@ -133,8 +133,8 @@ As migrations incrementais `20260914000100_previas_importacao` e `20260915000100
 - Usuário ou shopping desativado não faz login nem usa sessão existente. O bloqueio de gerente e a exclusão lógica de shopping apagam as sessões vinculadas. Reativar um gerente com `PATCH /gerentes/:gerenteId` e `ativo=true` não recupera os tokens apagados: ele precisa fazer um novo login. A API atual não expõe reativação de shopping excluído.
 - Limite de 10 chamadas de login por IP a cada 15 minutos, incluindo sucessos e corpos inválidos. Máximo de quatro verificações de senha simultâneas. Proteção local em memória, reiniciada com o processo.
 - Frontend: mantenha token em memória nesta etapa, envie no header Authorization e descarte no logout. Recarregar a página exigirá novo login. Não grave tokens/senhas em código ou URLs.
-- Não usa cookies de autenticação e não implementa refresh token. CORS entre origens ainda não foi configurado: cliente desktop de API funciona, mas frontend em outra porta precisará de configuração explícita.
-- Para publicar: HTTPS obrigatório, origens permitidas, proxies confiáveis, limites compartilhados, recuperação de conta e revisão de segurança. Não habilite trust proxy indiscriminadamente. API escuta em 127.0.0.1 por padrão.
+- Não usa cookies de autenticação e não implementa refresh token. No desenvolvimento, o proxy do Vite encaminha `/api` ao backend local. Na hospedagem registrada, Express serve o build React e `/api/v1` na mesma origem; não há CORS amplo configurado para um frontend em outro domínio.
+- A configuração versionada de publicação usa HTTPS do Render, `HOST=0.0.0.0` e `FRONTEND_DIST_PATH` para entregar a interface. A API local escuta em `127.0.0.1` por padrão. Origem separada, proxies confiáveis, limites compartilhados e recuperação de conta precisam de revisão própria antes de mudar essa topologia; não habilite `trust proxy` indiscriminadamente.
 
 ## Perfis e isolamento
 

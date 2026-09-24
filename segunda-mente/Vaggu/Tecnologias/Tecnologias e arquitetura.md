@@ -2,14 +2,14 @@
 
 **Tipo:** TRD resumido · **Atualização:** 23/09/2026 · **Fontes do estado real:** manifests, código, migrations e testes versionados.
 
-Este documento apresenta as escolhas técnicas e separa o que está implementado do que continua planejado. Versões com `^` ou faixas reproduzem os manifests; não significam que produção ou hospedagem já foram homologadas.
+Este documento apresenta as escolhas técnicas e separa o que está implementado do que continua planejado. Versões com `^` ou faixas reproduzem os manifests. A publicação no Render e o uso do Neon estão registrados em 23/09; esta revisão não aferiu disponibilidade externa ou homologação.
 
 ## Tecnologias implementadas
 
 | Tecnologia e versão declarada | Onde é usada | Finalidade | Motivo no projeto | Estado real |
 | --- | --- | --- | --- | --- |
 | React `^19.2.8`, React DOM `^19.2.8` | `vaggu-frontend` | Landing, autenticação, área Admin e painel do gerente. | Componentização e atualização declarativa da interface responsiva. | Implementado. |
-| Vite `^8.2.2` | `vaggu-frontend` | Desenvolvimento, build e proxy local de `/api`. | Ciclo curto de desenvolvimento e bundle do frontend. | Implementado; destino Vercel ainda não equivale a produção homologada. |
+| Vite `^8.2.2` | `vaggu-frontend` | Desenvolvimento, build e proxy local de `/api`. | Ciclo curto de desenvolvimento e bundle do frontend. | Implementado; o build React é entregue pelo Express no Render. |
 | TypeScript `^6.0.3` no frontend e `^7.0.2` no backend | Ambos os pacotes | Contratos, validação estática e manutenção. | Reduzir ambiguidades entre interface, domínio e API. | Implementado nos manifests atuais. |
 | React Router DOM `^7.18.3` | `vaggu-frontend/src/main.tsx` | Rotas públicas, troca de senha e áreas protegidas por perfil. | Centralizar navegação e separar jornadas de visitante, Admin e gerente. | Implementado. |
 | Tailwind CSS `^4.3.3` | `vaggu-frontend` | Tema, layout e responsividade. | Reutilizar tokens e compor estilos sem criar outra camada de design. | Implementado. |
@@ -17,9 +17,11 @@ Este documento apresenta as escolhas técnicas e separa o que está implementado
 | Lucide React `^1.39.0`, Motion `^13.2.0`, Poppins e Geist `^5.3.0` | Interface e landing | Ícones, movimentos, tipografia e acabamento. | Sustentar a linguagem visual; por decisão da equipe, as animações não são suprimidas pela preferência de movimento do sistema. | Implementado; medidas exatas ainda dependem de nova comparação com o Figma. |
 | Node.js `>=22.12.0 <25` | `vaggu-backend` | Runtime da API, scripts e testes. | Compartilhar o ecossistema TypeScript e usar APIs nativas para segurança e testes. | Faixa obrigatória do backend. |
 | Express `^5.1.0` | `vaggu-backend/src` | Rotas REST, middleware e webhook. | API HTTP direta e compatível com a escala do TCC. | Implementado. |
-| Helmet `^8.1.0` | Montagem da API | Cabeçalhos HTTP de proteção. | Aplicar uma base segura sem espalhar configuração nas rotas. | Implementado; CORS e hospedagem de produção continuam pendentes. |
+| Helmet `^8.1.0` | Montagem da API | Cabeçalhos HTTP de proteção. | Aplicar uma base segura sem espalhar configuração nas rotas. | Implementado; a publicação atual mantém frontend e API na mesma origem. |
 | `node:crypto` com scrypt | Módulo de autenticação | Hash de senhas, tokens e comparação segura. | Evitar senha reversível e manter a credencial provisória apenas na resposta imediata. | Implementado. |
-| PostgreSQL + Prisma `7.10.0`, adaptador pg `^7.10.0` e pg `^8.23.0` | Schema, migrations, serviços e testes do backend | Persistência relacional, integridade, transações e isolamento por shopping. | As regras dependem de vínculos e operações atômicas que o banco deve garantir. | Implementado; ambiente local documentado em PostgreSQL 17.11, versão de produção pendente. |
+| PostgreSQL + Prisma `7.10.0`, adaptador pg `^7.10.0` e pg `^8.23.0` | Schema, migrations, serviços e testes do backend | Persistência relacional, integridade, transações e isolamento por shopping. | As regras dependem de vínculos e operações atômicas que o banco deve garantir. | Implementado; registro da equipe indica banco Neon para a hospedagem. Versão do servidor remoto não consta do repositório. |
+| Render, manifesto `render.yaml` | Serviço web `vaggu-tcc` | Executar Express, servir o build React e verificar prontidão. | Manter interface e API sob a mesma origem e conexão privada com o banco. | Configuração e publicação registradas em 23/09; URL e estado atual do serviço não foram conferidos nesta revisão. |
+| GitHub Actions, workflow `publicar-render.yml` | Repositório, branch `main` | Solicitar novo deploy pelo hook do Render. | Compensar a ausência de eventos automáticos na ligação por URL pública registrada pela equipe. | Workflow commitado; execução depende do segredo `RENDER_DEPLOY_HOOK_URL`, não verificável no Git. |
 | `read-excel-file` `^9.3.10` e leitor CSV próprio | Módulo de importação | Prévia e confirmação de arquivos CSV/XLSX. | Importar estrutura com validação por linha sem adicionar outra biblioteca para CSV. | P05 concluído em 21/09/2026, inclusive confirmação idempotente no PostgreSQL. |
 | Vercel Blob `^2.8.0` | Fotos públicas dos shoppings | Guardar o arquivo fora do PostgreSQL e persistir somente a URL HTTPS. | Evitar binários no banco e separar foto pública dos documentos privados. | Adaptador implementado; uso depende de `BLOB_READ_WRITE_TOKEN`. |
 | WhatsApp Cloud API, sem SDK versionado | Backend `whatsapp` e links do frontend | Webhook assinado, deduplicação, envio de texto e encaminhamento comercial. | Manter o WhatsApp como canal de parceria e suporte. | Parcial: infraestrutura e menu demonstrativo existem; fluxo P10 e número oficial estão pendentes. |
@@ -84,7 +86,7 @@ A arquitetura planejada conserva dois caminhos: operação e análise. Mapa e te
 - A senha provisória aparece somente na resposta imediata de criação ou redefinição; apenas o hash permanece no banco.
 - A confirmação da importação P05 é serializada por shopping e idempotente; vagas ausentes não são removidas silenciosamente.
 - O transporte de atualização do P06/P07 ainda não foi escolhido. Polling é uma proposta compatível com o MVP; Socket.IO exige infraestrutura para conexão persistente.
-- Vercel é o destino previsto do frontend e o Blob já possui adaptador, mas hospedagem da API, banco, CORS, backup e monitoramento de produção ainda precisam de decisão.
+- A hospedagem registrada é Render para API e frontend na mesma origem, com PostgreSQL no Neon. Vercel Blob continua sendo somente o adaptador de fotos e depende de token próprio; backup, monitoramento e homologação externa ainda requerem verificação.
 - Power BI começa pelo Desktop e por histórico controlado; publicação, incorporação e segurança por linha dependem da forma de distribuição aprovada.
 
 ## Sequência técnica

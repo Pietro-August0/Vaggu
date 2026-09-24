@@ -100,6 +100,8 @@ O frontend não cria nem preenche contas. A equipe deve cadastrar o administrado
 
 A autenticação, a gestão administrativa e o mapa estão integrados à API. A interface permite excluir um gerente com confirmação e desfazer por sete segundos. A troca obrigatória mostra os requisitos de senha, permite visualizar os três campos e explica o erro junto ao campo responsável. O P05 aceita CSV/XLSX, persiste prévias isoladas por shopping e possui confirmação idempotente no backend e na interface; a validação completa com PostgreSQL real e navegador autenticado foi concluída em 21/09/2026. Telemetria, telões e Power BI continuam pendentes.
 
+Em 23/09, a equipe registrou a hospedagem da API e do frontend juntos no serviço `vaggu-tcc` do Render e a conexão PostgreSQL no Neon. O [guia de configuração](./segunda-mente/Vaggu/Documentação/configuracao.md#hospedagem-no-render) explica o build, a verificação de prontidão e a automação de deploy. A URL pública e a conclusão das execuções do workflow devem ser conferidas nos painéis dos provedores; o repositório não contém esses dados.
+
 O [planejamento do projeto](./segunda-mente/Vaggu/Documentação/planejamento-do-projeto.md) registra o estado real, os resultados da revisão e a próxima entrega. As skills `$start` e `$end` usam esse documento para iniciar e encerrar o trabalho diário.
 
 Consulte a [segunda mente](./segunda-mente/Vaggu/Vaggu.md) para conhecer o escopo, as decisões técnicas e os critérios de aceite sem confundir funcionalidades planejadas com funcionalidades já entregues.

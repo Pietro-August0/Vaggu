@@ -38,6 +38,8 @@ O próprio cofre está versionado na pasta `segunda-mente/` do repositório VAGG
 
 **Estado atual:** P01–P05, D01 e C01 concluídos. Em 23/09/2026, a ficha administrativa recuperou a exclusão lógica de gerente com sete segundos para desfazer e a exclusão lógica de shopping, além das correções do formulário e da página 404. O próximo pacote de produto é o P06, de telemetria e estados confiáveis. Ver [[Vaggu/Planejamento/Próximos passos]].
 
+**Hospedagem registrada em 23/09:** frontend e API são entregues pelo mesmo serviço Render, conectado ao PostgreSQL no Neon. Consulte [[Vaggu/Documentação/configuracao|configuração]] e [[Vaggu/Tecnologias/Tecnologias e arquitetura|arquitetura]] para o funcionamento versionado; endereço público e resultado das publicações devem ser conferidos no Render/GitHub.
+
 
 **Atualização de 11/09:** autenticação real integrada e validada. Foto original do login ainda pendente. [[Vaggu/Documentação/validacao-login-2026-09-11|Ver resultados]].
 

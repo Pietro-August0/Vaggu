@@ -393,7 +393,7 @@ Se um relatório reúne vários shoppings, definir RLS e identidade autorizada n
 | Firmware ESP32 | Leitura local, envio autenticado e recuperação de comunicação. |
 | Views + Power BI | Análise histórica, sem depender do relatório para operar o estacionamento. |
 
-O frontend tem Vercel como destino definido. Hospedagem da API e banco deve ser verificada antes da implantação. A foto pública de cada shopping usa Vercel Blob e requer `BLOB_READ_WRITE_TOKEN` no backend; o banco persiste apenas `imagemUrl`. **Proposta de atualização:** polling controlado pode servir ao MVP para telemetria; Socket.IO requer suporte a conexões persistentes. Mutações administrativas já devem atualizar por estado local ou refetch, sem recarga manual. Não colocar uma rotina crítica apenas em timer de função efêmera.
+A implantação registrada em 23/09 usa um serviço Render que entrega API e frontend na mesma origem e uma conexão PostgreSQL no Neon; a [configuração](configuracao.md#hospedagem-no-render) descreve o manifesto e suas verificações pendentes. A foto pública de cada shopping usa Vercel Blob e requer `BLOB_READ_WRITE_TOKEN` no backend; o banco persiste apenas `imagemUrl`. **Proposta de atualização:** polling controlado pode servir ao MVP para telemetria; Socket.IO requer suporte a conexões persistentes. Mutações administrativas já devem atualizar por estado local ou refetch, sem recarga manual. Não colocar uma rotina crítica apenas em timer de função efêmera.
 
 Separar consulta operacional de análise. Falha do Power BI não interrompe leitura das vagas. Organizar módulos conforme [regras-de-codigo.md](regras-de-codigo.md), conciliando com o repositório existente.
 
