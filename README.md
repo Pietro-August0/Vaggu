@@ -28,6 +28,8 @@ Este repositório reúne o MVP acadêmico da solução, desenvolvido como projet
 - Exclusão reversível de gerente, com confirmação e sete segundos para desfazer.
 - Exibição e cópia da senha provisória somente no instante da criação ou redefinição do gerente.
 - Mapa 2D compartilhado entre Admin e gerente, com troca de andar, setor, categorias, estados e busca.
+- Painéis com navegação contextual por seção, modo claro/escuro e conta do gerente em página própria.
+- Estrutura dividida entre cadastro, mapa e posições, com importação e exportação em janelas. A exportação XLSX tem abas de vagas e resumo; não é um relatório histórico.
 - Foto representativa do shopping com preview e armazenamento externo por URL.
 - Token somente em memória; recarregar a página exige novo login.
 
@@ -42,6 +44,7 @@ Este repositório reúne o MVP acadêmico da solução, desenvolvido como projet
 - Webhook da WhatsApp Cloud API com validação de assinatura e deduplicação de eventos.
 - Persistência PostgreSQL com Prisma e migrations versionadas.
 - Endpoints de saúde e prontidão para operação e banco de dados.
+- Núcleo isolado de confirmação temporal de 30 segundos, ainda sem ingestão, persistência ou conexão com o ESP32.
 
 ## Tecnologias
 
@@ -98,7 +101,7 @@ O frontend não cria nem preenche contas. A equipe deve cadastrar o administrado
 
 ## Estado atual
 
-A autenticação, a gestão administrativa e o mapa estão integrados à API. A interface permite excluir um gerente com confirmação e desfazer por sete segundos. A troca obrigatória mostra os requisitos de senha, permite visualizar os três campos e explica o erro junto ao campo responsável. O P05 aceita CSV/XLSX, persiste prévias isoladas por shopping e possui confirmação idempotente no backend e na interface; a validação completa com PostgreSQL real e navegador autenticado foi concluída em 21/09/2026. Telemetria, telões e Power BI continuam pendentes.
+A autenticação, a gestão administrativa e o mapa estão integrados à API. A interface permite excluir um gerente com confirmação e desfazer por sete segundos. A troca obrigatória mostra os requisitos de senha, permite visualizar os três campos e explica o erro junto ao campo responsável. O P05 aceita CSV/XLSX, persiste prévias isoladas por shopping e possui confirmação idempotente no backend e na interface; a validação completa com PostgreSQL real e navegador autenticado foi concluída em 21/09/2026. O P06 possui somente um cálculo temporal testado: telemetria operacional, telões e Power BI continuam pendentes.
 
 Em 23/09, a equipe registrou a hospedagem da API e do frontend juntos no serviço `vaggu-tcc` do Render e a conexão PostgreSQL no Neon. O [guia de configuração](./segunda-mente/Vaggu/Documentação/configuracao.md#hospedagem-no-render) explica o build, a verificação de prontidão e a automação de deploy. A URL pública e a conclusão das execuções do workflow devem ser conferidas nos painéis dos provedores; o repositório não contém esses dados.
 

@@ -1,6 +1,6 @@
 # VAGGU — planejamento e continuidade do projeto
 
-Última atualização: **23/09/2026**, fuso **America/Sao_Paulo**. A revisão da landing e seu fechamento permanecem atribuídos a **09/09/2026**, conforme solicitado. Base de P01: `c127b5e`; registros das entregas na seção 7. Este documento registra evidências e orienta o trabalho diário; não substitui o [SSD](SSD-VAGGU.md) nem os [critérios de aceite](plano-e-aceite.md).
+Última atualização: **24/09/2026**, fuso **America/Sao_Paulo**. A revisão da landing e seu fechamento permanecem atribuídos a **09/09/2026**, conforme solicitado. Base de P01: `c127b5e`; registros das entregas na seção 7. Este documento registra evidências e orienta o trabalho diário; não substitui o [SSD](SSD-VAGGU.md) nem os [critérios de aceite](plano-e-aceite.md).
 
 ## 1. Situação atual
 
@@ -13,6 +13,14 @@ A equipe registrou em 23/09 a hospedagem do frontend e da API no mesmo serviço 
 As Sprints 1 e 2 foram confirmadas pela equipe como etapas de descoberta, definição da ideia e planejamento inicial do Figma. As fotografias das Sprints 3 e 4 foram incorporadas como evidências históricas. O registro consolidado está em [Sprints do projeto](../Planejamento/Sprints%20do%20projeto.md); essa numeração não corresponde aos pacotes técnicos P01–P11.
 
 Classificações: **verificado** exige execução do comportamento indicado; **presente no código** significa inspeção estática; **parcial** identifica uma entrega incompleta; **ausente** indica que não foi encontrada implementação no escopo inspecionado. Um teste simulado não comprova banco, hardware ou serviço externo real.
+
+### Experiência dos painéis — entrega de 24/09
+
+- A pedido da equipe, a navegação Admin foi separada em visão geral, estrutura/mapa e gerentes; o painel Gerente separa estacionamento de Minha conta. A sidebar agrupa itens globais e contextuais, fecha no celular após navegar e oferece alternância clara/escura com ícones de sol e lua.
+- A área estrutural alterna configuração, mapa e posições. Importar e exportar abrem janelas. A exportação gera localmente um XLSX estilizado com abas Vagas e Resumo, filtro, primeira linha fixa, larguras legíveis e códigos textuais; não exporta histórico de ocupação nem usa uma rota nova da API.
+- O ensaio visual nesta tarefa usou frontend local e uma API **simulada** em `127.0.0.1`; verificou rotas Admin/Gerente, andares, janelas, temas e ausência de transbordamento horizontal nas larguras inspecionadas. Não comprova o deploy, PostgreSQL ou autenticação com contas reais. A comparação exata com o Figma e a abertura do arquivo no Microsoft Excel ficam pendentes.
+- Verificações: `npm.cmd run lint` e `npm.cmd run build` no frontend passaram; TypeScript foi conferido pelo build. O XLSX foi gerado e relido programaticamente, mas não aberto no Microsoft Excel. O navegador não registrou erros/avisos de console no ensaio. O build mantém aviso de chunk maior que 500 kB; ExcelJS carrega somente ao pedir o arquivo. O frontend não declara scripts `test` ou `typecheck` separados.
+- A árvore original também continha mudanças de P06 (`confirmacao-estado` e documentação), além de alterações em `index.html` e no texto de restauração da ficha Admin. Foram preservadas. A UX foi commitada primeiro em branch própria, com Juan como responsável técnico indicado e Elisa/Ana como revisoras indicadas; a autoria Git permaneceu com quem executou o commit.
 
 ## 2. O que foi implementado
 
@@ -33,8 +41,9 @@ Classificações: **verificado** exige execução do comportamento indicado; **p
 | Skills de continuidade | Criadas, validadas e instaladas | Fontes versionadas em [start](../../../skills/start/SKILL.md) e [end](../../../skills/end/SKILL.md); cópias em `C:/Users/CASA/.codex/skills/start` e `end` conferidas por hash. Usam este documento como registro compartilhado. |
 | Andares, setores, tipos e mapa | Verificado em P04 e novamente em 21/09 | Hierarquia por shopping, coordenadas proporcionais, revisão concorrente, dois andares, categorias, filtros, seleção e busca entre andares aprovados. Admin e gerente usam o mesmo componente visual; mutações administrativas fazem refetch sem refresh manual. O mapa usa base neutra; associação de planta ilustrada permanece uma evolução. |
 | Importação CSV/XLSX | Verificado, P05 concluído em 21/09 | API aceita CSV e XLSX, valida por linha/campo, identifica criação ou atualização, persiste a prévia isolada por shopping e confirma de forma idempotente. PostgreSQL real comprovou concorrência, preservação de IDs/histórico e manutenção das vagas ausentes. A ficha Admin autenticada foi validada com arquivo inválido e válido, confirmação explícita e recarga da estrutura. |
-| ESP32, sensores, confirmação e expiração | Ausentes como fluxo funcional | Entidades iniciais não equivalem a ingestão, confirmação consistente de 30 s, ordenação, expiração ou manutenção. |
-| Histórico consultável, contagens, telões e exportações | Ausentes como fluxo funcional | Exigem observações confirmadas e isolamento; não confundir a imagem da landing com um painel de dados real. |
+| Navegação dos painéis e exportação estrutural | Interface verificada com API simulada em 24/09 | Admin e gerente têm rotas separadas, tema claro/escuro e janelas de importação/exportação. O XLSX estrutural é gerado no navegador a partir da árvore já autorizada; não contém histórico nem prova integração com o deploy. |
+| ESP32, sensores, confirmação e expiração | Fluxo operacional ausente; cálculo temporal isolado testado | O núcleo P06 exige 30 s de leituras contínuas e reinicia após lacuna ou alternância. Sem autenticação da placa, ingestão, persistência, ordenação durável, expiração ou manutenção. |
+| Histórico consultável, contagens, telões e exportações analíticas | Ausentes como fluxo funcional | Exigem observações confirmadas e isolamento; não confundir o XLSX da estrutura ou a imagem da landing com relatório de ocupação real. |
 | Power BI | Ausente | Nenhum relatório funcional com histórico e atualização foi verificado/encontrado no projeto. |
 
 ## 3. Revisão final — achados e prioridades
@@ -104,7 +113,7 @@ As sprints reais da equipe estão registradas em [Sprints do projeto](../Planeja
 | P03 | Integrar Admin, vários gerentes e minha conta | Concluído em 12/09 | Contratos reais integrados; DTO informa situação ativa e bloqueio remove sessões na transação. | CA04, CA06 e o recorte disponível de CA07 aprovados em PostgreSQL real; fluxos principais aprovados no navegador. |
 | P04 | Estrutura e implantação: andares, setores, vagas, categorias e mapa | Concluído em 12/09 | P03 concluído; migration e contratos incrementais entregues. | CA08–CA12 cobertos: estado de configuração, dois andares, filtros, seleção, busca entre andares, rejeição de vaga de outro andar, revisão concorrente e isolamento. |
 | P05 | Importação CSV/XLSX com prévia e preservação de histórico | Concluído em 21/09 | Backend, PostgreSQL e interface Admin autenticada validados; confirmação concorrente e recarga da estrutura aprovadas. | CA13–CA14 cobertos sem alteração parcial, perda de ID/histórico ou remoção silenciosa de vaga ausente. |
-| P06 | ESP32/sensores, ingestão e estados confiáveis | Pronto | P04–P05 concluídos; falta estabilizar o contrato de firmware: autenticação, sensor, inicialização, sequência, frequência e expiração. | Confirmação de 30 s com evidência, deduplicação, ordem e expiração por sensor; histórico transacional. CA15–CA24. |
+| P06 | ESP32/sensores, ingestão e estados confiáveis | Em andamento: núcleo temporal isolado | P04–P05 concluídos; falta estabilizar o contrato de firmware: autenticação, sensor, inicialização, sequência, frequência e expiração. | Confirmação de 30 s com evidência, deduplicação, ordem e expiração por sensor; histórico transacional. CA15–CA24. |
 | P07 | Operação, manutenção, contagens e telões | Bloqueado por P06 | Observações confiáveis e ocorrências. | Contagens reconciliadas sem duplicar categorias; dado vencido não vira livre. CA23–CA26. |
 | P08 | Histórico, métricas e exportações | Bloqueado por P06/P07 | Intervalos confirmados, cobertura e recortes. | Cálculos reproduzem conjunto controlado; exportações respeitam shopping e filtros. CA27–CA31. |
 | P09 | Primeiro relatório funcional Power BI | Bloqueado por P08 | Histórico disponível e decisão de distribuição/acesso. | Atualização funcional e métricas reconciliadas (CA32); isolamento de acesso (CA33) só concluído na distribuição efetiva. |
@@ -124,7 +133,7 @@ Preservar os limites do produto: web responsiva, sem cadastro público de gerent
 - **Aceite e verificação a confirmar:** isolamento por shopping/placa, deduplicação, ordenação, confirmação após 30 segundos consistentes, expiração sem assumir vaga livre e histórico transacional.
 - **Comandos a confirmar:** detectar scripts reais após definir o recorte; manter backend build/test/integração, frontend lint/build quando houver interface e `node scripts/verificar-documentacao.mjs`.
 - **Limites:** não iniciar P07 antes de existir estado confiável; heartbeat da placa não comprova sensores; WhatsApp oficial continua indisponível.
-- **Estado atual:** P05, D01 e C01 concluídos; P06 está pronto para o próximo início. O fechamento de 23/09 foi autorizado para commit e publicação na `main`.
+- **Estado atual:** P05, D01 e C01 concluídos; P06 iniciado apenas pelo cálculo temporal isolado, ainda sem telemetria operacional. O fechamento anterior de 23/09 foi autorizado para commit e publicação na `main`.
 
 ### 14/09/2026 — PostgreSQL local instalado e configurado
 
@@ -144,6 +153,13 @@ Preservar os limites do produto: web responsiva, sem cadastro público de gerent
 
 Cada entrada mantém: data local, estado do dia, pacote/objetivo, evidências de entrada, alterações, verificações e resultados, pendências/bloqueios, primeira ação da retomada e situação Git. Acrescentar entradas sem apagar dias anteriores. O resumo das seções 1–6 deve acompanhar o estado mais recente.
 
+### 24/09/2026 — consolidação para a main
+
+- **Pedido e escopo:** documentar e integrar todas as alterações versionáveis pendentes: navegação/tema/exportação do frontend, ajustes de título e feedback, núcleo temporal P06 e documentação de hospedagem Render/Neon. Nenhum `.env`, build, cache ou fixture local integra a entrega.
+- **Git e autoria:** `origin/main` permaneceu em `f1172fa` após `fetch`. O commit `08ba46e` contém UX e exportação; `449ed20` acrescenta o recorte P06 e os ajustes locais sobre ele; `dc84a26` contém a documentação de hospedagem. A integração foi preparada na `main` local com os dois registros diários preservados ao resolver o conflito do planejamento. Pietro é o integrador e autor Git efetivo; Juan, Elisa, Ana e Kamilly são responsáveis/revisoras indicados por área, sem atribuição fictícia de coautoria.
+- **Verificações de código:** frontend `npm.cmd run lint` e `npm.cmd run build` aprovados; backend `npm.cmd run typecheck` aprovado e `npm.cmd test` com 49 aprovações, zero falhas e três integrações puladas por ausência de `TEST_DATABASE_URL`. O build do frontend ainda avisa sobre chunks acima de 500 kB, inclusive ExcelJS carregado somente ao exportar.
+- **Limites e próxima ação:** o teste visual dos painéis foi feito com API local simulada, não no deploy. O P06 só calcula a confirmação em memória; contrato do ESP32, persistência, expiração, histórico e testes de integração em PostgreSQL continuam pendentes. Conferir a URL/saúde pública, o segredo e a execução do hook de deploy nos provedores antes de chamar a implantação de homologada. A comparação com Figma e a abertura do XLSX no Microsoft Excel permanecem pendentes.
+
 ### 23/09/2026 — atualização local e reconciliação da hospedagem
 
 - **Pedido:** descartar as alterações não commitadas da auditoria interrompida, atualizar a `main` e documentar a hospedagem com o que o repositório comprova.
@@ -152,7 +168,19 @@ Cada entrada mantém: data local, estado do dia, pacote/objetivo, evidências de
 - **Conferência técnica:** `render.yaml` descreve build e inicialização do único serviço; `app.ts` entrega o build React e `/api/v1` na mesma origem; `server.ts` recebe `FRONTEND_DIST_PATH`; o frontend chama `/api/v1` relativamente. O registro anterior informa PostgreSQL no Neon, com `DATABASE_URL` fora do Git. O workflow solicita deploy por hook, mas seu segredo e execuções não são visíveis no repositório.
 - **Documentação:** guia de configuração, TRD, SSD, READMEs e índice reconciliados com a topologia recebida. Descrições do mapa de arquivos revisadas; responsabilidades e caminhos permanecem corretos.
 - **Limites:** esta revisão não comprova a URL, a saúde atual do serviço, a conclusão do último deploy, a versão do PostgreSQL remoto, backup nem configuração real do Blob. Nenhuma credencial foi lida ou publicada. Telemetria e demais pacotes seguem seu estado anterior.
-- **Verificações:** `node scripts/verificar-documentacao.mjs` aprovou 226 arquivos e os links internos; `git diff --check` não apontou erros. Os comandos de lint, build e testes de aplicação não foram repetidos, pois esta entrega alterou somente documentação. A branch documental permanece local, sem push desta revisão.
+- **Verificações:** `node scripts/verificar-documentacao.mjs` aprovou 226 arquivos e os links internos; `git diff --check` não apontou erros. Os comandos de lint, build e testes de aplicação não foram repetidos, pois esta entrega alterou somente documentação. A branch documental permaneceu local nesta revisão.
+
+### 23/09/2026 — retomada do P06 após o fechamento
+
+- **Estado:** aberto; o fechamento anterior de C01 permanece preservado abaixo.
+- **Pacote e objetivo:** P06, primeiro recorte: estabelecer o núcleo testável de confirmação temporal de estados de vaga, sem criar contrato HTTP, migration ou processamento de dados reais antes de conhecer o firmware.
+- **Entrada:** `origin/main` em `f1172fa`, árvore limpa. A revisão documental de hospedagem permanece preservada no commit local `dc84a26` da branch `docs/hospedagem-render-ana`, ainda separada da `main`. Não havia código de telemetria operacional nem tabela `Sensor` no schema atual.
+- **Roteamento:** Kamilly conduz backend/IoT; Samuel revisa dados e Pietro integra o fluxo. A branch local `feat/p06-confirmacao-estado-kamilly` parte de `origin/main`. O Git mantém a identidade de quem realmente executar eventual commit.
+- **Dependência de contrato:** frequência das leituras, lacuna máxima, identidade de inicialização e sequência do ESP32 ainda precisam ser confirmadas com a equipe. Enquanto isso, o cálculo temporal pode exigir esses valores como parâmetros explícitos e ser testado sem rede ou banco.
+- **Aceite deste recorte:** CA16–CA17 para alternância, lacuna e leitura isolada. CA18–CA20 exigem deduplicação persistente e identidade de inicialização/ordem do firmware; não declarar CA15–CA24 ou P06 concluídos sem autenticação, persistência, expiração, hardware e integração.
+- **Entrega deste recorte:** `src/telemetria/confirmacao-estado.ts` calcula a janela de 30 segundos somente com leituras contínuas, reinicia após alternância ou lacuna e nunca transforma silêncio em vaga livre; `test/confirmacao-estado.test.ts` cobre os casos com tempo determinístico. A lacuna de 15 segundos usada nos testes não define frequência nem configuração de produção. Sem API, migration, escrita no banco ou alteração de estado visível ao gerente.
+- **Verificações:** compilação TypeScript aprovada com Node 24.18.0; seis testes novos aprovados; suíte básica do backend com 49 aprovações, zero falhas e três integrações pendentes sem `TEST_DATABASE_URL`. A primeira tentativa da suíte partiu incorretamente da raiz, onde os testes de migration não encontram caminhos relativos; a repetição no diretório `vaggu-backend` passou. Verificador documental cobriu 228 arquivos e validou os links internos; `git diff --check` não apontou erros.
+- **Próxima ação:** confirmar com a equipe o contrato do ESP32 — frequência, lacuna permitida, identificadores de placa/sensor e inicialização/sequência — e só então projetar deduplicação persistente, autenticação, expiração e histórico transacional. Não usar o cálculo isolado como evidência de integração real.
 
 ### 23/09/2026 — consolidação das sprints e plano de correção
 

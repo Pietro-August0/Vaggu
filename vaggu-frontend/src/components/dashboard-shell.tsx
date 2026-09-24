@@ -8,7 +8,13 @@ import {
   LogOut,
   Menu,
   MessageCircle,
+  Moon,
+  Sun,
+  Map,
+  UsersRound,
+  UserRound,
 } from "lucide-react"
+import { useTheme } from "next-themes"
 import { useState, type ReactNode } from "react"
 import { Link, useLocation, useNavigate } from "react-router-dom"
 
@@ -33,14 +39,14 @@ interface NavItem {
 }
 
 /** Exibe os atalhos recebidos e destaca aquele cujo endereço coincide com a rota atual. */
-function Navigation({ items, admin = false }: { items: NavItem[]; admin?: boolean }) {
+function Navigation({ items, admin = false, aoNavegar }: { items: NavItem[]; admin?: boolean; aoNavegar: () => void }) {
   const { pathname } = useLocation()
 
   return (
     <nav aria-label="Navegação do painel" className="grid gap-1">
       {items.map((item) => {
         const Icon = item.icon
-        const active = item.href === "/admin/shoppings" ? pathname.startsWith(item.href) : pathname === item.href
+        const active = pathname === item.href
 
         return (
           <Button
@@ -54,7 +60,7 @@ function Navigation({ items, admin = false }: { items: NavItem[]; admin?: boolea
             key={item.href}
             variant="ghost"
           >
-            <Link to={item.href}>
+            <Link to={item.href} onClick={aoNavegar} aria-current={active ? "page" : undefined}>
               <Icon className="size-4" aria-hidden="true" />
               {item.label}
             </Link>
@@ -69,20 +75,30 @@ function Navigation({ items, admin = false }: { items: NavItem[]; admin?: boolea
 export function DashboardShell({
   title,
   eyebrow,
+  shoppingId,
   children,
 }: {
   title: string
   eyebrow: string
+  shoppingId?: string
   children: ReactNode
 }) {
   const { currentUser, logout } = useAppStore()
+  const { resolvedTheme, setTheme } = useTheme()
   const navigate = useNavigate()
+  const [menuAberto, setMenuAberto] = useState(false)
   const [saindo, setSaindo] = useState(false)
   const [erroSaida, setErroSaida] = useState("")
   const isAdmin = currentUser?.role === "admin"
   const navItems: NavItem[] = isAdmin
-    ? [{ label: "Cadastrar", href: "/admin", icon: FilePlus2 }, { label: "Shoppings", href: "/admin/shoppings", icon: Building2 }]
-    : [{ label: "Visão geral", href: "/painel", icon: LayoutDashboard }]
+    ? [{ label: "Cadastrar shopping", href: "/admin", icon: FilePlus2 }, { label: "Shoppings", href: "/admin/shoppings", icon: Building2 }]
+    : [{ label: "Estacionamento", href: "/painel", icon: LayoutDashboard }, { label: "Minha conta", href: "/painel/conta", icon: UserRound }]
+  const shoppingItems: NavItem[] = shoppingId ? [
+    { label: "Visão geral", href: `/admin/shoppings/${shoppingId}`, icon: LayoutDashboard },
+    { label: "Estrutura e mapa", href: `/admin/shoppings/${shoppingId}/estrutura`, icon: Map },
+    { label: "Gerentes", href: `/admin/shoppings/${shoppingId}/gerentes`, icon: UsersRound },
+  ] : []
+  const escuro = resolvedTheme === "dark"
 
   /** Limpa a sessão na API e substitui a rota atual pela tela de entrada. */
   async function handleLogout() {
@@ -103,12 +119,18 @@ export function DashboardShell({
     <>
       <div className="mb-10">
         <Brand inverted={!isAdmin} />
-        <p className="mt-3 text-xs font-medium uppercase tracking-[0.2em] text-neutral-500">
-          {isAdmin ? "Administração" : "Painel do shopping"}
-        </p>
       </div>
-      <Navigation items={navItems} admin={isAdmin} />
+      <p className={cn("mb-2 text-xs font-bold uppercase tracking-[0.18em]", isAdmin ? "text-neutral-800/70" : "text-neutral-500")}>{isAdmin ? "Administração" : "Shopping"}</p>
+      <Navigation items={navItems} admin={isAdmin} aoNavegar={() => setMenuAberto(false)} />
+      {shoppingItems.length > 0 && <div className="mt-6 border-t border-black/15 pt-5">
+        <p className="mb-2 text-xs font-bold uppercase tracking-[0.18em] text-neutral-800/70">Shopping atual</p>
+        <Navigation items={shoppingItems} admin aoNavegar={() => setMenuAberto(false)} />
+      </div>}
       <div className="mt-auto grid gap-2 pt-8">
+        <Button type="button" variant="ghost" className={isAdmin ? "justify-start gap-3 text-neutral-950 hover:bg-black/10" : "justify-start gap-3 text-neutral-300 hover:bg-neutral-900 hover:text-white"} onClick={() => setTheme(escuro ? "light" : "dark")} aria-label={escuro ? "Ativar modo claro" : "Ativar modo escuro"}>
+          {escuro ? <Sun className="size-4" aria-hidden="true" /> : <Moon className="size-4" aria-hidden="true" />}
+          {escuro ? "Modo claro" : "Modo escuro"}
+        </Button>
         {!isAdmin && WHATSAPP_URL && (
           <Button asChild className="justify-start gap-3" variant="outline">
             <a href={WHATSAPP_URL} rel="noreferrer" target="_blank">
@@ -132,17 +154,17 @@ export function DashboardShell({
   )
 
   return (
-    <div className={isAdmin ? "min-h-screen bg-[#171717] text-neutral-950" : "min-h-screen bg-[#f5f5f3] text-neutral-950"}>
+    <div className="painel-vaggu min-h-screen bg-[#f5f5f3] text-neutral-950 dark:bg-[#171717] dark:text-neutral-100">
       <aside className={isAdmin ? "fixed inset-y-0 left-0 hidden w-64 flex-col bg-[#ffe100] p-6 lg:flex" : "fixed inset-y-0 left-0 hidden w-64 flex-col bg-neutral-950 p-6 lg:flex"}>
         {sideContent}
       </aside>
 
       <div className="min-w-0 max-w-full lg:pl-64">
-        <header className={isAdmin ? "sticky top-0 z-30 border-b border-white/10 bg-[#171717]/90 text-white backdrop-blur-xl" : "sticky top-0 z-30 border-b border-black/5 bg-[#f5f5f3]/90 backdrop-blur-xl"}>
+        <header className="sticky top-0 z-30 border-b border-black/10 bg-[#f5f5f3]/90 backdrop-blur-xl dark:border-white/10 dark:bg-[#171717]/90">
           <div className="flex min-h-20 items-center gap-4 px-4 sm:px-6 lg:px-10">
-            <Sheet>
+            <Sheet open={menuAberto} onOpenChange={setMenuAberto}>
               <SheetTrigger asChild>
-                <Button aria-label="Abrir navegação" className={isAdmin ? "border-white/20 bg-white/10 text-white hover:bg-white/20 lg:hidden" : "lg:hidden"} size="icon" variant="outline">
+                <Button aria-label="Abrir navegação" className="border-black/15 bg-white/80 text-neutral-950 hover:bg-white lg:hidden dark:border-white/20 dark:bg-white/10 dark:text-white dark:hover:bg-white/20" size="icon" variant="outline">
                   <Menu aria-hidden="true" />
                 </Button>
               </SheetTrigger>
@@ -158,7 +180,7 @@ export function DashboardShell({
               <p className="text-xs font-bold uppercase tracking-[0.18em] text-neutral-500">{eyebrow}</p>
               <h1 className="break-words font-heading text-xl font-black tracking-tight sm:text-2xl">{title}</h1>
             </div>
-            <div className={isAdmin ? "ml-auto hidden items-center gap-2 rounded-full border border-white/15 bg-white/5 px-3 py-2 text-xs font-medium text-neutral-300 sm:flex" : "ml-auto hidden items-center gap-2 rounded-full border border-black/10 bg-white px-3 py-2 text-xs font-medium text-neutral-600 sm:flex"}>
+            <div className="ml-auto hidden items-center gap-2 rounded-full border border-black/10 bg-white px-3 py-2 text-xs font-medium text-neutral-600 sm:flex dark:border-white/15 dark:bg-white/5 dark:text-neutral-300">
               <span className="size-2 rounded-full bg-[#ffe100]" aria-hidden="true" />
               Acesso autenticado
             </div>

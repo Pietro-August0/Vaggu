@@ -36,7 +36,7 @@ Plataforma web responsiva para gestão de estacionamentos de shopping centers, d
 
 O próprio cofre está versionado na pasta `segunda-mente/` do repositório VAGGU.
 
-**Estado atual:** P01–P05, D01 e C01 concluídos. Em 23/09/2026, a ficha administrativa recuperou a exclusão lógica de gerente com sete segundos para desfazer e a exclusão lógica de shopping, além das correções do formulário e da página 404. O próximo pacote de produto é o P06, de telemetria e estados confiáveis. Ver [[Vaggu/Planejamento/Próximos passos]].
+**Estado atual:** P01–P05, D01 e C01 concluídos. P06 começou apenas pelo núcleo isolado de confirmação temporal; ingestão, persistência, expiração e integração com ESP32 ainda não existem como fluxo operacional. Em 24/09, Admin e gerente receberam navegação separada e modo claro/escuro; o Admin pode exportar uma fotografia XLSX da estrutura, distinta de relatórios históricos. Ver [[Vaggu/Documentação/planejamento-do-projeto|planejamento]] e [[Vaggu/Documentação/fluxo-de-telas|fluxo de telas]].
 
 **Hospedagem registrada em 23/09:** frontend e API são entregues pelo mesmo serviço Render, conectado ao PostgreSQL no Neon. Consulte [[Vaggu/Documentação/configuracao|configuração]] e [[Vaggu/Tecnologias/Tecnologias e arquitetura|arquitetura]] para o funcionamento versionado; endereço público e resultado das publicações devem ser conferidos no Render/GitHub.
 
