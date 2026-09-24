@@ -37,6 +37,11 @@ Classificações: **verificado** exige execução do comportamento indicado; **p
 - Revisão editorial posterior: o README público foi transformado em apresentação atemporal da proposta, da experiência por perfil, das imagens comentadas e da stack, sem datas, “MVP” ou lista de pendências. Esta segunda mente preserva o cronograma, as ressalvas das evidências e os limites técnicos; a revisão não acrescenta funcionalidades ao produto.
 - O Vite foi removido dos badges, da tabela e do diagrama do README para destacar as tecnologias centrais; permanece descrito na documentação técnica e na configuração onde seu papel de build importa. O Tailwind CSS ganhou badge e os estilos CSS próprios são mencionados na tabela da interface. A descrição do README no mapa do projeto foi revista e continua correta.
 
+### Ajustes da landing móvel — 24/09
+
+- A variante SVG branca da marca não aplica mais sombra desfocada, mantendo os contornos nítidos no cabeçalho móvel. O card claro de contato tem texto escuro explícito para continuar legível mesmo quando o tema escuro está salvo. As conexões do notebook começam quando 80% do painel está visível; as etapas anteriores conservam seu gatilho.
+- Revisão visual local em Chromium/Edge nas larguras de 390 e 1440 px: texto do card escuro e visível mesmo com a classe `dark`, marca vetorial carregada, conexões ainda ocultas no início e completas após o painel entrar, sem erros JavaScript nem overflow horizontal. Não representa teste no celular físico nem confirmação do deploy. O mapa do projeto foi revisto para os arquivos modificados; as descrições que permaneceram corretas não foram reescritas.
+
 ## 2. O que foi implementado
 
 | Área | Estado atual | Evidência e limite |

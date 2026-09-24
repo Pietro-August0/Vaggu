@@ -123,7 +123,7 @@ As cópias de imagens entre `segunda-mente/Vaggu/Identidade visual/Assets/` e `v
 | `vaggu-frontend/public/assets/phones-vaggu.png` | Imagem de celulares usada apenas na composição do rodapé desktop da landing; no mobile, o rodapé prioriza conteúdo e links. |
 | `vaggu-frontend/public/assets/vaggu-circulado.png` | Variante circular da marca preservada no catálogo público; não está montada nas telas atuais. |
 | `vaggu-frontend/public/assets/vaggu-foto-homem-login-sem-fundo.png` | Asset visual vaggu-foto-homem-login-sem-fundo.png; reutilizado na identidade e composição da interface. |
-| `vaggu-frontend/public/assets/vaggu-logo-white.svg` | Asset visual vaggu-logo-white.svg; reutilizado na identidade e composição da interface. |
+| `vaggu-frontend/public/assets/vaggu-logo-white.svg` | Variante vetorial branca da marca, sem filtro de sombra, usada na landing e em outras superfícies escuras. |
 | `vaggu-frontend/public/assets/vaggu-logo-yellow.svg` | Variante amarela do logotipo preservada no catálogo público; não está montada nas telas atuais. |
 | `vaggu-frontend/public/assets/vaggu-logo.svg` | Asset visual vaggu-logo.svg; reutilizado na identidade e composição da interface. |
 | `vaggu-frontend/src/app/app-store.tsx` | Mantém token apenas em memória, valida identidade na API e gerencia sessão, troca de senha, consultas autenticadas e atualização da própria conta. |
@@ -141,7 +141,7 @@ As cópias de imagens entre `segunda-mente/Vaggu/Identidade visual/Assets/` e `v
 | `vaggu-frontend/src/components/operacao-vaggu.tsx` | Relaciona a imagem de movimento urbano aos benefícios da gestão e ao atendimento. |
 | `vaggu-frontend/src/components/protected-route.tsx` | Protege a navegação com identidade da API; autorização de recursos continua no backend. |
 | `vaggu-frontend/src/components/sobre-vaggu.css` | Escala, anéis automáticos e pesos da landing; medidas compartilhadas mantêm as conexões alinhadas. |
-| `vaggu-frontend/src/components/sobre-vaggu.tsx` | Apresenta a solução, a jornada comercial e os benefícios conectados ao painel. |
+| `vaggu-frontend/src/components/sobre-vaggu.tsx` | Apresenta a solução, a jornada comercial e os benefícios; inicia as conexões quando o painel está quase todo visível. |
 | `vaggu-frontend/src/components/ui/alert.tsx` | Componente de interface reutilizável alert; usado para controles, estados e composição acessível. |
 | `vaggu-frontend/src/components/ui/avatar.tsx` | Componente de interface reutilizável avatar; usado para controles, estados e composição acessível. |
 | `vaggu-frontend/src/components/ui/badge.tsx` | Componente de interface reutilizável badge; usado para controles, estados e composição acessível. |
@@ -163,7 +163,7 @@ As cópias de imagens entre `segunda-mente/Vaggu/Identidade visual/Assets/` e `v
 | `vaggu-frontend/src/main.tsx` | Inicializa o React e reúne tema, mensagens, sessão e rotas separadas da estrutura, gerentes e conta. |
 | `vaggu-frontend/src/pages/admin-page.tsx` | Implementa cadastro, lista e ficha do shopping; a visão geral resume contatos e recolhe a edição, enquanto estrutura/mapa e gerentes mantêm importação/exportação, senha provisória e exclusões administrativas. |
 | `vaggu-frontend/src/pages/area-autenticada.tsx` | Separa mapa operacional e Minha conta do gerente em rotas próprias; o Admin usa a página administrativa dedicada. |
-| `vaggu-frontend/src/pages/landing-page.tsx` | Compõe a landing pública; o rodapé móvel usa chamada e navegação existentes sem duplicar a imagem de celulares, e o contato comercial depende do WhatsApp configurado. |
+| `vaggu-frontend/src/pages/landing-page.tsx` | Compõe a landing pública; mantém o card claro de contato legível em ambos os temas, e o rodapé móvel usa chamada e navegação sem duplicar a imagem de celulares. |
 | `vaggu-frontend/src/pages/login-page.css` | Define composição responsiva do login, troca de senha e desenho animado do rabisco em “vagas”. |
 | `vaggu-frontend/src/pages/login-page.tsx` | Entrada única para Admin e gerente, sem solicitar preenchimento automático das credenciais ao abrir a página. |
 | `vaggu-frontend/src/pages/pagina-nao-encontrada.tsx` | Exibe a rota 404 pública, oferece retorno à landing e compõe a animação semântica da vaga liberada. |

@@ -136,7 +136,7 @@ export function LandingPage() {
               transition={{ duration: 0.6, delay: 0.2 }}
               viewport={{ once: true, margin: "-100px" }}
             >
-              <Card className="mx-auto mt-10 max-w-2xl overflow-hidden rounded-[2rem] border-[#ffe100] bg-[#fffdf2] text-left shadow-xl shadow-black/8 sm:mt-12">
+              <Card className="mx-auto mt-10 max-w-2xl overflow-hidden rounded-[2rem] border-[#ffe100] bg-[#fffdf2] text-left text-neutral-950 shadow-xl shadow-black/8 sm:mt-12">
                 <CardContent className="grid gap-7 p-7 sm:grid-cols-[auto_1fr] sm:p-9">
                   <div className="grid size-16 place-items-center rounded-2xl bg-[#ffe100] text-black">
                     <IconeWhatsApp className="size-8" />

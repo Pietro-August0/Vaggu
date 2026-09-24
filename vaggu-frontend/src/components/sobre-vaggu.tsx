@@ -34,7 +34,7 @@ function DiagramaDaVaggu() {
   )
 }
 
-/** As conexões entram em sequência quando cada grupo aparece pela primeira vez. */
+/** As conexões entram em sequência após o painel estar quase todo visível. */
 export function SobreVaggu() {
   const entrada = {
     initial: "desconectado",
@@ -44,6 +44,10 @@ export function SobreVaggu() {
       desconectado: { "--conectar": "100%" },
       conectado: { "--conectar": "0%" },
     },
+  }
+  const entradaDoPainel = {
+    ...entrada,
+    viewport: { once: true, amount: 0.8 },
   }
 
   return (
@@ -76,7 +80,7 @@ export function SobreVaggu() {
 
         <div className="sobre-visualiza">
           <h3>Você visualiza</h3>
-          <motion.div className="sobre-painel" {...entrada}>
+          <motion.div className="sobre-painel" {...entradaDoPainel}>
             {/* Trajetos decorativos compartilham a grade dos destinos e ficam atrás do notebook. */}
             <svg className="sobre-conexoes" viewBox="0 0 1200 420" preserveAspectRatio="none" aria-hidden="true">
               <path d="M 220 225 C 400 30 510 -30 660 70" />
