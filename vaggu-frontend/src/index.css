@@ -128,8 +128,8 @@ body {
   --card-foreground: oklch(0.985 0 0);
   --popover: oklch(0.205 0 0);
   --popover-foreground: oklch(0.985 0 0);
-  --primary: oklch(0.922 0 0);
-  --primary-foreground: oklch(0.205 0 0);
+  --primary: #ffe100;
+  --primary-foreground: #0a0a0a;
   --secondary: oklch(0.269 0 0);
   --secondary-foreground: oklch(0.985 0 0);
   --muted: oklch(0.269 0 0);
@@ -139,7 +139,7 @@ body {
   --destructive: oklch(0.704 0.191 22.216);
   --border: oklch(1 0 0 / 10%);
   --input: oklch(1 0 0 / 15%);
-  --ring: oklch(0.556 0 0);
+  --ring: #ffe100;
   --chart-1: oklch(0.87 0 0);
   --chart-2: oklch(0.556 0 0);
   --chart-3: oklch(0.439 0 0);
@@ -147,8 +147,8 @@ body {
   --chart-5: oklch(0.269 0 0);
   --sidebar: oklch(0.205 0 0);
   --sidebar-foreground: oklch(0.985 0 0);
-  --sidebar-primary: oklch(0.488 0.243 264.376);
-  --sidebar-primary-foreground: oklch(0.985 0 0);
+  --sidebar-primary: #ffe100;
+  --sidebar-primary-foreground: #0a0a0a;
   --sidebar-accent: oklch(0.269 0 0);
   --sidebar-accent-foreground: oklch(0.985 0 0);
   --sidebar-border: oklch(1 0 0 / 10%);
@@ -173,6 +173,31 @@ body {
     color: #0a0a0a;
   }
 }
+
+/* Harmoniza as superfícies legadas dos painéis com o tema sem alterar a landing pública. */
+.light .painel-admin [class~="bg-[#202020]"] { background-color: #ffffff; }
+.light .painel-admin [class~="bg-white/5"] { background-color: #f5f5f3; }
+.light .painel-admin [class~="bg-black/30"] { background-color: #f0eee5; }
+.light .painel-admin [class~="text-white"] { color: #171717; }
+.light .painel-admin [class~="text-neutral-200"],
+.light .painel-admin [class~="text-neutral-300"],
+.light .painel-admin [class~="text-neutral-400"] { color: #525252; }
+.light .painel-admin [class~="border-white/10"],
+.light .painel-admin [class~="border-white/15"],
+.light .painel-admin [class~="border-white/20"] { border-color: rgb(0 0 0 / 14%); }
+.light .painel-admin [class~="bg-neutral-950"][class~="text-white"] { color: #ffffff; }
+.light .painel-admin [class~="text-[#ffe100]"] { color: #665a00; }
+.light .painel-admin article [class~="text-[#ffe100]"] { color: #ffe100; }
+
+.dark .painel-vaggu [class~="bg-white"] { background-color: #242424; color: #f5f5f5; }
+.dark .painel-vaggu [class~="bg-neutral-100"] { background-color: #343231; color: #f5f5f5; }
+.dark .painel-vaggu [class~="bg-neutral-200"] { background-color: #292929; color: #f5f5f5; }
+.dark .painel-vaggu [class~="bg-neutral-200"] [class~="text-neutral-950"] { color: #f5f5f5; }
+.dark .painel-vaggu [class~="text-neutral-600"] { color: #d4d4d4; }
+.dark .painel-vaggu [class~="text-neutral-700"],
+.dark .painel-vaggu [class~="text-neutral-800"] { color: #e5e5e5; }
+.dark .painel-vaggu [class~="bg-[#ffe100]"] [class~="text-neutral-800"] { color: #171717; }
+.dark .painel-vaggu select { background-color: #242424; color: #f5f5f5; border-color: #525252; }
 
 @keyframes landing-enter-down {
   from {

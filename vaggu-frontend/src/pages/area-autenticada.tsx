@@ -1,5 +1,6 @@
 /** Mantém o painel operacional e a edição da própria conta do gerente autenticado. */
 import { useState, type FormEvent } from "react"
+import { useLocation } from "react-router-dom"
 import { useAppStore } from "@/app/app-store"
 import { DashboardShell } from "@/components/dashboard-shell"
 import { MapaEstacionamento } from "@/components/mapa-estacionamento"
@@ -32,9 +33,9 @@ function MinhaConta() {
     }
   }
 
-  return <section className="max-w-2xl rounded-2xl bg-white p-6">
+  return <section className="max-w-2xl rounded-2xl bg-white p-6 dark:bg-[#242424] dark:text-white">
     <h2 className="text-xl font-semibold">Minha conta</h2>
-    <p className="mt-2 text-sm text-neutral-600">O e-mail e o vínculo com o shopping são administrados pela equipe VAGGU.</p>
+    <p className="mt-2 text-sm text-neutral-600 dark:text-neutral-300">O e-mail e o vínculo com o shopping são administrados pela equipe VAGGU.</p>
     <form className="mt-6 grid gap-4" onSubmit={salvar}>
       <div className="grid gap-2"><Label htmlFor="conta-nome">Nome</Label><Input id="conta-nome" name="nome" defaultValue={currentUser.nome} required minLength={2} maxLength={120} /></div>
       <div className="grid gap-2"><Label htmlFor="conta-email">E-mail</Label><Input id="conta-email" value={currentUser.email} disabled /></div>
@@ -49,9 +50,11 @@ function MinhaConta() {
 /** Exibe somente recursos autorizados ao gerente do shopping da sessão. */
 export function AreaAutenticada() {
   const { currentUser } = useAppStore()
+  const { pathname } = useLocation()
   if (!currentUser) return null
 
-  return <DashboardShell eyebrow="Área do cliente" title="Painel do shopping">
-    <div className="grid max-w-6xl gap-6"><MapaEstacionamento /><MinhaConta /></div>
+  const conta = pathname === "/painel/conta"
+  return <DashboardShell eyebrow="Área do cliente" title={conta ? "Minha conta" : "Estacionamento"}>
+    <div className="grid max-w-6xl gap-6">{conta ? <MinhaConta /> : <MapaEstacionamento />}</div>
   </DashboardShell>
 }
