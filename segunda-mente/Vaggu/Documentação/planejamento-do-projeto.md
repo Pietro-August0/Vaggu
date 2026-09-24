@@ -22,6 +22,19 @@ Classificações: **verificado** exige execução do comportamento indicado; **p
 - Verificações: `npm.cmd run lint` e `npm.cmd run build` no frontend passaram; TypeScript foi conferido pelo build. O XLSX foi gerado e relido programaticamente, mas não aberto no Microsoft Excel. O navegador não registrou erros/avisos de console no ensaio. O build mantém aviso de chunk maior que 500 kB; ExcelJS carrega somente ao pedir o arquivo. O frontend não declara scripts `test` ou `typecheck` separados.
 - A árvore original também continha mudanças de P06 (`confirmacao-estado` e documentação), além de alterações em `index.html` e no texto de restauração da ficha Admin. Foram preservadas. A UX foi commitada primeiro em branch própria, com Juan como responsável técnico indicado e Elisa/Ana como revisoras indicadas; a autoria Git permaneceu com quem executou o commit.
 
+### Ajustes de leitura e rolagem móvel — 24/09
+
+- A lista administrativa define texto preto no marcador amarelo “Abrir ficha”, inclusive no tema escuro. O formulário de shopping foi dividido em identificação, endereço e operação/foto, com validação por etapa e preservação dos campos ao voltar. Na ficha, contatos aparecem em resumo e a edição fica recolhida até ser solicitada.
+- O rodapé móvel da landing não repete a imagem de celulares usada no desktop. Passou a organizar marca, chamada e links já existentes em áreas separadas; o botão de WhatsApp do rodapé aparece somente quando o número oficial estiver configurado. O restante da landing ainda contém chamadas de WhatsApp sem a mesma guarda e precisa de revisão específica.
+- A implementação foi feita na branch local `fix/admin-mobile-footer-juan`, a partir de `main` em `a000e7a`. Responsável técnico indicado: Juan; revisão de experiência indicada: Elisa; revisão documental indicada: Ana. Não representa autoria ou revisão efetivamente assinada por esses integrantes.
+- Verificação técnica: `npm.cmd run lint`, `npm.cmd run build`, `git diff --check` e `node scripts/verificar-documentacao.mjs` aprovados. A landing foi aberta no navegador local em largura desktop e o rodapé renderizou com os links existentes, sem erros visíveis. Validação visual em viewport móvel e o fluxo Admin autenticado dependem de novo ensaio; não há confirmação neste registro de teste com API/banco reais nem do deploy.
+
+### README e evidências reproduzíveis — 24/09
+
+- O README da raiz agora orienta o visitante do GitHub por objetivo, mostra badges das tecnologias presentes, distingue entrega de backlog, explica por que `npm ci` isolado não inicia a aplicação e registra marcos por dia. Logos dos badges são servidas externamente por Shields.io com catálogo Simple Icons; a documentação textual não depende dessas imagens.
+- Quatro capturas novas foram feitas em `http://127.0.0.1:5173/` com Chromium automatizado: landing e login em 390 px, rodapé em 390 e 1440 px. As animações foram aguardadas. Nas duas larguras, `document.documentElement.scrollWidth` não excedeu `innerWidth`; não houve erro JavaScript de página. O print móvel confirma visualmente que não há imagem de celulares no rodapé. A checagem inicial de visibilidade do elemento `img` foi inconclusiva por não considerar corretamente o ancestral oculto; a captura renderizada é a evidência desta afirmação.
+- O índice de evidências separa prints locais atuais de P02–P04 históricos e corrige a afirmação antiga de que a exclusão reversível de gerente estaria ausente. As imagens públicas atuais não comprovam o fluxo Admin/Gerente autenticado, banco real, provedor externo ou deploy. A interface administrativa móvel atual ainda precisa de uma captura autenticada e de um teste de edição em etapas.
+
 ## 2. O que foi implementado
 
 | Área | Estado atual | Evidência e limite |

@@ -6,7 +6,20 @@ tags: [vaggu, evidencias, interface]
 Capturas geradas durante validações locais da interface e referências fornecidas pela equipe. Elas documentam o estado observado ou planejado na data de origem; não comprovam sensores, serviços externos, produção nem a interface atual sem nova validação.
 
 > [!important] Estado histórico
-> As capturas existentes de P02, P03, P04 e “Melhorias — interações e gerentes” são registros históricos de versões anteriores. O código atual pode divergir delas. Em especial, a exclusão de gerente e o aviso de desfazer mostrados nas imagens antigas não estão disponíveis no frontend atual.
+> As capturas de P02, P03, P04 e “Melhorias — interações e gerentes” são registros históricos de versões anteriores. O código atual pode divergir delas. A exclusão reversível de gerente está novamente implementada na ficha atual, mas os prints antigos não comprovam seu visual de hoje.
+
+## 24/09/2026 — capturas públicas atuais
+
+Capturadas no frontend local com Chromium/Playwright após aguardar as animações. A largura móvel foi 390 px e a desktop, 1440 px. Não havia sessão autenticada, banco ou deploy sob teste; portanto estas imagens **não** validam Admin, gerente, mapa ou produção.
+
+| Área | Captura | O que mostra |
+| --- | --- | --- |
+| Landing móvel | ![[Vaggu/Evidências visuais/landing-mobile-2026-09-24.png]] | Hero e acesso ao login em 390 px. |
+| Rodapé móvel | ![[Vaggu/Evidências visuais/rodape-mobile-2026-09-24.png]] | Marca, chamada e links, sem a imagem de celulares. |
+| Rodapé desktop | ![[Vaggu/Evidências visuais/rodape-desktop-2026-09-24.png]] | Imagem de celulares preservada em 1440 px. |
+| Login móvel | ![[Vaggu/Evidências visuais/login-mobile-2026-09-24.png]] | Formulário de entrada em 390 px, sem credenciais. |
+
+No ensaio, o documento não apresentou transbordamento horizontal nas duas larguras e o navegador não registrou erros de página. A ausência de número oficial explica por que o rodapé não mostra botão de WhatsApp; outras chamadas da landing ainda precisam da mesma guarda.
 
 ## P02 — Login — histórico
 
@@ -41,8 +54,8 @@ As capturas foram copiadas de pastas temporárias de validação em 12/09/2026. 
 Exemplo principal: ![[Vaggu/Evidências visuais/Melhorias - interações e gerentes/confirmacao-excluir-gerente.png]]
 
 - `login-rabisco-animado.png`: resultado final do contorno SVG desenhado em torno de “vagas”.
-- `confirmacao-excluir-gerente.png`: modal existente em uma versão anterior, antes de qualquer alteração no acesso; não representa a ficha atual.
-- `aviso-desfazer-exclusao.png`: versão anterior com gerente oculto e ação “Desfazer” durante sete segundos; o frontend atual não oferece esse fluxo.
+- `confirmacao-excluir-gerente.png`: modal de uma versão anterior; não representa necessariamente a ficha atual.
+- `aviso-desfazer-exclusao.png`: aparência anterior da ação “Desfazer” durante sete segundos. O comportamento existe novamente, mas precisa de print atual para comparação visual.
 
 ## Planejamento e identidade — material fornecido pela equipe
 

@@ -19,7 +19,8 @@ Plataforma web responsiva para gestão de estacionamentos de shopping centers, d
 - [[Vaggu/Planejamento/Próximos passos]]
 - [[Vaggu/Skills/Skills e regras]]
 - [[Vaggu/Fontes/Fontes e limites da importação]]
-- [[Vaggu/Diário/2026-09-15|Diário mais recente]]
+- [[Vaggu/Documentação/planejamento-do-projeto|Registro diário e próximo trabalho]]
+- [[Vaggu/Diário/2026-09-15|Diário histórico de 15/09]]
 
 ## Documentação completa recuperada
 
@@ -54,3 +55,5 @@ O próprio cofre está versionado na pasta `segunda-mente/` do repositório VAGG
 **Atualização de 21/09:** P05 concluído após corrigir o advisory lock para o Prisma 7 e montar a importação na ficha administrativa correta. A integração PostgreSQL aprovou 32/32 cenários; o navegador autenticado confirmou o fluxo válido e inválido, a atualização da estrutura e a responsividade sem transbordamento da página.
 
 **Atualização de 21/09 — mapa e foto:** Admin e gerente passaram a compartilhar a visualização 2D responsiva. O gerente vê a estrutura mesmo antes da ativação, mutações administrativas recarregam o mapa sem refresh, a senha provisória pode ser copiada somente quando é emitida e a foto do shopping usa referência HTTPS do Vercel Blob em vez de binário no PostgreSQL.
+
+**Atualização de 24/09 — leitura e evidências:** o cadastro de shopping foi dividido em etapas, a ficha recolhe a edição e o rodapé móvel deixou de repetir a imagem de celulares. A [galeria de evidências](./Evidências%20visuais/Índice%20de%20evidências.md) identifica capturas públicas atuais e separa as imagens históricas. O [README da raiz](../../README.md) apresenta o projeto no GitHub com datas, limites e caminhos para iniciar.

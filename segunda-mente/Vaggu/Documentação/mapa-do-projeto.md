@@ -27,6 +27,10 @@ As cópias de imagens entre `segunda-mente/Vaggu/Identidade visual/Assets/` e `v
 | `segunda-mente/Vaggu/Evidências visuais/Planejamento/sprint-03-planejamento-09-09-2026.jpeg` | Cópia versionada da fotografia fornecida pela equipe com o planejamento da Sprint 3. |
 | `segunda-mente/Vaggu/Evidências visuais/Planejamento/sprint-04-divisao-equipe.jpeg` | Cópia versionada da fotografia fornecida pela equipe com a divisão registrada para a Sprint 4. |
 | `segunda-mente/Vaggu/Evidências visuais/Planejamento/guia-identidade-visual-vaggu.png` | Cópia versionada do guia visual fornecido pela equipe, usado como evidência para paleta e tipografia, sem atribuí-lo a uma extração do Figma. |
+| `segunda-mente/Vaggu/Evidências visuais/landing-mobile-2026-09-24.png` | Captura da landing pública local em 390 px, feita em 24/09 após as animações; não comprova sessão ou deploy. |
+| `segunda-mente/Vaggu/Evidências visuais/rodape-mobile-2026-09-24.png` | Captura do rodapé público local em 390 px, sem a imagem de celulares, feita em 24/09. |
+| `segunda-mente/Vaggu/Evidências visuais/rodape-desktop-2026-09-24.png` | Captura do rodapé público local em 1440 px, com a imagem de celulares preservada, feita em 24/09. |
+| `segunda-mente/Vaggu/Evidências visuais/login-mobile-2026-09-24.png` | Captura do login público local em 390 px, sem uso de credenciais, feita em 24/09. |
 
 ## Arquivos versionáveis
 
@@ -36,7 +40,7 @@ As cópias de imagens entre `segunda-mente/Vaggu/Identidade visual/Assets/` e `v
 | `.github/workflows/publicar-render.yml` | Solicita ao Render um novo deploy após cada push na `main`, usando um Deploy Hook guardado como segredo do GitHub. |
 | `.gitignore` | Exclui ferramentas locais, segredos, dependências e saídas de build. |
 | `AGENTS.md` | Define escopo, regras de implementação, documentação e verificação para agentes. |
-| `README.md` | Apresenta o produto, recursos entregues e comandos de execução. |
+| `README.md` | Apresenta o produto no GitHub com recursos, limites, capturas datadas, tecnologias, início local e links para as fontes canônicas. |
 | `render.yaml` | Define build, inicialização, saúde e variáveis não secretas da hospedagem gratuita no Render. |
 | `scripts/verificar-documentacao.mjs` | Confere se o mapa canônico explica os arquivos versionáveis e se os links internos da segunda mente possuem destino válido. |
 | `skills/end/SKILL.md` | Documentação: Fechamento do dia — VAGGU. |
@@ -116,7 +120,7 @@ As cópias de imagens entre `segunda-mente/Vaggu/Identidade visual/Assets/` e `v
 | `vaggu-frontend/public/assets/city-flow-vaggu.png` | Asset visual city-flow-vaggu.png; reutilizado na identidade e composição da interface. |
 | `vaggu-frontend/public/assets/hero-vaggu.png` | Asset visual hero-vaggu.png; reutilizado na identidade e composição da interface. |
 | `vaggu-frontend/public/assets/mockup-laptop-vaggu.svg` | Asset visual mockup-laptop-vaggu.svg; reutilizado na identidade e composição da interface. |
-| `vaggu-frontend/public/assets/phones-vaggu.png` | Asset visual phones-vaggu.png; reutilizado na identidade e composição da interface. |
+| `vaggu-frontend/public/assets/phones-vaggu.png` | Imagem de celulares usada apenas na composição do rodapé desktop da landing; no mobile, o rodapé prioriza conteúdo e links. |
 | `vaggu-frontend/public/assets/vaggu-circulado.png` | Variante circular da marca preservada no catálogo público; não está montada nas telas atuais. |
 | `vaggu-frontend/public/assets/vaggu-foto-homem-login-sem-fundo.png` | Asset visual vaggu-foto-homem-login-sem-fundo.png; reutilizado na identidade e composição da interface. |
 | `vaggu-frontend/public/assets/vaggu-logo-white.svg` | Asset visual vaggu-logo-white.svg; reutilizado na identidade e composição da interface. |
@@ -128,7 +132,7 @@ As cópias de imagens entre `segunda-mente/Vaggu/Identidade visual/Assets/` e `v
 | `vaggu-frontend/src/components/estrutura-admin.tsx` | Permite ao Admin criar a hierarquia, escolher implantação e alternar cadastro, mapa e edição de posições, com refetch após mutações. |
 | `vaggu-frontend/src/components/exportacao-estrutura.tsx` | Abre a janela de exportação estrutural, mostra o recorte e inicia o download XLSX sob demanda. |
 | `vaggu-frontend/src/components/importacao-estrutura.tsx` | Permite ao Admin baixar o modelo CSV, enviar CSV/XLSX, revisar registros e erros, confirmar a importação e consultar o resumo aplicado. |
-| `vaggu-frontend/src/components/formulario-shopping.tsx` | Compartilha dados cadastrais e seleção, preview, troca ou remoção da foto entre cadastro e edição do shopping. |
+| `vaggu-frontend/src/components/formulario-shopping.tsx` | Compartilha cadastro e edição do shopping em três etapas validadas, preservando dados ao navegar e permitindo preview, troca ou remoção da foto. |
 | `vaggu-frontend/src/components/foto-shopping.tsx` | Renderiza a foto HTTPS do shopping ou o fallback visual consistente quando não há imagem. |
 | `vaggu-frontend/src/components/mapa-estacionamento.tsx` | Busca a estrutura isolada do gerente, mostra aviso de implantação sem ocultá-la e delega o desenho ao componente compartilhado. |
 | `vaggu-frontend/src/components/visualizacao-vagas.tsx` | Compartilha entre Admin e gerente o mapa 2D responsivo, andares, busca, filtros, categorias, estados e vagas sem posição. |
@@ -157,9 +161,9 @@ As cópias de imagens entre `segunda-mente/Vaggu/Identidade visual/Assets/` e `v
 | `vaggu-frontend/src/lib/constants.ts` | Publica links de contato somente após configurar o número oficial da equipe. |
 | `vaggu-frontend/src/lib/utils.ts` | Combina classes condicionais e resolve conflitos de utilitários Tailwind. |
 | `vaggu-frontend/src/main.tsx` | Inicializa o React e reúne tema, mensagens, sessão e rotas separadas da estrutura, gerentes e conta. |
-| `vaggu-frontend/src/pages/admin-page.tsx` | Implementa cadastro, lista e ficha do shopping em visão geral, estrutura/mapa e gerentes, com foto, importação/exportação em janelas, senha provisória e exclusões administrativas. |
+| `vaggu-frontend/src/pages/admin-page.tsx` | Implementa cadastro, lista e ficha do shopping; a visão geral resume contatos e recolhe a edição, enquanto estrutura/mapa e gerentes mantêm importação/exportação, senha provisória e exclusões administrativas. |
 | `vaggu-frontend/src/pages/area-autenticada.tsx` | Separa mapa operacional e Minha conta do gerente em rotas próprias; o Admin usa a página administrativa dedicada. |
-| `vaggu-frontend/src/pages/landing-page.tsx` | Compõe a landing pública e encaminha o contato comercial ao WhatsApp. |
+| `vaggu-frontend/src/pages/landing-page.tsx` | Compõe a landing pública; o rodapé móvel usa chamada e navegação existentes sem duplicar a imagem de celulares, e o contato comercial depende do WhatsApp configurado. |
 | `vaggu-frontend/src/pages/login-page.css` | Define composição responsiva do login, troca de senha e desenho animado do rabisco em “vagas”. |
 | `vaggu-frontend/src/pages/login-page.tsx` | Entrada única para Admin e gerente, sem solicitar preenchimento automático das credenciais ao abrir a página. |
 | `vaggu-frontend/src/pages/pagina-nao-encontrada.tsx` | Exibe a rota 404 pública, oferece retorno à landing e compõe a animação semântica da vaga liberada. |

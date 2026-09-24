@@ -1,6 +1,10 @@
 # Tecnologias e arquitetura
 
-**Tipo:** TRD resumido · **Atualização:** 23/09/2026 · **Fontes do estado real:** manifests, código, migrations e testes versionados.
+**Tipo:** TRD resumido · **Atualização:** 24/09/2026 · **Fontes do estado real:** manifests, código, migrations e testes versionados.
+
+![React](https://img.shields.io/badge/React-19-343231?logo=react&logoColor=FFE100&labelColor=171717) ![TypeScript](https://img.shields.io/badge/TypeScript-frontend%20e%20API-343231?logo=typescript&logoColor=FFE100&labelColor=171717) ![Node.js](https://img.shields.io/badge/Node.js-API-343231?logo=nodedotjs&logoColor=FFE100&labelColor=171717) ![PostgreSQL](https://img.shields.io/badge/PostgreSQL-dados-343231?logo=postgresql&logoColor=FFE100&labelColor=171717)
+
+Os ícones vêm do catálogo [Simple Icons](https://github.com/simple-icons/simple-icons) exibido por [Shields.io](https://shields.io/docs/logos). São decorativos e externos; a tabela abaixo continua sendo a fonte textual e funciona sem eles.
 
 Este documento apresenta as escolhas técnicas e separa o que está implementado do que continua planejado. Versões com `^` ou faixas reproduzem os manifests. A publicação no Render e o uso do Neon estão registrados em 23/09; esta revisão não aferiu disponibilidade externa ou homologação.
 
