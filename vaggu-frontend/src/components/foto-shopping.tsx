@@ -13,5 +13,5 @@ interface FotoShoppingProps {
 export function FotoShopping({ nome, imagemUrl, className }: FotoShoppingProps) {
   const [urlComFalha, setUrlComFalha] = useState<string | null>(null)
   if (imagemUrl && imagemUrl !== urlComFalha) return <img src={imagemUrl} alt={`Foto do ${nome}`} className={cn("object-cover", className)} onError={() => setUrlComFalha(imagemUrl)}/>
-  return <span className={cn("grid place-items-center bg-neutral-950 text-[#ffe100]", className)} aria-label={`${nome} sem foto cadastrada`}><Building2 aria-hidden="true"/></span>
+  return <span className={cn("grid place-items-center bg-neutral-100 text-neutral-950 dark:bg-neutral-800 dark:text-white", className)} aria-label={`${nome} sem foto cadastrada`}><Building2 aria-hidden="true"/></span>
 }

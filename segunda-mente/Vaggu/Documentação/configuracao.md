@@ -99,7 +99,7 @@ Abra `vaggu-backend/.env` em um editor e ajuste:
 
 ```dotenv
 DATABASE_URL="postgresql://vaggu_local_usuario:SUA_SENHA_LOCAL@127.0.0.1:5432/vaggu_local"
-BLOB_READ_WRITE_TOKEN="vercel_blob_rw_TOKEN_DO_PROJETO"
+BLOB_READ_WRITE_TOKEN=
 HOST="127.0.0.1"
 PORT="3000"
 NODE_ENV="development"
@@ -107,7 +107,11 @@ NODE_ENV="development"
 
 Use a senha definida na etapa anterior. Se o PostgreSQL estiver em outra porta, substitua `5432` pela porta correta.
 
-`BLOB_READ_WRITE_TOKEN` é necessário somente para salvar ou remover a foto representativa de um shopping. Obtenha-o no armazenamento Blob vinculado ao projeto Vercel e mantenha-o apenas no ambiente do backend. Sem essa variável, o restante do cadastro funciona e a tentativa de alterar a foto falha explicitamente; não use pasta local como substituto em produção. A imagem fica no Vercel Blob e o PostgreSQL guarda somente sua URL HTTPS.
+`BLOB_READ_WRITE_TOKEN` é necessário somente para salvar ou remover a foto representativa de um shopping. Obtenha-o no armazenamento Blob vinculado ao projeto Vercel e mantenha-o apenas no ambiente do backend. Na hospedagem atual, configure o segredo no serviço **Render**; não o coloque no frontend nem no Git. Sem essa variável, o restante do cadastro funciona e a tentativa de alterar a foto falha explicitamente; não use pasta local como substituto em produção. A imagem fica no Vercel Blob e o PostgreSQL guarda somente sua URL HTTPS. Para verificar, selecione uma imagem JPEG, PNG ou WebP de até 2 MB na ficha, salve, recarregue e confirme que a foto permanece. Uma falha de envio é informada sem apagar o cadastro.
+
+O login da interface usa um cookie de sessão `HttpOnly`, `SameSite=Strict` e `Secure` em produção, limitado a `/api/v1`; o backend valida a sessão no PostgreSQL a cada chamada. O navegador restaura a identidade via `/auth/me` após atualizar a página. Logout revoga a sessão e remove o cookie. Não copie tokens para `localStorage`; o contrato Bearer permanece apenas para clientes antigos e testes. Em escrita autenticada por cookie, a API exige o cabeçalho `X-VAGGU-Request`.
+
+O formulário administrativo consulta [ViaCEP](https://viacep.com.br/) após oito dígitos e preenche logradouro, bairro, cidade e UF. Número e complemento continuam manuais e todos os campos permanecem editáveis. Se o serviço estiver indisponível, o endereço pode ser preenchido manualmente.
 
 Não compartilhe nem envie `.env` ao Git. Se a senha possuir `@`, `:`, `/`, `?`, `#` ou `%`, esses caracteres precisam ser codificados para URL. Para um ambiente local, uma senha alfanumérica longa evita esse problema.
 
@@ -279,9 +283,9 @@ Em 21/09/2026, a validação local usou:
 Nesta máquina específica, o PostgreSQL portátil é iniciado, a partir da raiz, com:
 
 ```powershell
-.\ambiente.local\postgresql\pgsql\bin\pg_ctl.exe start `
-  -D ".\ambiente.local\dados" `
-  -l ".\ambiente.local\postgresql.log" `
+.\ambiente.local\postgresql17\pgsql\bin\pg_ctl.exe start `
+  -D ".\ambiente.local\dados-postgresql" `
+  -l ".\ambiente.local\postgresql-validacao.log" `
   -o "-p 55432" `
   -w
 ```
@@ -289,8 +293,8 @@ Nesta máquina específica, o PostgreSQL portátil é iniciado, a partir da raiz
 Para encerrá-lo de forma segura:
 
 ```powershell
-.\ambiente.local\postgresql\pgsql\bin\pg_ctl.exe stop `
-  -D ".\ambiente.local\dados" `
+.\ambiente.local\postgresql17\pgsql\bin\pg_ctl.exe stop `
+  -D ".\ambiente.local\dados-postgresql" `
   -m fast `
   -w
 ```
@@ -352,7 +356,7 @@ ALTER ROLE vaggu_teste_runner CREATEDB;
 
 O [registro de hospedagem](planejamento-do-projeto.md) informa que a equipe colocou o PostgreSQL no Neon e publicou a VAGGU no serviço `vaggu-tcc` do Render. O `render.yaml` versionado descreve um único serviço web no plano gratuito: ele instala as dependências, gera o cliente Prisma, compila backend e frontend, aplica migrations com `db:deploy` e inicia a API. O endereço público exato e o painel do provedor não estão no repositório; esta revisão não realizou uma requisição ao serviço hospedado.
 
-O manifesto define `HOST=0.0.0.0`, `NODE_ENV=production` e `FRONTEND_DIST_PATH=../vaggu-frontend/dist`. O Express entrega o build React e as rotas `/api/v1` na mesma origem, sem CORS amplo; o cliente usa caminhos relativos. A plataforma usa `/api/v1/health/ready` como verificação de prontidão, incluindo a conexão ao banco. `DATABASE_URL` é solicitada como segredo do serviço, sem valor no Git. `BLOB_READ_WRITE_TOKEN` não consta do manifesto: a foto só persiste quando a equipe a configura no backend. Não executar o banco de testes contra a conexão do Neon.
+O manifesto define `HOST=0.0.0.0`, `NODE_ENV=production` e `FRONTEND_DIST_PATH=../vaggu-frontend/dist`. O Express entrega o build React e as rotas `/api/v1` na mesma origem, sem CORS amplo; o cliente usa caminhos relativos. A plataforma usa `/api/v1/health/ready` como verificação de prontidão, incluindo a conexão ao banco. `DATABASE_URL` e `BLOB_READ_WRITE_TOKEN` são solicitadas como segredos do serviço, sem valores no Git. Criar o armazenamento Blob na Vercel não configura automaticamente o segredo no Render: a equipe precisa copiar o token ao ambiente do backend e disparar uma nova publicação. Não executar o banco de testes contra a conexão do Neon.
 
 O manifesto ainda gera `CREDENTIAL_ENCRYPTION_KEY`, embora o código atual não a leia após remover a cópia reversível da senha provisória. É uma configuração sem uso a limpar em uma revisão de infraestrutura; não reutilizá-la para guardar credenciais.
 

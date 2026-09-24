@@ -74,7 +74,7 @@ erDiagram
 
 **Relações e restrições:** `tokenHash` é único; a sessão pertence a um usuário e é apagada em cascata se o usuário for removido fisicamente. Há índices por usuário e expiração.
 
-**Uso atual:** autenticação `Bearer`, validade de oito horas e logout. Bloqueio de gerente, redefinição de senha e exclusão lógica do shopping removem as sessões afetadas.
+**Uso atual:** sessão opaca com validade de oito horas, entregue ao navegador por cookie HttpOnly e ainda aceita como `Bearer` para clientes existentes. Logout, bloqueio de gerente, redefinição de senha e exclusão lógica do shopping removem as sessões afetadas.
 
 ### `Andar` → tabela `andares`
 

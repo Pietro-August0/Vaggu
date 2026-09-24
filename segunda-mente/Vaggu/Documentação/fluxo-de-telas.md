@@ -12,7 +12,7 @@ Este documento registra a navegação encontrada no frontend em 24/09/2026 e a c
 
 As rotas administrativas e do gerente passam por proteção de sessão e perfil. Sem sessão, o usuário volta para `/login`; com troca de senha obrigatória, vai para `/trocar-senha`; com perfil incompatível, é redirecionado para `/admin` ou `/painel`. Qualquer endereço desconhecido volta para `/`.
 
-O token existe somente na memória da aba. Portanto, recarregar a página exige novo login conforme o contrato atual do frontend.
+A sessão persiste em cookie HttpOnly de mesma origem. Ao recarregar uma rota protegida, o frontend aguarda `/auth/me` antes de renderizar ou redirecionar; uma sessão expirada ou revogada volta ao login. A identidade pública fica somente em memória React.
 
 ## Rotas implementadas
 

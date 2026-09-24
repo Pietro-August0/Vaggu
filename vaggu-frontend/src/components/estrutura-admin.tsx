@@ -6,9 +6,10 @@ import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
 import { VisualizacaoVagas } from "@/components/visualizacao-vagas"
 import { lerEstrutura } from "@/servicos/estrutura"
+import { obterSituacaoImplantacao, situacoesImplantacao } from "@/servicos/situacao-implantacao"
 import type { EstruturaEstacionamento, PosicaoVaga, SituacaoImplantacao, TipoVaga } from "@/types/estrutura"
 
-const situacoes: Array<[SituacaoImplantacao, string]> = [["EM_CONFIGURACAO", "Em configuração"], ["AGUARDANDO_INSTALACAO", "Aguardando instalação"], ["ATIVO", "Ativo"], ["EM_ANALISE", "Em análise"], ["DOCUMENTACAO_PENDENTE", "Documentação pendente"], ["APROVADO", "Aprovado"], ["INATIVO", "Inativo"], ["REJEITADO", "Rejeitado"], ["NOVO_ATENDIMENTO", "Novo atendimento"]]
+const situacoes: SituacaoImplantacao[] = ["NOVO_ATENDIMENTO", "EM_ANALISE", "DOCUMENTACAO_PENDENTE", "APROVADO", "EM_CONFIGURACAO", "AGUARDANDO_INSTALACAO", "ATIVO", "REJEITADO", "INATIVO"]
 
 /** Mantém formulários pequenos e atualiza a árvore sempre a partir da resposta do servidor. */
 export function EstruturaAdmin({ shoppingId, aoAlterar }: { shoppingId: string; aoAlterar?: () => void }) {
@@ -35,8 +36,9 @@ export function EstruturaAdmin({ shoppingId, aoAlterar }: { shoppingId: string; 
 
   if (!estrutura) return <div className="rounded-2xl bg-white p-6"><p role="status">Carregando estrutura...</p>{erro && <p role="alert" className="mt-2 text-red-700">{erro}</p>}</div>
   const setores = estrutura.andares.flatMap(andar => andar.setores.map(setor => ({ ...setor, andarNome: andar.nome })))
+  const situacaoAtual = obterSituacaoImplantacao(estrutura.shopping.situacaoImplantacao)
   return <div className="grid min-w-0 grid-cols-[minmax(0,1fr)] gap-6">
-    <div className="rounded-2xl bg-white p-6"><div className="flex flex-wrap items-center justify-between gap-4"><div><h2 className="text-xl font-semibold">Situação da estrutura</h2><p className="mt-1 text-sm text-neutral-600">{estrutura.andares.length} andar(es) · {setores.length} setor(es)</p></div><div><Label htmlFor="situacao">Implantação</Label><select id="situacao" className="ml-3 rounded-md border bg-white px-3 py-2" value={estrutura.shopping.situacaoImplantacao} disabled={ocupado} onChange={evento => mudarSituacao(evento.target.value as SituacaoImplantacao)}>{situacoes.map(([valor, nome]) => <option key={valor} value={valor}>{nome}</option>)}</select></div></div>{erro && <p role="alert" className="mt-4 text-red-700">{erro}</p>}{mensagem && <p role="status" className="mt-4 text-green-700">{mensagem}</p>}</div>
+    <div className="rounded-2xl bg-white p-6"><div className="flex flex-wrap items-start justify-between gap-4"><div className="min-w-0"><h2 className="text-xl font-semibold">Situação da estrutura</h2><p className="mt-1 text-sm text-neutral-600">{estrutura.andares.length} andar(es) · {setores.length} setor(es)</p><p className="mt-3 flex items-center gap-2"><span className={`rounded-full px-3 py-1 text-sm font-semibold ${situacaoAtual.classe}`}>{situacaoAtual.nome}</span></p><p className="mt-2 max-w-md text-sm text-neutral-700">{situacaoAtual.descricao}</p></div><div className="grid min-w-0 gap-2"><Label htmlFor="situacao">Implantação</Label><select id="situacao" className="min-h-11 min-w-0 rounded-md border bg-white px-3 py-2" value={estrutura.shopping.situacaoImplantacao} disabled={ocupado} onChange={evento => mudarSituacao(evento.target.value as SituacaoImplantacao)}>{situacoes.map(valor => <option key={valor} value={valor}>{situacoesImplantacao[valor].nome}</option>)}</select></div></div>{erro && <p role="alert" className="mt-4 text-red-700">{erro}</p>}{mensagem && <p role="status" className="mt-4 text-green-700">{mensagem}</p>}</div>
     <div role="group" aria-label="Etapas da estrutura" className="flex flex-wrap gap-2 rounded-2xl border border-black/10 bg-white p-2 dark:border-white/10 dark:bg-[#242424]">
       {([ ["configurar", "Configurar vagas"], ["mapa", "Visualizar mapa"], ["posicoes", "Editar posições"] ] as const).map(([valor, rotulo]) => <button key={valor} type="button" aria-pressed={aba === valor} onClick={() => setAba(valor)} className={aba === valor ? "rounded-xl bg-[#ffe100] px-4 py-2 text-sm font-semibold text-black" : "rounded-xl px-4 py-2 text-sm font-medium text-neutral-700 hover:bg-neutral-100 dark:text-neutral-200 dark:hover:bg-neutral-800"}>{rotulo}</button>)}
     </div>

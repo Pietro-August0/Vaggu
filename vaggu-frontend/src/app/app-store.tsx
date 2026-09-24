@@ -1,4 +1,4 @@
-/** Controla a identidade validada pela API. Não lê contas, hashes ou permissões do navegador. */
+/** Restaura a identidade pelo cookie HttpOnly; dados de conta continuam vindo da API. */
 import { createContext, useCallback, useContext, useEffect, useRef, useState, type ReactNode } from "react"
 import { ErroApi, objeto, requisitarApi, requisitarArquivoApi } from "@/servicos/api"
 import type { UserAccount } from "@/types/app"
@@ -38,19 +38,18 @@ function lerUsuario(dados: unknown): UserAccount {
   }
 }
 
-/** Mantém a sessão na aba; recarregar a página exige novo login, conforme o contrato atual. */
+/** Mantém somente identidade pública em memória e restaura a sessão no carregamento. */
 export function AppStoreProvider({ children }: { children: ReactNode }) {
+  const [ready, setReady] = useState(false)
   const [currentUser, setCurrentUser] = useState<UserAccount | null>(null)
   const [expiraEm, setExpiraEm] = useState(0)
   const [erroSessao, setErroSessao] = useState("")
   const [mensagemSessao, setMensagemSessao] = useState("")
   const [senhaProvisoriaPendente, setSenhaProvisoriaPendente] = useState("")
-  const tokenAtual = useRef<string | null>(null)
   const versao = useRef(0)
 
   const limparSessao = useCallback((mensagem = "") => {
     versao.current++
-    tokenAtual.current = null
     setCurrentUser(null)
     setExpiraEm(0)
     setErroSessao("")
@@ -60,14 +59,13 @@ export function AppStoreProvider({ children }: { children: ReactNode }) {
 
   /** Não confunde senha atual incorreta com uma sessão revogada. */
   const consultar = useCallback(async (caminho: string, corpo?: unknown, metodo?: "GET" | "POST" | "PATCH" | "DELETE") => {
-    const token = tokenAtual.current
-    if (!token) throw new ErroApi("NAO_AUTENTICADO", "Entre novamente para continuar.")
+    const revisao = versao.current
     try {
-      const dados = await requisitarApi(caminho, token, corpo, metodo)
-      if (tokenAtual.current !== token) throw new ErroApi("SESSAO_ALTERADA", "O acesso foi encerrado. Entre novamente.")
+      const dados = await requisitarApi(caminho, undefined, corpo, metodo)
+      if (versao.current !== revisao) throw new ErroApi("SESSAO_ALTERADA", "O acesso foi encerrado. Entre novamente.")
       return dados
     } catch (erro) {
-      if (tokenAtual.current === token && erro instanceof ErroApi) {
+      if (versao.current === revisao && erro instanceof ErroApi) {
         if (erro.codigo === "NAO_AUTENTICADO") limparSessao("Sua sessão expirou ou foi encerrada. Entre novamente.")
         if (erro.codigo === "TROCA_SENHA_OBRIGATORIA") {
           setCurrentUser(usuario => usuario ? { ...usuario, trocarSenhaObrigatoria: true } : null)
@@ -78,30 +76,36 @@ export function AppStoreProvider({ children }: { children: ReactNode }) {
   }, [limparSessao])
 
   const verificarSessao = useCallback(async () => {
-    const token = tokenAtual.current
-    if (!token) return
     const revisao = ++versao.current
     try {
-      const usuario = lerUsuario(await consultar("/auth/me"))
-      if (tokenAtual.current === token && versao.current === revisao) {
+      const resposta = await requisitarApi("/auth/me")
+      const usuario = lerUsuario(resposta)
+      if (versao.current === revisao) {
         setCurrentUser(usuario)
+        if (objeto(resposta) && typeof resposta.expiraEm === "string") setExpiraEm(Date.parse(resposta.expiraEm))
         setErroSessao("")
       }
     } catch (erro) {
-      if (tokenAtual.current === token && versao.current === revisao) {
-        setErroSessao(erro instanceof Error ? erro.message : "Não foi possível verificar seu acesso.")
+      if (versao.current === revisao) {
+        if (erro instanceof ErroApi && erro.codigo === "NAO_AUTENTICADO") limparSessao()
+        else setErroSessao(erro instanceof Error ? erro.message : "Não foi possível verificar seu acesso.")
       }
     }
-  }, [consultar])
+  }, [limparSessao])
 
-  /** Usa a mesma sessão em memória para arquivos e preserva as regras de revogação. */
+  useEffect(() => {
+    let ativo = true
+    queueMicrotask(() => { if (ativo) void verificarSessao().finally(() => { if (ativo) setReady(true) }) })
+    return () => { ativo = false }
+  }, [verificarSessao])
+
+  /** Usa o cookie da mesma origem para arquivos e preserva as regras de revogação. */
   const enviarArquivo = useCallback(async (caminho: string, arquivo: File, tipoConteudo: string) => {
-    const token = tokenAtual.current
-    if (!token) throw new ErroApi("NAO_AUTENTICADO", "Entre novamente para continuar.")
+    const revisao = versao.current
     try {
-      return await requisitarArquivoApi(caminho, token, arquivo, tipoConteudo)
+      return await requisitarArquivoApi(caminho, arquivo, tipoConteudo)
     } catch (erro) {
-      if (tokenAtual.current === token && erro instanceof ErroApi && erro.codigo === "NAO_AUTENTICADO") {
+      if (versao.current === revisao && erro instanceof ErroApi && erro.codigo === "NAO_AUTENTICADO") {
         limparSessao("Sua sessão expirou ou foi encerrada. Entre novamente.")
       }
       throw erro
@@ -128,14 +132,12 @@ export function AppStoreProvider({ children }: { children: ReactNode }) {
     const revisao = ++versao.current
     setSenhaProvisoriaPendente("")
     const dados = await requisitarApi("/auth/login", undefined, { email: email.trim().toLowerCase(), senha })
-    if (!objeto(dados) || typeof dados.token !== "string" || !/^[A-Za-z0-9_-]{43}$/.test(dados.token)
-      || dados.tipo !== "Bearer" || typeof dados.expiraEm !== "string"
+    if (!objeto(dados) || typeof dados.expiraEm !== "string"
       || !Number.isFinite(Date.parse(dados.expiraEm)) || Date.parse(dados.expiraEm) <= Date.now()) {
       throw new ErroApi("RESPOSTA_INVALIDA", "Não foi possível confirmar seu acesso. Tente novamente.")
     }
-    const usuario = lerUsuario(await requisitarApi("/auth/me", dados.token))
+    const usuario = lerUsuario(await requisitarApi("/auth/me"))
     if (revisao !== versao.current) throw new ErroApi("SESSAO_ALTERADA", "Tente entrar novamente.")
-    tokenAtual.current = dados.token
     setCurrentUser(usuario)
     setExpiraEm(Date.parse(dados.expiraEm))
     setErroSessao("")
@@ -147,7 +149,7 @@ export function AppStoreProvider({ children }: { children: ReactNode }) {
 
   /** A navegação só anuncia saída após a revogação confirmada ou sessão já inválida. */
   async function logout() {
-    if (!tokenAtual.current) return
+    if (!currentUser) return
     try {
       await consultar("/auth/logout", {})
       limparSessao()
@@ -174,7 +176,7 @@ export function AppStoreProvider({ children }: { children: ReactNode }) {
   }
 
   return <AppStoreContext.Provider value={{
-    ready: true, currentUser, erroSessao, mensagemSessao, senhaProvisoriaPendente,
+    ready, currentUser, erroSessao, mensagemSessao, senhaProvisoriaPendente,
     login, logout, trocarSenha, verificarSessao, consultar, enviarArquivo, atualizarMinhaConta,
   }}>{children}</AppStoreContext.Provider>
 }

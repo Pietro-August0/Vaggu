@@ -2,10 +2,17 @@
 // a partir da sessão validada, nunca de filtros enviados pelo navegador.
 import { ApiError } from './service.js';
 
-/** Valida o Bearer e disponibiliza a identidade confirmada apenas durante esta requisição. */
+/** Aceita Bearer legado ou cookie HttpOnly; requisições com cookie exigem cabeçalho ant-CSRF. */
 export function requireAuth(auth) {
   return async (req, res, next) => {
-    res.locals.auth = await auth.authenticate(req.get('Authorization'));
+    const bearer = req.get('Authorization');
+    const tokenCookie = req.get('Cookie')?.split(';').map(parte => parte.trim())
+      .find(parte => parte.startsWith('vaggu_sessao='))?.slice('vaggu_sessao='.length);
+    if (!bearer && tokenCookie && !['GET', 'HEAD', 'OPTIONS'].includes(req.method)
+      && req.get('X-VAGGU-Request') !== '1') {
+      throw new ApiError(403, 'ORIGEM_INVALIDA', 'Atualize a página e tente novamente.');
+    }
+    res.locals.auth = await auth.authenticate(bearer ?? (tokenCookie ? `Bearer ${tokenCookie}` : undefined));
     next();
   };
 }

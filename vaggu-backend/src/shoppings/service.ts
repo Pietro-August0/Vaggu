@@ -235,7 +235,8 @@ export function createShoppingsService(prisma, {
       if (!armazenamentoFotos) {
         throw new ApiError(503, 'ARMAZENAMENTO_NAO_CONFIGURADO', 'O armazenamento de fotos ainda não foi configurado neste ambiente.');
       }
-      const imagemUrl = await armazenamentoFotos.salvar(shopping.id, foto.conteudo, foto.tipoConteudo);
+      const imagemUrl = await armazenamentoFotos.salvar(shopping.id, foto.conteudo, foto.tipoConteudo)
+        .catch(() => { throw new ApiError(503, 'ARMAZENAMENTO_INDISPONIVEL', 'Não foi possível enviar a foto agora. Tente novamente.'); });
       try {
         await prisma.shopping.update({ where: { id: shopping.id }, data: { imagemUrl } });
       } catch (erro) {

@@ -9,7 +9,7 @@ import "./login-page.css"
 
 /** Não exibe nem preenche contas de demonstração; erros de rede não concedem acesso. */
 export function LoginPage() {
-  const { currentUser, login, mensagemSessao } = useAppStore()
+  const { ready, currentUser, login, mensagemSessao } = useAppStore()
   const [email, setEmail] = useState("")
   const [senha, setSenha] = useState("")
   const [mostrarSenha, setMostrarSenha] = useState(false)
@@ -17,6 +17,7 @@ export function LoginPage() {
   const [enviando, setEnviando] = useState(false)
   const [ajuda, setAjuda] = useState(false)
   const envioAtivo = useRef(false)
+  if (!ready) return <main className="grid min-h-screen place-items-center" role="status">Verificando seu acesso...</main>
   if (currentUser) return <Navigate replace to={currentUser.trocarSenhaObrigatoria ? "/trocar-senha" : currentUser.role === "admin" ? "/admin" : "/painel"} />
 
   async function entrar(evento: FormEvent<HTMLFormElement>) {

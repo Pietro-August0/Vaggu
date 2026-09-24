@@ -47,7 +47,7 @@ export async function runAuthCases(t: TestContext, prisma: PrismaClient, shoppin
     assert.equal(response.body.usuario.shoppingId, null);
     assert.equal(response.body.usuario.senhaHash, undefined);
     assert.equal(response.headers['cache-control'], 'no-store');
-    assert.equal(response.headers['set-cookie'], undefined);
+    assert.match(response.headers['set-cookie']?.[0], /HttpOnly/);
     const session = await prisma.sessao.findUnique({ where: { tokenHash: digestToken(adminToken) } });
     assert.ok(session);
     assert.ok(!JSON.stringify(session).includes(adminToken));

@@ -5,6 +5,7 @@ import { Button } from "@/components/ui/button"
 import { FotoShopping } from "@/components/foto-shopping"
 import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
+import { buscarEnderecoPorCep, ErroCep } from "@/servicos/cep"
 import type { DadosShopping, ShoppingAdmin } from "@/types/admin"
 
 interface FormularioShoppingProps {
@@ -24,9 +25,35 @@ export function FormularioShopping({ shopping, ocupado, rotuloBotao, aoEnviar, a
   const [fotoPreview, setFotoPreview] = useState("")
   const [erroFoto, setErroFoto] = useState("")
   const [etapa, setEtapa] = useState(0)
+  const [cep, setCep] = useState("")
+  const [avisoCep, setAvisoCep] = useState("")
   const formularioRef = useRef<HTMLFormElement>(null)
 
   useEffect(() => () => { if (fotoPreview) URL.revokeObjectURL(fotoPreview) }, [fotoPreview])
+
+  useEffect(() => {
+    const digitos = cep.replace(/\D/g, "")
+    if (!cep || digitos.length < 8) { return }
+    if (digitos.length !== 8 || /[^\d-]/.test(cep)) { return }
+    const controle = new AbortController()
+    const prazo = window.setTimeout(() => {
+      setAvisoCep("Buscando endereço...")
+      void buscarEnderecoPorCep(cep, controle.signal).then(endereco => {
+        if (controle.signal.aborted) return
+        const formulario = formularioRef.current
+        if (!formulario) return
+        for (const nome of ["logradouro", "bairro", "cidade", "uf"] as const) {
+          const campo = formulario.elements.namedItem(nome)
+          if (campo instanceof HTMLInputElement && endereco[nome]) campo.value = endereco[nome]
+        }
+        setAvisoCep("Endereço preenchido. Confira os dados e informe o número.")
+      }).catch(erro => {
+        if (erro instanceof DOMException && erro.name === "AbortError") return
+        setAvisoCep(erro instanceof ErroCep ? erro.message : "Não foi possível buscar o endereço automaticamente. Preencha o endereço manualmente.")
+      })
+    }, 400)
+    return () => { window.clearTimeout(prazo); controle.abort() }
+  }, [cep])
 
   function selecionarFoto(evento: ChangeEvent<HTMLInputElement>) {
     const arquivo = evento.target.files?.[0] ?? null
@@ -96,7 +123,8 @@ export function FormularioShopping({ shopping, ocupado, rotuloBotao, aoEnviar, a
     </fieldset>
     <fieldset data-etapa="1" hidden={etapa !== 1} style={{ display: etapa === 1 ? undefined : "none" }} className="grid min-w-0 gap-5">
       <legend className="sr-only">Endereço do shopping</legend>
-      <div className="grid gap-5 md:grid-cols-[minmax(0,1fr)_8rem]">{campo("cep", "CEP", { required: true, inputMode: "numeric", maxLength: 9 })}{campo("uf", "Estado (UF)", { required: true, minLength: 2, maxLength: 2, placeholder: "SP" })}</div>
+      <div className="grid gap-5 md:grid-cols-[minmax(0,1fr)_8rem]">{campo("cep", "CEP", { required: true, inputMode: "numeric", maxLength: 9, onChange: evento => { const valor = evento.currentTarget.value; setCep(valor); setAvisoCep(valor && (valor.replace(/\D/g, "").length > 8 || /[^\d-]/.test(valor)) ? "Informe um CEP válido com 8 números." : "") } })}{campo("uf", "Estado (UF)", { required: true, minLength: 2, maxLength: 2, placeholder: "SP" })}</div>
+      {avisoCep && <p className="text-sm text-neutral-300" role="status">{avisoCep}</p>}
       <div className="grid gap-5 md:grid-cols-2">{campo("cidade", "Cidade", { required: true, maxLength: 100 })}{campo("bairro", "Bairro", { required: true, maxLength: 100 })}</div>
       <div className="grid gap-5 md:grid-cols-[minmax(0,2fr)_8rem_minmax(12rem,1fr)]">{campo("logradouro", "Logradouro", { required: true, maxLength: 160 })}{campo("numero", "Número", { required: true, maxLength: 20 })}{campo("complemento", "Complemento", { maxLength: 80, placeholder: "Opcional" })}</div>
     </fieldset>

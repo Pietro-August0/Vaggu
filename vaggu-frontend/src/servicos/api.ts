@@ -1,4 +1,4 @@
-/** Cliente da API na mesma origem. Tokens ficam apenas em memória e nunca são registrados. */
+/** Cliente da API na mesma origem; o navegador envia o cookie HttpOnly sem expor o token ao React. */
 export class ErroApi extends Error {
   constructor(public codigo: string, mensagem: string, public status = 0) {
     super(mensagem)
@@ -8,6 +8,7 @@ export class ErroApi extends Error {
 /** Mantém mensagens acionáveis para erros de configuração conhecidos do ambiente local. */
 function mensagemErroApi(codigo: unknown, mensagem: unknown, status: number): string {
   if (codigo === "ARMAZENAMENTO_NAO_CONFIGURADO") return "A foto foi validada, mas o armazenamento de fotos não está configurado no backend. Defina BLOB_READ_WRITE_TOKEN para salvar a imagem."
+  if (codigo === "ARMAZENAMENTO_INDISPONIVEL") return "Não foi possível enviar a foto agora. Tente novamente."
   if (codigo === "FOTO_INVALIDA" || codigo === "FOTO_MUITO_GRANDE") return typeof mensagem === "string" ? mensagem : "A foto selecionada não atende aos formatos ou tamanho permitidos."
   return status < 500 && typeof mensagem === "string" ? mensagem : "Não foi possível conectar à VAGGU. Verifique sua conexão e tente novamente."
 }
@@ -29,10 +30,10 @@ export async function requisitarApi(
   try {
     const resposta = await fetch("/api/v1" + caminho, {
       method: metodo ?? (corpo === undefined ? "GET" : "POST"),
-      headers: { ...(token ? { Authorization: `Bearer ${token}` } : {}), ...(corpo === undefined ? {} : { "Content-Type": "application/json" }) },
+      headers: { ...(token ? { Authorization: `Bearer ${token}` } : {}), ...(corpo === undefined ? {} : { "Content-Type": "application/json" }), "X-VAGGU-Request": "1" },
       body: corpo === undefined ? undefined : JSON.stringify(corpo),
       cache: "no-store",
-      credentials: "omit",
+      credentials: "same-origin",
       signal: controle.signal,
     })
     if (resposta.status === 204) return undefined
@@ -55,10 +56,9 @@ export async function requisitarApi(
   }
 }
 
-/** Envia bytes de CSV/XLSX sem converter o arquivo para JSON ou expor o token. */
+/** Envia bytes de arquivos com a sessão HttpOnly, sem converter o conteúdo para JSON. */
 export async function requisitarArquivoApi(
   caminho: string,
-  token: string,
   arquivo: File,
   tipoConteudo: string,
 ): Promise<unknown> {
@@ -67,10 +67,10 @@ export async function requisitarArquivoApi(
   try {
     const resposta = await fetch("/api/v1" + caminho, {
       method: "POST",
-      headers: { Authorization: `Bearer ${token}`, "Content-Type": tipoConteudo },
+      headers: { "Content-Type": tipoConteudo, "X-VAGGU-Request": "1" },
       body: arquivo,
       cache: "no-store",
-      credentials: "omit",
+      credentials: "same-origin",
       signal: controle.signal,
     })
     const dados: unknown = await resposta.json().catch(() => null)

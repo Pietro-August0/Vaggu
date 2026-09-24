@@ -25,7 +25,7 @@ const codigosNovaSenha = new Set([
 ])
 
 export function TrocarSenhaPage() {
-  const { currentUser, trocarSenha, logout, senhaProvisoriaPendente } = useAppStore()
+  const { ready, currentUser, trocarSenha, logout, senhaProvisoriaPendente } = useAppStore()
   const [senhaAtual, setSenhaAtual] = useState(senhaProvisoriaPendente)
   const [novaSenha, setNovaSenha] = useState("")
   const [confirmacao, setConfirmacao] = useState("")
@@ -34,6 +34,7 @@ export function TrocarSenhaPage() {
   const [erroGeral, setErroGeral] = useState("")
   const [enviando, setEnviando] = useState(false)
   const trava = useRef(false)
+  if (!ready) return <main className="grid min-h-screen place-items-center" role="status">Verificando seu acesso...</main>
   if (!currentUser) return <Navigate to="/login" replace />
   if (!currentUser.trocarSenhaObrigatoria) return <Navigate to={currentUser.role === "admin" ? "/admin" : "/painel"} replace />
 
