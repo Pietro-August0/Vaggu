@@ -81,7 +81,7 @@ export function ImportacaoEstrutura({ shoppingId, aoConfirmar }: { shoppingId: s
         <Download aria-hidden="true" />Baixar modelo CSV
       </Button>
     </div>
-    <div className="mt-5 flex w-full flex-col gap-3 border-t border-neutral-200 pt-5 sm:flex-row sm:items-end sm:justify-end">
+    <div className="mt-5 flex w-full flex-col gap-3 border-t border-neutral-200 pt-5 sm:flex-row sm:items-end sm:justify-start">
         <div className="grid min-w-0 gap-1.5 sm:min-w-72">
           <Label htmlFor={`arquivo-importacao-${shoppingId}`}>Arquivo CSV ou XLSX</Label>
           <Input id={`arquivo-importacao-${shoppingId}`} type="file" accept=".csv,.xlsx,text/csv,application/vnd.openxmlformats-officedocument.spreadsheetml.sheet"

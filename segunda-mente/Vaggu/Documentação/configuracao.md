@@ -111,7 +111,7 @@ Use a senha definida na etapa anterior. Se o PostgreSQL estiver em outra porta, 
 
 O login da interface usa um cookie de sessão `HttpOnly`, `SameSite=Strict` e `Secure` em produção, limitado a `/api/v1`; o backend valida a sessão no PostgreSQL a cada chamada. O navegador restaura a identidade via `/auth/me` após atualizar a página. Logout revoga a sessão e remove o cookie. Não copie tokens para `localStorage`; o contrato Bearer permanece apenas para clientes antigos e testes. Em escrita autenticada por cookie, a API exige o cabeçalho `X-VAGGU-Request`.
 
-O formulário administrativo consulta [ViaCEP](https://viacep.com.br/) após oito dígitos e preenche logradouro, bairro, cidade e UF. Número e complemento continuam manuais e todos os campos permanecem editáveis. Se o serviço estiver indisponível, o endereço pode ser preenchido manualmente.
+O formulário administrativo consulta [ViaCEP](https://viacep.com.br/) após oito dígitos e preenche logradouro, bairro, cidade e UF. Número e complemento continuam manuais e todos os campos permanecem editáveis. A política de segurança do Express permite a conexão somente com esse domínio externo; sem essa exceção, o navegador bloqueia a consulta na versão hospedada, embora ela funcione no servidor local do frontend. Se o serviço estiver indisponível, o endereço pode ser preenchido manualmente. A API oficial Busca CEP dos Correios não é usada: [exige contrato comercial e token](https://www.correios.com.br/atendimento/developers/manuais/manual-api-busca-cep).
 
 Não compartilhe nem envie `.env` ao Git. Se a senha possuir `@`, `:`, `/`, `?`, `#` ou `%`, esses caracteres precisam ser codificados para URL. Para um ambiente local, uma senha alfanumérica longa evita esse problema.
 

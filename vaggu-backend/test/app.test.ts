@@ -14,6 +14,13 @@ test('health responde sem consultar o banco', async () => {
   assert.equal(response.headers['x-powered-by'], undefined);
 });
 
+test('política de segurança permite somente a API externa de CEP nas conexões', async () => {
+  const response = await request(app).get('/api/v1/health').expect(200);
+  const politica = response.headers['content-security-policy'];
+  assert.match(politica, /connect-src 'self' https:\/\/viacep\.com\.br/);
+  assert.doesNotMatch(politica, /connect-src[^;]*\*/);
+});
+
 test('readiness confirma a consulta ao banco', async () => {
   let calls = 0;
   const localApp = createApp({ checkDatabase: async () => { calls += 1; } });

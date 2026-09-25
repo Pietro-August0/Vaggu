@@ -108,7 +108,7 @@ export function FormularioShopping({ shopping, ocupado, rotuloBotao, aoEnviar, a
   }
 
   const campo = (nome: keyof DadosShopping, rotulo: string, props: ComponentProps<"input"> = {}) => <div className="grid gap-2">
-    <Label htmlFor={`shopping-${nome}`} className="text-neutral-100">{rotulo}{props.required && <span className="text-[#ffe100]" aria-hidden="true"> *</span>}</Label>
+    <Label htmlFor={`shopping-${nome}`} className="text-neutral-950 dark:text-neutral-100">{rotulo}{props.required && <span className="text-amber-700 dark:text-[#ffe100]" aria-hidden="true"> *</span>}</Label>
     <Input id={`shopping-${nome}`} name={nome} defaultValue={shopping?.[nome] ?? ""} className="h-11 border-white/15 bg-white/5 text-white placeholder:text-neutral-600" disabled={ocupado} {...props} />
   </div>
 
@@ -132,7 +132,7 @@ export function FormularioShopping({ shopping, ocupado, rotuloBotao, aoEnviar, a
       <legend className="sr-only">Operação e foto do shopping</legend>
       <div className="grid gap-5 md:grid-cols-2">{campo("horarioAbertura", "Abertura", { type: "time" })}{campo("horarioFechamento", "Fechamento", { type: "time" })}</div>
       <div className="grid gap-3 rounded-2xl border border-white/10 bg-black/15 p-4 sm:grid-cols-[minmax(0,1fr)_8rem] sm:items-center">
-        <div className="grid gap-2"><Label htmlFor="shopping-foto" className="text-neutral-100">Foto do shopping</Label>
+        <div className="grid gap-2"><Label htmlFor="shopping-foto" className="text-neutral-950 dark:text-neutral-100">Foto do shopping</Label>
           <div className="flex min-h-11 items-center gap-3 rounded-md border border-white/15 bg-white/5 px-3 py-1">
             <Input id="shopping-foto" name="foto" type="file" accept="image/jpeg,image/png,image/webp" disabled={ocupado} onChange={selecionarFoto} className="peer sr-only" />
             <label htmlFor="shopping-foto" className="inline-flex h-9 shrink-0 cursor-pointer items-center justify-center rounded-md bg-[#ffe100] px-3 text-center text-sm font-semibold text-black transition hover:bg-[#ffeb54] peer-focus-visible:ring-2 peer-focus-visible:ring-[#ffe100] peer-focus-visible:ring-offset-2 peer-focus-visible:ring-offset-[#171717]">Escolher arquivo</label>

@@ -1,6 +1,6 @@
 # VAGGU — planejamento e continuidade do projeto
 
-Última atualização: **24/09/2026**, fuso **America/Sao_Paulo**. A revisão da landing e seu fechamento permanecem atribuídos a **09/09/2026**, conforme solicitado. Base de P01: `c127b5e`; registros das entregas na seção 7. Este documento registra evidências e orienta o trabalho diário; não substitui o [SSD](SSD-VAGGU.md) nem os [critérios de aceite](plano-e-aceite.md).
+Última atualização: **25/09/2026**, fuso **America/Sao_Paulo**. A revisão da landing e seu fechamento permanecem atribuídos a **09/09/2026**, conforme solicitado. Base de P01: `c127b5e`; registros das entregas na seção 7. Este documento registra evidências e orienta o trabalho diário; não substitui o [SSD](SSD-VAGGU.md) nem os [critérios de aceite](plano-e-aceite.md).
 
 ## 1. Situação atual
 
@@ -49,6 +49,13 @@ Classificações: **verificado** exige execução do comportamento indicado; **p
 - O upload existente já validava assinatura, tipo e tamanho, enviava ao Vercel Blob e persistia só a URL. O manifesto Render agora solicita `BLOB_READ_WRITE_TOKEN` como segredo; sem configurá-lo no serviço, o upload continuará retornando 503 explícito. A configuração local examinada não contém token utilizável. Falhas do provedor são tratadas sem expor detalhes. Não houve acesso ao painel Render/Vercel ou teste real de persistência externa.
 - O formulário consulta ViaCEP após oito dígitos, com espera de 400 ms, cancelamento de consulta anterior e prazo de oito segundos; campos de endereço permanecem editáveis, e número/complemento continuam manuais. Formato inválido, CEP inexistente e indisponibilidade produzem mensagens distintas.
 - Verificações desta revisão: frontend lint e build aprovados; backend `npm test` aprovou 50/53, com três cenários dependentes de PostgreSQL pulados; `npm run test:integracao` aprovou 32/32 em banco descartável. Navegador local com API simulada comprovou login/F5 em `/admin`, logout com retorno persistente ao login, CEP válido, inexistente e indisponível, 60 vagas em grid a 390, 768 e 1440 px, cabeçalho longo legível no tablet e fallback da foto legível no tema escuro, sem overflow nem erros de página. Isso não comprova upload Blob real nem autenticação em deploy. O mapa do projeto foi revisto; descrições não alteradas continuam válidas.
+
+### Leitura operacional e CEP hospedado — 25/09
+
+- A visão geral do Admin compactou as cinco contagens de vagas em grid de duas colunas no celular, três no tablet e cinco no desktop. Ícones diferentes identificam total, livres, ocupadas, indisponíveis e categorias especiais; os números continuam derivados da estrutura persistida, sem inferir disponibilidade de vaga sem leitura.
+- O aviso de implantação do gerente recebeu superfície e textos legíveis no tema escuro. Rótulos do cadastro de shopping ganharam contraste no tema claro. A escolha de CSV/XLSX foi alinhada à margem esquerda da janela de importação.
+- Causa identificada no build servido pelo Express, que corresponde à configuração versionada para hospedagem: o Helmet emitia `default-src 'self'` sem exceção de conexão para o ViaCEP. A chamada real retornou 200 quando feita pelo frontend local, mas era bloqueada pela política do Express. A API passou a declarar somente `connect-src 'self' https://viacep.com.br`; o contrato do formulário não mudou. A API oficial dos Correios exige contrato comercial e token, portanto não foi introduzida. O comportamento no endereço público ainda requer conferência após o deploy.
+- Verificações: frontend lint/build aprovados; backend `npm test` aprovou 51/54 com três integrações PostgreSQL puladas nesta execução. Edge headless, com API administrativa simulada, confirmou cards a 320, 390, 768 e 1280 px, aviso escuro e modal de importação, sem overflow nem erros de página. Em build React servido pelo Express real, CEP `01001000` consultou o ViaCEP com resposta 200 e preencheu Praça da Sé, Sé, São Paulo e SP; o número permaneceu manual. O teste não comprova a publicação no Render nem acesso com conta real. As descrições não alteradas do mapa do projeto foram revistas e permanecem válidas.
 
 ## 2. O que foi implementado
 

@@ -64,7 +64,7 @@ As cópias de imagens entre `segunda-mente/Vaggu/Identidade visual/Assets/` e `v
 | `vaggu-backend/prisma/migrations/migration_lock.toml` | Registra o provedor PostgreSQL das migrations do Prisma. |
 | `vaggu-backend/prisma/schema.prisma` | Define entidades, relações e restrições, incluindo estrutura, exclusão lógica, importação e URL da foto do shopping. |
 | `vaggu-backend/scripts/create-admin.ts` | Comando interativo para criar o primeiro administrador e exibir a senha gerada uma única vez no terminal. |
-| `vaggu-backend/src/app.ts` | Monta a API Express, suas rotas e respostas de erro e, quando configurado, entrega o build React na mesma origem. |
+| `vaggu-backend/src/app.ts` | Monta a API Express, restringe conexões externas do navegador ao ViaCEP pela política de segurança e, quando configurado, entrega o build React na mesma origem. |
 | `vaggu-backend/src/auth/bootstrap.ts` | Cria o primeiro administrador por uma operação de terminal, sem cadastro público. |
 | `vaggu-backend/src/auth/middleware.ts` | Autentica Bearer ou cookie HttpOnly, exige cabeçalho ant-CSRF nas escritas por cookie e fornece escopo às rotas. |
 | `vaggu-backend/src/auth/password.ts` | Protege senhas com scrypt e sal aleatório; guarda o resultado derivado, nunca a senha original. |
@@ -104,7 +104,7 @@ As cópias de imagens entre `segunda-mente/Vaggu/Identidade visual/Assets/` e `v
 | `vaggu-backend/test/auth-cookie.test.ts` | Verifica cookie HttpOnly, restauração da identidade, proteção ant-CSRF e limpeza no logout sem banco real. |
 | `vaggu-backend/test-support/banco-de-teste.ts` | Prepara um banco PostgreSQL exclusivo por execução e aplica as migrations versionadas. |
 | `vaggu-backend/test-support/estrutura-cases.ts` | Verifica hierarquia, mapa, implantação e isolamento do P04 em PostgreSQL real. |
-| `vaggu-backend/test/app.test.ts` | Verifica montagem da API, saúde, prontidão e respostas para rotas inexistentes. |
+| `vaggu-backend/test/app.test.ts` | Verifica montagem da API, saúde, prontidão, política de conexões do navegador e respostas para rotas inexistentes. |
 | `vaggu-backend/test/env.test.ts` | Verifica leitura e rejeição das variáveis de ambiente obrigatórias. |
 | `vaggu-backend/test/integracao-acessos.test.ts` | Executa os cenários HTTP de autenticação e administração em PostgreSQL descartável. |
 | `vaggu-backend/test/importacao-csv.test.ts` | Verifica a prévia CSV do P05, incluindo normalização, duplicatas, colunas ausentes e sintaxe inválida. |
@@ -162,7 +162,7 @@ As cópias de imagens entre `segunda-mente/Vaggu/Identidade visual/Assets/` e `v
 | `vaggu-frontend/src/lib/constants.ts` | Publica links de contato somente após configurar o número oficial da equipe. |
 | `vaggu-frontend/src/lib/utils.ts` | Combina classes condicionais e resolve conflitos de utilitários Tailwind. |
 | `vaggu-frontend/src/main.tsx` | Inicializa o React e reúne tema, mensagens, sessão e rotas separadas da estrutura, gerentes e conta. |
-| `vaggu-frontend/src/pages/admin-page.tsx` | Implementa cadastro, lista e ficha do shopping; a visão geral resume contatos e recolhe a edição, enquanto estrutura/mapa e gerentes mantêm importação/exportação, senha provisória e exclusões administrativas. |
+| `vaggu-frontend/src/pages/admin-page.tsx` | Implementa cadastro, lista e ficha do shopping; a visão geral resume contatos e contagens compactas por estado/categoria, enquanto estrutura/mapa e gerentes mantêm importação/exportação, senha provisória e exclusões administrativas. |
 | `vaggu-frontend/src/pages/area-autenticada.tsx` | Separa mapa operacional e Minha conta do gerente em rotas próprias; o Admin usa a página administrativa dedicada. |
 | `vaggu-frontend/src/pages/landing-page.tsx` | Compõe a landing pública; mantém o card claro de contato legível em ambos os temas, e o rodapé móvel usa chamada e navegação sem duplicar a imagem de celulares. |
 | `vaggu-frontend/src/pages/login-page.css` | Define composição responsiva do login, troca de senha e desenho animado do rabisco em “vagas”. |

@@ -1,6 +1,6 @@
 /** Fluxo administrativo de cadastro, listagem e ficha completa dos shoppings VAGGU. */
 import { useCallback, useEffect, useMemo, useRef, useState, type FormEvent } from "react"
-import { ArrowLeft, Check, ChevronDown, CircleParking, Copy, Plus, Search, Trash2, Upload, UserRound, UsersRound } from "lucide-react"
+import { ArrowLeft, CarFront, Check, ChevronDown, CircleCheck, CircleHelp, CircleParking, Copy, Plus, Search, Tags, Trash2, Upload, UserRound, UsersRound } from "lucide-react"
 import { Link, useLocation, useNavigate, useParams } from "react-router-dom"
 import { toast } from "sonner"
 import { useAppStore } from "@/app/app-store"
@@ -90,9 +90,15 @@ function ResumoVagas({ estrutura }: { estrutura: EstruturaEstacionamento }) {
   const ocupadas = ativas.filter(vaga => vaga.estadoAtual === "OCUPADA").length
   const indisponiveis = ativas.filter(vaga => vaga.estadoAtual === "DESCONHECIDA").length
   const especiais = ativas.filter(vaga => vaga.tipo !== "COMUM").length
-  const cartoes = [["Vagas totais", total, CircleParking], ["Livres", livres, CircleParking], ["Ocupadas", ocupadas, CircleParking], ["Indisponíveis", indisponiveis, CircleParking], ["Especiais", especiais, CircleParking]] as const
+  const cartoes = [
+    ["Vagas totais", total, CircleParking, "text-neutral-700 dark:text-[#ffe100]"],
+    ["Livres", livres, CircleCheck, "text-emerald-700 dark:text-emerald-300"],
+    ["Ocupadas", ocupadas, CarFront, "text-red-700 dark:text-red-300"],
+    ["Indisponíveis", indisponiveis, CircleHelp, "text-neutral-600 dark:text-neutral-300"],
+    ["Especiais", especiais, Tags, "text-sky-700 dark:text-sky-300"],
+  ] as const
   return <section className="grid gap-5"><div><h3 className="text-2xl font-bold text-white">Visão atual das vagas</h3><p className="mt-1 text-sm text-neutral-400">Contagens da estrutura persistida. Vaga sem leitura confirmada permanece indisponível.</p></div>
-    <div className="grid gap-3 sm:grid-cols-2 xl:grid-cols-5">{cartoes.map(([rotulo, quantidade, Icone]) => <div key={rotulo} className="rounded-2xl border border-white/10 bg-[#202020] p-4"><Icone className="size-5 text-[#ffe100]" aria-hidden="true"/><strong className="mt-3 block text-3xl text-white">{quantidade}</strong><span className="text-sm text-neutral-400">{rotulo}</span></div>)}</div>
+    <div className="grid grid-cols-2 gap-2 sm:grid-cols-3 lg:grid-cols-5">{cartoes.map(([rotulo, quantidade, Icone, cor]) => <div key={rotulo} className="min-w-0 rounded-xl border border-white/10 bg-[#202020] p-3"><div className="flex items-center justify-between gap-2"><Icone className={`size-5 shrink-0 ${cor}`} aria-hidden="true"/><strong className="text-2xl leading-none text-white">{quantidade}</strong></div><span className="mt-2 block text-xs font-medium text-neutral-400 sm:text-sm">{rotulo}</span></div>)}</div>
     <div className="flex flex-wrap items-center justify-between gap-3 rounded-2xl border border-white/10 bg-[#202020] p-5"><p className="text-sm text-neutral-400">{vagas.length === 0 ? "A estrutura ainda não possui vagas." : "Consulte os setores e as vagas no mapa do estacionamento."}</p><Button asChild><Link to={`estrutura`}>Abrir estrutura e mapa</Link></Button></div>
   </section>
 }
