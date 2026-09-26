@@ -23,7 +23,7 @@ O projeto foi desenvolvido como trabalho de conclusão de curso em Desenvolvimen
 
 ### Administração por shopping
 
-O painel Admin reúne a ficha do shopping, sua foto, os acessos individuais dos gerentes e a estrutura do estacionamento. A configuração segue a hierarquia **shopping → andar → setor → vaga**. O cadastro de shopping é dividido em etapas, e sua ficha destaca os dados essenciais antes da edição.
+O painel Admin reúne a ficha do shopping, os acessos individuais dos gerentes e a estrutura do estacionamento. A configuração segue a hierarquia **shopping → andar → setor → vaga**. O cadastro de shopping é dividido em etapas, e sua ficha destaca os dados essenciais antes da edição.
 
 Para preparar uma estrutura maior, a equipe pode importar CSV ou XLSX, revisar a prévia e confirmar a aplicação. A exportação XLSX reúne vagas e resumo da estrutura. Essas ações permanecem no contexto do shopping selecionado.
 
@@ -61,12 +61,10 @@ O rodapé mantém a identidade amarela e escura da marca. Em telas menores, prio
 | Interface | React e TypeScript para as telas; Tailwind CSS e estilos CSS próprios para identidade visual e responsividade; Radix UI e Lucide para componentes e ícones. |
 | API | Node.js, Express e TypeScript para autenticação, autorização e regras administrativas. |
 | Dados | PostgreSQL e Prisma para persistência, relações entre shoppings e migrations. |
-| Arquivos | Vercel Blob para fotos públicas; o PostgreSQL guarda apenas a referência da imagem. |
 | Integrações e publicação | WhatsApp Cloud API no backend; Render para servir frontend e API na mesma origem. |
 
 ```text
 Navegador React ── /api/v1 ──> Express ──> Prisma ──> PostgreSQL
-                                     └──────────> Vercel Blob (fotos)
 ```
 
 Os ícones dos badges usam [Simple Icons](https://github.com/simple-icons/simple-icons) por meio do [Shields.io](https://shields.io/docs/logos). Eles apenas apresentam a stack; não são dependências do sistema.

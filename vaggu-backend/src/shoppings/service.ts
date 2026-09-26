@@ -3,38 +3,10 @@
 import { randomBytes } from 'node:crypto';
 import { hashPassword } from '../auth/password.js';
 import { ApiError, normalizeEmail, publicUser } from '../auth/service.js';
-import type { ArmazenamentoFotosShopping } from './armazenamento-fotos.js';
 
 const SITUACOES_IMPLANTACAO = new Set(['NOVO_ATENDIMENTO', 'EM_ANALISE', 'DOCUMENTACAO_PENDENTE', 'APROVADO', 'EM_CONFIGURACAO', 'AGUARDANDO_INSTALACAO', 'ATIVO', 'REJEITADO', 'INATIVO']);
 const PRAZO_DESFAZER_EXCLUSAO_MS = 7_000;
 const MARGEM_TRANSPORTE_DESFAZER_MS = 1_000;
-const LIMITE_FOTO_SHOPPING_BYTES = 2 * 1024 * 1024;
-const TIPOS_FOTO_SHOPPING = new Set(['image/jpeg', 'image/png', 'image/webp']);
-
-/** Confere a assinatura real do arquivo para não confiar somente no Content-Type enviado. */
-function detectarTipoFoto(dados: Buffer): string | null {
-  if (dados.length >= 8 && dados.subarray(0, 8).equals(Buffer.from([0x89, 0x50, 0x4e, 0x47, 0x0d, 0x0a, 0x1a, 0x0a]))) return 'image/png';
-  if (dados.length >= 3 && dados[0] === 0xff && dados[1] === 0xd8 && dados[2] === 0xff) return 'image/jpeg';
-  if (dados.length >= 12 && dados.subarray(0, 4).toString('ascii') === 'RIFF' && dados.subarray(8, 12).toString('ascii') === 'WEBP') return 'image/webp';
-  return null;
-}
-
-/** Limita tamanho e formatos antes de encaminhar os bytes ao armazenamento externo. */
-function validarFotoShopping(conteudo: unknown, tipoInformado: unknown) {
-  if (!Buffer.isBuffer(conteudo) || conteudo.length === 0) {
-    throw new ApiError(400, 'FOTO_INVALIDA', 'Selecione uma foto JPEG, PNG ou WebP.');
-  }
-  if (conteudo.length > LIMITE_FOTO_SHOPPING_BYTES) {
-    throw new ApiError(413, 'FOTO_MUITO_GRANDE', 'A foto deve ter no máximo 2 MB.');
-  }
-  const tipo = typeof tipoInformado === 'string' ? tipoInformado.split(';', 1)[0].trim().toLowerCase() : '';
-  const tipoDetectado = detectarTipoFoto(conteudo);
-  if (!TIPOS_FOTO_SHOPPING.has(tipo) || tipoDetectado !== tipo) {
-    throw new ApiError(400, 'FOTO_INVALIDA', 'O conteúdo da foto deve corresponder a JPEG, PNG ou WebP.');
-  }
-  return { conteudo, tipoConteudo: tipo };
-}
-
 /** Recusa identificadores fora do formato básico esperado antes de consultar o banco. */
 function validarId(value, nomeCampo = 'id') {
   if (typeof value !== 'string' || !/^[0-9a-f-]{36}$/i.test(value)) {
@@ -145,12 +117,13 @@ function publicShopping(shopping) {
     endereco: shopping.endereco ?? null,
     horarioAbertura: shopping.horarioAbertura ?? null,
     horarioFechamento: shopping.horarioFechamento ?? null,
-    imagemUrl: shopping.imagemUrl ?? null,
-    possuiFoto: Boolean(shopping.imagemUrl),
     ativo: shopping.ativo,
     situacaoImplantacao: shopping.situacaoImplantacao,
     criadoEm: shopping.criadoEm,
     totalGerentes: shopping._count?.usuarios,
+    totalAndares: shopping._count?.andares,
+    totalSetores: shopping._count?.setores,
+    totalVagas: shopping._count?.vagas,
   };
 }
 
@@ -177,18 +150,17 @@ function tratarConflitoUnico(error) {
 
 // Regras administrativas da parceria: shoppings e gerentes nascem pelo Admin,
 // nunca por cadastro público ou por dados enviados por um gerente autenticado.
-export function createShoppingsService(prisma, {
-  now = () => new Date(),
-  armazenamentoFotos,
-}: {
-  now?: () => Date;
-  armazenamentoFotos?: ArmazenamentoFotosShopping;
-} = {}) {
-  const contagemGerentesVisiveis = {
-    select: { usuarios: { where: { perfil: 'SHOPPING', excluidoEm: null } } },
+export function createShoppingsService(prisma, { now = () => new Date() }: { now?: () => Date } = {}) {
+  const contagensVisiveis = {
+    select: {
+      usuarios: { where: { perfil: 'SHOPPING', excluidoEm: null } },
+      andares: { where: { ativo: true } },
+      setores: { where: { ativo: true } },
+      vagas: { where: { ativo: true } },
+    },
   };
   const detalhesPublicos = {
-    _count: contagemGerentesVisiveis,
+    _count: contagensVisiveis,
   };
 
   return {
@@ -226,40 +198,6 @@ export function createShoppingsService(prisma, {
       }
       const atualizado = await prisma.shopping.update({ where: { id: shopping.id }, data, include: detalhesPublicos });
       return { shopping: publicShopping(atualizado) };
-    },
-
-    /** Envia a foto ao Blob e grava somente sua URL, removendo a versão anterior após a troca. */
-    async salvarFotoShopping(shoppingId, conteudo: unknown, tipoConteudo: unknown) {
-      const shopping = await exigirShopping(prisma, shoppingId);
-      const foto = validarFotoShopping(conteudo, tipoConteudo);
-      if (!armazenamentoFotos) {
-        throw new ApiError(503, 'ARMAZENAMENTO_NAO_CONFIGURADO', 'O armazenamento de fotos ainda não foi configurado neste ambiente.');
-      }
-      const imagemUrl = await armazenamentoFotos.salvar(shopping.id, foto.conteudo, foto.tipoConteudo)
-        .catch(() => { throw new ApiError(503, 'ARMAZENAMENTO_INDISPONIVEL', 'Não foi possível enviar a foto agora. Tente novamente.'); });
-      try {
-        await prisma.shopping.update({ where: { id: shopping.id }, data: { imagemUrl } });
-      } catch (erro) {
-        // Uma falha no banco não deve deixar o arquivo recém-enviado sem referência.
-        await armazenamentoFotos.remover(imagemUrl).catch(() => undefined);
-        throw erro;
-      }
-      if (shopping.imagemUrl && shopping.imagemUrl !== imagemUrl) {
-        await armazenamentoFotos.remover(shopping.imagemUrl).catch(() => undefined);
-      }
-      return { imagemUrl, possuiFoto: true };
-    },
-
-    /** Remove a referência antes de apagar o arquivo para nunca manter uma URL quebrada no cadastro. */
-    async removerFotoShopping(shoppingId) {
-      const shopping = await exigirShopping(prisma, shoppingId);
-      if (!shopping.imagemUrl) return { imagemUrl: null, possuiFoto: false };
-      if (!armazenamentoFotos) {
-        throw new ApiError(503, 'ARMAZENAMENTO_NAO_CONFIGURADO', 'O armazenamento de fotos ainda não foi configurado neste ambiente.');
-      }
-      await prisma.shopping.update({ where: { id: shopping.id }, data: { imagemUrl: null } });
-      await armazenamentoFotos.remover(shopping.imagemUrl).catch(() => undefined);
-      return { imagemUrl: null, possuiFoto: false };
     },
 
     /** Oculta o shopping sem apagar sua estrutura ou histórico e encerra os acessos vinculados. */

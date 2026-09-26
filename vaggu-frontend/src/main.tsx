@@ -24,6 +24,8 @@ function App() {
       <Route element={<LoginPage />} path="/login" />
       <Route element={<TrocarSenhaPage />} path="/trocar-senha" />
       <Route element={<ProtectedRoute role="admin"><AdminPage /></ProtectedRoute>} path="/admin" />
+      <Route element={<ProtectedRoute role="admin"><AdminPage /></ProtectedRoute>} path="/admin/cadastrar" />
+      <Route element={<ProtectedRoute role="admin"><AdminPage /></ProtectedRoute>} path="/admin/conta" />
       <Route element={<ProtectedRoute role="admin"><AdminPage /></ProtectedRoute>} path="/admin/shoppings" />
       <Route element={<ProtectedRoute role="admin"><AdminPage /></ProtectedRoute>} path="/admin/shoppings/:shoppingId" />
       <Route element={<ProtectedRoute role="admin"><AdminPage /></ProtectedRoute>} path="/admin/shoppings/:shoppingId/estrutura" />
@@ -38,7 +40,7 @@ function App() {
 createRoot(document.getElementById("root")!).render(
   <StrictMode>
     <ThemeProvider attribute="class" defaultTheme="light" enableSystem={false}>
-      <MotionConfig reducedMotion="never">
+      <MotionConfig reducedMotion="user">
         <BrowserRouter>
           <AppStoreProvider>
             <App />

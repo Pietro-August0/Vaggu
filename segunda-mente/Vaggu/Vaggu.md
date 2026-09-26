@@ -37,7 +37,7 @@ Plataforma web responsiva para gestão de estacionamentos de shopping centers, d
 
 O próprio cofre está versionado na pasta `segunda-mente/` do repositório VAGGU.
 
-**Estado atual:** P01–P05, D01 e C01 concluídos. P06 começou apenas pelo núcleo isolado de confirmação temporal; ingestão, persistência, expiração e integração com ESP32 ainda não existem como fluxo operacional. Em 24/09, Admin e gerente receberam navegação separada e modo claro/escuro; o Admin pode exportar uma fotografia XLSX da estrutura, distinta de relatórios históricos. Ver [[Vaggu/Documentação/planejamento-do-projeto|planejamento]] e [[Vaggu/Documentação/fluxo-de-telas|fluxo de telas]].
+**Estado atual:** P01–P05, D01 e C01 concluídos. O mapa compartilhado abre um detalhe honesto da vaga; saúde, comunicação e última leitura permanecem indisponíveis até existir telemetria individual. A visão geral administrativa e Minha conta com troca voluntária de senha estão implementadas localmente, mas ainda não foram publicadas. P06 começou apenas pelo núcleo isolado de confirmação temporal; ingestão, persistência, expiração e integração com ESP32 ainda não existem como fluxo operacional. A prioridade seguinte é auditar responsividade e acessibilidade dos fluxos autenticados antes de retomar ESP32 e WhatsApp. Ver [[Vaggu/Documentação/planejamento-do-projeto|planejamento]] e [[Vaggu/Documentação/fluxo-de-telas|fluxo de telas]].
 
 **Hospedagem registrada em 23/09:** frontend e API são entregues pelo mesmo serviço Render, conectado ao PostgreSQL no Neon. Consulte [[Vaggu/Documentação/configuracao|configuração]] e [[Vaggu/Tecnologias/Tecnologias e arquitetura|arquitetura]] para o funcionamento versionado; endereço público e resultado das publicações devem ser conferidos no Render/GitHub.
 
@@ -54,6 +54,6 @@ O próprio cofre está versionado na pasta `segunda-mente/` do repositório VAGG
 
 **Atualização de 21/09:** P05 concluído após corrigir o advisory lock para o Prisma 7 e montar a importação na ficha administrativa correta. A integração PostgreSQL aprovou 32/32 cenários; o navegador autenticado confirmou o fluxo válido e inválido, a atualização da estrutura e a responsividade sem transbordamento da página.
 
-**Atualização de 21/09 — mapa e foto:** Admin e gerente passaram a compartilhar a visualização 2D responsiva. O gerente vê a estrutura mesmo antes da ativação, mutações administrativas recarregam o mapa sem refresh, a senha provisória pode ser copiada somente quando é emitida e a foto do shopping usa referência HTTPS do Vercel Blob em vez de binário no PostgreSQL.
+**Atualização de 21/09 — mapa e acessos:** Admin e gerente passaram a compartilhar a visualização 2D responsiva. O gerente vê a estrutura mesmo antes da ativação, mutações administrativas recarregam o mapa sem refresh e a senha provisória pode ser copiada somente quando é emitida.
 
 **Atualização de 24/09 — leitura e evidências:** o cadastro de shopping foi dividido em etapas, a ficha recolhe a edição e o rodapé móvel deixou de repetir a imagem de celulares. A [galeria de evidências](./Evidências%20visuais/Índice%20de%20evidências.md) identifica capturas públicas atuais e separa as imagens históricas. O [README da raiz](../../README.md) apresenta proposta, experiência, fotos comentadas e tecnologias; datas e limites permanecem nesta documentação interna.

@@ -7,9 +7,6 @@ export class ErroApi extends Error {
 
 /** Mantém mensagens acionáveis para erros de configuração conhecidos do ambiente local. */
 function mensagemErroApi(codigo: unknown, mensagem: unknown, status: number): string {
-  if (codigo === "ARMAZENAMENTO_NAO_CONFIGURADO") return "A foto foi validada, mas o armazenamento de fotos não está configurado no backend. Defina BLOB_READ_WRITE_TOKEN para salvar a imagem."
-  if (codigo === "ARMAZENAMENTO_INDISPONIVEL") return "Não foi possível enviar a foto agora. Tente novamente."
-  if (codigo === "FOTO_INVALIDA" || codigo === "FOTO_MUITO_GRANDE") return typeof mensagem === "string" ? mensagem : "A foto selecionada não atende aos formatos ou tamanho permitidos."
   return status < 500 && typeof mensagem === "string" ? mensagem : "Não foi possível conectar à VAGGU. Verifique sua conexão e tente novamente."
 }
 

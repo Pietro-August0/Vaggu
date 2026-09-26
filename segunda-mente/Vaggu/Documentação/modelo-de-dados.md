@@ -50,11 +50,11 @@ erDiagram
 
 **Finalidade:** representa cada shopping atendido e forma a raiz de isolamento dos dados administrativos e operacionais.
 
-**Campos principais:** `id: UUID`; `nome: String`; dados institucionais, contato e endereço opcionais; `horarioAbertura` e `horarioFechamento: String(5)?`; `imagemUrl: String?`; `ativo: Boolean`; `situacaoImplantacao: SituacaoImplantacao`; `criadoEm: DateTime`; `excluidoEm: DateTime?`. A coluna legada `fuso_horario` permanece nullable no schema para compatibilidade, mas não é mais exposta no formulário nem no contrato administrativo atual.
+**Campos principais:** `id: UUID`; `nome: String`; dados institucionais, contato e endereço opcionais; `horarioAbertura` e `horarioFechamento: String(5)?`; `ativo: Boolean`; `situacaoImplantacao: SituacaoImplantacao`; `criadoEm: DateTime`; `excluidoEm: DateTime?`. A coluna legada `fuso_horario` permanece nullable no schema para compatibilidade, mas não é mais exposta no formulário nem no contrato administrativo atual.
 
 **Relações e restrições:** possui usuários, dispositivos, vagas, andares, setores e importações. As relações usam exclusão restrita para preservar os registros. A exclusão feita pela API é lógica. Migrations validam formato da UF e dos horários.
 
-**Uso atual:** cadastro, ficha, foto externa, etapa de implantação, gerentes, estrutura e importação no painel administrativo. O PostgreSQL guarda apenas a URL da foto.
+**Uso atual:** cadastro, ficha, etapa de implantação, gerentes, estrutura e importação no painel administrativo.
 
 ### `Usuario` → tabela `usuarios`
 
@@ -172,7 +172,7 @@ A lista abaixo resume propostas do SSD. Os nomes e a separação em tabelas aind
 | `ControleEventoRecebido` | Deduplicar telemetria por placa, inicialização e sequência e registrar seu resultado. | `eventoId` único no histórico atual não cobre sozinho todo o processamento. |
 | `EventoEquipamento` e `OcorrenciaTecnica` | Preservar falhas, retornos e manutenções de placa/sensor sem ocorrências repetidas. | Ausentes no schema atual. |
 | `MapaAndar` e `PosicaoVaga` | Separar mapas/revisões e posições caso o produto precise preservar versões. | Hoje `imagemMapa`/`revisaoMapa` ficam em `Andar` e as coordenadas ficam em `Vaga`. Uma migração só é necessária se essa separação for confirmada. |
-| `DocumentoShopping` | Referenciar documentos privados e seu estado. | Não existe; `imagemUrl` é somente a foto pública representativa. |
+| `DocumentoShopping` | Referenciar documentos privados e seu estado. | Não existe no escopo atual. |
 | `Importacao` e `ErroImportacao` | Representar arquivo, processamento e erros estruturados separadamente. | O P05 atual usa `ImportacaoEstrutura` com prévia e erros dentro de JSONB. Não criar tabelas novas sem uma necessidade de consulta demonstrada. |
 | `SessaoWhatsApp`, `PedidoDemonstracao` e `ChamadoSuporte` | Estruturar jornada comercial e suporte além da deduplicação do webhook. | `WhatsappEvento` registra processamento técnico, não esses fluxos de negócio. |
 | `LogAcao` | Registrar ações administrativas relevantes sem segredos. | Ausente no schema atual. |

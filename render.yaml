@@ -13,8 +13,6 @@ services:
     envVars:
       - key: DATABASE_URL
         sync: false
-      - key: BLOB_READ_WRITE_TOKEN
-        sync: false
       - key: CREDENTIAL_ENCRYPTION_KEY
         generateValue: true
       - key: HOST

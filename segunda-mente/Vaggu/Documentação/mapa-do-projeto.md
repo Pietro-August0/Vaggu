@@ -52,7 +52,7 @@ As cópias de imagens entre `segunda-mente/Vaggu/Identidade visual/Assets/` e `v
 | `skills/rotear-trabalho-equipe/scripts/gerar-coautoria.mjs` | Gera trailers `Co-authored-by` a partir da configuração local ignorada pelo Git, sem trocar identidades nem criar commits. |
 | `skills/start/SKILL.md` | Documentação: Início do dia — VAGGU. |
 | `skills/start/agents/openai.yaml` | Metadados de descoberta e apresentação da skill no Codex. |
-| `vaggu-backend/.env.example` | Documenta banco, servidor, WhatsApp e token do Vercel Blob sem incluir credenciais reais. |
+| `vaggu-backend/.env.example` | Documenta banco, servidor e WhatsApp sem incluir credenciais reais. |
 | `vaggu-backend/README.md` | Documentação: Vaggu Backend — 0.5.0. |
 | `vaggu-backend/package-lock.json` | Fixa a árvore de dependências e integridade para instalação reproduzível via npm ci. |
 | `vaggu-backend/package.json` | Declara dependências, faixa do Node e scripts de desenvolvimento, build e verificação. |
@@ -62,16 +62,16 @@ As cópias de imagens entre `segunda-mente/Vaggu/Identidade visual/Assets/` e `v
 | `vaggu-backend/prisma/migrations/20260912000200_exclusao_reversivel_gerentes/migration.sql` | Acrescenta exclusão lógica de gerente, estado anterior e restrição de consistência para o desfazer. |
 | `vaggu-backend/prisma/migrations/20260913000100_senha_provisoria_e_exclusao_shopping/migration.sql` | Acrescenta exclusão lógica de shopping e a cópia cifrada temporária da senha provisória. |
 | `vaggu-backend/prisma/migrations/migration_lock.toml` | Registra o provedor PostgreSQL das migrations do Prisma. |
-| `vaggu-backend/prisma/schema.prisma` | Define entidades, relações e restrições, incluindo estrutura, exclusão lógica, importação e URL da foto do shopping. |
+| `vaggu-backend/prisma/schema.prisma` | Define entidades, relações e restrições, incluindo estrutura, exclusão lógica e importação. |
 | `vaggu-backend/scripts/create-admin.ts` | Comando interativo para criar o primeiro administrador e exibir a senha gerada uma única vez no terminal. |
 | `vaggu-backend/src/app.ts` | Monta a API Express, restringe conexões externas do navegador ao ViaCEP pela política de segurança e, quando configurado, entrega o build React na mesma origem. |
 | `vaggu-backend/src/auth/bootstrap.ts` | Cria o primeiro administrador por uma operação de terminal, sem cadastro público. |
 | `vaggu-backend/src/auth/middleware.ts` | Autentica Bearer ou cookie HttpOnly, exige cabeçalho ant-CSRF nas escritas por cookie e fornece escopo às rotas. |
 | `vaggu-backend/src/auth/password.ts` | Protege senhas com scrypt e sal aleatório; guarda o resultado derivado, nunca a senha original. |
 | `vaggu-backend/src/auth/routes.ts` | Expõe login, identidade, troca de senha e logout; emite/remove cookie HttpOnly sem expor token ao cliente web. |
-| `vaggu-backend/src/auth/service.ts` | Serviço de autenticação humana: valida credenciais, emite sessões opacas, retorna expiração ao middleware e recusa contas excluídas. |
+| `vaggu-backend/src/auth/service.ts` | Valida credenciais, emite sessões opacas, recusa contas excluídas e aplica a troca obrigatória ou voluntária sem expor hashes. |
 | `vaggu-backend/src/config/database.ts` | Valida e normaliza a URL PostgreSQL usada pelo backend sem expor credenciais. |
-| `vaggu-backend/src/config/env.ts` | Converte variáveis do processo em configuração da API e valida banco, porta e token opcional do Vercel Blob. |
+| `vaggu-backend/src/config/env.ts` | Converte variáveis do processo em configuração da API e valida banco e porta. |
 | `vaggu-backend/src/estrutura/routes.ts` | Expõe configuração administrativa e consulta isolada da estrutura pelo gerente. |
 | `vaggu-backend/src/estrutura/service.ts` | Valida hierarquia, tipos, posições e revisões concorrentes do mapa. |
 | `vaggu-backend/src/importacao/contratos.ts` | Define a representação intermediária e os erros da prévia de importação reutilizáveis por CSV e XLSX. |
@@ -85,22 +85,22 @@ As cópias de imagens entre `segunda-mente/Vaggu/Identidade visual/Assets/` e `v
 | `vaggu-backend/prisma/migrations/20260915000100_confirmacao_importacao/migration.sql` | Registra revisão e confirmação idempotente das prévias de importação estrutural. |
 | `vaggu-backend/prisma/migrations/20260921000100_foto_shopping/migration.sql` | Registra a tentativa anterior de armazenar a foto em binário; é mantida no histórico e corrigida pela migration seguinte. |
 | `vaggu-backend/prisma/migrations/20260921000200_referencia_foto_shopping/migration.sql` | Substitui a foto binária por URL externa e remove a cópia reversível da senha provisória. |
+| `vaggu-backend/prisma/migrations/20260925000100_remover_foto_shopping/migration.sql` | Remove do schema atual a coluna legada de imagem do shopping sem reescrever migrations já aplicadas. |
 | `vaggu-backend/test/importacao-postgresql.test.ts` | Verifica persistência, isolamento de consulta e preservação de vagas e histórico em PostgreSQL descartável. |
 | `vaggu-backend/src/conta/routes.ts` | Expõe consulta e edição da conta usando exclusivamente a identidade da sessão. |
 | `vaggu-backend/src/conta/service.ts` | Atualiza somente dados pessoais permitidos, sem conceder mudanças de perfil ou shopping. |
 | `vaggu-backend/src/lib/prisma.ts` | Cria o cliente Prisma compartilhado; serviços aceitam cliente transacional por injeção. |
 | `vaggu-backend/src/server.ts` | Ponto de entrada executável: lê a configuração, conecta Prisma e armazenamento de fotos, informa o build do frontend e inicia o HTTP. |
-| `vaggu-backend/src/shoppings/armazenamento-fotos.ts` | Adapta gravação e remoção das fotos públicas no Vercel Blob sem acoplar o domínio ao SDK. |
-| `vaggu-backend/src/shoppings/routes.ts` | Rotas administrativas de cadastro, ficha, foto, gerentes, exclusões e emissão de senha provisória. |
-| `vaggu-backend/src/shoppings/service.ts` | Valida a ficha e a imagem, envia foto ao Blob com erro seguro, administra shoppings e gerentes e entrega senha provisória somente na emissão. |
+| `vaggu-backend/src/shoppings/routes.ts` | Rotas administrativas de cadastro, ficha, gerentes, exclusões e emissão de senha provisória. |
+| `vaggu-backend/src/shoppings/service.ts` | Valida a ficha, administra shoppings e gerentes, agrega a estrutura ativa para a visão geral e entrega senha provisória somente na emissão. |
 | `vaggu-backend/src/telemetria/confirmacao-estado.ts` | Calcula a confirmação temporal de leituras de vaga já validadas, sem receber telemetria ou persistir dados. |
 | `vaggu-backend/src/whatsapp/client.ts` | Cliente de envio de texto pela API da Meta; recebe configuração privada e transporte substituível em testes. |
 | `vaggu-backend/src/whatsapp/payload.ts` | Interpreta o formato externo do webhook e mantém os textos do menu demonstrativo. |
 | `vaggu-backend/src/whatsapp/routes.ts` | Recebe o desafio de configuração e os eventos da Meta, validando sua origem antes de processá-los. |
 | `vaggu-backend/src/whatsapp/service.ts` | Coordena mensagens recebidas, deduplicação persistente e respostas do menu demonstrativo. |
 | `vaggu-backend/src/whatsapp/signature.ts` | Calcula e verifica assinaturas HMAC para confirmar que o corpo recebido veio de quem possui o segredo Meta. |
-| `vaggu-backend/test-support/admin-cases.ts` | Verifica acessos administrativos, foto externa, credencial não reversível, bloqueio, exclusão, prazo para desfazer e reutilização segura do e-mail. |
-| `vaggu-backend/test-support/auth-cases.ts` | Cenários sequenciais de autenticação e isolamento, usados pelo runner com banco exclusivo. |
+| `vaggu-backend/test-support/admin-cases.ts` | Verifica acessos administrativos, credencial não reversível, bloqueio, exclusão, prazo para desfazer e reutilização segura do e-mail. |
+| `vaggu-backend/test-support/auth-cases.ts` | Cenários sequenciais de autenticação, conta própria, troca obrigatória ou voluntária e isolamento, usados pelo runner com banco exclusivo. |
 | `vaggu-backend/test/auth-cookie.test.ts` | Verifica cookie HttpOnly, restauração da identidade, proteção ant-CSRF e limpeza no logout sem banco real. |
 | `vaggu-backend/test-support/banco-de-teste.ts` | Prepara um banco PostgreSQL exclusivo por execução e aplica as migrations versionadas. |
 | `vaggu-backend/test-support/estrutura-cases.ts` | Verifica hierarquia, mapa, implantação e isolamento do P04 em PostgreSQL real. |
@@ -129,14 +129,16 @@ As cópias de imagens entre `segunda-mente/Vaggu/Identidade visual/Assets/` e `v
 | `vaggu-frontend/public/assets/vaggu-logo.svg` | Asset visual vaggu-logo.svg; reutilizado na identidade e composição da interface. |
 | `vaggu-frontend/src/app/app-store.tsx` | Restaura identidade via cookie e `/auth/me` antes de liberar rotas; gerencia expiração, logout, troca de senha e consultas. |
 | `vaggu-frontend/src/components/brand.tsx` | Reutiliza os arquivos de marca publicados em public/assets nos links para a página inicial. |
-| `vaggu-frontend/src/components/dashboard-shell.tsx` | Compartilha cabeçalho, menu responsivo com seções contextuais, alternância claro/escuro e saída da sessão entre os painéis autenticados. |
+| `vaggu-frontend/src/components/dashboard-shell.tsx` | Compartilha cabeçalho, menu responsivo, atalho ao conteúdo, foco após navegação, alternância claro/escuro e saída da sessão entre os painéis autenticados. |
 | `vaggu-frontend/src/components/estrutura-admin.tsx` | Permite criar a hierarquia, explica o estado real de implantação e alterna cadastro, mapa e posições com refetch após mutações. |
 | `vaggu-frontend/src/components/exportacao-estrutura.tsx` | Abre a janela de exportação estrutural, mostra o recorte e inicia o download XLSX sob demanda. |
 | `vaggu-frontend/src/components/importacao-estrutura.tsx` | Permite ao Admin baixar o modelo CSV, enviar CSV/XLSX, revisar registros e erros, confirmar a importação e consultar o resumo aplicado. |
-| `vaggu-frontend/src/components/formulario-shopping.tsx` | Compartilha cadastro e edição em três etapas; consulta CEP, mantém edição manual e oferece preview, troca ou remoção da foto. |
-| `vaggu-frontend/src/components/foto-shopping.tsx` | Renderiza a foto HTTPS ou o fallback com ícone escuro no tema claro e claro no tema escuro. |
+| `vaggu-frontend/src/components/formulario-alterar-senha.tsx` | Compartilha a troca voluntária de senha com validação por campo, requisitos visíveis e confirmação da senha atual. |
+| `vaggu-frontend/src/components/formulario-shopping.tsx` | Compartilha cadastro e edição em três etapas; consulta CEP e mantém o endereço editável manualmente. |
 | `vaggu-frontend/src/components/mapa-estacionamento.tsx` | Busca a estrutura isolada do gerente, mostra aviso de implantação sem ocultá-la e delega o desenho ao componente compartilhado. |
-| `vaggu-frontend/src/components/visualizacao-vagas.tsx` | Compartilha mapa 2D, filtros e estados; listas de vagas usam grid fluido no celular e quando faltam posições. |
+| `vaggu-frontend/src/components/minha-conta.tsx` | Compartilha dados pessoais e segurança entre Admin e gerente; mantém o e-mail somente leitura, focável e copiável, sem permitir alterar perfil ou vínculo. |
+| `vaggu-frontend/src/components/detalhes-vaga.tsx` | Exibe em diálogo os dados estruturais da vaga e comunica, sem simulação, que saúde, comunicação e última leitura dependem da telemetria futura. |
+| `vaggu-frontend/src/components/visualizacao-vagas.tsx` | Compartilha mapa 2D, busca, filtros e seleção entre Admin e gerente; abre o mesmo detalhe pelo mapa, lista móvel ou vaga sem posição. |
 | `vaggu-frontend/src/components/icone-whatsapp.tsx` | Disponibiliza o símbolo usado nos links de atendimento, sem requisições externas. |
 | `vaggu-frontend/src/components/operacao-vaggu.css` | Foto e conteúdo dividem a seção sem impor uma altura vazia acima dos benefícios. |
 | `vaggu-frontend/src/components/operacao-vaggu.tsx` | Relaciona a imagem de movimento urbano aos benefícios da gestão e ao atendimento. |
@@ -161,25 +163,27 @@ As cópias de imagens entre `segunda-mente/Vaggu/Identidade visual/Assets/` e `v
 | `vaggu-frontend/src/index.css` | Reúne temas claro/escuro, compatibilidade visual dos painéis, responsividade e microinterações dos cards acionáveis. |
 | `vaggu-frontend/src/lib/constants.ts` | Publica links de contato somente após configurar o número oficial da equipe. |
 | `vaggu-frontend/src/lib/utils.ts` | Combina classes condicionais e resolve conflitos de utilitários Tailwind. |
-| `vaggu-frontend/src/main.tsx` | Inicializa o React e reúne tema, mensagens, sessão e rotas separadas da estrutura, gerentes e conta. |
-| `vaggu-frontend/src/pages/admin-page.tsx` | Implementa cadastro, lista e ficha do shopping; a visão geral resume contatos e contagens compactas por estado/categoria, enquanto estrutura/mapa e gerentes mantêm importação/exportação, senha provisória e exclusões administrativas. |
-| `vaggu-frontend/src/pages/area-autenticada.tsx` | Separa mapa operacional e Minha conta do gerente em rotas próprias; o Admin usa a página administrativa dedicada. |
-| `vaggu-frontend/src/pages/landing-page.tsx` | Compõe a landing pública; mantém o card claro de contato legível em ambos os temas, e o rodapé móvel usa chamada e navegação sem duplicar a imagem de celulares. |
+| `vaggu-frontend/src/main.tsx` | Inicializa o React, respeita a preferência de movimento reduzido e reúne tema, mensagens, sessão e rotas autenticadas. |
+| `vaggu-frontend/src/pages/admin-page.tsx` | Implementa a visão geral administrativa com indicadores cadastrais reais, além de cadastro, lista e ficha do shopping; estrutura/mapa e gerentes mantêm importação/exportação, senha provisória e exclusões administrativas. |
+| `vaggu-frontend/src/pages/area-autenticada.tsx` | Separa mapa operacional e Minha conta do gerente em rotas próprias, reutilizando a conta compartilhada. |
+| `vaggu-frontend/src/pages/landing-page.tsx` | Compõe a landing pública, respeita movimento reduzido e mantém contato, temas e rodapé móvel legíveis. |
 | `vaggu-frontend/src/pages/login-page.css` | Define composição responsiva do login, troca de senha e desenho animado do rabisco em “vagas”. |
 | `vaggu-frontend/src/pages/login-page.tsx` | Entrada única para Admin e gerente, sem solicitar preenchimento automático das credenciais ao abrir a página. |
 | `vaggu-frontend/src/pages/pagina-nao-encontrada.tsx` | Exibe a rota 404 pública, oferece retorno à landing e compõe a animação semântica da vaga liberada. |
 | `vaggu-frontend/src/pages/pagina-nao-encontrada.css` | Define o layout responsivo e a sequência única em que o carro deixa o sensor vermelho, sai pela esquerda e libera o estado verde. |
 | `vaggu-frontend/src/pages/trocar-senha-page.tsx` | Exige uma senha definitiva e reaproveita na aba a senha provisória digitada no login. |
 | `vaggu-frontend/src/servicos/api.ts` | Cliente da API na mesma origem para JSON e corpos binários; envia cookie e cabeçalho ant-CSRF sem ler o token. |
+| `vaggu-frontend/src/servicos/apresentacao-vaga.ts` | Centraliza os rótulos em português das categorias e estados usados no mapa, nas listas e no detalhe da vaga. |
 | `vaggu-frontend/src/servicos/cep.ts` | Consulta o ViaCEP com validação, prazo e erros distintos; devolve somente campos de endereço usados no formulário. |
 | `vaggu-frontend/src/servicos/situacao-implantacao.ts` | Centraliza rótulos, descrições e cores dos estados de implantação já definidos no backend. |
 | `vaggu-frontend/src/servicos/estrutura.ts` | Valida a árvore pública de andares, setores, vagas e posições recebida da API. |
 | `vaggu-frontend/src/servicos/exportacao-estrutura.ts` | Gera no navegador um XLSX estilizado com vagas e resumo da estrutura já carregada, sem endpoint novo nem dados históricos. |
 | `vaggu-frontend/src/servicos/importacao.ts` | Valida as respostas da API de prévia e confirmação antes de entregá-las à interface administrativa. |
-| `vaggu-frontend/src/servicos/shoppings.ts` | Valida fichas, listas, URL HTTPS de imagem e gerentes recebidos pelas rotas administrativas. |
+| `vaggu-frontend/src/servicos/politica-senha.ts` | Centraliza requisitos, mensagens locais e códigos de erro da senha definitiva para as duas jornadas de troca. |
+| `vaggu-frontend/src/servicos/shoppings.ts` | Valida fichas, listas, agregados estruturais, URL HTTPS de imagem e gerentes recebidos pelas rotas administrativas. |
 | `vaggu-frontend/src/types/app.ts` | Declara o contrato da identidade autenticada compartilhado pela interface. |
 | `vaggu-frontend/src/types/estrutura.ts` | Declara os contratos TypeScript da estrutura, implantação, tipos e mapa. |
-| `vaggu-frontend/src/types/admin.ts` | Declara os contratos TypeScript da ficha administrativa, incluindo referência da foto, e dos gerentes. |
+| `vaggu-frontend/src/types/admin.ts` | Declara os contratos TypeScript da ficha administrativa, seus agregados cadastrais e os gerentes. |
 | `vaggu-frontend/src/types/importacao.ts` | Declara prévias, erros, registros e resumos da importação estrutural. |
 | `vaggu-frontend/src/vite-env.d.ts` | Disponibiliza ao TypeScript os tipos de ambiente fornecidos pelo Vite. |
 | `vaggu-frontend/tsconfig.app.json` | Configura compilação TypeScript e limites dos arquivos incluídos neste projeto. |

@@ -100,8 +100,6 @@ Todas as rotas abaixo exigem `Authorization: Bearer TOKEN`, perfil `VAGGU` e sen
 | POST | /shoppings/:shoppingId/importacoes/:importacaoId/confirmar | Sem corpo | Aplica a prévia uma única vez, criando/atualizando estrutura sem apagar histórico. |
 | PATCH | /andares/:andarId/mapa | revisão esperada e posições das vagas | Salva o mapa de forma atômica; revisão desatualizada retorna 409. |
 | PATCH | /shoppings/:shoppingId/implantacao | situação | Atualiza a etapa de implantação do shopping. |
-| POST | /shoppings/:shoppingId/foto | Imagem JPEG, PNG ou WebP, até 2 MB | Armazena a imagem no Vercel Blob e salva somente sua URL no shopping. |
-| DELETE | /shoppings/:shoppingId/foto | Sem corpo | Remove a referência da foto e tenta excluir o arquivo externo. |
 
 O gerente não cria sua própria conta e não escolhe `shoppingId`; o vínculo vem da rota administrativa validada.
 
@@ -151,10 +149,9 @@ DATABASE_URL="postgresql://vaggu:vaggu@localhost:5432/vaggu"
 PORT=3000
 HOST=127.0.0.1
 NODE_ENV=development
-BLOB_READ_WRITE_TOKEN="vercel_blob_rw_..."
 ~~~
 
-Configure `DATABASE_URL` com um PostgreSQL acessível pelo backend. `BLOB_READ_WRITE_TOKEN` habilita fotos públicas representativas dos shoppings no Vercel Blob; sem ele, a API mantém cadastro e edição textual funcionando, mas devolve `503 ARMAZENAMENTO_NAO_CONFIGURADO` ao tentar gravar ou remover uma foto. O PostgreSQL guarda somente `imagem_url`, nunca os bytes. `npm run db:studio` permite inspecionar tabelas; não preencha `senha_hash` manualmente. Faça backup antes de migrations em ambiente compartilhado.
+Configure `DATABASE_URL` com um PostgreSQL acessível pelo backend. `npm run db:studio` permite inspecionar tabelas; não preencha `senha_hash` manualmente. Faça backup antes de migrations em ambiente compartilhado.
 
 Modelos persistidos atuais: Shopping, Andar, Setor, Vaga, Usuario, Dispositivo, HistoricoVaga e ImportacaoEstrutura. Sessao e WhatsappEvento são tabelas técnicas. Usuario guarda telefone, troca obrigatória de senha e os campos da exclusão lógica reversível. Permanecem restrições de perfis, estados, vínculo do dispositivo com shopping, código/canal únicos, hierarquia interna e histórico de eventos. CHECKs estão no SQL e devem ser preservados em futuras migrations. O [modelo de dados atual](../segunda-mente/Vaggu/Documentação/modelo-de-dados.md) separa essas tabelas das entidades ainda planejadas para telemetria e operação.
 
@@ -167,7 +164,7 @@ Modelos persistidos atuais: Shopping, Andar, Setor, Vaga, Usuario, Dispositivo, 
 | src/auth/middleware.ts | Autenticação, senha provisória, perfis, escopo e limite. |
 | src/auth/routes.ts | Rotas HTTP de autenticação. |
 | src/auth/bootstrap.ts | Criação do primeiro administrador. |
-| src/shoppings/ | Shoppings, foto externa, gerentes, senha provisória e redefinição administrativa. |
+| src/shoppings/ | Shoppings, gerentes, senha provisória e redefinição administrativa. |
 | src/estrutura/ | Hierarquia do estacionamento, mapa, revisão concorrente e escopo do gerente. |
 | src/importacao/ | Contratos, leitores CSV/XLSX, validação tabular, identificação de IDs, prévia e confirmação atômica. |
 | scripts/create-admin.ts | Comando interativo do administrador. |

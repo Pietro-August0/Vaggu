@@ -97,7 +97,7 @@ Não carregar skills de pagamento, app nativo ou geração de imagem apenas porq
 | CA10 | RF06 | Buscar vaga de outro andar | Navega ao andar correto e destaca a vaga. |
 | CA11 | RF07 | Salvar posição de vaga incompatível | Rejeita vínculo com andar/shopping errado ou duplicação da vaga. |
 | CA12 | RF07 | Dois Admins/sessões gravam revisões do mapa | Política de revisão impede sobrescrita silenciosa. |
-| CA12A | RF03/RF07 | Admin configura vagas e seleciona uma foto do shopping | O mapa compartilhado reflete a mutação sem refresh; a prévia pode ser trocada antes de salvar e a persistência guarda somente URL HTTPS de armazenamento externo. |
+| CA12A | RF03/RF07 | Admin configura vagas e altera dados cadastrais do shopping | O mapa compartilhado reflete a mutação sem refresh e a ficha preserva somente os dados previstos no cadastro. |
 | CA13 | RF08 | CSV/XLSX com duplicata e categoria inválida | Prévia informa linha/campo; confirmação bloqueada sem alteração parcial. |
 | CA14 | RF08/RF13 | Nova importação contém vaga já existente | Preserva ID, vínculo e histórico; ausência de registro na planilha não apaga silenciosamente. |
 | CA15 | RF09/RF17 | Placa tenta enviar sensor de outra placa/shopping | Rejeita sem atualizar estado nem último contato dos sensores indevidos. |

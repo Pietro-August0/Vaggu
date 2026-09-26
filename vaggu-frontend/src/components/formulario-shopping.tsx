@@ -1,8 +1,6 @@
-/** Divide cadastro e edição do shopping em etapas curtas, com validação local e foto opcional. */
-import { useEffect, useRef, useState, type ChangeEvent, type ComponentProps, type FormEvent } from "react"
-import { Trash2 } from "lucide-react"
+/** Divide cadastro e edição do shopping em etapas curtas, com validação local. */
+import { useEffect, useRef, useState, type ComponentProps, type FormEvent } from "react"
 import { Button } from "@/components/ui/button"
-import { FotoShopping } from "@/components/foto-shopping"
 import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
 import { buscarEnderecoPorCep, ErroCep } from "@/servicos/cep"
@@ -12,24 +10,18 @@ interface FormularioShoppingProps {
   shopping?: ShoppingAdmin
   ocupado: boolean
   rotuloBotao: string
-  aoEnviar: (dados: DadosShopping, formulario: HTMLFormElement, foto: File | null) => void
-  aoRemoverFoto?: () => void
+  aoEnviar: (dados: DadosShopping, formulario: HTMLFormElement) => void
 }
 
 const valor = (dados: FormData, campo: keyof DadosShopping) => String(dados.get(campo) ?? "").trim()
-const etapas = ["Identificação", "Endereço", "Operação e foto"] as const
+const etapas = ["Identificação", "Endereço", "Operação"] as const
 
 /** Preserva os campos entre etapas; validação local melhora o retorno, mas a API decide a persistência. */
-export function FormularioShopping({ shopping, ocupado, rotuloBotao, aoEnviar, aoRemoverFoto }: FormularioShoppingProps) {
-  const [foto, setFoto] = useState<File | null>(null)
-  const [fotoPreview, setFotoPreview] = useState("")
-  const [erroFoto, setErroFoto] = useState("")
+export function FormularioShopping({ shopping, ocupado, rotuloBotao, aoEnviar }: FormularioShoppingProps) {
   const [etapa, setEtapa] = useState(0)
   const [cep, setCep] = useState("")
   const [avisoCep, setAvisoCep] = useState("")
   const formularioRef = useRef<HTMLFormElement>(null)
-
-  useEffect(() => () => { if (fotoPreview) URL.revokeObjectURL(fotoPreview) }, [fotoPreview])
 
   useEffect(() => {
     const digitos = cep.replace(/\D/g, "")
@@ -54,27 +46,6 @@ export function FormularioShopping({ shopping, ocupado, rotuloBotao, aoEnviar, a
     }, 400)
     return () => { window.clearTimeout(prazo); controle.abort() }
   }, [cep])
-
-  function selecionarFoto(evento: ChangeEvent<HTMLInputElement>) {
-    const arquivo = evento.target.files?.[0] ?? null
-    if (fotoPreview) URL.revokeObjectURL(fotoPreview)
-    setFotoPreview("")
-    setFoto(null)
-    setErroFoto("")
-    if (!arquivo) return
-    if (!["image/jpeg", "image/png", "image/webp"].includes(arquivo.type)) {
-      setErroFoto("Escolha uma foto JPEG, PNG ou WebP.")
-      evento.target.value = ""
-      return
-    }
-    if (arquivo.size === 0 || arquivo.size > 2 * 1024 * 1024) {
-      setErroFoto("A foto deve ter no máximo 2 MB.")
-      evento.target.value = ""
-      return
-    }
-    setFoto(arquivo)
-    setFotoPreview(URL.createObjectURL(arquivo))
-  }
 
   /** Valida somente controles da etapa visível e leva o foco ao primeiro campo inválido. */
   function validarEtapa(formulario: HTMLFormElement, indice: number) {
@@ -104,7 +75,7 @@ export function FormularioShopping({ shopping, ocupado, rotuloBotao, aoEnviar, a
       cep: valor(dados, "cep"), uf: valor(dados, "uf"), cidade: valor(dados, "cidade"), bairro: valor(dados, "bairro"),
       logradouro: valor(dados, "logradouro"), numero: valor(dados, "numero"), complemento: valor(dados, "complemento"),
       horarioAbertura: valor(dados, "horarioAbertura"), horarioFechamento: valor(dados, "horarioFechamento"),
-    }, formulario, foto)
+    }, formulario)
   }
 
   const campo = (nome: keyof DadosShopping, rotulo: string, props: ComponentProps<"input"> = {}) => <div className="grid gap-2">
@@ -129,26 +100,12 @@ export function FormularioShopping({ shopping, ocupado, rotuloBotao, aoEnviar, a
       <div className="grid gap-5 md:grid-cols-[minmax(0,2fr)_8rem_minmax(12rem,1fr)]">{campo("logradouro", "Logradouro", { required: true, maxLength: 160 })}{campo("numero", "Número", { required: true, maxLength: 20 })}{campo("complemento", "Complemento", { maxLength: 80, placeholder: "Opcional" })}</div>
     </fieldset>
     <fieldset data-etapa="2" hidden={etapa !== 2} style={{ display: etapa === 2 ? undefined : "none" }} className="grid min-w-0 gap-5">
-      <legend className="sr-only">Operação e foto do shopping</legend>
+      <legend className="sr-only">Operação do shopping</legend>
       <div className="grid gap-5 md:grid-cols-2">{campo("horarioAbertura", "Abertura", { type: "time" })}{campo("horarioFechamento", "Fechamento", { type: "time" })}</div>
-      <div className="grid gap-3 rounded-2xl border border-white/10 bg-black/15 p-4 sm:grid-cols-[minmax(0,1fr)_8rem] sm:items-center">
-        <div className="grid gap-2"><Label htmlFor="shopping-foto" className="text-neutral-950 dark:text-neutral-100">Foto do shopping</Label>
-          <div className="flex min-h-11 items-center gap-3 rounded-md border border-white/15 bg-white/5 px-3 py-1">
-            <Input id="shopping-foto" name="foto" type="file" accept="image/jpeg,image/png,image/webp" disabled={ocupado} onChange={selecionarFoto} className="peer sr-only" />
-            <label htmlFor="shopping-foto" className="inline-flex h-9 shrink-0 cursor-pointer items-center justify-center rounded-md bg-[#ffe100] px-3 text-center text-sm font-semibold text-black transition hover:bg-[#ffeb54] peer-focus-visible:ring-2 peer-focus-visible:ring-[#ffe100] peer-focus-visible:ring-offset-2 peer-focus-visible:ring-offset-[#171717]">Escolher arquivo</label>
-            <span className="min-w-0 truncate text-sm text-neutral-200">{foto?.name ?? "Nenhum arquivo escolhido"}</span>
-          </div>
-          <p className="text-xs text-neutral-400">
-            JPEG, PNG ou WebP, com até 2 MB. Uma nova foto substitui a anterior.
-          </p>
-          {erroFoto && <p role="alert" className="text-sm text-red-300">{erroFoto}</p>}
-        </div>
-        {fotoPreview ? <img src={fotoPreview} alt="Prévia da foto selecionada para o shopping" className="aspect-square w-28 rounded-xl object-cover sm:w-full" /> : shopping && <div className="grid gap-2"><FotoShopping nome={shopping.nome} imagemUrl={shopping.imagemUrl} className="aspect-square w-28 rounded-xl sm:w-full" />{shopping.imagemUrl && aoRemoverFoto && <Button type="button" variant="outline" size="sm" className="border-white/20 bg-transparent text-white" disabled={ocupado} onClick={aoRemoverFoto}><Trash2 aria-hidden="true" />Remover</Button>}</div>}
-      </div>
     </fieldset>
     <div className="flex flex-col-reverse gap-3 sm:flex-row sm:justify-end">
       {etapa > 0 && <Button type="button" variant="outline" className="h-11 border-white/20 bg-transparent text-white" disabled={ocupado} onClick={() => setEtapa(etapa - 1)}>Voltar</Button>}
-      {etapa < etapas.length - 1 ? <Button type="button" className="h-11 px-8 font-bold" disabled={ocupado} onClick={avancar}>Continuar</Button> : <Button type="submit" className="h-11 px-8 font-bold" disabled={ocupado || Boolean(erroFoto)}>{ocupado ? "Salvando..." : rotuloBotao}</Button>}
+      {etapa < etapas.length - 1 ? <Button type="button" className="h-11 px-8 font-bold" disabled={ocupado} onClick={avancar}>Continuar</Button> : <Button type="submit" className="h-11 px-8 font-bold" disabled={ocupado}>{ocupado ? "Salvando..." : rotuloBotao}</Button>}
     </div>
   </form>
 }

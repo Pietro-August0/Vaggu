@@ -11,15 +11,7 @@ import { createShoppingsService } from '../src/shoppings/service.js';
 export async function runAdminCases(t: TestContext, prisma: PrismaClient, senhaAdmin: string) {
   const auth = createAuthService(prisma);
   let agoraAdministrativa = new Date();
-  const fotosRemovidas: string[] = [];
-  const armazenamentoFotos = {
-    async salvar(shoppingId: string, _conteudo: Buffer, tipoConteudo: string) {
-      const extensao = tipoConteudo === 'image/png' ? 'png' : tipoConteudo === 'image/webp' ? 'webp' : 'jpg';
-      return `https://arquivos.public.blob.vercel-storage.com/shoppings/${shoppingId}/foto-teste.${extensao}`;
-    },
-    async remover(url: string) { fotosRemovidas.push(url); },
-  };
-  const shoppings = createShoppingsService(prisma, { now: () => agoraAdministrativa, armazenamentoFotos });
+  const shoppings = createShoppingsService(prisma, { now: () => agoraAdministrativa });
   const app = createApp({ checkDatabase: () => prisma.$queryRaw`SELECT 1`, auth, shoppings });
   const adminLogin = await request(app).post('/api/v1/auth/login')
     .send({ email: 'vaggu@example.com', senha: senhaAdmin }).expect(200);
@@ -38,10 +30,12 @@ export async function runAdminCases(t: TestContext, prisma: PrismaClient, senhaA
     shoppingCentralId = shopping.id;
     assert.equal(shopping.nome, 'Shopping Central');
     assert.equal(shopping.totalGerentes, 0);
+    assert.equal(shopping.totalAndares, 0);
+    assert.equal(shopping.totalSetores, 0);
+    assert.equal(shopping.totalVagas, 0);
     assert.equal(shopping.cnpj, '12345678000190');
     assert.equal(shopping.cep, '01001000');
     assert.equal(shopping.uf, 'SP');
-    assert.equal(shopping.possuiFoto, false);
 
     const ficha = await request(app).get(`/api/v1/shoppings/${shopping.id}`)
       .set(adminHeader).expect(200);
@@ -50,19 +44,6 @@ export async function runAdminCases(t: TestContext, prisma: PrismaClient, senhaA
       .set(adminHeader).send({ bairro: 'Bela Vista', horarioAbertura: '07:00' }).expect(200);
     assert.equal(atualizada.body.shopping.bairro, 'Bela Vista');
     assert.equal(atualizada.body.shopping.horarioAbertura, '07:00');
-
-    const fotoPng = Buffer.from([0x89, 0x50, 0x4e, 0x47, 0x0d, 0x0a, 0x1a, 0x0a, 0x00]);
-    const foto = await request(app).post(`/api/v1/shoppings/${shopping.id}/foto`)
-      .set(adminHeader).set('Content-Type', 'image/png').send(fotoPng).expect(200);
-    assert.match(foto.body.imagemUrl, /^https:\/\/arquivos\.public\.blob\.vercel-storage\.com\//);
-    const fichaComFoto = await request(app).get(`/api/v1/shoppings/${shopping.id}`)
-      .set(adminHeader).expect(200);
-    assert.equal(fichaComFoto.body.shopping.possuiFoto, true);
-    assert.equal(fichaComFoto.body.shopping.imagemUrl, foto.body.imagemUrl);
-    await request(app).post(`/api/v1/shoppings/${shopping.id}/foto`)
-      .set(adminHeader).set('Content-Type', 'image/jpeg').send(fotoPng).expect(400);
-    await request(app).delete(`/api/v1/shoppings/${shopping.id}/foto`).set(adminHeader).expect(200);
-    assert.deepEqual(fotosRemovidas, [foto.body.imagemUrl]);
 
     const gerenteA = await request(app).post(`/api/v1/shoppings/${shopping.id}/gerentes`)
       .set(adminHeader).send({

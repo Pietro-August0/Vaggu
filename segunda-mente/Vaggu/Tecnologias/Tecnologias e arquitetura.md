@@ -27,7 +27,6 @@ Este documento apresenta as escolhas técnicas e separa o que está implementado
 | Render, manifesto `render.yaml` | Serviço web `vaggu-tcc` | Executar Express, servir o build React e verificar prontidão. | Manter interface e API sob a mesma origem e conexão privada com o banco. | Configuração e publicação registradas em 23/09; URL e estado atual do serviço não foram conferidos nesta revisão. |
 | GitHub Actions, workflow `publicar-render.yml` | Repositório, branch `main` | Solicitar novo deploy pelo hook do Render. | Compensar a ausência de eventos automáticos na ligação por URL pública registrada pela equipe. | Workflow commitado; execução depende do segredo `RENDER_DEPLOY_HOOK_URL`, não verificável no Git. |
 | `read-excel-file` `^9.3.10` e leitor CSV próprio | Módulo de importação | Prévia e confirmação de arquivos CSV/XLSX. | Importar estrutura com validação por linha sem adicionar outra biblioteca para CSV. | P05 concluído em 21/09/2026, inclusive confirmação idempotente no PostgreSQL. |
-| Vercel Blob `^2.8.0` | Fotos públicas dos shoppings | Guardar o arquivo fora do PostgreSQL e persistir somente a URL HTTPS. | Evitar binários no banco e separar foto pública dos documentos privados. | Adaptador implementado; uso depende de `BLOB_READ_WRITE_TOKEN`. |
 | WhatsApp Cloud API, sem SDK versionado | Backend `whatsapp` e links do frontend | Webhook assinado, deduplicação, envio de texto e encaminhamento comercial. | Manter o WhatsApp como canal de parceria e suporte. | Parcial: infraestrutura e menu demonstrativo existem; fluxo P10 e número oficial estão pendentes. |
 | ESLint `^10.9.1`, Node Test Runner e Supertest `^7.1.4` | Verificação dos pacotes | Lint, compilação e testes HTTP/unitários/integração. | Verificar contratos e regressões com poucas dependências adicionais. | Implementado. |
 
@@ -53,7 +52,6 @@ flowchart LR
     A --> D[Serviços de domínio]
     D --> P[Prisma]
     P --> B[(PostgreSQL)]
-    D -->|foto pública, quando configurado| V[Vercel Blob]
     M[WhatsApp Cloud API] -->|webhook assinado| A
     A -->|respostas habilitadas| M
 ```
@@ -90,7 +88,7 @@ A arquitetura planejada conserva dois caminhos: operação e análise. Mapa e te
 - A senha provisória aparece somente na resposta imediata de criação ou redefinição; apenas o hash permanece no banco.
 - A confirmação da importação P05 é serializada por shopping e idempotente; vagas ausentes não são removidas silenciosamente.
 - O transporte de atualização do P06/P07 ainda não foi escolhido. Polling é uma proposta compatível com o MVP; Socket.IO exige infraestrutura para conexão persistente.
-- A hospedagem registrada é Render para API e frontend na mesma origem, com PostgreSQL no Neon. Vercel Blob continua sendo somente o adaptador de fotos e depende de token próprio; backup, monitoramento e homologação externa ainda requerem verificação.
+- A hospedagem registrada é Render para API e frontend na mesma origem, com PostgreSQL no Neon; backup, monitoramento e homologação externa ainda requerem verificação.
 - Power BI começa pelo Desktop e por histórico controlado; publicação, incorporação e segurança por linha dependem da forma de distribuição aprovada.
 
 ## Sequência técnica

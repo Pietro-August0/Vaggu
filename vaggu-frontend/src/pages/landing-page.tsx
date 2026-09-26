@@ -21,7 +21,7 @@ export function LandingPage() {
   useScrollReveal()
 
   return (
-    <MotionConfig reducedMotion="never">
+    <MotionConfig reducedMotion="user">
       <div className="overflow-hidden bg-white font-landing font-light text-neutral-950">
       <header className="landing-header absolute inset-x-0 top-0 z-30">
         <div className="mx-auto flex max-w-[1440px] items-center justify-between px-5 py-6 sm:px-8 lg:px-12">

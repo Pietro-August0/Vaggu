@@ -134,7 +134,7 @@ O Admin trata pedidos de demonstração e suporte no painel, mas credenciais nã
 
 ### 5.1 Dados do shopping
 
-Nome, identificação institucional pertinente, endereço, contato, responsável, situação da implantação e horários de operação. O fuso não é cadastrado no fluxo atual. A foto representativa é pública, fica em armazenamento externo persistente e o PostgreSQL guarda somente sua URL HTTPS. Documentos e planta chegam principalmente pelo WhatsApp e exigem armazenamento privado; não confundir esses materiais com a foto nem colocá-los no bundle público.
+Nome, identificação institucional pertinente, endereço, contato, responsável, situação da implantação e horários de operação. O fuso não é cadastrado no fluxo atual. Documentos e planta chegam principalmente pelo WhatsApp e exigem armazenamento privado; não colocar esses materiais no bundle público.
 
 Etapas de implantação preservadas como base a conciliar: novo atendimento, em análise, documentação pendente, aprovado, em configuração, aguardando instalação, ativo, rejeitado e inativo. Não confundir etapa com suspensão de um gerente. Entrada inválida numa etapa deve retornar erro compreensível.
 
@@ -179,7 +179,7 @@ A exclusão de gerente usa sete segundos para desfazer e preserva o mesmo ID. A 
 | Admin | Atendimentos | Demonstrações e suporte, com continuidade no WhatsApp. |
 | Gerente | Estacionamento | Indicadores, mapa por andar, filtros, busca e detalhes. |
 | Gerente | Análises e relatórios | Histórico, comparação, resumos e análises disponibilizadas. |
-| Usuário | Minha conta | Dados pessoais permitidos e senha. |
+| Usuário | Minha conta | Dados pessoais permitidos e troca voluntária da senha mediante confirmação da senha atual; e-mail, perfil e vínculo permanecem administrativos. |
 | Telão | Entrada/andar | Agregados legíveis em tela cheia. |
 
 Interface precisa tratar carregamento, ausência de registros, ausência de observações, configuração, erro, desconexão e dados antigos. Distinguir zero medido de valor desconhecido. Mostrar escopo e última atualização. Regras visuais completas em [regras-visuais.md](regras-visuais.md).
@@ -188,7 +188,7 @@ Interface precisa tratar carregamento, ausência de registros, ausência de obse
 
 ### 7.1 Mapa
 
-Mapa é funcionalidade obrigatória e compartilha a mesma representação visual entre Admin e gerente. Selecionar andar carrega sua base e vagas, com código, setor, categoria, estado e detalhe. Busca por vaga de outro andar navega e destaca a posição. Filtros por setor, tipo e estado devem ter comportamento visível; não misturar total do shopping com total filtrado sem rótulo. No Admin, mutações de estrutura recarregam o estado exibido sem exigir atualização manual da página.
+Mapa é funcionalidade obrigatória e compartilha a mesma representação visual entre Admin e gerente. Selecionar andar carrega sua base e vagas, com código, setor, categoria e estado. Clicar em uma vaga posicionada, em um card móvel ou em uma vaga sem posição abre o mesmo diálogo de detalhes, que informa localização, categoria, cadastro e situação do monitoramento. Enquanto o P06 não fornecer telemetria individual, saúde, comunicação e última leitura aparecem explicitamente como indisponíveis; a interface não inventa um sensor saudável a partir do estado estrutural nem do contato futuro da placa. Busca por um código exato de outro andar navega ao recorte correto e abre o detalhe da vaga. Filtros por setor, tipo e estado devem ter comportamento visível; não misturar total do shopping com total filtrado sem rótulo. No Admin, mutações de estrutura recarregam o estado exibido sem exigir atualização manual da página.
 
 **Proposta técnica do MVP:** representação 2D simples por andar, base visual e coordenadas normalizadas. Posição usa `x`/`y` do canto superior esquerdo e largura/altura em relação às dimensões da base; rotação em graus, com âncora documentada. Definir validação de limites, inclusive elemento rotacionado. A proposta evita depender de coordenadas absolutas de um único monitor.
 
@@ -393,7 +393,7 @@ Se um relatório reúne vários shoppings, definir RLS e identidade autorizada n
 | Firmware ESP32 | Leitura local, envio autenticado e recuperação de comunicação. |
 | Views + Power BI | Análise histórica, sem depender do relatório para operar o estacionamento. |
 
-A implantação registrada em 23/09 usa um serviço Render que entrega API e frontend na mesma origem e uma conexão PostgreSQL no Neon; a [configuração](configuracao.md#hospedagem-no-render) descreve o manifesto e suas verificações pendentes. A foto pública de cada shopping usa Vercel Blob e requer `BLOB_READ_WRITE_TOKEN` no backend; o banco persiste apenas `imagemUrl`. **Proposta de atualização:** polling controlado pode servir ao MVP para telemetria; Socket.IO requer suporte a conexões persistentes. Mutações administrativas já devem atualizar por estado local ou refetch, sem recarga manual. Não colocar uma rotina crítica apenas em timer de função efêmera.
+A implantação registrada em 23/09 usa um serviço Render que entrega API e frontend na mesma origem e uma conexão PostgreSQL no Neon; a [configuração](configuracao.md#hospedagem-no-render) descreve o manifesto e suas verificações pendentes. **Proposta de atualização:** polling controlado pode servir ao MVP para telemetria; Socket.IO requer suporte a conexões persistentes. Mutações administrativas já devem atualizar por estado local ou refetch, sem recarga manual. Não colocar uma rotina crítica apenas em timer de função efêmera.
 
 Separar consulta operacional de análise. Falha do Power BI não interrompe leitura das vagas. Organizar módulos conforme [regras-de-codigo.md](regras-de-codigo.md), conciliando com o repositório existente.
 

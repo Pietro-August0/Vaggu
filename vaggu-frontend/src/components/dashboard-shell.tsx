@@ -15,7 +15,7 @@ import {
   UserRound,
 } from "lucide-react"
 import { useTheme } from "next-themes"
-import { useState, type ReactNode } from "react"
+import { useEffect, useRef, useState, type ReactNode } from "react"
 import { Link, useLocation, useNavigate } from "react-router-dom"
 
 import { useAppStore } from "@/app/app-store"
@@ -84,14 +84,22 @@ export function DashboardShell({
   children: ReactNode
 }) {
   const { currentUser, logout } = useAppStore()
+  const { pathname } = useLocation()
   const { resolvedTheme, setTheme } = useTheme()
   const navigate = useNavigate()
   const [menuAberto, setMenuAberto] = useState(false)
   const [saindo, setSaindo] = useState(false)
   const [erroSaida, setErroSaida] = useState("")
+  const tituloRef = useRef<HTMLHeadingElement>(null)
+  const rotaInicial = useRef(pathname)
   const isAdmin = currentUser?.role === "admin"
   const navItems: NavItem[] = isAdmin
-    ? [{ label: "Cadastrar shopping", href: "/admin", icon: FilePlus2 }, { label: "Shoppings", href: "/admin/shoppings", icon: Building2 }]
+    ? [
+        { label: "Visão geral", href: "/admin", icon: LayoutDashboard },
+        { label: "Cadastrar shopping", href: "/admin/cadastrar", icon: FilePlus2 },
+        { label: "Shoppings", href: "/admin/shoppings", icon: Building2 },
+        { label: "Minha conta", href: "/admin/conta", icon: UserRound },
+      ]
     : [{ label: "Estacionamento", href: "/painel", icon: LayoutDashboard }, { label: "Minha conta", href: "/painel/conta", icon: UserRound }]
   const shoppingItems: NavItem[] = shoppingId ? [
     { label: "Visão geral", href: `/admin/shoppings/${shoppingId}`, icon: LayoutDashboard },
@@ -99,6 +107,12 @@ export function DashboardShell({
     { label: "Gerentes", href: `/admin/shoppings/${shoppingId}/gerentes`, icon: UsersRound },
   ] : []
   const escuro = resolvedTheme === "dark"
+
+  /** Move o foco para o título após navegação interna para anunciar a nova tela. */
+  useEffect(() => {
+    if (pathname === rotaInicial.current) return
+    tituloRef.current?.focus()
+  }, [pathname])
 
   /** Limpa a sessão na API e substitui a rota atual pela tela de entrada. */
   async function handleLogout() {
@@ -155,6 +169,9 @@ export function DashboardShell({
 
   return (
     <div className="painel-vaggu min-h-screen bg-[#f5f5f3] text-neutral-950 dark:bg-[#171717] dark:text-neutral-100">
+      <a href="#conteudo-principal" className="fixed left-4 top-3 z-[100] -translate-y-20 rounded-lg bg-neutral-950 px-4 py-2 font-semibold text-white shadow-lg transition-transform focus:translate-y-0 focus:outline-none focus:ring-2 focus:ring-[#ffe100]">
+        Ir para o conteúdo principal
+      </a>
       <aside className={isAdmin ? "fixed inset-y-0 left-0 hidden w-64 flex-col bg-[#ffe100] p-6 lg:flex" : "fixed inset-y-0 left-0 hidden w-64 flex-col bg-neutral-950 p-6 lg:flex"}>
         {sideContent}
       </aside>
@@ -178,7 +195,7 @@ export function DashboardShell({
             </Sheet>
             <div className="min-w-0">
               <p className="text-xs font-bold uppercase tracking-[0.18em] text-neutral-500">{eyebrow}</p>
-              <h1 className="break-words font-heading text-xl font-black tracking-tight sm:text-2xl">{title}</h1>
+              <h1 ref={tituloRef} tabIndex={-1} className="break-words rounded-sm font-heading text-xl font-black tracking-tight outline-none focus-visible:ring-2 focus-visible:ring-[#ffe100] sm:text-2xl">{title}</h1>
             </div>
             <div className="ml-auto hidden items-center gap-2 rounded-full border border-black/10 bg-white px-3 py-2 text-xs font-medium text-neutral-600 sm:flex dark:border-white/15 dark:bg-white/5 dark:text-neutral-300">
               <span className="size-2 rounded-full bg-[#ffe100]" aria-hidden="true" />
@@ -186,7 +203,7 @@ export function DashboardShell({
             </div>
           </div>
         </header>
-        <main className={isAdmin ? "min-w-0 max-w-full overflow-x-hidden px-0 py-0" : "min-w-0 max-w-full overflow-x-hidden px-4 py-8 sm:px-6 lg:px-10 lg:py-10"}>{erroSaida && <p role="alert" className="m-5 text-red-700">{erroSaida}</p>}{children}</main>
+        <main id="conteudo-principal" tabIndex={-1} className={isAdmin ? "min-w-0 max-w-full overflow-x-hidden px-0 py-0" : "min-w-0 max-w-full overflow-x-hidden px-4 py-8 sm:px-6 lg:px-10 lg:py-10"}>{erroSaida && <p role="alert" className="m-5 text-red-700">{erroSaida}</p>}{children}</main>
       </div>
     </div>
   )

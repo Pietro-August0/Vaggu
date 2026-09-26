@@ -14,8 +14,10 @@ export function lerShopping(valor: unknown): ShoppingAdmin {
   }
   return { id: valor.id, nome: valor.nome, ativo: valor.ativo, situacaoImplantacao: valor.situacaoImplantacao,
     totalGerentes: typeof valor.totalGerentes === "number" ? valor.totalGerentes : 0,
-    imagemUrl: typeof valor.imagemUrl === "string" && /^https:\/\//.test(valor.imagemUrl) ? valor.imagemUrl : null,
-    possuiFoto: valor.possuiFoto === true, ...opcionais } as ShoppingAdmin
+    totalAndares: typeof valor.totalAndares === "number" ? valor.totalAndares : 0,
+    totalSetores: typeof valor.totalSetores === "number" ? valor.totalSetores : 0,
+    totalVagas: typeof valor.totalVagas === "number" ? valor.totalVagas : 0,
+    ...opcionais } as ShoppingAdmin
 }
 
 export function lerListaShoppings(dados: unknown): ShoppingAdmin[] {

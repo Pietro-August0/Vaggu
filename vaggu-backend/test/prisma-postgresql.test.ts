@@ -52,10 +52,15 @@ test('migration cadastral amplia a ficha sem invalidar shoppings existentes', ()
   assert.doesNotMatch(sql, /DROP\s+(TABLE|COLUMN)/i);
 });
 
-test('migration final da foto mantém somente URL e hash de senha no PostgreSQL', () => {
+test('migration histórica da foto remove binário e senha provisória reversível', () => {
   const sql = readFileSync(join(projectRoot, 'prisma/migrations/20260921000200_referencia_foto_shopping/migration.sql'), 'utf8');
   assert.match(sql, /ADD COLUMN "imagem_url" TEXT/);
   assert.match(sql, /DROP TABLE "fotos_shopping"/);
   assert.match(sql, /DROP COLUMN "senha_provisoria_protegida"/);
   assert.doesNotMatch(sql, /BYTEA/);
+});
+
+test('migration de remoção retira a foto do cadastro de shopping', () => {
+  const sql = readFileSync(join(projectRoot, 'prisma/migrations/20260925000100_remover_foto_shopping/migration.sql'), 'utf8');
+  assert.match(sql, /DROP COLUMN "imagem_url"/);
 });

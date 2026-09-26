@@ -4,7 +4,7 @@
 
 ## 1. Situação atual
 
-A autenticação do frontend usa a API real: login, identidade, primeira senha, revogação e expiração. A senha definitiva possui política explícita e erros por campo na API e na interface. Os acessos demonstrativos foram removidos. O backend e a ficha administrativa cadastram e excluem logicamente shoppings e gerentes; a exclusão de gerente pode ser desfeita durante sete segundos. A interface também oferece edição, bloqueio, reativação, redefinição, foto externa, andares, setores, vagas, categorias, importação e mapa 2D compartilhado. O gerente consulta o mapa do próprio shopping mesmo durante a configuração, alterna andares e localiza vagas. Telemetria, telões e Power BI continuam pendentes.
+A autenticação do frontend usa a API real: login, identidade, primeira senha, revogação e expiração. A senha definitiva possui política explícita e erros por campo na API e na interface. Os acessos demonstrativos foram removidos. O backend e a ficha administrativa cadastram e excluem logicamente shoppings e gerentes; a exclusão de gerente pode ser desfeita durante sete segundos. A interface também oferece edição, bloqueio, reativação, redefinição, andares, setores, vagas, categorias, importação e mapa 2D compartilhado. O gerente consulta o mapa do próprio shopping mesmo durante a configuração, alterna andares e localiza vagas. Telemetria, telões e Power BI continuam pendentes.
 
 P01 foi concluído em 10/09 e P02 em 11/09, incluindo autenticação e acabamento visual. P03 foi concluído em 12/09 com gestão administrativa, vários gerentes e Minha conta. P04 foi concluído em 12/09 com estrutura e mapa validados em PostgreSQL real e no navegador. O P05 foi concluído em 21/09: prévias CSV/XLSX, confirmação idempotente e preservação de IDs/histórico foram executadas no PostgreSQL; a jornada Admin autenticada foi validada no navegador em desktop e viewport móvel. A base local está verificável, mas o sistema ainda não está liberado para operação com clientes.
 
@@ -24,7 +24,7 @@ Classificações: **verificado** exige execução do comportamento indicado; **p
 
 ### Ajustes de leitura e rolagem móvel — 24/09
 
-- A lista administrativa define texto preto no marcador amarelo “Abrir ficha”, inclusive no tema escuro. O formulário de shopping foi dividido em identificação, endereço e operação/foto, com validação por etapa e preservação dos campos ao voltar. Na ficha, contatos aparecem em resumo e a edição fica recolhida até ser solicitada.
+- A lista administrativa define texto preto no marcador amarelo “Abrir ficha”, inclusive no tema escuro. O formulário de shopping foi dividido em identificação, endereço e operação, com validação por etapa e preservação dos campos ao voltar. Na ficha, contatos aparecem em resumo e a edição fica recolhida até ser solicitada.
 - O rodapé móvel da landing não repete a imagem de celulares usada no desktop. Passou a organizar marca, chamada e links já existentes em áreas separadas; o botão de WhatsApp do rodapé aparece somente quando o número oficial estiver configurado. O restante da landing ainda contém chamadas de WhatsApp sem a mesma guarda e precisa de revisão específica.
 - A implementação foi feita na branch local `fix/admin-mobile-footer-juan`, a partir de `main` em `a000e7a`. Responsável técnico indicado: Juan; revisão de experiência indicada: Elisa; revisão documental indicada: Ana. Não representa autoria ou revisão efetivamente assinada por esses integrantes.
 - Verificação técnica: `npm.cmd run lint`, `npm.cmd run build`, `git diff --check` e `node scripts/verificar-documentacao.mjs` aprovados. A landing foi aberta no navegador local em largura desktop e o rodapé renderizou com os links existentes, sem erros visíveis. Validação visual em viewport móvel e o fluxo Admin autenticado dependem de novo ensaio; não há confirmação neste registro de teste com API/banco reais nem do deploy.
@@ -46,7 +46,6 @@ Classificações: **verificado** exige execução do comportamento indicado; **p
 
 - Causa do logout no F5: o token anterior existia só em uma referência React e as rotas redirecionavam antes de uma consulta inicial. O login web passou a receber cookie HttpOnly, `SameSite=Strict` e `Secure` em produção; `/auth/me` restaura identidade e expiração antes da rota decidir. O backend ainda aceita Bearer para compatibilidade. Escritas por cookie exigem cabeçalho próprio contra CSRF; logout revoga a sessão e remove o cookie. A senha provisória permanece apenas em memória durante a troca.
 - As listas do mapa compartilhado usam grid de colunas automáticas para reduzir rolagem sem esmagar códigos e estados. O fallback da foto usa ícone escuro no tema claro e claro no escuro; o cabeçalho da ficha libera uma linha para nome e endereço no celular e tablet. As descrições da situação da estrutura correspondem aos nove estados já existentes no backend; as cores diferenciam etapa, pendência, operação e inatividade sem chamar ativação de comprovação dos sensores. A auditoria do tom dourado no tema claro levou à troca dos textos e ícones comuns por neutro escuro, mantendo amarelo onde comunica seleção ou contrasta sobre fundo escuro.
-- O upload existente já validava assinatura, tipo e tamanho, enviava ao Vercel Blob e persistia só a URL. O manifesto Render agora solicita `BLOB_READ_WRITE_TOKEN` como segredo; sem configurá-lo no serviço, o upload continuará retornando 503 explícito. A configuração local examinada não contém token utilizável. Falhas do provedor são tratadas sem expor detalhes. Não houve acesso ao painel Render/Vercel ou teste real de persistência externa.
 - O formulário consulta ViaCEP após oito dígitos, com espera de 400 ms, cancelamento de consulta anterior e prazo de oito segundos; campos de endereço permanecem editáveis, e número/complemento continuam manuais. Formato inválido, CEP inexistente e indisponibilidade produzem mensagens distintas.
 - Verificações desta revisão: frontend lint e build aprovados; backend `npm test` aprovou 50/53, com três cenários dependentes de PostgreSQL pulados; `npm run test:integracao` aprovou 32/32 em banco descartável. Navegador local com API simulada comprovou login/F5 em `/admin`, logout com retorno persistente ao login, CEP válido, inexistente e indisponível, 60 vagas em grid a 390, 768 e 1440 px, cabeçalho longo legível no tablet e fallback da foto legível no tema escuro, sem overflow nem erros de página. Isso não comprova upload Blob real nem autenticação em deploy. O mapa do projeto foi revisto; descrições não alteradas continuam válidas.
 
@@ -56,6 +55,12 @@ Classificações: **verificado** exige execução do comportamento indicado; **p
 - O aviso de implantação do gerente recebeu superfície e textos legíveis no tema escuro. Rótulos do cadastro de shopping ganharam contraste no tema claro. A escolha de CSV/XLSX foi alinhada à margem esquerda da janela de importação.
 - Causa identificada no build servido pelo Express, que corresponde à configuração versionada para hospedagem: o Helmet emitia `default-src 'self'` sem exceção de conexão para o ViaCEP. A chamada real retornou 200 quando feita pelo frontend local, mas era bloqueada pela política do Express. A API passou a declarar somente `connect-src 'self' https://viacep.com.br`; o contrato do formulário não mudou. A API oficial dos Correios exige contrato comercial e token, portanto não foi introduzida. O comportamento no endereço público ainda requer conferência após o deploy.
 - Verificações: frontend lint/build aprovados; backend `npm test` aprovou 51/54 com três integrações PostgreSQL puladas nesta execução. Edge headless, com API administrativa simulada, confirmou cards a 320, 390, 768 e 1280 px, aviso escuro e modal de importação, sem overflow nem erros de página. Em build React servido pelo Express real, CEP `01001000` consultou o ViaCEP com resposta 200 e preencheu Praça da Sé, Sé, São Paulo e SP; o número permaneceu manual. O teste não comprova a publicação no Render nem acesso com conta real. As descrições não alteradas do mapa do projeto foram revistas e permanecem válidas.
+
+### Remoção de imagem do cadastro de shopping — 25/09
+
+- Por decisão explícita da equipe, o cadastro de shopping não recebe nem apresenta imagem. Foram removidos seletor, prévia, fallback, contratos, rotas, adaptador de armazenamento, configuração de ambiente e dependência do provedor externo.
+- O schema Prisma deixou de expor o campo e recebeu migration incremental para remover a coluna legada. As migrations anteriores permanecem imutáveis para conservar a sequência de bancos já atualizados.
+- A documentação de produto, telas, configuração e arquitetura foi alinhada ao novo escopo. A remoção foi validada por typecheck e testes do backend, lint e build do frontend; a integração PostgreSQL aprovou 33/33 cenários em banco descartável.
 
 ## 2. O que foi implementado
 
@@ -70,7 +75,7 @@ Classificações: **verificado** exige execução do comportamento indicado; **p
 | Estado sem sensores | Verificado novamente em 21/09 | O gerente recebe da API a situação de implantação do próprio shopping. Enquanto não estiver ativa, a interface apresenta o aviso e mantém a estrutura visível; vagas sem leitura confirmada permanecem indisponíveis. |
 | Base Express e saúde | Verificado em 10/09 | `start` e `dev` iniciaram a saída compilada; health e readiness responderam 200 com PostgreSQL local. Processos de API usados na verificação encerrados. |
 | Autenticação e conta na API | Verificado nos cenários de integração em 10/09 | [Runner](../../../vaggu-backend/test/integracao-acessos.test.ts): identidade, hash, sessão, primeira senha, conta, expiração, logout e escopo entre shoppings. Frontend integrado em 11/09; rotas de vagas usadas nos testes são exclusivas da suíte. |
-| Shoppings e vários gerentes | Verificado no recorte entregue | Cadastro e exclusão lógica de shopping, dois gerentes, redefinição e bloqueio individual aprovados no PostgreSQL e na interface. O banco mantém apenas o hash da senha provisória; o Admin pode copiá-la somente na resposta imediata de criação ou redefinição. A foto pública usa armazenamento externo e referência HTTPS. |
+| Shoppings e vários gerentes | Verificado no recorte entregue | Cadastro e exclusão lógica de shopping, dois gerentes, redefinição e bloqueio individual aprovados no PostgreSQL e na interface. O banco mantém apenas o hash da senha provisória; o Admin pode copiá-la somente na resposta imediata de criação ou redefinição. |
 | Persistência PostgreSQL | Migration aplicada e integração local verificada | PostgreSQL 17.11 portátil, bancos de desenvolvimento e controle de teste separados. Migrations aplicadas a cada banco descartável; descarte e ausência de fixtures nos bancos persistentes conferidos. Isso não valida histórico/telemetria ainda ausentes. |
 | Webhook WhatsApp | Parcial | [WhatsApp](../../../vaggu-backend/src/whatsapp/service.ts): assinatura, distinção entre mensagens/status, deduplicação e cliente Meta. Conversa contém menu de teste; fluxos de demonstração/suporte não estão concluídos. |
 | Skills de continuidade | Criadas, validadas e instaladas | Fontes versionadas em [start](../../../skills/start/SKILL.md) e [end](../../../skills/end/SKILL.md); cópias em `C:/Users/CASA/.codex/skills/start` e `end` conferidas por hash. Usam este documento como registro compartilhado. |
@@ -161,14 +166,15 @@ Preservar os limites do produto: web responsiva, sem cadastro público de gerent
 
 - **Pacote documental concluído:** D01 — consolidação documental e das sprints, finalizada em 23/09/2026.
 - **Pacote corretivo concluído:** C01 — exclusões administrativas e desfazer restaurados na ficha atual.
-- **Pacote atual para implementação:** P06 — ESP32/sensores, ingestão e estados confiáveis.
-- **Primeira ação do P06:** consolidar o contrato de firmware e telemetria antes de criar endpoints: autenticação da placa, identificador do sensor, inicialização, sequência, frequência e prazo de expiração.
-- **Arquivos de entrada:** `segunda-mente/Vaggu/Documentação/arquitetura-estrutura-sensores-telao.md`, `segunda-mente/Vaggu/Documentação/SSD-VAGGU.md`, `vaggu-backend/prisma/schema.prisma` e os cenários CA15–CA24 de `plano-e-aceite.md`.
-- **Base já validada:** P05 concluído no PostgreSQL e no navegador em 21/09; estrutura, IDs e histórico permanecem preservados durante importações.
-- **Aceite e verificação a confirmar:** isolamento por shopping/placa, deduplicação, ordenação, confirmação após 30 segundos consistentes, expiração sem assumir vaga livre e histórico transacional.
-- **Comandos a confirmar:** detectar scripts reais após definir o recorte; manter backend build/test/integração, frontend lint/build quando houver interface e `node scripts/verificar-documentacao.mjs`.
-- **Limites:** não iniciar P07 antes de existir estado confiável; heartbeat da placa não comprova sensores; WhatsApp oficial continua indisponível.
-- **Estado atual:** P05, D01 e C01 concluídos; P06 iniciado apenas pelo cálculo temporal isolado, ainda sem telemetria operacional. O fechamento anterior de 23/09 foi autorizado para commit e publicação na `main`.
+- **Prioridade atual definida em 25/09:** concluir a experiência do site antes de retomar integrações externas. WhatsApp, firmware ESP32 e ingestão de sensores permanecem no backlog, sem serem apresentados como funcionalidades prontas.
+- **Pacote do site concluído localmente:** a visão geral administrativa usa a listagem persistida para resumir shoppings, gerentes ativos e estrutura cadastrada, indica cadastros incompletos e oferece atalhos para cada ficha. Carregamento, vazio e erro não inventam dados. A alteração ainda não foi publicada.
+- **Pacote do site concluído localmente:** Minha conta agora atende Admin e gerente, separa dados pessoais de segurança e oferece troca voluntária mediante a senha atual. A política visual é compartilhada com a primeira troca obrigatória; perfil, e-mail e vínculo não podem ser alterados pela tela.
+- **Próximo pacote do site:** auditoria responsiva e acessível dos fluxos autenticados, priorizando navegação por teclado, foco, mensagens de erro, contrastes, cortes e estados vazios em Admin e gerente.
+- **Primeira ação:** executar um inventário por rota e viewport dos painéis autenticados, registrar achados reproduzíveis e corrigir primeiro os problemas que bloqueiam tarefa ou navegação.
+- **Sequência web sugerida:** auditoria responsiva e acessível; correções encontradas; somente então retomar P06 e, depois, os fluxos de WhatsApp.
+- **Base já validada:** P05 concluído no PostgreSQL e no navegador em 21/09; estrutura, IDs e histórico permanecem preservados durante importações. O mapa e o detalhe da vaga não devem alegar saúde do sensor antes do P06.
+- **Comandos mínimos:** backend build/test/integração quando houver novo contrato; frontend lint/build e ensaio renderizado; `node scripts/verificar-documentacao.mjs` em toda entrega.
+- **Estado atual:** P01–P05, D01 e C01 concluídos; o detalhe estrutural da vaga está disponível. P06 possui apenas o cálculo temporal isolado e fica adiado por esta prioridade de produto, sem telemetria operacional.
 
 ### 14/09/2026 — PostgreSQL local instalado e configurado
 
@@ -187,6 +193,41 @@ Preservar os limites do produto: web responsiva, sem cadastro público de gerent
 ## 7. Registro diário
 
 Cada entrada mantém: data local, estado do dia, pacote/objetivo, evidências de entrada, alterações, verificações e resultados, pendências/bloqueios, primeira ação da retomada e situação Git. Acrescentar entradas sem apagar dias anteriores. O resumo das seções 1–6 deve acompanhar o estado mais recente.
+
+### 25/09/2026 — revisão documental, código do mapa e detalhe da vaga
+
+- **Escopo:** documentação canônica confrontada com os contratos e componentes atuais; revisão focal do mapa compartilhado e da interação de seleção. A solicitação não autorizou reescrever arquitetura nem introduzir telemetria simulada.
+- **Correção:** o clique no mapa, na lista móvel e nas vagas sem posição agora abre um diálogo acessível. Ele mostra código, estado registrado, andar, setor, categoria e situação cadastral. Saúde do sensor, comunicação e última leitura aparecem como indisponíveis até o P06 fornecer observações individuais; heartbeat de placa não é tratado como prova de saúde.
+- **Organização:** o componente do mapa foi formatado e dividido; o diálogo ganhou responsabilidade própria e os rótulos de categoria/estado foram centralizados. Funções e módulos tocados receberam comentários curtos de responsabilidade, sem comentários que apenas repetem sintaxe.
+- **Documentação:** SSD, fluxo de telas, índice e mapa do projeto foram alinhados ao comportamento real. O próximo pacote passa a priorizar a visão geral administrativa do site; WhatsApp, ESP32 e ingestão ficam adiados sem serem descritos como implementados.
+- **Verificações:** frontend lint e build aprovados; o build conserva o aviso conhecido de chunk maior que 500 kB. O verificador documental aprovou 238 arquivos e links internos. Ensaio renderizado local, com cenário temporário removido após o teste, confirmou clique, conteúdo, fechamento por `Esc`, console sem erros/avisos e ausência de overflow em 390 × 844; desktop também foi conferido. Não comprova telemetria, PostgreSQL ou deploy.
+- **Git:** branch local `feat/detalhes-vaga-documentacao-pietro`, criada da `main` em `dcc792c`. Responsável primário indicado: Pietro; revisões recomendadas: Elisa em UX/QA, Juan no visual e Ana na documentação. Nenhum commit, push, PR ou deploy foi solicitado.
+
+### 25/09/2026 — validação da produção e visão geral administrativa
+
+- **Produção:** a jornada administrativa publicada foi conferida com o acesso fornecido pela equipe. Foram criados o `Shopping Teste Codex` e um gerente de teste vinculado; nenhum dado real foi usado. A criação e a listagem responderam sem erro de console. Credenciais não foram registradas na documentação.
+- **Implementação local:** `/admin` passou a ser uma visão geral com indicadores derivados da API, pendências cadastrais e atalhos para as fichas. O cadastro foi separado em `/admin/cadastrar`; a navegação diferencia visão geral, cadastro e lista de shoppings.
+- **Contrato:** a listagem administrativa informa totais ativos de andares, setores e vagas, além dos gerentes já disponíveis. Os agregados são calculados no backend e tratados no frontend sem inferir saúde de sensor ou telemetria.
+- **Verificações:** typecheck, 51 testes unitários e 32 cenários de integração em PostgreSQL descartável foram aprovados no backend; lint e build do frontend também passaram. A revisão visual final da visão geral confirmou os cinco indicadores, pendências e atalhos em 1280 × 720 e 390 × 844, sem rolagem horizontal nem erros ou avisos no console.
+- **Próxima ação:** revisar Minha conta e projetar a troca voluntária de senha com testes de autenticação, mantendo WhatsApp e ESP32 fora deste pacote.
+- **Git:** mudanças permanecem locais na branch `feat/detalhes-vaga-documentacao-pietro`; nenhum commit, push, PR ou deploy foi solicitado.
+
+### 25/09/2026 — Minha conta e troca voluntária de senha
+
+- **Implementação:** Admin e gerente agora possuem Minha conta em rotas próprias. A tela separa dados pessoais de segurança e permite alterar a senha definitiva somente após confirmar a senha atual; e-mail, perfil e vínculo com shopping permanecem fora da edição pessoal.
+- **Organização:** a conta e o formulário de segurança foram extraídos para componentes compartilhados. Requisitos e códigos de validação ficaram em um único serviço usado também pela primeira troca obrigatória, evitando duas políticas visuais divergentes.
+- **Backend e segurança:** o contrato existente de `/auth/change-password` foi preservado. O serviço de conta deixou de usar `any` na fronteira e o cenário PostgreSQL agora comprova a troca voluntária, a rejeição da senha antiga e a continuidade da sessão autenticada.
+- **Verificações:** backend com typecheck, 51 testes unitários e 33 cenários de integração aprovados; frontend com lint e build aprovados, mantendo somente o aviso conhecido de chunks acima de 500 kB. Admin e gerente foram conferidos localmente em desktop e 390 × 844, sem rolagem horizontal nem erros no console; o cenário temporário não integra o repositório.
+- **Próxima ação:** iniciar a auditoria responsiva e acessível dos fluxos autenticados, registrando achados reproduzíveis antes das correções. WhatsApp, ESP32 e telemetria continuam fora deste pacote.
+- **Git:** trabalho local na branch `feat/detalhes-vaga-documentacao-pietro`, base `dcc792c`; Pietro é responsável primário, com Samuel indicado para contrato, Elisa para UX/acessibilidade, Juan para visual e Ana para documentação. Nenhum commit, push, PR ou deploy foi solicitado.
+
+### 25/09/2026 — auditoria transversal de acessibilidade e responsividade
+
+- **Escopo:** primeiro recorte da auditoria dos fluxos autenticados, concentrado no shell compartilhado, navegação entre rotas, menu móvel, preferências de movimento e campos de conta. As fichas administrativas densas e cada estado de mapa/importação continuam no inventário seguinte.
+- **Achados corrigidos:** a aplicação deixou de forçar animações quando o sistema solicita movimento reduzido; o painel ganhou atalho visível ao foco para o conteúdo principal; mudanças internas de rota agora focam o novo título sem roubar o foco no carregamento inicial; o e-mail somente leitura voltou a ser focável e copiável; o fallback sem foto passou a ter semântica de imagem.
+- **Verificação renderizada:** em `127.0.0.1:5173`, o primeiro `Tab` alcançou “Ir para o conteúdo principal” e a navegação de `/admin` para `/admin/shoppings` focou o `h1` da nova rota. Desktop 1280 × 720 e celular 390 × 844 ficaram sem rolagem horizontal ou erros no console; o menu móvel manteve foco dentro do diálogo, fundo opaco e controles legíveis.
+- **Próxima ação:** continuar a matriz por rota nas fichas de shopping, estrutura/mapa, gerentes e importação; registrar e corrigir bloqueios de teclado, foco, contraste, corte e mensagens. O cenário local temporário foi removido e não integra o projeto.
+- **Git:** alterações locais preservadas na branch `feat/detalhes-vaga-documentacao-pietro`; nenhum commit, push, PR ou deploy foi solicitado.
 
 ### 24/09/2026 — consolidação para a main
 
@@ -229,13 +270,11 @@ Cada entrada mantém: data local, estado do dia, pacote/objetivo, evidências de
 - **Próxima ação:** iniciar C01 revalidando a ficha Admin no navegador e restaurar os fluxos de exclusão de gerente, desfazer por sete segundos e exclusão de shopping conforme os contratos reais.
 - **Git:** alterações locais, sem commit, push, PR ou deploy; a modificação preexistente em `vaggu-backend/.env.example` foi preservada.
 
-### 23/09/2026 — correção do formulário e diagnóstico da foto do shopping
+### 23/09/2026 — correção do formulário administrativo
 
 - **Estado:** C01 iniciado; correção de formulário concluída e persistência da foto diagnosticada.
 - **Alterações:** removido o campo de fuso horário da interface e do contrato administrativo atual; o banco mantém a coluna nullable somente para compatibilidade. O seletor de arquivo passou a usar um rótulo controlado, com texto centralizado, nome do arquivo selecionado e foco de teclado visível.
-- **Causa confirmada da falha da foto:** a validação local do formato, tamanho e prévia funciona. O backend rejeita a persistência com `503 ARMAZENAMENTO_NAO_CONFIGURADO` quando `BLOB_READ_WRITE_TOKEN` não está definido; o frontend antes convertia esse erro em “Não foi possível conectar à VAGGU”. A mensagem agora informa que a foto foi validada e indica a configuração necessária.
 - **Verificações:** frontend lint e build aprovados; backend typecheck e suíte básica aprovados (43 testes, 3 integrações pendentes quando executada sem variável de teste); suíte PostgreSQL oficial aprovada com 32/32 testes usando o banco portátil local.
-- **Limites:** nenhuma credencial Blob foi criada ou adicionada. Para salvar imagens, o ambiente precisa receber `BLOB_READ_WRITE_TOKEN` no `.env` do backend; sem ele, a imagem pode ser pré-visualizada, mas não persistida.
 - **Próxima ação:** manter o PostgreSQL portátil na porta 55432 para os testes e configurar o armazenamento Blob autorizado antes de validar a foto persistida no navegador.
 
 ### 23/09/2026 — página 404 animada
@@ -251,26 +290,26 @@ Cada entrada mantém: data local, estado do dia, pacote/objetivo, evidências de
 - **Estado:** encerrado por solicitação da equipe; C01 concluído sem iniciar o P06.
 - **Pacote e objetivo:** corrigir as divergências funcionais confirmadas na ficha administrativa, concluir os ajustes de formulário e erro 404 e deixar a retomada de telemetria preparada.
 - **Roteamento:** Pietro como responsável primário pela integração fullstack; Juan responsável pelos ajustes visuais; Elisa indicada para UX/QA; Samuel para contratos e dados. A branch `test/p05-integracao-samuel`, baseada em `origin/main`, foi preservada por já conter o conjunto integrado.
-- **Entrega:** a ficha atual voltou a excluir gerente com confirmação e aviso de sete segundos para desfazer, e a excluir shopping com confirmação, encerramento dos acessos e retorno à lista. O formulário deixou de expor fuso horário, o seletor de foto foi centralizado e erros conhecidos de armazenamento agora são acionáveis. URLs desconhecidas exibem a página 404 animada da VAGGU.
+- **Entrega:** a ficha atual voltou a excluir gerente com confirmação e aviso de sete segundos para desfazer, e a excluir shopping com confirmação, encerramento dos acessos e retorno à lista. O formulário deixou de expor fuso horário. URLs desconhecidas exibem a página 404 animada da VAGGU.
 - **Verificações:** frontend lint e build aprovados; backend typecheck aprovado; suíte básica com 43 aprovações e três integrações explicitamente pendentes sem variável de teste; integração PostgreSQL oficial com 32/32 cenários, incluindo exclusão/desfazer de gerente e exclusão de shopping; verificador documental e `git diff --check` aprovados. A página 404 foi inspecionada em desktop e largura móvel. A ficha autenticada não recebeu nova captura visual neste fechamento, portanto as evidências antigas permanecem históricas.
-- **Decisões e limites:** exclusão de shopping não possui desfazer no contrato atual; exclusão de gerente mantém a janela de sete segundos. A foto exige `BLOB_READ_WRITE_TOKEN` no backend para persistir. O aviso conhecido de bundle acima de 500 kB permanece. Nenhum deploy foi solicitado.
+- **Decisões e limites:** exclusão de shopping não possui desfazer no contrato atual; exclusão de gerente mantém a janela de sete segundos. O aviso conhecido de bundle acima de 500 kB permanece. Nenhum deploy foi solicitado.
 - **Próxima ação:** iniciar P06 consolidando o contrato de firmware e telemetria — autenticação da placa, identificação do sensor, sequência, frequência, confirmação de 30 segundos e expiração — antes de criar endpoints.
 - **Git:** entrega funcional publicada na `main` no commit `42ad219a` (`feat: conclui correcoes administrativas e pagina 404`), preservando antes dela o commit remoto `c7773a7e` de configuração do Render. Nenhum deploy manual adicional foi solicitado.
 
-### 21/09/2026 — retomada segura: mapa, acessos e foto do shopping
+### 21/09/2026 — retomada segura: mapa e acessos
 
 - **Estado:** implementação e validação concluídas; o dia permanece aberto até solicitação explícita de fechamento.
-- **Pacote e objetivo:** disponibilizar a visualização 2D compartilhada para Admin e gerente, corrigir a ocultação indevida do mapa do gerente, atualizar a interface após mutações, permitir copiar a senha provisória e concluir a foto do shopping sem armazenar binários no PostgreSQL.
+- **Pacote e objetivo:** disponibilizar a visualização 2D compartilhada para Admin e gerente, corrigir a ocultação indevida do mapa do gerente, atualizar a interface após mutações e permitir copiar a senha provisória.
 - **Situação de entrada:** `main` limpa e sincronizada com `origin/main` em `4261b16`. O commit mais recente já continha preview e endpoints preliminares de foto, mas persistia `BYTEA`, não enviava a seleção do formulário, não montava a foto nas telas e deixava um erro de lint. O Admin ainda usava somente a tabela de coordenadas; o Gerente recebia a estrutura correta da API, mas o frontend ocultava toda a árvore enquanto a implantação não fosse `ATIVO`.
-- **Roteamento:** Pietro como responsável primário pelo escopo fullstack transversal; revisão indicada para Juan (visual), Elisa (jornada/QA) e Samuel (Prisma). Branch local `feat/mapa-admin-foto-shopping-pietro`, baseada em `main`/`origin/main` no commit `4261b16`.
+- **Roteamento:** Pietro como responsável primário pelo escopo fullstack transversal; revisão indicada para Juan (visual), Elisa (jornada/QA) e Samuel (Prisma). Trabalho baseado em `main`/`origin/main` no commit `4261b16`.
 - **Primeira ação:** estabilizar os contratos compartilhados do mapa e substituir a persistência binária da foto por uma referência de armazenamento externo, preservando a prévia local e deixando a ausência de configuração explícita.
-- **Linha de base:** frontend build aprovado e lint reprovado apenas em `foto-shopping.tsx`; backend typecheck aprovado, suíte básica com 43 aprovações e três integrações puladas. A primeira integração PostgreSQL falhou por cliente Prisma local desatualizado; após `db:generate`, aprovou 32/32 cenários. O Figma não retornou o nó `2022:2` por exigir seleção ativa, então os componentes e tokens existentes são a referência verificada desta retomada.
-- **Entrega:** `VisualizacaoVagas` centraliza o mapa 2D responsivo de Admin e gerente; o wrapper do gerente não oculta mais a estrutura durante a implantação. A ficha Admin recarrega estrutura após mutações, exibe foto/fallback, envia e remove a foto, e oferece cópia com feedback para a credencial recém-emitida. O backend usa Vercel Blob, salva somente `imagem_url`, remove o antigo `BYTEA` e deixa de persistir cópia reversível da senha provisória.
+- **Linha de base:** frontend build e backend typecheck aprovados; a suíte básica teve 43 aprovações e três integrações puladas. A primeira integração PostgreSQL falhou por cliente Prisma local desatualizado; após `db:generate`, aprovou 32/32 cenários. O Figma não retornou o nó `2022:2` por exigir seleção ativa, então os componentes e tokens existentes são a referência verificada desta retomada.
+- **Entrega:** `VisualizacaoVagas` centraliza o mapa 2D responsivo de Admin e gerente; o wrapper do gerente não oculta mais a estrutura durante a implantação. A ficha Admin recarrega estrutura após mutações e oferece cópia com feedback para a credencial recém-emitida. O backend deixa de persistir cópia reversível da senha provisória.
 - **Causa do bug do gerente:** `MapaEstacionamento` encerrava a renderização para qualquer `situacaoImplantacao` diferente de `ATIVO`, embora a API retornasse corretamente shopping, andares, setores, vagas e posições. A condição foi substituída por aviso não bloqueante acima da visualização compartilhada.
 - **Verificações:** backend `typecheck` aprovado; suíte básica com 43 aprovações e três integrações puladas; integração PostgreSQL 32/32; migrations 9/9 aplicadas no banco local. Frontend lint e build aprovados, mantendo apenas o aviso conhecido de chunk acima de 500 kB. Navegador autenticado confirmou mapa no Admin e gerente, troca de andar, categorias/estados, nova vaga refletida sem refresh, clipboard igual à senha exibida, preview de imagem, desktop, tablet e celular; console sem avisos ou erros.
 - **Documentação e comentários:** contratos de credencial, imagem, mapa, configuração e responsabilidades dos arquivos foram atualizados. A extração do Figma ficou indisponível por falta de seleção ativa; a validação visual usou os tokens e componentes existentes, sem declarar fidelidade não comparada.
-- **Limites:** nenhuma publicação, deploy ou configuração real do Vercel Blob foi autorizada. O upload externo foi comprovado por adapter nos testes; no ambiente local sem `BLOB_READ_WRITE_TOKEN`, somente seleção e preview foram validados no navegador e a API falha explicitamente com 503 ao tentar persistir. O dia permanece aberto até solicitação explícita de fechamento.
-- **Git:** alterações locais na branch `feat/mapa-admin-foto-shopping-pietro`, sem commit, push, PR ou deploy solicitado.
+- **Limites:** nenhuma publicação ou deploy foi autorizado. O dia permanece aberto até solicitação explícita de fechamento.
+- **Git:** alterações locais na branch de trabalho do dia, sem commit, push, PR ou deploy solicitado.
 
 ### 21/09/2026 — retomada do P05: validação integrada
 

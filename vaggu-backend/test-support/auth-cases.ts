@@ -108,6 +108,31 @@ export async function runAuthCases(t: TestContext, prisma: PrismaClient, shoppin
     assert.equal(changed.body.usuario.email, 'shopping@example.com');
   });
 
+  await t.test('usuário com senha definitiva pode trocá-la voluntariamente', async () => {
+    const senhaAtual = 'SenhaVoluntariaAtual1!';
+    const senhaNova = 'SenhaVoluntariaNova2@';
+    await prisma.usuario.create({ data: {
+      nome: 'Gerente voluntário',
+      email: 'voluntario@example.com',
+      senhaHash: await hashPassword(senhaAtual),
+      perfil: 'SHOPPING',
+      shoppingId: shoppingA.id,
+      trocarSenhaObrigatoria: false,
+    } });
+    const sessao = await request(app).post('/api/v1/auth/login')
+      .send({ email: 'voluntario@example.com', senha: senhaAtual }).expect(200);
+    const changed = await request(app).post('/api/v1/auth/change-password')
+      .set('Authorization', `Bearer ${sessao.body.token}`)
+      .send({ senhaAtual, novaSenha: senhaNova }).expect(200);
+    assert.equal(changed.body.usuario.trocarSenhaObrigatoria, false);
+    await request(app).get('/api/v1/auth/me')
+      .set('Authorization', `Bearer ${sessao.body.token}`).expect(200);
+    await request(app).post('/api/v1/auth/login')
+      .send({ email: 'voluntario@example.com', senha: senhaAtual }).expect(401);
+    await request(app).post('/api/v1/auth/login')
+      .send({ email: 'voluntario@example.com', senha: senhaNova }).expect(200);
+  });
+
   await t.test('senha provisória exige troca e não permanece válida depois da alteração', async () => {
     const senhaProvisoria = 'SenhaProvisoriaTeste!';
     const senhaNova = 'NovaSenhaDefinitivaTeste1!';
