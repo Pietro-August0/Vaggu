@@ -1,6 +1,4 @@
 <p align="center"><img src="./vaggu-frontend/public/assets/vaggu-logo-yellow.svg" alt="Logotipo da VAGGU" width="210"></p>
-
-<h1 align="center">VAGGU</h1>
 <p align="center">Uma visão clara do estacionamento, do shopping inteiro à vaga individual.</p>
 
 <p align="center">
