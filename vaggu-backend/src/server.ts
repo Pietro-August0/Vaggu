@@ -11,11 +11,14 @@ import { createShoppingsService } from './shoppings/service.js';
 import { createContaService } from './conta/service.js';
 import { createEstruturaService } from './estrutura/service.js';
 import { createImportacaoService } from './importacao/service.js';
+import { createTelemetriaService } from './telemetria/service.js';
+import { expirarSensores } from './telemetria/expiracao.js';
 
 const config = readEnv();
 const prisma = createPrisma(config.databaseUrl);
 const whatsappClient = createWhatsappClient(config.whatsapp);
 const whatsappService = createWhatsappService(prisma, whatsappClient, config.whatsapp);
+const telemetriaService = createTelemetriaService(prisma, config.telemetria);
 const app = createApp({
   checkDatabase: () => prisma.$queryRaw`SELECT 1`,
   frontendDistPath: process.env.FRONTEND_DIST_PATH,
@@ -25,7 +28,16 @@ const app = createApp({
   conta: createContaService(prisma),
   estrutura: createEstruturaService(prisma),
   importacao: createImportacaoService(prisma),
+  telemetria: telemetriaService,
 });
+
+// O job persiste a expiração; consultas futuras também deverão aplicar validade no momento da leitura.
+const tarefaExpiracao = setInterval(() => {
+  expirarSensores(prisma, config.telemetria).catch(() => {
+    console.error('Não foi possível executar a expiração de sensores.');
+  });
+}, config.telemetria.intervaloExpiracaoMs);
+tarefaExpiracao.unref();
 
 const server = app.listen(config.port, config.host, () => {
   console.log(`Vaggu API: http://${config.host}:${config.port}/api/v1/health`);
@@ -45,6 +57,7 @@ let closing = false;
 async function shutdown() {
   if (closing) return;
   closing = true;
+  clearInterval(tarefaExpiracao);
   const timeout = setTimeout(() => process.exit(1), 5000);
   timeout.unref();
   server.close(async () => {

@@ -12,7 +12,7 @@ Cada andar possui uma revisão do mapa. A posição da vaga usa `x`, `y`, largur
 
 ## Sensores e estado
 
-No P06, cada canal de sensor será associado a uma vaga já cadastrada. A placa ESP32 se autentica e envia identidade de inicialização, sequência, sensor, estado medido e instante. O backend deriva o shopping pela credencial, valida pertencimento, ordem e idempotência, aplica a confirmação consistente e registra histórico. Evento duplicado não cria nova observação; evento antigo não regride estado; silêncio expira o sensor e nunca transforma dado vencido em vaga livre.
+No primeiro recorte local do P06, cada canal de sensor é associado a uma vaga já cadastrada. A placa ESP32 se autentica e envia identidade de inicialização, sequência, sensor, estado medido e instante opcional. O backend deriva o shopping pela credencial, valida pertencimento, ordem e idempotência, aplica a confirmação consistente e registra histórico. Evento duplicado não cria nova observação; evento antigo não regride estado; silêncio expira o sensor e nunca transforma dado vencido em vaga livre. O firmware, os valores temporais definitivos, a administração dos equipamentos e a integração PostgreSQL ainda precisam de validação.
 
 ## Mapa operacional e telões
 

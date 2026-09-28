@@ -64,3 +64,14 @@ test('migration de remoção retira a foto do cadastro de shopping', () => {
   const sql = readFileSync(join(projectRoot, 'prisma/migrations/20260925000100_remover_foto_shopping/migration.sql'), 'utf8');
   assert.match(sql, /DROP COLUMN "imagem_url"/);
 });
+
+test('migration P06 separa sensor, deduplica sequência e preserva instante efetivo', () => {
+  const enumSql = readFileSync(join(projectRoot, 'prisma/migrations/20260928000100_telemetria_p06/migration.sql'), 'utf8');
+  const sql = readFileSync(join(projectRoot, 'prisma/migrations/20260928000200_persistencia_telemetria_p06/migration.sql'), 'utf8');
+  assert.match(enumSql, /ALTER TYPE "EstadoVaga" ADD VALUE IF NOT EXISTS 'INDISPONIVEL'/);
+  assert.match(sql, /CREATE TABLE "sensores"/);
+  assert.match(sql, /eventos_telemetria_dispositivo_inicializacao_sequencia_key/);
+  assert.match(sql, /FOREIGN KEY \("vaga_id", "shopping_id"\)/);
+  assert.match(sql, /"efetivo_em" TIMESTAMP\(3\)/);
+  assert.match(sql, /"payload_hash" CHAR\(64\)/);
+});

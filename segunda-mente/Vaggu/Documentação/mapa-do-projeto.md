@@ -52,26 +52,31 @@ As cópias de imagens entre `segunda-mente/Vaggu/Identidade visual/Assets/` e `v
 | `skills/rotear-trabalho-equipe/scripts/gerar-coautoria.mjs` | Gera trailers `Co-authored-by` a partir da configuração local ignorada pelo Git, sem trocar identidades nem criar commits. |
 | `skills/start/SKILL.md` | Documentação: Início do dia — VAGGU. |
 | `skills/start/agents/openai.yaml` | Metadados de descoberta e apresentação da skill no Codex. |
-| `vaggu-backend/.env.example` | Documenta banco, servidor e WhatsApp sem incluir credenciais reais. |
+| `vaggu-backend/.env.example` | Documenta banco, servidor, WhatsApp e parâmetros provisórios da telemetria sem incluir credenciais reais. |
 | `vaggu-backend/README.md` | Documentação: Vaggu Backend — 0.5.0. |
 | `vaggu-backend/package-lock.json` | Fixa a árvore de dependências e integridade para instalação reproduzível via npm ci. |
-| `vaggu-backend/package.json` | Declara dependências, faixa do Node e scripts de desenvolvimento, build e verificação. |
+| `vaggu-backend/package.json` | Declara dependências, faixa do Node e scripts de desenvolvimento, build, verificação, provisionamento e simulação de telemetria. |
 | `vaggu-backend/prisma.config.mjs` | Configura a CLI do Prisma: schema, migrations e conexão obtida do ambiente, sem credenciais no código. |
-| `vaggu-backend/prisma/migrations/20260909000300_inicial_postgresql/migration.sql` | Cria o modelo PostgreSQL inicial de usuários, shoppings, sessões, placas, sensores, vagas e eventos do WhatsApp. |
+| `vaggu-backend/prisma/migrations/20260909000300_inicial_postgresql/migration.sql` | Cria o modelo PostgreSQL inicial de usuários, shoppings, sessões, dispositivos, vagas, histórico legado e eventos do WhatsApp. |
 | `vaggu-backend/prisma/migrations/20260912000100_estrutura_estacionamento/migration.sql` | Cria hierarquia, tipos, implantação, posições e relações compostas do P04. |
 | `vaggu-backend/prisma/migrations/20260912000200_exclusao_reversivel_gerentes/migration.sql` | Acrescenta exclusão lógica de gerente, estado anterior e restrição de consistência para o desfazer. |
 | `vaggu-backend/prisma/migrations/20260913000100_senha_provisoria_e_exclusao_shopping/migration.sql` | Acrescenta exclusão lógica de shopping e a cópia cifrada temporária da senha provisória. |
 | `vaggu-backend/prisma/migrations/migration_lock.toml` | Registra o provedor PostgreSQL das migrations do Prisma. |
-| `vaggu-backend/prisma/schema.prisma` | Define entidades, relações e restrições, incluindo estrutura, exclusão lógica e importação. |
+| `vaggu-backend/prisma/migrations/20260928000100_telemetria_p06/migration.sql` | Acrescenta `INDISPONIVEL` em transação própria para compatibilidade do enum PostgreSQL. |
+| `vaggu-backend/prisma/migrations/20260928000200_persistencia_telemetria_p06/migration.sql` | Cria sensores, inicializações, deduplicação persistente e histórico temporal isolado por shopping. |
+| `vaggu-backend/prisma/schema.prisma` | Define entidades, relações e restrições de estrutura, acessos, importação e primeiro recorte persistente de telemetria. |
 | `vaggu-backend/scripts/create-admin.ts` | Comando interativo para criar o primeiro administrador e exibir a senha gerada uma única vez no terminal. |
-| `vaggu-backend/src/app.ts` | Monta a API Express, restringe conexões externas do navegador ao ViaCEP pela política de segurança e, quando configurado, entrega o build React na mesma origem. |
+| `vaggu-backend/scripts/provisionar-placa.ts` | Cria placa e sensores para vagas existentes, guardando apenas o hash e exibindo a chave uma vez. |
+| `vaggu-backend/scripts/simular-telemetria.ts` | Envia heartbeat e observações sintéticas pela mesma API do ESP32, sem inserir fixtures diretamente no banco. |
+| `vaggu-backend/src/app.ts` | Monta a API Express, incluindo rotas humanas e de equipamento, restringe conexões externas e entrega o build React quando configurado. |
+| `vaggu-backend/src/analiticos/conjunto-controlado.ts` | Define intervalos sintéticos confirmados, calcula métricas ponderadas e gera o CSV reproduzível usado para preparar o Power BI sem simular integração com sensores. |
 | `vaggu-backend/src/auth/bootstrap.ts` | Cria o primeiro administrador por uma operação de terminal, sem cadastro público. |
 | `vaggu-backend/src/auth/middleware.ts` | Autentica Bearer ou cookie HttpOnly, exige cabeçalho ant-CSRF nas escritas por cookie e fornece escopo às rotas. |
 | `vaggu-backend/src/auth/password.ts` | Protege senhas com scrypt e sal aleatório; guarda o resultado derivado, nunca a senha original. |
 | `vaggu-backend/src/auth/routes.ts` | Expõe login, identidade, troca de senha e logout; emite/remove cookie HttpOnly sem expor token ao cliente web. |
 | `vaggu-backend/src/auth/service.ts` | Valida credenciais, emite sessões opacas, recusa contas excluídas e aplica a troca obrigatória ou voluntária sem expor hashes. |
 | `vaggu-backend/src/config/database.ts` | Valida e normaliza a URL PostgreSQL usada pelo backend sem expor credenciais. |
-| `vaggu-backend/src/config/env.ts` | Converte variáveis do processo em configuração da API e valida banco e porta. |
+| `vaggu-backend/src/config/env.ts` | Converte variáveis do processo em configuração da API e valida banco, porta, lacuna e timeouts provisórios da telemetria. |
 | `vaggu-backend/src/estrutura/routes.ts` | Expõe configuração administrativa e consulta isolada da estrutura pelo gerente. |
 | `vaggu-backend/src/estrutura/service.ts` | Valida hierarquia, tipos, posições e revisões concorrentes do mapa. |
 | `vaggu-backend/src/importacao/contratos.ts` | Define a representação intermediária e os erros da prévia de importação reutilizáveis por CSV e XLSX. |
@@ -90,10 +95,14 @@ As cópias de imagens entre `segunda-mente/Vaggu/Identidade visual/Assets/` e `v
 | `vaggu-backend/src/conta/routes.ts` | Expõe consulta e edição da conta usando exclusivamente a identidade da sessão. |
 | `vaggu-backend/src/conta/service.ts` | Atualiza somente dados pessoais permitidos, sem conceder mudanças de perfil ou shopping. |
 | `vaggu-backend/src/lib/prisma.ts` | Cria o cliente Prisma compartilhado; serviços aceitam cliente transacional por injeção. |
-| `vaggu-backend/src/server.ts` | Ponto de entrada executável: lê a configuração, conecta Prisma e armazenamento de fotos, informa o build do frontend e inicia o HTTP. |
+| `vaggu-backend/src/server.ts` | Ponto de entrada executável: conecta serviços, inicia HTTP e executa a verificação periódica de expiração dos sensores. |
 | `vaggu-backend/src/shoppings/routes.ts` | Rotas administrativas de cadastro, ficha, gerentes, exclusões e emissão de senha provisória. |
 | `vaggu-backend/src/shoppings/service.ts` | Valida a ficha, administra shoppings e gerentes, agrega a estrutura ativa para a visão geral e entrega senha provisória somente na emissão. |
 | `vaggu-backend/src/telemetria/confirmacao-estado.ts` | Calcula a confirmação temporal de leituras de vaga já validadas, sem receber telemetria ou persistir dados. |
+| `vaggu-backend/src/telemetria/contratos.ts` | Valida placa, inicialização, sequência e lote de sensores, além de exigir credencial `Device` no cabeçalho. |
+| `vaggu-backend/src/telemetria/expiracao.ts` | Marca sensores silenciosos como indisponíveis no instante efetivo e grava o evento uma única vez. |
+| `vaggu-backend/src/telemetria/routes.ts` | Expõe heartbeat e estados do ESP32 sem reutilizar cookies ou sessões humanas. |
+| `vaggu-backend/src/telemetria/service.ts` | Autentica placa, serializa eventos, deduplica sequência, persiste candidatos e confirma estados/histórico atomicamente. |
 | `vaggu-backend/src/whatsapp/client.ts` | Cliente de envio de texto pela API da Meta; recebe configuração privada e transporte substituível em testes. |
 | `vaggu-backend/src/whatsapp/payload.ts` | Interpreta o formato externo do webhook e mantém os textos do menu demonstrativo. |
 | `vaggu-backend/src/whatsapp/routes.ts` | Recebe o desafio de configuração e os eventos da Meta, validando sua origem antes de processá-los. |
@@ -105,12 +114,17 @@ As cópias de imagens entre `segunda-mente/Vaggu/Identidade visual/Assets/` e `v
 | `vaggu-backend/test-support/banco-de-teste.ts` | Prepara um banco PostgreSQL exclusivo por execução e aplica as migrations versionadas. |
 | `vaggu-backend/test-support/estrutura-cases.ts` | Verifica hierarquia, mapa, implantação e isolamento do P04 em PostgreSQL real. |
 | `vaggu-backend/test/app.test.ts` | Verifica montagem da API, saúde, prontidão, política de conexões do navegador e respostas para rotas inexistentes. |
-| `vaggu-backend/test/env.test.ts` | Verifica leitura e rejeição das variáveis de ambiente obrigatórias. |
+| `vaggu-backend/test/env.test.ts` | Verifica banco, porta e parâmetros configuráveis da telemetria, incluindo a lacuna menor que 30 segundos. |
 | `vaggu-backend/test/integracao-acessos.test.ts` | Executa os cenários HTTP de autenticação e administração em PostgreSQL descartável. |
 | `vaggu-backend/test/importacao-csv.test.ts` | Verifica a prévia CSV do P05, incluindo normalização, duplicatas, colunas ausentes e sintaxe inválida. |
 | `vaggu-backend/test/confirmacao-estado.test.ts` | Verifica janela, continuidade, alternância e leituras repetidas na confirmação temporal do P06. |
+| `vaggu-backend/test/metricas-ocupacao.test.ts` | Reproduz as métricas analíticas esperadas e garante que o CSV sintético versionado não diverge do conjunto tipado. |
+| `vaggu-backend/test/fixtures/power-bi/conjunto-controlado-ocupacao.csv` | Fornece ao Power BI um conjunto sintético identificado de duas vagas durante uma hora, sem gravar fixtures em banco persistente. |
 | `vaggu-backend/test/importacao-routes.test.ts` | Verifica autorização e transporte HTTP da prévia CSV administrativa. |
-| `vaggu-backend/test/prisma-postgresql.test.ts` | Confere provider, relações, índices e migrations PostgreSQL, inclusive URL da foto e remoção dos campos binário/reversível. |
+| `vaggu-backend/test/prisma-postgresql.test.ts` | Confere provider, relações, índices e migrations PostgreSQL, incluindo o recorte persistente P06. |
+| `vaggu-backend/test/telemetria-contratos.test.ts` | Verifica payload do ESP32, lote atômico, estados aceitos e credencial exclusiva do cabeçalho. |
+| `vaggu-backend/test/telemetria-postgresql.test.ts` | Exercita confirmação, deduplicação e expiração individual em PostgreSQL descartável quando `TEST_DATABASE_URL` existe. |
+| `vaggu-backend/test/telemetria-routes.test.ts` | Confere transporte HTTP e status distintos para evento novo e reenvio idempotente. |
 | `vaggu-backend/test/whatsapp.test.ts` | Verifica assinatura, desafio, interpretação, deduplicação e respostas do webhook WhatsApp. |
 | `vaggu-backend/tsconfig.json` | Configura compilação TypeScript e limites dos arquivos incluídos neste projeto. |
 | `vaggu-frontend/components.json` | Configura aliases e estilo de geração dos componentes shadcn. |

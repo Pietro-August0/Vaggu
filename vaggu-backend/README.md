@@ -1,6 +1,6 @@
 # Vaggu Backend — 0.5.0
 
-TypeScript + Node.js + Express + Prisma 7 + PostgreSQL. A base inclui autenticação, administração de shoppings e gerentes, estrutura do estacionamento, prévia de importação CSV/XLSX e webhook do WhatsApp.
+TypeScript + Node.js + Express + Prisma 7 + PostgreSQL. A base inclui autenticação, administração de shoppings e gerentes, estrutura do estacionamento, prévia de importação CSV/XLSX, webhook do WhatsApp e o primeiro recorte persistente de telemetria P06.
 
 ## Atualizar a pasta atual
 
@@ -103,6 +103,21 @@ Todas as rotas abaixo exigem `Authorization: Bearer TOKEN`, perfil `VAGGU` e sen
 
 O gerente não cria sua própria conta e não escolhe `shoppingId`; o vínculo vem da rota administrativa validada.
 
+## Telemetria do ESP32
+
+As rotas de equipamento não usam sessão humana. A placa envia `Authorization: Device CHAVE` e o backend deriva o shopping pelo dispositivo autenticado.
+
+| Método | Rota | Entrada | Resultado |
+| --- | --- | --- | --- |
+| POST | `/telemetria/heartbeat` | placa, inicialização, sequência e horário opcional | Atualiza somente a comunicação da placa. |
+| POST | `/telemetria/estados` | mesma identidade e lote de sensor/estado | Atualiza observações individuais e confirma mudanças após 30 segundos consistentes. |
+
+A sequência é global entre as duas rotas dentro de uma inicialização. Reenvio idêntico retorna `DUPLICADO`; reutilizar a sequência com outro conteúdo ou enviar inicialização antiga retorna 409. Sensor desconhecido ou de outra placa rejeita o lote inteiro. `capturadoEm` é apenas metadado: confirmação, contato e expiração usam o relógio do servidor.
+
+O job local marca o sensor como `INDISPONIVEL` após seu próprio timeout e grava o instante efetivo. Heartbeat não renova sensores. Os padrões de 15 segundos para lacuna e 120 segundos para timeout são provisórios e configuráveis até o ensaio do firmware.
+
+Para provisionar uma placa, configure `PLACA_SHOPPING_ID`, `PLACA_CODIGO`, `PLACA_NOME` e `PLACA_VAGAS_CODIGOS`, execute `npm run telemetria:provisionar` e copie a chave exibida uma única vez. Para o cenário sintético, use `SIMULADOR_PLACA_CODIGO`, `SIMULADOR_PLACA_CHAVE` e `SIMULADOR_SENSORES_CODIGOS` com `npm run telemetria:simular`. O simulador atravessa a API; não insere fixtures diretamente no banco.
+
 ## Estrutura consultada pelo gerente
 
 `GET /estacionamento/estrutura` exige perfil `SHOPPING`. O backend deriva o shopping da sessão autenticada e não aceita um `shoppingId` enviado pelo cliente. A resposta contém a situação de implantação e a hierarquia `andar → setor → vaga`. Tipos de vaga: `COMUM`, `PCD`, `IDOSO` e `ELETRICA`.
@@ -125,6 +140,7 @@ As migrations incrementais `20260914000100_previas_importacao` e `20260915000100
 - Senha provisória: o banco mantém somente seu hash. O valor em texto é retornado ao Admin apenas na resposta imediata de criação ou redefinição e não reaparece em listagens posteriores.
 - Senha definitiva: de 12 a 128 caracteres, com letra minúscula, letra maiúscula, número, símbolo e sem espaços. A API devolve um código e uma mensagem próprios para cada requisito não atendido; a nova senha também precisa ser diferente da atual.
 - Sessões: tokens opacos aleatórios de 256 bits; somente SHA-256 do token no banco. Não é JWT e não exige JWT_SECRET.
+- Placas: chave aleatória protegida com scrypt; o hash não sai do backend e a chave aparece apenas no provisionamento.
 - Primeiro acesso: gerentes criados ou redefinidos pelo Admin recebem `trocarSenhaObrigatoria=true`; rotas protegidas por `requirePasswordReady` recusam acesso até a troca.
 - Validade fixa de 8 horas. Logout apaga apenas a sessão atual. Sessões expiradas são recusadas imediatamente e removidas no próximo login bem-sucedido.
 - Perfil, vínculo e status ativo são lidos do banco em cada requisição autenticada, nunca dos campos enviados pelo cliente.
@@ -138,7 +154,7 @@ As migrations incrementais `20260914000100_previas_importacao` e `20260915000100
 
 requireAuth valida a sessão. requirePasswordReady bloqueia senha provisória fora das rotas necessárias à troca. requirePerfil('VAGGU') protege cadastro/listagem de shoppings, gerentes e estrutura. shoppingScope fornece res.locals.shoppingId a partir do usuário autenticado; a consulta do mapa do gerente usa esse filtro Prisma, nunca IDs enviados pelo cliente.
 
-Os testes montam rotas exclusivas para complementar a demonstração de isolamento entre dois shoppings. Cadastro/listagem de shoppings e gerentes e configuração da estrutura estão expostos para Admin; a consulta do mapa está exposta para o gerente. Telemetria, telões, exportações e Power BI ainda não estão implementados.
+Os testes montam rotas exclusivas para complementar a demonstração de isolamento entre dois shoppings. Cadastro/listagem de shoppings e gerentes e configuração da estrutura estão expostos para Admin; a consulta do mapa está exposta para o gerente. A ingestão de telemetria existe localmente, mas telões, manutenção, exportações analíticas e a conexão real do Power BI permanecem pendentes.
 
 ## Banco e configuração
 
@@ -149,11 +165,15 @@ DATABASE_URL="postgresql://vaggu:vaggu@localhost:5432/vaggu"
 PORT=3000
 HOST=127.0.0.1
 NODE_ENV=development
+TELEMETRIA_LACUNA_MAXIMA_MS=15000
+TELEMETRIA_TIMEOUT_SENSOR_MS=120000
+TELEMETRIA_TIMEOUT_PLACA_MS=120000
+TELEMETRIA_INTERVALO_EXPIRACAO_MS=30000
 ~~~
 
 Configure `DATABASE_URL` com um PostgreSQL acessível pelo backend. `npm run db:studio` permite inspecionar tabelas; não preencha `senha_hash` manualmente. Faça backup antes de migrations em ambiente compartilhado.
 
-Modelos persistidos atuais: Shopping, Andar, Setor, Vaga, Usuario, Dispositivo, HistoricoVaga e ImportacaoEstrutura. Sessao e WhatsappEvento são tabelas técnicas. Usuario guarda telefone, troca obrigatória de senha e os campos da exclusão lógica reversível. Permanecem restrições de perfis, estados, vínculo do dispositivo com shopping, código/canal únicos, hierarquia interna e histórico de eventos. CHECKs estão no SQL e devem ser preservados em futuras migrations. O [modelo de dados atual](../segunda-mente/Vaggu/Documentação/modelo-de-dados.md) separa essas tabelas das entidades ainda planejadas para telemetria e operação.
+Modelos persistidos atuais incluem Shopping, Andar, Setor, Vaga, Usuario, Dispositivo, Sensor, InicializacaoPlaca, EventoTelemetriaRecebido, HistoricoVaga e ImportacaoEstrutura. Sessao e WhatsappEvento são tabelas técnicas. Chaves compostas preservam o shopping em sensor, placa e histórico; sequência e payload possuem deduplicação persistente. CHECKs estão no SQL e devem ser preservados em futuras migrations.
 
 ## Organização
 
@@ -167,7 +187,9 @@ Modelos persistidos atuais: Shopping, Andar, Setor, Vaga, Usuario, Dispositivo, 
 | src/shoppings/ | Shoppings, gerentes, senha provisória e redefinição administrativa. |
 | src/estrutura/ | Hierarquia do estacionamento, mapa, revisão concorrente e escopo do gerente. |
 | src/importacao/ | Contratos, leitores CSV/XLSX, validação tabular, identificação de IDs, prévia e confirmação atômica. |
+| src/telemetria/ | Contratos ESP32, confirmação, ingestão persistente, rotas e expiração por sensor. |
 | scripts/create-admin.ts | Comando interativo do administrador. |
+| scripts/provisionar-placa.ts e scripts/simular-telemetria.ts | Provisionamento com chave de exibição única e cenário sintético pela API. |
 | src/app.ts e src/server.ts | Express e inicialização. |
 | src/config/ e src/lib/ | Configuração e Prisma. |
 | prisma/ | Schema e migrations versionadas. |
@@ -175,7 +197,7 @@ Modelos persistidos atuais: Shopping, Andar, Setor, Vaga, Usuario, Dispositivo, 
 
 ## Verificação e limites
 
-`npm test` compila o TypeScript e executa os testes HTTP/configuração/schema e o runner de autenticação/gerentes. Sem `TEST_DATABASE_URL`, a integração aparece explicitamente como **PENDENTE/skip**; isso não comprova CA04–CA07. Gere o cliente antes do primeiro build com `npm run db:generate`, usando uma `DATABASE_URL` de desenvolvimento configurada (a geração não conecta ao banco).
+`npm test` compila o TypeScript e executa os testes HTTP/configuração/schema, autenticação e telemetria. Sem `TEST_DATABASE_URL`, as integrações aparecem explicitamente como **PENDENTE/skip**; isso não comprova a persistência P05/P06 nem CA15–CA24. Gere o cliente antes do primeiro build com `npm run db:generate` (a geração não conecta ao banco).
 
 Para integração local, crie `.env.teste.local` (ignorado pelo Git) contendo `TEST_DATABASE_URL` e execute `npm run test:integracao`. Esse comando falha se o arquivo não existir. Em CI, configure `TEST_DATABASE_URL` no ambiente e use `npm test`. Uma URL presente mas inválida ou inacessível falha, sem converter o erro em skip.
 
