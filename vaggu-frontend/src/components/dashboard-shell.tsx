@@ -54,7 +54,7 @@ function Navigation({ items, admin = false, aoNavegar }: { items: NavItem[]; adm
             className={cn(
               "h-11 justify-start gap-3 rounded-xl px-3",
               active
-                ? admin ? "bg-neutral-950 text-[#ffe100] hover:bg-neutral-900" : "bg-[#ffe100] text-black hover:bg-[#ffe100]/90"
+                ? admin ? "bg-neutral-950 text-[#ffe100] hover:bg-neutral-900 hover:text-[#ffe100]" : "bg-[#ffe100] text-black hover:bg-[#ffe100]/90 hover:text-black"
                 : admin ? "text-neutral-950 hover:bg-black/10 hover:text-black" : "text-neutral-400 hover:bg-neutral-900 hover:text-white",
             )}
             key={item.href}
@@ -95,11 +95,11 @@ export function DashboardShell({
   const isAdmin = currentUser?.role === "admin"
   const navItems: NavItem[] = isAdmin
     ? [
-        { label: "Visão geral", href: "/admin", icon: LayoutDashboard },
-        { label: "Cadastrar shopping", href: "/admin/cadastrar", icon: FilePlus2 },
-        { label: "Shoppings", href: "/admin/shoppings", icon: Building2 },
-        { label: "Minha conta", href: "/admin/conta", icon: UserRound },
-      ]
+      { label: "Visão geral", href: "/admin", icon: LayoutDashboard },
+      { label: "Cadastrar shopping", href: "/admin/cadastrar", icon: FilePlus2 },
+      { label: "Shoppings", href: "/admin/shoppings", icon: Building2 },
+      { label: "Minha conta", href: "/admin/conta", icon: UserRound },
+    ]
     : [{ label: "Estacionamento", href: "/painel", icon: LayoutDashboard }, { label: "Minha conta", href: "/painel/conta", icon: UserRound }]
   const shoppingItems: NavItem[] = shoppingId ? [
     { label: "Visão geral", href: `/admin/shoppings/${shoppingId}`, icon: LayoutDashboard },

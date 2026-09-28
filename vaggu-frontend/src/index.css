@@ -32,6 +32,29 @@
 
 html {
   scroll-behavior: smooth;
+  scrollbar-color: var(--scrollbar-thumb) var(--scrollbar-track);
+  scrollbar-width: auto;
+}
+
+/* Mantém a rolagem visível e alinhada à identidade amarela e escura da VAGGU. */
+*::-webkit-scrollbar {
+  width: 12px;
+  height: 12px;
+}
+
+*::-webkit-scrollbar-track {
+  background: var(--scrollbar-track);
+}
+
+*::-webkit-scrollbar-thumb {
+  min-height: 44px;
+  border: 3px solid var(--scrollbar-track);
+  border-radius: 999px;
+  background: var(--scrollbar-thumb);
+}
+
+*::-webkit-scrollbar-thumb:hover {
+  background: var(--scrollbar-thumb-hover);
 }
 
 body {
@@ -87,6 +110,9 @@ body {
 }
 
 :root {
+  --scrollbar-track: #0a0a0a;
+  --scrollbar-thumb: #ffe100;
+  --scrollbar-thumb-hover: #f2d500;
   --background: oklch(1 0 0);
   --foreground: oklch(0.145 0 0);
   --card: oklch(1 0 0);
@@ -122,6 +148,9 @@ body {
 }
 
 .dark {
+  --scrollbar-track: #0a0a0a;
+  --scrollbar-thumb: #ffe100;
+  --scrollbar-thumb-hover: #f2d500;
   --background: oklch(0.145 0 0);
   --foreground: oklch(0.985 0 0);
   --card: oklch(0.205 0 0);

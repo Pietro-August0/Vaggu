@@ -27,3 +27,14 @@ test('configuração recusa portas inválidas', () => {
     assert.throws(() => readEnv({ DATABASE_URL: databaseUrl, PORT: port }));
   }
 });
+
+test('telemetria usa parâmetros provisórios configuráveis e lacuna menor que trinta segundos', () => {
+  const config = readEnv({
+    DATABASE_URL: databaseUrl,
+    TELEMETRIA_LACUNA_MAXIMA_MS: '10000',
+    TELEMETRIA_TIMEOUT_SENSOR_MS: '90000',
+  });
+  assert.equal(config.telemetria.lacunaMaximaMs, 10_000);
+  assert.equal(config.telemetria.timeoutSensorMs, 90_000);
+  assert.throws(() => readEnv({ DATABASE_URL: databaseUrl, TELEMETRIA_LACUNA_MAXIMA_MS: '30000' }));
+});

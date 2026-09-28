@@ -240,6 +240,8 @@ Retorno de contato encerra a falha de comunicação correspondente, mas o histó
 
 Esta seção é **proposta técnica** de contrato e algoritmo. Deve ser conciliada com o firmware existente e implementada com testes de tempo, concorrência e reinicialização.
 
+**Estado local em 28/09/2026:** o primeiro recorte segue esta proposta com sequência global entre heartbeat/estados, relógio autoritativo do servidor, rejeição atômica do lote e credencial `Authorization: Device <chave>`. Lacuna e timeouts são configuração provisória, não confirmação do firmware. A integração PostgreSQL, o hardware, manutenção/ocorrências, validade nas consultas e o deploy permanecem pendentes; P06 não está concluído.
+
 ### 9.1 Parâmetros
 
 | Parâmetro | Valor/situação |

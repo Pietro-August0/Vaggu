@@ -40,7 +40,9 @@ erDiagram
 | --- | --- | --- |
 | `Perfil` | `VAGGU`, `SHOPPING` | Distingue o Admin VAGGU do gerente vinculado a um shopping. |
 | `TipoVaga` | `COMUM`, `PCD`, `IDOSO`, `ELETRICA` | Classifica a finalidade da vaga; não representa ocupação. |
-| `EstadoVaga` | `LIVRE`, `OCUPADA`, `DESCONHECIDA` | Guarda o estado operacional atual e o histórico legado. Ainda não cobre o contrato planejado de indisponibilidade do P06. |
+| `EstadoVaga` | `LIVRE`, `OCUPADA`, `INDISPONIVEL`, `DESCONHECIDA` | Separa ocupação confirmada de ausência de dado válido; `DESCONHECIDA` permanece para compatibilidade legada. |
+| `TipoEventoTelemetria` | `HEARTBEAT`, `ESTADOS` | Distingue contato da placa de observações individuais dos sensores. |
+| `ResultadoEventoTelemetria` | `PROCESSADO`, `REJEITADO_ORDEM` | Registra o resultado persistente usado na deduplicação e na proteção contra mensagens antigas. |
 | `SituacaoImplantacao` | `NOVO_ATENDIMENTO`, `EM_ANALISE`, `DOCUMENTACAO_PENDENTE`, `APROVADO`, `EM_CONFIGURACAO`, `AGUARDANDO_INSTALACAO`, `ATIVO`, `REJEITADO`, `INATIVO` | Acompanha a implantação sem substituir o bloqueio institucional do shopping. |
 | `WhatsappEventStatus` | `PROCESSANDO`, `PROCESSADO`, `FALHOU` | Controla o processamento idempotente de mensagens recebidas da Meta. |
 
@@ -108,23 +110,37 @@ erDiagram
 
 ### `Dispositivo` → tabela `dispositivos`
 
-**Finalidade atual:** base legada para um controlador ligado diretamente a canais armazenados nas vagas.
+**Finalidade atual:** representa a placa ESP32 autenticada que envia heartbeat e lotes de sensores.
 
-**Campos principais:** `id: UUID`; `shoppingId: UUID`; `nome: String`; `chaveApiHash: String`; `ultimoContatoEm: DateTime?`; `ativo: Boolean`.
+**Campos principais:** `id: UUID`; `shoppingId: UUID`; `codigo: String?`; `nome: String`; `chaveApiHash: String`; `ultimoContatoEm: DateTime?`; `inicializacaoAtualId: String?`; `ultimaSequencia: Int?`; `ativo: Boolean`.
 
 **Relações e restrições:** pertence a um shopping e pode aparecer em várias vagas. A relação composta `dispositivoId + shoppingId` impede vincular a vaga a um dispositivo de outro shopping.
 
-**Uso atual:** existe no schema e nas migrations, mas ainda não possui serviço ou endpoint operacional de telemetria. Não deve ser apresentado como monitoramento P06 concluído.
+**Uso atual:** a credencial `Device` autentica a placa; o código identifica o equipamento e a inicialização/sequência globais impedem regressão. Registros legados podem permanecer sem código até serem provisionados.
 
 ### `HistoricoVaga` → tabela `historico_vagas`
 
-**Finalidade atual:** estrutura legada para registrar um estado associado a uma vaga.
+**Finalidade atual:** registra transições confirmadas e expirações associadas a uma vaga, preservando isolamento analítico.
 
-**Campos principais:** `id: UUID`; `vagaId: UUID`; `eventoId: String`; `estado: EstadoVaga`; `registradoEm: DateTime`.
+**Campos principais:** `id: UUID`; `shoppingId: UUID`; `vagaId: UUID`; `eventoId: String`; `estadoAnterior: EstadoVaga?`; `estado: EstadoVaga`; `efetivoEm`, `recebidoEm` e `registradoEm: DateTime`; `origem` e `motivo: String`.
 
 **Relações e restrições:** pertence a uma vaga; `eventoId` é único e evita duplicar esse identificador. A exclusão da vaga é restrita para preservar o histórico.
 
-**Uso atual:** o schema preserva a base histórica, mas o fluxo P06 que produzirá eventos confiáveis ainda não foi implementado.
+**Uso atual:** confirmação e expiração gravam o estado atual da vaga e seu evento na mesma transação. O backfill conserva eventos anteriores como origem/motivo `LEGADO`.
+
+### `Sensor` → tabela `sensores`
+
+**Finalidade:** representa cada canal físico separadamente da comunicação geral da placa.
+
+**Campos principais:** shopping, dispositivo, vaga e código; estado confirmado e candidato; início do candidato; última observação própria e instante de expiração.
+
+**Relações e restrições:** cada vaga possui no máximo um sensor; código é único dentro da placa; chaves compostas impedem vínculo cruzado entre shoppings.
+
+### `InicializacaoPlaca` e `EventoTelemetriaRecebido`
+
+**Finalidade:** registrar inicializações conhecidas e deduplicar persistentemente a sequência global de heartbeat/estados.
+
+**Relações e restrições:** dispositivo, inicialização e sequência formam chave única. O hash do payload distingue reenvio idêntico de reutilização conflitante da sequência; evento rejeitado por ordem não renova contato nem sensores.
 
 ### `ImportacaoEstrutura` → tabela `importacoes_estrutura`
 
@@ -146,30 +162,21 @@ erDiagram
 
 **Uso atual:** idempotência técnica do webhook e registro de falha/processamento; não equivale a uma conversa comercial completa.
 
-## Limites do modelo atual para o P06
+## Estado e limites do primeiro recorte operacional do P06
 
-Os campos de `Dispositivo`, `Vaga` e `HistoricoVaga` são uma base antiga, mas não implementam a telemetria confiável especificada para o P06:
+A API agora recebe `/telemetria/heartbeat` e `/telemetria/estados`, rejeita o lote inteiro quando um sensor não pertence à placa, usa o relógio do servidor, confirma somente após 30 segundos consistentes, deduplica por placa/inicialização/sequência e expira cada sensor por sua própria observação. Heartbeat nunca renova sensor.
 
-- não existe uma entidade `Sensor`; o canal está embutido na vaga;
-- não há identidade de inicialização do ESP32, sequência nem controle persistente completo de eventos recebidos;
-- não há estado candidato, início/continuidade da confirmação de 30 segundos nem observação por sensor;
-- `ultimoContatoEm` do dispositivo não comprova que todos os sensores vinculados funcionam;
-- o enum atual usa `DESCONHECIDA` e ainda não representa de forma final a indisponibilidade causada por dado expirado;
-- o histórico não separa instante efetivo, instante de recebimento, estado anterior, origem e motivo;
-- não existem ocorrências de equipamento/manutenção nem rotina persistente de expiração;
-- não existem serviços ou endpoints de placa, sensor ou ingestão no backend atual.
+Continuam pendentes: ensaio com o firmware real; valores definitivos de frequência, lacuna e timeout; ocorrência/manutenção de equipamento; retenção dos marcadores de replay; consulta do mapa aplicando validade no momento da leitura; testes PostgreSQL executados com `TEST_DATABASE_URL`; interface administrativa de placas/sensores e implantação no ambiente compartilhado. Portanto P06 permanece em andamento.
 
-Portanto, os campos existentes não autorizam tratar heartbeat como leitura de sensor, dado expirado como vaga livre ou `HistoricoVaga` como histórico operacional completo.
+## Entidades planejadas ou parcialmente implementadas
 
-## Entidades planejadas, ainda não implementadas
-
-A lista abaixo resume propostas do SSD. Os nomes e a separação em tabelas ainda precisam ser conciliados com firmware, retenção, migrations e testes; nenhuma delas aparece hoje como modelo Prisma independente.
+A lista abaixo separa o recorte persistido das evoluções ainda necessárias.
 
 | Proposta | Necessidade prevista | Relação com o modelo atual |
 | --- | --- | --- |
-| `Placa` e `Sensor` | Separar o controlador ESP32 de cada canal físico, autenticar a placa e acompanhar observação/expiração por sensor. | Deve substituir ou evoluir `Dispositivo` e os campos de canal embutidos em `Vaga`, sem perder vínculos. |
-| `EventoOcupacao` | Guardar transições confirmadas com estados anterior/novo, instantes efetivo e recebido, origem e motivo. | Evolução proposta de `HistoricoVaga`; não deve recriar IDs das vagas. |
-| `ControleEventoRecebido` | Deduplicar telemetria por placa, inicialização e sequência e registrar seu resultado. | `eventoId` único no histórico atual não cobre sozinho todo o processamento. |
+| `Placa` e `Sensor` | Separar o controlador ESP32 de cada canal físico, autenticar a placa e acompanhar observação/expiração por sensor. | Implementado como evolução compatível de `Dispositivo` mais a entidade `Sensor`; falta administração visual e hardware real. |
+| `EventoOcupacao` | Guardar transições confirmadas com estados anterior/novo, instantes efetivo e recebido, origem e motivo. | Implementado no `HistoricoVaga` sem recriar IDs das vagas; métricas P08 ainda dependem de consultas próprias. |
+| `ControleEventoRecebido` | Deduplicar telemetria por placa, inicialização e sequência e registrar seu resultado. | Implementado por `InicializacaoPlaca` e `EventoTelemetriaRecebido`; retenção definitiva depende do firmware. |
 | `EventoEquipamento` e `OcorrenciaTecnica` | Preservar falhas, retornos e manutenções de placa/sensor sem ocorrências repetidas. | Ausentes no schema atual. |
 | `MapaAndar` e `PosicaoVaga` | Separar mapas/revisões e posições caso o produto precise preservar versões. | Hoje `imagemMapa`/`revisaoMapa` ficam em `Andar` e as coordenadas ficam em `Vaga`. Uma migração só é necessária se essa separação for confirmada. |
 | `DocumentoShopping` | Referenciar documentos privados e seu estado. | Não existe no escopo atual. |

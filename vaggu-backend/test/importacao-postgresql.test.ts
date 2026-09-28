@@ -16,7 +16,17 @@ test('prévia persistida preserva vagas e isola consultas por shopping', {
   const outro = await prisma.shopping.create({ data: { nome: 'Outro shopping' } });
   const vaga = await prisma.vaga.create({ data: { shoppingId: shopping.id, codigo: 'A-001' } });
   const ausente = await prisma.vaga.create({ data: { shoppingId: shopping.id, codigo: 'A-999' } });
-  const historico = await prisma.historicoVaga.create({ data: { vagaId: vaga.id, eventoId: 'evento-p05', estado: 'OCUPADA' } });
+  const instanteHistorico = new Date();
+  const historico = await prisma.historicoVaga.create({ data: {
+    shoppingId: shopping.id,
+    vagaId: vaga.id,
+    eventoId: 'evento-p05',
+    estado: 'OCUPADA',
+    efetivoEm: instanteHistorico,
+    recebidoEm: instanteHistorico,
+    origem: 'TESTE_P05',
+    motivo: 'PRESERVACAO',
+  } });
   const previa = await servico.criarPreviaCsv(shopping.id, 'codigo,andar,setor,tipo\nA-001,Térreo,A,PCD\nA-002,Térreo,A,COMUM');
   assert.equal(previa.registros[0]?.vagaId, vaga.id);
   const armazenada = await servico.buscarPrevia(shopping.id, previa.importacaoId);
@@ -51,7 +61,17 @@ test('confirma prévia uma única vez preservando IDs, histórico e vagas ausent
   const setor = await prisma.setor.create({ data: { shoppingId: shopping.id, andarId: andar.id, nome: 'A' } });
   const vaga = await prisma.vaga.create({ data: { shoppingId: shopping.id, andarId: andar.id, setorId: setor.id, codigo: 'A-001', tipo: 'COMUM' } });
   const ausente = await prisma.vaga.create({ data: { shoppingId: shopping.id, andarId: andar.id, setorId: setor.id, codigo: 'A-999', tipo: 'PCD' } });
-  const historico = await prisma.historicoVaga.create({ data: { vagaId: vaga.id, eventoId: 'evento-confirmacao-p05', estado: 'OCUPADA' } });
+  const instanteHistorico = new Date();
+  const historico = await prisma.historicoVaga.create({ data: {
+    shoppingId: shopping.id,
+    vagaId: vaga.id,
+    eventoId: 'evento-confirmacao-p05',
+    estado: 'OCUPADA',
+    efetivoEm: instanteHistorico,
+    recebidoEm: instanteHistorico,
+    origem: 'TESTE_P05',
+    motivo: 'PRESERVACAO',
+  } });
 
   const previa = await servico.criarPreviaCsv(shopping.id,
     'codigo,andar,setor,tipo\nA-001,Térreo,B,IDOSO\nA-002,Subsolo 1,C,ELETRICA');

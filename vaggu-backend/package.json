@@ -15,6 +15,8 @@
     "test:integracao": "npm run build && node --env-file=.env.teste.local --test dist/test/integracao-acessos.test.js dist/test/importacao-postgresql.test.js",
     "typecheck": "tsc -p tsconfig.json --noEmit",
     "admin:create": "npm run build && node dist/scripts/create-admin.js",
+    "telemetria:provisionar": "npm run build && node dist/scripts/provisionar-placa.js",
+    "telemetria:simular": "npm run build && node dist/scripts/simular-telemetria.js",
     "db:validate": "prisma validate",
     "db:generate": "prisma generate",
     "db:setup": "prisma generate && prisma migrate deploy",
