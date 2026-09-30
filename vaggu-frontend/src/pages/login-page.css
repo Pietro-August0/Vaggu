@@ -84,12 +84,31 @@
   border-radius: 6px;
 }
 
+.login-olho:hover {
+  background: rgb(23 23 23 / 8%);
+}
+
+.login-olho:active {
+  background: rgb(23 23 23 / 14%);
+}
+
 .login-recuperar {
   font-size: 12px;
   color: #525252;
   margin-top: 8px;
   text-decoration: underline;
   text-underline-offset: 3px;
+}
+
+.login-recuperar:hover,
+.login-voltar:hover {
+  color: #171717;
+  text-decoration-thickness: 2px;
+}
+
+.login-recuperar:active,
+.login-voltar:active {
+  color: #000;
 }
 
 .login-enviar {
@@ -107,6 +126,10 @@
 
 .login-enviar:hover {
   background: #f2d500;
+}
+
+.login-enviar:active {
+  background: #e0c600;
 }
 
 .pagina-login button {
@@ -217,6 +240,15 @@
   border-radius: 30px;
   font-size: 12px;
   font-weight: 400;
+}
+
+.login-suporte> :is(a, button):not(.login-voltar):hover {
+  background: #171717;
+  color: #ffe100;
+}
+
+.login-suporte> :is(a, button):not(.login-voltar):active {
+  background: #000;
 }
 
 .login-voltar {
