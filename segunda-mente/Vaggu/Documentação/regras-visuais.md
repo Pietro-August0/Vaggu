@@ -11,7 +11,7 @@ Referência principal: [Figma VAGGU — página Web](https://www.figma.com/desig
 - A referência já consultada na conversa e o documento mestre sustentam a direção visual: amarelo, tons escuros, textos claros, marca VAGGU e interface minimalista.
 - Em 09/09, a nova consulta à integração foi bloqueada por limite de chamadas. Não foi possível extrair novamente cores numéricas, fontes, espaçamentos e componentes deste nó.
 - Em 23/09, a equipe forneceu um guia de identidade com paleta hexadecimal e Poppins. Essa imagem é uma fonte entregue pela equipe, não uma extração do Figma.
-- As regras abaixo distinguem **identidade fornecida**, **tokens encontrados no código**, **regras de implementação** e **itens a conferir**.
+- As regras abaixo distinguem **identidade fornecida**, **cores e medidas encontradas no código**, **regras de implementação** e **itens a conferir**.
 - Frames podem preservar escopo antigo, como motos. As decisões atuais de produto prevalecem; o estilo visual continua sendo a referência.
 
 ## 2. Identidade conhecida e obrigatória
@@ -92,7 +92,7 @@ Os nomes são uma proposta de organização; adaptar aos tokens existentes. Não
 | Estado vazio | Explicação do motivo e próxima ação possível, sem números inventados. |
 | Erro de conexão | Explicar perda de atualização, permitir recuperação sem esconder dados expirados. |
 
-Estados a implementar: padrão, hover onde aplicável, foco, pressionado/selecionado, desabilitado, carregando, vazio, erro, sucesso e dados desatualizados. Usar padrões existentes e evitar uma versão diferente de modal para cada tela.
+Estados a conferir em cada componente: padrão, passagem do mouse quando aplicável, foco, pressionado ou selecionado, desabilitado, carregando, vazio, erro, sucesso e dados desatualizados. Usar padrões existentes e evitar uma janela diferente para cada tela.
 
 Cards acionáveis usam uma resposta curta de elevação e pressão, sem animações decorativas longas. O contorno da palavra “vagas” no login se desenha como rabisco ao carregar.
 
@@ -134,9 +134,9 @@ Reutilizar a base visual, mas oferecer organização para shoppings, acessos e e
 
 ## 7. Responsividade e acessibilidade
 
-Adotar layout fluido e breakpoints necessários ao conteúdo, conciliados com os frames existentes. Como **matriz de verificação proposta**, testar aproximadamente 360, 768, 1280 e 1920 pixels, além da resolução real do telão. Esses números não foram extraídos do Figma.
+Adotar layout fluido e larguras de tela adequadas ao conteúdo, conciliadas com os desenhos existentes. Como **matriz de verificação proposta**, testar aproximadamente 360, 768, 1280 e 1920 pixels, além da resolução real do telão. Esses números não foram extraídos do Figma.
 
-Conferir navegação por teclado, foco visível, leitura dos controles por tecnologia assistiva, zoom do navegador, textos maiores e áreas de toque. Por decisão da equipe em 23/09, as animações permanecem ativas independentemente da preferência de movimento do sistema. Nenhuma informação essencial depende apenas de hover, animação ou cor.
+Conferir navegação por teclado, foco visível, leitura dos controles por tecnologia assistiva, zoom do navegador, textos maiores e áreas de toque. A interface atual respeita a preferência do usuário por menos movimento. Nenhuma informação essencial depende apenas de passagem do mouse, animação ou cor.
 
 Verificar contraste de texto/controles usando os valores reais; não declarar conformidade completa de acessibilidade sem auditoria. Scroll horizontal interno pode ser necessário no mapa; não deve fazer a página inteira escapar da tela.
 
@@ -148,7 +148,7 @@ Se um asset exato vier do Figma, preservar o desenho e dar nome descritivo em po
 
 ## 9. Procedimento para confirmar a identidade
 
-1. Localizar o nó da tela e ler o contexto de design com a skill de Figma disponível.
+1. Localizar o nó da tela e consultar o contexto disponível no Figma.
 2. Obter/revisar sua captura e os componentes associados.
 3. Inventariar tokens, fontes, assets, variantes e espaçamentos reais, distinguindo o que veio do Figma do que foi fornecido diretamente pela equipe.
 4. Comparar com o repositório e reutilizar o que corresponde.
@@ -160,11 +160,11 @@ Se um asset exato vier do Figma, preservar o desenho e dar nome descritivo em po
 
 ### Revisão da seção Sobre — 09/09/2026
 
-A seção usa como referência complementar os arquivos `Group 132.png` e `Group 132.svg` enviados pela equipe: apresentação com anéis ao redor da marca, quatro etapas com círculos amarelos e notebook conectado aos benefícios. O componente `sobre-vaggu.tsx` reutiliza Poppins, `--primary` e os assets existentes. As linhas aparecem ao entrar na tela, com disposição vertical no celular. Pela decisão de 14/09, essa animação decorativa continua automática mesmo com preferência por movimento reduzido.
+A seção usa como referência complementar os arquivos `Group 132.png` e `Group 132.svg` enviados pela equipe: apresentação com anéis ao redor da marca, quatro etapas com círculos amarelos e notebook conectado aos benefícios. O componente `sobre-vaggu.tsx` reutiliza Poppins, `--primary` e as imagens existentes. As linhas aparecem ao entrar na tela, com disposição vertical no celular; quando o usuário prefere menos movimento, a apresentação reduz ou remove a animação decorativa.
 
-Os textos foram ajustados ao escopo de estacionamento: “Eventos estratégicos” e “Gestão de público” passam a “Planejamento da operação” e “Visão da ocupação”. A pedido da equipe, a legenda visível do notebook e todo o controle manual de pausa foram removidos; o notebook mantém descrição alternativa de ilustração. As conexões do notebook aguardam a maior parte do painel entrar na viewport antes de iniciar. A consulta ao contexto do nó `2022:2` retornou erro de seleção; medidas exatas e tokens do Figma continuam pendentes de confirmação. Esta revisão da apresentação não comprova implementação das integrações anunciadas.
+Os textos foram ajustados ao escopo de estacionamento: “Eventos estratégicos” e “Gestão de público” passam a “Planejamento da operação” e “Visão da ocupação”. A pedido da equipe, a legenda visível do notebook e o controle manual de pausa foram removidos; o notebook mantém descrição alternativa de ilustração. As conexões aguardam a maior parte do painel entrar na área visível da tela antes de iniciar. Medidas exatas e componentes do Figma continuam pendentes de confirmação. Esta revisão da apresentação não comprova implementação das integrações anunciadas.
 
-Refinamento solicitado pela equipe em 09/09: reduzir a escala e o peso da seção para acompanhar o restante da landing. Títulos usam peso 400, textos de apoio 300 e círculos das etapas têm até 136 px. Rótulos do diagrama são posicionados pelo raio dos anéis; pontos luminosos percorrem as órbitas continuamente enquanto a landing está aberta. Em 14/09, a decisão mais recente da equipe definiu animações automáticas mesmo quando o navegador informa movimento reduzido, sem botão ou controle manual de pausa. Nenhuma informação essencial depende do movimento. Referências: [Orbiting Circles](https://magicui.design/docs/components/orbiting-circles), [Moving Border](https://ui.aceternity.com/components/moving-border) e [Motion](https://motion.dev/). Implementação própria com CSS e Motion já instalado, sem adicionar bibliotecas.
+Refinamento solicitado pela equipe em 09/09: reduzir a escala e o peso da seção para acompanhar o restante da landing. Títulos usam peso 400, textos de apoio 300 e círculos das etapas têm até 136 px. Rótulos do diagrama são posicionados pelo raio dos anéis; pontos luminosos percorrem as órbitas quando o movimento está habilitado. Nenhuma informação essencial depende do movimento. Referências: [Orbiting Circles](https://magicui.design/docs/components/orbiting-circles), [Moving Border](https://ui.aceternity.com/components/moving-border) e [Motion](https://motion.dev/). Implementação própria com CSS e Motion já instalado, sem adicionar bibliotecas.
 
 A seção seguinte, `operacao-vaggu.tsx`, preserva a foto urbana e apresenta um título, explicação, benefícios de planejamento/implantação e contato pelo WhatsApp. Substitui os dois cards no rodapé de uma área alta por conteúdo alinhado à imagem; no celular, a imagem precede o texto. Essas mudanças seguem a correção explícita da equipe, não uma nova extração de medidas do Figma.
 

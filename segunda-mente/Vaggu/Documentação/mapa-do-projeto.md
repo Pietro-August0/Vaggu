@@ -2,7 +2,7 @@
 
 O frontend começa em main.tsx, monta o provedor de sessão e encaminha /login, /trocar-senha, /admin e /painel. O cliente HTTP chama /api/v1 pelo proxy local do Vite; o backend server.ts conecta os serviços e app.ts monta as rotas. Serviços validam permissões antes de acessar o Prisma/PostgreSQL. O cookie HttpOnly preserva a sessão no refresh; a identidade pública é restaurada da API.
 
-Conhecimento, documentos e regras ficam em `segunda-mente`. As skills `start` e `end` usam o planejamento canônico da segunda mente como registro diário. Assets da aplicação ficam no `public` do frontend; o cofre mantém cópias próprias das evidências necessárias ao Obsidian. Dependências, builds, segredos e bancos ignorados não integram o mapa.
+Conhecimento, documentos e regras ficam em `segunda-mente`. O planejamento canônico registra a situação atual e a continuidade. Imagens da aplicação ficam no `public` do frontend; o cofre mantém cópias próprias das evidências necessárias ao Obsidian. Dependências, builds, segredos e bancos ignorados não integram o mapa.
 
 ## Pastas principais
 
@@ -10,11 +10,10 @@ Conhecimento, documentos e regras ficam em `segunda-mente`. As skills `start` e 
 | --- | --- |
 | `scripts/` | Reúne verificações do repositório que não pertencem ao frontend nem ao backend. |
 | `segunda-mente/` | Mantém o cofre Obsidian canônico, suas fontes, evidências e registros históricos. |
-| `skills/` | Versiona rotinas operacionais usadas pelos agentes e pela equipe. |
 | `vaggu-backend/` | Contém API, regras de domínio, persistência, integrações e testes do servidor. |
 | `vaggu-frontend/` | Contém a aplicação React, componentes, páginas, contratos e assets publicados. |
 
-As cópias de imagens entre `segunda-mente/Vaggu/Identidade visual/Assets/` e `vaggu-frontend/public/assets/` são intencionais: o cofre precisa renderizar a referência visual sem depender do bundle, enquanto a aplicação precisa publicar seus próprios arquivos. As notas em `segunda-mente/Vaggu/Skills/` são índices documentais, não implementações duplicadas.
+As cópias de imagens entre `segunda-mente/Vaggu/Identidade visual/Assets/` e `vaggu-frontend/public/assets/` são intencionais: o cofre precisa mostrar a referência visual sem depender do arquivo gerado do site, enquanto a aplicação precisa publicar seus próprios arquivos.
 
 ### Documentos e evidências acrescentados em 23/09/2026
 
@@ -39,19 +38,10 @@ As cópias de imagens entre `segunda-mente/Vaggu/Identidade visual/Assets/` e `v
 | `.gitattributes` | Padroniza tratamento de arquivos e terminações de linha no Git. |
 | `.github/workflows/publicar-render.yml` | Solicita ao Render um novo deploy após cada push na `main`, usando um Deploy Hook guardado como segredo do GitHub. |
 | `.gitignore` | Exclui ferramentas locais, segredos, dependências e saídas de build. |
-| `AGENTS.md` | Define escopo, regras de implementação, documentação e verificação para agentes. |
+| `CONTRIBUTING.md` | Reúne os acordos humanos de contribuição, produto, documentação, verificação e Git. |
 | `README.md` | Apresenta a VAGGU no GitHub com proposta, experiência por perfil, imagens comentadas, tecnologias, início local e links para a documentação técnica. |
 | `render.yaml` | Define build, inicialização, saúde e solicita os segredos de banco e Blob sem versionar seus valores. |
 | `scripts/verificar-documentacao.mjs` | Confere se o mapa canônico explica os arquivos versionáveis e se os links internos da segunda mente possuem destino válido. |
-| `skills/end/SKILL.md` | Documentação: Fechamento do dia — VAGGU. |
-| `skills/end/agents/openai.yaml` | Metadados de descoberta e apresentação da skill no Codex. |
-| `skills/rotear-trabalho-equipe/SKILL.md` | Roteia cada tarefa para o integrante responsável e seleciona ou cria uma branch segura e rastreável. |
-| `skills/rotear-trabalho-equipe/agents/openai.yaml` | Metadados de descoberta e apresentação do roteador de trabalho da equipe. |
-| `skills/rotear-trabalho-equipe/references/equipe.md` | Registra papéis, branches-base e critérios de desempate entre áreas da equipe. |
-| `skills/rotear-trabalho-equipe/references/autoria-coletiva.md` | Define a atribuição honesta de coautoria para trabalho coletivo realizado em uma única máquina. |
-| `skills/rotear-trabalho-equipe/scripts/gerar-coautoria.mjs` | Gera trailers `Co-authored-by` a partir da configuração local ignorada pelo Git, sem trocar identidades nem criar commits. |
-| `skills/start/SKILL.md` | Documentação: Início do dia — VAGGU. |
-| `skills/start/agents/openai.yaml` | Metadados de descoberta e apresentação da skill no Codex. |
 | `vaggu-backend/.env.example` | Documenta banco, servidor, WhatsApp e parâmetros provisórios da telemetria sem incluir credenciais reais. |
 | `vaggu-backend/README.md` | Documentação: Vaggu Backend — 0.5.0. |
 | `vaggu-backend/package-lock.json` | Fixa a árvore de dependências e integridade para instalação reproduzível via npm ci. |

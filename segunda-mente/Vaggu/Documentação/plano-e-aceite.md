@@ -4,7 +4,7 @@ Versão 1.0 • 09/09/2026
 
 Este plano organiza dependências e evidências. Não é um registro de funcionalidades já concluídas. Cada etapa deve ser conciliada com o código existente; não recriar o que estiver implementado e validado.
 
-## 1. Diagnóstico inicial do Codex
+## 1. Como avaliar cada entrega
 
 Inspecionar repositório, instruções locais, scripts, dependências, schema, migrations, autenticação, frontend, serviços, hardware disponível e testes. Produzir uma tabela com requisito, estado e evidência:
 
@@ -22,64 +22,17 @@ Não usar “concluído” porque uma tela existe no Figma ou um cartão está m
 | Etapa | Escopo | Dependência | Evidência de conclusão |
 | --- | --- | --- | --- |
 | E0 — Base | Diagnóstico, convenções, divergências e configuração de desenvolvimento | Repositório correto | Inventário com evidências, comandos reais e próxima entrega definida. |
-| E1 — Contato e acessos | Landing/WhatsApp, bot, shopping, vários gerentes, sessão, troca e bloqueio | E0 | Jornada testada; dois gerentes no mesmo shopping e isolamento contra outro. |
-| E2 — Estrutura e mapa | Andares, setores, vagas, importação, mapas e posições | E1 | Dois andares navegáveis e importação sem perda de IDs. |
-| E3 — Equipamentos | Placa/sensor, protocolo, ingestão, expiração, ocorrências e manutenção | E1/E2 e contrato de firmware | Maquete ou simulador identificado demonstra estados, falhas e retorno. |
+| E1 — Acessos | Shopping, vários gerentes, sessão, troca e bloqueio | E0 | Dois gerentes no mesmo shopping entram separadamente e não acessam outro shopping. |
+| E1C — Contato | Landing, WhatsApp e atendimento humano | E0; pode avançar separadamente | Contato abre o canal correto e o menu não duplica solicitações. |
+| E2 — Estrutura e mapa | Andares, setores, vagas, importação, mapas e posições | E1 | Dois andares navegáveis e importação sem perda de registros. |
+| E3 — Equipamentos | Placa, sensor, recebimento das leituras, expiração, ocorrências e manutenção | E1/E2 e acordo com o firmware | Maquete ou simulador identificado demonstra estados, falhas e retorno. |
 | E4 — Operação e histórico | Indicadores, telões, filtros, eventos, comparações e exportação | E2/E3 | Contagens reconciliadas e histórico com indisponibilidade explícita. |
 | E5 — Power BI | Views, medidas, relatório e atualização | E4 | Relatório funcional com números iguais ao conjunto controlado. |
 | E6 — Integração | Fluxo completo, responsividade, permissões e preparação de apresentação | E1–E5 | Roteiro completo reproduzível e limitações declaradas. |
 
 O fluxo comercial pode ser testado com atendimento demonstrativo. Dados simulados devem estar identificados. Quando houver hardware real, conferir ingestão e interrupção física de comunicação; não chamar um simulador de integração física.
 
-## 3. Organização dos agentes
-
-Usar agentes quando a tarefa e o ambiente autorizarem, com divisão que produza trabalho independente. Os papéis abaixo são responsabilidades possíveis, não agentes instalados ou nomes que precisam ser criados.
-
-| Papel | Escopo | Limite |
-| --- | --- | --- |
-| Coordenador | Plano, contratos, dependências, integração e comunicação | Responsável final; confere evidências dos demais. |
-| Produto/contratos | Divergências, critérios e desenho de API | Não decide sozinho mudanças de escopo confirmadas. |
-| Frontend/visual | Interface, componentes e mapa | Respeita tokens; não muda API compartilhada sem acordo. |
-| Backend/dados | Casos de uso, autorização e migrations | Dono único de schema e contratos comuns durante a entrega. |
-| Telemetria | Firmware/protocolo, sequência, confirmação e offline | Implementa sobre contrato estabilizado com backend. |
-| Análises | Views, medidas e Power BI | Usa fatos validados; não inventa dados de sensores. |
-| Revisão | Testes, isolamento, riscos e comparação visual | Informa evidência e impacto; não aprova por aparência. |
-
-Não usar todos em cada tarefa. Uma alteração pequena pode ser concluída pelo agente principal. Para uma etapa ampla, começar com poucas frentes; aumentar somente se existirem entregas independentes. Número e modelo dependem das capacidades disponíveis, sem impor modelos premium ou inventar configurações.
-
-### Contrato de delegação
-
-Cada subtask deve receber:
-
-1. Objetivo e requisito associado.
-2. Fontes/arquivos que precisa ler.
-3. Arquivos ou diretório sob sua responsabilidade.
-4. Limites: o que precisa preservar e quais contratos não pode alterar sozinho.
-5. Entrada pronta e resultado esperado.
-6. Cenários e comandos de verificação reais.
-7. Formato de retorno: alterações, evidências, riscos e dependências.
-
-Exemplo: um agente revisa a autorização em modo leitura enquanto outro implementa os estados visuais do mapa usando contrato pronto. Evitar dois agentes editando simultaneamente `schema.prisma`, cliente HTTP, token global ou lockfile.
-
-Quando uma alteração afeta contrato compartilhado, coordenador resolve a dependência primeiro. Não integrar apenas com base no resumo do agente: revisar diffs e executar os cenários relevantes após a integração. Worktrees podem isolar mudanças quando forem necessários e houver ferramenta disponível; não são exigência para toda tarefa.
-
-## 4. Escolha de skills
-
-Conferir o catálogo do ambiente e ler a skill antes de aplicar. Os nomes abaixo são referências disponíveis nesta preparação ou capacidades equivalentes; sua instalação no Codex do repositório deve ser confirmada.
-
-| Necessidade | Skill/capacidade a procurar | Aplicação |
-| --- | --- | --- |
-| Ler uma tela do Figma | `figma-design-to-code` | Contexto, captura, assets e adaptação ao código existente. |
-| Alterar o arquivo Figma | `figma-use` e skill específica da ação | Somente quando a tarefa autorizar escrita no design. |
-| Ajustar/testar interface | `frontend-testing-debugging`, skill React pertinente | Erro visual, responsividade, renderização e comportamento. |
-| Revisar PostgreSQL | `supabase-postgres-best-practices` ou equivalente PostgreSQL | Índices, consultas e transações aplicáveis; não implica migrar para Supabase. |
-| Git e PRs | `git-github-professional` ou equivalente | Revisão de diff, commits, descrição e integração conforme autorização. |
-| Verificar fluxo completo | `verification`, navegador ou testes existentes | Percorrer interface, API e banco com evidências. |
-| Consultar integração | Documentação oficial e ferramentas do provedor | Confirmar versão e requisitos reais. |
-
-Não carregar skills de pagamento, app nativo ou geração de imagem apenas porque existem. Não criar skills fictícias para Power BI: usar a documentação e ferramentas disponíveis. Não omitir pré-requisito de uma skill para “ganhar tempo”. Se faltar capacidade, informar a limitação e fazer o que for possível com evidência.
-
-## 5. Critérios de aceite rastreáveis
+## 3. Critérios de aceite rastreáveis
 
 | ID | Requisito | Cenário | Resultado esperado |
 | --- | --- | --- | --- |
@@ -132,17 +85,17 @@ Esta matriz conecta o motivo da funcionalidade ao trabalho técnico. `Planejado`
 | Apresentar a solução e iniciar o atendimento | RF01–RF02; CA01–CA03 | Landing → WhatsApp → atendimento humano | Webhook WhatsApp; `WhatsappEvento` | `landing-page.tsx`; `src/whatsapp/*` | Elisa/Ana no fluxo; Kamilly no backend; Pietro na integração | P10 — parcial/planejado |
 | Criar acessos individuais e proteger cada shopping | RF04–RF05/RF17; CA04–CA07 | Login → troca obrigatória → Admin ou painel | `/auth/*`, `/shoppings/*`, `/gerentes/*`, `/minha-conta`; `Usuario`, `Sessao`, `Shopping` | `app-store.tsx`, páginas de acesso e módulos `auth`, `shoppings`, `conta` | Pietro, Ana e Samuel | P02–P03 — implementado, com correções de interface em C01 |
 | Configurar e consultar o estacionamento | RF03/RF06–RF08; CA08–CA14 | Ficha Admin → estrutura/importação/mapa; gerente → mapa | Rotas de estrutura e importação; `Andar`, `Setor`, `Vaga`, `ImportacaoEstrutura` | `estrutura-admin.tsx`, `visualizacao-vagas.tsx`, módulos `estrutura` e `importacao` | Samuel nos dados; Juan/Elisa na interface; Pietro na integração | P04–P05 — implementado |
-| Receber estados confiáveis dos sensores | RF09–RF13; CA15–CA24 | Equipamentos e estado operacional | Rotas, placa, sensor, sequência, eventos, confirmação e expiração implementados localmente; ocorrências/manutenção e validade na consulta ainda incompletas | Testes unitários/HTTP aprovados; integração PostgreSQL e firmware pendentes | Kamilly, Samuel e Pietro | P06 — em andamento |
+| Receber estados confiáveis dos sensores | RF09–RF13; CA15–CA24 | Equipamentos e estado operacional | Recepção, placa, sensor, ordem, confirmação e expiração implementadas; ocorrências, manutenção e validade no mapa ainda incompletas | Testes locais e integração PostgreSQL aprovados; ESP32 real ainda pendente | Kamilly, Samuel e Pietro | P06 — em andamento |
 | Exibir contagens sem duplicar categorias | RF14; CA25–CA26 | Mapa operacional e telões | Consultas agregadas e autorização do telão ainda planejadas | Ainda sem telas/rotas funcionais | Juan/Elisa na apresentação; Kamilly/Samuel nos dados | P07 — bloqueado por P06 |
-| Explicar o uso no tempo e exportar resultados | RF13/RF15; CA27–CA31 | Histórico, comparação e relatórios | Histórico temporal, métricas, PDF e CSV ainda planejados | Ainda sem fluxo funcional | Samuel nos dados; Ana/Elisa na interface; Pietro na integração | P08 — bloqueado por P06/P07 |
-| Produzir análise externa com os mesmos números | RF16–RF17; CA32–CA33 | Relatório Power BI | Views e modelo analítico planejados | Nenhum relatório funcional encontrado | Samuel e Pietro, com validação de Elisa | P09 — bloqueado por P08 |
+| Explicar o uso no tempo e exportar resultados | RF13/RF15; CA27–CA31 | Histórico, comparação e relatórios | Histórico confirmado e análise dos últimos sete dias implementados; exportações e métricas complementares ainda faltam | API e painéis usam dados reais quando existem e identificam a demonstração quando não existem | Samuel nos dados; Ana/Elisa na interface; Pietro na integração | P08 — iniciado, ainda dependente da conclusão operacional |
+| Produzir análise externa com os mesmos números | RF16–RF17; CA32–CA33 | Relatório Power BI | A preparação dos intervalos históricos existe no banco | Conjunto de conferência e testes existem; nenhum relatório funcional versionado foi encontrado | Samuel e Pietro, com validação de Elisa | P09 — iniciado na preparação dos dados; relatório pendente |
 | Desativar sem apagar histórico | RF18; CA34 | Administração de shopping e gerente | Exclusão lógica confirmada; gerente pode ser restaurado por sete segundos | Serviços `shoppings`; ações e diálogos na ficha administrativa | Samuel no dado; Ana/Elisa/Juan na jornada; Pietro na integração | P03 e C01 implementados |
 
 Detalhes de cada rota real ficam no README do backend; entidades atuais ficam em [modelo de dados](modelo-de-dados.md); telas reais e planejadas ficam em [fluxo de telas](fluxo-de-telas.md).
 
 CA33 só pode ser declarado concluído após implementar a forma de publicação/acesso. Enquanto a demonstração ficar apenas no Desktop, registrar a incorporação como pendente; não fingir teste de RLS no portal.
 
-## 6. Conjunto controlado para reconciliar métricas
+## 4. Conjunto controlado para conferir os números
 
 ### Cenário analítico de duas vagas durante uma hora
 
@@ -170,7 +123,7 @@ Resultados esperados:
 
 A taxa individual da A é 50%, e a da B é 75%. A média simples de 62,5% estaria errada para o conjunto; a ponderação pelos tempos conhecidos produz 60%. Backend, views e Power BI devem reproduzir o mesmo resultado.
 
-## 7. Execução dos testes
+## 5. Execução dos testes
 
 Preferir ferramentas já adotadas no projeto. Usar testes unitários para cálculos e máquina de estados, testes de integração para autorização/transações e testes de interface para fluxos e responsividade. Escolher por risco, não por quantidade.
 
@@ -178,7 +131,7 @@ Timers devem ser controláveis nos testes; evitar esperar minutos reais em cada 
 
 Para cada resultado, registrar cenário, comando real, ambiente de teste, resultado esperado/obtido e evidência. Falha de uma ferramenta não significa teste aprovado. Não declarar “todos os testes passaram” se apenas build ou inspeção estática foi executado.
 
-## 8. Definição de pronto por entrega
+## 6. Definição de pronto por entrega
 
 - [ ] Requisito e recorte da entrega identificados.
 - [ ] Comportamento funciona com dados pertinentes e autorização correta.
@@ -192,7 +145,7 @@ Para cada resultado, registrar cenário, comando real, ambiente de teste, result
 - [ ] Limitações declaradas; tarefa não marcada como pronta por existir apenas a tela.
 - [ ] Commit/PR/publicação feitos apenas quando fazem parte da autorização atual.
 
-## 9. Roteiro da demonstração do TCC
+## 7. Roteiro da demonstração do TCC
 
 1. Mostrar a landing e explicar o encaminhamento ao WhatsApp.
 2. Demonstrar cadastro de shopping e dois gerentes pelo Admin após a parceria.

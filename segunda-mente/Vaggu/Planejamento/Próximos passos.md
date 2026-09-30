@@ -1,6 +1,6 @@
 # Próximos passos
 
-Atualizado em 23/09/2026. Ordem de trabalho, sem promessa de datas.
+Atualizado em 30/09/2026. Esta é a ordem de trabalho, sem promessa de datas.
 
 As sprints históricas da equipe e sua diferença em relação aos pacotes técnicos estão em [[Vaggu/Planejamento/Sprints do projeto]]. A ordem executável das correções está em [[Vaggu/Planejamento/Plano de correção e implementação]].
 
@@ -20,7 +20,7 @@ O D01 e o C01 foram concluídos com documentação e contratos reconciliados. A 
 ## Antes de retomar a implementação
 
 - [x] Revisar as alterações locais da reorganização interrompida em 10/09, preservando o trabalho existente.
-- [x] Consolidar o mapa em `Vaggu/Documentação/mapa-do-projeto.md` e atualizar `AGENTS.md` para a fonte canônica.
+- [x] Consolidar o mapa em `Vaggu/Documentação/mapa-do-projeto.md` e apontar o guia de contribuição para a fonte canônica.
 - [x] Reconciliar configuração, README e planejamento; a referência inexistente a `ambiente-local.md` foi substituída pela configuração canônica.
 - [x] Conferir runtime e conexão PostgreSQL disponíveis, sem transportar credenciais para o Obsidian.
 - [x] Executar os checks exigidos pela reorganização antes de declarar sua conclusão.
@@ -29,13 +29,17 @@ O D01 e o C01 foram concluídos com documentação e contratos reconciliados. A 
 
 A ficha administrativa foi reconciliada com os contratos reais: exclusão lógica de gerente, desfazer por sete segundos e exclusão lógica de shopping. Frontend e integração PostgreSQL foram aprovados; falta apenas substituir as capturas históricas por novas evidências visuais autenticadas.
 
-## Próxima entrega de produto: P06
+## Trabalho atual: concluir o P06
 
-Implementar a base confiável de telemetria para placas ESP32 e sensores, preservando o isolamento por shopping e o histórico operacional.
+A base que recebe as leituras dos sensores já foi criada e testada com PostgreSQL. Ela reconhece a placa, mantém a ordem das mensagens, evita repetições, espera leituras consistentes e torna indisponível a vaga cujo sensor parou de responder.
 
-Entrada: estrutura e importação concluídas no P04–P05, entidades iniciais de placa/sensor e decisões registradas na arquitetura de sensores e telões.
+Para concluir o pacote, a equipe precisa testar com o ESP32 real, definir os tempos finais, criar a gestão de equipamentos e manutenção e fazer o mapa considerar a validade de cada sensor. Uma leitura isolada ou o simples contato da placa não podem tornar uma vaga livre.
 
-Aceite: autenticar a origem, rejeitar vínculos de outro shopping, deduplicar e ordenar eventos, confirmar mudanças somente após 30 segundos consistentes e nunca converter dado expirado em vaga livre. Cobrir CA15–CA24.
+Os cenários completos continuam em CA15–CA24. A parte de PostgreSQL foi aprovada; hardware e fluxo operacional ainda precisam de evidência.
+
+## Trabalho já iniciado depois do P06
+
+O histórico confirmado e a análise dos últimos sete dias já funcionam no sistema quando existem leituras. Sem histórico, o painel mostra uma demonstração identificada. Essa entrega adianta uma parte do P08, mas ainda faltam exportações, métricas complementares e a conferência completa do fluxo. A preparação dos dados para Power BI também existe, porém o relatório funcional ainda não foi entregue.
 
 ## Sequência preservada do backlog
 
@@ -47,10 +51,10 @@ Aceite: autenticar a origem, rejeitar vínculos de outro shopping, deduplicar e 
 | P04 | Andares, setores, vagas e mapa — concluído em 12/09 |
 | P05 | Importação CSV/XLSX com prévia — concluída em 21/09 |
 | C01 | Correções da interface administrativa — concluídas em 23/09 |
-| P06 | Telemetria, confirmação e expiração — próxima entrega de produto |
+| P06 | Sensores, confirmação e expiração — em andamento; base e testes PostgreSQL prontos |
 | P07 | Operação, manutenção e telões |
-| P08 | Histórico, métricas e exportações |
-| P09 | Relatório funcional Power BI |
+| P08 | Histórico, métricas e exportações — iniciado; histórico e painel parcial prontos |
+| P09 | Relatório funcional Power BI — dados preparados, relatório pendente |
 | P10 | Contato/fluxos WhatsApp — trabalho independente com dependências externas |
 | P11 | Revisão integrada para o TCC |
 

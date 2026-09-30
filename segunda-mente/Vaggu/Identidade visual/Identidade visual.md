@@ -48,7 +48,7 @@ Fonte: vaggu-frontend/src/index.css, 11/09/2026.
 
 O amarelo `#FFE100`, o carvão `#171717`, o preto e o branco coincidem com valores do guia fornecido pela equipe. Essa coincidência não comprova fidelidade ao Figma. Os tons `#ffeb54`, `#fff49d` e `#343231` ainda precisam ser conciliados com os usos reais antes de virar novos tokens executáveis.
 
-**Pendência:** o tema `.dark` sobrescreve a primária com cinza e a primária da sidebar com outro valor. Isso é uma observação estática do código, não uma aprovação da paleta nem comprovação de qual tema está ativo.
+O tema escuro atual mantém o amarelo principal `#FFE100`. Essa observação confirma o código presente, mas não substitui a comparação visual completa com o Figma.
 
 ## Assets preservados
 

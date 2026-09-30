@@ -1,6 +1,6 @@
 # Visão do produto
 
-**Tipo:** PRD resumido · **Atualização:** 23/09/2026 · **Produto:** VAGGU — plataforma web responsiva para gestão de estacionamentos de shopping centers.
+**Atualização:** 30/09/2026 · **Produto:** VAGGU — plataforma web responsiva para gestão de estacionamentos de shopping centers.
 
 Este documento apresenta a direção do produto sem repetir os contratos detalhados do [[Vaggu/Documentação/SSD-VAGGU|SSD-VAGGU]]. O SSD continua sendo a referência para regras de negócio, permissões, API proposta e decisões pendentes; o estado real da entrega é acompanhado em [[Vaggu/Documentação/planejamento-do-projeto|planejamento e continuidade]].
 
@@ -14,7 +14,7 @@ Esse histórico explica a evolução do escopo, mas não reativa propostas antig
 
 Estacionamentos de shopping precisam conhecer a disponibilidade real das vagas, localizar problemas de comunicação ou manutenção e oferecer uma leitura clara da operação. Sem uma fonte confiável, a equipe pode tratar dado antigo como disponibilidade, somar categorias de forma duplicada ou expor informações de um shopping a outro.
 
-A VAGGU busca reunir implantação, acessos, estrutura, mapa, telemetria, histórico e análise em um fluxo único. O valor não está apenas em mostrar vagas: está em preservar a confiabilidade do estado, o isolamento entre shoppings e a rastreabilidade necessária para operação e análise.
+A VAGGU reúne cadastro do shopping, acessos, mapa, leitura dos sensores, histórico e análises em uma única experiência. O valor não está apenas em mostrar vagas: a informação precisa ser atual, não pode misturar shoppings diferentes e deve permitir entender o que aconteceu ao longo do tempo.
 
 ## Público e usuários
 
@@ -51,10 +51,10 @@ Para atingir esse objetivo, o produto deve:
 3. O Admin cadastra o shopping, prepara a estrutura e cria acessos individuais.
 4. O gerente recebe uma senha provisória, troca-a no primeiro login e entra no painel do seu shopping.
 5. O Admin importa ou configura andares, setores, vagas e posições; Admin e gerente usam a mesma representação 2D.
-6. Quando a telemetria estiver implementada, placas e sensores enviarão observações autenticadas para confirmação, expiração e histórico.
+6. A base de sensores já recebe e confirma leituras em ambiente de teste. O próximo passo é ligá-la ao ESP32 real e levar a validade dessas leituras ao mapa.
 7. Telões, indicadores, exportações e Power BI consumirão dados confirmados, sem duplicar categorias especiais.
 
-Os passos 1 a 5 possuem base implementada em P01–P05. Os passos operacionais dependentes de telemetria, telões, histórico analítico e Power BI permanecem planejados para P06–P09. O fluxo estruturado do WhatsApp está parcial e será concluído em P10.
+Os passos 1 a 5 estão implementados em P01–P05. P06 já possui uma base funcional de sensores e P08 já começou com histórico e análises dentro do sistema. Esses pacotes continuam incompletos: faltam o hardware real, manutenção, validade no mapa, exportações e outras consultas. Telões e Power BI permanecem por fazer. O fluxo estruturado do WhatsApp está parcial.
 
 ## Metas verificáveis
 
@@ -66,10 +66,10 @@ Não há metas comerciais de aquisição, latência ou volume aprovadas. O suces
 | Controlar acessos com segurança | Dois gerentes do mesmo shopping usam logins próprios e um gerente não acessa outro shopping. | Implementado em P02–P03. |
 | Configurar a estrutura sem perder identidade | Importação mostra prévia e erros, confirma uma vez, preserva IDs/histórico e não apaga vaga ausente silenciosamente. | P05 concluído em 21/09/2026. |
 | Consultar o estacionamento em diferentes telas | Admin e gerente navegam por andares, filtros, busca e seleção sem transbordamento horizontal. | Base do mapa concluída em P04 e refinada em P05. |
-| Confiar no estado da vaga | Mudança exige 30 segundos de evidência consistente; reenvio, ordem, reinicialização e expiração têm resultado determinístico. | Planejado para P06. |
+| Confiar no estado da vaga | Mudança exige 30 segundos de leituras consistentes; mensagens repetidas ou antigas não alteram o resultado; sensor sem resposta deixa a vaga indisponível. | Base implementada e testada com PostgreSQL; hardware real e uso no mapa ainda pendentes. |
 | Exibir contagens reconciliadas | Mapa, API e telão usam a mesma validade; PCD, idoso e elétrica integram o total sem duplicação. | Planejado para P07. |
-| Preservar histórico e análises | Conjunto controlado reproduz estados, tempos, exportações e métricas com recorte por shopping. | Planejado para P08. |
-| Demonstrar análise funcional | Primeiro relatório Power BI atualiza com números iguais aos dados controlados e sem exposição entre shoppings. | Planejado para P09. |
+| Preservar histórico e análises | O sistema guarda mudanças confirmadas e calcula ocupação, cobertura e entradas dos últimos sete dias sem misturar shoppings. | Parte de P08 implementada; exportações e evolução das métricas ainda pendentes. |
+| Demonstrar análise funcional | Primeiro relatório Power BI atualiza com números iguais aos dados controlados e sem exposição entre shoppings. | A preparação dos dados existe; o relatório Power BI funcional ainda está pendente. |
 
 ## Escopo do MVP
 
@@ -86,7 +86,7 @@ O MVP-alvo do TCC inclui:
 - telões web com agregados por andar ou setor;
 - primeiro relatório funcional no Power BI baseado no histórico.
 
-P01–P05 e a correção de interface C01 estão concluídos. O P06 é o próximo pacote de produto e estabiliza o contrato de firmware e a confiabilidade da telemetria antes de P07–P09.
+P01–P05 e a correção de interface C01 estão concluídos. P06 e P08 já começaram e possuem partes funcionais, mas ainda não atendem todo o aceite. O trabalho imediato é fechar P06 com o hardware e a operação real, concluir P07 e ampliar histórico e exportações antes do relatório Power BI.
 
 ## Posterior ao MVP
 
@@ -101,7 +101,6 @@ Itens apenas aventados ou dependentes dessas decisões não devem ser apresentad
 - reconhecimento de veículos ou leitura de placas de veículos;
 - aplicativo nativo;
 - motos como categoria de vaga;
-- chatbot de IA;
 - navegação 3D;
 - leitura automática de planta e editor CAD completo.
 

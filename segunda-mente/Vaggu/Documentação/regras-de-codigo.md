@@ -6,7 +6,7 @@ Versão 1.0 • 09/09/2026 • Aplicação: novas implementações e alteraçõe
 
 Código deve ser legível pela equipe, previsível, testável e proporcional ao TCC. Reutilizar o que já funciona. Uma estrutura organizada separa responsabilidades sem exigir uma grande quantidade de camadas vazias. A mudança deve resolver o problema solicitado e preservar comportamento não relacionado.
 
-A stack definida é React, TypeScript, Tailwind, Node.js, Express, Prisma e PostgreSQL. Vite consta da base do projeto. Verificar versões e organização reais antes de alterar configurações. Não migrar para Next.js, outro ORM, outro banco, microserviços ou outra biblioteca visual por preferência do agente.
+A base definida é React, TypeScript, Tailwind, Node.js, Express, Prisma e PostgreSQL. Vite consta do projeto. Verificar versões e organização reais antes de alterar configurações. Não migrar para Next.js, outro ORM, outro banco, microserviços ou outra biblioteca visual apenas por preferência pessoal.
 
 ### Clareza da documentação
 
@@ -42,7 +42,7 @@ Antes de concluir uma alteração documental, faça uma leitura como parceiro no
 | Testes | Descrever o comportamento em português | “impede acesso a vagas de outro shopping” |
 | Commits/PRs | Descrição em português; prefixo técnico consistente | `fix(telemetria): impedir estado livre após expiração` |
 
-Preservar APIs externas, palavras reservadas e arquivos obrigatórios de ferramenta. `useState`, `Request`, `Response`, `GET`, `package.json`, `tsconfig.json`, `schema.prisma`, `README.md` e `AGENTS.md` não precisam ser traduzidos. Abreviações comuns como API, ID, UUID e URL são aceitáveis. Evitar `data`, `obj`, `aux`, `managerData` e nomes genéricos quando existe um termo do domínio.
+Preservar APIs externas, palavras reservadas e arquivos obrigatórios de ferramenta. `useState`, `Request`, `Response`, `GET`, `package.json`, `tsconfig.json`, `schema.prisma`, `README.md` e `CONTRIBUTING.md` não precisam ser traduzidos. Abreviações comuns como API, ID, UUID e URL são aceitáveis. Evitar `data`, `obj`, `aux`, `managerData` e nomes genéricos quando existe um termo do domínio.
 
 Manter a convenção local se renomear quebra contratos ou cria um diff desnecessário. Tradução estrutural deve ter escopo próprio, atualizar imports, testes, consumidores, migrations e documentação. Usar mapeamentos do ORM quando for útil preservar nomes físicos existentes.
 
@@ -98,7 +98,7 @@ Esta é uma **proposta para adaptação**, não uma ordem de mover todo o reposi
 
 | Caminho proposto | Responsabilidade |
 | --- | --- |
-| `AGENTS.md` | Regras de trabalho e referências. |
+| `CONTRIBUTING.md` | Acordos de trabalho e referências. |
 | `segunda-mente/Vaggu/Documentação/` | Especificação, decisões, contratos, operação e identidade visual canônicos. |
 | `frontend/src/aplicacao/` | Composição, rotas, provedores e inicialização. |
 | `frontend/src/modulos/autenticacao/` | Login, sessão e troca de senha. |
@@ -177,12 +177,12 @@ No frontend, co-localizar componentes e hooks usados somente pelo módulo. Promo
 - PostgreSQL é a fonte persistente; Prisma organiza schema e migrations. Não usar memória do processo como única fonte de eventos confirmados.
 - Identificadores estáveis. Imports conciliam por chave de domínio, sem recriar vagas existentes.
 - Restrições: e-mail único; código de vaga único por shopping; sensor ativo não pode ocupar duas vagas e vaga não pode ter dois sensores ativos.
-- Remover unicidade indevida de `shoppingId` no gerente para permitir vários logins no mesmo shopping.
+- Nunca tornar `shoppingId` único nos gerentes: vários logins podem pertencer ao mesmo shopping.
 - Validar vínculos cruzados em transações; usar constraints/índices quando suportados pela modelagem. Se uma regra exigir índice parcial SQL, documentá-lo na migration.
 - Atualizar estado e inserir evento de transição na mesma transação.
 - Concorrência precisa impedir dois processadores de confirmar o mesmo evento ou duas importações de sobrescreverem revisões sem controle.
 - Preservar histórico em desativação. Não usar cascata destrutiva para apagar eventos junto com vaga/placa/andar.
-- Guardar UTC e exibir no fuso cadastrado do shopping; para Cotia, usar `America/Sao_Paulo`, não deslocamento fixo embutido em todas as consultas.
+- Guardar horários em UTC e informar qual fuso é usado na exibição. Como o cadastro atual não possui fuso por shopping, não presumir essa informação em consultas ou relatórios.
 - Mudanças de categoria, andar, setor e sensor precisam de vigência ou fotografia histórica para análises passadas.
 - Validar a migration sobre dados de teste representativos e conferir preservação dos vínculos. Nunca usar reset de banco real como solução de migração.
 
@@ -192,7 +192,7 @@ Manter `.env.example` com nomes e descrições, sem segredos. Exemplos de config
 
 Validar variáveis na inicialização. Não espalhar números mágicos. Explicar unidades no nome ou no contrato. Não enviar variáveis privadas ao bundle do frontend.
 
-Frontend pode ficar na Vercel. A API e a rotina de expiração precisam de execução compatível com o mecanismo escolhido. Não depender de um `setInterval` em função efêmera para um serviço que exige continuidade. Confirmar capacidade real de conexões persistentes antes de adotar Socket.IO.
+A interface e a API são publicadas juntas no Render na configuração atual. A rotina que identifica sensores sem resposta precisa de execução contínua; não pode depender de um processo que seja encerrado entre chamadas. Confirmar o suporte da hospedagem antes de adotar conexões persistentes.
 
 Logs devem permitir correlacionar evento, equipamento, shopping e falha sem registrar conteúdo sensível. Monitorar erros de ingestão, atrasos de expiração e falhas de atualização analítica. Documentar inicialização, recuperação e verificação dos serviços.
 

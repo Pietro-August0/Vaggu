@@ -7,7 +7,7 @@ Este cofre reúne decisões, documentação, planejamento, fontes históricas e 
 
 - Comece pelo [[Início]].
 - Para entender o produto, abra [[Vaggu/Vaggu|índice da VAGGU]].
-- Para continuar o desenvolvimento, consulte [[Vaggu/Planejamento/Próximos passos]].
+- Para continuar o desenvolvimento, consulte [[Vaggu/Documentação/planejamento-do-projeto|a situação atual e o próximo trabalho]].
 - Para registrar uma sessão, siga a [[Rotina de registro]].
 
-Conteúdo em `Vaggu/Fontes/Conversas` é histórico e não substitui as decisões atuais do SSD e do planejamento.
+Os diários e fontes históricas não substituem as decisões atuais do SSD e do planejamento.

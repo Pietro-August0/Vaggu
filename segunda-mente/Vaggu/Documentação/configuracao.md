@@ -264,40 +264,6 @@ npm.cmd test
 - Prisma Studio: pressione `Ctrl+C` no terminal correspondente.
 - PostgreSQL instalado como serviço pode continuar ligado. Se desejar pará-lo, use **Serviços** do Windows.
 
-## Ambiente portátil usado nesta máquina da equipe
-
-Esta máquina possui uma instalação portátil e ignorada pelo Git em `ambiente.local`. Ela não acompanha o repositório e não deve ser copiada como requisito para parceiros.
-
-Em 21/09/2026, a validação local usou:
-
-- PostgreSQL `17.11`;
-- banco `vaggu_p05_local`;
-- endereço `127.0.0.1:55432`;
-- API em `127.0.0.1:3000`;
-- 9 migrations aplicadas, sem pendências;
-- `/health` e `/health/ready` com resposta `ok`.
-
-Nesta máquina específica, o PostgreSQL portátil é iniciado, a partir da raiz, com:
-
-```powershell
-.\ambiente.local\postgresql17\pgsql\bin\pg_ctl.exe start `
-  -D ".\ambiente.local\dados-postgresql" `
-  -l ".\ambiente.local\postgresql-validacao.log" `
-  -o "-p 55432" `
-  -w
-```
-
-Para encerrá-lo de forma segura:
-
-```powershell
-.\ambiente.local\postgresql17\pgsql\bin\pg_ctl.exe stop `
-  -D ".\ambiente.local\dados-postgresql" `
-  -m fast `
-  -w
-```
-
-Parceiros devem seguir a instalação normal deste guia e usar a porta `5432`, salvo se a própria instalação do PostgreSQL informar outra porta.
-
 ## Problemas comuns
 
 ### `ECONNREFUSED` ou conexão recusada
@@ -370,4 +336,4 @@ O administrador do repositório deve concluir uma única configuração:
 3. Criar o segredo `RENDER_DEPLOY_HOOK_URL` com a URL copiada. Não registrar essa URL em arquivos, mensagens ou capturas.
 4. Abrir **Actions → Publicar main no Render → Run workflow** e conferir o resultado no GitHub e no Render. Com o segredo configurado, cada push na `main` solicita uma nova publicação; conferir também o resultado do build e da prontidão.
 
-Somente administradores de `Pietro-August0/Vaggu` podem cadastrar esse segredo. A conta de Samuel possui permissão de escrita, mas não de administração do repositório.
+O cadastro desse segredo exige permissão administrativa no repositório.

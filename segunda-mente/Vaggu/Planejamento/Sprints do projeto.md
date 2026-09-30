@@ -83,11 +83,11 @@ As sprints acima começaram antes da organização atual do repositório em paco
 - Os pacotes técnicos registram dependências, implementação verificada e critérios de aceite.
 - O estado atual dos pacotes permanece em [[Vaggu/Documentação/planejamento-do-projeto]].
 
-## Próxima sprint proposta — correção e consolidação
+## Registro da Sprint 5 proposta em 23/09
 
 **Número:** Sprint 5, a confirmar pela equipe.
 
-**Objetivo:** alinhar documentação e implementação antes de iniciar a telemetria do P06.
+**Objetivo naquela data:** alinhar documentação e implementação antes de iniciar a base de sensores do P06.
 
 | Frente | Responsável principal | Revisores | Resultado esperado |
 | --- | --- | --- | --- |
@@ -95,18 +95,18 @@ As sprints acima começaram antes da organização atual do repositório em paco
 | TRD, banco e API | Samuel | Kamilly e Pietro | Tecnologias, entidades e endpoints atuais separados do que ainda é planejado. |
 | Fluxos e experiência | Elisa | Ana e Pietro | Telas reais e ausentes documentadas por perfil e ação. |
 | Identidade e evidências | Juan | Elisa e Ana | Paleta, tipografia e capturas com origem e limites registrados. |
-| Preparação da telemetria | Kamilly | Samuel e Pietro | Contrato de firmware pronto para o P06, sem criar endpoints antes da decisão. |
+| Preparação dos sensores | Kamilly | Samuel e Pietro | Contrato de firmware pronto para o P06. |
 
 **Dependências:** concluir as correções documentais prioritárias, confirmar as lacunas atuais da interface e validar com a equipe os campos ainda marcados como pendentes.
 
-**Critério de conclusão:** documentação canônica sem contradições conhecidas, matriz de rastreabilidade atualizada, evidências catalogadas e primeira decisão do contrato de telemetria pronta para revisão.
+**Situação em 30/09:** a consolidação documental e as correções de interface foram concluídas. A base do P06 já recebe, confirma e expira leituras em testes com PostgreSQL. Hardware real, manutenção e validade no mapa continuam pendentes.
 
 Detalhamento da execução: [[Vaggu/Planejamento/Plano de correção e implementação]].
 
 ## Sequência posterior
 
 1. Corrigir as divergências funcionais atuais da interface que foram identificadas na auditoria.
-2. Executar o P06: telemetria, confirmação e expiração confiáveis.
-3. Executar P07 e P08: operação, telões, histórico, métricas e exportações.
+2. Concluir o P06 com hardware, manutenção e validade no mapa.
+3. Executar P07 e concluir P08: operação, telões, histórico, métricas e exportações.
 4. Executar P09: primeiro relatório funcional Power BI.
 5. Concluir P10 e P11 conforme dependências externas e roteiro da apresentação.

@@ -1,6 +1,6 @@
 # Plano de correção e implementação
 
-Atualizado em 23/09/2026. Este plano começa pelos problemas comprovados na auditoria e mantém os pacotes técnicos P01–P11 como referência de produto. Não cria datas ou infraestrutura ainda não aprovadas.
+Atualizado em 30/09/2026. Este plano começou com os problemas encontrados na auditoria de 23/09 e mantém os pacotes P01–P11 como referência. Os registros concluídos foram preservados como histórico; o resumo abaixo mostra o estado atual.
 
 ## Objetivo
 
@@ -38,14 +38,15 @@ Os estados abaixo descrevem o conjunto depois da consolidação D01. Quando a do
 - Resumos colocavam P06 como retomada imediata sem registrar a correção C01; a ordem foi atualizada.
 - A documentação da API e dos dados continha diferenças em relação às rotas e ao schema atuais; o inventário e o modelo foram reconciliados.
 
-### 4. O que ainda não existe
+### 4. O que ainda falta no estado atual
 
-- Na interface atual: exclusão de gerente, desfazer por sete segundos e exclusão de shopping, embora existam contratos correspondentes no backend.
-- Como páginas próprias: visão geral administrativa, equipamentos, atendimentos, análises, conta completa e telões.
-- Como produto operacional: telemetria confiável, manutenção, contagens para telões, histórico analítico, exportações e relatório Power BI funcional.
+- Equipamentos e manutenção ainda não possuem uma área própria; atendimentos e telões também continuam pendentes.
+- A visão geral administrativa, as exclusões, Minha conta e a área de análises já existem. A análise usa histórico real quando disponível e mostra uma demonstração identificada quando não há dados.
+- A base de sensores, confirmação, expiração e histórico já funciona em testes com PostgreSQL. Ainda faltam o ESP32 real, os tempos definitivos, a validade no mapa e a conferência no ambiente publicado.
+- Exportações históricas e o relatório Power BI funcional ainda não foram entregues. Existe somente a preparação dos dados e um protótipo não versionado como relatório final.
 - Como decisão confirmada: contrato final entre ESP32, sensores e backend, retenção operacional e distribuição do Power BI.
 
-Essas ausências não autorizam a criação imediata de todas as páginas. C01 corrige regressões comprovadas; P06–P11 continuam sujeitos às dependências e aos critérios do backlog.
+Essas pendências não autorizam criar tudo de uma vez. Cada pacote continua sujeito às dependências e aos critérios de aceite.
 
 ### 5. Estrutura documental preservada
 
@@ -62,8 +63,8 @@ Não foi criada uma pasta `docs/` paralela. A segunda mente já era a fonte can�
 
 1. D01 — consolidar documentação e evidências: concluído em 23/09.
 2. C01 — reconciliar as exclusões da interface administrativa: concluído em 23/09.
-3. P06 — próxima implementação: telemetria confiável depois do contrato de hardware.
-4. P07–P09 — operação, telões, métricas e Power BI sobre dados confiáveis.
+3. P06 — concluir hardware, equipamentos, manutenção e validade no mapa sobre a base já implementada.
+4. P07–P09 — concluir operação e telões; ampliar o histórico já iniciado; criar o relatório Power BI funcional.
 5. P10–P11 — concluir WhatsApp e preparar a apresentação integrada conforme dependências.
 
 ### 7. Divisão inicial da próxima sprint
@@ -136,11 +137,11 @@ A divisão detalhada, dependências e critérios permanecem em [Sprints do proje
 - Fluxos verificados em desktop e celular, incluindo teclado, confirmação, erro e sucesso.
 - Documentação e evidências atualizadas na mesma entrega.
 
-## Depois — P06: telemetria confiável
+## Em andamento — P06: leituras confiáveis dos sensores
 
 **Responsáveis principais:** Kamilly para backend/Arduino e Samuel para dados; Pietro integra o fluxo completo.
 
-Antes de criar endpoints, a equipe precisa confirmar:
+A recepção e a confirmação das leituras já foram criadas e testadas com PostgreSQL. Para concluir o pacote, a equipe precisa confirmar com o hardware real:
 
 - credencial e identidade da placa;
 - código e vínculo dos sensores;
