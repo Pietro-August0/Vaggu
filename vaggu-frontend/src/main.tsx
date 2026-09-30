@@ -31,6 +31,7 @@ function App() {
       <Route element={<ProtectedRoute role="admin"><AdminPage /></ProtectedRoute>} path="/admin/shoppings/:shoppingId/estrutura" />
       <Route element={<ProtectedRoute role="admin"><AdminPage /></ProtectedRoute>} path="/admin/shoppings/:shoppingId/gerentes" />
       <Route element={<ProtectedRoute role="shopping"><AreaAutenticada /></ProtectedRoute>} path="/painel" />
+      <Route element={<ProtectedRoute role="shopping"><AreaAutenticada /></ProtectedRoute>} path="/painel/analise" />
       <Route element={<ProtectedRoute role="shopping"><AreaAutenticada /></ProtectedRoute>} path="/painel/conta" />
       <Route element={<PaginaNaoEncontrada />} path="*" />
     </Routes>

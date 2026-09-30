@@ -11,6 +11,7 @@ import {
   Moon,
   Sun,
   Map,
+  ChartNoAxesCombined,
   UsersRound,
   UserRound,
 } from "lucide-react"
@@ -100,7 +101,7 @@ export function DashboardShell({
       { label: "Shoppings", href: "/admin/shoppings", icon: Building2 },
       { label: "Minha conta", href: "/admin/conta", icon: UserRound },
     ]
-    : [{ label: "Estacionamento", href: "/painel", icon: LayoutDashboard }, { label: "Minha conta", href: "/painel/conta", icon: UserRound }]
+    : [{ label: "Estacionamento", href: "/painel", icon: LayoutDashboard }, { label: "Análise", href: "/painel/analise", icon: ChartNoAxesCombined }, { label: "Minha conta", href: "/painel/conta", icon: UserRound }]
   const shoppingItems: NavItem[] = shoppingId ? [
     { label: "Visão geral", href: `/admin/shoppings/${shoppingId}`, icon: LayoutDashboard },
     { label: "Estrutura e mapa", href: `/admin/shoppings/${shoppingId}/estrutura`, icon: Map },

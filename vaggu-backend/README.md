@@ -118,6 +118,10 @@ O job local marca o sensor como `INDISPONIVEL` após seu próprio timeout e grav
 
 Para provisionar uma placa, configure `PLACA_SHOPPING_ID`, `PLACA_CODIGO`, `PLACA_NOME` e `PLACA_VAGAS_CODIGOS`, execute `npm run telemetria:provisionar` e copie a chave exibida uma única vez. Para o cenário sintético, use `SIMULADOR_PLACA_CODIGO`, `SIMULADOR_PLACA_CHAVE` e `SIMULADOR_SENSORES_CODIGOS` com `npm run telemetria:simular`. O simulador atravessa a API; não insere fixtures diretamente no banco.
 
+A view `power_bi_intervalos_ocupacao` converte o histórico confirmado em intervalos semiabertos e mantém o mesmo contrato de 11 colunas do conjunto sintético. O campo `shopping_codigo` usa o UUID estável do shopping para permitir recorte sem depender de nome mutável. A view não contém senhas, documentos pessoais nem credenciais de placas. O Power BI Service não alcança um PostgreSQL em `127.0.0.1`: atualização automática exige um gateway configurado ou um banco cloud com usuário de leitura restrito à view.
+
+Para ensaios sem hardware, `npm run power-bi:gerar-fixtures` recria o conjunto controlado de seis intervalos e a demonstração ampliada de 784 intervalos em `test/fixtures/power-bi`. A demonstração ampliada cobre sete dias, dois andares, quatro setores, dezesseis vagas e os tipos `COMUM`, `PCD`, `IDOSO` e `ELETRICA`. Todos os registros usam origem `SINTETICO`; esses arquivos não devem ser carregados no banco de produção.
+
 ## Estrutura consultada pelo gerente
 
 `GET /estacionamento/estrutura` exige perfil `SHOPPING`. O backend deriva o shopping da sessão autenticada e não aceita um `shoppingId` enviado pelo cliente. A resposta contém a situação de implantação e a hierarquia `andar → setor → vaga`. Tipos de vaga: `COMUM`, `PCD`, `IDOSO` e `ELETRICA`.

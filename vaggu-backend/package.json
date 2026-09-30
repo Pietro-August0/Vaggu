@@ -17,6 +17,7 @@
     "admin:create": "npm run build && node dist/scripts/create-admin.js",
     "telemetria:provisionar": "npm run build && node dist/scripts/provisionar-placa.js",
     "telemetria:simular": "npm run build && node dist/scripts/simular-telemetria.js",
+    "power-bi:gerar-fixtures": "npm run build && node dist/scripts/gerar-fixtures-power-bi.js",
     "db:validate": "prisma validate",
     "db:generate": "prisma generate",
     "db:setup": "prisma generate && prisma migrate deploy",

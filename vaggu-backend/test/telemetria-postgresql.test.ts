@@ -59,4 +59,22 @@ test('telemetria confirma após 30 s, deduplica e não usa heartbeat para renova
   assert.equal((await prisma.vaga.findUnique({ where: { id: vaga.id } }))?.estadoAtual, 'INDISPONIVEL');
   assert.equal(await prisma.historicoVaga.count({ where: { vagaId: vaga.id } }), 2);
   assert.equal((await prisma.dispositivo.findUnique({ where: { id: placa.id } }))?.ultimoContatoEm?.toISOString(), instante.toISOString());
+
+  const intervalos = await prisma.$queryRaw<Array<{
+    shopping_codigo: string;
+    vaga_codigo: string;
+    estado: string;
+    inicio_em: Date;
+    fim_em: Date;
+    entrada_observada: boolean;
+  }>>`SELECT "shopping_codigo", "vaga_codigo", "estado", "inicio_em", "fim_em", "entrada_observada"
+      FROM "power_bi_intervalos_ocupacao"
+      WHERE "shopping_codigo" = ${shopping.id}
+      ORDER BY "inicio_em"`;
+  assert.equal(intervalos.length, 2);
+  assert.deepEqual(intervalos.map((intervalo) => intervalo.estado), ['OCUPADA', 'INDISPONIVEL']);
+  assert.equal(intervalos[0]?.vaga_codigo, vaga.codigo);
+  assert.equal(intervalos[0]?.inicio_em.toISOString(), '2026-09-28T12:00:30.000Z');
+  assert.equal(intervalos[0]?.fim_em.toISOString(), '2026-09-28T12:02:30.000Z');
+  assert.equal(intervalos[0]?.entrada_observada, false);
 });

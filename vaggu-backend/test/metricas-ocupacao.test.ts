@@ -6,6 +6,7 @@ import test from 'node:test';
 import {
   calcularMetricasOcupacao,
   conjuntoControladoPowerBi,
+  conjuntoDemonstracaoPowerBi,
   gerarCsvConjuntoControlado,
 } from '../src/analiticos/conjunto-controlado.js';
 
@@ -28,6 +29,23 @@ test('mantém o CSV versionado igual ao conjunto tipado', async () => {
   const caminho = resolve('test/fixtures/power-bi/conjunto-controlado-ocupacao.csv');
   const csvVersionado = await readFile(caminho, 'utf8');
   assert.equal(csvVersionado.replaceAll('\r\n', '\n'), gerarCsvConjuntoControlado(conjuntoControladoPowerBi));
+});
+
+test('mantém a demonstração ampliada reproduzível e com todos os recortes esperados', async () => {
+  const caminho = resolve('test/fixtures/power-bi/demonstracao-ampliada-ocupacao.csv');
+  const csvVersionado = await readFile(caminho, 'utf8');
+  assert.equal(csvVersionado.replaceAll('\r\n', '\n'), gerarCsvConjuntoControlado(conjuntoDemonstracaoPowerBi));
+  assert.equal(conjuntoDemonstracaoPowerBi.length, 784);
+  assert.deepEqual(new Set(conjuntoDemonstracaoPowerBi.map((intervalo) => intervalo.andar)), new Set(['G1', 'G2']));
+  assert.deepEqual(
+    new Set(conjuntoDemonstracaoPowerBi.map((intervalo) => intervalo.setor)),
+    new Set(['Setor A', 'Setor B', 'Setor C', 'Setor D']),
+  );
+  assert.deepEqual(
+    new Set(conjuntoDemonstracaoPowerBi.map((intervalo) => intervalo.tipoVaga)),
+    new Set(['COMUM', 'PCD', 'IDOSO', 'ELETRICA']),
+  );
+  assert.ok(conjuntoDemonstracaoPowerBi.every((intervalo) => intervalo.origem === 'SINTETICO'));
 });
 
 test('recusa intervalo vazio ou com duração inválida', () => {
