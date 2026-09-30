@@ -1,5 +1,5 @@
 /** Permite trocar a própria senha dentro da sessão, com validação acessível e feedback por campo. */
-import { Check, Eye, EyeOff, ShieldCheck, X } from "lucide-react"
+import { Check, Eye, EyeOff, X } from "lucide-react"
 import { useRef, useState, type FormEvent } from "react"
 import { useAppStore } from "@/app/app-store"
 import { Button } from "@/components/ui/button"
@@ -90,12 +90,7 @@ export function FormularioAlterarSenha() {
     </div>
   }
 
-  return <section className="rounded-2xl border border-neutral-200 bg-white p-6 dark:border-white/10 dark:bg-[#242424] dark:text-white">
-    <div className="flex items-start gap-3">
-      <span className="grid size-11 shrink-0 place-items-center rounded-xl bg-[#ffe100] text-neutral-950"><ShieldCheck aria-hidden="true" /></span>
-      <div><h2 className="text-xl font-semibold">Segurança</h2><p className="mt-1 text-sm text-neutral-600 dark:text-neutral-300">Troque sua senha sempre que precisar. A senha atual é exigida para confirmar sua identidade.</p></div>
-    </div>
-    <form className="mt-6 grid gap-4" onSubmit={salvar} aria-busy={enviando} noValidate>
+  return <form className="grid gap-4" onSubmit={salvar} aria-busy={enviando} noValidate>
       {campo("senhaAtual", "Senha atual", "current-password")}
       {campo("novaSenha", "Nova senha", "new-password")}
       <ul id="conta-requisitos-senha" className="grid gap-1 text-sm text-neutral-600 dark:text-neutral-300" aria-label="Requisitos da nova senha">
@@ -110,6 +105,5 @@ export function FormularioAlterarSenha() {
       {mensagem ? <p role="status" className="text-sm text-green-700 dark:text-green-300">{mensagem}</p> : null}
       {erroGeral ? <p role="alert" className="text-sm text-red-700 dark:text-red-300">{erroGeral}</p> : null}
       <Button className="w-fit" disabled={enviando}>{enviando ? "Alterando..." : "Alterar senha"}</Button>
-    </form>
-  </section>
+  </form>
 }
