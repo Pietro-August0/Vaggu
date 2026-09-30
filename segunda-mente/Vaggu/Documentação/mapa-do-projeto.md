@@ -72,6 +72,8 @@ As cópias de imagens entre `segunda-mente/Vaggu/Identidade visual/Assets/` e `v
 | `vaggu-backend/scripts/gerar-fixtures-power-bi.ts` | Gera os CSVs sintéticos reproduzíveis da prova matemática e da demonstração ampliada, sem acessar banco ou hardware. |
 | `vaggu-backend/src/app.ts` | Monta a API Express, incluindo rotas humanas e de equipamento, restringe conexões externas e entrega o build React quando configurado. |
 | `vaggu-backend/src/analiticos/conjunto-controlado.ts` | Define intervalos sintéticos confirmados, calcula métricas ponderadas e gera o CSV reproduzível usado para preparar o Power BI sem simular integração com sensores. |
+| `vaggu-backend/src/analiticos/routes.ts` | Expõe a análise histórica do gerente com o shopping derivado exclusivamente da sessão e sem cache compartilhado. |
+| `vaggu-backend/src/analiticos/service.ts` | Consulta a view de intervalos confirmados e calcula ocupação, cobertura e entradas dos últimos sete dias, ponderadas pelo tempo. |
 | `vaggu-backend/src/auth/bootstrap.ts` | Cria o primeiro administrador por uma operação de terminal, sem cadastro público. |
 | `vaggu-backend/src/auth/middleware.ts` | Autentica Bearer ou cookie HttpOnly, exige cabeçalho ant-CSRF nas escritas por cookie e fornece escopo às rotas. |
 | `vaggu-backend/src/auth/password.ts` | Protege senhas com scrypt e sal aleatório; guarda o resultado derivado, nunca a senha original. |
@@ -121,6 +123,7 @@ As cópias de imagens entre `segunda-mente/Vaggu/Identidade visual/Assets/` e `v
 | `vaggu-backend/test/importacao-csv.test.ts` | Verifica a prévia CSV do P05, incluindo normalização, duplicatas, colunas ausentes e sintaxe inválida. |
 | `vaggu-backend/test/confirmacao-estado.test.ts` | Verifica janela, continuidade, alternância e leituras repetidas na confirmação temporal do P06. |
 | `vaggu-backend/test/metricas-ocupacao.test.ts` | Reproduz as métricas analíticas esperadas e garante que o CSV sintético versionado não diverge do conjunto tipado. |
+| `vaggu-backend/test/analiticos.test.ts` | Verifica métricas históricas, estado vazio e isolamento da rota analítica pelo shopping autenticado. |
 | `vaggu-backend/test/fixtures/power-bi/conjunto-controlado-ocupacao.csv` | Fornece ao Power BI um conjunto sintético identificado de duas vagas durante uma hora, sem gravar fixtures em banco persistente. |
 | `vaggu-backend/test/fixtures/power-bi/demonstracao-ampliada-ocupacao.csv` | Fornece ao protótipo visual um cenário sintético reproduzível de sete dias, dois andares, quatro setores e dezesseis vagas, sem simular ingestão de sensores. |
 | `vaggu-backend/test/importacao-routes.test.ts` | Verifica autorização e transporte HTTP da prévia CSV administrativa. |
@@ -147,7 +150,7 @@ As cópias de imagens entre `segunda-mente/Vaggu/Identidade visual/Assets/` e `v
 | `vaggu-frontend/src/app/app-store.tsx` | Restaura identidade via cookie e `/auth/me` antes de liberar rotas; gerencia expiração, logout, troca de senha e consultas. |
 | `vaggu-frontend/src/components/brand.tsx` | Reutiliza os arquivos de marca publicados em public/assets nos links para a página inicial. |
 | `vaggu-frontend/src/components/analise-estacionamento.css` | Define o painel analítico responsivo com fundo preto, cartões grafite, amarelo VAGGU e adaptações para celular. |
-| `vaggu-frontend/src/components/analise-estacionamento.tsx` | Associa ao shopping autenticado uma demonstração analítica identificada, com indicadores e gráficos genéricos sem persistir eventos no histórico real. |
+| `vaggu-frontend/src/components/analise-estacionamento.tsx` | Exibe o histórico confirmado do shopping autenticado quando disponível e mantém a demonstração identificada como fallback sem persistir eventos fictícios. |
 | `vaggu-frontend/src/components/dashboard-shell.tsx` | Compartilha cabeçalho, menu responsivo, atalho ao conteúdo, foco após navegação, alternância claro/escuro e saída da sessão; inclui o acesso do gerente à análise demonstrativa. |
 | `vaggu-frontend/src/components/estrutura-admin.tsx` | Permite criar a hierarquia, explica o estado real de implantação e alterna cadastro, mapa e posições com refetch após mutações. |
 | `vaggu-frontend/src/components/exportacao-estrutura.tsx` | Abre a janela de exportação estrutural, mostra o recorte e inicia o download XLSX sob demanda. |
@@ -192,6 +195,7 @@ As cópias de imagens entre `segunda-mente/Vaggu/Identidade visual/Assets/` e `v
 | `vaggu-frontend/src/pages/pagina-nao-encontrada.css` | Define o layout responsivo e a sequência única em que o carro deixa o sensor vermelho, sai pela esquerda e libera o estado verde. |
 | `vaggu-frontend/src/pages/trocar-senha-page.tsx` | Exige uma senha definitiva e reaproveita na aba a senha provisória digitada no login. |
 | `vaggu-frontend/src/servicos/api.ts` | Cliente da API na mesma origem para JSON e corpos binários; envia cookie e cabeçalho ant-CSRF sem ler o token. |
+| `vaggu-frontend/src/servicos/analise.ts` | Valida ocupação, cobertura, entradas e séries históricas antes de substituir os gráficos demonstrativos. |
 | `vaggu-frontend/src/servicos/apresentacao-vaga.ts` | Centraliza os rótulos em português das categorias e estados usados no mapa, nas listas e no detalhe da vaga. |
 | `vaggu-frontend/src/servicos/cep.ts` | Consulta o ViaCEP com validação, prazo e erros distintos; devolve somente campos de endereço usados no formulário. |
 | `vaggu-frontend/src/servicos/situacao-implantacao.ts` | Centraliza rótulos, descrições e cores dos estados de implantação já definidos no backend. |

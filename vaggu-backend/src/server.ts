@@ -13,6 +13,7 @@ import { createEstruturaService } from './estrutura/service.js';
 import { createImportacaoService } from './importacao/service.js';
 import { createTelemetriaService } from './telemetria/service.js';
 import { expirarSensores } from './telemetria/expiracao.js';
+import { createAnaliticosService } from './analiticos/service.js';
 
 const config = readEnv();
 const prisma = createPrisma(config.databaseUrl);
@@ -29,6 +30,7 @@ const app = createApp({
   estrutura: createEstruturaService(prisma),
   importacao: createImportacaoService(prisma),
   telemetria: telemetriaService,
+  analiticos: createAnaliticosService(prisma),
 });
 
 // O job persiste a expiração; consultas futuras também deverão aplicar validade no momento da leitura.
