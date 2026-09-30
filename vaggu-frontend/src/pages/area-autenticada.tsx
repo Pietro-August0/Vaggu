@@ -2,6 +2,8 @@
 import { useLocation } from "react-router-dom"
 import { useAppStore } from "@/app/app-store"
 import { DashboardShell } from "@/components/dashboard-shell"
+import { AnaliseEstacionamento } from "@/components/analise-estacionamento"
+import "@/components/analise-estacionamento.css"
 import { MapaEstacionamento } from "@/components/mapa-estacionamento"
 import { MinhaConta } from "@/components/minha-conta"
 
@@ -12,7 +14,9 @@ export function AreaAutenticada() {
   if (!currentUser) return null
 
   const conta = pathname === "/painel/conta"
-  return <DashboardShell eyebrow="Área do cliente" title={conta ? "Minha conta" : "Estacionamento"}>
-    <div className="grid max-w-6xl gap-6">{conta ? <MinhaConta /> : <MapaEstacionamento />}</div>
+  const analise = pathname === "/painel/analise"
+  const titulo = conta ? "Minha conta" : analise ? "Análise do estacionamento" : "Estacionamento"
+  return <DashboardShell eyebrow="Área do cliente" title={titulo}>
+    <div className="grid max-w-6xl gap-6">{conta ? <MinhaConta /> : analise ? <AnaliseEstacionamento /> : <MapaEstacionamento />}</div>
   </DashboardShell>
 }

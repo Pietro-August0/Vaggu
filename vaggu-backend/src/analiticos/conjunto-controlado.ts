@@ -30,6 +30,31 @@ export type MetricasOcupacao = {
 };
 
 const CENARIO_ID = 'power-bi-duas-vagas-uma-hora';
+const CENARIO_DEMONSTRACAO_ID = 'power-bi-demonstracao-sete-dias';
+
+const VAGAS_DEMONSTRACAO = [
+  { codigo: 'A01', andar: 'G1', setor: 'Setor A', tipo: 'COMUM' },
+  { codigo: 'A02', andar: 'G1', setor: 'Setor A', tipo: 'COMUM' },
+  { codigo: 'A03', andar: 'G1', setor: 'Setor A', tipo: 'PCD' },
+  { codigo: 'A04', andar: 'G1', setor: 'Setor A', tipo: 'IDOSO' },
+  { codigo: 'B01', andar: 'G1', setor: 'Setor B', tipo: 'COMUM' },
+  { codigo: 'B02', andar: 'G1', setor: 'Setor B', tipo: 'COMUM' },
+  { codigo: 'B03', andar: 'G1', setor: 'Setor B', tipo: 'ELETRICA' },
+  { codigo: 'B04', andar: 'G1', setor: 'Setor B', tipo: 'IDOSO' },
+  { codigo: 'C01', andar: 'G2', setor: 'Setor C', tipo: 'COMUM' },
+  { codigo: 'C02', andar: 'G2', setor: 'Setor C', tipo: 'COMUM' },
+  { codigo: 'C03', andar: 'G2', setor: 'Setor C', tipo: 'PCD' },
+  { codigo: 'C04', andar: 'G2', setor: 'Setor C', tipo: 'ELETRICA' },
+  { codigo: 'D01', andar: 'G2', setor: 'Setor D', tipo: 'COMUM' },
+  { codigo: 'D02', andar: 'G2', setor: 'Setor D', tipo: 'COMUM' },
+  { codigo: 'D03', andar: 'G2', setor: 'Setor D', tipo: 'IDOSO' },
+  { codigo: 'D04', andar: 'G2', setor: 'Setor D', tipo: 'ELETRICA' },
+] as const satisfies readonly {
+  codigo: string;
+  andar: string;
+  setor: string;
+  tipo: IntervaloOcupacao['tipoVaga'];
+}[];
 
 /** Intervalos já confirmados; não simulam mensagens brutas nem substituem o teste do ESP32. */
 export const conjuntoControladoPowerBi: readonly IntervaloOcupacao[] = [
@@ -40,6 +65,56 @@ export const conjuntoControladoPowerBi: readonly IntervaloOcupacao[] = [
   criarIntervalo('B', 'PCD', 'INDISPONIVEL', 30, 50, false),
   criarIntervalo('B', 'PCD', 'LIVRE', 50, 60, false),
 ];
+
+/**
+ * Amplia a demonstração com sete dias e vários recortes, sem representar leituras reais de sensores.
+ * Cada intervalo tem duas horas e usa uma sequência determinística para manter o CSV reproduzível.
+ */
+export const conjuntoDemonstracaoPowerBi: readonly IntervaloOcupacao[] = gerarConjuntoDemonstracao();
+
+function gerarConjuntoDemonstracao(): readonly IntervaloOcupacao[] {
+  const intervalos: IntervaloOcupacao[] = [];
+  const horasDeInicio = [8, 10, 12, 14, 16, 18, 20] as const;
+
+  for (let dia = 0; dia < 7; dia += 1) {
+    for (const [indiceVaga, vaga] of VAGAS_DEMONSTRACAO.entries()) {
+      let estadoAnterior: EstadoIntervalo | undefined;
+
+      for (const [indiceFaixa, hora] of horasDeInicio.entries()) {
+        const estado = determinarEstadoDemonstracao(dia, indiceVaga, indiceFaixa);
+        const inicio = new Date(Date.UTC(2026, 4, 11 + dia, hora));
+        const fim = new Date(Date.UTC(2026, 4, 11 + dia, hora + 2));
+        intervalos.push({
+          cenarioId: CENARIO_DEMONSTRACAO_ID,
+          origem: 'SINTETICO',
+          shoppingCodigo: 'SHOPPING-DEMONSTRACAO',
+          andar: vaga.andar,
+          setor: vaga.setor,
+          vagaCodigo: vaga.codigo,
+          tipoVaga: vaga.tipo,
+          estado,
+          inicioEm: inicio.toISOString(),
+          fimEm: fim.toISOString(),
+          entradaObservada: estado === 'OCUPADA' && estadoAnterior !== undefined && estadoAnterior !== 'OCUPADA',
+        });
+        estadoAnterior = estado;
+      }
+    }
+  }
+
+  return intervalos;
+}
+
+function determinarEstadoDemonstracao(
+  dia: number,
+  indiceVaga: number,
+  indiceFaixa: number,
+): EstadoIntervalo {
+  const ciclo = (dia * 3 + indiceVaga * 2 + indiceFaixa) % 12;
+  if (ciclo === 11) return 'INDISPONIVEL';
+  if (ciclo >= 4 && ciclo <= 9) return 'OCUPADA';
+  return 'LIVRE';
+}
 
 function criarIntervalo(
   vagaCodigo: string,

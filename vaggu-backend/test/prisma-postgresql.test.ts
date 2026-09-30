@@ -75,3 +75,16 @@ test('migration P06 separa sensor, deduplica sequência e preserva instante efet
   assert.match(sql, /"efetivo_em" TIMESTAMP\(3\)/);
   assert.match(sql, /"payload_hash" CHAR\(64\)/);
 });
+
+test('view do Power BI transforma eventos confirmados em intervalos semiabertos', () => {
+  const sql = readFileSync(
+    join(projectRoot, 'prisma/migrations/20260930000100_visao_power_bi_historico/migration.sql'),
+    'utf8',
+  );
+  assert.match(sql, /CREATE VIEW "power_bi_intervalos_ocupacao"/);
+  assert.match(sql, /LEAD\("efetivo_em"\) OVER/);
+  assert.match(sql, /PARTITION BY "vaga_id"/);
+  assert.match(sql, /"shopping_id"::text AS "shopping_codigo"/);
+  assert.match(sql, /"estado_anterior" = 'LIVRE'::"EstadoVaga"/);
+  assert.doesNotMatch(sql, /CREATE MATERIALIZED VIEW/);
+});

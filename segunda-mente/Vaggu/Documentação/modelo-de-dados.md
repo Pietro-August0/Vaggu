@@ -166,7 +166,13 @@ erDiagram
 
 A API agora recebe `/telemetria/heartbeat` e `/telemetria/estados`, rejeita o lote inteiro quando um sensor não pertence à placa, usa o relógio do servidor, confirma somente após 30 segundos consistentes, deduplica por placa/inicialização/sequência e expira cada sensor por sua própria observação. Heartbeat nunca renova sensor.
 
-Continuam pendentes: ensaio com o firmware real; valores definitivos de frequência, lacuna e timeout; ocorrência/manutenção de equipamento; retenção dos marcadores de replay; consulta do mapa aplicando validade no momento da leitura; testes PostgreSQL executados com `TEST_DATABASE_URL`; interface administrativa de placas/sensores e implantação no ambiente compartilhado. Portanto P06 permanece em andamento.
+Continuam pendentes: ensaio com o firmware real; valores definitivos de frequência, lacuna e timeout; ocorrência/manutenção de equipamento; retenção dos marcadores de replay; consulta do mapa aplicando validade no momento da leitura; interface administrativa de placas/sensores e implantação no ambiente compartilhado. As integrações PostgreSQL foram executadas localmente com `TEST_DATABASE_URL`, mas P06 permanece em andamento até as validações de hardware e operação.
+
+### View analítica inicial
+
+`power_bi_intervalos_ocupacao` deriva intervalos semiabertos `[inicio_em, fim_em)` dos eventos confirmados com `LEAD`, sem contar eventos como se fossem duração. O contrato preserva as 11 colunas do conjunto sintético: cenário, origem, shopping, andar, setor, vaga, tipo, estado, início, fim e entrada observada. `entrada_observada` é verdadeira apenas na transição confirmada de `LIVRE` para `OCUPADA`; uma ocupação inicial não é tratada como entrada. O último intervalo termina no instante da consulta, e a expiração do sensor produz um evento `INDISPONIVEL`, impedindo que silêncio seja prolongado como vaga livre.
+
+O identificador exposto em `shopping_codigo` é o UUID estável do shopping. A primeira view ainda usa a classificação estrutural atual da vaga; fotografia/vigência histórica de andar, setor e categoria continua necessária antes das métricas definitivas de P08/P09. A conexão do Power BI Service com o PostgreSQL local exige gateway ou banco cloud e usuário de leitura restrito à view.
 
 ## Entidades planejadas ou parcialmente implementadas
 

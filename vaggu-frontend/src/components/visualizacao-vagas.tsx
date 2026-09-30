@@ -1,5 +1,5 @@
 /** Renderiza a mesma leitura espacial de andares, setores e vagas para Admin e gerente. */
-import { useMemo, useState } from "react"
+import { useMemo, useState, type CSSProperties } from "react"
 
 import { DetalhesVaga } from "@/components/detalhes-vaga"
 import { Badge } from "@/components/ui/badge"
@@ -12,6 +12,12 @@ const classesEstado: Record<VagaEstrutura["estadoAtual"], string> = {
   LIVRE: "bg-emerald-500 text-neutral-950",
   OCUPADA: "bg-red-600 text-white",
   DESCONHECIDA: "bg-neutral-600 text-white",
+}
+
+const classesInteracaoEstado: Record<VagaEstrutura["estadoAtual"], string> = {
+  LIVRE: "hover:bg-emerald-400 active:bg-emerald-600",
+  OCUPADA: "hover:bg-red-500 active:bg-red-700",
+  DESCONHECIDA: "hover:bg-neutral-500 active:bg-neutral-700",
 }
 
 interface VisualizacaoVagasProps {
@@ -117,8 +123,8 @@ export function VisualizacaoVagas({ estrutura, modo }: VisualizacaoVagasProps) {
               onClick={() => selecionarAndar(item.id)}
               className={`cartao-clicavel rounded-full px-4 py-2 text-sm font-semibold ${
                 andar?.id === item.id
-                  ? "bg-[#ffe100] text-black"
-                  : "bg-neutral-100 text-neutral-700"
+                  ? "bg-[#ffe100] text-black hover:bg-[#f2d500] active:bg-[#e0c600]"
+                  : "bg-neutral-100 text-neutral-700 hover:bg-neutral-200 active:bg-neutral-300"
               }`}
             >
               {item.nome}
@@ -226,14 +232,14 @@ export function VisualizacaoVagas({ estrutura, modo }: VisualizacaoVagasProps) {
                     top: `${vaga.posicao!.y * 100}%`,
                     width: `${vaga.posicao!.largura * 100}%`,
                     height: `${vaga.posicao!.altura * 100}%`,
-                    transform: `rotate(${vaga.posicao!.rotacao}deg)`,
-                  }}
-                  className={`absolute min-h-12 min-w-16 overflow-hidden rounded-lg border-2 px-1 text-[11px] font-bold leading-tight shadow-sm ${
+                    "--rotacao-vaga": `${vaga.posicao!.rotacao}deg`,
+                  } as CSSProperties}
+                  className={`cartao-clicavel vaga-mapa-clicavel absolute min-h-12 min-w-16 overflow-hidden rounded-lg border-2 px-1 text-[11px] font-bold leading-tight shadow-sm ${
                     classesEstado[vaga.estadoAtual]
-                  } ${
+                  } ${classesInteracaoEstado[vaga.estadoAtual]} ${
                     vagaSelecionadaId === vaga.id
                       ? "z-10 border-black ring-4 ring-[#ffe100]/70"
-                      : "border-white"
+                      : "border-white hover:border-[#ffe100]"
                   }`}
                 >
                   <span className="block truncate">{vaga.codigo}</span>
@@ -321,7 +327,7 @@ function VagaLista({ vaga, selecionada, aoSelecionar }: VagaListaProps) {
         className={`cartao-clicavel flex h-full w-full min-w-0 flex-col items-start gap-2 rounded-lg border bg-white p-3 text-left ${
           selecionada
             ? "border-black ring-4 ring-[#ffe100]/60"
-            : "border-neutral-200"
+            : "border-neutral-200 hover:border-[#ffe100] hover:bg-[#fffbe0] active:bg-[#fff49d]"
         }`}
       >
         <span className="flex min-w-0 items-center gap-2">

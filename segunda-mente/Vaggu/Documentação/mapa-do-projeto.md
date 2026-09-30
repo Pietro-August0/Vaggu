@@ -64,10 +64,12 @@ As cópias de imagens entre `segunda-mente/Vaggu/Identidade visual/Assets/` e `v
 | `vaggu-backend/prisma/migrations/migration_lock.toml` | Registra o provedor PostgreSQL das migrations do Prisma. |
 | `vaggu-backend/prisma/migrations/20260928000100_telemetria_p06/migration.sql` | Acrescenta `INDISPONIVEL` em transação própria para compatibilidade do enum PostgreSQL. |
 | `vaggu-backend/prisma/migrations/20260928000200_persistencia_telemetria_p06/migration.sql` | Cria sensores, inicializações, deduplicação persistente e histórico temporal isolado por shopping. |
+| `vaggu-backend/prisma/migrations/20260930000100_visao_power_bi_historico/migration.sql` | Expõe o histórico confirmado como intervalos semiabertos compatíveis com o primeiro modelo do Power BI. |
 | `vaggu-backend/prisma/schema.prisma` | Define entidades, relações e restrições de estrutura, acessos, importação e primeiro recorte persistente de telemetria. |
 | `vaggu-backend/scripts/create-admin.ts` | Comando interativo para criar o primeiro administrador e exibir a senha gerada uma única vez no terminal. |
 | `vaggu-backend/scripts/provisionar-placa.ts` | Cria placa e sensores para vagas existentes, guardando apenas o hash e exibindo a chave uma vez. |
 | `vaggu-backend/scripts/simular-telemetria.ts` | Envia heartbeat e observações sintéticas pela mesma API do ESP32, sem inserir fixtures diretamente no banco. |
+| `vaggu-backend/scripts/gerar-fixtures-power-bi.ts` | Gera os CSVs sintéticos reproduzíveis da prova matemática e da demonstração ampliada, sem acessar banco ou hardware. |
 | `vaggu-backend/src/app.ts` | Monta a API Express, incluindo rotas humanas e de equipamento, restringe conexões externas e entrega o build React quando configurado. |
 | `vaggu-backend/src/analiticos/conjunto-controlado.ts` | Define intervalos sintéticos confirmados, calcula métricas ponderadas e gera o CSV reproduzível usado para preparar o Power BI sem simular integração com sensores. |
 | `vaggu-backend/src/auth/bootstrap.ts` | Cria o primeiro administrador por uma operação de terminal, sem cadastro público. |
@@ -120,6 +122,7 @@ As cópias de imagens entre `segunda-mente/Vaggu/Identidade visual/Assets/` e `v
 | `vaggu-backend/test/confirmacao-estado.test.ts` | Verifica janela, continuidade, alternância e leituras repetidas na confirmação temporal do P06. |
 | `vaggu-backend/test/metricas-ocupacao.test.ts` | Reproduz as métricas analíticas esperadas e garante que o CSV sintético versionado não diverge do conjunto tipado. |
 | `vaggu-backend/test/fixtures/power-bi/conjunto-controlado-ocupacao.csv` | Fornece ao Power BI um conjunto sintético identificado de duas vagas durante uma hora, sem gravar fixtures em banco persistente. |
+| `vaggu-backend/test/fixtures/power-bi/demonstracao-ampliada-ocupacao.csv` | Fornece ao protótipo visual um cenário sintético reproduzível de sete dias, dois andares, quatro setores e dezesseis vagas, sem simular ingestão de sensores. |
 | `vaggu-backend/test/importacao-routes.test.ts` | Verifica autorização e transporte HTTP da prévia CSV administrativa. |
 | `vaggu-backend/test/prisma-postgresql.test.ts` | Confere provider, relações, índices e migrations PostgreSQL, incluindo o recorte persistente P06. |
 | `vaggu-backend/test/telemetria-contratos.test.ts` | Verifica payload do ESP32, lote atômico, estados aceitos e credencial exclusiva do cabeçalho. |
@@ -143,7 +146,9 @@ As cópias de imagens entre `segunda-mente/Vaggu/Identidade visual/Assets/` e `v
 | `vaggu-frontend/public/assets/vaggu-logo.svg` | Asset visual vaggu-logo.svg; reutilizado na identidade e composição da interface. |
 | `vaggu-frontend/src/app/app-store.tsx` | Restaura identidade via cookie e `/auth/me` antes de liberar rotas; gerencia expiração, logout, troca de senha e consultas. |
 | `vaggu-frontend/src/components/brand.tsx` | Reutiliza os arquivos de marca publicados em public/assets nos links para a página inicial. |
-| `vaggu-frontend/src/components/dashboard-shell.tsx` | Compartilha cabeçalho, menu responsivo, atalho ao conteúdo, foco após navegação, alternância claro/escuro e saída da sessão entre os painéis autenticados. |
+| `vaggu-frontend/src/components/analise-estacionamento.css` | Define o painel analítico responsivo com fundo preto, cartões grafite, amarelo VAGGU e adaptações para celular. |
+| `vaggu-frontend/src/components/analise-estacionamento.tsx` | Associa ao shopping autenticado uma demonstração analítica identificada, com indicadores e gráficos genéricos sem persistir eventos no histórico real. |
+| `vaggu-frontend/src/components/dashboard-shell.tsx` | Compartilha cabeçalho, menu responsivo, atalho ao conteúdo, foco após navegação, alternância claro/escuro e saída da sessão; inclui o acesso do gerente à análise demonstrativa. |
 | `vaggu-frontend/src/components/estrutura-admin.tsx` | Permite criar a hierarquia, explica o estado real de implantação e alterna cadastro, mapa e posições com refetch após mutações. |
 | `vaggu-frontend/src/components/exportacao-estrutura.tsx` | Abre a janela de exportação estrutural, mostra o recorte e inicia o download XLSX sob demanda. |
 | `vaggu-frontend/src/components/importacao-estrutura.tsx` | Permite ao Admin baixar o modelo CSV, enviar CSV/XLSX, revisar registros e erros, confirmar a importação e consultar o resumo aplicado. |
@@ -177,9 +182,9 @@ As cópias de imagens entre `segunda-mente/Vaggu/Identidade visual/Assets/` e `v
 | `vaggu-frontend/src/index.css` | Reúne temas claro/escuro, compatibilidade visual dos painéis, responsividade e microinterações dos cards acionáveis. |
 | `vaggu-frontend/src/lib/constants.ts` | Publica links de contato somente após configurar o número oficial da equipe. |
 | `vaggu-frontend/src/lib/utils.ts` | Combina classes condicionais e resolve conflitos de utilitários Tailwind. |
-| `vaggu-frontend/src/main.tsx` | Inicializa o React, respeita a preferência de movimento reduzido e reúne tema, mensagens, sessão e rotas autenticadas. |
+| `vaggu-frontend/src/main.tsx` | Inicializa o React, respeita a preferência de movimento reduzido e reúne tema, mensagens, sessão e rotas autenticadas, incluindo `/painel/analise`. |
 | `vaggu-frontend/src/pages/admin-page.tsx` | Implementa a visão geral administrativa com indicadores cadastrais reais, além de cadastro, lista e ficha do shopping; estrutura/mapa e gerentes mantêm importação/exportação, senha provisória e exclusões administrativas. |
-| `vaggu-frontend/src/pages/area-autenticada.tsx` | Separa mapa operacional e Minha conta do gerente em rotas próprias, reutilizando a conta compartilhada. |
+| `vaggu-frontend/src/pages/area-autenticada.tsx` | Separa mapa operacional, análise demonstrativa e Minha conta do gerente em rotas próprias, reutilizando a conta compartilhada. |
 | `vaggu-frontend/src/pages/landing-page.tsx` | Compõe a landing pública, respeita movimento reduzido e mantém contato, temas e rodapé móvel legíveis. |
 | `vaggu-frontend/src/pages/login-page.css` | Define composição responsiva do login, troca de senha e desenho animado do rabisco em “vagas”. |
 | `vaggu-frontend/src/pages/login-page.tsx` | Entrada única para Admin e gerente, sem solicitar preenchimento automático das credenciais ao abrir a página. |
