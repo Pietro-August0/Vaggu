@@ -12,6 +12,7 @@ import { estruturaAdminRoutes, estruturaGerenteRoutes } from './estrutura/routes
 import { importacaoRoutes } from './importacao/routes.js';
 import { telemetriaRoutes } from './telemetria/routes.js';
 import type { TelemetriaHttpService } from './telemetria/routes.js';
+import { analiticosRoutes } from './analiticos/routes.js';
 
 type AppServices = {
   checkDatabase: () => Promise<unknown> | unknown;
@@ -23,10 +24,11 @@ type AppServices = {
   estrutura?: any;
   importacao?: any;
   telemetria?: TelemetriaHttpService;
+  analiticos?: any;
 };
 
 // Injeção da consulta facilita testar HTTP sem um banco real.
-export function createApp({ checkDatabase, frontendDistPath, auth, whatsapp, shoppings, conta, estrutura, importacao, telemetria }: AppServices) {
+export function createApp({ checkDatabase, frontendDistPath, auth, whatsapp, shoppings, conta, estrutura, importacao, telemetria, analiticos }: AppServices) {
   const app = express();
   app.disable('x-powered-by');
   // O cadastro consulta o ViaCEP no navegador; as demais conexões continuam restritas à origem da API.
@@ -68,6 +70,7 @@ export function createApp({ checkDatabase, frontendDistPath, auth, whatsapp, sho
     app.use('/api/v1', estruturaAdminRoutes(auth, estrutura));
   }
   if (auth && importacao) app.use('/api/v1', importacaoRoutes(auth, importacao));
+  if (auth && analiticos) app.use('/api/v1/estacionamento/analise', analiticosRoutes(auth, analiticos));
   if (telemetria) app.use('/api/v1/telemetria', telemetriaRoutes(telemetria));
 
   // Na hospedagem, entrega o build React pelo mesmo domínio da API. Assim, login e

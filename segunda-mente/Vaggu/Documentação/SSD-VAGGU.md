@@ -508,6 +508,7 @@ Novos contratos próprios devem priorizar português e termos claros, com exceç
 | GET | `/alertas` | Admin/gerente no recorte | Consultar impacto operacional sem expor segredos técnicos. |
 | GET | `/dashboard` | Admin/gerente no recorte | Contagens atuais, validade e cobertura. |
 | GET | `/historico` | Admin/gerente no recorte | Séries e métricas no período. |
+| GET | `/estacionamento/analise` | Gerente no recorte da sessão | Ocupação, cobertura, entradas e séries dos últimos sete dias; não aceita `shoppingId` do navegador como autoridade. |
 | GET | `/comparacoes` | Admin/gerente no recorte | Comparar períodos usando as mesmas definições. |
 | GET | `/exportacoes/pdf` | Admin/gerente no recorte | Resumo em PDF. |
 | GET | `/exportacoes/csv` | Admin/gerente no recorte | Resumo tabular para planilha. |

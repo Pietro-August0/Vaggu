@@ -5,6 +5,7 @@ import { Accessibility, CarFront, CircleParking, Clock3, Download, PlugZap, Refr
 import { useAppStore } from "@/app/app-store"
 import { Button } from "@/components/ui/button"
 import { lerEstrutura } from "@/servicos/estrutura"
+import { lerAnaliseHistorica, type AnaliseHistorica } from "@/servicos/analise"
 import type { EstruturaEstacionamento, TipoVaga } from "@/types/estrutura"
 
 const dias = ["11 Mai", "12 Mai", "13 Mai", "14 Mai", "15 Mai", "16 Mai", "17 Mai"]
@@ -19,11 +20,13 @@ const tipos: Record<TipoVaga, { nome: string; cor: string }> = {
 }
 
 /** Produz valores estáveis para a demonstração e mantém a capacidade ligada ao shopping consultado. */
-function criarDemonstracao(estrutura: EstruturaEstacionamento) {
+function criarDemonstracao(estrutura: EstruturaEstacionamento, historico: AnaliseHistorica | null) {
   const vagas = estrutura.andares.flatMap((andar) => andar.setores.flatMap((setor) => setor.vagas))
-  const total = Math.max(vagas.length, 16)
-  const ocupadas = Math.round(total * 0.651)
-  const livres = total - ocupadas
+  const total = historico?.temHistorico ? vagas.length : Math.max(vagas.length, 16)
+  const ocupadasAtuais = vagas.filter((vaga) => vaga.estadoAtual === "OCUPADA").length
+  const livresAtuais = vagas.filter((vaga) => vaga.estadoAtual === "LIVRE").length
+  const ocupadas = historico?.temHistorico ? ocupadasAtuais : Math.round(total * 0.651)
+  const livres = historico?.temHistorico ? livresAtuais : total - ocupadas
   const especiais = vagas.filter((vaga) => vaga.tipo !== "COMUM").length || Math.max(3, Math.round(total * 0.08))
   const setoresOriginais = estrutura.andares.flatMap((andar) => andar.setores.map((setor) => ({
     nome: setor.nome,
@@ -35,7 +38,8 @@ function criarDemonstracao(estrutura: EstruturaEstacionamento) {
     { nome: "Setor C", total: Math.floor(total / 4) },
     { nome: "Setor D", total: total - Math.ceil(total / 4) - Math.floor(total / 2) },
   ]).map((setor, indice) => {
-    const taxa = [66.7, 65.8, 65.6, 62.3][indice % 4]
+    const taxaReal = historico?.porSetor.find((item) => item.setor === setor.nome)?.ocupacaoPercentual
+    const taxa = taxaReal ?? [66.7, 65.8, 65.6, 62.3][indice % 4]
     const ocupadasSetor = Math.round(setor.total * taxa / 100)
     return { ...setor, ocupadas: ocupadasSetor, livres: Math.max(0, setor.total - ocupadasSetor), taxa, permanencia: ["01h22", "01h15", "01h20", "01h12"][indice % 4], rotatividade: [4.23, 4.67, 4.45, 4.19][indice % 4] }
   })
@@ -48,16 +52,17 @@ function criarDemonstracao(estrutura: EstruturaEstacionamento) {
   return { total, ocupadas, livres, especiais, setores, porTipo }
 }
 
-function GraficoLinha() {
-  const pontos = ocupacaoDiaria.map((valor, indice) => `${8 + indice * 15.3},${88 - valor}`).join(" ")
-  return <div className="grafico-linha" role="img" aria-label={`Taxa de ocupação entre ${dias[0]} e ${dias[dias.length - 1]}, variando de 58% a 72%.`}>
+function GraficoLinha({ rotulos, valores }: { rotulos: string[]; valores: number[] }) {
+  const maior = Math.max(...valores, 1)
+  const pontos = valores.map((valor, indice) => `${8 + indice * (91 / Math.max(1, valores.length - 1))},${50 - valor / maior * 38}`).join(" ")
+  return <div className="grafico-linha" role="img" aria-label={`Taxa de ocupação no período, entre ${Math.min(...valores).toFixed(0)}% e ${Math.max(...valores).toFixed(0)}%.`}>
     <svg viewBox="0 0 100 54" preserveAspectRatio="none" aria-hidden="true">
       <defs><linearGradient id="area-amarela" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stopColor="#ffe100" stopOpacity=".42"/><stop offset="1" stopColor="#ffe100" stopOpacity="0"/></linearGradient></defs>
       <path d={`M ${pontos} L 99 52 L 8 52 Z`} fill="url(#area-amarela)" />
       <polyline points={pontos} fill="none" stroke="#ffe100" strokeWidth="1.3" vectorEffect="non-scaling-stroke" />
-      {ocupacaoDiaria.map((valor, indice) => <circle key={dias[indice]} cx={8 + indice * 15.3} cy={88 - valor} r="1.7" fill="#ffe100" />)}
+      {valores.map((valor, indice) => <circle key={rotulos[indice]} cx={8 + indice * (91 / Math.max(1, valores.length - 1))} cy={50 - valor / maior * 38} r="1.7" fill="#ffe100" />)}
     </svg>
-    <div className="grafico-eixo">{dias.map((dia) => <span key={dia}>{dia}</span>)}</div>
+    <div className="grafico-eixo">{rotulos.map((dia) => <span key={dia}>{dia}</span>)}</div>
   </div>
 }
 
@@ -72,15 +77,21 @@ function CartaoMetrica({ titulo, valor, apoio, cor, icone: Icon }: { titulo: str
 export function AnaliseEstacionamento() {
   const { consultar } = useAppStore()
   const [estrutura, setEstrutura] = useState<EstruturaEstacionamento | null>(null)
+  const [historico, setHistorico] = useState<AnaliseHistorica | null>(null)
   const [erro, setErro] = useState("")
 
   useEffect(() => {
     let ativo = true
-    consultar("/estacionamento/estrutura").then(lerEstrutura).then((valor) => { if (ativo) setEstrutura(valor) }).catch((falha) => { if (ativo) setErro(falha instanceof Error ? falha.message : "Não foi possível carregar a análise.") })
+    Promise.all([
+      consultar("/estacionamento/estrutura").then(lerEstrutura),
+      consultar("/estacionamento/analise").then(lerAnaliseHistorica).catch(() => null),
+    ]).then(([estruturaRecebida, historicoRecebido]) => {
+      if (ativo) { setEstrutura(estruturaRecebida); setHistorico(historicoRecebido) }
+    }).catch((falha) => { if (ativo) setErro(falha instanceof Error ? falha.message : "Não foi possível carregar a análise.") })
     return () => { ativo = false }
   }, [consultar])
 
-  const demonstracao = useMemo(() => estrutura ? criarDemonstracao(estrutura) : null, [estrutura])
+  const demonstracao = useMemo(() => estrutura ? criarDemonstracao(estrutura, historico) : null, [estrutura, historico])
   if (erro) return <p role="alert" className="rounded-2xl border border-red-500/30 bg-red-950/40 p-5 text-red-200">{erro}</p>
   if (!estrutura || !demonstracao) return <p role="status" className="rounded-2xl bg-[#232323] p-6 text-neutral-200">Carregando análise do estacionamento...</p>
 
@@ -92,11 +103,23 @@ export function AnaliseEstacionamento() {
     return `${tipos[item.tipo].cor} ${inicio}% ${fim}%`
   }).join(", ")
   const setoresDoGrafico = demonstracao.setores.slice(0, 4)
+  const totalOcupadoSetores = setoresDoGrafico.reduce((soma, setor) => soma + setor.ocupadas, 0)
+  const gradienteSetores = setoresDoGrafico.map((setor, indice, setores) => {
+    const pesos = totalOcupadoSetores > 0 ? setores.map((item) => item.ocupadas) : setores.map(() => 1)
+    const totalPesos = pesos.reduce((soma, valor) => soma + valor, 0)
+    const inicio = pesos.slice(0, indice).reduce((soma, valor) => soma + valor, 0) / totalPesos * 100
+    const fim = inicio + pesos[indice] / totalPesos * 100
+    return `${coresSetor[indice]} ${inicio}% ${fim}%`
+  }).join(",")
+  const dadosReais = historico?.temHistorico === true
+  const serieDiaria = dadosReais ? historico.porDia.map((item) => item.ocupacaoPercentual) : ocupacaoDiaria
+  const rotulosDiarios = dadosReais ? historico.porDia.map((item) => new Intl.DateTimeFormat("pt-BR", { day: "2-digit", month: "short", timeZone: "UTC" }).format(new Date(item.inicioEm)).replace(" de ", " ")) : dias
+  const periodo = dadosReais ? `${rotulosDiarios[0]} a ${rotulosDiarios.at(-1)}` : "11 a 17 de maio"
 
   return <section className="analise-estacionamento" aria-labelledby="titulo-analise">
     <header className="analise-cabecalho">
-      <div><p className="analise-selo">Dados genéricos · demonstração</p><h2 id="titulo-analise">Análise do estacionamento</h2><p>{estrutura.shopping.nome} · período de 11 a 17 de maio</p></div>
-      <div className="analise-acoes"><Button type="button" variant="outline" disabled><RefreshCw aria-hidden="true"/>Atualização simulada</Button><Button type="button" disabled><Download aria-hidden="true"/>Exportar</Button></div>
+      <div><p className={`analise-selo ${dadosReais ? "analise-selo-real" : ""}`}>{dadosReais ? "Histórico confirmado" : "Dados genéricos · demonstração"}</p><h2 id="titulo-analise">Análise do estacionamento</h2><p>{estrutura.shopping.nome} · período de {periodo}</p></div>
+      <div className="analise-acoes"><Button type="button" variant="outline" disabled><RefreshCw aria-hidden="true"/>{dadosReais ? "Histórico carregado" : "Atualização simulada"}</Button><Button type="button" disabled><Download aria-hidden="true"/>Exportar</Button></div>
     </header>
 
     <div className="analise-metricas">
@@ -107,9 +130,9 @@ export function AnaliseEstacionamento() {
     </div>
 
     <div className="analise-grade-principal">
-      <article className="analise-painel analise-linha"><div className="analise-titulo"><div><h3>Taxa de ocupação</h3><p>Média diária do período</p></div><span>Por dia</span></div><GraficoLinha/></article>
-      <article className="analise-painel"><div className="analise-titulo"><div><h3>Ocupação por setor</h3><p>Participação no total ocupado</p></div></div><div className="analise-rosca-bloco"><div className="analise-rosca" style={{ background: `conic-gradient(${setoresDoGrafico.map((setor, indice) => `${coresSetor[indice]} ${indice / setoresDoGrafico.length * 100}% ${(indice + 1) / setoresDoGrafico.length * 100}%`).join(",")})` }}><span><strong>{demonstracao.ocupadas}</strong>ocupadas</span></div><ul>{setoresDoGrafico.map((setor, indice) => <li key={setor.nome}><i style={{ background: coresSetor[indice] }}/><span>{setor.nome}</span><strong>{setor.ocupadas}</strong></li>)}</ul></div></article>
-      <article className="analise-painel analise-resumo"><div className="analise-titulo"><div><h3>Resumo do período</h3><p>Comparação com a semana anterior</p></div></div><dl><div><Clock3/><dt>Tempo médio de ocupação</dt><dd>01h18 <span>↓ 6,4%</span></dd></div><div><CarFront/><dt>Entradas</dt><dd>5.842 <span>↑ 12,7%</span></dd></div><div><RefreshCw/><dt>Rotatividade</dt><dd>4,51 <span>↑ 8,6%</span></dd></div><div><PlugZap/><dt>Cobertura dos sensores</dt><dd>92% <span>↑ 2,1%</span></dd></div></dl></article>
+      <article className="analise-painel analise-linha"><div className="analise-titulo"><div><h3>Taxa de ocupação</h3><p>Média diária do período</p></div><span>Por dia</span></div><GraficoLinha rotulos={rotulosDiarios} valores={serieDiaria}/></article>
+      <article className="analise-painel"><div className="analise-titulo"><div><h3>Ocupação por setor</h3><p>Participação no total ocupado</p></div></div><div className="analise-rosca-bloco"><div className="analise-rosca" style={{ background: `conic-gradient(${gradienteSetores})` }}><span><strong>{demonstracao.ocupadas}</strong>ocupadas</span></div><ul>{setoresDoGrafico.map((setor, indice) => <li key={setor.nome}><i style={{ background: coresSetor[indice] }}/><span>{setor.nome}</span><strong>{setor.ocupadas}</strong></li>)}</ul></div></article>
+      <article className="analise-painel analise-resumo"><div className="analise-titulo"><div><h3>Resumo do período</h3><p>{dadosReais ? "Calculado sobre eventos confirmados" : "Comparação demonstrativa"}</p></div></div><dl><div><Clock3/><dt>Taxa de ocupação</dt><dd>{dadosReais ? `${historico.resumo.ocupacaoPercentual.toFixed(1).replace(".", ",")}%` : "65,1%"}</dd></div><div><CarFront/><dt>Entradas observadas</dt><dd>{dadosReais ? historico.resumo.entradasObservadas.toLocaleString("pt-BR") : "5.842"}</dd></div><div><RefreshCw/><dt>Rotatividade</dt><dd>{dadosReais ? "Em evolução" : "4,51"}</dd></div><div><PlugZap/><dt>Cobertura dos sensores</dt><dd>{dadosReais ? `${historico.resumo.coberturaPercentual.toFixed(1).replace(".", ",")}%` : "92%"}</dd></div></dl></article>
     </div>
 
     <div className="analise-grade-secundaria">

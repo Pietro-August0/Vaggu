@@ -5,6 +5,7 @@ import { prepararBancoDeTeste } from '../test-support/banco-de-teste.js';
 import { hashPassword } from '../src/auth/password.js';
 import { createTelemetriaService } from '../src/telemetria/service.js';
 import { expirarSensores } from '../src/telemetria/expiracao.js';
+import { createAnaliticosService } from '../src/analiticos/service.js';
 
 const url = process.env.TEST_DATABASE_URL;
 test('telemetria confirma após 30 s, deduplica e não usa heartbeat para renovar sensor', {
@@ -77,4 +78,13 @@ test('telemetria confirma após 30 s, deduplica e não usa heartbeat para renova
   assert.equal(intervalos[0]?.inicio_em.toISOString(), '2026-09-28T12:00:30.000Z');
   assert.equal(intervalos[0]?.fim_em.toISOString(), '2026-09-28T12:02:30.000Z');
   assert.equal(intervalos[0]?.entrada_observada, false);
+
+  const analise = await createAnaliticosService(
+    prisma,
+    () => new Date('2026-09-28T13:00:00.000Z'),
+  ).buscarAnalise(shopping.id);
+  assert.equal(analise.temHistorico, true);
+  assert.equal(analise.resumo.ocupacaoPercentual, 100);
+  assert.equal(analise.resumo.coberturaPercentual, 0.02);
+  assert.equal(analise.porSetor[0]?.setor, 'Sem setor');
 });
