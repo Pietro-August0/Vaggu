@@ -1,8 +1,8 @@
 # SSD VAGGU — especificação de produto e desenho do sistema
 
-**Versão:** 1.0 • **Data:** 09/09/2026 • **Idioma:** português brasileiro.
+**Versão:** 1.1 • **Revisão:** 30/09/2026 • **Idioma:** português brasileiro.
 
-**Objetivo:** oferecer ao Codex e à equipe uma base ampla, rastreável e utilizável para planejar, implementar e revisar a VAGGU. Esta especificação descreve o resultado esperado; o estado real da implementação deve ser verificado no repositório.
+**Objetivo:** reunir as regras, os limites e o resultado esperado da VAGGU em um único lugar. Este documento explica o produto; o planejamento mostra o que já foi entregue e o que ainda falta.
 
 ## Sumário
 
@@ -24,7 +24,7 @@
 
 ## 1. Contexto, fontes e autoridade
 
-A VAGGU é o TCC de Desenvolvimento de Sistemas de uma equipe de seis integrantes. A organização confirmada em 14/09/2026 é: Pietro em fullstack e liderança; Ana Clara como Scrum Master, documentação e frontend; Elisa em frontend, UX e QA; Juan em frontend, UI e design; Samuel em backend, gestão de dados e Product Owner; Kamilly em backend, Arduino e IoT. O roteamento operacional e os usernames ficam em `skills/rotear-trabalho-equipe/references/equipe.md`. O horizonte informado é a apresentação até dezembro de 2026; não existe cronograma diário aprovado neste pacote.
+A VAGGU é o TCC de Desenvolvimento de Sistemas de uma equipe de seis integrantes. A organização confirmada em 14/09/2026 é: Pietro em desenvolvimento completo e liderança; Ana Clara como Scrum Master, documentação e interface; Elisa em interface, experiência e qualidade; Juan em interface e design; Samuel em servidor, dados e produto; Kamilly em servidor, Arduino e IoT. O horizonte informado é a apresentação até dezembro de 2026; não existe cronograma diário aprovado neste pacote.
 
 O sistema recebe dados de sensores em vagas de estacionamento de shoppings, apresenta ocupação e disponibilidade por andar/setor, oferece mapa operacional e telões e preserva histórico para análise. A equipe VAGGU administra implantação, acessos e equipamentos; gerentes acompanham a operação.
 
@@ -36,7 +36,7 @@ O sistema recebe dados de sensores em vagas de estacionamento de shoppings, apre
 | `VAGGU_Documento_Mestre_Atualizado.docx`, revisão de 09/09, 17 páginas | Base consolidada de fluxos, regras, modelo proposto e planejamento. |
 | Documento mestre de 03/09 e endpoints MVP de 02/09 | Contexto anterior. Regras conflitantes foram substituídas. |
 | Figma VAGGU, arquivo `xKI9wjoiZ5CoXC3DXIJNmq`, nó `2022:2` | Referência de identidade e telas. Nova extração bloqueada por limite; detalhes no guia visual. |
-| Documentação oficial OpenAI e Microsoft | Referência para arquivo de instruções e opções do Power BI; links ao final. |
+| Documentação oficial Microsoft | Referência para conexão, atualização e formas de compartilhar o Power BI; links ao final. |
 
 Este pacote não atesta revisão completa do código no GitHub nem dos cartões do Trello. O quadro VAGGU não pôde ser lido na etapa anterior. Não inferir conclusão de tarefas pelo protótipo, por um documento ou pelo nome de um endpoint.
 
@@ -69,7 +69,7 @@ Landing, login, troca de senha, bot de WhatsApp, administração de shoppings e 
 
 ### 2.2 Fora do escopo
 
-Lotes comerciais, perfil de lojista/empresário, reservas, cobrança ou pagamento de estacionamento, identificação de veículos por câmera, leitura de placas de veículos, aplicativo nativo, chatbot de IA, navegação 3D, leitura automática de planta e editor CAD completo. Não reintroduzir esses itens por conta própria.
+Lotes comerciais, perfil de lojista/empresário, reservas, cobrança ou pagamento de estacionamento, identificação de veículos por câmera, leitura de placas de veículos, aplicativo nativo, navegação 3D, leitura automática de planta e editor CAD completo. Não reintroduzir esses itens por conta própria.
 
 A maquete prevista tem oito vagas. A pequena tela física pode ser demonstrativa e não precisa consumir o sistema. As páginas web de telão devem poder ser demonstradas em monitor convencional. Instalação comercial em vários shoppings não é pré-requisito para demonstrar o TCC.
 
@@ -164,7 +164,7 @@ O código atual preserva várias prévias de importação e não possui polític
 
 ### 5.4 Desativação
 
-A exclusão de gerente usa sete segundos para desfazer e preserva o mesmo ID. A exclusão de shopping está implementada no backend sem desfazer; reativação posterior de shopping e regras equivalentes para estrutura permanecem pendentes. O frontend atual precisa ser reconciliado com essas ações antes de o fluxo ser declarado verificado novamente. Histórico continua disponível. Ações em cascata devem mostrar impacto e preservar integridade; não deixar vaga ativa com pai desativado sem regra explícita.
+A exclusão de gerente usa sete segundos para desfazer e preserva o mesmo ID. A exclusão de shopping não oferece desfazer. As duas ações já estão ligadas à interface e foram verificadas; reativação posterior de shopping e regras equivalentes para estrutura permanecem pendentes. O histórico continua disponível. A tela deve explicar o impacto e não pode deixar uma vaga ativa dentro de uma estrutura inativa sem uma regra clara.
 
 ## 6. Páginas e comportamento da interface
 
@@ -174,7 +174,7 @@ A exclusão de gerente usa sete segundos para desfazer e preserva o mesmo ID. A 
 | Acesso | Login/troca de senha | Autenticação, validação e direcionamento por perfil. |
 | Admin | Visão geral | Situação dos shoppings e falhas que exigem atenção. |
 | Admin | Shoppings | Buscar, cadastrar e abrir ficha. |
-| Admin | Ficha do shopping | Dados, documentos, gerentes, andares, setores, mapa, vagas, importação e implantação. |
+| Admin | Ficha do shopping | Dados, gerentes, andares, setores, mapa, vagas, importação e implantação. Documentos e plantas continuam no atendimento pelo WhatsApp. |
 | Admin | Equipamentos | Placas, sensores, comunicação e ocorrências. |
 | Admin | Atendimentos | Demonstrações e suporte, com continuidade no WhatsApp. |
 | Gerente | Estacionamento | Indicadores, mapa por andar, filtros, busca e detalhes. |
@@ -188,7 +188,7 @@ Interface precisa tratar carregamento, ausência de registros, ausência de obse
 
 ### 7.1 Mapa
 
-Mapa é funcionalidade obrigatória e compartilha a mesma representação visual entre Admin e gerente. Selecionar andar carrega sua base e vagas, com código, setor, categoria e estado. Clicar em uma vaga posicionada, em um card móvel ou em uma vaga sem posição abre o mesmo diálogo de detalhes, que informa localização, categoria, cadastro e situação do monitoramento. Enquanto o P06 não fornecer telemetria individual, saúde, comunicação e última leitura aparecem explicitamente como indisponíveis; a interface não inventa um sensor saudável a partir do estado estrutural nem do contato futuro da placa. Busca por um código exato de outro andar navega ao recorte correto e abre o detalhe da vaga. Filtros por setor, tipo e estado devem ter comportamento visível; não misturar total do shopping com total filtrado sem rótulo. No Admin, mutações de estrutura recarregam o estado exibido sem exigir atualização manual da página.
+Mapa é funcionalidade obrigatória e compartilha a mesma representação visual entre Admin e gerente. Selecionar andar carrega sua base e vagas, com código, setor, categoria e estado. Clicar em uma vaga posicionada, em um card móvel ou em uma vaga sem posição abre o mesmo diálogo de detalhes, que informa localização, categoria, cadastro e situação do monitoramento. A base individual de telemetria já existe, mas o mapa ainda não consulta a validade de cada sensor; até essa ligação ser feita, saúde, comunicação e última leitura devem aparecer como indisponíveis. A interface não pode inventar um sensor saudável apenas porque a vaga está cadastrada ou a placa enviou um sinal geral. Busca por um código exato de outro andar navega ao recorte correto e abre o detalhe da vaga. Filtros por setor, tipo e estado devem ter comportamento visível; não misturar total do shopping com total filtrado sem rótulo. No Admin, mudanças de estrutura atualizam o que aparece sem exigir recarga manual da página.
 
 **Proposta técnica do MVP:** representação 2D simples por andar, base visual e coordenadas normalizadas. Posição usa `x`/`y` do canto superior esquerdo e largura/altura em relação às dimensões da base; rotação em graus, com âncora documentada. Definir validação de limites, inclusive elemento rotacionado. A proposta evita depender de coordenadas absolutas de um único monitor.
 
@@ -240,7 +240,7 @@ Retorno de contato encerra a falha de comunicação correspondente, mas o histó
 
 Esta seção é **proposta técnica** de contrato e algoritmo. Deve ser conciliada com o firmware existente e implementada com testes de tempo, concorrência e reinicialização.
 
-**Estado local em 28/09/2026:** o primeiro recorte segue esta proposta com sequência global entre heartbeat/estados, relógio autoritativo do servidor, rejeição atômica do lote e credencial `Authorization: Device <chave>`. Lacuna e timeouts são configuração provisória, não confirmação do firmware. A integração PostgreSQL, o hardware, manutenção/ocorrências, validade nas consultas e o deploy permanecem pendentes; P06 não está concluído.
+**Estado local em 30/09/2026:** a base já controla a ordem das mensagens, usa o horário do servidor, rejeita um grupo inteiro quando há leitura inválida e exige uma credencial própria da placa. A integração com PostgreSQL foi executada com sucesso. Os tempos usados ainda são provisórios e precisam ser comparados com o ESP32 real. Também faltam manutenção e ocorrências, validade nas consultas do mapa e conferência no ambiente publicado; por isso, o P06 continua em andamento.
 
 ### 9.1 Parâmetros
 
@@ -318,7 +318,7 @@ Métricas de duração e disponibilidade dependem desses eventos. Não considera
 
 Estados confirmados com origem, instante efetivo, recebimento e motivo; intervalos de indisponibilidade; períodos de atividade dos cadastros; mudanças de categoria/estrutura/vínculo relevantes à análise. O estado atual serve à consulta rápida e não substitui eventos históricos.
 
-**Proposta temporal:** usar intervalos semiabertos `[início, fim)`, em UTC, convertendo a exibição ao fuso do shopping. Consultar o estado anterior ao início do período quando necessário para reconstruir um intervalo. Cortar intervalos nas bordas do período, da hora e da vigência cadastral. Não prolongar indefinidamente o último estado conhecido por um período sem comunicação.
+**Proposta temporal:** guardar horários em UTC e informar claramente o fuso usado na tela ou no relatório. O cadastro atual não possui um fuso por shopping, portanto nenhuma análise pode supor esse dado. Consultar o estado anterior ao início do período quando necessário para reconstruir um intervalo. Cortar intervalos nas bordas do período, da hora e da vigência cadastral. Não prolongar indefinidamente o último estado conhecido quando a comunicação for perdida.
 
 ### 10.2 Definições únicas
 
@@ -340,7 +340,7 @@ Sensores não identificam carros/pessoas: não prometer “clientes únicos”, 
 
 ### 10.3 Relatórios e insights
 
-Filtros de período, andar, setor e categoria. Exportação em PDF e planilha de resumo; CSV pode atender a planilha do MVP, devendo estar identificado no botão/contrato. Incluir filtros, fuso, atualização e cobertura. Exportar somente dados autorizados e neutralizar células textuais interpretáveis como fórmulas em formatos tabulares quando aplicável.
+Filtros de período, andar, setor e categoria. Exportação em PDF e planilha de resumo; CSV pode atender ao MVP, desde que o botão deixe o formato claro. Incluir os filtros usados, o fuso mostrado, a data de atualização e a cobertura dos dados. Exportar somente informações autorizadas e impedir que textos da planilha sejam interpretados como fórmulas.
 
 Insights são frases derivadas de regras e métricas conferíveis. Exemplo: “O andar 2 apresentou maior ocupação no período selecionado”, somente se os dados sustentarem a comparação. Não há chat analítico de IA. No caso de cobertura insuficiente, informar limitação em vez de produzir conclusão forte.
 
@@ -417,7 +417,6 @@ Não são um schema Prisma pronto. Tipos, índices e campos precisam ser concili
 | EventoOcupacao | ID, vagaId, estados anterior/novo, efetivoEm, recebidoEm, origem, motivo e vínculo de evento. |
 | EventoEquipamento | ID, placaId ou sensorId, mudança, efetivoEm, recebidoEm e motivo. Exatamente um alvo por evento. |
 | OcorrenciaTecnica | ID, equipamento, tipo de falha, abertura, retorno, responsável, observações e conclusão de manutenção. |
-| DocumentoShopping | shoppingId, tipo, nome, referência privada, tamanho, situação e datas. |
 | Importacao | shoppingId, arquivo, estado de processamento, resumo, revisão e confirmação. |
 | ErroImportacao | importacaoId, linha, campo, motivo e severidade. |
 | SessaoWhatsApp | Identificação de contato, etapa, última interação e situação; mínimo necessário. |
@@ -443,18 +442,13 @@ Autenticação pode precisar de entidade de sessão/revogação conforme soluç�
 | Vaga | 1:0..1 ativo | Sensor vinculado |
 | Vaga | 1:N | Eventos de ocupação |
 | Equipamento | 1:N | Eventos/ocorrências |
-| Shopping | 1:N | Documentos, chamados e registros auxiliares |
+| Shopping | 1:N | Chamados e registros auxiliares |
 
 Um campo de shopping redundante na vaga, se necessário para restrição composta e consultas, deve ser mantido consistente com o setor/andar. Não confiar que copiar o ID em várias tabelas garante isolamento.
 
-### 12.4 Migrações prioritárias
+### 12.4 Evolução do banco
 
-1. Corrigir unicidade de shopping no gerente, preservando contas existentes.
-2. Introduzir mapa e posições associados a vagas existentes.
-3. Separar placa e sensor, preservando vínculos/leituras já existentes.
-4. Unificar tipos/estados com mapeamento dos enums antigos.
-5. Garantir eventos, intervalos de falha, deduplicação e índices necessários.
-6. Introduzir views analíticas e permissões de leitura com validação dos resultados.
+Já foram concluídos: vários gerentes no mesmo shopping, mapa e posições, separação entre placa e sensor, eventos de telemetria, histórico e a primeira consulta preparada para análise. Ainda faltam as mudanças ligadas a ocorrências e manutenção, histórico das alterações cadastrais e permissões definitivas para o Power BI.
 
 Cada migração precisa declarar pré-condições, compatibilidade com a API, backfill quando necessário e estratégia de recuperação. Não resetar dados reais.
 
@@ -484,8 +478,6 @@ Novos contratos próprios devem priorizar português e termos claros, com exceç
 | POST | `/gerentes/:id/redefinir-senha` | Admin | Emitir senha provisória individual. |
 | DELETE | `/gerentes/:id` | Admin | Excluir logicamente, encerrar sessões e abrir sete segundos para desfazer. |
 | POST | `/gerentes/:id/desfazer-exclusao` | Admin | Restaurar o mesmo ID e estado anterior dentro da janela. |
-| GET/POST | `/shoppings/:id/documentos` | Admin | Listar/enviar arquivos da implantação. |
-| GET/PATCH | `/documentos/:id` | Admin | Acesso privado e revisão de metadados/situação. |
 | GET/POST | `/shoppings/:id/andares` | Consulta autorizada/Admin escrita | Estrutura de andares do recorte. |
 | GET/PATCH | `/andares/:id` | Consulta autorizada/Admin escrita | Detalhe e manutenção do andar. |
 | GET/POST | `/andares/:id/setores` | Consulta autorizada/Admin escrita | Estrutura dos setores. |
@@ -515,7 +507,7 @@ Novos contratos próprios devem priorizar português e termos claros, com exceç
 | GET | `/exportacoes/csv` | Admin/gerente no recorte | Resumo tabular para planilha. |
 | GET | `/teloes/entrada` | Telão autorizado | Agregados por andar. |
 | GET | `/teloes/andares/:id` | Telão autorizado | Agregados por setor. |
-| GET/POST | `/webhooks/whatsapp` | Provedor validado | Verificação e recebimento conforme protocolo externo. |
+| GET/POST | `/whatsapp/webhook` | Meta validada | Endereço que confirma a configuração e recebe as mensagens da Meta. |
 | GET/PATCH | `/demonstracoes` e `/demonstracoes/:id` | Admin | Acompanhar contatos e situação; escrita parcial na rota por ID. |
 | POST | `/demonstracoes/:id/converter` | Admin | Criar/vincular shopping após validação comercial. |
 | GET/PATCH | `/suporte` e `/suporte/:id` | Admin | Acompanhar protocolos; escrita parcial na rota por ID. |
@@ -586,7 +578,7 @@ Usar `400` para entrada inválida, `401` para ausência/sessão inválida, `403`
 | --- | --- |
 | RF01 | Landing apresenta serviço e encaminha ao WhatsApp. |
 | RF02 | Bot executa menu e registra demonstração/suporte com encaminhamento humano. |
-| RF03 | Admin cadastra shopping, documentos, etapa e estrutura. |
+| RF03 | Admin cadastra shopping, etapa e estrutura. Documentos e plantas são tratados pelo atendimento no WhatsApp nesta entrega. |
 | RF04 | Admin cria vários gerentes com logins individuais por shopping. |
 | RF05 | Autenticação por perfil, troca provisória, bloqueio e redefinição. |
 | RF06 | Mapa permite andares, busca, filtros e seleção. |
@@ -633,7 +625,6 @@ Toda decisão relevante registra: identificador, data, contexto, escolha, altern
 
 Fontes do projeto: decisões da conversa e documento mestre de 09/09/2026. O documento antigo é histórico; não deve reinstalar as regras “sem mapa” e “um gerente”.
 
-- **R1 — OpenAI:** [Instruções com AGENTS.md](https://developers.openai.com/codex/guides/agents-md). Base para organizar um arquivo de entrada curto apontando à documentação extensa.
 - **R2 — Microsoft:** [Conector PostgreSQL](https://learn.microsoft.com/pt-br/power-query/connectors/postgresql). Modos suportados e conexão.
 - **R3 — Microsoft:** [Atualização de dados](https://learn.microsoft.com/en-us/power-bi/connect-data/refresh-data). Atualização e conectividade ao serviço.
 - **R4 — Microsoft:** [Visão geral de incorporação](https://learn.microsoft.com/en-us/power-bi/developer/embedded/embedded-analytics-power-bi). Modelos de acesso e publicação.

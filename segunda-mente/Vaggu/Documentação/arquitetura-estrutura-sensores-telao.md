@@ -12,10 +12,10 @@ Cada andar possui uma revisão do mapa. A posição da vaga usa `x`, `y`, largur
 
 ## Sensores e estado
 
-No primeiro recorte local do P06, cada canal de sensor é associado a uma vaga já cadastrada. A placa ESP32 se autentica e envia identidade de inicialização, sequência, sensor, estado medido e instante opcional. O backend deriva o shopping pela credencial, valida pertencimento, ordem e idempotência, aplica a confirmação consistente e registra histórico. Evento duplicado não cria nova observação; evento antigo não regride estado; silêncio expira o sensor e nunca transforma dado vencido em vaga livre. O firmware, os valores temporais definitivos, a administração dos equipamentos e a integração PostgreSQL ainda precisam de validação.
+Na base atual do P06, cada sensor é ligado a uma vaga já cadastrada. A placa ESP32 se identifica e envia a leitura de cada sensor em uma ordem controlada. O servidor confere se tudo pertence ao mesmo shopping, ignora mensagens repetidas ou antigas, espera leituras consistentes antes de mudar o estado e guarda o histórico. Se um sensor parar de responder, a vaga fica indisponível; ela nunca é mostrada como livre por falta de informação. Essa parte já foi testada com PostgreSQL. Ainda faltam o teste com o ESP32 real, a definição final dos tempos e as telas de equipamentos e manutenção.
 
 ## Mapa operacional e telões
 
 O mapa consulta o estado atual por vaga e recebe atualizações sem recarga manual. O P07 produzirá contagens agregadas por shopping, andar e setor para os telões. PCD, idoso e elétrica fazem parte do total geral e aparecem como recortes, sem soma duplicada. O telão recebe apenas agregados autorizados e validade dos dados, sem sessões administrativas ou dados pessoais.
 
-O transporte em tempo real será validado na infraestrutura. A proposta inicial é Server-Sent Events ou WebSocket, com nova consulta ao reconectar. O banco permanece a referência para recompor o estado; o canal em tempo real não substitui persistência nem isolamento.
+A forma de atualizar as telas em tempo real ainda será escolhida e testada no ambiente publicado. Independentemente da opção, o banco continuará sendo a referência: se a conexão cair, a tela deve consultar os dados novamente sem misturar informações de shoppings diferentes.

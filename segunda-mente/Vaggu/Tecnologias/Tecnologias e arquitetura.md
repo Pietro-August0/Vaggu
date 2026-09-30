@@ -1,6 +1,6 @@
 # Tecnologias e arquitetura
 
-**Tipo:** TRD resumido · **Atualização:** 24/09/2026 · **Fontes do estado real:** manifests, código, migrations e testes versionados.
+**Atualização:** 30/09/2026 · **Fontes do estado real:** configurações, código, mudanças do banco e testes versionados.
 
 ![React](https://img.shields.io/badge/React-19-343231?logo=react&logoColor=FFE100&labelColor=171717) ![TypeScript](https://img.shields.io/badge/TypeScript-frontend%20e%20API-343231?logo=typescript&logoColor=FFE100&labelColor=171717) ![Node.js](https://img.shields.io/badge/Node.js-API-343231?logo=nodedotjs&logoColor=FFE100&labelColor=171717) ![PostgreSQL](https://img.shields.io/badge/PostgreSQL-dados-343231?logo=postgresql&logoColor=FFE100&labelColor=171717)
 
@@ -30,16 +30,16 @@ Este documento apresenta as escolhas técnicas e separa o que está implementado
 | WhatsApp Cloud API, sem SDK versionado | Backend `whatsapp` e links do frontend | Webhook assinado, deduplicação, envio de texto e encaminhamento comercial. | Manter o WhatsApp como canal de parceria e suporte. | Parcial: infraestrutura e menu demonstrativo existem; fluxo P10 e número oficial estão pendentes. |
 | ESLint `^10.9.1`, Node Test Runner e Supertest `^7.1.4` | Verificação dos pacotes | Lint, compilação e testes HTTP/unitários/integração. | Verificar contratos e regressões com poucas dependências adicionais. | Implementado. |
 
-## Tecnologias e componentes planejados
+## Componentes em andamento ou planejados
 
 | Tecnologia ou componente | Onde entrará | Finalidade | Motivo no projeto | Estado |
 | --- | --- | --- | --- | --- |
 | ESP32 + firmware | Maquete e instalação | Autenticar o controlador, ler sensores e enviar sequência/reinicialização. | Controlador acessível para a demonstração e capaz de agrupar sensores. | P06; contrato ainda precisa ser estabilizado. |
 | Sensores ultrassônicos + Wi-Fi | Vagas e comunicação local | Observar ocupação e transmitir leituras. | Base física prevista para a maquete do TCC. | Planejado; topologia e frequências dependem de ensaio. |
-| Serviço de confirmação e expiração | Backend | Confirmar mudança após 30 segundos consistentes, ordenar/deduplicar eventos e invalidar dados antigos. | Dado ausente ou expirado não pode virar vaga livre. | P06, não implementado. |
+| Serviço de confirmação e expiração | Servidor | Confirmar mudança após 30 segundos consistentes, ignorar mensagens repetidas ou antigas e invalidar dados vencidos. | Dado ausente ou expirado não pode virar vaga livre. | Implementado e testado com PostgreSQL; falta validar com o ESP32 real e usar a validade no mapa. |
 | Atualização operacional por polling controlado ou transporte a confirmar | API e frontend | Atualizar mapa e telões sem recarga manual. | Separar o contrato de estado do transporte e adequá-lo à hospedagem disponível. | Decisão pendente; Socket.IO não está instalado. |
 | Telões web | Frontend + API agregada | Mostrar vagas livres por andar/setor e categorias especiais sem duplicação. | Reutilizar a fonte confiável do mapa em monitores convencionais. | P07, não implementado. |
-| Views PostgreSQL + Power BI Desktop | Camada analítica | Métricas, histórico e primeiro relatório funcional. | Manter análise separada da operação e reconciliar números com conjunto controlado. | P09, não implementado; modo Importação é a proposta inicial. |
+| Consultas PostgreSQL + Power BI Desktop | Análises | Preparar histórico, métricas e o primeiro relatório funcional. | Manter a análise separada da operação e conferir os números com um conjunto conhecido. | A consulta histórica e a preparação dos dados existem; o relatório funcional no Power BI ainda não existe no repositório. |
 
 ## Arquitetura atual
 
@@ -56,9 +56,9 @@ flowchart LR
     A -->|respostas habilitadas| M
 ```
 
-O backend é a autoridade das permissões e deriva o shopping da sessão do gerente. O frontend não concede acesso ao ocultar controles. A base atual cobre autenticação, administração, estrutura, mapa, importação e uma integração parcial com o WhatsApp.
+O servidor decide as permissões e identifica o shopping pela sessão do gerente. Esconder um botão na tela não substitui essa proteção. A base atual cobre autenticação, administração, estrutura, mapa, importação, histórico, análises iniciais e uma integração parcial com o WhatsApp.
 
-P01–P05 estão concluídos. Embora o schema já contenha `Dispositivo`, estado atual e `HistoricoVaga`, isso não comprova ingestão operacional: telemetria, confirmação, expiração, ocorrências, telões e análise continuam ausentes.
+P01–P05 estão concluídos. A recepção de leituras, a confirmação, a expiração, o histórico e a análise inicial já estão presentes e foram testados localmente. Isso ainda não comprova a operação completa: faltam o ESP32 real, manutenção e ocorrências, validade no mapa, telões, exportações e o relatório Power BI.
 
 ## Arquitetura planejada para a operação
 
@@ -93,10 +93,10 @@ A arquitetura planejada conserva dois caminhos: operação e análise. Mapa e te
 
 ## Sequência técnica
 
-1. **P06:** fechar contrato de firmware, autenticação, sequência, reinicialização, frequência e expiração antes dos endpoints definitivos.
+1. **P06:** validar a base já criada com o ESP32 real, fechar os tempos de leitura e expiração e levar a validade ao mapa.
 2. **P07:** consumir apenas estados confiáveis para contagens, painel e telões.
-3. **P08:** consolidar histórico, métricas e exportações com isolamento.
-4. **P09:** criar views e primeiro relatório funcional no Power BI.
+3. **P08:** ampliar o histórico e as métricas já iniciados e concluir as exportações sem misturar shoppings.
+4. **P09:** usar a preparação de dados existente para criar e conferir o primeiro relatório funcional no Power BI.
 5. **P10:** concluir o fluxo do WhatsApp em trabalho independente quando número e ambiente Meta estiverem disponíveis.
 6. **P11:** integrar e reproduzir o roteiro final do TCC.
 

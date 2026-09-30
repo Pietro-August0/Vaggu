@@ -75,7 +75,7 @@ Vaggu/
 ├── vaggu-backend/    API, Prisma e testes
 ├── segunda-mente/    produto, arquitetura e evidências visuais
 ├── scripts/          verificações do repositório
-├── skills/           rotinas de continuidade da equipe
+├── CONTRIBUTING.md   acordos de contribuição da equipe
 └── README.md
 ```
 

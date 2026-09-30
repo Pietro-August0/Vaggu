@@ -1,4 +1,6 @@
-# Webhook WhatsApp Cloud API
+# Integração com o WhatsApp
+
+Esta integração está parcial. O endereço abaixo recebe avisos e mensagens enviados pela Meta, ignora mensagens repetidas e sustenta um menu de demonstração. Os links públicos que abrem o WhatsApp não dependem dele. Número oficial, ambiente Meta e fluxos completos de demonstração e suporte ainda precisam ser configurados.
 
 ## Como o código se organiza
 

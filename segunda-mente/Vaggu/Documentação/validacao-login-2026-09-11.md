@@ -2,7 +2,7 @@
 
 ## Resultado
 
-Integração funcional e acabamento visual validados localmente. MCP Figma autentica a conta, mas get_design_context e download_assets atingiram o limite do plano. O frame 2580:30 foi observado no navegador: duas colunas branca/amarela, Poppins, campos cinza, botão amarelo e fotografia recortada no lado direito. Medidas usadas são aproximações da visualização, não valores extraídos pelo MCP.
+Integração funcional e acabamento visual validados localmente. A consulta detalhada ao Figma atingiu o limite do plano. O frame 2580:30 foi observado no navegador: duas colunas branca e amarela, Poppins, campos cinza, botão amarelo e fotografia recortada no lado direito. As medidas usadas são aproximações da visualização, não valores extraídos do arquivo.
 
 ## Mudanças
 
@@ -40,8 +40,8 @@ Ambiente: Windows, Node 24.18.0, PostgreSQL 17.11 existente, React/Vite e Edge h
 
 A primeira tentativa de integração falhou porque o PostgreSQL estava parado. Após iniciar o serviço existente com autorização, a suíte passou. Os testes criaram banco exclusivo aleatório, aplicaram migrations e descartaram suas fixtures ao final. Não criaram administrador no banco de desenvolvimento.
 
-Evidências locais: C:/Users/CASA/Documents/Codex/validacao-vaggu-2026-09-11 (validar.mjs, resultado.json, login-desktop.png e login-mobile.png). O script E2E importa o backend compilado e requer TEST_DATABASE_URL de teste; executar a partir do backend com Node compatível, arquivo .env.teste.local e Vite em 5173 com API_PROXY_TARGET=http://127.0.0.1:3053.
+As evidências foram geradas localmente: resultado da validação e capturas do login em computador e celular. O teste completo exige banco separado, servidor compilado e a interface local apontando para essa API.
 
 ## Limites e continuidade
 
-Pietro forneceu a foto recortada e o contorno usados no Figma. Ambos foram versionados em `public/assets`, posicionados no painel amarelo e conferidos em 1440×1024 e 390×844. O MCP Figma segue limitado pela cota do plano, portanto não houve nova extração de medidas; a comparação usa o frame previamente observado e os assets originais enviados pela equipe. Nenhum teste comprova deploy, entrega pela Meta, sensores ou Power BI. Recuperação automatizada de senha não foi implementada: a equipe redefine o acesso. Para produção, encaminhar /api à API e demais rotas ao index.html, além de configurar HTTPS. Não houve commit, push ou publicação.
+Pietro forneceu a foto recortada e o contorno usados no Figma. Ambos foram versionados em `public/assets`, posicionados no painel amarelo e conferidos em 1440×1024 e 390×844. Não houve nova extração de medidas por limite do plano; a comparação usa o frame observado e os arquivos originais enviados pela equipe. Nenhum teste desta data comprova publicação, entrega pela Meta, sensores ou Power BI. Recuperação automatizada de senha não foi implementada: a equipe redefine o acesso. Para produção, encaminhar `/api` à API, demais rotas ao `index.html` e configurar HTTPS. Não houve commit, push ou publicação.

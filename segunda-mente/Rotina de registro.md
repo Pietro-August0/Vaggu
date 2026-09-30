@@ -13,8 +13,6 @@ Definida por Pietro em 11/09/2026, fuso America/Sao_Paulo.
 
 ## Como a continuidade funciona
 
-As instruções em `AGENTS.md`, na raiz do repositório VAGGU, orientam agentes que trabalham nesta árvore de pastas a manter estes registros. A execução acontece durante as sessões em que essas instruções forem carregadas e houver acesso ao cofre.
+O `CONTRIBUTING.md`, na raiz do repositório, orienta a equipe a manter estes registros. O planejamento concentra a situação atual, e os diários preservam o que aconteceu em cada data sem criar outra versão das decisões.
 
-Isso não captura automaticamente todas as conversas de ChatGPT ou tarefas em outros computadores. Históricos só são importados quando acessíveis. O registro diário é uma síntese fiel do conteúdo e das ações; transcrições recuperadas ficam em Fontes.
-
-A segunda mente dentro do repositório é a fonte canônica de produto, decisões, documentação e continuidade. As skills `start` e `end` continuam a controlar o dia técnico no planejamento canônico em `Vaggu/Documentação`; os diários preservam o histórico sem criar outra versão das decisões atuais.
+O registro diário é uma síntese fiel das decisões e ações da equipe. A segunda mente dentro do repositório continua sendo a fonte principal de produto, documentação e continuidade.

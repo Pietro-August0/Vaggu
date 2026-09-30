@@ -5,7 +5,7 @@ tags: [vaggu, banco-de-dados, postgresql, prisma]
 
 # Modelo de dados atual
 
-Este documento explica o banco que existe no repositório em 23/09/2026. A fonte principal é o [`schema.prisma`](../../../vaggu-backend/prisma/schema.prisma); as migrations SQL acrescentam as restrições que o Prisma não representa, e os serviços do backend mostram onde cada registro é usado.
+Este documento explica o banco que existe no repositório em 30/09/2026. A fonte principal é o [`schema.prisma`](../../../vaggu-backend/prisma/schema.prisma); as atualizações SQL acrescentam regras que o Prisma não representa, e os serviços do servidor mostram onde cada registro é usado.
 
 O documento não afirma que uma entidade planejada já foi implementada. Também não substitui as migrations: qualquer alteração do banco deve ser incremental e compatível com os dados existentes.
 
@@ -197,6 +197,6 @@ Telão, alerta e relatório não possuem entidade implementada. A forma de autor
 1. Preservar o isolamento por `shoppingId` com chaves compostas ou validação equivalente no banco e no backend.
 2. Manter os IDs de vagas ao importar, reposicionar ou trocar sensores.
 3. Criar migrations incrementais; nunca resetar um banco real para acomodar o P06.
-4. Definir backfill e compatibilidade antes de separar `Dispositivo`, `Sensor` e `HistoricoVaga`.
+4. A separação entre `Dispositivo`, `Sensor` e `HistoricoVaga` já foi feita preservando registros anteriores como `LEGADO`. Futuras alterações devem manter essa compatibilidade.
 5. Não enviar `senhaHash`, `chaveApiHash`, token de sessão ou conexão do banco ao frontend, relatórios ou exportações.
 6. Validar o modelo novo pelos cenários CA15–CA24 do [plano e critérios de aceite](plano-e-aceite.md) antes de declarar P06 concluído.
