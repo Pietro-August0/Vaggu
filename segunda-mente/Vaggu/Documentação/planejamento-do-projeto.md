@@ -514,6 +514,14 @@ Se a lista de skills da conversa atual ainda não refletir a instalação, abrir
 - **Verificações:** migration aplicada ao `vaggu_local`; integração PostgreSQL isolada 31/31; suíte básica do backend com 39 aprovações e duas integrações puladas quando executada sem `TEST_DATABASE_URL`; build backend, lint e build frontend aprovados. Capturas em 1440×1024 e 390×844 conferiram cadastro, lista e ficha completa; o fluxo real levou o gerente a `/trocar-senha` com a senha provisória já preenchida.
 - **Limites:** documentos privados, telemetria e histórico analítico não foram implementados nesta entrega. O aviso conhecido de bundle acima de 500 kB permanece. Mudanças locais na branch `feat/admin-shoppings-juan`, sem commit, push ou deploy.
 
+### 30/09/2026 — gráficos interativos e resumo analítico Admin
+
+- **Entrega local:** os gráficos do gerente ganharam animação de entrada, detalhes em hover/foco e navegação por teclado. As superfícies, textos, grades e contrastes agora possuem estilos próprios nos temas claro e escuro, mantendo o amarelo VAGGU como destaque.
+- **Admin:** a ficha do shopping passa a consultar o histórico pelo identificador autorizado e apresenta ocupação, cobertura e tendência em um cartão compacto. Na ausência de histórico, a série permanece explicitamente marcada como demonstração e não é persistida.
+- **Acessibilidade:** animações respeitam `prefers-reduced-motion`; pontos e barras possuem nomes acessíveis, foco visível e tooltip.
+- **Limite:** a interface não substitui a atualização do Power BI nem transforma dados sintéticos em telemetria real.
+- **Ajuste de Minha conta:** dados pessoais usam duas colunas em telas maiores e a troca de senha deixou de ocupar um cartão vertical permanente; agora é aberta por botão em um diálogo acessível e continua linear no celular.
+
 ### 23/09/2026 — banco Neon e hospedagem pública
 
 - **Responsável:** Samuel Santos (`mukinha01`).

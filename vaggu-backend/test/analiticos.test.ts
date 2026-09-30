@@ -37,7 +37,7 @@ test('inclui vagas ativas sem leitura no denominador da cobertura', () => {
 
 test('rota usa exclusivamente o shopping da sessão', async () => {
   let shoppingConsultado = '';
-  const usuario = { perfil: 'SHOPPING', shoppingId: 'shopping-da-sessao', trocarSenhaObrigatoria: false };
+  const usuario = { perfil: 'SHOPPING', shoppingId: '11111111-1111-4111-8111-111111111111', trocarSenhaObrigatoria: false };
   const auth = { authenticate: async () => ({ sessionId: 'sessao', usuario }) };
   const analiticos = { buscarAnalise: async (shoppingId: string) => {
     shoppingConsultado = shoppingId;
@@ -46,6 +46,31 @@ test('rota usa exclusivamente o shopping da sessão', async () => {
   const app = createApp({ checkDatabase: async () => 1, auth, analiticos });
   const resposta = await request(app).get('/api/v1/estacionamento/analise?shoppingId=outro')
     .set('Authorization', 'Bearer teste').expect(200);
-  assert.equal(shoppingConsultado, 'shopping-da-sessao');
+  assert.equal(shoppingConsultado, '11111111-1111-4111-8111-111111111111');
   assert.equal(resposta.headers['cache-control'], 'no-store');
+});
+
+test('Admin consulta somente o shopping indicado na rota administrativa', async () => {
+  let shoppingConsultado = '';
+  const usuario = { perfil: 'VAGGU', shoppingId: null, trocarSenhaObrigatoria: false };
+  const auth = { authenticate: async () => ({ sessionId: 'sessao', usuario }) };
+  const analiticos = { buscarAnalise: async (shoppingId: string) => {
+    shoppingConsultado = shoppingId;
+    return { temHistorico: false, periodo: {}, resumo: {}, porDia: [], porSetor: [] };
+  } };
+  const app = createApp({ checkDatabase: async () => 1, auth, analiticos });
+  await request(app).get('/api/v1/shoppings/22222222-2222-4222-8222-222222222222/analise')
+    .set('Authorization', 'Bearer teste').expect(200);
+  assert.equal(shoppingConsultado, '22222222-2222-4222-8222-222222222222');
+});
+
+test('gerente não pode consultar a análise administrativa de outro shopping', async () => {
+  let consultas = 0;
+  const usuario = { perfil: 'SHOPPING', shoppingId: '11111111-1111-4111-8111-111111111111', trocarSenhaObrigatoria: false };
+  const auth = { authenticate: async () => ({ sessionId: 'sessao', usuario }) };
+  const analiticos = { buscarAnalise: async () => { consultas += 1; return {}; } };
+  const app = createApp({ checkDatabase: async () => 1, auth, analiticos });
+  await request(app).get('/api/v1/shoppings/22222222-2222-4222-8222-222222222222/analise')
+    .set('Authorization', 'Bearer teste').expect(403);
+  assert.equal(consultas, 0);
 });

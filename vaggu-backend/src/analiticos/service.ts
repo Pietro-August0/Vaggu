@@ -1,5 +1,6 @@
 /** Consulta e agrega o histórico confirmado do shopping sem expor eventos de outro cliente. */
 import { Prisma, type PrismaClient } from '@prisma/client';
+import { ApiError } from '../auth/service.js';
 
 export type IntervaloHistorico = {
   setor: string;
@@ -21,6 +22,13 @@ function acumular(destino: Acumulador, estado: IntervaloHistorico['estado'], dur
 
 function percentual(numerador: number, denominador: number) {
   return denominador > 0 ? Number((numerador / denominador * 100).toFixed(2)) : 0;
+}
+
+function shoppingIdValido(valor: string) {
+  if (!/^[0-9a-f]{8}-[0-9a-f]{4}-[1-5][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$/i.test(valor)) {
+    throw new ApiError(400, 'SHOPPING_ID_INVALIDO', 'O shopping informado é inválido.');
+  }
+  return valor;
 }
 
 /** Calcula métricas ponderadas pelo tempo e limita cada intervalo ao período solicitado. */
@@ -101,6 +109,7 @@ export function calcularAnaliseHistorica(
 export function createAnaliticosService(prisma: PrismaClient, agora = () => new Date()) {
   return {
     async buscarAnalise(shoppingId: string) {
+      const idShopping = shoppingIdValido(shoppingId);
       const fim = agora();
       const inicio = new Date(fim.getTime() - 7 * 86_400_000);
       const [intervalos, vagasAtivas] = await Promise.all([
@@ -111,13 +120,13 @@ export function createAnaliticosService(prisma: PrismaClient, agora = () => new 
                fim_em AS "fimEm",
                entrada_observada AS "entradaObservada"
           FROM power_bi_intervalos_ocupacao
-         WHERE shopping_codigo = ${shoppingId}
+         WHERE shopping_codigo = ${idShopping}
            AND fim_em > ${inicio}
            AND inicio_em < ${fim}
          ORDER BY inicio_em
       `),
         prisma.vaga.findMany({
-          where: { shoppingId, ativo: true },
+          where: { shoppingId: idShopping, ativo: true },
           select: { setor: { select: { nome: true } } },
         }),
       ]);

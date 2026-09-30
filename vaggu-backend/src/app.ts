@@ -12,7 +12,7 @@ import { estruturaAdminRoutes, estruturaGerenteRoutes } from './estrutura/routes
 import { importacaoRoutes } from './importacao/routes.js';
 import { telemetriaRoutes } from './telemetria/routes.js';
 import type { TelemetriaHttpService } from './telemetria/routes.js';
-import { analiticosRoutes } from './analiticos/routes.js';
+import { analiticosAdminRoutes, analiticosGerenteRoutes } from './analiticos/routes.js';
 
 type AppServices = {
   checkDatabase: () => Promise<unknown> | unknown;
@@ -70,7 +70,10 @@ export function createApp({ checkDatabase, frontendDistPath, auth, whatsapp, sho
     app.use('/api/v1', estruturaAdminRoutes(auth, estrutura));
   }
   if (auth && importacao) app.use('/api/v1', importacaoRoutes(auth, importacao));
-  if (auth && analiticos) app.use('/api/v1/estacionamento/analise', analiticosRoutes(auth, analiticos));
+  if (auth && analiticos) {
+    app.use('/api/v1/estacionamento/analise', analiticosGerenteRoutes(auth, analiticos));
+    app.use('/api/v1', analiticosAdminRoutes(auth, analiticos));
+  }
   if (telemetria) app.use('/api/v1/telemetria', telemetriaRoutes(telemetria));
 
   // Na hospedagem, entrega o build React pelo mesmo domínio da API. Assim, login e

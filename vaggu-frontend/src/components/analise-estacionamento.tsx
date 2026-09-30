@@ -4,6 +4,7 @@ import { Accessibility, CarFront, CircleParking, Clock3, Download, PlugZap, Refr
 
 import { useAppStore } from "@/app/app-store"
 import { Button } from "@/components/ui/button"
+import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "@/components/ui/tooltip"
 import { lerEstrutura } from "@/servicos/estrutura"
 import { lerAnaliseHistorica, type AnaliseHistorica } from "@/servicos/analise"
 import type { EstruturaEstacionamento, TipoVaga } from "@/types/estrutura"
@@ -55,13 +56,13 @@ function criarDemonstracao(estrutura: EstruturaEstacionamento, historico: Analis
 function GraficoLinha({ rotulos, valores }: { rotulos: string[]; valores: number[] }) {
   const maior = Math.max(...valores, 1)
   const pontos = valores.map((valor, indice) => `${8 + indice * (91 / Math.max(1, valores.length - 1))},${50 - valor / maior * 38}`).join(" ")
-  return <div className="grafico-linha" role="img" aria-label={`Taxa de ocupação no período, entre ${Math.min(...valores).toFixed(0)}% e ${Math.max(...valores).toFixed(0)}%.`}>
+  return <div className="grafico-linha" role="group" aria-label={`Taxa de ocupação no período, entre ${Math.min(...valores).toFixed(0)}% e ${Math.max(...valores).toFixed(0)}%.`}>
     <svg viewBox="0 0 100 54" preserveAspectRatio="none" aria-hidden="true">
       <defs><linearGradient id="area-amarela" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stopColor="#ffe100" stopOpacity=".42"/><stop offset="1" stopColor="#ffe100" stopOpacity="0"/></linearGradient></defs>
       <path d={`M ${pontos} L 99 52 L 8 52 Z`} fill="url(#area-amarela)" />
-      <polyline points={pontos} fill="none" stroke="#ffe100" strokeWidth="1.3" vectorEffect="non-scaling-stroke" />
-      {valores.map((valor, indice) => <circle key={rotulos[indice]} cx={8 + indice * (91 / Math.max(1, valores.length - 1))} cy={50 - valor / maior * 38} r="1.7" fill="#ffe100" />)}
+      <polyline className="grafico-linha-tracado" points={pontos} fill="none" stroke="#ffe100" strokeWidth="1.3" vectorEffect="non-scaling-stroke" />
     </svg>
+    <TooltipProvider><div className="grafico-pontos" aria-label="Detalhes por dia">{valores.map((valor, indice) => <Tooltip key={rotulos[indice]}><TooltipTrigger asChild><button type="button" style={{ left: `${8 + indice * (91 / Math.max(1, valores.length - 1))}%`, top: `${(50 - valor / maior * 38) / 54 * 100}%` }} aria-label={`${rotulos[indice]}: ${valor.toFixed(1).replace(".", ",")}% de ocupação`}><span /></button></TooltipTrigger><TooltipContent side="top"><strong>{rotulos[indice]}</strong> · {valor.toFixed(1).replace(".", ",")}% ocupado</TooltipContent></Tooltip>)}</div></TooltipProvider>
     <div className="grafico-eixo">{rotulos.map((dia) => <span key={dia}>{dia}</span>)}</div>
   </div>
 }
@@ -136,8 +137,8 @@ export function AnaliseEstacionamento() {
     </div>
 
     <div className="analise-grade-secundaria">
-      <article className="analise-painel"><div className="analise-titulo"><div><h3>Entradas x saídas</h3><p>Movimentação diária</p></div></div><div className="barras-duplas">{dias.map((dia, indice) => <div key={dia}><span className="barra-entrada" style={{ height: `${42 + indice * 5 + (indice % 2) * 9}%` }}/><span className="barra-saida" style={{ height: `${38 + indice * 5 + ((indice + 1) % 2) * 8}%` }}/><small>{dia.replace(" Mai", "")}</small></div>)}</div></article>
-      <article className="analise-painel"><div className="analise-titulo"><div><h3>Ocupação por horário</h3><p>Média ao longo do dia</p></div></div><div className="barras-horario">{ocupacaoHoraria.map((valor, indice) => <span key={indice} style={{ height: `${valor}%` }} title={`${String(indice + 6).padStart(2, "0")}h: ${valor}%`} />)}</div><div className="grafico-eixo"><span>06h</span><span>12h</span><span>18h</span><span>22h</span></div></article>
+      <article className="analise-painel"><div className="analise-titulo"><div><h3>Entradas x saídas</h3><p>Movimentação diária</p></div></div><TooltipProvider><div className="barras-duplas">{dias.map((dia, indice) => { const entradas = 42 + indice * 5 + (indice % 2) * 9; const saidas = 38 + indice * 5 + ((indice + 1) % 2) * 8; return <div key={dia}><Tooltip><TooltipTrigger asChild><button type="button" className="barra-entrada" style={{ height: `${entradas}%` }} aria-label={`${dia}: ${entradas * 10} entradas`} /></TooltipTrigger><TooltipContent>{dia} · {entradas * 10} entradas</TooltipContent></Tooltip><Tooltip><TooltipTrigger asChild><button type="button" className="barra-saida" style={{ height: `${saidas}%` }} aria-label={`${dia}: ${saidas * 10} saídas`} /></TooltipTrigger><TooltipContent>{dia} · {saidas * 10} saídas</TooltipContent></Tooltip><small>{dia.replace(" Mai", "")}</small></div> })}</div></TooltipProvider></article>
+      <article className="analise-painel"><div className="analise-titulo"><div><h3>Ocupação por horário</h3><p>Média ao longo do dia</p></div></div><TooltipProvider><div className="barras-horario">{ocupacaoHoraria.map((valor, indice) => <Tooltip key={indice}><TooltipTrigger asChild><button type="button" style={{ height: `${valor}%` }} aria-label={`${String(indice + 6).padStart(2, "0")}h: ${valor}% de ocupação`} /></TooltipTrigger><TooltipContent>{String(indice + 6).padStart(2, "0")}h · {valor}% ocupado</TooltipContent></Tooltip>)}</div></TooltipProvider><div className="grafico-eixo"><span>06h</span><span>12h</span><span>18h</span><span>22h</span></div></article>
       <article className="analise-painel"><div className="analise-titulo"><div><h3>Tipo de vaga</h3><p>Distribuição da capacidade</p></div></div><div className="analise-rosca-bloco"><div className="analise-rosca compacta" style={{ background: `conic-gradient(${gradienteTipos})` }}><span><strong>{demonstracao.total}</strong>total</span></div><ul>{demonstracao.porTipo.map((item) => <li key={item.tipo}><i style={{ background: tipos[item.tipo].cor }}/><span>{tipos[item.tipo].nome}</span><strong>{item.quantidade}</strong></li>)}</ul></div></article>
     </div>
 
