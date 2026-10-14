@@ -65,6 +65,7 @@ export function montarRelatorioAnalise(estrutura: EstruturaEstacionamento, histo
   ] : []
   return {
     shopping: estrutura.shopping.nome,
+    cenarioFicticio: estrutura.shopping.demonstracao === true,
     geradoEm: new Date(),
     historico: dadosConfirmados,
     filtro: opcoes.periodoSelecionado ?? null,
@@ -80,7 +81,7 @@ export function montarRelatorioAnalise(estrutura: EstruturaEstacionamento, histo
       origem: demonstracaoAtiva ? "demonstração" : "situação atual",
     })),
     serieDiaria: dadosConfirmados
-      ? dadosConfirmados.porDia.map((dia) => ({ rotulo: dia.inicioEm, ocupacao: dia.ocupacaoPercentual, entradas: dia.entradasObservadas, origem: "confirmado" as const }))
+      ? dadosConfirmados.porDia.map((dia) => ({ rotulo: dia.inicioEm, ocupacao: dia.ocupacaoPercentual, entradas: dia.entradasObservadas, origem: estrutura.shopping.demonstracao ? "fictício" as const : "confirmado" as const }))
       : demonstracaoAtiva ? DIAS_DEMONSTRACAO.map((rotulo, indice) => ({ rotulo, ocupacao: OCUPACAO_DIARIA_DEMONSTRACAO[indice], entradas: (42 + indice * 5 + (indice % 2) * 9) * 10, saidas: (38 + indice * 5 + ((indice + 1) % 2) * 8) * 10, origem: "demonstração" as const })) : [],
     serieHoraria: demonstracaoAtiva ? OCUPACAO_HORARIA_DEMONSTRACAO.map((ocupacao, indice) => ({ horario: `${String(indice + 6).padStart(2, "0")}h`, ocupacao })) : [],
   }

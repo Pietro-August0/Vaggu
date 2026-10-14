@@ -5,4 +5,4 @@ export interface PosicaoVaga { x: number; y: number; largura: number; altura: nu
 export interface VagaEstrutura { id: string; codigo: string; tipo: TipoVaga; estadoAtual: "LIVRE" | "OCUPADA" | "DESCONHECIDA" | "INDISPONIVEL"; ativo: boolean; posicao: PosicaoVaga | null }
 export interface SetorEstrutura { id: string; nome: string; ativo: boolean; vagas: VagaEstrutura[] }
 export interface AndarEstrutura { id: string; nome: string; ordem: number; imagemMapa: string | null; revisaoMapa: number; ativo: boolean; setores: SetorEstrutura[] }
-export interface EstruturaEstacionamento { shopping: { id: string; nome: string; situacaoImplantacao: SituacaoImplantacao }; andares: AndarEstrutura[] }
+export interface EstruturaEstacionamento { shopping: { id: string; nome: string; situacaoImplantacao: SituacaoImplantacao; demonstracao?: boolean }; andares: AndarEstrutura[] }

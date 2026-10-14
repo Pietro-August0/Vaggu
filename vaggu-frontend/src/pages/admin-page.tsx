@@ -49,6 +49,41 @@ function VisaoGeralAdmin() {
   const { consultar } = useAppStore()
   const [shoppings, setShoppings] = useState<ShoppingAdmin[] | null>(null)
   const [erro, setErro] = useState("")
+  const [criandoCenario, setCriandoCenario] = useState(false)
+  const [credenciaisCenario, setCredenciaisCenario] = useState<{ nome: string; email: string; senha: string }[] | null>(null)
+
+  async function criarCenario() {
+    setCriandoCenario(true)
+    try {
+      const resposta = await consultar("/shoppings/cenario-apresentacao", {}, "POST")
+      if (!objeto(resposta) || !Array.isArray(resposta.gerentes)
+        || !resposta.gerentes.every((gerente: unknown) => objeto(gerente) && typeof gerente.nome === "string" && typeof gerente.email === "string" && typeof gerente.senha === "string")) {
+        throw new Error("O cenário foi criado, mas não foi possível ler as credenciais. Redefina as senhas na ficha dos gerentes.")
+      }
+      setCredenciaisCenario(resposta.gerentes as { nome: string; email: string; senha: string }[])
+      toast.success("Cenário fictício criado para apresentação.")
+      try {
+        setShoppings(lerListaShoppings(await consultar("/shoppings")))
+      } catch {
+        toast.warning("Cenário criado. Atualize a lista após guardar as credenciais.")
+      }
+    } catch (falha) {
+      toast.error(falha instanceof Error ? falha.message : "Não foi possível criar o cenário fictício.")
+    } finally {
+      setCriandoCenario(false)
+    }
+  }
+
+  function baixarCredenciais() {
+    if (!credenciaisCenario) return
+    const arquivo = new Blob([JSON.stringify({ shopping: "Shopping Aurora — DEMONSTRAÇÃO", gerentes: credenciaisCenario }, null, 2)], { type: "application/json" })
+    const url = URL.createObjectURL(arquivo)
+    const link = document.createElement("a")
+    link.href = url
+    link.download = "credenciais-aurora-demo.json"
+    link.click()
+    URL.revokeObjectURL(url)
+  }
 
   useEffect(() => {
     let ativo = true
@@ -108,13 +143,23 @@ function VisaoGeralAdmin() {
             Acompanhe cadastros, implantação e acessos com os dados já registrados no sistema.
           </p>
         </div>
-        <Button asChild className="h-11 px-5 font-bold">
-          <Link to="/admin/cadastrar">
-            <Plus aria-hidden="true" />
-            Cadastrar shopping
-          </Link>
-        </Button>
+        <div className="flex flex-wrap gap-2">
+          <Button type="button" variant="outline" className="h-11" disabled={criandoCenario || shoppings?.some((shopping) => shopping.nome === "Shopping Aurora — DEMONSTRAÇÃO")} onClick={() => void criarCenario()}>
+            {criandoCenario ? "Criando cenário..." : "Criar cenário fictício"}
+          </Button>
+          <Button asChild className="h-11 px-5 font-bold">
+            <Link to="/admin/cadastrar"><Plus aria-hidden="true" />Cadastrar shopping</Link>
+          </Button>
+        </div>
       </header>
+
+      <Dialog open={credenciaisCenario !== null} onOpenChange={(aberto) => { if (!aberto) setCredenciaisCenario(null) }}>
+        <DialogContent className="max-w-xl">
+          <DialogHeader><DialogTitle>Acessos do cenário fictício</DialogTitle><DialogDescription>As senhas provisórias aparecem somente agora. Baixe o arquivo e guarde-o fora do Git; cada gerente deverá trocar a senha no primeiro acesso.</DialogDescription></DialogHeader>
+          <div className="grid gap-3">{credenciaisCenario?.map((gerente) => <div key={gerente.email} className="rounded-lg border p-3 text-sm"><strong className="block">{gerente.nome}</strong><span className="block break-all">{gerente.email}</span><code className="block select-all break-all">{gerente.senha}</code></div>)}</div>
+          <DialogFooter><Button type="button" onClick={baixarCredenciais}>Baixar credenciais</Button><DialogClose asChild><Button type="button" variant="outline">Fechar</Button></DialogClose></DialogFooter>
+        </DialogContent>
+      </Dialog>
 
       {erro ? (
         <p role="alert" className="rounded-xl border border-red-500/30 bg-red-950/40 p-4 text-red-200">

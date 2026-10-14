@@ -16,6 +16,11 @@ export function shoppingsRoutes(auth, shoppings) {
     res.status(201).json(await shoppings.criarShopping(req.body));
   });
 
+  router.post('/cenario-apresentacao', async (_req, res) => {
+    res.set('Cache-Control', 'no-store');
+    res.status(201).json(await shoppings.criarCenarioApresentacao());
+  });
+
   router.get('/:shoppingId', async (req, res) => {
     res.json(await shoppings.buscarShopping(req.params.shoppingId));
   });

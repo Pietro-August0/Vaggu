@@ -30,12 +30,12 @@ function proporcao(valor: unknown, campo: string, permiteZero = true): number {
 }
 
 /** Converte Decimals do Prisma em números adequados ao contrato JSON do mapa. */
-function vagaPublica(vaga: Record<string, unknown>, timeoutSensorMs?: number, referencia = new Date()) {
+function vagaPublica(vaga: Record<string, unknown>, timeoutSensorMs?: number, referencia = new Date(), demonstracao = false) {
   const numero = (valor: unknown) => valor === null || valor === undefined ? null : Number(valor);
   const sensor = vaga.sensor as { ativo: boolean; estadoConfirmado: string; ultimaObservacaoEm: Date | null; expiradoEm: Date | null } | null | undefined;
   const leituraValida = sensor?.ativo && sensor.expiradoEm === null && sensor.ultimaObservacaoEm !== null
     && timeoutSensorMs !== undefined && referencia.getTime() - sensor.ultimaObservacaoEm.getTime() < timeoutSensorMs;
-  const estadoAtual = sensor
+  const estadoAtual = demonstracao ? vaga.estadoAtual : sensor
     ? leituraValida && ['LIVRE', 'OCUPADA'].includes(sensor.estadoConfirmado) ? sensor.estadoConfirmado : 'INDISPONIVEL'
     : 'DESCONHECIDA';
   return { id: vaga.id, codigo: vaga.codigo, tipo: vaga.tipo, estadoAtual,
@@ -45,11 +45,11 @@ function vagaPublica(vaga: Record<string, unknown>, timeoutSensorMs?: number, re
 
 /** Mantém o formato de leitura igual para Admin e gerente, sem incluir credenciais de sensores. */
 function estruturaPublica(shopping: Record<string, unknown> & { andares: Array<Record<string, unknown> & { setores: Array<Record<string, unknown> & { vagas: Array<Record<string, unknown>> }> }> }, timeoutSensorMs: number, referencia: Date) {
-  return { shopping: { id: shopping.id, nome: shopping.nome, situacaoImplantacao: shopping.situacaoImplantacao },
+  return { shopping: { id: shopping.id, nome: shopping.nome, situacaoImplantacao: shopping.situacaoImplantacao, demonstracao: shopping.demonstracao },
     andares: shopping.andares.map(andar => ({ id: andar.id, nome: andar.nome, ordem: andar.ordem,
       imagemMapa: andar.imagemMapa, revisaoMapa: andar.revisaoMapa, ativo: andar.ativo,
       setores: andar.setores.map(setor => ({ id: setor.id, nome: setor.nome, ativo: setor.ativo,
-        vagas: setor.vagas.map(vaga => vagaPublica(vaga, timeoutSensorMs, referencia)) })) })) };
+        vagas: setor.vagas.map(vaga => vagaPublica(vaga, timeoutSensorMs, referencia, shopping.demonstracao === true)) })) })) };
 }
 
 /** Traduz conflitos estruturais para mensagens de domínio sem expor detalhes do PostgreSQL. */

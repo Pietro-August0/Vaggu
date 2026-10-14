@@ -177,6 +177,8 @@ TELEMETRIA_INTERVALO_EXPIRACAO_MS=30000
 
 Configure `DATABASE_URL` com um PostgreSQL acessível pelo backend. `npm run db:studio` permite inspecionar tabelas; não preencha `senha_hash` manualmente. Faça backup antes de migrations em ambiente compartilhado.
 
+Para preparar o cenário fictício da apresentação, consulte [cenário de apresentação](../segunda-mente/Vaggu/Documentação/cenario-de-apresentacao.md). O Admin pode criá-lo uma vez no painel e baixar as três senhas provisórias; o comando alternativo `demo:create` usa somente `DEMO_DATABASE_URL` e grava as senhas em arquivo local ignorado pelo Git.
+
 Modelos persistidos atuais incluem Shopping, Andar, Setor, Vaga, Usuario, Dispositivo, Sensor, InicializacaoPlaca, EventoTelemetriaRecebido, HistoricoVaga e ImportacaoEstrutura. Sessao e WhatsappEvento são tabelas técnicas. Chaves compostas preservam o shopping em sensor, placa e histórico; sequência e payload possuem deduplicação persistente. CHECKs estão no SQL e devem ser preservados em futuras migrations.
 
 ## Organização
@@ -193,6 +195,7 @@ Modelos persistidos atuais incluem Shopping, Andar, Setor, Vaga, Usuario, Dispos
 | src/importacao/ | Contratos, leitores CSV/XLSX, validação tabular, identificação de IDs, prévia e confirmação atômica. |
 | src/telemetria/ | Contratos ESP32, confirmação, ingestão persistente, rotas e expiração por sensor. |
 | scripts/create-admin.ts | Comando interativo do administrador. |
+| scripts/criar-cenario-apresentacao.ts | Seed isolado e identificado de shopping, gerentes, vagas e histórico fictício. |
 | scripts/provisionar-placa.ts e scripts/simular-telemetria.ts | Provisionamento com chave de exibição única e cenário sintético pela API. |
 | src/app.ts e src/server.ts | Express e inicialização. |
 | src/config/ e src/lib/ | Configuração e Prisma. |

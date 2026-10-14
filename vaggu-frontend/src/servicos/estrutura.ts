@@ -3,7 +3,7 @@ import { objeto } from "@/servicos/api"
 import type { AndarEstrutura, EstruturaEstacionamento, SetorEstrutura, TipoVaga, VagaEstrutura } from "@/types/estrutura"
 
 const tipos = new Set<TipoVaga>(["COMUM", "PCD", "IDOSO", "ELETRICA"])
-const estados = new Set(["LIVRE", "OCUPADA", "DESCONHECIDA"])
+const estados = new Set(["LIVRE", "OCUPADA", "DESCONHECIDA", "INDISPONIVEL"])
 
 function lerVaga(valor: unknown): VagaEstrutura {
   if (!objeto(valor) || typeof valor.id !== "string" || typeof valor.codigo !== "string" || typeof valor.tipo !== "string" || !tipos.has(valor.tipo as TipoVaga)
@@ -20,7 +20,8 @@ function lerVaga(valor: unknown): VagaEstrutura {
 /** Lê a árvore inteira e preserva a ordem devolvida pelo servidor. */
 export function lerEstrutura(dados: unknown): EstruturaEstacionamento {
   if (!objeto(dados) || !objeto(dados.shopping) || typeof dados.shopping.id !== "string" || typeof dados.shopping.nome !== "string"
-    || typeof dados.shopping.situacaoImplantacao !== "string" || !Array.isArray(dados.andares)) throw new Error("Não foi possível consultar a estrutura do estacionamento.")
+    || typeof dados.shopping.situacaoImplantacao !== "string" || (dados.shopping.demonstracao !== undefined && typeof dados.shopping.demonstracao !== "boolean")
+    || !Array.isArray(dados.andares)) throw new Error("Não foi possível consultar a estrutura do estacionamento.")
   const andares: AndarEstrutura[] = dados.andares.map((andar: unknown) => {
     if (!objeto(andar) || typeof andar.id !== "string" || typeof andar.nome !== "string" || typeof andar.ordem !== "number"
       || typeof andar.revisaoMapa !== "number" || typeof andar.ativo !== "boolean" || !Array.isArray(andar.setores)) throw new Error("Um andar recebido é inválido.")

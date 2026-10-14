@@ -10,6 +10,11 @@ P01 foi concluído em 10/09 e P02 em 11/09, incluindo autenticação e acabament
 
 A equipe registrou em 23/09 a hospedagem do frontend e da API no mesmo serviço Render, com banco PostgreSQL no Neon. O repositório contém o manifesto e o workflow de solicitação de deploy; URL pública, segredo do hook e resultado da última publicação não foram verificados nesta revisão documental. Veja [configuração](configuracao.md#hospedagem-no-render).
 
+### Cenário fictício de apresentação — 14/10
+
+- O comando `demo:create` prepara um shopping identificado como demonstração, três gerentes, 80 vagas e 15 dias de histórico sintético. Ele exige uma conexão explícita em `DEMO_DATABASE_URL`, não modifica outros shoppings e guarda as senhas provisórias fora do Git.
+- A marcação de demonstração faz o mapa mostrar os estados fictícios persistidos sem alegar sensores ativos; a análise e as exportações identificam os números como cenário fictício. O administrador pode criar o cenário uma vez no painel publicado e baixar as credenciais provisórias; o script direto continua disponível. A criação e a verificação no endereço publicado ainda precisam ser executadas. Consulte [o procedimento](cenario-de-apresentacao.md).
+
 ### Revisão de código e relatórios — 14/10
 
 - A API analítica aceita `inicio` e `fim` como datas civis UTC inclusivas, com limite de 31 dias, mantendo o shopping do gerente derivado da sessão. Sem filtro, mostra os últimos sete dias civis UTC. O período anterior de mesma duração serve à comparação inicial; os arquivos Excel/PDF registram o recorte aplicado e a comparação. Horas futuras do dia atual não entram como cobertura observada.
