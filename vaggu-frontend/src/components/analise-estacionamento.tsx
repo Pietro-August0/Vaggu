@@ -74,14 +74,19 @@ function criarDemonstracao(estrutura: EstruturaEstacionamento, historico: Analis
 function GraficoLinha({ rotulos, valores }: { rotulos: string[]; valores: number[] }) {
   const [selecionado, setSelecionado] = useState<number | null>(null)
   const pontos = valores.map((valor, indice) => `${8 + indice * (91 / Math.max(1, valores.length - 1))},${50 - Math.min(100, Math.max(0, valor)) / 100 * 38}`).join(" ")
+  const rotulosEixo = rotulos.filter((_, indice) => rotulos.length <= 3 || indice === 0 || indice === Math.floor((rotulos.length - 1) / 2) || indice === rotulos.length - 1)
   return <div className="grafico-linha" role="group" aria-label={`Taxa de ocupação no período, entre ${Math.min(...valores).toFixed(0)}% e ${Math.max(...valores).toFixed(0)}%.`}>
-    <svg viewBox="0 0 100 54" preserveAspectRatio="none" aria-hidden="true">
-      <defs><linearGradient id="area-amarela" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stopColor="#ffe100" stopOpacity=".42"/><stop offset="1" stopColor="#ffe100" stopOpacity="0"/></linearGradient></defs>
-      <path d={`M ${pontos} L 99 52 L 8 52 Z`} fill="url(#area-amarela)" />
-      <polyline className="grafico-linha-tracado" points={pontos} fill="none" stroke="#ffe100" strokeWidth="1.3" vectorEffect="non-scaling-stroke" />
-    </svg>
-    <TooltipProvider><div className="grafico-pontos" aria-label="Detalhes por dia">{valores.map((valor, indice) => <Tooltip key={rotulos[indice]}><TooltipTrigger asChild><button type="button" style={{ left: `${8 + indice * (91 / Math.max(1, valores.length - 1))}%`, top: `${(50 - Math.min(100, Math.max(0, valor)) / 100 * 38) / 54 * 100}%` }} aria-label={`${rotulos[indice]}: ${valor.toFixed(1).replace(".", ",")}% de ocupação`} aria-pressed={selecionado === indice} onClick={() => setSelecionado(indice)}><span /></button></TooltipTrigger><TooltipContent side="top"><strong>{rotulos[indice]}</strong> · {valor.toFixed(1).replace(".", ",")}% ocupado</TooltipContent></Tooltip>)}</div></TooltipProvider>
-    <div className="grafico-eixo">{rotulos.map((dia) => <span key={dia}>{dia}</span>)}</div>
+    <div className="grafico-linha-viewport">
+      <div className="grafico-plot">
+        <svg viewBox="0 0 100 54" preserveAspectRatio="none" aria-hidden="true">
+          <defs><linearGradient id="area-amarela" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stopColor="#ffe100" stopOpacity=".42"/><stop offset="1" stopColor="#ffe100" stopOpacity="0"/></linearGradient></defs>
+          <path d={`M ${pontos} L 99 52 L 8 52 Z`} fill="url(#area-amarela)" />
+          <polyline className="grafico-linha-tracado" points={pontos} fill="none" stroke="#ffe100" strokeWidth="1.3" vectorEffect="non-scaling-stroke" />
+        </svg>
+        <TooltipProvider><div className="grafico-pontos" aria-label="Detalhes por dia">{valores.map((valor, indice) => <Tooltip key={rotulos[indice]}><TooltipTrigger asChild><button type="button" style={{ left: `${8 + indice * (91 / Math.max(1, valores.length - 1))}%`, top: `${(50 - Math.min(100, Math.max(0, valor)) / 100 * 38) / 54 * 100}%` }} aria-label={`${rotulos[indice]}: ${valor.toFixed(1).replace(".", ",")}% de ocupação`} aria-pressed={selecionado === indice} onClick={() => setSelecionado(indice)}><span /></button></TooltipTrigger><TooltipContent side="top"><strong>{rotulos[indice]}</strong> · {valor.toFixed(1).replace(".", ",")}% ocupado</TooltipContent></Tooltip>)}</div></TooltipProvider>
+      </div>
+      <div className="grafico-eixo">{rotulosEixo.map((dia) => <span key={dia}>{dia}</span>)}</div>
+    </div>
     {selecionado !== null && <p className="analise-detalhe-toque" role="status">{rotulos[selecionado]}: {valores[selecionado].toFixed(1).replace(".", ",")}% de ocupação</p>}
   </div>
 }
@@ -216,7 +221,7 @@ export function AnaliseEstacionamento() {
     </div>
 
     {!carregando && (!filtro || dadosReais) && <div className="analise-grade-principal">
-      <article className="analise-painel analise-linha"><div className="analise-titulo"><div><h3>Taxa de ocupação</h3><p>Média diária do período · escala de 0 a 100%</p></div><span>Por dia</span></div>{rotulosDiarios.length > 14 ? <div className="analise-serie-lista"><p>Lista diária, deslize para ver todos os dias.</p><ul>{rotulosDiarios.map((rotulo, indice) => <li key={rotulo}><span>{rotulo}</span><strong>{serieDiaria[indice].toFixed(1).replace(".", ",")}%</strong></li>)}</ul></div> : <GraficoLinha rotulos={rotulosDiarios} valores={serieDiaria}/>}</article>
+      <article className="analise-painel analise-linha"><div className="analise-titulo"><div><h3>Taxa de ocupação</h3><p>Média diária do período · escala de 0 a 100%</p></div><span>Por dia</span></div>{rotulosDiarios.length > 7 ? <div className="analise-serie-lista"><p>Lista diária, deslize para ver todos os dias.</p><ul>{rotulosDiarios.map((rotulo, indice) => <li key={rotulo}><span>{rotulo}</span><strong>{serieDiaria[indice].toFixed(1).replace(".", ",")}%</strong></li>)}</ul></div> : <GraficoLinha rotulos={rotulosDiarios} valores={serieDiaria}/>}</article>
       <article className="analise-painel"><div className="analise-titulo"><div><h3>Vagas ocupadas por setor</h3><p>Situação atual · até quatro setores</p></div></div><div className="analise-rosca-bloco"><div className="analise-rosca" style={{ background: totalOcupadoSetores ? `conic-gradient(${gradienteSetores})` : "var(--an-inset)" }}><span><strong>{totalOcupadoSetores}</strong>ocupadas agora</span></div><ul>{setoresDoGrafico.map((setor, indice) => <li key={setor.nome}><i style={{ background: coresSetor[indice] }}/><span>{setor.nome}</span><strong>{setor.ocupadas}</strong></li>)}</ul></div></article>
       <article className="analise-painel analise-resumo"><div className="analise-titulo"><div><h3>Resumo do período</h3><p>{dadosReais ? "Calculado sobre eventos confirmados" : "Dados demonstrativos"}</p></div></div><dl><div><Clock3/><dt>Taxa de ocupação</dt><dd>{dadosReais ? `${historico.resumo.ocupacaoPercentual.toFixed(1).replace(".", ",")}%` : "65,1%"}</dd></div><div><CarFront/><dt>Entradas observadas</dt><dd>{dadosReais ? historico.resumo.entradasObservadas.toLocaleString("pt-BR") : "5.842"}</dd></div><div><RefreshCw/><dt>Rotatividade</dt><dd>{dadosReais ? "Não apurada" : "4,51"}</dd></div><div><PlugZap/><dt>Cobertura dos sensores</dt><dd>{dadosReais ? `${historico.resumo.coberturaPercentual.toFixed(1).replace(".", ",")}%` : "92%"}</dd></div></dl></article>
     </div>}
