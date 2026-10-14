@@ -158,7 +158,7 @@ As migrations incrementais `20260914000100_previas_importacao` e `20260915000100
 
 requireAuth valida a sessão. requirePasswordReady bloqueia senha provisória fora das rotas necessárias à troca. requirePerfil('VAGGU') protege cadastro/listagem de shoppings, gerentes e estrutura. shoppingScope fornece res.locals.shoppingId a partir do usuário autenticado; a consulta do mapa do gerente usa esse filtro Prisma, nunca IDs enviados pelo cliente.
 
-Os testes montam rotas exclusivas para complementar a demonstração de isolamento entre dois shoppings. Cadastro/listagem de shoppings e gerentes e configuração da estrutura estão expostos para Admin; a consulta do mapa está exposta para o gerente. A ingestão de telemetria existe localmente; a interface gera exportações analíticas iniciais no navegador. Telões, manutenção, seleção de período e a conexão real do Power BI permanecem pendentes.
+Os testes montam rotas exclusivas para complementar a demonstração de isolamento entre dois shoppings. Cadastro/listagem de shoppings e gerentes e configuração da estrutura estão expostos para Admin; a consulta do mapa está exposta para o gerente. A ingestão de telemetria existe localmente. As rotas analíticas aceitam `inicio` e `fim` juntos no formato `YYYY-MM-DD`, em dias UTC inclusivos, com intervalo máximo de 31 dias; sem parâmetros, consultam os últimos sete dias UTC. A interface compara o recorte com o período anterior e gera Excel/PDF no navegador. Telões, manutenção, filtro analítico por categoria e a conexão real do Power BI permanecem pendentes.
 
 ## Banco e configuração
 

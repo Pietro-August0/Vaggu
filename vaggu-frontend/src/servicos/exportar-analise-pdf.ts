@@ -1,4 +1,4 @@
-/** Produz o PDF da análise preservando a origem da fotografia e das séries dos gráficos. */
+/** Produz o PDF da análise com o período, a comparação e a origem de cada série. */
 import type { RelatorioAnalise } from "@/servicos/modelo-relatorio-analise"
 import { carregarLogoRelatorio } from "@/servicos/modelo-relatorio-analise"
 
@@ -76,7 +76,11 @@ export async function gerarPdfAnalise(relatorio: RelatorioAnalise): Promise<Blob
   pdf.setTextColor(CINZA)
   pdf.text(`Gerado em ${relatorio.geradoEm.toLocaleString("pt-BR")}`, 15, y)
   y += 7
-  const selo = relatorio.historico ? "HISTÓRICO CONFIRMADO + FOTOGRAFIA ATUAL" : "FOTOGRAFIA ATUAL · SEM HISTÓRICO CONFIRMADO"
+  if (relatorio.filtro) {
+    pdf.text(`Filtro: ${relatorio.filtro.inicio} a ${relatorio.filtro.fim} (dias UTC inclusivos)`, 15, y)
+    y += 7
+  }
+  const selo = relatorio.historico ? "HISTÓRICO CONFIRMADO + SITUAÇÃO ATUAL" : "SITUAÇÃO ATUAL · SEM HISTÓRICO CONFIRMADO"
   pdf.setFillColor(AMARELO)
   pdf.roundedRect(15, y, 180, 10, 2, 2, "F")
   pdf.setTextColor(ESCURO)
@@ -137,7 +141,7 @@ export async function gerarPdfAnalise(relatorio: RelatorioAnalise): Promise<Blob
   }
 
   if (relatorio.historico) {
-    titulo("Histórico confirmado · últimos 7 dias")
+    titulo("Histórico confirmado · período selecionado")
     pdf.setFont("helvetica", "normal")
     pdf.setTextColor(CINZA)
     pdf.setFontSize(8)
@@ -160,19 +164,37 @@ export async function gerarPdfAnalise(relatorio: RelatorioAnalise): Promise<Blob
     pdf.setFont("helvetica", "normal")
     pdf.setFontSize(9)
     pdf.setTextColor(CINZA)
-    const aviso = "Ainda não há histórico confirmado. As séries abaixo são DEMONSTRAÇÃO — NÃO MEDIÇÃO."
+    const aviso = relatorio.demonstracaoAtiva
+      ? "Ainda não há histórico confirmado. As séries abaixo são DEMONSTRAÇÃO — NÃO MEDIÇÃO."
+      : "Não há medições confirmadas no período selecionado. Nenhuma série demonstrativa substitui esses dados."
     const linhas = pdf.splitTextToSize(aviso, 165)
     espaco(linhas.length * 5 + 5)
     pdf.text(linhas, 15, y)
     y += linhas.length * 5 + 7
   }
 
-  titulo(relatorio.historico ? "Gráficos diários · histórico confirmado" : "Gráficos diários · DEMONSTRAÇÃO — NÃO MEDIÇÃO")
-  linhaTabela(["Dia", "Ocupação", "Entradas", "Saídas"], [55, 42, 42, 41], true)
-  for (const dia of relatorio.serieDiaria) linhaTabela([
-    dia.origem === "confirmado" ? new Date(dia.rotulo).toLocaleDateString("pt-BR", { timeZone: "UTC" }) : dia.rotulo,
-    `${dia.ocupacao.toFixed(1)}%`, String(dia.entradas), "saidas" in dia ? String(dia.saidas) : "Não apurado",
-  ], [55, 42, 42, 41])
+  if (relatorio.serieDiaria.length) {
+    titulo(relatorio.historico ? "Gráficos diários · histórico confirmado" : "Gráficos diários · DEMONSTRAÇÃO — NÃO MEDIÇÃO")
+    linhaTabela(["Dia", "Ocupação", "Entradas", "Saídas"], [55, 42, 42, 41], true)
+    for (const dia of relatorio.serieDiaria) linhaTabela([
+      dia.origem === "confirmado" ? new Date(dia.rotulo).toLocaleDateString("pt-BR", { timeZone: "UTC" }) : dia.rotulo,
+      `${dia.ocupacao.toFixed(1)}%`, String(dia.entradas), "saidas" in dia ? String(dia.saidas) : "Não apurado",
+    ], [55, 42, 42, 41])
+  }
+
+  if (relatorio.comparacao) {
+    titulo("Comparação com o período anterior · histórico confirmado")
+    pdf.setFont("helvetica", "normal")
+    pdf.setFontSize(8)
+    pdf.text(`Anterior UTC: ${relatorio.comparacao.periodo.inicioEm} a ${relatorio.comparacao.periodo.fimEm}`, 15, y)
+    y += 7
+    linhaTabela(["Métrica", "Selecionado", "Anterior", "Variação"], [60, 40, 40, 40], true)
+    const atual = relatorio.historico?.resumo
+    const anterior = relatorio.comparacao.resumo
+    for (const [nome, chave, unidade] of [["Ocupação", "ocupacaoPercentual", "%"], ["Cobertura", "coberturaPercentual", "%"], ["Entradas", "entradasObservadas", ""]] as const) {
+      linhaTabela([nome, atual ? `${atual[chave]}${unidade}` : "Sem medição", `${anterior[chave]}${unidade}`, atual ? `${Number((atual[chave] - anterior[chave]).toFixed(2))}${unidade}` : "Não apurado"], [60, 40, 40, 40])
+    }
+  }
 
   if (relatorio.serieHoraria.length) {
     titulo("Ocupação por horário · DEMONSTRAÇÃO — NÃO MEDIÇÃO")
@@ -184,11 +206,11 @@ export async function gerarPdfAnalise(relatorio: RelatorioAnalise): Promise<Blob
     }
   }
 
-  titulo(relatorio.origemTipos === "demonstração" ? "Tipo de vaga · DEMONSTRAÇÃO — NÃO MEDIÇÃO" : "Tipo de vaga · fotografia atual")
+  titulo(relatorio.origemTipos === "demonstração" ? "Tipo de vaga · DEMONSTRAÇÃO — NÃO MEDIÇÃO" : "Tipo de vaga · situação atual")
   linhaTabela(["Tipo", "Vagas no gráfico"], [120, 60], true)
   for (const tipo of relatorio.porTipo) linhaTabela([tipo.nome, String(tipo.quantidade)], [120, 60])
 
-  titulo(relatorio.historico ? "Gráfico por setor · fotografia atual" : "Gráfico por setor · DEMONSTRAÇÃO — NÃO MEDIÇÃO")
+  titulo(relatorio.demonstracaoAtiva ? "Gráfico por setor · DEMONSTRAÇÃO — NÃO MEDIÇÃO" : "Gráfico por setor · situação atual")
   linhaTabela(["Setor", "Ocupadas"], [120, 60], true)
   for (const setor of relatorio.participacaoSetores) linhaTabela([setor.nome, String(setor.ocupadas)], [120, 60])
 
@@ -200,7 +222,7 @@ export async function gerarPdfAnalise(relatorio: RelatorioAnalise): Promise<Blob
     ], [75, 35, 35, 35])
   }
 
-  titulo("Setores · fotografia atual")
+  titulo("Setores · situação atual")
   linhaTabela(["Andar · setor", "Ativas", "Livres", "Ocupadas", "Sem leitura", "Indisp."], [69, 20, 20, 25, 26, 20], true)
   if (relatorio.setores.length === 0) linhaTabela(["Nenhum setor cadastrado", "0", "0", "0", "0", "0"], [69, 20, 20, 25, 26, 20])
   for (const setor of relatorio.setores) linhaTabela([

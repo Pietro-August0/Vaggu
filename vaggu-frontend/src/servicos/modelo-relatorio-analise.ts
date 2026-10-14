@@ -15,10 +15,16 @@ export const DIAS_DEMONSTRACAO = ["11 Mai", "12 Mai", "13 Mai", "14 Mai", "15 Ma
 export const OCUPACAO_DIARIA_DEMONSTRACAO = [58, 62, 65, 70, 68, 72, 65]
 export const OCUPACAO_HORARIA_DEMONSTRACAO = [18, 12, 9, 14, 22, 36, 51, 63, 72, 79, 84, 87, 82, 73, 61, 48, 39]
 
+export interface OpcoesRelatorioAnalise {
+  periodoSelecionado?: { inicio: string; fim: string }
+  comparacao?: AnaliseHistorica | null
+  permitirDemonstracao?: boolean
+}
+
 const NOMES_TIPO = { COMUM: "Convencional", PCD: "PCD", IDOSO: "Idoso", ELETRICA: "Elétrica" } as const
 
 /** A fotografia atual vem do mapa; métricas históricas só entram quando confirmadas. */
-export function montarRelatorioAnalise(estrutura: EstruturaEstacionamento, historico: AnaliseHistorica | null) {
+export function montarRelatorioAnalise(estrutura: EstruturaEstacionamento, historico: AnaliseHistorica | null, opcoes: OpcoesRelatorioAnalise = {}) {
   const setores: SetorRelatorio[] = estrutura.andares.flatMap((andar) => andar.setores.map((setor) => {
     const vagas = setor.vagas.filter((vaga) => vaga.ativo)
     return {
@@ -39,40 +45,44 @@ export function montarRelatorioAnalise(estrutura: EstruturaEstacionamento, histo
   }), { total: 0, livres: 0, ocupadas: 0, semLeitura: 0, indisponiveis: 0 })
   // Os gráficos do painel usam todas as vagas cadastradas; o resumo acima mantém apenas as ativas.
   const vagasDoPainel = estrutura.andares.flatMap((andar) => andar.setores.flatMap((setor) => setor.vagas))
-  const totalDoPainel = historico?.temHistorico ? vagasDoPainel.length : Math.max(vagasDoPainel.length, 16)
+  const dadosConfirmados = historico?.temHistorico ? historico : null
+  const demonstracaoAtiva = !dadosConfirmados && opcoes.permitirDemonstracao !== false
+  const totalDoPainel = demonstracaoAtiva ? Math.max(vagasDoPainel.length, 16) : vagasDoPainel.length
   const porTipo = (Object.keys(NOMES_TIPO) as (keyof typeof NOMES_TIPO)[]).map((tipo) => ({
     nome: NOMES_TIPO[tipo], quantidade: vagasDoPainel.filter((vaga) => vaga.tipo === tipo).length,
   }))
   const tiposDemonstrativos = porTipo.every((tipo) => tipo.quantidade === 0)
   // O painel preenche a categoria convencional apenas quando não existe nenhuma vaga cadastrada.
-  if (tiposDemonstrativos) porTipo[0].quantidade = totalDoPainel
-  const dadosConfirmados = historico?.temHistorico ? historico : null
+  if (tiposDemonstrativos && demonstracaoAtiva) porTipo[0].quantidade = totalDoPainel
   const setoresDoGrafico = (estrutura.andares.flatMap((andar) => andar.setores.map((setor) => ({
     nome: setor.nome, total: setor.vagas.length, ocupadasAtuais: setor.vagas.filter((vaga) => vaga.estadoAtual === "OCUPADA").length,
   }))).slice(0, 4))
-  const setoresDemonstrados = setoresDoGrafico.length ? setoresDoGrafico : [
+  const setoresDemonstrados = setoresDoGrafico.length ? setoresDoGrafico : demonstracaoAtiva ? [
     { nome: "Setor A", total: Math.ceil(totalDoPainel / 4), ocupadasAtuais: 0 },
     { nome: "Setor B", total: Math.floor(totalDoPainel / 4), ocupadasAtuais: 0 },
     { nome: "Setor C", total: Math.floor(totalDoPainel / 4), ocupadasAtuais: 0 },
     { nome: "Setor D", total: totalDoPainel - Math.ceil(totalDoPainel / 4) - Math.floor(totalDoPainel / 2), ocupadasAtuais: 0 },
-  ]
+  ] : []
   return {
     shopping: estrutura.shopping.nome,
     geradoEm: new Date(),
     historico: dadosConfirmados,
+    filtro: opcoes.periodoSelecionado ?? null,
+    comparacao: opcoes.comparacao?.temHistorico ? opcoes.comparacao : null,
+    demonstracaoAtiva,
     totais,
     setores,
     porTipo,
-    origemTipos: tiposDemonstrativos ? "demonstração" : "fotografia atual",
+    origemTipos: tiposDemonstrativos && demonstracaoAtiva ? "demonstração" : "situação atual",
     participacaoSetores: setoresDemonstrados.map((setor, indice) => ({
       nome: setor.nome,
-      ocupadas: dadosConfirmados ? setor.ocupadasAtuais : Math.round(setor.total * [66.7, 65.8, 65.6, 62.3][indice] / 100),
-      origem: dadosConfirmados ? "fotografia atual" : "demonstração",
+      ocupadas: demonstracaoAtiva ? Math.round(setor.total * [66.7, 65.8, 65.6, 62.3][indice] / 100) : setor.ocupadasAtuais,
+      origem: demonstracaoAtiva ? "demonstração" : "situação atual",
     })),
     serieDiaria: dadosConfirmados
       ? dadosConfirmados.porDia.map((dia) => ({ rotulo: dia.inicioEm, ocupacao: dia.ocupacaoPercentual, entradas: dia.entradasObservadas, origem: "confirmado" as const }))
-      : DIAS_DEMONSTRACAO.map((rotulo, indice) => ({ rotulo, ocupacao: OCUPACAO_DIARIA_DEMONSTRACAO[indice], entradas: (42 + indice * 5 + (indice % 2) * 9) * 10, saidas: (38 + indice * 5 + ((indice + 1) % 2) * 8) * 10, origem: "demonstração" as const })),
-    serieHoraria: dadosConfirmados ? [] : OCUPACAO_HORARIA_DEMONSTRACAO.map((ocupacao, indice) => ({ horario: `${String(indice + 6).padStart(2, "0")}h`, ocupacao })),
+      : demonstracaoAtiva ? DIAS_DEMONSTRACAO.map((rotulo, indice) => ({ rotulo, ocupacao: OCUPACAO_DIARIA_DEMONSTRACAO[indice], entradas: (42 + indice * 5 + (indice % 2) * 9) * 10, saidas: (38 + indice * 5 + ((indice + 1) % 2) * 8) * 10, origem: "demonstração" as const })) : [],
+    serieHoraria: demonstracaoAtiva ? OCUPACAO_HORARIA_DEMONSTRACAO.map((ocupacao, indice) => ({ horario: `${String(indice + 6).padStart(2, "0")}h`, ocupacao })) : [],
   }
 }
 

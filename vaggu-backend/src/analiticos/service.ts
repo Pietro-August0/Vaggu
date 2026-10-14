@@ -12,6 +12,8 @@ export type IntervaloHistorico = {
 
 type Acumulador = { ocupadoMs: number; conhecidoMs: number; ativoMs: number; entradas: number };
 type CapacidadesAtivas = { total: number; porSetor: ReadonlyMap<string, number> };
+export type PeriodoAnalise = { inicio: Date; fim: Date };
+const DIA_MS = 86_400_000;
 
 function acumular(destino: Acumulador, estado: IntervaloHistorico['estado'], duracaoMs: number, entrada: boolean) {
   destino.ativoMs += duracaoMs;
@@ -40,9 +42,11 @@ export function calcularAnaliseHistorica(
 ) {
   const resumo: Acumulador = { ocupadoMs: 0, conhecidoMs: 0, ativoMs: 0, entradas: 0 };
   const setores = new Map<string, Acumulador>();
-  const dias = Array.from({ length: 7 }, (_, indice) => {
-    const diaInicio = new Date(inicio.getTime() + indice * 86_400_000);
-    const diaFim = new Date(Math.min(fim.getTime(), diaInicio.getTime() + 86_400_000));
+  const primeiroDiaUtc = Date.UTC(inicio.getUTCFullYear(), inicio.getUTCMonth(), inicio.getUTCDate());
+  const quantidadeDias = Math.ceil((fim.getTime() - primeiroDiaUtc) / DIA_MS);
+  const dias = Array.from({ length: quantidadeDias }, (_, indice) => {
+    const diaInicio = new Date(primeiroDiaUtc + indice * DIA_MS);
+    const diaFim = new Date(Math.min(fim.getTime(), diaInicio.getTime() + DIA_MS));
     return { inicio: diaInicio, fim: diaFim, acumulador: { ocupadoMs: 0, conhecidoMs: 0, ativoMs: 0, entradas: 0 } as Acumulador };
   });
 
@@ -81,7 +85,7 @@ export function calcularAnaliseHistorica(
       coberturaPercentual: percentual(resumo.conhecidoMs, tempoAtivoTotalMs),
       entradasObservadas: resumo.entradas,
     },
-    porDia: dias.map((dia) => ({
+    porDia: resumo.ativoMs > 0 ? dias.map((dia) => ({
       inicioEm: dia.inicio.toISOString(),
       ocupacaoPercentual: percentual(dia.acumulador.ocupadoMs, dia.acumulador.conhecidoMs),
       entradasObservadas: dia.acumulador.entradas,
@@ -91,7 +95,7 @@ export function calcularAnaliseHistorica(
           ? capacidades.total * (dia.fim.getTime() - dia.inicio.getTime())
           : dia.acumulador.ativoMs,
       ),
-    })),
+    })) : [],
     porSetor: [...setores.entries()].map(([setor, valor]) => ({
       setor,
       ocupacaoPercentual: percentual(valor.ocupadoMs, valor.conhecidoMs),
@@ -106,13 +110,19 @@ export function calcularAnaliseHistorica(
   };
 }
 
-/** Usa a view analítica para restringir a leitura aos últimos sete dias do shopping autenticado. */
+/** Usa a view analítica para restringir a leitura ao período UTC do shopping autenticado. */
 export function createAnaliticosService(prisma: PrismaClient, agora = () => new Date()) {
   return {
-    async buscarAnalise(shoppingId: string) {
+    async buscarAnalise(shoppingId: string, periodo?: PeriodoAnalise) {
       const idShopping = shoppingIdValido(shoppingId);
-      const fim = agora();
-      const inicio = new Date(fim.getTime() - 7 * 86_400_000);
+      const hoje = agora();
+      const inicioHoje = Date.UTC(hoje.getUTCFullYear(), hoje.getUTCMonth(), hoje.getUTCDate());
+      const inicio = periodo?.inicio ?? new Date(inicioHoje - 6 * DIA_MS);
+      if (inicio >= hoje) {
+        throw new ApiError(400, 'PERIODO_INVALIDO', 'O período não pode estar inteiramente no futuro.');
+      }
+      // O dia atual termina no instante da consulta: horas futuras não entram no denominador da cobertura.
+      const fim = new Date(Math.min(periodo?.fim.getTime() ?? hoje.getTime(), hoje.getTime()));
       const [intervalos, vagasAtivas] = await Promise.all([
         prisma.$queryRaw<IntervaloHistorico[]>(Prisma.sql`
         SELECT setor,

@@ -39,7 +39,7 @@ export async function gerarPlanilhaAnalise(relatorio: RelatorioAnalise): Promise
   resumo.getCell("A6").value = textoSeguro(relatorio.shopping)
   resumo.getCell("A6").font = { name: "Arial", size: 12, color: { argb: COR.texto } }
   resumo.mergeCells("A8:F8")
-  resumo.getCell("A8").value = relatorio.historico ? "HISTÓRICO CONFIRMADO + FOTOGRAFIA ATUAL" : "FOTOGRAFIA ATUAL · SEM HISTÓRICO CONFIRMADO"
+  resumo.getCell("A8").value = relatorio.historico ? "HISTÓRICO CONFIRMADO + SITUAÇÃO ATUAL" : "SITUAÇÃO ATUAL · SEM HISTÓRICO CONFIRMADO"
   resumo.getCell("A8").fill = { type: "pattern", pattern: "solid", fgColor: { argb: COR.amarelo } }
   resumo.getCell("A8").font = { name: "Arial", size: 10, bold: true, color: { argb: COR.escuro } }
   resumo.getRow(8).height = 28
@@ -69,12 +69,20 @@ export async function gerarPlanilhaAnalise(relatorio: RelatorioAnalise): Promise
   resumo.getCell("A16").value = "Sem leitura e indisponível não são vagas livres. Os totais atuais vêm do mapa."
   resumo.getCell("A16").font = { name: "Arial", italic: true, size: 10, color: { argb: COR.texto } }
   resumo.mergeCells("A18:F18")
-  resumo.getCell("A18").value = relatorio.historico
-    ? `Período histórico (UTC): ${relatorio.historico.periodo.inicioEm} a ${relatorio.historico.periodo.fimEm}`
-    : "Ainda não há leituras confirmadas para o período. Nenhuma métrica demonstrativa foi incluída neste arquivo."
+  resumo.getCell("A18").value = relatorio.filtro
+    ? `Filtro aplicado (dias UTC inclusivos): ${relatorio.filtro.inicio} a ${relatorio.filtro.fim}`
+    : relatorio.historico
+      ? `Período histórico (UTC): ${relatorio.historico.periodo.inicioEm} a ${relatorio.historico.periodo.fimEm}`
+      : "Período padrão: últimos sete dias UTC. Sem histórico confirmado."
   resumo.getCell("A18").alignment = { wrapText: true, vertical: "middle" }
   resumo.getRow(18).height = 38
   resumo.getCell("A18").font = { name: "Arial", size: 10, color: { argb: COR.texto } }
+  resumo.mergeCells("A20:F20")
+  resumo.getCell("A20").value = relatorio.comparacao
+    ? `Comparação: ${relatorio.comparacao.periodo.inicioEm} a ${relatorio.comparacao.periodo.fimEm} (UTC)`
+    : relatorio.filtro ? "Comparação: sem medições confirmadas no período anterior." : "Comparação: não aplicada."
+  resumo.getCell("A20").alignment = { wrapText: true, vertical: "middle" }
+  resumo.getRow(20).height = 38
 
   const setores = livro.addWorksheet("Setores", { views: [{ state: "frozen", ySplit: 1 }], properties: { tabColor: { argb: COR.escuro } } })
   setores.columns = [
@@ -94,7 +102,7 @@ export async function gerarPlanilhaAnalise(relatorio: RelatorioAnalise): Promise
     })
   }
   if (relatorio.historico) {
-    const historico = livro.addWorksheet("Histórico 7 dias", { views: [{ state: "frozen", ySplit: 1 }], properties: { tabColor: { argb: COR.amarelo } } })
+    const historico = livro.addWorksheet("Histórico por dia", { views: [{ state: "frozen", ySplit: 1 }], properties: { tabColor: { argb: COR.amarelo } } })
     historico.columns = [
       { header: "Dia UTC", width: 26 }, { header: "Ocupação %", width: 20 },
       { header: "Cobertura %", width: 20 }, { header: "Entradas observadas", width: 23 },
@@ -113,6 +121,15 @@ export async function gerarPlanilhaAnalise(relatorio: RelatorioAnalise): Promise
       })
     }
   }
+  if (relatorio.comparacao) {
+    const comparacao = livro.addWorksheet("Comparação")
+    comparacao.columns = [{ header: "Métrica", width: 30 }, { header: "Período selecionado", width: 24 }, { header: "Período anterior", width: 24 }, { header: "Variação", width: 20 }]
+    const atual = relatorio.historico?.resumo
+    const anterior = relatorio.comparacao.resumo
+    for (const [nome, chave] of [["Ocupação %", "ocupacaoPercentual"], ["Cobertura %", "coberturaPercentual"], ["Entradas observadas", "entradasObservadas"]] as const) {
+      comparacao.addRow([nome, atual?.[chave] ?? "Sem medição", anterior[chave], atual ? Number((atual[chave] - anterior[chave]).toFixed(2)) : "Não apurado"])
+    }
+  }
   const series = livro.addWorksheet("Gráficos por dia", { views: [{ state: "frozen", ySplit: 1 }] })
   series.columns = [
     { header: "Origem", width: 20 }, { header: "Dia (UTC se confirmado)", width: 27 },
@@ -121,6 +138,7 @@ export async function gerarPlanilhaAnalise(relatorio: RelatorioAnalise): Promise
   for (const dia of relatorio.serieDiaria) series.addRow([
     dia.origem, textoSeguro(dia.rotulo), dia.ocupacao, dia.entradas, "saidas" in dia ? dia.saidas : "Não apurado",
   ])
+  if (!relatorio.serieDiaria.length) series.addRow(["Sem medições confirmadas", "", "Não apurado", "Não apurado", "Não apurado"])
   series.getColumn(3).numFmt = '0.0"%"'
   const tipos = livro.addWorksheet("Tipos de vaga")
   tipos.columns = [{ header: "Origem", width: 22 }, { header: "Tipo", width: 24 }, { header: "Vagas no gráfico", width: 20 }]
