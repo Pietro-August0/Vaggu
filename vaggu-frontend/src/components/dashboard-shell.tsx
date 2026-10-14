@@ -182,7 +182,7 @@ export function DashboardShell({
           </span>
           <span className="min-w-0 flex-1">
             <span className="block truncate text-sm font-medium leading-tight">{currentUser?.nome}</span>
-            <span className={cn("block truncate text-[11px] leading-tight", isAdmin ? "text-neutral-300" : "text-neutral-700")}>{currentUser?.email}</span>
+            <span className={cn("block truncate text-xs font-medium leading-tight", isAdmin ? "text-white" : "text-neutral-900")}>{currentUser?.email}</span>
           </span>
           <ChevronDown className="mr-2 size-4 shrink-0" aria-hidden="true" />
         </button>

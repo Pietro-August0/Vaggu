@@ -44,7 +44,7 @@ test('rota usa exclusivamente o shopping da sessão', async () => {
     shoppingConsultado = shoppingId;
     return { temHistorico: false, periodo: {}, resumo: {}, porDia: [], porSetor: [] };
   } };
-  const app = createApp({ checkDatabase: async () => 1, auth, analiticos });
+  const app = createApp({ checkDatabase: async () => 1, auth, analiticos, estrutura: {}, importacao: {} });
   const resposta = await request(app).get('/api/v1/estacionamento/analise?shoppingId=outro')
     .set('Authorization', 'Bearer teste').expect(200);
   assert.equal(shoppingConsultado, '11111111-1111-4111-8111-111111111111');

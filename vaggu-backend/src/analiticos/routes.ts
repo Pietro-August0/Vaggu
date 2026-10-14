@@ -17,8 +17,7 @@ export function analiticosGerenteRoutes(auth: unknown, analiticos: ServicoAnalit
 /** Permite ao Admin consultar um shopping escolhido, mantendo o recorte explícito na rota. */
 export function analiticosAdminRoutes(auth: unknown, analiticos: ServicoAnaliticos) {
   const router = Router();
-  router.use(requireAuth(auth), requirePasswordReady, requirePerfil('VAGGU'));
-  router.get('/shoppings/:shoppingId/analise', async (req, res) => {
+  router.get('/shoppings/:shoppingId/analise', requireAuth(auth), requirePasswordReady, requirePerfil('VAGGU'), async (req, res) => {
     res.set('Cache-Control', 'no-store');
     res.json(await analiticos.buscarAnalise(req.params.shoppingId));
   });

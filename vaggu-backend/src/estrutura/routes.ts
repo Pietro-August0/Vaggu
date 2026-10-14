@@ -5,12 +5,12 @@ import { requireAuth, requirePasswordReady, requirePerfil, shoppingScope } from 
 /** Monta as operações administrativas de andares, setores, vagas e posições. */
 export function estruturaAdminRoutes(auth: unknown, estrutura: ReturnType<typeof import('./service.js').createEstruturaService>) {
   const router = Router();
-  router.use(requireAuth(auth), requirePasswordReady, requirePerfil('VAGGU'));
-  router.get('/shoppings/:shoppingId/estrutura', async (req, res) => res.json(await estrutura.buscarEstrutura(req.params.shoppingId)));
-  router.post('/shoppings/:shoppingId/andares', async (req, res) => res.status(201).json(await estrutura.criarAndar(req.params.shoppingId, req.body)));
-  router.post('/andares/:andarId/setores', async (req, res) => res.status(201).json(await estrutura.criarSetor(req.params.andarId, req.body)));
-  router.patch('/andares/:andarId/mapa', async (req, res) => res.json(await estrutura.salvarMapa(req.params.andarId, req.body)));
-  router.post('/setores/:setorId/vagas', async (req, res) => res.status(201).json(await estrutura.criarVaga(req.params.setorId, req.body)));
+  const admin = [requireAuth(auth), requirePasswordReady, requirePerfil('VAGGU')];
+  router.get('/shoppings/:shoppingId/estrutura', admin, async (req, res) => res.json(await estrutura.buscarEstrutura(req.params.shoppingId)));
+  router.post('/shoppings/:shoppingId/andares', admin, async (req, res) => res.status(201).json(await estrutura.criarAndar(req.params.shoppingId, req.body)));
+  router.post('/andares/:andarId/setores', admin, async (req, res) => res.status(201).json(await estrutura.criarSetor(req.params.andarId, req.body)));
+  router.patch('/andares/:andarId/mapa', admin, async (req, res) => res.json(await estrutura.salvarMapa(req.params.andarId, req.body)));
+  router.post('/setores/:setorId/vagas', admin, async (req, res) => res.status(201).json(await estrutura.criarVaga(req.params.setorId, req.body)));
   return router;
 }
 
