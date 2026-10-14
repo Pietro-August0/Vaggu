@@ -32,8 +32,8 @@ export function MinhaConta() {
     }
   }
 
-  return <div className="grid w-full max-w-4xl gap-6">
-    <section className="rounded-2xl border border-neutral-200 bg-white p-5 text-neutral-950 shadow-sm sm:p-6 dark:border-white/10 dark:bg-[#242424] dark:text-white">
+  return <div className="grid min-w-0 gap-6">
+    <section className="min-w-0 text-neutral-950 dark:text-white">
       <div className="grid items-start gap-5 border-b border-neutral-200 pb-5 md:grid-cols-[minmax(0,1fr)_auto] dark:border-white/10">
         <div><h2 className="text-xl font-semibold">Dados pessoais</h2><p className="mt-2 max-w-xl text-sm text-neutral-600 dark:text-neutral-300">O e-mail e {currentUser.role === "shopping" ? "o vínculo com o shopping" : "o perfil administrativo"} são controlados pela VAGGU.</p></div>
         <Dialog>

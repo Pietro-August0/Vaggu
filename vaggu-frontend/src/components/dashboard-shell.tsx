@@ -12,6 +12,7 @@ import {
   Sun,
   Map,
   ChartNoAxesCombined,
+  ChevronDown,
   UsersRound,
   UserRound,
 } from "lucide-react"
@@ -21,7 +22,9 @@ import { Link, useLocation, useNavigate } from "react-router-dom"
 
 import { useAppStore } from "@/app/app-store"
 import { Brand } from "@/components/brand"
+import { MinhaConta } from "@/components/minha-conta"
 import { Button } from "@/components/ui/button"
+import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle } from "@/components/ui/dialog"
 import {
   Sheet,
   SheetContent,
@@ -89,6 +92,7 @@ export function DashboardShell({
   const { resolvedTheme, setTheme } = useTheme()
   const navigate = useNavigate()
   const [menuAberto, setMenuAberto] = useState(false)
+  const [contaAberta, setContaAberta] = useState(false)
   const [saindo, setSaindo] = useState(false)
   const [erroSaida, setErroSaida] = useState("")
   const tituloRef = useRef<HTMLHeadingElement>(null)
@@ -99,15 +103,21 @@ export function DashboardShell({
       { label: "Visão geral", href: "/admin", icon: LayoutDashboard },
       { label: "Cadastrar shopping", href: "/admin/cadastrar", icon: FilePlus2 },
       { label: "Shoppings", href: "/admin/shoppings", icon: Building2 },
-      { label: "Minha conta", href: "/admin/conta", icon: UserRound },
     ]
-    : [{ label: "Estacionamento", href: "/painel", icon: LayoutDashboard }, { label: "Análise", href: "/painel/analise", icon: ChartNoAxesCombined }, { label: "Minha conta", href: "/painel/conta", icon: UserRound }]
+    : [{ label: "Estacionamento", href: "/painel", icon: LayoutDashboard }, { label: "Análise", href: "/painel/analise", icon: ChartNoAxesCombined }]
   const shoppingItems: NavItem[] = shoppingId ? [
     { label: "Visão geral", href: `/admin/shoppings/${shoppingId}`, icon: LayoutDashboard },
     { label: "Estrutura e mapa", href: `/admin/shoppings/${shoppingId}/estrutura`, icon: Map },
     { label: "Gerentes", href: `/admin/shoppings/${shoppingId}/gerentes`, icon: UsersRound },
   ] : []
   const escuro = resolvedTheme === "dark"
+  const rotaConta = pathname === (isAdmin ? "/admin/conta" : "/painel/conta")
+  const contaVisivel = contaAberta || rotaConta
+
+  function fecharConta() {
+    setContaAberta(false)
+    if (rotaConta) navigate(isAdmin ? "/admin" : "/painel", { replace: true })
+  }
 
   /** Move o foco para o título após navegação interna para anunciar a nova tela. */
   useEffect(() => {
@@ -136,10 +146,10 @@ export function DashboardShell({
         <Brand inverted={!isAdmin} />
       </div>
       <p className={cn("mb-2 text-xs font-bold uppercase tracking-[0.18em]", isAdmin ? "text-neutral-800/70" : "text-neutral-500")}>{isAdmin ? "Administração" : "Shopping"}</p>
-      <Navigation items={navItems} admin={isAdmin} aoNavegar={() => setMenuAberto(false)} />
+      <Navigation items={navItems} admin={isAdmin} aoNavegar={() => { setMenuAberto(false); setContaAberta(false) }} />
       {shoppingItems.length > 0 && <div className="mt-6 border-t border-black/15 pt-5">
         <p className="mb-2 text-xs font-bold uppercase tracking-[0.18em] text-neutral-800/70">Shopping atual</p>
-        <Navigation items={shoppingItems} admin aoNavegar={() => setMenuAberto(false)} />
+        <Navigation items={shoppingItems} admin aoNavegar={() => { setMenuAberto(false); setContaAberta(false) }} />
       </div>}
       <div className="mt-auto grid gap-2 pt-8">
         <Button type="button" variant="ghost" className={isAdmin ? "justify-start gap-3 text-neutral-950 hover:bg-black/10" : "justify-start gap-3 text-neutral-300 hover:bg-neutral-900 hover:text-white"} onClick={() => setTheme(escuro ? "light" : "dark")} aria-label={escuro ? "Ativar modo claro" : "Ativar modo escuro"}>
@@ -155,8 +165,29 @@ export function DashboardShell({
             </a>
           </Button>
         )}
+        <button
+          type="button"
+          className={cn(
+            "mt-3 flex min-h-14 w-full items-center gap-2 rounded-full p-1 text-left outline-none transition-colors focus-visible:ring-2 focus-visible:ring-offset-2",
+            isAdmin ? "bg-neutral-950 text-white hover:bg-neutral-800 focus-visible:ring-neutral-950 focus-visible:ring-offset-[#ffe100]" : "bg-[#ffe100] text-neutral-950 hover:bg-yellow-300 focus-visible:ring-[#ffe100] focus-visible:ring-offset-neutral-950",
+          )}
+          aria-haspopup="dialog"
+          aria-expanded={contaVisivel}
+          aria-label={`Abrir minha conta de ${currentUser?.nome ?? "usuário"}`}
+          data-conta-trigger=""
+          onClick={() => { setMenuAberto(false); setContaAberta(true) }}
+        >
+          <span className={cn("grid size-11 shrink-0 place-items-center rounded-full font-heading text-xl font-bold", isAdmin ? "bg-[#ffe100] text-neutral-950" : "bg-neutral-950 text-[#ffe100]")} aria-hidden="true">
+            {currentUser?.nome.trim().charAt(0).toLocaleUpperCase("pt-BR") || <UserRound className="size-5" />}
+          </span>
+          <span className="min-w-0 flex-1">
+            <span className="block truncate text-sm font-medium leading-tight">{currentUser?.nome}</span>
+            <span className={cn("block truncate text-[11px] leading-tight", isAdmin ? "text-neutral-300" : "text-neutral-700")}>{currentUser?.email}</span>
+          </span>
+          <ChevronDown className="mr-2 size-4 shrink-0" aria-hidden="true" />
+        </button>
         <Button
-          className={isAdmin ? "justify-start gap-3 text-neutral-950 hover:bg-black/10 hover:text-black" : "justify-start gap-3 text-neutral-400 hover:bg-neutral-900 hover:text-white"}
+          className={isAdmin ? "justify-center gap-2 text-neutral-950 hover:bg-black/10 hover:text-black" : "justify-center gap-2 text-neutral-300 hover:bg-neutral-900 hover:text-white"}
           disabled={saindo}
           onClick={() => void handleLogout()}
           variant="ghost"
@@ -179,7 +210,7 @@ export function DashboardShell({
 
       <div className="min-w-0 max-w-full lg:pl-64">
         <header className="sticky top-0 z-30 border-b border-black/10 bg-[#f5f5f3]/90 backdrop-blur-xl dark:border-white/10 dark:bg-[#171717]/90">
-          <div className="flex min-h-20 items-center gap-4 px-4 sm:px-6 lg:px-10">
+          <div className="mx-auto flex min-h-20 w-full max-w-6xl items-center gap-4 px-4 sm:px-6 lg:px-10">
             <Sheet open={menuAberto} onOpenChange={setMenuAberto}>
               <SheetTrigger asChild>
                 <Button aria-label="Abrir navegação" className="border-black/15 bg-white/80 text-neutral-950 hover:bg-white lg:hidden dark:border-white/20 dark:bg-white/10 dark:text-white dark:hover:bg-white/20" size="icon" variant="outline">
@@ -206,6 +237,22 @@ export function DashboardShell({
         </header>
         <main id="conteudo-principal" tabIndex={-1} className={isAdmin ? "min-w-0 max-w-full overflow-x-hidden px-0 py-0" : "min-w-0 max-w-full overflow-x-hidden px-4 py-8 sm:px-6 lg:px-10 lg:py-10"}>{erroSaida && <p role="alert" className="m-5 text-red-700">{erroSaida}</p>}{children}</main>
       </div>
+      <Dialog open={contaVisivel} onOpenChange={(aberto) => { if (!aberto) fecharConta() }}>
+        <DialogContent
+          className="max-h-[calc(100dvh-2rem)] overflow-y-auto p-5 sm:max-w-2xl sm:p-7"
+          onCloseAutoFocus={(evento) => {
+            const gatilhos = document.querySelectorAll<HTMLButtonElement>("[data-conta-trigger]")
+            const visivel = [...gatilhos].find((gatilho) => gatilho.getClientRects().length > 0)
+            if (visivel) { evento.preventDefault(); visivel.focus() }
+          }}
+        >
+          <DialogHeader className="pr-9">
+            <DialogTitle className="font-heading text-2xl">Minha conta</DialogTitle>
+            <DialogDescription>Atualize seus dados pessoais e gerencie sua senha.</DialogDescription>
+          </DialogHeader>
+          <MinhaConta />
+        </DialogContent>
+      </Dialog>
     </div>
   )
 }

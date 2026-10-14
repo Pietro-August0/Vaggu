@@ -9,7 +9,6 @@ import { EstruturaAdmin } from "@/components/estrutura-admin"
 import { ExportacaoEstrutura } from "@/components/exportacao-estrutura"
 import { FormularioShopping } from "@/components/formulario-shopping"
 import { ImportacaoEstrutura } from "@/components/importacao-estrutura"
-import { MinhaConta } from "@/components/minha-conta"
 import { ResumoAnaliticoAdmin } from "@/components/resumo-analitico-admin"
 import { Badge } from "@/components/ui/badge"
 import { Button } from "@/components/ui/button"
@@ -414,7 +413,7 @@ export function AdminPage() {
     : pathname === "/admin"
       ? "Visão geral"
       : pathname === "/admin/conta"
-        ? "Minha conta"
+        ? "Visão geral"
       : pathname === "/admin/shoppings"
         ? "Shoppings"
         : "Cadastrar shopping"
@@ -422,12 +421,10 @@ export function AdminPage() {
   let conteudo
   if (shoppingId) {
     conteudo = <FichaShopping key={`${shoppingId}-${secao}`} shoppingId={shoppingId} secao={secao} />
-  } else if (pathname === "/admin") {
+  } else if (pathname === "/admin" || pathname === "/admin/conta") {
     conteudo = <VisaoGeralAdmin />
   } else if (pathname === "/admin/shoppings") {
     conteudo = <ListaShoppings />
-  } else if (pathname === "/admin/conta") {
-    conteudo = <MinhaConta />
   } else {
     conteudo = <CadastroShopping />
   }

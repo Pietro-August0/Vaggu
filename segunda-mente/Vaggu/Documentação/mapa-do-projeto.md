@@ -142,7 +142,7 @@ As cópias de imagens entre `segunda-mente/Vaggu/Identidade visual/Assets/` e `v
 | `vaggu-frontend/src/components/analise-estacionamento.css` | Define o painel analítico responsivo, com superfícies próprias nos temas claro/escuro, animações reduzíveis e estados interativos acessíveis. |
 | `vaggu-frontend/src/components/analise-estacionamento.tsx` | Exibe o histórico confirmado quando disponível, mantém a demonstração identificada, oferece detalhes por toque ou teclado e permite exportar Excel e PDF. |
 | `vaggu-frontend/src/components/resumo-analitico-admin.tsx` | Resume ocupação, cobertura e tendência do shopping selecionado na ficha Admin, distinguindo histórico real de demonstração. |
-| `vaggu-frontend/src/components/dashboard-shell.tsx` | Compartilha cabeçalho, menu responsivo, atalho ao conteúdo, foco após navegação, alternância claro/escuro e saída da sessão; inclui o acesso do gerente à análise demonstrativa. |
+| `vaggu-frontend/src/components/dashboard-shell.tsx` | Compartilha cabeçalho e conteúdo centralizados, menu responsivo, cartão de conta no rodapé da sidebar, diálogo da conta, alternância claro/escuro e saída da sessão. |
 | `vaggu-frontend/src/components/estrutura-admin.tsx` | Permite criar a hierarquia, explica o estado real de implantação e alterna cadastro, mapa e posições com refetch após mutações. |
 | `vaggu-frontend/src/components/exportacao-estrutura.tsx` | Abre a janela de exportação estrutural, mostra o recorte e inicia o download XLSX sob demanda. |
 | `vaggu-frontend/src/components/importacao-estrutura.tsx` | Permite ao Admin baixar o modelo CSV, enviar CSV/XLSX, revisar registros e erros, confirmar a importação e consultar o resumo aplicado. |
@@ -178,7 +178,7 @@ As cópias de imagens entre `segunda-mente/Vaggu/Identidade visual/Assets/` e `v
 | `vaggu-frontend/src/lib/utils.ts` | Combina classes condicionais e resolve conflitos de utilitários Tailwind. |
 | `vaggu-frontend/src/main.tsx` | Inicializa o React, respeita a preferência de movimento reduzido e reúne tema, mensagens, sessão e rotas autenticadas, incluindo `/painel/analise`. |
 | `vaggu-frontend/src/pages/admin-page.tsx` | Implementa a visão geral administrativa, cadastro, lista e ficha do shopping; o resumo inclui análise compacta e estrutura/mapa e gerentes mantêm seus fluxos próprios. |
-| `vaggu-frontend/src/pages/area-autenticada.tsx` | Separa mapa operacional, análise demonstrativa e Minha conta do gerente em rotas próprias, reutilizando a conta compartilhada. |
+| `vaggu-frontend/src/pages/area-autenticada.tsx` | Centraliza mapa e análise do gerente; a rota legada de conta mantém o painel ao fundo enquanto o diálogo compartilhado abre. |
 | `vaggu-frontend/src/pages/landing-page.tsx` | Compõe a landing pública, respeita movimento reduzido e mantém contato, temas e rodapé móvel legíveis. |
 | `vaggu-frontend/src/pages/login-page.css` | Define composição responsiva do login, troca de senha e desenho animado do rabisco em “vagas”. |
 | `vaggu-frontend/src/pages/login-page.tsx` | Entrada única para Admin e gerente, sem solicitar preenchimento automático das credenciais ao abrir a página. |
