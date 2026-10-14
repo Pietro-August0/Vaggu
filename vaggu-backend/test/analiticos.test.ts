@@ -18,6 +18,7 @@ test('calcula ocupação e cobertura sem tratar indisponibilidade como livre', (
   assert.equal(resultado.resumo.ocupacaoPercentual, 50);
   assert.equal(resultado.resumo.coberturaPercentual, 66.67);
   assert.equal(resultado.resumo.entradasObservadas, 1);
+  assert.equal(resultado.porDia[0]?.entradasObservadas, 1);
 });
 
 test('retorna estado vazio quando ainda não existem intervalos confirmados', () => {

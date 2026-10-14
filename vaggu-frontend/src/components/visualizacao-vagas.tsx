@@ -12,12 +12,14 @@ const classesEstado: Record<VagaEstrutura["estadoAtual"], string> = {
   LIVRE: "bg-emerald-500 text-neutral-950",
   OCUPADA: "bg-red-600 text-white",
   DESCONHECIDA: "bg-neutral-600 text-white",
+  INDISPONIVEL: "bg-amber-600 text-white",
 }
 
 const classesInteracaoEstado: Record<VagaEstrutura["estadoAtual"], string> = {
   LIVRE: "hover:bg-emerald-400 active:bg-emerald-600",
   OCUPADA: "hover:bg-red-500 active:bg-red-700",
   DESCONHECIDA: "hover:bg-neutral-500 active:bg-neutral-700",
+  INDISPONIVEL: "hover:bg-amber-500 active:bg-amber-700",
 }
 
 interface VisualizacaoVagasProps {

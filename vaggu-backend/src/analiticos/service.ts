@@ -84,6 +84,7 @@ export function calcularAnaliseHistorica(
     porDia: dias.map((dia) => ({
       inicioEm: dia.inicio.toISOString(),
       ocupacaoPercentual: percentual(dia.acumulador.ocupadoMs, dia.acumulador.conhecidoMs),
+      entradasObservadas: dia.acumulador.entradas,
       coberturaPercentual: percentual(
         dia.acumulador.conhecidoMs,
         capacidades && capacidades.total > 0

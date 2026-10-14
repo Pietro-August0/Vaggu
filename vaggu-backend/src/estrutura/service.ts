@@ -30,20 +30,26 @@ function proporcao(valor: unknown, campo: string, permiteZero = true): number {
 }
 
 /** Converte Decimals do Prisma em números adequados ao contrato JSON do mapa. */
-function vagaPublica(vaga: Record<string, unknown>) {
+function vagaPublica(vaga: Record<string, unknown>, timeoutSensorMs?: number, referencia = new Date()) {
   const numero = (valor: unknown) => valor === null || valor === undefined ? null : Number(valor);
-  return { id: vaga.id, codigo: vaga.codigo, tipo: vaga.tipo, estadoAtual: vaga.estadoAtual,
+  const sensor = vaga.sensor as { ativo: boolean; estadoConfirmado: string; ultimaObservacaoEm: Date | null; expiradoEm: Date | null } | null | undefined;
+  const leituraValida = sensor?.ativo && sensor.expiradoEm === null && sensor.ultimaObservacaoEm !== null
+    && timeoutSensorMs !== undefined && referencia.getTime() - sensor.ultimaObservacaoEm.getTime() < timeoutSensorMs;
+  const estadoAtual = sensor
+    ? leituraValida && ['LIVRE', 'OCUPADA'].includes(sensor.estadoConfirmado) ? sensor.estadoConfirmado : 'INDISPONIVEL'
+    : 'DESCONHECIDA';
+  return { id: vaga.id, codigo: vaga.codigo, tipo: vaga.tipo, estadoAtual,
     ativo: vaga.ativo, posicao: numero(vaga.posicaoX) === null ? null : { x: numero(vaga.posicaoX), y: numero(vaga.posicaoY),
       largura: numero(vaga.largura), altura: numero(vaga.altura), rotacao: numero(vaga.rotacao) } };
 }
 
 /** Mantém o formato de leitura igual para Admin e gerente, sem incluir credenciais de sensores. */
-function estruturaPublica(shopping: Record<string, unknown> & { andares: Array<Record<string, unknown> & { setores: Array<Record<string, unknown> & { vagas: Array<Record<string, unknown>> }> }> }) {
+function estruturaPublica(shopping: Record<string, unknown> & { andares: Array<Record<string, unknown> & { setores: Array<Record<string, unknown> & { vagas: Array<Record<string, unknown>> }> }> }, timeoutSensorMs: number, referencia: Date) {
   return { shopping: { id: shopping.id, nome: shopping.nome, situacaoImplantacao: shopping.situacaoImplantacao },
     andares: shopping.andares.map(andar => ({ id: andar.id, nome: andar.nome, ordem: andar.ordem,
       imagemMapa: andar.imagemMapa, revisaoMapa: andar.revisaoMapa, ativo: andar.ativo,
       setores: andar.setores.map(setor => ({ id: setor.id, nome: setor.nome, ativo: setor.ativo,
-        vagas: setor.vagas.map(vagaPublica) })) })) };
+        vagas: setor.vagas.map(vaga => vagaPublica(vaga, timeoutSensorMs, referencia)) })) })) };
 }
 
 /** Traduz conflitos estruturais para mensagens de domínio sem expor detalhes do PostgreSQL. */
@@ -55,12 +61,12 @@ function conflito(error: unknown): never {
 }
 
 /** Implementa configuração e leitura da estrutura com isolamento por shopping. */
-export function createEstruturaService(prisma: PrismaClient) {
+export function createEstruturaService(prisma: PrismaClient, timeoutSensorMs: number) {
   const obter = async (shoppingId: string) => {
     const shopping = await prisma.shopping.findUnique({ where: { id: idValido(shoppingId, 'shoppingId') },
-      include: { andares: { orderBy: { ordem: 'asc' }, include: { setores: { orderBy: { nome: 'asc' }, include: { vagas: { orderBy: { codigo: 'asc' } } } } } } } });
+      include: { andares: { orderBy: { ordem: 'asc' }, include: { setores: { orderBy: { nome: 'asc' }, include: { vagas: { orderBy: { codigo: 'asc' }, include: { sensor: true } } } } } } } });
     if (!shopping) throw new ApiError(404, 'SHOPPING_NAO_ENCONTRADO', 'Shopping não encontrado.');
-    return estruturaPublica(shopping as unknown as Parameters<typeof estruturaPublica>[0]);
+    return estruturaPublica(shopping as unknown as Parameters<typeof estruturaPublica>[0], timeoutSensorMs, new Date());
   };
   return {
     buscarEstrutura: obter,

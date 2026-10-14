@@ -16,6 +16,7 @@ const classesEstado: Record<VagaEstrutura["estadoAtual"], string> = {
   LIVRE: "bg-emerald-100 text-emerald-900",
   OCUPADA: "bg-red-100 text-red-900",
   DESCONHECIDA: "bg-neutral-200 text-neutral-800",
+  INDISPONIVEL: "bg-amber-100 text-amber-900",
 }
 
 interface DetalhesVagaProps {
@@ -73,10 +74,10 @@ export function DetalhesVaga({ vaga, andar, setor, aoFechar }: DetalhesVagaProps
               Monitoramento do sensor
             </h3>
             <dl className="grid gap-3 text-sm sm:grid-cols-2">
-              <LinhaDetalhe termo="Saúde do sensor" descricao="Aguardando telemetria" />
-              <LinhaDetalhe termo="Comunicação" descricao="Ainda não monitorada" />
-              <LinhaDetalhe termo="Última leitura" descricao="Não disponível" />
-              <LinhaDetalhe termo="Fonte do status" descricao="Registro atual do sistema" />
+              <LinhaDetalhe termo="Saúde do sensor" descricao={vaga.estadoAtual === "INDISPONIVEL" ? "Leitura indisponível ou expirada" : vaga.estadoAtual === "DESCONHECIDA" ? "Sem sensor confirmado" : "Leitura confirmada e válida"} />
+              <LinhaDetalhe termo="Comunicação" descricao={vaga.estadoAtual === "INDISPONIVEL" ? "Verifique o equipamento" : "Estado consultado agora"} />
+              <LinhaDetalhe termo="Última leitura" descricao="Horário não disponível" />
+              <LinhaDetalhe termo="Fonte do status" descricao={vaga.estadoAtual === "DESCONHECIDA" ? "Sem leitura confirmada" : "Sensor individual"} />
             </dl>
             <p className="flex gap-2 rounded-lg bg-white/70 p-3 text-xs leading-relaxed">
               <TriangleAlert className="mt-0.5 size-4 shrink-0" aria-hidden="true" />

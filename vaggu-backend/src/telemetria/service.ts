@@ -201,15 +201,30 @@ export function createTelemetriaService(
           if (!sensor) {
             throw new ApiError(403, 'SENSOR_NAO_AUTORIZADO', 'O lote contém sensor não vinculado à placa autenticada.');
           }
+          const leituraAnteriorExpirada = sensor.ultimaObservacaoEm !== null
+            && recebidoEm.getTime() - sensor.ultimaObservacaoEm.getTime() >= configuracao.timeoutSensorMs;
+          if (leituraAnteriorExpirada && sensor.expiradoEm === null && sensor.ultimaObservacaoEm) {
+            const efetivoEm = new Date(sensor.ultimaObservacaoEm.getTime() + configuracao.timeoutSensorMs);
+            await tx.historicoVaga.upsert({
+              where: { eventoId: `expiracao:${sensor.id}:${efetivoEm.toISOString()}` },
+              create: {
+                shoppingId: dispositivo.shoppingId, vagaId: sensor.vagaId,
+                eventoId: `expiracao:${sensor.id}:${efetivoEm.toISOString()}`,
+                estadoAnterior: sensor.estadoConfirmado, estado: 'INDISPONIVEL',
+                efetivoEm, recebidoEm, origem: 'EXPIRACAO', motivo: 'SENSOR_SEM_RESPOSTA',
+              },
+              update: {},
+            });
+          }
           const observacao = observarEstado(
-            confirmacaoPersistida(sensor),
+            leituraAnteriorExpirada ? criarConfirmacaoEstado('DESCONHECIDA') : confirmacaoPersistida(sensor),
             { estado: leitura.estadoDetectado, recebidoEmMs: recebidoEm.getTime() },
             configuracao.lacunaMaximaMs,
           );
           const candidato = observacao.proximo.candidato;
           const estadoConfirmado = observacao.situacao === 'CONFIRMADA'
             ? leitura.estadoDetectado
-            : sensor.estadoConfirmado;
+            : leituraAnteriorExpirada ? 'INDISPONIVEL' : sensor.estadoConfirmado;
           await tx.sensor.update({
             where: { id: sensor.id },
             data: {
@@ -224,7 +239,7 @@ export function createTelemetriaService(
             where: { id: sensor.vagaId },
             data: {
               ultimaLeituraEm: recebidoEm,
-              ...(observacao.situacao === 'CONFIRMADA' ? { estadoAtual: leitura.estadoDetectado } : {}),
+              ...(observacao.situacao === 'CONFIRMADA' ? { estadoAtual: leitura.estadoDetectado } : leituraAnteriorExpirada ? { estadoAtual: 'INDISPONIVEL' } : {}),
             },
           });
           if (observacao.situacao === 'CONFIRMADA') {

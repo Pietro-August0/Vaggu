@@ -7,6 +7,7 @@ import { Button } from "@/components/ui/button"
 import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "@/components/ui/tooltip"
 import { lerEstrutura } from "@/servicos/estrutura"
 import { lerAnaliseHistorica, type AnaliseHistorica } from "@/servicos/analise"
+import { baixarCsvAnalise } from "@/servicos/exportar-analise"
 import type { EstruturaEstacionamento, TipoVaga } from "@/types/estrutura"
 
 const dias = ["11 Mai", "12 Mai", "13 Mai", "14 Mai", "15 Mai", "16 Mai", "17 Mai"]
@@ -28,21 +29,24 @@ function criarDemonstracao(estrutura: EstruturaEstacionamento, historico: Analis
   const livresAtuais = vagas.filter((vaga) => vaga.estadoAtual === "LIVRE").length
   const ocupadas = historico?.temHistorico ? ocupadasAtuais : Math.round(total * 0.651)
   const livres = historico?.temHistorico ? livresAtuais : total - ocupadas
-  const especiais = vagas.filter((vaga) => vaga.tipo !== "COMUM").length || Math.max(3, Math.round(total * 0.08))
+  const especiaisReais = vagas.filter((vaga) => vaga.tipo !== "COMUM").length
+  const especiais = historico?.temHistorico ? especiaisReais : especiaisReais || Math.max(3, Math.round(total * 0.08))
   const setoresOriginais = estrutura.andares.flatMap((andar) => andar.setores.map((setor) => ({
     nome: setor.nome,
     total: setor.vagas.length,
+    ocupadasAtuais: setor.vagas.filter((vaga) => vaga.estadoAtual === "OCUPADA").length,
+    livresAtuais: setor.vagas.filter((vaga) => vaga.estadoAtual === "LIVRE").length,
   })))
   const setores = (setoresOriginais.length > 0 ? setoresOriginais : [
-    { nome: "Setor A", total: Math.ceil(total / 4) },
-    { nome: "Setor B", total: Math.floor(total / 4) },
-    { nome: "Setor C", total: Math.floor(total / 4) },
-    { nome: "Setor D", total: total - Math.ceil(total / 4) - Math.floor(total / 2) },
+    { nome: "Setor A", total: Math.ceil(total / 4), ocupadasAtuais: 0, livresAtuais: 0 },
+    { nome: "Setor B", total: Math.floor(total / 4), ocupadasAtuais: 0, livresAtuais: 0 },
+    { nome: "Setor C", total: Math.floor(total / 4), ocupadasAtuais: 0, livresAtuais: 0 },
+    { nome: "Setor D", total: total - Math.ceil(total / 4) - Math.floor(total / 2), ocupadasAtuais: 0, livresAtuais: 0 },
   ]).map((setor, indice) => {
     const taxaReal = historico?.porSetor.find((item) => item.setor === setor.nome)?.ocupacaoPercentual
-    const taxa = taxaReal ?? [66.7, 65.8, 65.6, 62.3][indice % 4]
-    const ocupadasSetor = Math.round(setor.total * taxa / 100)
-    return { ...setor, ocupadas: ocupadasSetor, livres: Math.max(0, setor.total - ocupadasSetor), taxa, permanencia: ["01h22", "01h15", "01h20", "01h12"][indice % 4], rotatividade: [4.23, 4.67, 4.45, 4.19][indice % 4] }
+    const taxa = taxaReal ?? (historico?.temHistorico ? 0 : [66.7, 65.8, 65.6, 62.3][indice % 4])
+    const ocupadasSetor = historico?.temHistorico ? setor.ocupadasAtuais : Math.round(setor.total * taxa / 100)
+    return { ...setor, ocupadas: ocupadasSetor, livres: historico?.temHistorico ? setor.livresAtuais : Math.max(0, setor.total - ocupadasSetor), taxa, permanencia: historico?.temHistorico ? null : ["01h22", "01h15", "01h20", "01h12"][indice % 4], rotatividade: historico?.temHistorico ? null : [4.23, 4.67, 4.45, 4.19][indice % 4] }
   })
   const porTipo = Object.keys(tipos).map((tipo) => ({
     tipo: tipo as TipoVaga,
@@ -54,6 +58,7 @@ function criarDemonstracao(estrutura: EstruturaEstacionamento, historico: Analis
 }
 
 function GraficoLinha({ rotulos, valores }: { rotulos: string[]; valores: number[] }) {
+  const [selecionado, setSelecionado] = useState<number | null>(null)
   const maior = Math.max(...valores, 1)
   const pontos = valores.map((valor, indice) => `${8 + indice * (91 / Math.max(1, valores.length - 1))},${50 - valor / maior * 38}`).join(" ")
   return <div className="grafico-linha" role="group" aria-label={`Taxa de ocupação no período, entre ${Math.min(...valores).toFixed(0)}% e ${Math.max(...valores).toFixed(0)}%.`}>
@@ -62,8 +67,9 @@ function GraficoLinha({ rotulos, valores }: { rotulos: string[]; valores: number
       <path d={`M ${pontos} L 99 52 L 8 52 Z`} fill="url(#area-amarela)" />
       <polyline className="grafico-linha-tracado" points={pontos} fill="none" stroke="#ffe100" strokeWidth="1.3" vectorEffect="non-scaling-stroke" />
     </svg>
-    <TooltipProvider><div className="grafico-pontos" aria-label="Detalhes por dia">{valores.map((valor, indice) => <Tooltip key={rotulos[indice]}><TooltipTrigger asChild><button type="button" style={{ left: `${8 + indice * (91 / Math.max(1, valores.length - 1))}%`, top: `${(50 - valor / maior * 38) / 54 * 100}%` }} aria-label={`${rotulos[indice]}: ${valor.toFixed(1).replace(".", ",")}% de ocupação`}><span /></button></TooltipTrigger><TooltipContent side="top"><strong>{rotulos[indice]}</strong> · {valor.toFixed(1).replace(".", ",")}% ocupado</TooltipContent></Tooltip>)}</div></TooltipProvider>
+    <TooltipProvider><div className="grafico-pontos" aria-label="Detalhes por dia">{valores.map((valor, indice) => <Tooltip key={rotulos[indice]}><TooltipTrigger asChild><button type="button" style={{ left: `${8 + indice * (91 / Math.max(1, valores.length - 1))}%`, top: `${(50 - valor / maior * 38) / 54 * 100}%` }} aria-label={`${rotulos[indice]}: ${valor.toFixed(1).replace(".", ",")}% de ocupação`} aria-pressed={selecionado === indice} onClick={() => setSelecionado(indice)}><span /></button></TooltipTrigger><TooltipContent side="top"><strong>{rotulos[indice]}</strong> · {valor.toFixed(1).replace(".", ",")}% ocupado</TooltipContent></Tooltip>)}</div></TooltipProvider>
     <div className="grafico-eixo">{rotulos.map((dia) => <span key={dia}>{dia}</span>)}</div>
+    {selecionado !== null && <p className="analise-detalhe-toque" role="status">{rotulos[selecionado]}: {valores[selecionado].toFixed(1).replace(".", ",")}% de ocupação</p>}
   </div>
 }
 
@@ -80,6 +86,7 @@ export function AnaliseEstacionamento() {
   const [estrutura, setEstrutura] = useState<EstruturaEstacionamento | null>(null)
   const [historico, setHistorico] = useState<AnaliseHistorica | null>(null)
   const [erro, setErro] = useState("")
+  const [barraSelecionada, setBarraSelecionada] = useState("")
 
   useEffect(() => {
     let ativo = true
@@ -120,7 +127,7 @@ export function AnaliseEstacionamento() {
   return <section className="analise-estacionamento" aria-labelledby="titulo-analise">
     <header className="analise-cabecalho">
       <div><p className={`analise-selo ${dadosReais ? "analise-selo-real" : ""}`}>{dadosReais ? "Histórico confirmado" : "Dados genéricos · demonstração"}</p><h2 id="titulo-analise">Análise do estacionamento</h2><p>{estrutura.shopping.nome} · período de {periodo}</p></div>
-      <div className="analise-acoes"><Button type="button" variant="outline" disabled><RefreshCw aria-hidden="true"/>{dadosReais ? "Histórico carregado" : "Atualização simulada"}</Button><Button type="button" disabled><Download aria-hidden="true"/>Exportar</Button></div>
+      <div className="analise-acoes"><Button type="button" variant="outline" disabled><RefreshCw aria-hidden="true"/>{dadosReais ? "Histórico carregado" : "Atualização simulada"}</Button><Button type="button" onClick={() => baixarCsvAnalise(estrutura, historico)}><Download aria-hidden="true"/>Exportar CSV</Button></div>
     </header>
 
     <div className="analise-metricas">
@@ -132,16 +139,16 @@ export function AnaliseEstacionamento() {
 
     <div className="analise-grade-principal">
       <article className="analise-painel analise-linha"><div className="analise-titulo"><div><h3>Taxa de ocupação</h3><p>Média diária do período</p></div><span>Por dia</span></div><GraficoLinha rotulos={rotulosDiarios} valores={serieDiaria}/></article>
-      <article className="analise-painel"><div className="analise-titulo"><div><h3>Ocupação por setor</h3><p>Participação no total ocupado</p></div></div><div className="analise-rosca-bloco"><div className="analise-rosca" style={{ background: `conic-gradient(${gradienteSetores})` }}><span><strong>{demonstracao.ocupadas}</strong>ocupadas</span></div><ul>{setoresDoGrafico.map((setor, indice) => <li key={setor.nome}><i style={{ background: coresSetor[indice] }}/><span>{setor.nome}</span><strong>{setor.ocupadas}</strong></li>)}</ul></div></article>
+      <article className="analise-painel"><div className="analise-titulo"><div><h3>Ocupação por setor</h3><p>Participação no total ocupado · até quatro setores</p></div></div><div className="analise-rosca-bloco"><div className="analise-rosca" style={{ background: `conic-gradient(${gradienteSetores})` }}><span><strong>{totalOcupadoSetores}</strong>ocupadas</span></div><ul>{setoresDoGrafico.map((setor, indice) => <li key={setor.nome}><i style={{ background: coresSetor[indice] }}/><span>{setor.nome}</span><strong>{setor.ocupadas}</strong></li>)}</ul></div></article>
       <article className="analise-painel analise-resumo"><div className="analise-titulo"><div><h3>Resumo do período</h3><p>{dadosReais ? "Calculado sobre eventos confirmados" : "Comparação demonstrativa"}</p></div></div><dl><div><Clock3/><dt>Taxa de ocupação</dt><dd>{dadosReais ? `${historico.resumo.ocupacaoPercentual.toFixed(1).replace(".", ",")}%` : "65,1%"}</dd></div><div><CarFront/><dt>Entradas observadas</dt><dd>{dadosReais ? historico.resumo.entradasObservadas.toLocaleString("pt-BR") : "5.842"}</dd></div><div><RefreshCw/><dt>Rotatividade</dt><dd>{dadosReais ? "Em evolução" : "4,51"}</dd></div><div><PlugZap/><dt>Cobertura dos sensores</dt><dd>{dadosReais ? `${historico.resumo.coberturaPercentual.toFixed(1).replace(".", ",")}%` : "92%"}</dd></div></dl></article>
     </div>
 
     <div className="analise-grade-secundaria">
-      <article className="analise-painel"><div className="analise-titulo"><div><h3>Entradas x saídas</h3><p>Movimentação diária</p></div></div><TooltipProvider><div className="barras-duplas">{dias.map((dia, indice) => { const entradas = 42 + indice * 5 + (indice % 2) * 9; const saidas = 38 + indice * 5 + ((indice + 1) % 2) * 8; return <div key={dia}><Tooltip><TooltipTrigger asChild><button type="button" className="barra-entrada" style={{ height: `${entradas}%` }} aria-label={`${dia}: ${entradas * 10} entradas`} /></TooltipTrigger><TooltipContent>{dia} · {entradas * 10} entradas</TooltipContent></Tooltip><Tooltip><TooltipTrigger asChild><button type="button" className="barra-saida" style={{ height: `${saidas}%` }} aria-label={`${dia}: ${saidas * 10} saídas`} /></TooltipTrigger><TooltipContent>{dia} · {saidas * 10} saídas</TooltipContent></Tooltip><small>{dia.replace(" Mai", "")}</small></div> })}</div></TooltipProvider></article>
-      <article className="analise-painel"><div className="analise-titulo"><div><h3>Ocupação por horário</h3><p>Média ao longo do dia</p></div></div><TooltipProvider><div className="barras-horario">{ocupacaoHoraria.map((valor, indice) => <Tooltip key={indice}><TooltipTrigger asChild><button type="button" style={{ height: `${valor}%` }} aria-label={`${String(indice + 6).padStart(2, "0")}h: ${valor}% de ocupação`} /></TooltipTrigger><TooltipContent>{String(indice + 6).padStart(2, "0")}h · {valor}% ocupado</TooltipContent></Tooltip>)}</div></TooltipProvider><div className="grafico-eixo"><span>06h</span><span>12h</span><span>18h</span><span>22h</span></div></article>
+      <article className="analise-painel"><div className="analise-titulo"><div><h3>{dadosReais ? "Entradas observadas" : "Entradas x saídas"}</h3><p>Movimentação diária{dadosReais ? " confirmada" : " demonstrativa"}</p></div></div><TooltipProvider><div className="barras-duplas">{rotulosDiarios.map((dia, indice) => { const entradas = dadosReais ? historico.porDia[indice].entradasObservadas : (42 + indice * 5 + (indice % 2) * 9) * 10; const saidas = (38 + indice * 5 + ((indice + 1) % 2) * 8) * 10; const escala = dadosReais ? Math.max(1, ...historico.porDia.map((item) => item.entradasObservadas)) : 1000; return <div key={dia}><Tooltip><TooltipTrigger asChild><button type="button" className="barra-entrada" style={{ height: `${Math.max(entradas > 0 ? 4 : 0, entradas / escala * 90)}%` }} aria-label={`${dia}: ${entradas} entradas`} onClick={() => setBarraSelecionada(`${dia}: ${entradas} entradas`)} /></TooltipTrigger><TooltipContent>{dia} · {entradas} entradas</TooltipContent></Tooltip>{!dadosReais && <Tooltip><TooltipTrigger asChild><button type="button" className="barra-saida" style={{ height: `${saidas / escala * 90}%` }} aria-label={`${dia}: ${saidas} saídas`} onClick={() => setBarraSelecionada(`${dia}: ${saidas} saídas`)} /></TooltipTrigger><TooltipContent>{dia} · {saidas} saídas</TooltipContent></Tooltip>}<small>{dia.split(" ")[0]}</small></div> })}</div></TooltipProvider>{barraSelecionada && <p className="analise-detalhe-toque" role="status">{barraSelecionada}</p>}</article>
+      {!dadosReais && <article className="analise-painel"><div className="analise-titulo"><div><h3>Ocupação por horário</h3><p>Média demonstrativa ao longo do dia</p></div></div><TooltipProvider><div className="barras-horario">{ocupacaoHoraria.map((valor, indice) => <Tooltip key={indice}><TooltipTrigger asChild><button type="button" style={{ height: `${valor}%` }} aria-label={`${String(indice + 6).padStart(2, "0")}h: ${valor}% de ocupação`} /></TooltipTrigger><TooltipContent>{String(indice + 6).padStart(2, "0")}h · {valor}% ocupado</TooltipContent></Tooltip>)}</div></TooltipProvider><div className="grafico-eixo"><span>06h</span><span>12h</span><span>18h</span><span>22h</span></div></article>}
       <article className="analise-painel"><div className="analise-titulo"><div><h3>Tipo de vaga</h3><p>Distribuição da capacidade</p></div></div><div className="analise-rosca-bloco"><div className="analise-rosca compacta" style={{ background: `conic-gradient(${gradienteTipos})` }}><span><strong>{demonstracao.total}</strong>total</span></div><ul>{demonstracao.porTipo.map((item) => <li key={item.tipo}><i style={{ background: tipos[item.tipo].cor }}/><span>{tipos[item.tipo].nome}</span><strong>{item.quantidade}</strong></li>)}</ul></div></article>
     </div>
 
-    <article className="analise-painel analise-tabela"><div className="analise-titulo"><div><h3>Desempenho por setor</h3><p>Indicadores demonstrativos associados à estrutura atual</p></div></div><div className="analise-tabela-scroll"><table><thead><tr><th>Setor</th><th>Vagas totais</th><th>Ocupadas</th><th>Livres</th><th>Taxa de ocupação</th><th>Tempo médio</th><th>Rotatividade</th></tr></thead><tbody>{demonstracao.setores.map((setor, indice) => <tr key={`${setor.nome}-${indice}`}><th scope="row"><i style={{ background: coresSetor[indice % 4] }}/>{setor.nome}</th><td>{setor.total}</td><td>{setor.ocupadas}</td><td>{setor.livres}</td><td><span className="taxa-setor"><b style={{ width: `${setor.taxa}%` }}/></span>{setor.taxa.toFixed(1).replace(".", ",")}%</td><td>{setor.permanencia}</td><td>{setor.rotatividade.toFixed(2).replace(".", ",")}</td></tr>)}</tbody></table></div></article>
+    <article className="analise-painel analise-tabela"><div className="analise-titulo"><div><h3>Desempenho por setor</h3><p>{dadosReais ? "Ocupação histórica e vagas atuais com leitura válida" : "Indicadores demonstrativos associados à estrutura atual"}</p></div></div><div className="analise-tabela-scroll"><table><thead><tr><th>Setor</th><th>Vagas totais</th><th>Ocupadas</th><th>Livres</th><th>Taxa de ocupação</th><th>{dadosReais ? "Cobertura" : "Tempo médio"}</th><th>{dadosReais ? "Entradas" : "Rotatividade"}</th></tr></thead><tbody>{demonstracao.setores.map((setor, indice) => <tr key={`${setor.nome}-${indice}`}><th scope="row"><i style={{ background: coresSetor[indice % 4] }}/>{setor.nome}</th><td>{setor.total}</td><td>{setor.ocupadas}</td><td>{setor.livres}</td><td><span className="taxa-setor"><b style={{ width: `${setor.taxa}%` }}/></span>{setor.taxa.toFixed(1).replace(".", ",")}%</td><td>{dadosReais ? `${(historico.porSetor.find((item) => item.setor === setor.nome)?.coberturaPercentual ?? 0).toFixed(1).replace(".", ",")}%` : setor.permanencia}</td><td>{dadosReais ? (historico.porSetor.find((item) => item.setor === setor.nome)?.entradasObservadas ?? 0).toLocaleString("pt-BR") : setor.rotatividade?.toFixed(2).replace(".", ",")}</td></tr>)}</tbody></table></div></article>
   </section>
 }

@@ -16,3 +16,14 @@
 @media(max-width:1050px){.analise-metricas{grid-template-columns:repeat(2,minmax(0,1fr))}.analise-grade-principal{grid-template-columns:repeat(2,minmax(0,1fr))}.analise-resumo{grid-column:1/-1}.analise-grade-secundaria{grid-template-columns:repeat(2,minmax(0,1fr))}.analise-grade-secundaria>:last-child{grid-column:1/-1}}
 @media(max-width:680px){.analise-cabecalho{align-items:start;flex-direction:column}.analise-acoes{width:100%}.analise-acoes button{flex:1}.analise-metricas,.analise-grade-principal,.analise-grade-secundaria{grid-template-columns:1fr}.analise-resumo,.analise-grade-secundaria>:last-child{grid-column:auto}.analise-rosca-bloco{justify-content:space-around}.grafico-linha svg{height:10rem}}
 @media(prefers-reduced-motion:reduce){.analise-card-metrica,.analise-painel,.grafico-linha-tracado,.analise-rosca,.barra-entrada,.barra-saida,.barras-horario button{animation:none!important;transition:none!important}}
+
+/* Alvos confortáveis e leitura persistente após toque, inclusive sem hover. */
+.grafico-pontos button{display:grid;place-items:center;width:2.75rem;height:2.75rem;background:transparent;box-shadow:none;touch-action:manipulation}
+.grafico-pontos button span{display:block;width:1rem;height:1rem;margin:auto;border-radius:50%;background:#ffe100;box-shadow:0 0 0 3px #ffe10047}
+.grafico-pontos button[aria-pressed="true"] span{box-shadow:0 0 0 5px #ffe10080}
+.analise-detalhe-toque{min-height:2rem;margin-top:.75rem;padding:.4rem .65rem;border:1px solid var(--an-border);border-radius:.5rem;color:var(--an-text);font-size:.85rem}
+.barras-duplas,.barras-horario{overflow-x:auto;overflow-y:hidden;touch-action:pan-x}
+.barras-duplas>div{min-width:5.5rem}
+.barras-duplas button,.barras-horario button{min-width:2.75rem;touch-action:manipulation}
+.barras-horario button{flex:0 0 2.75rem}
+.barras-duplas small{bottom:0}

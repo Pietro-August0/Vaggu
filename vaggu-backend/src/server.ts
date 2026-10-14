@@ -27,13 +27,13 @@ const app = createApp({
   whatsapp: { config: config.whatsapp, service: whatsappService },
   shoppings: createShoppingsService(prisma),
   conta: createContaService(prisma),
-  estrutura: createEstruturaService(prisma),
+  estrutura: createEstruturaService(prisma, config.telemetria.timeoutSensorMs),
   importacao: createImportacaoService(prisma),
   telemetria: telemetriaService,
   analiticos: createAnaliticosService(prisma),
 });
 
-// O job persiste a expiração; consultas futuras também deverão aplicar validade no momento da leitura.
+// O job persiste a expiração; o mapa também aplica validade no momento da leitura.
 const tarefaExpiracao = setInterval(() => {
   expirarSensores(prisma, config.telemetria).catch(() => {
     console.error('Não foi possível executar a expiração de sensores.');

@@ -5,7 +5,7 @@ export interface AnaliseHistorica {
   temHistorico: boolean
   periodo: { inicioEm: string; fimEm: string }
   resumo: { ocupacaoPercentual: number; coberturaPercentual: number; entradasObservadas: number }
-  porDia: { inicioEm: string; ocupacaoPercentual: number; coberturaPercentual: number }[]
+  porDia: { inicioEm: string; ocupacaoPercentual: number; coberturaPercentual: number; entradasObservadas: number }[]
   porSetor: { setor: string; ocupacaoPercentual: number; coberturaPercentual: number; entradasObservadas: number }[]
 }
 
@@ -30,7 +30,7 @@ export function lerAnaliseHistorica(dados: unknown): AnaliseHistorica {
     },
     porDia: dados.porDia.map((item) => {
       if (!objeto(item) || typeof item.inicioEm !== "string") throw new Error("Uma série histórica recebida é inválida.")
-      return { inicioEm: item.inicioEm, ocupacaoPercentual: numero(item.ocupacaoPercentual), coberturaPercentual: numero(item.coberturaPercentual) }
+      return { inicioEm: item.inicioEm, ocupacaoPercentual: numero(item.ocupacaoPercentual), coberturaPercentual: numero(item.coberturaPercentual), entradasObservadas: numero(item.entradasObservadas) }
     }),
     porSetor: dados.porSetor.map((item) => {
       if (!objeto(item) || typeof item.setor !== "string") throw new Error("Um setor histórico recebido é inválido.")
