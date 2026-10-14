@@ -164,39 +164,39 @@ export function LandingPage() {
         <OperacaoVaggu />
       </main>
 
-      <footer className="relative overflow-hidden bg-black px-5 pb-8 pt-14 text-white sm:px-8 lg:pt-20">
-        <div className="absolute inset-y-0 right-0 hidden w-1/2 lg:block">
-          <motion.img
-            alt="Celulares amarelos com a identidade VAGGU"
-            className="h-full w-full object-contain object-right-bottom opacity-85"
-            loading="lazy"
-            src="/assets/phones-vaggu.png"
-            initial={{ opacity: 0, x: 40 }}
-            whileInView={{ opacity: 0.85, x: 0 }}
-            transition={{ duration: 0.8 }}
-            viewport={{ once: true, margin: "-100px" }}
-          />
-        </div>
-        <div className="relative mx-auto max-w-7xl">
-          <motion.div
-            className="max-w-xl"
-            initial={{ opacity: 0, y: 20 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.6 }}
-            viewport={{ once: true, margin: "-100px" }}
-          >
-            <Brand inverted className="h-10 sm:h-12" />
-            <p className="mt-9 text-xs font-medium uppercase tracking-[0.24em] text-[#ffe100] sm:mt-8">Fale conosco</p>
-            <h2 className="mt-3 font-landing text-3xl font-semibold tracking-[-0.04em] sm:mt-4 sm:text-5xl">
-              Seu estacionamento começa por uma conversa.
-            </h2>
-            {WHATSAPP_URL && <Button asChild className="mt-7 h-12 w-full rounded-full bg-[#ffe100] px-6 font-medium text-black hover:bg-[#f2d500] sm:mt-8 sm:w-auto">
-              <a aria-label="Chamar a VAGGU no WhatsApp (abre em nova aba)" href={WHATSAPP_URL} rel="noreferrer" target="_blank">
-                <IconeWhatsApp className="size-5" />
-                Chamar no WhatsApp
-              </a>
-            </Button>}
-          </motion.div>
+      <footer className="bg-black px-5 pb-8 pt-14 text-white sm:px-8 lg:pt-20">
+        <div className="mx-auto max-w-7xl">
+          <div className="grid gap-8 lg:grid-cols-2 lg:items-center">
+            <motion.div
+              className="max-w-xl"
+              initial={{ opacity: 0, y: 20 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.6 }}
+              viewport={{ once: true, margin: "-100px" }}
+            >
+              <Brand inverted className="h-10 sm:h-12" />
+              <p className="mt-9 text-xs font-medium uppercase tracking-[0.24em] text-[#ffe100] sm:mt-8">Fale conosco</p>
+              <h2 className="mt-3 font-landing text-3xl font-semibold tracking-[-0.04em] sm:mt-4 sm:text-5xl">
+                Seu estacionamento começa por uma conversa.
+              </h2>
+              {WHATSAPP_URL && <Button asChild className="mt-7 h-12 w-full rounded-full bg-[#ffe100] px-6 font-medium text-black hover:bg-[#f2d500] sm:mt-8 sm:w-auto">
+                <a aria-label="Chamar a VAGGU no WhatsApp (abre em nova aba)" href={WHATSAPP_URL} rel="noreferrer" target="_blank">
+                  <IconeWhatsApp className="size-5" />
+                  Chamar no WhatsApp
+                </a>
+              </Button>}
+            </motion.div>
+            <motion.img
+              alt="Celulares amarelos com a identidade VAGGU"
+              className="hidden w-full max-h-[420px] object-contain lg:block"
+              loading="lazy"
+              src="/assets/phones-vaggu.png"
+              initial={{ opacity: 0, x: 40 }}
+              whileInView={{ opacity: 0.85, x: 0 }}
+              transition={{ duration: 0.8 }}
+              viewport={{ once: true, margin: "-100px" }}
+            />
+          </div>
           <div className="mt-12 grid gap-6 border-t border-white/15 pt-7 text-sm sm:mt-16 sm:flex sm:items-center sm:justify-between sm:gap-8">
             <p className="max-w-xs leading-relaxed text-neutral-400">Gestão inteligente de estacionamentos para shoppings.</p>
             <nav aria-label="Links do rodapé" className="flex flex-wrap gap-x-6 gap-y-3"><a className="underline-offset-4 hover:text-[#ffe100] hover:underline focus-visible:outline-2 focus-visible:outline-[#ffe100]" href="#sobre">Sobre a VAGGU</a><Link className="underline-offset-4 hover:text-[#ffe100] hover:underline focus-visible:outline-2 focus-visible:outline-[#ffe100]" to="/login">Área do cliente</Link></nav>

@@ -14,7 +14,13 @@ export async function gerarPdfAnalise(relatorio: RelatorioAnalise): Promise<Blob
   function cabecalho(continuacao = false) {
     pdf.setFillColor(ESCURO)
     pdf.rect(0, 0, largura, continuacao ? 30 : 53, "F")
-    pdf.addImage(logo, "PNG", 15, 9, 47, 12)
+    if (logo) pdf.addImage(logo, "PNG", 15, 9, 47, 12)
+    else {
+      pdf.setTextColor(AMARELO)
+      pdf.setFont("helvetica", "bold")
+      pdf.setFontSize(22)
+      pdf.text("vaggu", 15, 19)
+    }
     pdf.setTextColor(AMARELO)
     pdf.setFont("helvetica", "bold")
     pdf.setFontSize(continuacao ? 12 : 21)

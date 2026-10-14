@@ -151,7 +151,7 @@ export function DashboardShell({
         <p className="mb-2 text-xs font-bold uppercase tracking-[0.18em] text-neutral-800/70">Shopping atual</p>
         <Navigation items={shoppingItems} admin aoNavegar={() => { setMenuAberto(false); setContaAberta(false) }} />
       </div>}
-      <div className="mt-auto grid gap-2 pt-8">
+      <div className="mt-auto grid w-full min-w-0 gap-2 pt-8">
         <Button type="button" variant="ghost" className={isAdmin ? "justify-start gap-3 text-neutral-950 hover:bg-black/10" : "justify-start gap-3 text-neutral-300 hover:bg-neutral-900 hover:text-white"} onClick={() => setTheme(escuro ? "light" : "dark")} aria-label={escuro ? "Ativar modo claro" : "Ativar modo escuro"}>
           {escuro ? <Sun className="size-4" aria-hidden="true" /> : <Moon className="size-4" aria-hidden="true" />}
           {escuro ? "Modo claro" : "Modo escuro"}
@@ -168,7 +168,7 @@ export function DashboardShell({
         <button
           type="button"
           className={cn(
-            "mt-3 flex min-h-14 w-full items-center gap-2 rounded-full p-1 text-left outline-none transition-colors focus-visible:ring-2 focus-visible:ring-offset-2",
+            "mt-3 flex min-h-14 w-full min-w-0 max-w-full items-center gap-2 overflow-hidden rounded-full p-1 text-left outline-none transition-colors focus-visible:ring-2 focus-visible:ring-offset-2",
             isAdmin ? "bg-neutral-950 text-white hover:bg-neutral-800 focus-visible:ring-neutral-950 focus-visible:ring-offset-[#ffe100]" : "bg-[#ffe100] text-neutral-950 hover:bg-yellow-300 focus-visible:ring-[#ffe100] focus-visible:ring-offset-neutral-950",
           )}
           aria-haspopup="dialog"
@@ -180,7 +180,7 @@ export function DashboardShell({
           <span className={cn("grid size-11 shrink-0 place-items-center rounded-full font-heading text-xl font-bold", isAdmin ? "bg-[#ffe100] text-neutral-950" : "bg-neutral-950 text-[#ffe100]")} aria-hidden="true">
             {currentUser?.nome.trim().charAt(0).toLocaleUpperCase("pt-BR") || <UserRound className="size-5" />}
           </span>
-          <span className="min-w-0 flex-1">
+          <span className="min-w-0 flex-1 overflow-hidden">
             <span className="block truncate text-sm font-medium leading-tight">{currentUser?.nome}</span>
             <span className={cn("block truncate text-xs font-medium leading-tight", isAdmin ? "text-white" : "text-neutral-900")}>{currentUser?.email}</span>
           </span>

@@ -55,27 +55,31 @@ export function baixarArquivo(arquivo: Blob, nome: string) {
   document.body.append(link)
   link.click()
   link.remove()
-  window.setTimeout(() => URL.revokeObjectURL(url), 0)
+  window.setTimeout(() => URL.revokeObjectURL(url), 1000)
 }
 
-/** Rasteriza a logo SVG versionada para manter a mesma marca no PDF e no XLSX. */
-export async function carregarLogoRelatorio(): Promise<string> {
-  const resposta = await fetch(`${import.meta.env.BASE_URL}assets/vaggu-logo-yellow.svg`)
-  if (!resposta.ok) throw new Error("Não foi possível carregar a logo do relatório.")
-  const svg = await resposta.blob()
-  const url = URL.createObjectURL(svg)
+/** A logo é opcional: falhas de decodificação não devem impedir o relatório. */
+export async function carregarLogoRelatorio(): Promise<string | null> {
   try {
-    const imagem = new Image()
-    imagem.src = url
-    await imagem.decode()
-    const canvas = document.createElement("canvas")
-    canvas.width = 552
-    canvas.height = 144
-    const contexto = canvas.getContext("2d")
-    if (!contexto) throw new Error("Não foi possível preparar a logo do relatório.")
-    contexto.drawImage(imagem, 0, 0, canvas.width, canvas.height)
-    return canvas.toDataURL("image/png")
-  } finally {
-    URL.revokeObjectURL(url)
+    const resposta = await fetch(`${import.meta.env.BASE_URL}assets/vaggu-logo-yellow.svg`)
+    if (!resposta.ok) return null
+    const svg = await resposta.blob()
+    const url = URL.createObjectURL(svg)
+    try {
+      const imagem = new Image()
+      imagem.src = url
+      await imagem.decode()
+      const canvas = document.createElement("canvas")
+      canvas.width = 552
+      canvas.height = 144
+      const contexto = canvas.getContext("2d")
+      if (!contexto) return null
+      contexto.drawImage(imagem, 0, 0, canvas.width, canvas.height)
+      return canvas.toDataURL("image/png")
+    } finally {
+      URL.revokeObjectURL(url)
+    }
+  } catch {
+    return null
   }
 }

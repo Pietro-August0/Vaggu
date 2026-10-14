@@ -17,8 +17,14 @@ export async function gerarPlanilhaAnalise(relatorio: RelatorioAnalise): Promise
   resumo.columns = [{ width: 24 }, { width: 19 }, { width: 19 }, { width: 19 }, { width: 19 }, { width: 19 }]
   resumo.mergeCells("A1:F3")
   resumo.getCell("A1").fill = { type: "pattern", pattern: "solid", fgColor: { argb: COR.escuro } }
-  const imagemId = livro.addImage({ base64: logo, extension: "png" })
-  resumo.addImage(imagemId, { tl: { col: 0.3, row: 0.45 }, ext: { width: 184, height: 48 } })
+  if (logo) {
+    const imagemId = livro.addImage({ base64: logo, extension: "png" })
+    resumo.addImage(imagemId, { tl: { col: 0.3, row: 0.45 }, ext: { width: 184, height: 48 } })
+  } else {
+    resumo.getCell("A1").value = "vaggu"
+    resumo.getCell("A1").font = { name: "Arial", size: 26, bold: true, color: { argb: COR.amarelo } }
+    resumo.getCell("A1").alignment = { vertical: "middle" }
+  }
   resumo.getRow(1).height = 28
   resumo.getRow(2).height = 22
   resumo.getRow(3).height = 22
