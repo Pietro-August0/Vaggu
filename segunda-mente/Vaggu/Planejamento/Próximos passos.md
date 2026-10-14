@@ -39,7 +39,7 @@ Os cenários completos continuam em CA15–CA24. A parte de PostgreSQL foi aprov
 
 ## Trabalho já iniciado depois do P06
 
-O histórico confirmado e a análise dos últimos sete dias já funcionam no sistema quando existem leituras. Sem histórico, o painel mostra uma demonstração identificada. O painel agora oferece um CSV inicial com resumo, série diária e setores somente quando há eventos confirmados; a ausência de histórico é declarada no arquivo. Ainda faltam exportações mais completas, métricas complementares e a conferência completa do fluxo. A preparação dos dados para Power BI também existe, porém o relatório funcional ainda não foi entregue.
+O histórico confirmado e a análise dos últimos sete dias já funcionam no sistema quando existem leituras. Sem histórico, o painel mostra uma demonstração identificada. O painel oferece uma planilha Excel formatada e um PDF com a identidade VAGGU. Ambos mostram a fotografia atual das vagas e só incluem métricas históricas quando existem eventos confirmados; a ausência de histórico é declarada nos arquivos. Ainda faltam métricas complementares e a conferência completa do fluxo. A preparação dos dados para Power BI também existe, porém o relatório funcional ainda não foi entregue.
 
 ## Sequência preservada do backlog
 

@@ -140,7 +140,7 @@ As cópias de imagens entre `segunda-mente/Vaggu/Identidade visual/Assets/` e `v
 | `vaggu-frontend/src/app/app-store.tsx` | Restaura identidade via cookie e `/auth/me` antes de liberar rotas; gerencia expiração, logout, troca de senha e consultas. |
 | `vaggu-frontend/src/components/brand.tsx` | Reutiliza os arquivos de marca publicados em public/assets nos links para a página inicial. |
 | `vaggu-frontend/src/components/analise-estacionamento.css` | Define o painel analítico responsivo, com superfícies próprias nos temas claro/escuro, animações reduzíveis e estados interativos acessíveis. |
-| `vaggu-frontend/src/components/analise-estacionamento.tsx` | Exibe o histórico confirmado quando disponível, mantém a demonstração identificada, oferece detalhes por toque ou teclado e permite exportar o CSV da análise. |
+| `vaggu-frontend/src/components/analise-estacionamento.tsx` | Exibe o histórico confirmado quando disponível, mantém a demonstração identificada, oferece detalhes por toque ou teclado e permite exportar Excel e PDF. |
 | `vaggu-frontend/src/components/resumo-analitico-admin.tsx` | Resume ocupação, cobertura e tendência do shopping selecionado na ficha Admin, distinguindo histórico real de demonstração. |
 | `vaggu-frontend/src/components/dashboard-shell.tsx` | Compartilha cabeçalho, menu responsivo, atalho ao conteúdo, foco após navegação, alternância claro/escuro e saída da sessão; inclui o acesso do gerente à análise demonstrativa. |
 | `vaggu-frontend/src/components/estrutura-admin.tsx` | Permite criar a hierarquia, explica o estado real de implantação e alterna cadastro, mapa e posições com refetch após mutações. |
@@ -192,7 +192,9 @@ As cópias de imagens entre `segunda-mente/Vaggu/Identidade visual/Assets/` e `v
 | `vaggu-frontend/src/servicos/situacao-implantacao.ts` | Centraliza rótulos, descrições e cores dos estados de implantação já definidos no backend. |
 | `vaggu-frontend/src/servicos/estrutura.ts` | Valida a árvore pública de andares, setores, vagas e posições recebida da API. |
 | `vaggu-frontend/src/servicos/exportacao-estrutura.ts` | Gera no navegador um XLSX estilizado com vagas e resumo da estrutura já carregada, sem endpoint novo nem dados históricos. |
-| `vaggu-frontend/src/servicos/exportar-analise.ts` | Gera um CSV com resumo, dias e setores confirmados; identifica a ausência de histórico e protege células textuais contra fórmulas. |
+| `vaggu-frontend/src/servicos/modelo-relatorio-analise.ts` | Consolida a fotografia atual das vagas, identifica histórico confirmado e prepara a logo e os nomes de arquivo das exportações. |
+| `vaggu-frontend/src/servicos/exportar-analise-xlsx.ts` | Gera planilha Excel formatada com logo, resumo atual, setores e histórico confirmado quando disponível. |
+| `vaggu-frontend/src/servicos/exportar-analise-pdf.ts` | Gera relatório PDF paginado com logo, indicadores atuais, distribuição, setores e histórico confirmado quando disponível. |
 | `vaggu-frontend/src/servicos/importacao.ts` | Valida as respostas da API de prévia e confirmação antes de entregá-las à interface administrativa. |
 | `vaggu-frontend/src/servicos/politica-senha.ts` | Centraliza requisitos, mensagens locais e códigos de erro da senha definitiva para as duas jornadas de troca. |
 | `vaggu-frontend/src/servicos/shoppings.ts` | Valida fichas, listas, agregados estruturais, URL HTTPS de imagem e gerentes recebidos pelas rotas administrativas. |

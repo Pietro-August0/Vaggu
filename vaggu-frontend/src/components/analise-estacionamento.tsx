@@ -7,7 +7,9 @@ import { Button } from "@/components/ui/button"
 import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "@/components/ui/tooltip"
 import { lerEstrutura } from "@/servicos/estrutura"
 import { lerAnaliseHistorica, type AnaliseHistorica } from "@/servicos/analise"
-import { baixarCsvAnalise } from "@/servicos/exportar-analise"
+import { gerarPlanilhaAnalise } from "@/servicos/exportar-analise-xlsx"
+import { gerarPdfAnalise } from "@/servicos/exportar-analise-pdf"
+import { baixarArquivo, montarRelatorioAnalise, nomeArquivoRelatorio } from "@/servicos/modelo-relatorio-analise"
 import type { EstruturaEstacionamento, TipoVaga } from "@/types/estrutura"
 
 const dias = ["11 Mai", "12 Mai", "13 Mai", "14 Mai", "15 Mai", "16 Mai", "17 Mai"]
@@ -86,13 +88,15 @@ export function AnaliseEstacionamento() {
   const [estrutura, setEstrutura] = useState<EstruturaEstacionamento | null>(null)
   const [historico, setHistorico] = useState<AnaliseHistorica | null>(null)
   const [erro, setErro] = useState("")
+  const [erroExportacao, setErroExportacao] = useState("")
+  const [exportando, setExportando] = useState<"xlsx" | "pdf" | null>(null)
   const [barraSelecionada, setBarraSelecionada] = useState("")
 
   useEffect(() => {
     let ativo = true
     Promise.all([
       consultar("/estacionamento/estrutura").then(lerEstrutura),
-      consultar("/estacionamento/analise").then(lerAnaliseHistorica).catch(() => null),
+      consultar("/estacionamento/analise").then(lerAnaliseHistorica),
     ]).then(([estruturaRecebida, historicoRecebido]) => {
       if (ativo) { setEstrutura(estruturaRecebida); setHistorico(historicoRecebido) }
     }).catch((falha) => { if (ativo) setErro(falha instanceof Error ? falha.message : "Não foi possível carregar a análise.") })
@@ -100,6 +104,21 @@ export function AnaliseEstacionamento() {
   }, [consultar])
 
   const demonstracao = useMemo(() => estrutura ? criarDemonstracao(estrutura, historico) : null, [estrutura, historico])
+
+  async function exportar(formato: "xlsx" | "pdf") {
+    if (!estrutura || exportando) return
+    setErroExportacao("")
+    setExportando(formato)
+    try {
+      const relatorio = montarRelatorioAnalise(estrutura, historico)
+      const arquivo = formato === "xlsx" ? await gerarPlanilhaAnalise(relatorio) : await gerarPdfAnalise(relatorio)
+      baixarArquivo(arquivo, nomeArquivoRelatorio(estrutura.shopping.nome, formato))
+    } catch (falha) {
+      setErroExportacao(falha instanceof Error ? falha.message : "Não foi possível exportar a análise.")
+    } finally {
+      setExportando(null)
+    }
+  }
   if (erro) return <p role="alert" className="rounded-2xl border border-red-500/30 bg-red-950/40 p-5 text-red-200">{erro}</p>
   if (!estrutura || !demonstracao) return <p role="status" className="rounded-2xl bg-[#232323] p-6 text-neutral-200">Carregando análise do estacionamento...</p>
 
@@ -127,8 +146,9 @@ export function AnaliseEstacionamento() {
   return <section className="analise-estacionamento" aria-labelledby="titulo-analise">
     <header className="analise-cabecalho">
       <div><p className={`analise-selo ${dadosReais ? "analise-selo-real" : ""}`}>{dadosReais ? "Histórico confirmado" : "Dados genéricos · demonstração"}</p><h2 id="titulo-analise">Análise do estacionamento</h2><p>{estrutura.shopping.nome} · período de {periodo}</p></div>
-      <div className="analise-acoes"><Button type="button" variant="outline" disabled><RefreshCw aria-hidden="true"/>{dadosReais ? "Histórico carregado" : "Atualização simulada"}</Button><Button type="button" onClick={() => baixarCsvAnalise(estrutura, historico)}><Download aria-hidden="true"/>Exportar CSV</Button></div>
+      <div className="analise-acoes"><Button type="button" variant="outline" disabled><RefreshCw aria-hidden="true"/>{dadosReais ? "Histórico carregado" : "Atualização simulada"}</Button><Button type="button" disabled={exportando !== null} onClick={() => void exportar("xlsx")}><Download aria-hidden="true"/>{exportando === "xlsx" ? "Preparando Excel..." : "Exportar Excel"}</Button><Button type="button" disabled={exportando !== null} onClick={() => void exportar("pdf")}><Download aria-hidden="true"/>{exportando === "pdf" ? "Preparando PDF..." : "Exportar PDF"}</Button></div>
     </header>
+    {erroExportacao && <p role="alert" className="analise-erro-exportacao">{erroExportacao}</p>}
 
     <div className="analise-metricas">
       <CartaoMetrica titulo="Vagas totais" valor={demonstracao.total.toLocaleString("pt-BR")} apoio="100% da capacidade" cor="#ffe100" icone={CarFront}/>

@@ -27,3 +27,4 @@
 .barras-duplas button,.barras-horario button{min-width:2.75rem;touch-action:manipulation}
 .barras-horario button{flex:0 0 2.75rem}
 .barras-duplas small{bottom:0}
+.analise-erro-exportacao{margin:.75rem 0;padding:.75rem 1rem;border:1px solid #ef4938;border-radius:.6rem;color:#ef4938;font-size:.85rem}
