@@ -9,12 +9,12 @@ import { lerEstrutura } from "@/servicos/estrutura"
 import { lerAnaliseHistorica, type AnaliseHistorica } from "@/servicos/analise"
 import { gerarPlanilhaAnalise } from "@/servicos/exportar-analise-xlsx"
 import { gerarPdfAnalise } from "@/servicos/exportar-analise-pdf"
-import { baixarArquivo, montarRelatorioAnalise, nomeArquivoRelatorio } from "@/servicos/modelo-relatorio-analise"
+import { baixarArquivo, DIAS_DEMONSTRACAO, montarRelatorioAnalise, nomeArquivoRelatorio, OCUPACAO_DIARIA_DEMONSTRACAO, OCUPACAO_HORARIA_DEMONSTRACAO } from "@/servicos/modelo-relatorio-analise"
 import type { EstruturaEstacionamento, TipoVaga } from "@/types/estrutura"
 
-const dias = ["11 Mai", "12 Mai", "13 Mai", "14 Mai", "15 Mai", "16 Mai", "17 Mai"]
-const ocupacaoDiaria = [58, 62, 65, 70, 68, 72, 65]
-const ocupacaoHoraria = [18, 12, 9, 14, 22, 36, 51, 63, 72, 79, 84, 87, 82, 73, 61, 48, 39]
+const dias = DIAS_DEMONSTRACAO
+const ocupacaoDiaria = OCUPACAO_DIARIA_DEMONSTRACAO
+const ocupacaoHoraria = OCUPACAO_HORARIA_DEMONSTRACAO
 
 const tipos: Record<TipoVaga, { nome: string; cor: string }> = {
   COMUM: { nome: "Convencional", cor: "#ffe100" },

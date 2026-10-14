@@ -18,13 +18,58 @@ export function EstruturaAdmin({ shoppingId, aoAlterar }: { shoppingId: string; 
   const [andarMapaId, setAndarMapaId] = useState(""); const [posicoes, setPosicoes] = useState<Record<string, PosicaoVaga>>({})
   const [aba, setAba] = useState<"configurar" | "mapa" | "posicoes">("configurar")
 
-  const carregar = useCallback(async () => { const valor = lerEstrutura(await consultar(`/shoppings/${shoppingId}/estrutura`)); setEstrutura(valor); setAndarMapaId(atual => valor.andares.some(a => a.id === atual) ? atual : valor.andares[0]?.id ?? "") }, [consultar, shoppingId])
-  useEffect(() => { let ativo = true; consultar(`/shoppings/${shoppingId}/estrutura`).then(lerEstrutura).then(valor => { if (ativo) { setEstrutura(valor); setAndarMapaId(valor.andares[0]?.id ?? "") } }).catch(falha => { if (ativo) setErro(falha instanceof Error ? falha.message : "Falha ao consultar a estrutura.") }); return () => { ativo = false } }, [consultar, shoppingId])
+  const carregar = useCallback(async () => {
+    const valor = lerEstrutura(await consultar(`/shoppings/${shoppingId}/estrutura`))
+    setEstrutura(valor)
+    // Preserva o andar selecionado se ele ainda existir após atualizar a estrutura.
+    setAndarMapaId(atual => valor.andares.some(andar => andar.id === atual) ? atual : valor.andares[0]?.id ?? "")
+  }, [consultar, shoppingId])
+  useEffect(() => {
+    let ativo = true
+    consultar(`/shoppings/${shoppingId}/estrutura`)
+      .then(lerEstrutura)
+      .then(valor => {
+        if (!ativo) return
+        setEstrutura(valor)
+        setAndarMapaId(valor.andares[0]?.id ?? "")
+      })
+      .catch(falha => {
+        if (ativo) setErro(falha instanceof Error ? falha.message : "Falha ao consultar a estrutura.")
+      })
+    return () => { ativo = false }
+  }, [consultar, shoppingId])
   const andarMapa = estrutura?.andares.find(andar => andar.id === andarMapaId)
   const vagasMapa = useMemo(() => andarMapa?.setores.flatMap(setor => setor.vagas) ?? [], [andarMapa])
-  useEffect(() => { if (!andarMapa) return; const grade: Record<string, PosicaoVaga> = {}; vagasMapa.forEach((vaga, indice) => { grade[vaga.id] = vaga.posicao ?? { x: 0.05 + (indice % 6) * 0.15, y: 0.08 + Math.floor(indice / 6) * 0.18, largura: 0.1, altura: 0.12, rotacao: 0 } }); queueMicrotask(() => setPosicoes(grade)) }, [andarMapa, vagasMapa])
+  useEffect(() => {
+    if (!andarMapa) return
+    const grade: Record<string, PosicaoVaga> = {}
+    vagasMapa.forEach((vaga, indice) => {
+      // Vagas sem posição salva recebem uma grade provisória para edição.
+      grade[vaga.id] = vaga.posicao ?? {
+        x: 0.05 + (indice % 6) * 0.15,
+        y: 0.08 + Math.floor(indice / 6) * 0.18,
+        largura: 0.1,
+        altura: 0.12,
+        rotacao: 0,
+      }
+    })
+    queueMicrotask(() => setPosicoes(grade))
+  }, [andarMapa, vagasMapa])
 
-  async function executar(tarefa: () => Promise<void>, sucesso: string) { setOcupado(true); setErro(""); setMensagem(""); try { await tarefa(); aoAlterar?.(); setMensagem(sucesso) } catch (falha) { setErro(falha instanceof Error ? falha.message : "Não foi possível concluir.") } finally { setOcupado(false) } }
+  async function executar(tarefa: () => Promise<void>, sucesso: string) {
+    setOcupado(true)
+    setErro("")
+    setMensagem("")
+    try {
+      await tarefa()
+      aoAlterar?.()
+      setMensagem(sucesso)
+    } catch (falha) {
+      setErro(falha instanceof Error ? falha.message : "Não foi possível concluir.")
+    } finally {
+      setOcupado(false)
+    }
+  }
   const dados = (evento: FormEvent<HTMLFormElement>) => { evento.preventDefault(); return { elemento: evento.currentTarget, valores: new FormData(evento.currentTarget) } }
 
   function criarAndar(evento: FormEvent<HTMLFormElement>) { const { elemento, valores } = dados(evento); void executar(async () => { await consultar(`/shoppings/${shoppingId}/andares`, { nome: valores.get("nome"), ordem: Number(valores.get("ordem")) }); elemento.reset(); await carregar() }, "Andar criado.") }

@@ -150,15 +150,15 @@ As migrations incrementais `20260914000100_previas_importacao` e `20260915000100
 - Perfil, vínculo e status ativo são lidos do banco em cada requisição autenticada, nunca dos campos enviados pelo cliente.
 - Usuário ou shopping desativado não faz login nem usa sessão existente. O bloqueio de gerente e a exclusão lógica de shopping apagam as sessões vinculadas. Reativar um gerente com `PATCH /gerentes/:gerenteId` e `ativo=true` não recupera os tokens apagados: ele precisa fazer um novo login. A API atual não expõe reativação de shopping excluído.
 - Limite de 10 chamadas de login por IP a cada 15 minutos, incluindo sucessos e corpos inválidos. Máximo de quatro verificações de senha simultâneas. Proteção local em memória, reiniciada com o processo.
-- Frontend: mantenha token em memória nesta etapa, envie no header Authorization e descarte no logout. Recarregar a página exigirá novo login. Não grave tokens/senhas em código ou URLs.
-- Não usa cookies de autenticação e não implementa refresh token. No desenvolvimento, o proxy do Vite encaminha `/api` ao backend local. Na hospedagem registrada, Express serve o build React e `/api/v1` na mesma origem; não há CORS amplo configurado para um frontend em outro domínio.
+- Frontend: a sessão usa cookie `HttpOnly`, `SameSite=Strict`, limitado a `/api/v1` e `Secure` em produção. O navegador restaura a identidade por `/auth/me` após recarregar a página; logout revoga a sessão e remove o cookie. Não grave tokens ou senhas no código, em URLs ou no `localStorage`.
+- O contrato Bearer permanece para clientes antigos e testes; a interface usa cookie e envia `X-VAGGU-Request` nas escritas autenticadas. Não há refresh token. No desenvolvimento, o proxy do Vite encaminha `/api` ao backend local. Na hospedagem registrada, Express serve o build React e `/api/v1` na mesma origem; não há CORS amplo configurado para um frontend em outro domínio.
 - A configuração versionada de publicação usa HTTPS do Render, `HOST=0.0.0.0` e `FRONTEND_DIST_PATH` para entregar a interface. A API local escuta em `127.0.0.1` por padrão. Origem separada, proxies confiáveis, limites compartilhados e recuperação de conta precisam de revisão própria antes de mudar essa topologia; não habilite `trust proxy` indiscriminadamente.
 
 ## Perfis e isolamento
 
 requireAuth valida a sessão. requirePasswordReady bloqueia senha provisória fora das rotas necessárias à troca. requirePerfil('VAGGU') protege cadastro/listagem de shoppings, gerentes e estrutura. shoppingScope fornece res.locals.shoppingId a partir do usuário autenticado; a consulta do mapa do gerente usa esse filtro Prisma, nunca IDs enviados pelo cliente.
 
-Os testes montam rotas exclusivas para complementar a demonstração de isolamento entre dois shoppings. Cadastro/listagem de shoppings e gerentes e configuração da estrutura estão expostos para Admin; a consulta do mapa está exposta para o gerente. A ingestão de telemetria existe localmente, mas telões, manutenção, exportações analíticas e a conexão real do Power BI permanecem pendentes.
+Os testes montam rotas exclusivas para complementar a demonstração de isolamento entre dois shoppings. Cadastro/listagem de shoppings e gerentes e configuração da estrutura estão expostos para Admin; a consulta do mapa está exposta para o gerente. A ingestão de telemetria existe localmente; a interface gera exportações analíticas iniciais no navegador. Telões, manutenção, seleção de período e a conexão real do Power BI permanecem pendentes.
 
 ## Banco e configuração
 

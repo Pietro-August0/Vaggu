@@ -1,3 +1,4 @@
+// Exercita assinatura, deduplicação e retomada do webhook com persistência simulada.
 import test from 'node:test';
 import assert from 'node:assert/strict';
 import request from 'supertest';
@@ -73,16 +74,18 @@ function createFakePrisma() {
       async findUnique({ where }) {
         return rows.get(where.metaMessageId) || null;
       },
-      async update({ where, data }) {
-        const row = [...rows.values()].find((item) => item.id === where.id);
-        Object.assign(row, data, { atualizadoEm: new Date() });
-        return row;
-      },
       async updateMany({ where, data }) {
-        const row = [...rows.values()].find((item) => item.id === where.id && item.status === where.status);
+        const row = [...rows.values()].find((item) => {
+          if (item.id !== where.id || item.status !== where.status) return false;
+          const condition = where.atualizadoEm;
+          const equals = condition instanceof Date ? condition : condition?.equals;
+          if (equals && item.atualizadoEm.getTime() !== equals.getTime()) return false;
+          if (condition?.lte && item.atualizadoEm > condition.lte) return false;
+          return true;
+        });
         if (!row) return { count: 0 };
         const { tentativas, ...rest } = data;
-        Object.assign(row, rest, { atualizadoEm: new Date() });
+        Object.assign(row, rest, { atualizadoEm: data.atualizadoEm || new Date() });
         if (data.tentativas?.increment) row.tentativas += data.tentativas.increment;
         return { count: 1 };
       },
@@ -112,7 +115,7 @@ function createWhatsappApp({ autoReplyEnabled = false, sendText }: { autoReplyEn
   };
 }
 
-test('GET valido devolve o challenge exato', async () => {
+test('GET válido devolve o desafio exato', async () => {
   const { app } = createWhatsappApp();
   const response = await request(app)
     .get('/api/v1/whatsapp/webhook')
@@ -123,7 +126,7 @@ test('GET valido devolve o challenge exato', async () => {
   assert.match(response.headers['content-type'], /^text\/plain/);
 });
 
-test('GET rejeita token incorreto, parametros ausentes e configuracao ausente', async () => {
+test('GET rejeita token incorreto, parâmetros ausentes e configuração ausente', async () => {
   const { app } = createWhatsappApp();
   await request(app).get('/api/v1/whatsapp/webhook')
     .query({ 'hub.mode': 'subscribe', 'hub.verify_token': 'errado', 'hub.challenge': 'abc123' })
@@ -142,7 +145,7 @@ test('GET rejeita token incorreto, parametros ausentes e configuracao ausente', 
     .expect(503);
 });
 
-test('POST com assinatura valida e multiplas mensagens processa todas', async () => {
+test('POST com assinatura válida e múltiplas mensagens processa todas', async () => {
   const { app, prisma } = createWhatsappApp();
   await signedPost(app, messagePayload([
     { id: 'wamid.1', from: '5511999990001', type: 'text', text: { body: 'Oi' } },
@@ -177,19 +180,19 @@ test('POST rejeita assinatura ausente, malformada, incorreta e corpo alterado', 
     .expect(401);
 });
 
-test('payload invalido nao derruba a aplicacao', async () => {
+test('corpo inválido não derruba a aplicação', async () => {
   const { app } = createWhatsappApp();
   await signedPost(app, Buffer.from('{')).expect(400);
   await signedPost(app, { object: 'whatsapp_business_account', entry: [{ changes: 'invalido' }] }).expect(200);
 });
 
-test('status de entrega nao gera resposta automatica', async () => {
+test('status de entrega não gera resposta automática', async () => {
   const { app, sent } = createWhatsappApp({ autoReplyEnabled: true });
   await signedPost(app, statusPayload([{ id: 'wamid.status', status: 'failed', errors: [{ code: 130497 }] }])).expect(200);
   assert.equal(sent.length, 0);
 });
 
-test('evento duplicado, inclusive concorrente, nao gera novo processamento normal', async () => {
+test('evento duplicado, inclusive concorrente, não gera novo processamento normal', async () => {
   let release;
   const gate = new Promise((resolve) => { release = resolve; });
   const { app, sent } = createWhatsappApp({
@@ -208,7 +211,7 @@ test('evento duplicado, inclusive concorrente, nao gera novo processamento norma
   assert.equal(sent.length, 1);
 });
 
-test('falha transitoria nao perde definitivamente o evento', async () => {
+test('falha transitória não perde definitivamente o evento', async () => {
   let calls = 0;
   const { app, prisma } = createWhatsappApp({
     autoReplyEnabled: true,
@@ -227,6 +230,51 @@ test('falha transitoria nao perde definitivamente o evento', async () => {
   assert.equal(prisma.rows.get('wamid.retry').tentativas, 2);
 });
 
+test('reentrega assume evento PROCESSANDO antigo uma única vez', async () => {
+  const { app, prisma, sent } = createWhatsappApp({ autoReplyEnabled: true });
+  const payload = messagePayload([{ id: 'wamid.stale', from: '5511999990010', type: 'text', text: { body: 'OI' } }]);
+  prisma.rows.set('wamid.stale', {
+    id: 'evt-stale', metaMessageId: 'wamid.stale', tipo: 'text', status: 'PROCESSANDO',
+    tentativas: 1, erroCodigo: null, processadoEm: null,
+    atualizadoEm: new Date(Date.now() - 3 * 60 * 1000),
+  });
+
+  await Promise.all([signedPost(app, payload).expect(200), signedPost(app, payload).expect(200)]);
+  assert.equal(sent.length, 1);
+  assert.equal(prisma.rows.get('wamid.stale').status, 'PROCESSADO');
+  assert.equal(prisma.rows.get('wamid.stale').tentativas, 2);
+});
+
+test('execução antiga não altera o resultado de uma tentativa retomada', async () => {
+  let releaseFirst;
+  let firstStarted;
+  const started = new Promise((resolve) => { firstStarted = resolve; });
+  const gate = new Promise((resolve) => { releaseFirst = resolve; });
+  const prisma = createFakePrisma();
+  let sends = 0;
+  const service = createWhatsappService(prisma, {
+    async sendText() {
+      sends += 1;
+      if (sends === 1) {
+        firstStarted();
+        await gate;
+      }
+    },
+  }, { autoReplyEnabled: true });
+  const message = { id: 'wamid.late', from: '5511999990011', type: 'text', text: 'OI' };
+  const first = service.handleMessage(message);
+  await started;
+  const row = prisma.rows.get('wamid.late');
+  assert.ok(row);
+  row.atualizadoEm = new Date(Date.now() - 3 * 60 * 1000);
+  await service.handleMessage(message);
+  releaseFirst();
+  await first;
+  assert.equal(row.status, 'PROCESSADO');
+  assert.equal(row.tentativas, 2);
+  assert.equal(sends, 2);
+});
+
 test('flag desativada impede envio e OI/MENU gera menu quando habilitado', async () => {
   const disabled = createWhatsappApp({ autoReplyEnabled: false });
   await signedPost(disabled.app, messagePayload([
@@ -241,7 +289,7 @@ test('flag desativada impede envio e OI/MENU gera menu quando habilitado', async
   assert.deepEqual(enabled.sent, [{ to: '5511999990007', body: testMenuText }]);
 });
 
-test('falha da Meta e timeout sao tratados sem expor credenciais', async () => {
+test('falha da Meta e prazo esgotado são tratados sem expor credenciais', async () => {
   for (const error of [new Error('META_ENVIO_FALHOU:130497'), new Error('META_ENVIO_TIMEOUT')]) {
     const { app, prisma } = createWhatsappApp({
       autoReplyEnabled: true,

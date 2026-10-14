@@ -378,10 +378,47 @@ function FichaShopping({ shoppingId, secao }: { shoppingId: string; secao: "resu
     secao === "gerentes" ? Promise.resolve(null) : consultar(`/shoppings/${shoppingId}/estrutura`),
     secao === "gerentes" ? consultar(`/shoppings/${shoppingId}/gerentes`) : Promise.resolve(null),
   ]), [consultar, shoppingId, secao])
-  const carregar = useCallback(async () => { const [dadosShopping, dadosEstrutura, dadosGerentes] = await buscarDados(); setShopping(lerRespostaShopping(dadosShopping)); if (dadosEstrutura) setEstrutura(lerEstrutura(dadosEstrutura)); if (dadosGerentes) setGerentes(lerGerentesAdmin(dadosGerentes)) }, [buscarDados])
-  useEffect(() => { let ativo = true; buscarDados().then(([a, b, c]) => { if (ativo) { setShopping(lerRespostaShopping(a)); if (b) setEstrutura(lerEstrutura(b)); if (c) setGerentes(lerGerentesAdmin(c)) } }).catch(falha => { if (ativo) setErro(falha instanceof Error ? falha.message : "Não foi possível abrir a ficha.") }); return () => { ativo = false } }, [buscarDados])
-  function salvar(dados: DadosShopping) { setOcupado(true); setErro(""); void consultar(`/shoppings/${shoppingId}`, dados, "PATCH").then(() => carregar()).then(() => toast.success("Dados do shopping atualizados.")).catch(falha => setErro(falha instanceof Error ? falha.message : "Não foi possível atualizar o shopping.")).finally(() => setOcupado(false)) }
-  function excluirShopping() { setOcupado(true); setErro(""); void consultar(`/shoppings/${shoppingId}`, undefined, "DELETE").then(() => { setConfirmarExclusao(false); toast.success(`${shopping?.nome ?? "O shopping"} foi excluído.`); navigate("/admin/shoppings", { replace: true }) }).catch(falha => setErro(falha instanceof Error ? falha.message : "Não foi possível excluir o shopping.")).finally(() => setOcupado(false)) }
+  const carregar = useCallback(async () => {
+    const [dadosShopping, dadosEstrutura, dadosGerentes] = await buscarDados()
+    setShopping(lerRespostaShopping(dadosShopping))
+    if (dadosEstrutura) setEstrutura(lerEstrutura(dadosEstrutura))
+    if (dadosGerentes) setGerentes(lerGerentesAdmin(dadosGerentes))
+  }, [buscarDados])
+  useEffect(() => {
+    let ativo = true
+    buscarDados()
+      .then(([dadosShopping, dadosEstrutura, dadosGerentes]) => {
+        if (!ativo) return
+        setShopping(lerRespostaShopping(dadosShopping))
+        if (dadosEstrutura) setEstrutura(lerEstrutura(dadosEstrutura))
+        if (dadosGerentes) setGerentes(lerGerentesAdmin(dadosGerentes))
+      })
+      .catch(falha => {
+        if (ativo) setErro(falha instanceof Error ? falha.message : "Não foi possível abrir a ficha.")
+      })
+    return () => { ativo = false }
+  }, [buscarDados])
+  function salvar(dados: DadosShopping) {
+    setOcupado(true)
+    setErro("")
+    void consultar(`/shoppings/${shoppingId}`, dados, "PATCH")
+      .then(() => carregar())
+      .then(() => toast.success("Dados do shopping atualizados."))
+      .catch(falha => setErro(falha instanceof Error ? falha.message : "Não foi possível atualizar o shopping."))
+      .finally(() => setOcupado(false))
+  }
+  function excluirShopping() {
+    setOcupado(true)
+    setErro("")
+    void consultar(`/shoppings/${shoppingId}`, undefined, "DELETE")
+      .then(() => {
+        setConfirmarExclusao(false)
+        toast.success(`${shopping?.nome ?? "O shopping"} foi excluído.`)
+        navigate("/admin/shoppings", { replace: true })
+      })
+      .catch(falha => setErro(falha instanceof Error ? falha.message : "Não foi possível excluir o shopping."))
+      .finally(() => setOcupado(false))
+  }
   function recarregarAposImportacao() { setRevisaoEstrutura(revisao => revisao + 1); void carregar() }
   if (erro && !shopping) return <section className="mx-auto max-w-6xl"><p role="alert" className="rounded-xl border border-red-500/30 bg-red-950/40 p-4 text-red-200">{erro}</p><Button asChild className="mt-4"><Link to="/admin/shoppings">Voltar aos shoppings</Link></Button></section>
   if (!shopping || (secao !== "gerentes" && !estrutura)) return <p role="status" className="text-neutral-300">Carregando {secao === "gerentes" ? "acessos" : "ficha"} do shopping...</p>

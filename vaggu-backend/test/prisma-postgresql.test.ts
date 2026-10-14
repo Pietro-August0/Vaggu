@@ -1,3 +1,4 @@
+// Verifica contratos do schema e das migrations com PostgreSQL quando o banco de teste está disponível.
 import test from 'node:test';
 import assert from 'node:assert/strict';
 import { readFileSync } from 'node:fs';

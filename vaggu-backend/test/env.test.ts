@@ -1,3 +1,4 @@
+// Confere a validação das variáveis de ambiente antes de iniciar a API.
 import test from 'node:test';
 import assert from 'node:assert/strict';
 import { readEnv } from '../src/config/env.js';

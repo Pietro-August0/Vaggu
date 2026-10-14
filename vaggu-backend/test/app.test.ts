@@ -1,3 +1,4 @@
+// Exercita as rotas e proteções HTTP da aplicação sem depender de serviços externos.
 import test from 'node:test';
 import assert from 'node:assert/strict';
 import request from 'supertest';

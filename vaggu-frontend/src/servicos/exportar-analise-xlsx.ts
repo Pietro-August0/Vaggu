@@ -1,12 +1,15 @@
+/** Monta a planilha da análise com séries dos gráficos e origem explícita de cada dado. */
 import type { RelatorioAnalise } from "@/servicos/modelo-relatorio-analise"
 import { carregarLogoRelatorio } from "@/servicos/modelo-relatorio-analise"
 
 const COR = { escuro: "FF171717", amarelo: "FFFFE100", branco: "FFFFFFFF", cinza: "FFF4F4F4", texto: "FF343434" }
 
+/** Impede que nomes fornecidos pelo shopping sejam interpretados como fórmulas pelo Excel. */
 function textoSeguro(valor: string) {
   return /^[=+@-]/.test(valor) ? `'${valor}` : valor
 }
 
+/** Exporta a fotografia atual e as séries exibidas; valores genéricos recebem identificação de demonstração. */
 export async function gerarPlanilhaAnalise(relatorio: RelatorioAnalise): Promise<Blob> {
   const [{ default: ExcelJS }, logo] = await Promise.all([import("exceljs"), carregarLogoRelatorio()])
   const livro = new ExcelJS.Workbook()
@@ -110,6 +113,39 @@ export async function gerarPlanilhaAnalise(relatorio: RelatorioAnalise): Promise
       })
     }
   }
+  const series = livro.addWorksheet("Gráficos por dia", { views: [{ state: "frozen", ySplit: 1 }] })
+  series.columns = [
+    { header: "Origem", width: 20 }, { header: "Dia (UTC se confirmado)", width: 27 },
+    { header: "Ocupação %", width: 19 }, { header: "Entradas", width: 18 }, { header: "Saídas", width: 18 },
+  ]
+  for (const dia of relatorio.serieDiaria) series.addRow([
+    dia.origem, textoSeguro(dia.rotulo), dia.ocupacao, dia.entradas, "saidas" in dia ? dia.saidas : "Não apurado",
+  ])
+  series.getColumn(3).numFmt = '0.0"%"'
+  const tipos = livro.addWorksheet("Tipos de vaga")
+  tipos.columns = [{ header: "Origem", width: 22 }, { header: "Tipo", width: 24 }, { header: "Vagas no gráfico", width: 20 }]
+  for (const tipo of relatorio.porTipo) tipos.addRow([relatorio.origemTipos, tipo.nome, tipo.quantidade])
+  const participacao = livro.addWorksheet("Gráfico por setor")
+  participacao.columns = [{ header: "Origem", width: 25 }, { header: "Setor", width: 42 }, { header: "Ocupadas", width: 18 }]
+  for (const setor of relatorio.participacaoSetores) participacao.addRow([setor.origem, textoSeguro(setor.nome), setor.ocupadas])
+  const horarios = livro.addWorksheet("Ocupação por horário")
+  horarios.columns = [{ header: "Origem", width: 22 }, { header: "Horário", width: 18 }, { header: "Ocupação %", width: 20 }]
+  if (relatorio.serieHoraria.length) {
+    for (const horario of relatorio.serieHoraria) horarios.addRow(["Demonstração", horario.horario, horario.ocupacao])
+  } else horarios.addRow(["Sem histórico horário confirmado", "", "Não apurado"])
+  horarios.getColumn(3).numFmt = '0.0"%"'
+  const setoresHistoricos = livro.addWorksheet("Ocupação histórica setor")
+  setoresHistoricos.columns = [
+    { header: "Origem", width: 22 }, { header: "Setor", width: 42 },
+    { header: "Ocupação %", width: 20 }, { header: "Cobertura %", width: 20 }, { header: "Entradas", width: 18 },
+  ]
+  if (relatorio.historico?.porSetor.length) {
+    for (const setor of relatorio.historico.porSetor) setoresHistoricos.addRow([
+      "Histórico confirmado", textoSeguro(setor.setor), setor.ocupacaoPercentual, setor.coberturaPercentual, setor.entradasObservadas,
+    ])
+  } else setoresHistoricos.addRow(["Sem histórico confirmado", "", "Não apurado", "Não apurado", "Não apurado"])
+  setoresHistoricos.getColumn(3).numFmt = '0.0"%"'
+  setoresHistoricos.getColumn(4).numFmt = '0.0"%"'
   const dados = await livro.xlsx.writeBuffer()
   return new Blob([dados], { type: "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet" })
 }

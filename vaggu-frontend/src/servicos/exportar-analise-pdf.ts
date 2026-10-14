@@ -1,3 +1,4 @@
+/** Produz o PDF da análise preservando a origem da fotografia e das séries dos gráficos. */
 import type { RelatorioAnalise } from "@/servicos/modelo-relatorio-analise"
 import { carregarLogoRelatorio } from "@/servicos/modelo-relatorio-analise"
 
@@ -5,6 +6,7 @@ const ESCURO = "#171717"
 const AMARELO = "#FFE100"
 const CINZA = "#5E5E5E"
 
+/** Exporta os dados disponíveis; séries sintéticas são identificadas como demonstração. */
 export async function gerarPdfAnalise(relatorio: RelatorioAnalise): Promise<Blob> {
   const [{ jsPDF }, logo] = await Promise.all([import("jspdf"), carregarLogoRelatorio()])
   const pdf = new jsPDF({ unit: "mm", format: "a4" })
@@ -47,7 +49,8 @@ export async function gerarPdfAnalise(relatorio: RelatorioAnalise): Promise<Blob
   }
 
   function linhaTabela(valores: string[], larguras: number[], cabeca = false) {
-    const altura = 9
+    const textos = valores.map((valor, indice) => pdf.splitTextToSize(valor, larguras[indice] - 4) as string[])
+    const altura = Math.max(9, ...textos.map((linhas) => linhas.length * 4 + 3))
     espaco(altura + 2)
     pdf.setFillColor(cabeca ? ESCURO : y % 2 < 1 ? "#F5F5F5" : "#FFFFFF")
     pdf.rect(15, y, 180, altura, "F")
@@ -57,8 +60,7 @@ export async function gerarPdfAnalise(relatorio: RelatorioAnalise): Promise<Blob
     let x = 18
     valores.forEach((valor, indice) => {
       const larguraColuna = larguras[indice]
-      const texto = pdf.splitTextToSize(valor, larguraColuna - 4)[0] ?? ""
-      pdf.text(texto, x, y + 6)
+      pdf.text(textos[indice], x, y + 5)
       x += larguraColuna
     })
     y += altura
@@ -158,11 +160,44 @@ export async function gerarPdfAnalise(relatorio: RelatorioAnalise): Promise<Blob
     pdf.setFont("helvetica", "normal")
     pdf.setFontSize(9)
     pdf.setTextColor(CINZA)
-    const aviso = "Ainda não há histórico confirmado para este período. Os gráficos demonstrativos do painel não foram incluídos como dados observados neste relatório."
+    const aviso = "Ainda não há histórico confirmado. As séries abaixo são DEMONSTRAÇÃO — NÃO MEDIÇÃO."
     const linhas = pdf.splitTextToSize(aviso, 165)
     espaco(linhas.length * 5 + 5)
     pdf.text(linhas, 15, y)
     y += linhas.length * 5 + 7
+  }
+
+  titulo(relatorio.historico ? "Gráficos diários · histórico confirmado" : "Gráficos diários · DEMONSTRAÇÃO — NÃO MEDIÇÃO")
+  linhaTabela(["Dia", "Ocupação", "Entradas", "Saídas"], [55, 42, 42, 41], true)
+  for (const dia of relatorio.serieDiaria) linhaTabela([
+    dia.origem === "confirmado" ? new Date(dia.rotulo).toLocaleDateString("pt-BR", { timeZone: "UTC" }) : dia.rotulo,
+    `${dia.ocupacao.toFixed(1)}%`, String(dia.entradas), "saidas" in dia ? String(dia.saidas) : "Não apurado",
+  ], [55, 42, 42, 41])
+
+  if (relatorio.serieHoraria.length) {
+    titulo("Ocupação por horário · DEMONSTRAÇÃO — NÃO MEDIÇÃO")
+    linhaTabela(["Horário", "Ocupação", "Horário", "Ocupação"], [45, 45, 45, 45], true)
+    for (let indice = 0; indice < relatorio.serieHoraria.length; indice += 2) {
+      const primeiro = relatorio.serieHoraria[indice]
+      const segundo = relatorio.serieHoraria[indice + 1]
+      linhaTabela([primeiro.horario, `${primeiro.ocupacao}%`, segundo?.horario ?? "", segundo ? `${segundo.ocupacao}%` : ""], [45, 45, 45, 45])
+    }
+  }
+
+  titulo(relatorio.origemTipos === "demonstração" ? "Tipo de vaga · DEMONSTRAÇÃO — NÃO MEDIÇÃO" : "Tipo de vaga · fotografia atual")
+  linhaTabela(["Tipo", "Vagas no gráfico"], [120, 60], true)
+  for (const tipo of relatorio.porTipo) linhaTabela([tipo.nome, String(tipo.quantidade)], [120, 60])
+
+  titulo(relatorio.historico ? "Gráfico por setor · fotografia atual" : "Gráfico por setor · DEMONSTRAÇÃO — NÃO MEDIÇÃO")
+  linhaTabela(["Setor", "Ocupadas"], [120, 60], true)
+  for (const setor of relatorio.participacaoSetores) linhaTabela([setor.nome, String(setor.ocupadas)], [120, 60])
+
+  if (relatorio.historico?.porSetor.length) {
+    titulo("Ocupação por setor · histórico confirmado")
+    linhaTabela(["Setor", "Ocupação", "Cobertura", "Entradas"], [75, 35, 35, 35], true)
+    for (const setor of relatorio.historico.porSetor) linhaTabela([
+      setor.setor, `${setor.ocupacaoPercentual.toFixed(1)}%`, `${setor.coberturaPercentual.toFixed(1)}%`, String(setor.entradasObservadas),
+    ], [75, 35, 35, 35])
   }
 
   titulo("Setores · fotografia atual")

@@ -100,7 +100,7 @@ As cópias de imagens entre `segunda-mente/Vaggu/Identidade visual/Assets/` e `v
 | `vaggu-backend/src/whatsapp/client.ts` | Cliente de envio de texto pela API da Meta; recebe configuração privada e transporte substituível em testes. |
 | `vaggu-backend/src/whatsapp/payload.ts` | Interpreta o formato externo do webhook e mantém os textos do menu demonstrativo. |
 | `vaggu-backend/src/whatsapp/routes.ts` | Recebe o desafio de configuração e os eventos da Meta, validando sua origem antes de processá-los. |
-| `vaggu-backend/src/whatsapp/service.ts` | Coordena mensagens recebidas, deduplicação persistente e respostas do menu demonstrativo. |
+| `vaggu-backend/src/whatsapp/service.ts` | Coordena mensagens recebidas, deduplicação persistente, retomada de eventos abandonados e respostas do menu demonstrativo. |
 | `vaggu-backend/src/whatsapp/signature.ts` | Calcula e verifica assinaturas HMAC para confirmar que o corpo recebido veio de quem possui o segredo Meta. |
 | `vaggu-backend/test-support/admin-cases.ts` | Verifica acessos administrativos, credencial não reversível, bloqueio, exclusão, prazo para desfazer e reutilização segura do e-mail. |
 | `vaggu-backend/test-support/auth-cases.ts` | Cenários sequenciais de autenticação, conta própria, troca obrigatória ou voluntária e isolamento, usados pelo runner com banco exclusivo. |
@@ -192,9 +192,9 @@ As cópias de imagens entre `segunda-mente/Vaggu/Identidade visual/Assets/` e `v
 | `vaggu-frontend/src/servicos/situacao-implantacao.ts` | Centraliza rótulos, descrições e cores dos estados de implantação já definidos no backend. |
 | `vaggu-frontend/src/servicos/estrutura.ts` | Valida a árvore pública de andares, setores, vagas e posições recebida da API. |
 | `vaggu-frontend/src/servicos/exportacao-estrutura.ts` | Gera no navegador um XLSX estilizado com vagas e resumo da estrutura já carregada, sem endpoint novo nem dados históricos. |
-| `vaggu-frontend/src/servicos/modelo-relatorio-analise.ts` | Consolida a fotografia atual das vagas, identifica histórico confirmado e prepara a logo e os nomes de arquivo das exportações. |
-| `vaggu-frontend/src/servicos/exportar-analise-xlsx.ts` | Gera planilha Excel formatada com logo, resumo atual, setores e histórico confirmado quando disponível. |
-| `vaggu-frontend/src/servicos/exportar-analise-pdf.ts` | Gera relatório PDF paginado com logo, indicadores atuais, distribuição, setores e histórico confirmado quando disponível. |
+| `vaggu-frontend/src/servicos/modelo-relatorio-analise.ts` | Consolida fotografia atual, séries dos gráficos, histórico confirmado e demonstração separada; prepara a logo e os nomes de arquivo. |
+| `vaggu-frontend/src/servicos/exportar-analise-xlsx.ts` | Gera planilha Excel com resumo, setores, séries dos gráficos e origem explícita dos dados. |
+| `vaggu-frontend/src/servicos/exportar-analise-pdf.ts` | Gera relatório PDF paginado com indicadores, setores e séries dos gráficos, preservando nomes longos e a origem dos dados. |
 | `vaggu-frontend/src/servicos/importacao.ts` | Valida as respostas da API de prévia e confirmação antes de entregá-las à interface administrativa. |
 | `vaggu-frontend/src/servicos/politica-senha.ts` | Centraliza requisitos, mensagens locais e códigos de erro da senha definitiva para as duas jornadas de troca. |
 | `vaggu-frontend/src/servicos/shoppings.ts` | Valida fichas, listas, agregados estruturais, URL HTTPS de imagem e gerentes recebidos pelas rotas administrativas. |

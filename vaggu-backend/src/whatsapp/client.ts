@@ -37,7 +37,7 @@ export function createWhatsappClient(config, { fetchImpl = globalThis.fetch } = 
             const data: any = await response.json();
             if (data?.error?.code) metaCode = String(data.error.code);
           } catch {
-            // Mantem o codigo HTTP quando a Meta nao retorna JSON parseavel.
+            // Mantém o código HTTP quando a Meta não retorna JSON legível.
           }
           throw new Error(`META_ENVIO_FALHOU:${metaCode}`);
         }
