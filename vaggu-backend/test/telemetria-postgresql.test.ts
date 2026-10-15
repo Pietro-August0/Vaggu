@@ -6,6 +6,7 @@ import { hashPassword } from '../src/auth/password.js';
 import { createTelemetriaService } from '../src/telemetria/service.js';
 import { expirarSensores } from '../src/telemetria/expiracao.js';
 import { createAnaliticosService } from '../src/analiticos/service.js';
+import { createEstruturaService } from '../src/estrutura/service.js';
 
 const url = process.env.TEST_DATABASE_URL;
 test('telemetria confirma após 30 s, deduplica e não usa heartbeat para renovar sensor', {
@@ -17,7 +18,9 @@ test('telemetria confirma após 30 s, deduplica e não usa heartbeat para renova
   const configuracao = { lacunaMaximaMs: 15_000, timeoutSensorMs: 120_000, timeoutPlacaMs: 120_000 };
   let instante = new Date('2026-09-28T12:00:00.000Z');
   const shopping = await prisma.shopping.create({ data: { nome: 'Shopping P06' } });
-  const vaga = await prisma.vaga.create({ data: { shoppingId: shopping.id, codigo: 'A-001' } });
+  const andar = await prisma.andar.create({ data: { shoppingId: shopping.id, nome: 'Piso P06', ordem: 1 } });
+  const setor = await prisma.setor.create({ data: { shoppingId: shopping.id, andarId: andar.id, nome: 'Setor P06' } });
+  const vaga = await prisma.vaga.create({ data: { shoppingId: shopping.id, andarId: andar.id, setorId: setor.id, codigo: 'A-001' } });
   const placa = await prisma.dispositivo.create({ data: {
     shoppingId: shopping.id,
     codigo: 'PLACA-P06',
@@ -60,6 +63,15 @@ test('telemetria confirma após 30 s, deduplica e não usa heartbeat para renova
   assert.equal((await prisma.vaga.findUnique({ where: { id: vaga.id } }))?.estadoAtual, 'INDISPONIVEL');
   assert.equal(await prisma.historicoVaga.count({ where: { vagaId: vaga.id } }), 2);
   assert.equal((await prisma.dispositivo.findUnique({ where: { id: placa.id } }))?.ultimoContatoEm?.toISOString(), instante.toISOString());
+  const estrutura = await createEstruturaService(prisma, 120_000).buscarEstrutura(shopping.id);
+  const monitoramento = estrutura.andares[0].setores[0].vagas[0].monitoramento;
+  assert.equal(monitoramento?.demonstracao, false);
+  assert.equal(monitoramento?.situacao, 'SEM_RESPOSTA');
+  assert.equal(monitoramento?.sensorCodigo, sensor.codigo);
+  assert.equal(monitoramento?.placaCodigo, placa.codigo);
+  assert.equal(monitoramento?.ultimaObservacaoEm?.toISOString(), '2026-09-28T12:00:30.000Z');
+  assert.equal(monitoramento?.ultimoContatoPlacaEm?.toISOString(), instante.toISOString());
+  assert.doesNotMatch(JSON.stringify(estrutura), /chaveApiHash|senhaHash|payloadHash/);
 
   const intervalos = await prisma.$queryRaw<Array<{
     shopping_codigo: string;
@@ -86,5 +98,5 @@ test('telemetria confirma após 30 s, deduplica e não usa heartbeat para renova
   assert.equal(analise.temHistorico, true);
   assert.equal(analise.resumo.ocupacaoPercentual, 100);
   assert.equal(analise.resumo.coberturaPercentual, 0.02);
-  assert.equal(analise.porSetor[0]?.setor, 'Sem setor');
+  assert.equal(analise.porSetor[0]?.setor, 'Setor P06');
 });

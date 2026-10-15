@@ -13,6 +13,7 @@ export async function expirarSensores(
     const sensores = await tx.sensor.findMany({
       where: {
         ativo: true,
+        shopping: { demonstracao: false },
         expiradoEm: null,
         ultimaObservacaoEm: { lte: limite },
       },

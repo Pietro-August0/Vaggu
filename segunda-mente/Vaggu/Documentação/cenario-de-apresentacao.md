@@ -1,6 +1,8 @@
 # Cenário fictício para apresentação
 
-O **Shopping Exemplo** contém cadastro institucional fictício completo, três gerentes com acessos individuais, dois pisos, quatro setores, 80 vagas posicionadas no mapa, quatro tipos de vaga e 15 dias de mudanças de estado para a análise e suas exportações. Os dados são identificados como fictícios na tela e nos relatórios. Não há sensores ou ESP32 reais nesse shopping.
+O **Shopping Exemplo** contém cadastro institucional fictício completo, três gerentes com acessos individuais, dois pisos, quatro setores, 80 vagas posicionadas no mapa, quatro tipos de vaga e 15 dias de mudanças de estado para a análise e suas exportações. Também possui quatro placas e 80 sensores de apresentação, com situações e horários persistidos. Não há sensores ou ESP32 reais nesse shopping. A pedido do usuário em 15/10, os avisos de origem fictícia foram retirados das telas e dos relatórios; a marcação técnica interna foi preservada.
+
+O funcionamento e os testes do editor e dos sensores estão em [edição visual e monitoramento](edicao-visual-e-monitoramento.md).
 
 ## Aplicação automática no ambiente publicado
 

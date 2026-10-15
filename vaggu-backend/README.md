@@ -179,6 +179,8 @@ Configure `DATABASE_URL` com um PostgreSQL acessível pelo backend. `npm run db:
 
 O Shopping Exemplo é criado automaticamente na inicialização de produção, com 80 vagas e 15 dias de histórico fictício, na conexão já usada pelo site. Não há botão para criá-lo. Os acessos são emitidos pela redefinição de senha existente na ficha dos gerentes. Consulte [cenário de apresentação](../segunda-mente/Vaggu/Documentação/cenario-de-apresentacao.md). O comando alternativo `demo:create` usa somente `DEMO_DATABASE_URL` e grava as senhas em arquivo local ignorado pelo Git.
 
+A inicialização também acrescenta quatro placas e 80 sensores ao exemplo de forma idempotente. A leitura da estrutura devolve `monitoramento` por vaga com código do sensor, placa, situação, observação individual, contato da placa e candidato pendente; não inclui chaves ou hashes. O job de expiração operacional exclui shoppings marcados como demonstração. Contratos, apresentação e limites estão no [guia de edição e monitoramento](../segunda-mente/Vaggu/Documentação/edicao-visual-e-monitoramento.md).
+
 Modelos persistidos atuais incluem Shopping, Andar, Setor, Vaga, Usuario, Dispositivo, Sensor, InicializacaoPlaca, EventoTelemetriaRecebido, HistoricoVaga e ImportacaoEstrutura. Sessao e WhatsappEvento são tabelas técnicas. Chaves compostas preservam o shopping em sensor, placa e histórico; sequência e payload possuem deduplicação persistente. CHECKs estão no SQL e devem ser preservados em futuras migrations.
 
 ## Organização

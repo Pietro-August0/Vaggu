@@ -7,6 +7,7 @@ import type { PrismaClient } from '@prisma/client';
 import { createPrisma } from '../src/lib/prisma.js';
 import { hashPassword } from '../src/auth/password.js';
 import { ApiError } from '../src/auth/service.js';
+import { garantirMonitoramentoApresentacao } from './monitoramento-apresentacao.js';
 
 const SHOPPING_ID = 'd3a09b29-7e5a-4b7e-8c42-8f371d0a0001';
 const DIA_MS = 86_400_000;
@@ -47,14 +48,20 @@ export async function gerarCredenciaisApresentacao(): Promise<Credencial[]> {
 
 /** Garante o exemplo na publicação sem sobrescrever contas, senhas ou histórico existentes. */
 export async function garantirCenarioApresentacao(prisma: PrismaClient) {
-  if (await prisma.shopping.findUnique({ where: { id: SHOPPING_ID }, select: { id: true } })) return;
+  if (await prisma.shopping.findUnique({ where: { id: SHOPPING_ID }, select: { id: true } })) {
+    await garantirMonitoramentoApresentacao(prisma);
+    return;
+  }
   try {
     await criarCenarioApresentacao(prisma, await gerarCredenciaisApresentacao());
   } catch (erro) {
     // Duas instâncias podem iniciar juntas; somente a criação do mesmo cenário é idempotente.
     if ((erro instanceof ApiError && erro.codigo === 'CENARIO_JA_EXISTE')
       || (typeof erro === 'object' && erro !== null && 'code' in erro && erro.code === 'P2002')) {
-      if (await prisma.shopping.findUnique({ where: { id: SHOPPING_ID }, select: { id: true } })) return;
+      if (await prisma.shopping.findUnique({ where: { id: SHOPPING_ID }, select: { id: true } })) {
+        await garantirMonitoramentoApresentacao(prisma);
+        return;
+      }
     }
     throw erro;
   }
@@ -140,6 +147,7 @@ export async function criarCenarioApresentacao(prisma: PrismaClient, credenciais
         await tx.historicoVaga.createMany({ data: historico.slice(inicio, inicio + 500) });
       }
   }, { timeout: 120_000 });
+  await garantirMonitoramentoApresentacao(prisma);
   return { shoppingId: SHOPPING_ID, gerentes: credenciais.map(({ nome, email, senha }) => ({ nome, email, senha })) };
 }
 

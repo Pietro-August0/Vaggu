@@ -39,7 +39,7 @@ export async function gerarPlanilhaAnalise(relatorio: RelatorioAnalise): Promise
   resumo.getCell("A6").value = textoSeguro(relatorio.shopping)
   resumo.getCell("A6").font = { name: "Arial", size: 12, color: { argb: COR.texto } }
   resumo.mergeCells("A8:F8")
-  resumo.getCell("A8").value = relatorio.cenarioFicticio ? "CENÁRIO FICTÍCIO · APRESENTAÇÃO" : relatorio.historico ? "HISTÓRICO CONFIRMADO + SITUAÇÃO ATUAL" : "SITUAÇÃO ATUAL · SEM HISTÓRICO CONFIRMADO"
+  resumo.getCell("A8").value = relatorio.cenarioFicticio ? "HISTÓRICO DE OCUPAÇÃO + SITUAÇÃO ATUAL" : relatorio.historico ? "HISTÓRICO CONFIRMADO + SITUAÇÃO ATUAL" : "SITUAÇÃO ATUAL · SEM HISTÓRICO CONFIRMADO"
   resumo.getCell("A8").fill = { type: "pattern", pattern: "solid", fgColor: { argb: COR.amarelo } }
   resumo.getCell("A8").font = { name: "Arial", size: 10, bold: true, color: { argb: COR.escuro } }
   resumo.getRow(8).height = 28
@@ -104,7 +104,7 @@ export async function gerarPlanilhaAnalise(relatorio: RelatorioAnalise): Promise
   if (relatorio.historico) {
     const historico = livro.addWorksheet("Histórico por dia", { views: [{ state: "frozen", ySplit: 1 }], properties: { tabColor: { argb: COR.amarelo } } })
     historico.columns = [
-      { header: relatorio.cenarioFicticio ? "Dia fictício UTC" : "Dia UTC", width: 26 }, { header: "Ocupação %", width: 20 },
+      { header: relatorio.cenarioFicticio ? "Dia UTC" : "Dia UTC", width: 26 }, { header: "Ocupação %", width: 20 },
       { header: "Cobertura %", width: 20 }, { header: "Entradas observadas", width: 23 },
     ]
     for (const dia of relatorio.historico.porDia) historico.addRow([new Date(dia.inicioEm), dia.ocupacaoPercentual, dia.coberturaPercentual, dia.entradasObservadas])
@@ -136,7 +136,7 @@ export async function gerarPlanilhaAnalise(relatorio: RelatorioAnalise): Promise
     { header: "Ocupação %", width: 19 }, { header: "Entradas", width: 18 }, { header: "Saídas", width: 18 },
   ]
   for (const dia of relatorio.serieDiaria) series.addRow([
-    dia.origem, textoSeguro(dia.rotulo), dia.ocupacao, dia.entradas, "saidas" in dia ? dia.saidas : "Não apurado",
+    dia.origem === "fictício" ? "histórico de ocupação" : dia.origem, textoSeguro(dia.rotulo), dia.ocupacao, dia.entradas, "saidas" in dia ? dia.saidas : "Não apurado",
   ])
   if (!relatorio.serieDiaria.length) series.addRow(["Sem medições confirmadas", "", "Não apurado", "Não apurado", "Não apurado"])
   series.getColumn(3).numFmt = '0.0"%"'
@@ -159,7 +159,7 @@ export async function gerarPlanilhaAnalise(relatorio: RelatorioAnalise): Promise
   ]
   if (relatorio.historico?.porSetor.length) {
     for (const setor of relatorio.historico.porSetor) setoresHistoricos.addRow([
-      relatorio.cenarioFicticio ? "Histórico fictício" : "Histórico confirmado", textoSeguro(setor.setor), setor.ocupacaoPercentual, setor.coberturaPercentual, setor.entradasObservadas,
+      relatorio.cenarioFicticio ? "Histórico de ocupação" : "Histórico confirmado", textoSeguro(setor.setor), setor.ocupacaoPercentual, setor.coberturaPercentual, setor.entradasObservadas,
     ])
   } else setoresHistoricos.addRow(["Sem histórico confirmado", "", "Não apurado", "Não apurado", "Não apurado"])
   setoresHistoricos.getColumn(3).numFmt = '0.0"%"'

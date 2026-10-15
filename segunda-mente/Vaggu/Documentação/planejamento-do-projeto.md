@@ -12,6 +12,15 @@
 
 ## 1. Situação atual
 
+### Editor visual, monitoramento e material de apresentação — 15/10
+
+- O Admin edita posições por arraste, toque, clique no mapa ou setas, sem a tabela de X/Y. Controles de tamanho e rotação, desfazer, rascunho, confirmação ao trocar piso/aba, limites e bloqueio de sobreposição foram conferidos. O salvamento preserva a autorização, revisão concorrente e transação já existentes.
+- A visualização de Admin e gerente ganhou monitoramento dos sensores com contagens, filtros e detalhes individuais, horários independentes de placa e sensor, estado confirmado e candidato pendente. A API usa projeção explícita sem chaves ou hashes.
+- O exemplo recebe automaticamente quatro placas e 80 sensores persistidos, sem duplicação nem alteração de sensores existentes. O job de expiração ignora o shopping sintético, preservando a fotografia de apresentação. Nenhum hardware físico foi exercitado.
+- A pedido explícito do usuário, foram retirados do exemplo os avisos/selos de dados fictícios nas telas e nos relatórios. O isolamento técnico e a origem sintética permanecem documentados; não há nova alegação de transmissão ao vivo.
+- Verificação: 114 testes PostgreSQL/backend aprovados, zero falhas/skips; lint e build frontend aprovados com o aviso conhecido de chunks. Edge/Playwright local com API e PostgreSQL reais confirmou mouse, teclado, persistência, desfazer, filtros, Admin/gerente, larguras de 1440/768/390 px, arraste e posicionamento por toque, proteção de sobreposição e temas. Sem erros de execução. Excel gerado/relido e PDF de quatro páginas com texto extraído: sem avisos no exemplo.
+- Oito prints finais guardados no repositório, em `Evidências visuais/2026-10-15 - Editor e sensores`, e indexados na galeria. O [guia da entrega](edicao-visual-e-monitoramento.md) documenta uso, contratos, testes e limites. A publicação segue por push autorizado na `main`; a conferência autenticada remota continua pendente.
+
 ### Correção do mapa do Shopping Exemplo — 15/10
 
 - Causa: os setores do mesmo piso receberam as mesmas coordenadas no seed; “Todos os setores” sobrepunha as vagas. Corrigidos seed e migration incremental para os exemplos existentes, usando uma faixa por setor no espaço do piso. Posições personalizadas, acessos e histórico são preservados; a revisão dos pisos corrigidos é incrementada.

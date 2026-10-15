@@ -11,6 +11,7 @@ import { createEstruturaService } from '../src/estrutura/service.js';
 import { projectRoot } from '../src/config/database.js';
 import { prepararBancoDeTeste } from '../test-support/banco-de-teste.js';
 import { garantirCenarioApresentacao } from '../scripts/criar-cenario-apresentacao.js';
+import { expirarSensores } from '../src/telemetria/expiracao.js';
 
 const executar = promisify(execFile);
 
@@ -45,7 +46,20 @@ test('publicação garante um único Shopping Exemplo sem alterar acessos nas re
   await garantirCenarioApresentacao(prisma);
   assert.equal(await prisma.shopping.count(), 1);
   assert.equal(await prisma.vaga.count({ where: { shoppingId: shopping.id } }), 80);
-  conferirPosicoes(await createEstruturaService(prisma, 120_000).buscarEstrutura(shopping.id));
+  const estrutura = await createEstruturaService(prisma, 120_000).buscarEstrutura(shopping.id);
+  conferirPosicoes(estrutura);
+  assert.equal(await prisma.dispositivo.count({ where: { shoppingId: shopping.id } }), 4);
+  const sensores = await prisma.sensor.findMany({ where: { shoppingId: shopping.id }, orderBy: { codigo: 'asc' } });
+  assert.equal(sensores.length, 80);
+  const monitoramentos = estrutura.andares.flatMap(andar => andar.setores.flatMap(setor => setor.vagas.map(vaga => vaga.monitoramento)));
+  assert.equal(monitoramentos.filter(sensor => sensor?.situacao === 'MANUTENCAO').length, 4);
+  assert.equal(monitoramentos.filter(sensor => sensor?.situacao === 'SEM_RESPOSTA').length, 4);
+  assert.equal(monitoramentos.filter(sensor => sensor?.situacao === 'CONFIRMANDO').length, 4);
+  assert.ok(monitoramentos.every(sensor => sensor?.demonstracao === true && sensor.placaCodigo));
+  assert.doesNotMatch(JSON.stringify(estrutura), /chaveApiHash|senhaHash|payloadHash/);
+  await expirarSensores(prisma, { timeoutSensorMs: 120_000, timeoutPlacaMs: 120_000, lacunaMaximaMs: 15_000 }, new Date(Date.now() + 86_400_000));
+  await garantirCenarioApresentacao(prisma);
+  assert.deepEqual(await prisma.sensor.findMany({ where: { shoppingId: shopping.id }, orderBy: { codigo: 'asc' } }), sensores);
   assert.equal(await prisma.historicoVaga.count({ where: { shoppingId: shopping.id } }), eventos);
   assert.deepEqual(await prisma.usuario.findMany({ where: { shoppingId: shopping.id }, orderBy: { id: 'asc' } }), gerentes);
 });

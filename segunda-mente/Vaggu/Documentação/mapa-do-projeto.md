@@ -60,6 +60,7 @@ As cópias de imagens entre `segunda-mente/Vaggu/Identidade visual/Assets/` e `v
 | `vaggu-backend/prisma/schema.prisma` | Define entidades, relações e restrições de estrutura, acessos, importação e primeiro recorte persistente de telemetria. |
 | `vaggu-backend/scripts/create-admin.ts` | Comando interativo para criar o primeiro administrador e exibir a senha gerada uma única vez no terminal. |
 | `vaggu-backend/scripts/criar-cenario-apresentacao.ts` | Garante o Shopping Exemplo na inicialização de produção, sem duplicar dados nem alterar acessos existentes; mantém o comando alternativo de criação explícita. |
+| `vaggu-backend/scripts/monitoramento-apresentacao.ts` | Acrescenta quatro placas e 80 sensores ao exemplo com lock transacional, preserva registros existentes e mantém horários de apresentação estáveis. |
 | `vaggu-backend/prisma/migrations/20261015000100_nome_shopping_exemplo/migration.sql` | Renomeia somente o cenário fictício conhecido para Shopping Exemplo, preservando contas e histórico. |
 | `vaggu-backend/prisma/migrations/20261015000200_mapa_exemplo_sem_sobreposicao/migration.sql` | Distribui os setores do exemplo em faixas distintas do piso, preserva posições personalizadas e incrementa a revisão dos mapas corrigidos. |
 | `vaggu-backend/scripts/provisionar-placa.ts` | Cria placa e sensores para vagas existentes, guardando apenas o hash e exibindo a chave uma vez. |
@@ -77,7 +78,7 @@ As cópias de imagens entre `segunda-mente/Vaggu/Identidade visual/Assets/` e `v
 | `vaggu-backend/src/config/database.ts` | Valida e normaliza a URL PostgreSQL usada pelo backend sem expor credenciais. |
 | `vaggu-backend/src/config/env.ts` | Converte variáveis do processo em configuração da API e valida banco, porta, lacuna e timeouts provisórios da telemetria. |
 | `vaggu-backend/src/estrutura/routes.ts` | Expõe configuração administrativa e consulta isolada da estrutura pelo gerente. |
-| `vaggu-backend/src/estrutura/service.ts` | Valida hierarquia, tipos, posições e revisões concorrentes do mapa. |
+| `vaggu-backend/src/estrutura/service.ts` | Valida hierarquia e revisões do mapa; projeta monitoramento individual e contato da placa sem retornar chaves ou hashes. |
 | `vaggu-backend/src/importacao/contratos.ts` | Define a representação intermediária e os erros da prévia de importação reutilizáveis por CSV e XLSX. |
 | `vaggu-backend/src/importacao/parser-csv.ts` | Converte CSV em uma prévia validada por linha e campo, sem persistir alterações. |
 | `vaggu-backend/src/importacao/parser-tabela.ts` | Centraliza cabeçalhos, tipos, duplicatas e erros usados igualmente pelas prévias CSV e XLSX. |
@@ -99,7 +100,7 @@ As cópias de imagens entre `segunda-mente/Vaggu/Identidade visual/Assets/` e `v
 | `vaggu-backend/src/shoppings/service.ts` | Valida a ficha, administra shoppings e gerentes, agrega a estrutura ativa para a visão geral e entrega senha provisória somente na emissão. |
 | `vaggu-backend/src/telemetria/confirmacao-estado.ts` | Calcula a confirmação temporal de leituras de vaga já validadas, sem receber telemetria ou persistir dados. |
 | `vaggu-backend/src/telemetria/contratos.ts` | Valida placa, inicialização, sequência e lote de sensores, além de exigir credencial `Device` no cabeçalho. |
-| `vaggu-backend/src/telemetria/expiracao.ts` | Marca sensores silenciosos como indisponíveis no instante efetivo e grava o evento uma única vez. |
+| `vaggu-backend/src/telemetria/expiracao.ts` | Marca sensores operacionais silenciosos como indisponíveis uma única vez; exclui shoppings de demonstração para preservar a fotografia de apresentação. |
 | `vaggu-backend/src/telemetria/routes.ts` | Expõe heartbeat e estados do ESP32 sem reutilizar cookies ou sessões humanas. |
 | `vaggu-backend/src/telemetria/service.ts` | Autentica placa, serializa eventos, deduplica sequência, persiste candidatos e confirma estados/histórico atomicamente. |
 | `vaggu-backend/src/whatsapp/client.ts` | Cliente de envio de texto pela API da Meta; recebe configuração privada e transporte substituível em testes. |
@@ -156,7 +157,10 @@ As cópias de imagens entre `segunda-mente/Vaggu/Identidade visual/Assets/` e `v
 | `vaggu-frontend/src/components/formulario-shopping.tsx` | Compartilha cadastro e edição em três etapas; consulta CEP e mantém o endereço editável manualmente. |
 | `vaggu-frontend/src/components/mapa-estacionamento.tsx` | Busca a estrutura isolada do gerente, mostra aviso de implantação sem ocultá-la e delega o desenho ao componente compartilhado. |
 | `vaggu-frontend/src/components/minha-conta.tsx` | Compartilha dados pessoais em layout responsivo entre Admin e gerente; mantém vínculos protegidos e abre a troca de senha em diálogo sob demanda. |
-| `vaggu-frontend/src/components/detalhes-vaga.tsx` | Exibe em diálogo os dados estruturais da vaga e comunica, sem simulação, que saúde, comunicação e última leitura dependem da telemetria futura. |
+| `vaggu-frontend/src/components/detalhes-vaga.tsx` | Exibe localização, situação do sensor, placa, horários independentes, estado confirmado e confirmação pendente. |
+| `vaggu-frontend/src/components/editor-mapa-vagas.tsx` | Edita posições por arraste, toque ou teclado, ajusta tamanho/rotação e mantém rascunho, desfazer, limites e prevenção de sobreposição. |
+| `vaggu-frontend/src/components/monitoramento-sensores.tsx` | Mostra contagens e cartões dos sensores, filtra situação e abre os detalhes no recorte de vagas autorizado. |
+| `segunda-mente/Vaggu/Documentação/edicao-visual-e-monitoramento.md` | Documenta fluxos, contratos, origem dos dados, apresentação, testes e limites da entrega de 15/10. |
 | `vaggu-frontend/src/components/visualizacao-vagas.tsx` | Compartilha mapa 2D, busca, filtros e seleção entre Admin e gerente; abre o mesmo detalhe pelo mapa, lista móvel ou vaga sem posição. |
 | `vaggu-frontend/src/components/icone-whatsapp.tsx` | Disponibiliza o símbolo usado nos links de atendimento, sem requisições externas. |
 | `vaggu-frontend/src/components/operacao-vaggu.css` | Foto e conteúdo dividem a seção sem impor uma altura vazia acima dos benefícios. |

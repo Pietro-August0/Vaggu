@@ -2,6 +2,8 @@
 import { useMemo, useState, type CSSProperties } from "react"
 
 import { DetalhesVaga } from "@/components/detalhes-vaga"
+import { MonitoramentoSensores } from "@/components/monitoramento-sensores"
+import { Button } from "@/components/ui/button"
 import { Badge } from "@/components/ui/badge"
 import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
@@ -42,6 +44,7 @@ export function VisualizacaoVagas({ estrutura, modo }: VisualizacaoVagasProps) {
   const [estado, setEstado] = useState<VagaEstrutura["estadoAtual"] | "TODOS">("TODOS")
   const [busca, setBusca] = useState("")
   const [vagaSelecionadaId, setVagaSelecionadaId] = useState<string | null>(null)
+  const [visao, setVisao] = useState<"mapa" | "sensores">("mapa")
 
   const vagas = useMemo<VagaComContexto[]>(
     () =>
@@ -200,7 +203,8 @@ export function VisualizacaoVagas({ estrutura, modo }: VisualizacaoVagasProps) {
         </div>
       </div>
 
-      <div className="rounded-2xl border border-neutral-300 bg-neutral-200 p-3 sm:p-5">
+      <div className="flex flex-wrap gap-2" role="group" aria-label="Visualização do estacionamento"><Button variant={visao === "mapa" ? "default" : "outline"} aria-pressed={visao === "mapa"} onClick={() => setVisao("mapa")}>Mapa de vagas</Button><Button variant={visao === "sensores" ? "default" : "outline"} aria-pressed={visao === "sensores"} onClick={() => setVisao("sensores")}>Monitoramento dos sensores</Button></div>
+      {visao === "sensores" ? <MonitoramentoSensores vagas={filtradas} demonstracao={estrutura.shopping.demonstracao === true} aoSelecionar={setVagaSelecionadaId}/> : <div className="rounded-2xl border border-neutral-300 bg-neutral-200 p-3 sm:p-5">
         <div className="mb-3 flex flex-wrap items-center justify-between gap-2">
           <div>
             <h3 className="font-bold text-neutral-950">{andar?.nome}</h3>
@@ -301,7 +305,7 @@ export function VisualizacaoVagas({ estrutura, modo }: VisualizacaoVagasProps) {
             </span>
           ))}
         </div>
-      </div>
+      </div>}
 
       <DetalhesVaga
         vaga={vagaSelecionada}

@@ -37,8 +37,8 @@ export function ResumoAnaliticoAdmin({ shoppingId, estrutura }: { shoppingId: st
   return <Card className="border-border bg-card text-card-foreground shadow-sm transition-shadow hover:shadow-lg dark:shadow-black/30">
     <CardHeader>
       <CardTitle className="flex items-center gap-2"><Activity className="size-4 text-[#d1b900] dark:text-[#ffe100]" aria-hidden="true"/>Análise compacta</CardTitle>
-      <CardDescription>{cenarioFicticio ? "Indicadores fictícios para apresentação." : "Indicadores operacionais para conferência administrativa."}</CardDescription>
-      <CardAction><Badge variant="outline" className={dadosReais && !cenarioFicticio ? "border-emerald-600/40 text-emerald-700 dark:text-emerald-300" : "border-[#b49d00]/50 text-[#6b5d00] dark:text-[#ffe100]"}>{cenarioFicticio ? "Cenário fictício" : dadosReais ? "Histórico real" : "Demonstração"}</Badge></CardAction>
+      <CardDescription>{cenarioFicticio ? "Indicadores do estacionamento para conferência administrativa." : "Indicadores operacionais para conferência administrativa."}</CardDescription>
+      <CardAction><Badge variant="outline" className={dadosReais && !cenarioFicticio ? "border-emerald-600/40 text-emerald-700 dark:text-emerald-300" : "border-[#b49d00]/50 text-[#6b5d00] dark:text-[#ffe100]"}>{cenarioFicticio ? "Histórico carregado" : dadosReais ? "Histórico real" : "Demonstração"}</Badge></CardAction>
     </CardHeader>
     <CardContent className="grid gap-4 md:grid-cols-[minmax(0,1fr)_minmax(16rem,1.3fr)]">
       <dl className="grid grid-cols-2 gap-2">

@@ -29,6 +29,8 @@ Para preparar uma estrutura maior, a equipe pode importar CSV ou XLSX, revisar a
 
 Admin e gerente usam a mesma visualização 2D de vagas. O mapa permite navegar pelos andares, localizar setores, buscar uma vaga e distinguir categorias e estados. O gerente consulta somente o shopping associado à sua sessão; alterações estruturais ficam sob responsabilidade administrativa.
 
+O Admin organiza as posições diretamente no mapa por arraste, toque ou teclado, com ajustes de tamanho, rotação e salvamento da prévia. A visualização também oferece monitoramento por sensor: placa vinculada, horários de observação, situação e confirmação pendente. O [guia de edição e monitoramento](./segunda-mente/Vaggu/Documentação/edicao-visual-e-monitoramento.md) reúne os fluxos e as evidências de validação.
+
 ### Acesso e identidade
 
 Os acessos são criados pela equipe VAGGU, sem cadastro público de gerente. Cada gerente possui credenciais próprias. A senha provisória é exibida ao Admin somente quando é emitida e precisa ser trocada no primeiro acesso; o banco mantém o hash, não a senha em texto puro. Os painéis oferecem navegação por seção e modo claro/escuro.

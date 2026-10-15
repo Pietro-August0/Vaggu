@@ -68,3 +68,18 @@ Pasta de destino: `Vaggu/Evidências visuais/Planejamento/`.
 Esses três arquivos registram planejamento e direção visual; não comprovam a conclusão das tarefas citadas nem fidelidade das telas ao Figma.
 
 Ver [[Vaggu/Diário/2026-09-12]] e [[Vaggu/Vaggu]].
+
+## 15/10/2026 — editor visual e monitoramento
+
+Capturas locais com Edge/Playwright, API e PostgreSQL reais exclusivos de QA. Usam contas de ensaio e o Shopping Exemplo; não são capturas da publicação remota nem evidência de ESP32 físico. O usuário solicitou guardar os prints no repositório. O [registro da entrega](../Documenta%C3%A7%C3%A3o/edicao-visual-e-monitoramento.md) descreve contratos, testes e limites.
+
+| Captura | O que comprova |
+| --- | --- |
+| [Editor desktop](2026-10-15%20-%20Editor%20e%20sensores/editor-desktop.png) | Seleção direta, controles de tamanho/rotação, mapa e salvamento sem tabela de X/Y. |
+| [Editor escuro](2026-10-15%20-%20Editor%20e%20sensores/editor-escuro.png) | Mesmos controles no tema escuro. |
+| [Editor mobile](2026-10-15%20-%20Editor%20e%20sensores/editor-mobile.png) | Controles adaptados à largura de 390 px, mapa navegável internamente. |
+| [Monitoramento desktop](2026-10-15%20-%20Editor%20e%20sensores/monitoramento-desktop.png) | Contagens por situação, filtros e cartões de sensores/placas. |
+| [Monitoramento mobile](2026-10-15%20-%20Editor%20e%20sensores/monitoramento-mobile.png) | Organização do monitoramento em tela pequena. |
+| [Confirmação pendente](2026-10-15%20-%20Editor%20e%20sensores/sensor-confirmacao.png) | Sensor, placa, horários e transição pendente no detalhe de N-03. |
+| [Sensor sem resposta](2026-10-15%20-%20Editor%20e%20sensores/sensor-sem-resposta.png) | Falha individual com o registro de contato da placa preservado. |
+| [Análise para apresentação](2026-10-15%20-%20Editor%20e%20sensores/analise-apresentacao.png) | Indicadores do exemplo sem os antigos selos de origem sintética, conforme solicitado. |

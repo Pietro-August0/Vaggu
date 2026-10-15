@@ -15,6 +15,7 @@ Esta pasta reúne as decisões de produto, o desenho técnico, os padrões de c�
 | [plano-e-aceite.md](plano-e-aceite.md) | Etapas, cenários de teste e definição de pronto. |
 | [planejamento-do-projeto.md](planejamento-do-projeto.md) | Inventário verificado, revisão final, backlog, diário e pacote para o próximo início. |
 | [fluxo-de-telas.md](fluxo-de-telas.md) | Rotas e jornadas atuais por perfil, páginas planejadas e divergências encontradas entre interface e backend. |
+| [edicao-visual-e-monitoramento.md](edicao-visual-e-monitoramento.md) | Edição direta das vagas, monitoramento individual, dados de apresentação, testes e evidências de 15/10. |
 | [modelo-de-dados.md](modelo-de-dados.md) | Entidades e relações implementadas no Prisma/PostgreSQL, limites atuais e evolução prevista para a telemetria. |
 | [mapa-do-projeto.md](mapa-do-projeto.md) | Explica a estrutura do repositório e a responsabilidade de cada arquivo versionável. |
 | [configuracao.md](configuracao.md) | Guia sequencial para um parceiro instalar, iniciar, verificar, testar e encerrar o sistema local sem publicar segredos. |

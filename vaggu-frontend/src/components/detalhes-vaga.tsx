@@ -1,6 +1,7 @@
-/** Apresenta os dados disponíveis de uma vaga sem simular telemetria ainda não integrada. */
+/** Apresenta a localização da vaga e o monitoramento individual retornado pela API. */
 import { MapPin, Radio, TriangleAlert } from "lucide-react"
 
+import { horarioSensor, nomesSituacaoSensor } from "@/components/monitoramento-sensores"
 import { Badge } from "@/components/ui/badge"
 import {
   Dialog,
@@ -74,16 +75,20 @@ export function DetalhesVaga({ vaga, andar, setor, aoFechar }: DetalhesVagaProps
               Monitoramento do sensor
             </h3>
             <dl className="grid gap-3 text-sm sm:grid-cols-2">
-              <LinhaDetalhe termo="Saúde do sensor" descricao={vaga.estadoAtual === "INDISPONIVEL" ? "Leitura indisponível ou expirada" : vaga.estadoAtual === "DESCONHECIDA" ? "Sem sensor confirmado" : "Leitura confirmada e válida"} />
-              <LinhaDetalhe termo="Comunicação" descricao={vaga.estadoAtual === "INDISPONIVEL" ? "Verifique o equipamento" : "Estado consultado agora"} />
-              <LinhaDetalhe termo="Última leitura" descricao="Horário não disponível" />
-              <LinhaDetalhe termo="Fonte do status" descricao={vaga.estadoAtual === "DESCONHECIDA" ? "Sem leitura confirmada" : "Sensor individual"} />
+              <LinhaDetalhe termo="Situação" descricao={vaga.monitoramento ? nomesSituacaoSensor[vaga.monitoramento.situacao] : "Sem sensor vinculado"} />
+              <LinhaDetalhe termo="Sensor" descricao={vaga.monitoramento?.sensorCodigo ?? "Não configurado"} />
+              <LinhaDetalhe termo="Placa ESP32" descricao={vaga.monitoramento?.placaNome ?? "Não vinculada"} />
+              <LinhaDetalhe termo="Último contato da placa" descricao={horarioSensor(vaga.monitoramento?.ultimoContatoPlacaEm ?? null)} />
+              <LinhaDetalhe termo="Última observação individual" descricao={horarioSensor(vaga.monitoramento?.ultimaObservacaoEm ?? null)} />
+              <LinhaDetalhe termo="Estado confirmado" descricao={vaga.monitoramento ? nomesEstadoVaga[vaga.monitoramento.estadoConfirmado] : "Sem leitura confirmada"} />
+              <LinhaDetalhe termo="Mudança pendente" descricao={vaga.monitoramento?.estadoCandidato ? nomesEstadoVaga[vaga.monitoramento.estadoCandidato] : "Nenhuma"} />
+              <LinhaDetalhe termo="Início da confirmação" descricao={horarioSensor(vaga.monitoramento?.candidatoIniciadoEm ?? null)} />
+              <LinhaDetalhe termo="Fonte dos dados" descricao={vaga.monitoramento?.demonstracao ? "Registro do sensor" : vaga.monitoramento ? "Sensor individual" : "Sem monitoramento configurado"} />
             </dl>
             <p className="flex gap-2 rounded-lg bg-white/70 p-3 text-xs leading-relaxed">
               <TriangleAlert className="mt-0.5 size-4 shrink-0" aria-hidden="true" />
               <span>
-                A saúde só será classificada quando o sistema receber observações individuais do
-                sensor. O contato da placa, sozinho, não comprova que o sensor esteja funcionando.
+                {vaga.monitoramento?.demonstracao ? "A situação exibida considera o registro individual deste sensor. O contato da placa não substitui sua última observação." : "A validade depende das observações individuais do sensor. O contato da placa, sozinho, não comprova que todos os sensores estejam funcionando."}
               </span>
             </p>
           </section>

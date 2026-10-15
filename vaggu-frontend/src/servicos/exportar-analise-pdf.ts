@@ -80,7 +80,7 @@ export async function gerarPdfAnalise(relatorio: RelatorioAnalise): Promise<Blob
     pdf.text(`Filtro: ${relatorio.filtro.inicio} a ${relatorio.filtro.fim} (dias UTC inclusivos)`, 15, y)
     y += 7
   }
-  const selo = relatorio.cenarioFicticio ? "CENÁRIO FICTÍCIO · APRESENTAÇÃO" : relatorio.historico ? "HISTÓRICO CONFIRMADO + SITUAÇÃO ATUAL" : "SITUAÇÃO ATUAL · SEM HISTÓRICO CONFIRMADO"
+  const selo = relatorio.cenarioFicticio ? "HISTÓRICO DE OCUPAÇÃO + SITUAÇÃO ATUAL" : relatorio.historico ? "HISTÓRICO CONFIRMADO + SITUAÇÃO ATUAL" : "SITUAÇÃO ATUAL · SEM HISTÓRICO CONFIRMADO"
   pdf.setFillColor(AMARELO)
   pdf.roundedRect(15, y, 180, 10, 2, 2, "F")
   pdf.setTextColor(ESCURO)
@@ -141,7 +141,7 @@ export async function gerarPdfAnalise(relatorio: RelatorioAnalise): Promise<Blob
   }
 
   if (relatorio.historico) {
-    titulo(relatorio.cenarioFicticio ? "Histórico fictício · período selecionado" : "Histórico confirmado · período selecionado")
+    titulo(relatorio.cenarioFicticio ? "Histórico de ocupação · período selecionado" : "Histórico confirmado · período selecionado")
     pdf.setFont("helvetica", "normal")
     pdf.setTextColor(CINZA)
     pdf.setFontSize(8)
@@ -174,7 +174,7 @@ export async function gerarPdfAnalise(relatorio: RelatorioAnalise): Promise<Blob
   }
 
   if (relatorio.serieDiaria.length) {
-    titulo(relatorio.cenarioFicticio ? "Gráficos diários · dados fictícios" : relatorio.historico ? "Gráficos diários · histórico confirmado" : "Gráficos diários · DEMONSTRAÇÃO — NÃO MEDIÇÃO")
+    titulo(relatorio.cenarioFicticio ? "Gráficos diários · ocupação" : relatorio.historico ? "Gráficos diários · histórico confirmado" : "Gráficos diários · DEMONSTRAÇÃO — NÃO MEDIÇÃO")
     linhaTabela(["Dia", "Ocupação", "Entradas", "Saídas"], [55, 42, 42, 41], true)
     for (const dia of relatorio.serieDiaria) linhaTabela([
       dia.origem !== "demonstração" ? new Date(dia.rotulo).toLocaleDateString("pt-BR", { timeZone: "UTC" }) : dia.rotulo,
@@ -183,7 +183,7 @@ export async function gerarPdfAnalise(relatorio: RelatorioAnalise): Promise<Blob
   }
 
   if (relatorio.comparacao) {
-    titulo(relatorio.cenarioFicticio ? "Comparação · histórico fictício" : "Comparação com o período anterior · histórico confirmado")
+    titulo(relatorio.cenarioFicticio ? "Comparação com o período anterior" : "Comparação com o período anterior · histórico confirmado")
     pdf.setFont("helvetica", "normal")
     pdf.setFontSize(8)
     pdf.text(`Anterior UTC: ${relatorio.comparacao.periodo.inicioEm} a ${relatorio.comparacao.periodo.fimEm}`, 15, y)
@@ -215,7 +215,7 @@ export async function gerarPdfAnalise(relatorio: RelatorioAnalise): Promise<Blob
   for (const setor of relatorio.participacaoSetores) linhaTabela([setor.nome, String(setor.ocupadas)], [120, 60])
 
   if (relatorio.historico?.porSetor.length) {
-    titulo(relatorio.cenarioFicticio ? "Ocupação por setor · histórico fictício" : "Ocupação por setor · histórico confirmado")
+    titulo(relatorio.cenarioFicticio ? "Ocupação por setor · histórico de ocupação" : "Ocupação por setor · histórico confirmado")
     linhaTabela(["Setor", "Ocupação", "Cobertura", "Entradas"], [75, 35, 35, 35], true)
     for (const setor of relatorio.historico.porSetor) linhaTabela([
       setor.setor, `${setor.ocupacaoPercentual.toFixed(1)}%`, `${setor.coberturaPercentual.toFixed(1)}%`, String(setor.entradasObservadas),
