@@ -10,6 +10,8 @@ O shopping aparece na lista administrativa. Para entrar como gerente, use a rede
 
 A migration `20261015000100_nome_shopping_exemplo` renomeia somente o cenário conhecido que ainda se chama Shopping Aurora — DEMONSTRAÇÃO. Ela preserva seus acessos e dados. Shoppings personalizados não são renomeados.
 
+As posições das vagas são relativas ao piso inteiro: cada setor ocupa uma faixa própria, permitindo ver as 40 vagas do piso com o filtro “Todos os setores”. A migration `20261015000200_mapa_exemplo_sem_sobreposicao` corrige somente as coordenadas originais do exemplo já criado; posições editadas manualmente e outros shoppings são preservados. A revisão do mapa é incrementada nos pisos corrigidos para impedir que uma edição aberta antes da atualização sobrescreva as novas posições.
+
 ## Aplicação alternativa com conexão direta
 
 1. Confirme que a migration `20261014000100_cenario_demonstracao` foi aplicada pelo deploy do Render.

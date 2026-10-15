@@ -61,6 +61,7 @@ As cópias de imagens entre `segunda-mente/Vaggu/Identidade visual/Assets/` e `v
 | `vaggu-backend/scripts/create-admin.ts` | Comando interativo para criar o primeiro administrador e exibir a senha gerada uma única vez no terminal. |
 | `vaggu-backend/scripts/criar-cenario-apresentacao.ts` | Garante o Shopping Exemplo na inicialização de produção, sem duplicar dados nem alterar acessos existentes; mantém o comando alternativo de criação explícita. |
 | `vaggu-backend/prisma/migrations/20261015000100_nome_shopping_exemplo/migration.sql` | Renomeia somente o cenário fictício conhecido para Shopping Exemplo, preservando contas e histórico. |
+| `vaggu-backend/prisma/migrations/20261015000200_mapa_exemplo_sem_sobreposicao/migration.sql` | Distribui os setores do exemplo em faixas distintas do piso, preserva posições personalizadas e incrementa a revisão dos mapas corrigidos. |
 | `vaggu-backend/scripts/provisionar-placa.ts` | Cria placa e sensores para vagas existentes, guardando apenas o hash e exibindo a chave uma vez. |
 | `vaggu-backend/scripts/simular-telemetria.ts` | Envia heartbeat e observações sintéticas pela mesma API do ESP32, sem inserir fixtures diretamente no banco. |
 | `vaggu-backend/scripts/gerar-fixtures-power-bi.ts` | Gera os CSVs sintéticos reproduzíveis da prova matemática e da demonstração ampliada, sem acessar banco ou hardware. |

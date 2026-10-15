@@ -12,6 +12,12 @@
 
 ## 1. Situação atual
 
+### Correção do mapa do Shopping Exemplo — 15/10
+
+- Causa: os setores do mesmo piso receberam as mesmas coordenadas no seed; “Todos os setores” sobrepunha as vagas. Corrigidos seed e migration incremental para os exemplos existentes, usando uma faixa por setor no espaço do piso. Posições personalizadas, acessos e histórico são preservados; a revisão dos pisos corrigidos é incrementada.
+- Verificação PostgreSQL: suíte completa com 114 testes aprovados, sem falhas ou skips, incluindo ausência de sobreposição, limites do mapa, preservação de posições editadas, isolamento de outros shoppings e repetição segura da migration.
+- Navegador local com Edge/Playwright e API/PostgreSQL reais: 40 vagas clicáveis por piso em 1440 e 768 px, nenhuma sobreposição ou corte nos limites do mapa; filtro de setor com 20 vagas e retorno a 40 em “Todos os setores”; detalhes abrem e fecham pelo teclado. Celular de 390 px com 40 itens e sem transbordamento horizontal. Console sem erros inesperados. Evidências fora do repositório; endereço publicado ainda não conferido nesta correção.
+
 A VAGGU já possui login real, troca de senha, gestão de shoppings e gerentes, importação, mapa compartilhado e conta pessoal. O gerente vê somente o próprio shopping. A base de sensores recebe leituras, confirma mudanças, ignora repetições, marca sensores sem resposta como indisponíveis e guarda o histórico; essa parte foi testada com PostgreSQL. O sistema também consulta esse histórico por período, mostra análises iniciais e gera exportações locais em Excel e PDF. Ainda faltam o ESP32 real, equipamentos e manutenção, validade no mapa, telões, filtros analíticos por setor e categoria, conferência da publicação e o relatório Power BI funcional.
 
 P01 foi concluído em 10/09 e P02 em 11/09, incluindo autenticação e acabamento visual. P03 foi concluído em 12/09 com gestão administrativa, vários gerentes e Minha conta. P04 foi concluído em 12/09 com estrutura e mapa validados no banco e no navegador. O P05 foi concluído em 21/09: a importação de CSV/XLSX mostra uma prévia, pode ser repetida sem duplicar o resultado e preserva os registros existentes. O fluxo foi conferido no computador e em tela de celular. A base local está verificável, mas o sistema ainda não está liberado para operação com clientes.

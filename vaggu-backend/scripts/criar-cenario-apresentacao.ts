@@ -93,7 +93,7 @@ export async function criarCenarioApresentacao(prisma: PrismaClient, credenciais
         efetivoEm: Date; recebidoEm: Date; origem: string; motivo: string;
       }> = [];
       let numeroVaga = 0;
-      for (const setorDef of SETORES) {
+      for (const [indiceSetor, setorDef] of SETORES.entries()) {
         let andarId = andares.get(setorDef.andar);
         if (!andarId) {
           const andar = await tx.andar.create({ data: { shoppingId: SHOPPING_ID, nome: setorDef.andar, ordem: setorDef.ordem } });
@@ -119,7 +119,9 @@ export async function criarCenarioApresentacao(prisma: PrismaClient, credenciais
           const estadoAtual = transicoes.at(-1)?.estado ?? 'DESCONHECIDA';
           const vaga = await tx.vaga.create({ data: {
             shoppingId: SHOPPING_ID, andarId, setorId: setor.id, codigo, tipo: tipoDaVaga(indice),
-            posicaoX: 0.06 + (posicao % 5) * 0.18, posicaoY: 0.08 + Math.floor(posicao / 5) * 0.21,
+            // As coordenadas pertencem ao piso inteiro, inclusive ao mostrar todos os setores.
+            posicaoX: 0.06 + (posicao % 5) * 0.18,
+            posicaoY: 0.04 + (indiceSetor % 2) * 0.48 + Math.floor(posicao / 5) * 0.105,
             largura: 0.12, altura: 0.1, rotacao: 0, estadoAtual,
             ultimaLeituraEm: transicoes.at(-1)?.instante ?? null, ativo: true,
           } });

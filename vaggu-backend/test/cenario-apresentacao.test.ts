@@ -14,6 +14,23 @@ import { garantirCenarioApresentacao } from '../scripts/criar-cenario-apresentac
 
 const executar = promisify(execFile);
 
+function conferirPosicoes(estrutura: Awaited<ReturnType<ReturnType<typeof createEstruturaService>['buscarEstrutura']>>) {
+  for (const andar of estrutura.andares) {
+    const vagas = andar.setores.flatMap((setor) => setor.vagas);
+    assert.equal(vagas.length, 40);
+    for (const [indice, vaga] of vagas.entries()) {
+      const p = vaga.posicao!;
+      assert.ok(p.x >= 0 && p.y >= 0 && p.x + p.largura <= 1 && p.y + p.altura <= 1);
+      for (const outra of vagas.slice(indice + 1)) {
+        const q = outra.posicao!;
+        assert.ok(p.x + p.largura <= q.x || q.x + q.largura <= p.x
+          || p.y + p.altura <= q.y || q.y + q.altura <= p.y,
+        `${vaga.codigo} e ${outra.codigo} não podem se sobrepor no mesmo piso`);
+      }
+    }
+  }
+}
+
 test('publicação garante um único Shopping Exemplo sem alterar acessos nas reinicializações', async (t) => {
   if (!process.env.TEST_DATABASE_URL) return t.skip('Configure TEST_DATABASE_URL para testar a inicialização publicada.');
   const prisma = await prepararBancoDeTeste(t, process.env.TEST_DATABASE_URL);
@@ -28,8 +45,39 @@ test('publicação garante um único Shopping Exemplo sem alterar acessos nas re
   await garantirCenarioApresentacao(prisma);
   assert.equal(await prisma.shopping.count(), 1);
   assert.equal(await prisma.vaga.count({ where: { shoppingId: shopping.id } }), 80);
+  conferirPosicoes(await createEstruturaService(prisma, 120_000).buscarEstrutura(shopping.id));
   assert.equal(await prisma.historicoVaga.count({ where: { shoppingId: shopping.id } }), eventos);
   assert.deepEqual(await prisma.usuario.findMany({ where: { shoppingId: shopping.id }, orderBy: { id: 'asc' } }), gerentes);
+});
+
+test('corrige o mapa já publicado preservando posições editadas e outros shoppings', async (t) => {
+  if (!process.env.TEST_DATABASE_URL) return t.skip('Configure TEST_DATABASE_URL para testar a correção do mapa.');
+  const prisma = await prepararBancoDeTeste(t, process.env.TEST_DATABASE_URL);
+  await garantirCenarioApresentacao(prisma);
+  const shoppingId = 'd3a09b29-7e5a-4b7e-8c42-8f371d0a0001';
+  const vagas = await prisma.vaga.findMany({ where: { shoppingId } });
+  await prisma.$transaction(vagas.map((vaga) => {
+    const indice = Number(vaga.codigo.slice(2)) - 1;
+    return prisma.vaga.update({ where: { id: vaga.id }, data: { posicaoY: 0.08 + Math.floor(indice / 5) * 0.21 } });
+  }));
+  const editada = vagas.find((vaga) => vaga.codigo === 'N-01')!;
+  await prisma.vaga.update({ where: { id: editada.id }, data: { posicaoX: 0.01, posicaoY: 0.001, altura: 0.03 } });
+  const outro = await prisma.shopping.create({ data: { nome: 'Outro shopping' } });
+  const vagaOutro = await prisma.vaga.create({ data: { shoppingId: outro.id, codigo: 'S-01', posicaoX: 0.06, posicaoY: 0.08, largura: 0.12, altura: 0.1, rotacao: 0 } });
+  const historico = await prisma.historicoVaga.count({ where: { shoppingId } });
+  const migracao = await readFile(join(projectRoot, 'prisma/migrations/20261015000200_mapa_exemplo_sem_sobreposicao/migration.sql'), 'utf8');
+  await prisma.$executeRawUnsafe(migracao);
+  const estrutura = await createEstruturaService(prisma, 120_000).buscarEstrutura(shoppingId);
+  conferirPosicoes(estrutura);
+  assert.ok(estrutura.andares.every((andar) => andar.revisaoMapa === 1));
+  const preservada = await prisma.vaga.findUniqueOrThrow({ where: { id: editada.id } });
+  assert.equal(Number(preservada.posicaoX), 0.01);
+  assert.equal(Number(preservada.posicaoY), 0.001);
+  assert.equal(Number(preservada.altura), 0.03);
+  assert.deepEqual(await prisma.vaga.findUniqueOrThrow({ where: { id: vagaOutro.id } }), vagaOutro);
+  assert.equal(await prisma.historicoVaga.count({ where: { shoppingId } }), historico);
+  await prisma.$executeRawUnsafe(migracao);
+  assert.deepEqual(await createEstruturaService(prisma, 120_000).buscarEstrutura(shoppingId), estrutura);
 });
 
 test('cria cenário fictício completo e não sobrescreve acessos em segunda execução', async (t) => {
