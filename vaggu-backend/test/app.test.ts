@@ -20,6 +20,8 @@ test('política de segurança permite somente a API externa de CEP nas conexões
   const politica = response.headers['content-security-policy'];
   assert.match(politica, /connect-src 'self' https:\/\/viacep\.com\.br/);
   assert.doesNotMatch(politica, /connect-src[^;]*\*/);
+  assert.match(politica, /img-src 'self' data: blob:/);
+  assert.doesNotMatch(politica, /img-src[^;]*\*/);
 });
 
 test('readiness confirma a consulta ao banco', async () => {

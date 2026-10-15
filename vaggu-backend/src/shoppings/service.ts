@@ -3,7 +3,6 @@
 import { randomBytes } from 'node:crypto';
 import { hashPassword } from '../auth/password.js';
 import { ApiError, normalizeEmail, publicUser } from '../auth/service.js';
-import { criarCenarioApresentacao, gerarCredenciaisApresentacao } from '../../scripts/criar-cenario-apresentacao.js';
 
 const SITUACOES_IMPLANTACAO = new Set(['NOVO_ATENDIMENTO', 'EM_ANALISE', 'DOCUMENTACAO_PENDENTE', 'APROVADO', 'EM_CONFIGURACAO', 'AGUARDANDO_INSTALACAO', 'ATIVO', 'REJEITADO', 'INATIVO']);
 const PRAZO_DESFAZER_EXCLUSAO_MS = 7_000;
@@ -166,11 +165,6 @@ export function createShoppingsService(prisma, { now = () => new Date() }: { now
   };
 
   return {
-    /** Cria uma única vez o cenário fictício e retorna senhas provisórias somente nesta resposta. */
-    async criarCenarioApresentacao() {
-      const credenciais = await gerarCredenciaisApresentacao();
-      return criarCenarioApresentacao(prisma, credenciais);
-    },
     /** Ordena clientes ativos primeiro e inclui a quantidade de usuários de cada shopping. */
     async listarShoppings() {
       const rows = await prisma.shopping.findMany({

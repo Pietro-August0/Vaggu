@@ -1,6 +1,14 @@
 # VAGGU — planejamento e continuidade do projeto
 
-Última atualização: **14/10/2026**, fuso **America/Sao_Paulo**. A revisão da landing e seu fechamento permanecem atribuídos a **09/09/2026**, conforme solicitado. Base de P01: `c127b5e`; registros das entregas na seção 7. Este documento registra evidências e orienta o trabalho diário; não substitui o [SSD](SSD-VAGGU.md) nem os [critérios de aceite](plano-e-aceite.md).
+Última atualização: **15/10/2026**, fuso **America/Sao_Paulo**. A revisão da landing e seu fechamento permanecem atribuídos a **09/09/2026**, conforme solicitado. Base de P01: `c127b5e`; registros das entregas na seção 7. Este documento registra evidências e orienta o trabalho diário; não substitui o [SSD](SSD-VAGGU.md) nem os [critérios de aceite](plano-e-aceite.md).
+
+### Retomada e revisão da última entrega — 15/10
+
+- Revisado o cenário fictício entregue em `294c1d0`. Corrigida a omissão de `cenario-apresentacao.test.ts` no comando `test:integracao`; o teste já era descoberto por `npm test`.
+- Shopping Exemplo: criação automática na inicialização de produção pela conexão já configurada no site, sem botão ou rota de criação no painel. Contém 80 vagas, dois pisos, quatro setores, três gerentes e 15 dias de histórico fictício. A migration renomeia o cenário anterior pelo ID fixo sem alterar senhas ou histórico. O Admin pode emitir o acesso pela redefinição de senha já existente na ficha do gerente.
+- PostgreSQL 17 portátil preparado exclusivamente para QA local. Suíte completa: 113 testes aprovados, zero falhas e zero skips, incluindo criação concorrente e preservação de acessos na reinicialização. Frontend: lint e build aprovados, com o aviso conhecido de chunks acima de 500 kB.
+- Navegador: Edge headless com Playwright (plugin Browser ausente), API e PostgreSQL reais em `http://127.0.0.1:3102`. Login Admin, lista do exemplo e ausência do botão confirmados; login gerente e análise conferidos em 1440, 768 e 390 px sem transbordamento horizontal. Excel gerado e relido, PDF com assinatura válida; zero erros inesperados de console ou HTTP. Os 401 de `/auth/me` antes do login são esperados. Corrigida a política de imagens para permitir os gráficos locais `blob:` nos relatórios. Evidências e arquivos de QA ficaram fora do repositório.
+- Publicação: usuário autorizou push na `main` e confirmou atualização automática do site. A verificação autenticada no endereço publicado e o hardware ainda não foram executados.
 
 ## 1. Situação atual
 
@@ -13,7 +21,7 @@ A equipe registrou em 23/09 a hospedagem do frontend e da API no mesmo serviço 
 ### Cenário fictício de apresentação — 14/10
 
 - O comando `demo:create` prepara um shopping identificado como demonstração, três gerentes, 80 vagas e 15 dias de histórico sintético. Ele exige uma conexão explícita em `DEMO_DATABASE_URL`, não modifica outros shoppings e guarda as senhas provisórias fora do Git.
-- A marcação de demonstração faz o mapa mostrar os estados fictícios persistidos sem alegar sensores ativos; a análise e as exportações identificam os números como cenário fictício. O administrador pode criar o cenário uma vez no painel publicado e baixar as credenciais provisórias; o script direto continua disponível. A criação e a verificação no endereço publicado ainda precisam ser executadas. Consulte [o procedimento](cenario-de-apresentacao.md).
+- A marcação de demonstração faz o mapa mostrar os estados fictícios persistidos sem alegar sensores ativos; a análise e as exportações identificam os números como cenário fictício. A criação por botão desta entrega foi substituída pela inicialização automática de produção em 15/10, a pedido do usuário. Consulte [o procedimento atual](cenario-de-apresentacao.md).
 
 ### Revisão de código e relatórios — 14/10
 

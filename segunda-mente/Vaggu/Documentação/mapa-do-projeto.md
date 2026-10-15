@@ -59,7 +59,8 @@ As cópias de imagens entre `segunda-mente/Vaggu/Identidade visual/Assets/` e `v
 | `vaggu-backend/prisma/migrations/20261014000100_cenario_demonstracao/migration.sql` | Marca shoppings fictícios sem alterar o comportamento dos shoppings existentes. |
 | `vaggu-backend/prisma/schema.prisma` | Define entidades, relações e restrições de estrutura, acessos, importação e primeiro recorte persistente de telemetria. |
 | `vaggu-backend/scripts/create-admin.ts` | Comando interativo para criar o primeiro administrador e exibir a senha gerada uma única vez no terminal. |
-| `vaggu-backend/scripts/criar-cenario-apresentacao.ts` | Cria shopping, três gerentes e histórico fictício isolados para apresentação; fornece a mesma rotina à ação protegida do Admin. |
+| `vaggu-backend/scripts/criar-cenario-apresentacao.ts` | Garante o Shopping Exemplo na inicialização de produção, sem duplicar dados nem alterar acessos existentes; mantém o comando alternativo de criação explícita. |
+| `vaggu-backend/prisma/migrations/20261015000100_nome_shopping_exemplo/migration.sql` | Renomeia somente o cenário fictício conhecido para Shopping Exemplo, preservando contas e histórico. |
 | `vaggu-backend/scripts/provisionar-placa.ts` | Cria placa e sensores para vagas existentes, guardando apenas o hash e exibindo a chave uma vez. |
 | `vaggu-backend/scripts/simular-telemetria.ts` | Envia heartbeat e observações sintéticas pela mesma API do ESP32, sem inserir fixtures diretamente no banco. |
 | `vaggu-backend/scripts/gerar-fixtures-power-bi.ts` | Gera os CSVs sintéticos reproduzíveis da prova matemática e da demonstração ampliada, sem acessar banco ou hardware. |
@@ -92,7 +93,7 @@ As cópias de imagens entre `segunda-mente/Vaggu/Identidade visual/Assets/` e `v
 | `vaggu-backend/src/conta/routes.ts` | Expõe consulta e edição da conta usando exclusivamente a identidade da sessão. |
 | `vaggu-backend/src/conta/service.ts` | Atualiza somente dados pessoais permitidos, sem conceder mudanças de perfil ou shopping. |
 | `vaggu-backend/src/lib/prisma.ts` | Cria o cliente Prisma compartilhado; serviços aceitam cliente transacional por injeção. |
-| `vaggu-backend/src/server.ts` | Ponto de entrada executável: conecta serviços, inicia HTTP e executa a verificação periódica de expiração dos sensores. |
+| `vaggu-backend/src/server.ts` | Garante o Shopping Exemplo em produção antes de iniciar HTTP, conecta serviços e executa a expiração periódica dos sensores. |
 | `vaggu-backend/src/shoppings/routes.ts` | Rotas administrativas de cadastro, ficha, gerentes, exclusões e emissão de senha provisória. |
 | `vaggu-backend/src/shoppings/service.ts` | Valida a ficha, administra shoppings e gerentes, agrega a estrutura ativa para a visão geral e entrega senha provisória somente na emissão. |
 | `vaggu-backend/src/telemetria/confirmacao-estado.ts` | Calcula a confirmação temporal de leituras de vaga já validadas, sem receber telemetria ou persistir dados. |
@@ -117,7 +118,7 @@ As cópias de imagens entre `segunda-mente/Vaggu/Identidade visual/Assets/` e `v
 | `vaggu-backend/test/confirmacao-estado.test.ts` | Verifica janela, continuidade, alternância e leituras repetidas na confirmação temporal do P06. |
 | `vaggu-backend/test/metricas-ocupacao.test.ts` | Reproduz as métricas analíticas esperadas e garante que o CSV sintético versionado não diverge do conjunto tipado. |
 | `vaggu-backend/test/analiticos.test.ts` | Verifica métricas históricas, filtro de datas, estado vazio e isolamento da rota analítica pelo shopping autenticado. |
-| `vaggu-backend/test/cenario-apresentacao.test.ts` | Cria o cenário em PostgreSQL descartável e verifica shopping, gerentes, vagas, histórico e repetição segura. |
+| `vaggu-backend/test/cenario-apresentacao.test.ts` | Cria o cenário em PostgreSQL descartável e verifica shopping, gerentes, vagas, histórico e repetição segura; incluído em `test:integracao` e `npm test`. |
 | `vaggu-backend/test/fixtures/power-bi/conjunto-controlado-ocupacao.csv` | Fornece ao Power BI um conjunto sintético identificado de duas vagas durante uma hora, sem gravar fixtures em banco persistente. |
 | `vaggu-backend/test/fixtures/power-bi/demonstracao-ampliada-ocupacao.csv` | Fornece ao protótipo visual um cenário sintético reproduzível de sete dias, dois andares, quatro setores e dezesseis vagas, sem simular ingestão de sensores. |
 | `vaggu-backend/test/importacao-routes.test.ts` | Verifica autorização e transporte HTTP da prévia CSV administrativa. |

@@ -32,7 +32,11 @@ export function createApp({ checkDatabase, frontendDistPath, auth, whatsapp, sho
   const app = express();
   app.disable('x-powered-by');
   // O cadastro consulta o ViaCEP no navegador; as demais conexões continuam restritas à origem da API.
-  app.use(helmet({ contentSecurityPolicy: { directives: { connectSrc: ["'self'", 'https://viacep.com.br'] } } }));
+  app.use(helmet({ contentSecurityPolicy: { directives: {
+    connectSrc: ["'self'", 'https://viacep.com.br'],
+    // Os gráficos são rasterizados localmente para compor as exportações.
+    imgSrc: ["'self'", 'data:', 'blob:'],
+  } } }));
   // A assinatura da Meta depende dos bytes originais, antes da conversão para JSON.
   if (whatsapp) {
     app.use('/api/v1/whatsapp/webhook', express.raw({ type: 'application/json', limit: '64kb' }), whatsappRoutes(whatsapp));

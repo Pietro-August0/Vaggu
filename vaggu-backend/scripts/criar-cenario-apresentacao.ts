@@ -45,6 +45,21 @@ export async function gerarCredenciaisApresentacao(): Promise<Credencial[]> {
   }));
 }
 
+/** Garante o exemplo na publicação sem sobrescrever contas, senhas ou histórico existentes. */
+export async function garantirCenarioApresentacao(prisma: PrismaClient) {
+  if (await prisma.shopping.findUnique({ where: { id: SHOPPING_ID }, select: { id: true } })) return;
+  try {
+    await criarCenarioApresentacao(prisma, await gerarCredenciaisApresentacao());
+  } catch (erro) {
+    // Duas instâncias podem iniciar juntas; somente a criação do mesmo cenário é idempotente.
+    if ((erro instanceof ApiError && erro.codigo === 'CENARIO_JA_EXISTE')
+      || (typeof erro === 'object' && erro !== null && 'code' in erro && erro.code === 'P2002')) {
+      if (await prisma.shopping.findUnique({ where: { id: SHOPPING_ID }, select: { id: true } })) return;
+    }
+    throw erro;
+  }
+}
+
 /** A transação é atômica e recusa um cenário ou e-mail já existente. */
 export async function criarCenarioApresentacao(prisma: PrismaClient, credenciais: Credencial[]) {
   if (await prisma.shopping.findUnique({ where: { id: SHOPPING_ID }, select: { id: true } })) {
@@ -56,7 +71,7 @@ export async function criarCenarioApresentacao(prisma: PrismaClient, credenciais
   const primeiroDia = Date.UTC(agora.getUTCFullYear(), agora.getUTCMonth(), agora.getUTCDate()) - 14 * DIA_MS;
   await prisma.$transaction(async (tx) => {
       await tx.shopping.create({ data: {
-        id: SHOPPING_ID, nome: 'Shopping Aurora — DEMONSTRAÇÃO', demonstracao: true,
+        id: SHOPPING_ID, nome: 'Shopping Exemplo', demonstracao: true,
         cnpj: '00000000000000', responsavelNome: 'Equipe de apresentação VAGGU', responsavelCpf: '00000000000',
         emailCorporativo: 'contato@aurora-demo.example', telefone: '(11) 0000-0000', cep: '00000000',
         uf: 'SP', cidade: 'São Paulo', bairro: 'Bairro Exemplo', logradouro: 'Avenida Exemplo', numero: '100',
@@ -141,7 +156,7 @@ async function main() {
   let concluido = false;
   try {
     arquivo = await open(destino, 'wx', 0o600);
-    await arquivo.writeFile(JSON.stringify({ shopping: 'Shopping Aurora — DEMONSTRAÇÃO', gerentes: credenciais.map(({ nome, email, senha }) => ({ nome, email, senha })) }, null, 2));
+    await arquivo.writeFile(JSON.stringify({ shopping: 'Shopping Exemplo', gerentes: credenciais.map(({ nome, email, senha }) => ({ nome, email, senha })) }, null, 2));
     await arquivo.sync();
 
     await criarCenarioApresentacao(prisma, credenciais);

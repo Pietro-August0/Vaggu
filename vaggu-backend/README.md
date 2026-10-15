@@ -177,7 +177,7 @@ TELEMETRIA_INTERVALO_EXPIRACAO_MS=30000
 
 Configure `DATABASE_URL` com um PostgreSQL acessível pelo backend. `npm run db:studio` permite inspecionar tabelas; não preencha `senha_hash` manualmente. Faça backup antes de migrations em ambiente compartilhado.
 
-Para preparar o cenário fictício da apresentação, consulte [cenário de apresentação](../segunda-mente/Vaggu/Documentação/cenario-de-apresentacao.md). O Admin pode criá-lo uma vez no painel e baixar as três senhas provisórias; o comando alternativo `demo:create` usa somente `DEMO_DATABASE_URL` e grava as senhas em arquivo local ignorado pelo Git.
+O Shopping Exemplo é criado automaticamente na inicialização de produção, com 80 vagas e 15 dias de histórico fictício, na conexão já usada pelo site. Não há botão para criá-lo. Os acessos são emitidos pela redefinição de senha existente na ficha dos gerentes. Consulte [cenário de apresentação](../segunda-mente/Vaggu/Documentação/cenario-de-apresentacao.md). O comando alternativo `demo:create` usa somente `DEMO_DATABASE_URL` e grava as senhas em arquivo local ignorado pelo Git.
 
 Modelos persistidos atuais incluem Shopping, Andar, Setor, Vaga, Usuario, Dispositivo, Sensor, InicializacaoPlaca, EventoTelemetriaRecebido, HistoricoVaga e ImportacaoEstrutura. Sessao e WhatsappEvento são tabelas técnicas. Chaves compostas preservam o shopping em sensor, placa e histórico; sequência e payload possuem deduplicação persistente. CHECKs estão no SQL e devem ser preservados em futuras migrations.
 

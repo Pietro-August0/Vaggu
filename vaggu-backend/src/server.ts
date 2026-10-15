@@ -14,9 +14,12 @@ import { createImportacaoService } from './importacao/service.js';
 import { createTelemetriaService } from './telemetria/service.js';
 import { expirarSensores } from './telemetria/expiracao.js';
 import { createAnaliticosService } from './analiticos/service.js';
+import { garantirCenarioApresentacao } from '../scripts/criar-cenario-apresentacao.js';
 
 const config = readEnv();
 const prisma = createPrisma(config.databaseUrl);
+// O ambiente publicado usa sua própria conexão; os dados fictícios ficam isolados no exemplo.
+if (process.env.NODE_ENV === 'production') await garantirCenarioApresentacao(prisma);
 const whatsappClient = createWhatsappClient(config.whatsapp);
 const whatsappService = createWhatsappService(prisma, whatsappClient, config.whatsapp);
 const telemetriaService = createTelemetriaService(prisma, config.telemetria);
