@@ -5,7 +5,7 @@ tags: [vaggu, banco-de-dados, postgresql, prisma]
 
 # Modelo de dados atual
 
-Este documento explica o banco que existe no repositório em 30/09/2026. A fonte principal é o [`schema.prisma`](../../../vaggu-backend/prisma/schema.prisma); as atualizações SQL acrescentam regras que o Prisma não representa, e os serviços do servidor mostram onde cada registro é usado.
+Este documento explica o banco que existe no repositório em 15/10/2026. A fonte principal é o [`schema.prisma`](../../../vaggu-backend/prisma/schema.prisma); as atualizações SQL acrescentam regras que o Prisma não representa, e os serviços do servidor mostram onde cada registro é usado.
 
 O documento não afirma que uma entidade planejada já foi implementada. Também não substitui as migrations: qualquer alteração do banco deve ser incremental e compatível com os dados existentes.
 
@@ -17,12 +17,17 @@ erDiagram
     SHOPPING ||--o{ SETOR : isola
     SHOPPING ||--o{ VAGA : isola
     SHOPPING ||--o{ DISPOSITIVO : possui
+    SHOPPING ||--o{ SENSOR : isola
     SHOPPING ||--o{ IMPORTACAO_ESTRUTURA : recebe
     SHOPPING o|--o{ USUARIO : vincula_gerentes
     ANDAR ||--o{ SETOR : contem
     ANDAR o|--o{ VAGA : localiza
     SETOR o|--o{ VAGA : agrupa
     DISPOSITIVO o|--o{ VAGA : fornece_canal
+    DISPOSITIVO ||--o{ SENSOR : controla
+    VAGA ||--o| SENSOR : possui
+    DISPOSITIVO ||--o{ INICIALIZACAO_PLACA : inicia
+    DISPOSITIVO ||--o{ EVENTO_TELEMETRIA_RECEBIDO : recebe
     VAGA ||--o{ HISTORICO_VAGA : registra
     USUARIO ||--o{ SESSAO : autentica
 
@@ -52,11 +57,13 @@ erDiagram
 
 **Finalidade:** representa cada shopping atendido e forma a raiz de isolamento dos dados administrativos e operacionais.
 
-**Campos principais:** `id: UUID`; `nome: String`; dados institucionais, contato e endereço opcionais; `horarioAbertura` e `horarioFechamento: String(5)?`; `ativo: Boolean`; `situacaoImplantacao: SituacaoImplantacao`; `criadoEm: DateTime`; `excluidoEm: DateTime?`. A coluna legada `fuso_horario` permanece nullable no schema para compatibilidade, mas não é mais exposta no formulário nem no contrato administrativo atual.
+**Campos principais:** `id: UUID`; `nome: String`; dados institucionais, contato e endereço opcionais; `horarioAbertura` e `horarioFechamento: String(5)?`; `ativo: Boolean`; `demonstracao: Boolean` (padrão falso); `situacaoImplantacao: SituacaoImplantacao`; `criadoEm: DateTime`; `excluidoEm: DateTime?`. A coluna legada `fuso_horario` permanece nullable no schema para compatibilidade, mas não é mais exposta no formulário nem no contrato administrativo atual.
 
 **Relações e restrições:** possui usuários, dispositivos, vagas, andares, setores e importações. As relações usam exclusão restrita para preservar os registros. A exclusão feita pela API é lógica. Migrations validam formato da UF e dos horários.
 
 **Uso atual:** cadastro, ficha, etapa de implantação, gerentes, estrutura e importação no painel administrativo.
+
+`demonstracao=true` identifica o Shopping Exemplo internamente: seus sensores são uma fotografia sintética e ficam fora da expiração operacional. O provisionamento é idempotente na inicialização de produção; detalhes e limites estão em [cenário de apresentação](cenario-de-apresentacao.md). Essa marcação não concede permissões adicionais aos gerentes.
 
 ### `Usuario` → tabela `usuarios`
 
@@ -132,15 +139,17 @@ erDiagram
 
 **Finalidade:** representa cada canal físico separadamente da comunicação geral da placa.
 
-**Campos principais:** shopping, dispositivo, vaga e código; estado confirmado e candidato; início do candidato; última observação própria e instante de expiração.
+**Campos principais:** `id`, `shoppingId`, `dispositivoId` e `vagaId: UUID`; `codigo: String`; `ativo: Boolean`; `estadoConfirmado: EstadoVaga`; `estadoCandidato: EstadoVaga?`; `candidatoIniciadoEm`, `ultimaObservacaoEm`, `expiradoEm: DateTime?`; `criadoEm: DateTime`.
 
 **Relações e restrições:** cada vaga possui no máximo um sensor; código é único dentro da placa; chaves compostas impedem vínculo cruzado entre shoppings.
+
+**Uso atual:** confirmação/expiração individual e consulta de monitoramento no mapa e nos detalhes. A API expõe somente código, situação, estado/candidato e horários próprios/da placa, sem retornar hashes. `ativo=false` aparece como manutenção na consulta; não representa um sistema de chamados ou ordens de serviço já implementado.
 
 ### `InicializacaoPlaca` e `EventoTelemetriaRecebido`
 
 **Finalidade:** registrar inicializações conhecidas e deduplicar persistentemente a sequência global de heartbeat/estados.
 
-**Relações e restrições:** dispositivo, inicialização e sequência formam chave única. O hash do payload distingue reenvio idêntico de reutilização conflitante da sequência; evento rejeitado por ordem não renova contato nem sensores.
+**Campos e restrições:** `InicializacaoPlaca` contém shopping, dispositivo, identificador de inicialização, `iniciadaEm` e `encerradaEm`; a combinação dispositivo + inicialização é única. `EventoTelemetriaRecebido` acrescenta sequência, tipo, `payloadHash`, resultado e `recebidoEm`; dispositivo + inicialização + sequência formam a chave única do evento. O hash distingue reenvio idêntico de reutilização conflitante da sequência; evento rejeitado por ordem não renova contato nem sensores.
 
 ### `ImportacaoEstrutura` → tabela `importacoes_estrutura`
 
@@ -166,7 +175,7 @@ erDiagram
 
 A API agora recebe `/telemetria/heartbeat` e `/telemetria/estados`, rejeita o lote inteiro quando um sensor não pertence à placa, usa o relógio do servidor, confirma somente após 30 segundos consistentes, deduplica por placa/inicialização/sequência e expira cada sensor por sua própria observação. Heartbeat nunca renova sensor.
 
-Continuam pendentes: ensaio com o firmware real; valores definitivos de frequência, lacuna e timeout; ocorrência/manutenção de equipamento; retenção dos marcadores de replay; consulta do mapa aplicando validade no momento da leitura; interface administrativa de placas/sensores e implantação no ambiente compartilhado. As integrações PostgreSQL foram executadas localmente com `TEST_DATABASE_URL`, mas P06 permanece em andamento até as validações de hardware e operação.
+Continuam pendentes: ensaio com o firmware real; valores definitivos de frequência, lacuna e timeout; ocorrência/manutenção de equipamento; retenção dos marcadores de replay; cadastro/vínculo administrativo de placas/sensores; atualização automática das telas e homologação no ambiente compartilhado. A consulta do mapa já aplica validade individual e retorna monitoramento sem credenciais. As integrações PostgreSQL foram executadas localmente com `TEST_DATABASE_URL`, mas P06 permanece em andamento até as validações de hardware e operação.
 
 ### View analítica inicial
 
@@ -180,7 +189,7 @@ A lista abaixo separa o recorte persistido das evoluções ainda necessárias.
 
 | Proposta | Necessidade prevista | Relação com o modelo atual |
 | --- | --- | --- |
-| `Placa` e `Sensor` | Separar o controlador ESP32 de cada canal físico, autenticar a placa e acompanhar observação/expiração por sensor. | Implementado como evolução compatível de `Dispositivo` mais a entidade `Sensor`; falta administração visual e hardware real. |
+| `Placa` e `Sensor` | Separar o controlador ESP32 de cada canal físico, autenticar a placa e acompanhar observação/expiração por sensor. | Implementado como evolução compatível de `Dispositivo` mais a entidade `Sensor`; consulta visual implementada; faltam cadastro/vínculo operacional, comandos de manutenção e hardware real. |
 | `EventoOcupacao` | Guardar transições confirmadas com estados anterior/novo, instantes efetivo e recebido, origem e motivo. | Implementado no `HistoricoVaga` sem recriar IDs das vagas; métricas P08 ainda dependem de consultas próprias. |
 | `ControleEventoRecebido` | Deduplicar telemetria por placa, inicialização e sequência e registrar seu resultado. | Implementado por `InicializacaoPlaca` e `EventoTelemetriaRecebido`; retenção definitiva depende do firmware. |
 | `EventoEquipamento` e `OcorrenciaTecnica` | Preservar falhas, retornos e manutenções de placa/sensor sem ocorrências repetidas. | Ausentes no schema atual. |

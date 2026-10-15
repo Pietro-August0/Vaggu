@@ -51,24 +51,24 @@ Para atingir esse objetivo, o produto deve:
 3. O Admin cadastra o shopping, prepara a estrutura e cria acessos individuais.
 4. O gerente recebe uma senha provisória, troca-a no primeiro login e entra no painel do seu shopping.
 5. O Admin importa ou configura andares, setores, vagas e posições; Admin e gerente usam a mesma representação 2D.
-6. A base de sensores já recebe e confirma leituras em ambiente de teste. O próximo passo é ligá-la ao ESP32 real e levar a validade dessas leituras ao mapa.
-7. Telões, indicadores, exportações e Power BI consumirão dados confirmados, sem duplicar categorias especiais.
+6. A base de sensores já recebe e confirma leituras em ambiente de teste. A validade individual já chega ao mapa na consulta; faltam ligação ao ESP32 real e atualização automática das telas.
+7. Indicadores e Excel/PDF já consomem o histórico e a situação atual; telões e Power BI ainda precisam completar a integração, sem duplicar categorias especiais.
 
-Os passos 1 a 5 estão implementados em P01–P05. P06 já possui uma base funcional de sensores e P08 já começou com histórico e análises dentro do sistema. Esses pacotes continuam incompletos: faltam o hardware real, manutenção, validade no mapa, exportações e outras consultas. Telões e Power BI permanecem por fazer. O fluxo estruturado do WhatsApp está parcial.
+Os passos 1 a 5 estão implementados em P01–P05. P06 já possui uma base funcional de sensores e P08 já começou com histórico e análises dentro do sistema. Esses pacotes continuam incompletos: faltam hardware real, cadastro de equipamentos, comandos/ocorrências de manutenção, atualização automática, filtros e métricas complementares. O editor visual, a consulta de monitoramento, a validade no mapa e Excel/PDF já existem. Telões e Power BI permanecem por fazer. O fluxo estruturado do WhatsApp está parcial.
 
 ## Metas verificáveis
 
 Não há metas comerciais de aquisição, latência ou volume aprovadas. O sucesso do produto é verificado pelos comportamentos e evidências abaixo; os cenários completos estão em [[Vaggu/Documentação/plano-e-aceite|plano e aceite]].
 
-| Meta | Evidência de aceite | Estado em 23/09/2026 |
+| Meta | Evidência de aceite | Estado em 15/10/2026 |
 | --- | --- | --- |
 | Converter interesse em contato | CTA abre o WhatsApp configurado sem criar cadastro público. | Base implementada; número oficial ainda depende de configuração. |
 | Controlar acessos com segurança | Dois gerentes do mesmo shopping usam logins próprios e um gerente não acessa outro shopping. | Implementado em P02–P03. |
 | Configurar a estrutura sem perder identidade | Importação mostra prévia e erros, confirma uma vez, preserva IDs/histórico e não apaga vaga ausente silenciosamente. | P05 concluído em 21/09/2026. |
 | Consultar o estacionamento em diferentes telas | Admin e gerente navegam por andares, filtros, busca e seleção sem transbordamento horizontal. | Base do mapa concluída em P04 e refinada em P05. |
-| Confiar no estado da vaga | Mudança exige 30 segundos de leituras consistentes; mensagens repetidas ou antigas não alteram o resultado; sensor sem resposta deixa a vaga indisponível. | Base implementada e testada com PostgreSQL; hardware real e uso no mapa ainda pendentes. |
+| Confiar no estado da vaga | Mudança exige 30 segundos de leituras consistentes; mensagens repetidas ou antigas não alteram o resultado; sensor sem resposta deixa a vaga indisponível. | Base implementada e testada com PostgreSQL; validade na consulta e monitoramento implementados; hardware real e atualização automática ainda pendentes. |
 | Exibir contagens reconciliadas | Mapa, API e telão usam a mesma validade; PCD, idoso e elétrica integram o total sem duplicação. | Planejado para P07. |
-| Preservar histórico e análises | O sistema guarda mudanças confirmadas e calcula ocupação, cobertura e entradas dos últimos sete dias sem misturar shoppings. | Parte de P08 implementada; exportações e evolução das métricas ainda pendentes. |
+| Preservar histórico e análises | O sistema guarda mudanças confirmadas e calcula ocupação, cobertura e entradas dos últimos sete dias sem misturar shoppings. | P08 parcial: período de até 31 dias, comparação e Excel/PDF entregues; faltam filtros complementares, evolução das métricas, cobertura zero e classificação histórica. |
 | Demonstrar análise funcional | Primeiro relatório Power BI atualiza com números iguais aos dados controlados e sem exposição entre shoppings. | A preparação dos dados existe; o relatório Power BI funcional ainda está pendente. |
 
 ## Escopo do MVP
@@ -86,7 +86,7 @@ O MVP-alvo do TCC inclui:
 - telões web com agregados por andar ou setor;
 - primeiro relatório funcional no Power BI baseado no histórico.
 
-P01–P05 e a correção de interface C01 estão concluídos. P06 e P08 já começaram e possuem partes funcionais, mas ainda não atendem todo o aceite. O trabalho imediato é fechar P06 com o hardware e a operação real, concluir P07 e ampliar histórico e exportações antes do relatório Power BI.
+P01–P05 e a correção de interface C01 estão concluídos. P06 e P08 já começaram e possuem partes funcionais, mas ainda não atendem todo o aceite. O trabalho imediato é fechar P06 com o hardware e a operação real, concluir P07 e ampliar métricas e filtros históricos antes do relatório Power BI; Excel/PDF já estão entregues.
 
 ## Posterior ao MVP
 

@@ -99,14 +99,14 @@ As sprints acima começaram antes da organização atual do repositório em paco
 
 **Dependências:** concluir as correções documentais prioritárias, confirmar as lacunas atuais da interface e validar com a equipe os campos ainda marcados como pendentes.
 
-**Situação em 30/09:** a consolidação documental e as correções de interface foram concluídas. A base do P06 já recebe, confirma e expira leituras em testes com PostgreSQL. Hardware real, manutenção e validade no mapa continuam pendentes.
+**Situação em 30/09 — registro histórico:** a consolidação documental e as correções de interface foram concluídas. A base do P06 já recebe, confirma e expira leituras em testes com PostgreSQL. Naquele resumo, hardware real, manutenção e validade no mapa permaneciam pendentes. A atualização de 15/10 entregou validade na consulta, editor visual, monitoramento individual e Excel/PDF; o [estado atual](../Documenta%C3%A7%C3%A3o/auditoria-documental-2026-10-15.md) separa as entregas das pendências operacionais.
 
 Detalhamento da execução: [[Vaggu/Planejamento/Plano de correção e implementação]].
 
-## Sequência posterior
+## Sequência posterior — atualizada em 15/10
 
 1. Corrigir as divergências funcionais atuais da interface que foram identificadas na auditoria.
-2. Concluir o P06 com hardware, manutenção e validade no mapa.
-3. Executar P07 e concluir P08: operação, telões, histórico, métricas e exportações.
+2. Concluir P06 com hardware, cadastro/vínculo de equipamentos, manutenção/ocorrências e atualização automática da tela; a validade na consulta já existe.
+3. Executar P07 e concluir P08: telões, filtros/métricas complementares, cobertura zero e classificação histórica. Histórico, período/comparação e Excel/PDF já estão implementados.
 4. Executar P09: primeiro relatório funcional Power BI.
 5. Concluir P10 e P11 conforme dependências externas e roteiro da apresentação.

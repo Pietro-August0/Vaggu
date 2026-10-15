@@ -60,7 +60,7 @@ Se o serviço já estiver com o estado **Em execução**, siga para a próxima e
 3. Selecione o banco `postgres`.
 4. Abra **Tools → Query Tool**.
 5. Troque as duas senhas de exemplo abaixo por senhas locais próprias.
-6. Execute o SQL:
+6. Mantenha o autocommit ativo e execute **uma instrução SQL por vez**, selecionando cada bloco até seu ponto e vírgula. `CREATE DATABASE` não pode rodar dentro de `BEGIN` nem de um lote tratado como uma única transação:
 
 ```sql
 CREATE ROLE vaggu_local_usuario

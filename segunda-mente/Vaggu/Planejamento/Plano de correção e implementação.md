@@ -1,10 +1,10 @@
 # Plano de correção e implementação
 
-Atualizado em 30/09/2026. Este plano começou com os problemas encontrados na auditoria de 23/09 e mantém os pacotes P01–P11 como referência. Os registros concluídos foram preservados como histórico; o resumo abaixo mostra o estado atual.
+Atualizado em 15/10/2026. Este plano começou com os problemas encontrados na auditoria de 23/09 e mantém os pacotes P01–P11 como referência. Os registros concluídos foram preservados como histórico; o resumo abaixo mostra o estado atual.
 
 ## Objetivo
 
-Alinhar documentação, interface, API e evidências antes de iniciar a telemetria. O projeto deve voltar a ter uma descrição única e verificável do que existe, do que regrediu e do que ainda será construído.
+Alinhar documentação, interface, API e evidências das partes já implementadas e dos pacotes ainda abertos. O projeto deve voltar a ter uma descrição única e verificável do que existe, do que regrediu e do que ainda será construído.
 
 ## Resultado da auditoria de 23/09/2026
 
@@ -26,7 +26,7 @@ Os estados abaixo descrevem o conjunto depois da consolidação D01. Quando a do
 | Área | Estado | O que falta |
 | --- | --- | --- |
 | Design | Parcial | Extrair ou confirmar no Figma tamanhos, espaçamentos, sombras, estados e componentes; a paleta e Poppins vieram da evidência fornecida pela equipe. |
-| Evidências atuais da interface | Parcial | Gerar novas capturas da ficha Admin, importação, mapa, erros e larguras menores depois de C01. |
+| Evidências atuais da interface | Parcial | Editor, monitoramento e análise têm oito capturas autenticadas locais de 15/10. Faltam renovar as capturas específicas de exclusões, importação/erros e validar o site publicado. |
 | Sprints históricas | Parcial | Informar datas e divisão individual das Sprints 1–2 e o período da Sprint 4. |
 | Personas | Parcial por dependência da equipe | Inserir no PRD as personas já desenvolvidas, sem criar substitutas. |
 | WhatsApp comercial | Parcial | Confirmar número e ambiente Meta e concluir o P10. |
@@ -40,11 +40,11 @@ Os estados abaixo descrevem o conjunto depois da consolidação D01. Quando a do
 
 ### 4. O que ainda falta no estado atual
 
-- Equipamentos e manutenção ainda não possuem uma área própria; atendimentos e telões também continuam pendentes.
+- A consulta de monitoramento por sensor e seus detalhes já existe. Cadastro/vínculo de equipamentos, comandos e ocorrências de manutenção, atendimentos e telões continuam pendentes.
 - A visão geral administrativa, as exclusões, Minha conta e a área de análises já existem. A análise usa histórico real quando disponível e mostra uma demonstração identificada quando não há dados.
-- A base de sensores, confirmação, expiração e histórico já funciona em testes com PostgreSQL. Ainda faltam o ESP32 real, os tempos definitivos, a validade no mapa e a conferência no ambiente publicado.
-- Exportações históricas e o relatório Power BI funcional ainda não foram entregues. Existe somente a preparação dos dados e um protótipo não versionado como relatório final.
-- Como decisão confirmada: contrato final entre ESP32, sensores e backend, retenção operacional e distribuição do Power BI.
+- A base de sensores, confirmação, expiração e histórico já funciona em testes com PostgreSQL. Ainda faltam ESP32 real, tempos definitivos, atualização automática da tela e conferência no ambiente publicado; a validade individual já é aplicada na consulta do mapa.
+- Histórico, filtro de período, comparação e exportações Excel/PDF foram entregues. Faltam filtros por setor/categoria, métricas complementares, cobertura zero e classificação histórica. O aceite de exportação foi alinhado ao SSD: PDF e planilha XLSX; CSV é opcional. No Power BI existem preparação de dados e registro histórico de protótipo externo, sem artefato final versionado ou acesso integrado.
+- Decisões ainda pendentes: contrato final de firmware, retenção operacional e forma de distribuição do Power BI.
 
 Essas pendências não autorizam criar tudo de uma vez. Cada pacote continua sujeito às dependências e aos critérios de aceite.
 
@@ -63,7 +63,7 @@ Não foi criada uma pasta `docs/` paralela. A segunda mente já era a fonte can�
 
 1. D01 — consolidar documentação e evidências: concluído em 23/09.
 2. C01 — reconciliar as exclusões da interface administrativa: concluído em 23/09.
-3. P06 — concluir hardware, equipamentos, manutenção e validade no mapa sobre a base já implementada.
+3. P06 — concluir hardware, cadastro/vínculo de equipamentos, manutenção e atualização automática sobre a base e a validade já implementadas.
 4. P07–P09 — concluir operação e telões; ampliar o histórico já iniciado; criar o relatório Power BI funcional.
 5. P10–P11 — concluir WhatsApp e preparar a apresentação integrada conforme dependências.
 

@@ -42,7 +42,8 @@ As cópias de imagens entre `segunda-mente/Vaggu/Identidade visual/Assets/` e `v
 | `CONTRIBUTING.md` | Reúne os acordos humanos de contribuição, produto, documentação, verificação e Git. |
 | `README.md` | Apresenta a VAGGU no GitHub com proposta, experiência por perfil, imagens comentadas, tecnologias, início local e links para a documentação técnica. |
 | `render.yaml` | Define build, inicialização, saúde e solicita os segredos de banco e Blob sem versionar seus valores. |
-| `scripts/verificar-documentacao.mjs` | Confere se o mapa canônico explica os arquivos versionáveis e se os links internos da segunda mente possuem destino válido. |
+| `scripts/verificar-documentacao.mjs` | Confere cobertura do mapa, wikilinks e destinos/âncoras locais de todos os Markdown versionáveis, incluindo READMEs; ignora exemplos em blocos de código. |
+| `segunda-mente/Vaggu/Documentação/auditoria-documental-2026-10-15.md` | Consolida a auditoria semântica, as pendências funcionais e de aceite, as evidências e os limites da revisão de 15/10. |
 | `vaggu-backend/.env.example` | Documenta banco, servidor, WhatsApp e parâmetros provisórios da telemetria sem incluir credenciais reais. |
 | `vaggu-backend/README.md` | Documentação: Vaggu Backend — 0.5.0. |
 | `vaggu-backend/package-lock.json` | Fixa a árvore de dependências e integridade para instalação reproduzível via npm ci. |

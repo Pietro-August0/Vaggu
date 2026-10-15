@@ -1,6 +1,6 @@
 # Próximos passos
 
-Atualizado em 30/09/2026. Esta é a ordem de trabalho, sem promessa de datas.
+Atualizado em 15/10/2026. Esta é a ordem de trabalho, sem promessa de datas.
 
 As sprints históricas da equipe e sua diferença em relação aos pacotes técnicos estão em [[Vaggu/Planejamento/Sprints do projeto]]. A ordem executável das correções está em [[Vaggu/Planejamento/Plano de correção e implementação]].
 
@@ -27,19 +27,19 @@ O D01 e o C01 foram concluídos com documentação e contratos reconciliados. A 
 
 ## Correção concluída: C01
 
-A ficha administrativa foi reconciliada com os contratos reais: exclusão lógica de gerente, desfazer por sete segundos e exclusão lógica de shopping. Frontend e integração PostgreSQL foram aprovados; falta apenas substituir as capturas históricas por novas evidências visuais autenticadas.
+A ficha administrativa foi reconciliada com os contratos reais: exclusão lógica de gerente, desfazer por sete segundos e exclusão lógica de shopping. Frontend e integração PostgreSQL foram aprovados; as capturas autenticadas de editor, mapa, monitoramento e análise estão na galeria de 15/10. Exclusões, importação e outros fluxos mantêm evidências históricas e precisam de nova captura específica.
 
 ## Trabalho atual: concluir o P06
 
 A base que recebe as leituras dos sensores já foi criada e testada com PostgreSQL. Ela reconhece a placa, mantém a ordem das mensagens, evita repetições, espera leituras consistentes e torna indisponível a vaga cujo sensor parou de responder.
 
-Para concluir o pacote, a equipe precisa testar com o ESP32 real, definir os tempos finais, criar a gestão de equipamentos e manutenção e fazer o mapa considerar a validade de cada sensor. Uma leitura isolada ou o simples contato da placa não podem tornar uma vaga livre.
+Para concluir o pacote, a equipe precisa testar com o ESP32 real, definir os tempos finais, concluir cadastro/vínculo operacional de equipamentos, manutenção e ocorrências, além da atualização automática das leituras na tela. A validade por sensor já é aplicada quando a estrutura é consultada; o monitoramento individual e o editor visual estão entregues. Uma leitura isolada ou o simples contato da placa não podem tornar uma vaga livre.
 
 Os cenários completos continuam em CA15–CA24. A parte de PostgreSQL foi aprovada; hardware e fluxo operacional ainda precisam de evidência.
 
 ## Trabalho já iniciado depois do P06
 
-O histórico confirmado e a análise dos últimos sete dias já funcionam no sistema quando existem leituras. Sem histórico, o painel mostra uma demonstração identificada. O painel oferece uma planilha Excel formatada e um PDF com a identidade VAGGU. Ambos mostram a fotografia atual das vagas e só incluem métricas históricas quando existem eventos confirmados; a ausência de histórico é declarada nos arquivos. Ainda faltam métricas complementares e a conferência completa do fluxo. A preparação dos dados para Power BI também existe, porém o relatório funcional ainda não foi entregue.
+O histórico confirmado e a análise por período de até 31 dias UTC já funcionam no sistema quando existem leituras, com padrão dos últimos sete dias e comparação com o período anterior. Sem histórico, o painel mostra uma demonstração identificada. O painel oferece uma planilha Excel formatada e um PDF com a identidade VAGGU. Ambos mostram a fotografia atual das vagas e só incluem métricas históricas quando existem eventos confirmados; a ausência de histórico é declarada nos arquivos. Ainda faltam filtros analíticos por setor/categoria, saídas, permanência, rotatividade e a conferência integrada em produção. CA31 foi reconciliado com o SSD: PDF e planilha, com XLSX na entrega atual; CSV é uma opção, não uma entrega obrigatória adicional. CA28 (cobertura zero) e CA30 (classificação histórica) ainda não estão atendidos. A preparação dos dados para Power BI também existe, porém o relatório funcional ainda não foi entregue.
 
 ## Sequência preservada do backlog
 
@@ -53,7 +53,7 @@ O histórico confirmado e a análise dos últimos sete dias já funcionam no sis
 | C01 | Correções da interface administrativa — concluídas em 23/09 |
 | P06 | Sensores, confirmação e expiração — em andamento; base e testes PostgreSQL prontos |
 | P07 | Operação, manutenção e telões |
-| P08 | Histórico, métricas e exportações — iniciado; histórico e painel parcial prontos |
+| P08 | Histórico, período/comparação e Excel/PDF implementados; filtros complementares, métricas, cobertura zero e classificação histórica pendentes |
 | P09 | Relatório funcional Power BI — dados preparados, relatório pendente |
 | P10 | Contato/fluxos WhatsApp — trabalho independente com dependências externas |
 | P11 | Revisão integrada para o TCC |

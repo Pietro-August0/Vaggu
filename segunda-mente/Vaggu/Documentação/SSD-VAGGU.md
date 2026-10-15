@@ -1,8 +1,8 @@
 # SSD VAGGU — especificação de produto e desenho do sistema
 
-**Versão:** 1.1 • **Revisão:** 30/09/2026 • **Idioma:** português brasileiro.
+**Versão:** 1.2 • **Revisão:** 15/10/2026 • **Idioma:** português brasileiro.
 
-**Objetivo:** reunir as regras, os limites e o resultado esperado da VAGGU em um único lugar. Este documento explica o produto; o planejamento mostra o que já foi entregue e o que ainda falta.
+**Objetivo:** reunir as regras, os limites e o resultado esperado da VAGGU em um único lugar. Este documento explica o produto; o planejamento mostra o que já foi entregue e o que ainda falta. A [auditoria de 15/10](auditoria-documental-2026-10-15.md) reconcilia os resumos com o código e registra os critérios ainda não atendidos.
 
 ## Sumário
 
@@ -188,7 +188,7 @@ Interface precisa tratar carregamento, ausência de registros, ausência de obse
 
 ### 7.1 Mapa
 
-Mapa é funcionalidade obrigatória e compartilha a mesma representação visual entre Admin e gerente. Selecionar andar carrega sua base e vagas, com código, setor, categoria e estado. Clicar em uma vaga posicionada, em um card móvel ou em uma vaga sem posição abre o mesmo diálogo de detalhes, que informa localização, categoria, cadastro e situação do monitoramento. A base individual de telemetria já existe, mas o mapa ainda não consulta a validade de cada sensor; até essa ligação ser feita, saúde, comunicação e última leitura devem aparecer como indisponíveis. A interface não pode inventar um sensor saudável apenas porque a vaga está cadastrada ou a placa enviou um sinal geral. Busca por um código exato de outro andar navega ao recorte correto e abre o detalhe da vaga. Filtros por setor, tipo e estado devem ter comportamento visível; não misturar total do shopping com total filtrado sem rótulo. No Admin, mudanças de estrutura atualizam o que aparece sem exigir recarga manual da página.
+Mapa é funcionalidade obrigatória e compartilha a mesma representação visual entre Admin e gerente. Selecionar andar carrega sua base e vagas, com código, setor, categoria e estado. Clicar em uma vaga posicionada, em um card móvel ou em uma vaga sem posição abre o mesmo diálogo de detalhes, que informa localização, categoria, cadastro e situação do monitoramento. A consulta do mapa já aplica a validade individual e retorna monitoramento com situação, placa, horários e confirmação pendente, sem credenciais. A tela ainda não busca novas leituras automaticamente; isso continua necessário para a operação. O Admin edita posições por arraste, toque e teclado, com prévia e salvamento da revisão. A interface não pode inventar um sensor saudável apenas porque a vaga está cadastrada ou a placa enviou um sinal geral. Busca por um código exato de outro andar navega ao recorte correto e abre o detalhe da vaga. Filtros por setor, tipo e estado devem ter comportamento visível; não misturar total do shopping com total filtrado sem rótulo. No Admin, mudanças de estrutura atualizam o que aparece sem exigir recarga manual da página.
 
 **Proposta técnica do MVP:** representação 2D simples por andar, base visual e coordenadas normalizadas. Posição usa `x`/`y` do canto superior esquerdo e largura/altura em relação às dimensões da base; rotação em graus, com âncora documentada. Definir validação de limites, inclusive elemento rotacionado. A proposta evita depender de coordenadas absolutas de um único monitor.
 
@@ -240,7 +240,7 @@ Retorno de contato encerra a falha de comunicação correspondente, mas o histó
 
 Esta seção é **proposta técnica** de contrato e algoritmo. Deve ser conciliada com o firmware existente e implementada com testes de tempo, concorrência e reinicialização.
 
-**Estado local em 30/09/2026:** a base já controla a ordem das mensagens, usa o horário do servidor, rejeita um grupo inteiro quando há leitura inválida e exige uma credencial própria da placa. A integração com PostgreSQL foi executada com sucesso. Os tempos usados ainda são provisórios e precisam ser comparados com o ESP32 real. Também faltam manutenção e ocorrências, validade nas consultas do mapa e conferência no ambiente publicado; por isso, o P06 continua em andamento.
+**Estado local atualizado em 15/10/2026:** a base já controla a ordem das mensagens, usa o horário do servidor, rejeita um grupo inteiro quando há leitura inválida e exige uma credencial própria da placa. A integração com PostgreSQL foi executada com sucesso. Os tempos usados ainda são provisórios e precisam ser comparados com o ESP32 real. Também faltam cadastro/vínculo operacional de equipamentos, comandos de manutenção e ocorrências, atualização automática das telas e conferência no ambiente publicado; por isso, o P06 continua em andamento.
 
 ### 9.1 Parâmetros
 

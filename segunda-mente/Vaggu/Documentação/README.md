@@ -16,6 +16,7 @@ Esta pasta reúne as decisões de produto, o desenho técnico, os padrões de c�
 | [planejamento-do-projeto.md](planejamento-do-projeto.md) | Inventário verificado, revisão final, backlog, diário e pacote para o próximo início. |
 | [fluxo-de-telas.md](fluxo-de-telas.md) | Rotas e jornadas atuais por perfil, páginas planejadas e divergências encontradas entre interface e backend. |
 | [edicao-visual-e-monitoramento.md](edicao-visual-e-monitoramento.md) | Edição direta das vagas, monitoramento individual, dados de apresentação, testes e evidências de 15/10. |
+| [auditoria-documental-2026-10-15.md](auditoria-documental-2026-10-15.md) | Revisão do estado atual, divergências corrigidas, prioridades restantes e limites das verificações. |
 | [modelo-de-dados.md](modelo-de-dados.md) | Entidades e relações implementadas no Prisma/PostgreSQL, limites atuais e evolução prevista para a telemetria. |
 | [mapa-do-projeto.md](mapa-do-projeto.md) | Explica a estrutura do repositório e a responsabilidade de cada arquivo versionável. |
 | [configuracao.md](configuracao.md) | Guia sequencial para um parceiro instalar, iniciar, verificar, testar e encerrar o sistema local sem publicar segredos. |
@@ -41,8 +42,8 @@ O `CONTRIBUTING.md` é o ponto de entrada para os acordos de trabalho. O SSD re�
 - O escopo considera as decisões de Pietro e o documento mestre revisado em 09/09/2026.
 - Regras de código e de organização foram elaboradas para este pedido e passam a orientar novas entregas.
 - Modelos de dados, rotas e detalhes de infraestrutura marcados como **proposta** devem ser conciliados com o repositório.
-- P01–P05 e C01 estão concluídos. P06 está em andamento, com recepção e confirmação de leituras já testadas no PostgreSQL. P08 também começou com histórico e análises dos últimos sete dias. Hardware real, manutenção, telões, exportações e Power BI funcional continuam pendentes.
-- A referência visual é o [Figma VAGGU](https://www.figma.com/design/xKI9wjoiZ5CoXC3DXIJNmq/Vaggu?node-id=2022-2). A consulta atual atingiu o limite da integração; não houve nova extração dos tokens. Os valores exatos a confirmar estão registrados no guia visual.
+- P01–P05 e C01 estão concluídos. P06 possui backend de telemetria, validade na consulta e monitoramento individual; P08 possui histórico, até 31 dias UTC, comparação e Excel/PDF. Editor visual e oito prints autenticados locais estão documentados. Faltam ESP32 real, cadastro operacional, manutenção/ocorrências, atualização automática das telas, telões, filtros/métricas/classificação histórica e Power BI funcional. O inventário de prioridades está na auditoria de 15/10.
+- A referência visual é o [Figma VAGGU](https://www.figma.com/design/xKI9wjoiZ5CoXC3DXIJNmq/Vaggu?node-id=2022-2). O histórico registra bloqueio/limite em uma consulta anterior; esta auditoria não acessou o Figma nem extraiu novos tokens. Os valores exatos a confirmar estão registrados no guia visual.
 - A documentação não contém credenciais. Mudanças no Figma, Trello ou repositório remoto só podem ser afirmadas quando houver evidência registrada na sessão correspondente.
 
 ## Atualização do pacote

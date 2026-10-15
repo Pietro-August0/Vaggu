@@ -26,7 +26,7 @@ Este guia reúne os acordos de trabalho da equipe. A segunda mente em `segunda-m
 - Escreva documentação, comentários, mensagens e nomes do domínio em português brasileiro.
 - Use nomes claros, funções curtas e responsabilidades bem separadas.
 - Valide dados ao entrar no sistema e mantenha as regras de permissão no servidor.
-- Nunca envie senhas, hashes, chaves de placas ou conexão do banco para a interface ou relatórios.
+- Nunca envie senhas definitivas, hashes, chaves de placas ou conexão do banco para a interface ou relatórios. A senha provisória de gerente aparece somente na resposta imediata de criação ou redefinição já autorizada.
 - Crie mudanças incrementais no banco e nunca apague um banco real para facilitar uma atualização.
 - Preserve a identidade amarela e escura da VAGGU, a responsividade, o foco visível e a navegação por teclado.
 - Diferencie carregamento, vazio, erro, sucesso e dados desatualizados sem inventar números.

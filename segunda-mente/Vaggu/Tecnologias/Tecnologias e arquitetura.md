@@ -1,6 +1,6 @@
 # Tecnologias e arquitetura
 
-**Atualização:** 30/09/2026 · **Fontes do estado real:** configurações, código, mudanças do banco e testes versionados.
+**Atualização:** 15/10/2026 · **Fontes do estado real:** configurações, código, mudanças do banco e testes versionados.
 
 ![React](https://img.shields.io/badge/React-19-343231?logo=react&logoColor=FFE100&labelColor=171717) ![TypeScript](https://img.shields.io/badge/TypeScript-frontend%20e%20API-343231?logo=typescript&logoColor=FFE100&labelColor=171717) ![Node.js](https://img.shields.io/badge/Node.js-API-343231?logo=nodedotjs&logoColor=FFE100&labelColor=171717) ![PostgreSQL](https://img.shields.io/badge/PostgreSQL-dados-343231?logo=postgresql&logoColor=FFE100&labelColor=171717)
 
@@ -18,7 +18,7 @@ Este documento apresenta as escolhas técnicas e separa o que está implementado
 | React Router DOM `^7.18.3` | `vaggu-frontend/src/main.tsx` | Rotas públicas, troca de senha e áreas protegidas por perfil. | Centralizar navegação e separar jornadas de visitante, Admin e gerente. | Implementado. |
 | Tailwind CSS `^4.3.3` | `vaggu-frontend` | Tema, layout e responsividade. | Reutilizar tokens e compor estilos sem criar outra camada de design. | Implementado. |
 | Radix UI `^1.6.7`, shadcn `^4.20.1` e componentes Radix específicos | `vaggu-frontend/src/components/ui` | Diálogos, controles e composição acessível. | Oferecer primitivas reutilizáveis sem substituir a identidade VAGGU. | Implementado parcialmente conforme os componentes presentes. |
-| Lucide React `^1.39.0`, Motion `^13.2.0`, Poppins e Geist `^5.3.0` | Interface e landing | Ícones, movimentos, tipografia e acabamento. | Sustentar a linguagem visual; por decisão da equipe, as animações não são suprimidas pela preferência de movimento do sistema. | Implementado; medidas exatas ainda dependem de nova comparação com o Figma. |
+| Lucide React `^1.39.0`, Motion `^13.2.0`, Poppins e Geist `^5.3.0` | Interface e landing | Ícones, movimentos, tipografia e acabamento. | Sustentar a linguagem visual; MotionConfig usa reducedMotion="user" e os gráficos possuem regras CSS de movimento reduzido; a cobertura completa de todas as animações ainda deve ser auditada. | Implementado; medidas exatas ainda dependem de nova comparação com o Figma. |
 | Node.js `>=22.12.0 <25` | `vaggu-backend` | Runtime da API, scripts e testes. | Compartilhar o ecossistema TypeScript e usar APIs nativas para segurança e testes. | Faixa obrigatória do backend. |
 | Express `^5.1.0` | `vaggu-backend/src` | Rotas REST, middleware e webhook. | API HTTP direta e compatível com a escala do TCC. | Implementado. |
 | Helmet `^8.1.0` | Montagem da API | Cabeçalhos HTTP de proteção. | Aplicar uma base segura sem espalhar configuração nas rotas. | Implementado; a publicação atual mantém frontend e API na mesma origem. |
@@ -36,7 +36,7 @@ Este documento apresenta as escolhas técnicas e separa o que está implementado
 | --- | --- | --- | --- | --- |
 | ESP32 + firmware | Maquete e instalação | Autenticar o controlador, ler sensores e enviar sequência/reinicialização. | Controlador acessível para a demonstração e capaz de agrupar sensores. | P06; contrato ainda precisa ser estabilizado. |
 | Sensores ultrassônicos + Wi-Fi | Vagas e comunicação local | Observar ocupação e transmitir leituras. | Base física prevista para a maquete do TCC. | Planejado; topologia e frequências dependem de ensaio. |
-| Serviço de confirmação e expiração | Servidor | Confirmar mudança após 30 segundos consistentes, ignorar mensagens repetidas ou antigas e invalidar dados vencidos. | Dado ausente ou expirado não pode virar vaga livre. | Implementado e testado com PostgreSQL; falta validar com o ESP32 real e usar a validade no mapa. |
+| Serviço de confirmação e expiração | Servidor | Confirmar mudança após 30 segundos consistentes, ignorar mensagens repetidas ou antigas e invalidar dados vencidos. | Dado ausente ou expirado não pode virar vaga livre. | Implementado e testado com PostgreSQL; validade na consulta do mapa e monitoramento individual implementados; faltam ESP32 real e atualização automática das telas. |
 | Atualização operacional por polling controlado ou transporte a confirmar | API e frontend | Atualizar mapa e telões sem recarga manual. | Separar o contrato de estado do transporte e adequá-lo à hospedagem disponível. | Decisão pendente; Socket.IO não está instalado. |
 | Telões web | Frontend + API agregada | Mostrar vagas livres por andar/setor e categorias especiais sem duplicação. | Reutilizar a fonte confiável do mapa em monitores convencionais. | P07, não implementado. |
 | Consultas PostgreSQL + Power BI Desktop | Análises | Preparar histórico, métricas e o primeiro relatório funcional. | Manter a análise separada da operação e conferir os números com um conjunto conhecido. | A consulta histórica e a preparação dos dados existem; o relatório funcional no Power BI ainda não existe no repositório. |
@@ -58,7 +58,7 @@ flowchart LR
 
 O servidor decide as permissões e identifica o shopping pela sessão do gerente. Esconder um botão na tela não substitui essa proteção. A base atual cobre autenticação, administração, estrutura, mapa, importação, histórico, análises iniciais e uma integração parcial com o WhatsApp.
 
-P01–P05 estão concluídos. A recepção de leituras, a confirmação, a expiração, o histórico e a análise inicial já estão presentes e foram testados localmente. Isso ainda não comprova a operação completa: faltam o ESP32 real, manutenção e ocorrências, validade no mapa, telões, exportações e o relatório Power BI.
+P01–P05 estão concluídos. A recepção de leituras, a confirmação, a expiração, o histórico e a análise inicial já estão presentes e foram testados localmente. Isso ainda não comprova a operação completa: faltam ESP32 real, cadastro/vínculo de equipamentos, comandos de manutenção e ocorrências, atualização automática das telas, telões, métricas/filtros complementares e relatório Power BI. Editor visual, monitoramento e Excel/PDF estão implementados.
 
 ## Arquitetura planejada para a operação
 
@@ -93,9 +93,9 @@ A arquitetura planejada conserva dois caminhos: operação e análise. Mapa e te
 
 ## Sequência técnica
 
-1. **P06:** validar a base já criada com o ESP32 real, fechar os tempos de leitura e expiração e levar a validade ao mapa.
+1. **P06:** validar a base já criada com o ESP32 real, fechar os tempos de leitura e expiração e implementar atualização automática; a validade na consulta já existe.
 2. **P07:** consumir apenas estados confiáveis para contagens, painel e telões.
-3. **P08:** ampliar o histórico e as métricas já iniciados e concluir as exportações sem misturar shoppings.
+3. **P08:** ampliar métricas e filtros analíticos sobre o histórico e Excel/PDF existentes; concluir cobertura zero/classificação histórica e preservar isolamento. CSV continua uma alternativa de planilha, conforme o SSD.
 4. **P09:** usar a preparação de dados existente para criar e conferir o primeiro relatório funcional no Power BI.
 5. **P10:** concluir o fluxo do WhatsApp em trabalho independente quando número e ambiente Meta estiverem disponíveis.
 6. **P11:** integrar e reproduzir o roteiro final do TCC.

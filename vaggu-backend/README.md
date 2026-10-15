@@ -44,9 +44,9 @@ Base: http://127.0.0.1:3000/api/v1
 
 | Método | Rota | Entrada | Resultado |
 | --- | --- | --- | --- |
-| POST | /auth/login | JSON com email e senha | 200: token, validade e usuário. |
+| POST | /auth/login | JSON com email e senha | 200: sessão em cookie, validade e usuário. Com `X-VAGGU-Request: 1`, o token não aparece no JSON; o cliente Bearer legado recebe o contrato anterior. |
 | GET | /auth/me | Header Authorization: Bearer TOKEN | 200: usuário da sessão. |
-| POST | /auth/change-password | Header Authorization e JSON com senhaAtual/novaSenha | 200: usuário com troca concluída. |
+| POST | /auth/change-password | Sessão por cookie + `X-VAGGU-Request: 1`, ou Bearer legado; JSON com senhaAtual/novaSenha | 200: usuário com troca concluída. |
 | POST | /auth/logout | Mesmo header, sem corpo | 204 sem corpo: sessão revogada. |
 
 ## Minha conta
