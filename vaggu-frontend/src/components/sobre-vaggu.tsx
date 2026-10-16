@@ -88,7 +88,7 @@ export function SobreVaggu() {
               <path d="M 220 225 C 210 510 460 430 660 350" />
             </svg>
             <figure className="sobre-notebook">
-              <img src="/assets/mockup-laptop-vaggu-optimized.svg" alt="Ilustração do painel de análise da VAGGU em um notebook" loading="lazy" decoding="async" width="600" height="420" />
+              <img src="/assets/mockup-laptop-vaggu.webp" alt="Ilustração do painel de análise da VAGGU em um notebook" loading="lazy" decoding="async" width="1618" height="972" />
             </figure>
             <ul className="sobre-beneficios">
               {beneficios.map(({ titulo, descricao }) => <li key={titulo}><h4>{titulo}</h4><p>{descricao}</p></li>)}
