@@ -6,9 +6,9 @@ import type { UserRole } from "@/types/app"
 
 export function ProtectedRoute({ role, children }: { role: UserRole; children: ReactNode }) {
   const { ready, currentUser, erroSessao, verificarSessao } = useAppStore()
-  if (!ready) return <main className="grid min-h-screen place-items-center bg-white p-8" role="status">Verificando seu acesso...</main>
-  if (erroSessao) return <main className="grid min-h-screen place-items-center bg-white p-8">
-    <div role="alert" className="max-w-lg text-center"><h1 className="text-2xl font-semibold">Não foi possível verificar seu acesso</h1><p className="my-4">{erroSessao}</p><button className="rounded-lg bg-[#ffe100] px-6 py-3 hover:bg-[#f2d500] active:bg-[#e0c600]" onClick={() => void verificarSessao()}>Tentar novamente</button></div>
+  if (!ready) return <main className="grid min-h-screen place-items-center bg-background p-8 text-foreground" role="status">Verificando seu acesso...</main>
+  if (erroSessao) return <main className="grid min-h-screen place-items-center bg-background p-8 text-foreground">
+    <div role="alert" className="max-w-lg text-center"><h1 className="text-2xl font-semibold">Não foi possível verificar seu acesso</h1><p className="my-4">{erroSessao}</p><button className="rounded-lg bg-[#ffe100] px-6 py-3 font-semibold text-[#242424] hover:bg-[#f2d500] focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-foreground active:bg-[#e0c600]" onClick={() => void verificarSessao()}>Tentar novamente</button></div>
   </main>
   if (!currentUser) return <Navigate replace to="/login" />
   if (currentUser.trocarSenhaObrigatoria) return <Navigate replace to="/trocar-senha" />

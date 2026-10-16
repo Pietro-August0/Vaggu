@@ -569,3 +569,7 @@ Por solicitação da equipe, as alterações e verificações desta sessão pert
 - **Verificações finais:** backend com 43 testes aprovados e três integrações puladas sem `TEST_DATABASE_URL`; frontend com lint e build aprovados; documentação com 223 arquivos cobertos e links internos válidos.
 - **Limite do plano:** o serviço gratuito pode suspender por inatividade e demorar na primeira abertura seguinte; os dados permanecem persistidos no Neon.
 - **Automação preparada:** `.github/workflows/publicar-render.yml` solicita um deploy a cada push na `main`. Falta o administrador Pietro cadastrar no GitHub o segredo `RENDER_DEPLOY_HOOK_URL`; Samuel tem escrita, mas a API confirmou que não possui permissão administrativa para criar segredos ou webhooks neste repositório.
+
+### Contraste da verificação de acesso — 15/10
+
+Corrigidos carregamento e erro de sessão para usar fundo e texto do tema; botão amarelo mantém texto escuro e foco visível. Conferidos em Edge/Playwright local, com resposta 503 controlada para `/auth/me`, nos temas claro/escuro e larguras 1440, 768 e 390 px. Botão acionado por teclado realizou nova consulta; sem transbordamento ou erros JavaScript. Build e lint aprovados (aviso de bundle já conhecido). Plugin Browser ausente, utilizado Playwright. Capturas locais fora do repositório. Produção não validada nesta correção. Lacunas documentais adiadas a pedido do usuário, preservadas na auditoria documental.

@@ -166,7 +166,7 @@ As cópias de imagens entre `segunda-mente/Vaggu/Identidade visual/Assets/` e `v
 | `vaggu-frontend/src/components/icone-whatsapp.tsx` | Disponibiliza o símbolo usado nos links de atendimento, sem requisições externas. |
 | `vaggu-frontend/src/components/operacao-vaggu.css` | Foto e conteúdo dividem a seção sem impor uma altura vazia acima dos benefícios. |
 | `vaggu-frontend/src/components/operacao-vaggu.tsx` | Relaciona a imagem de movimento urbano aos benefícios da gestão e ao atendimento. |
-| `vaggu-frontend/src/components/protected-route.tsx` | Aguarda a restauração da sessão antes de proteger a navegação; autorização de recursos continua no backend. |
+| `vaggu-frontend/src/components/protected-route.tsx` | Aguarda a sessão e exibe carregamento/erro com cores do tema, foco visível e nova tentativa; autorização de recursos continua no backend. |
 | `vaggu-frontend/src/components/sobre-vaggu.css` | Escala, anéis automáticos e pesos da landing; medidas compartilhadas mantêm as conexões alinhadas. |
 | `vaggu-frontend/src/components/sobre-vaggu.tsx` | Apresenta a solução, a jornada comercial e os benefícios; inicia as conexões quando o painel está quase todo visível. |
 | `vaggu-frontend/src/components/ui/alert.tsx` | Componente de interface reutilizável alert; usado para controles, estados e composição acessível. |

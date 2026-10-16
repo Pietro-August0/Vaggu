@@ -78,3 +78,7 @@ Não foram verificados nesta sessão: links externos, execução dos serviços p
 - [Edição visual e monitoramento](edicao-visual-e-monitoramento.md).
 - [Galeria e oito capturas atuais](../Evid%C3%AAncias%20visuais/%C3%8Dndice%20de%20evid%C3%AAncias.md).
 - [Modelo de dados](modelo-de-dados.md) e [inventário da API](../../../vaggu-backend/README.md).
+
+## Retomada adiada por solicitação do usuário
+
+Em 15/10/2026, o usuário pediu guardar as lacunas documentais para depois. Permanecem registradas para retomada: fontes das personas; datas e divisão das sprints 1–2 e período da sprint 4; aprovação da identidade visual e medidas do Figma; decisões de frequência, confirmação, expiração e manutenção dos sensores; alcance de Power BI e WhatsApp na apresentação; validação autenticada da versão publicada. Não preencher essas informações por suposição. As pendências funcionais da tabela acima continuam abertas.
