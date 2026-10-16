@@ -46,7 +46,9 @@ export function LandingPage() {
             alt="Pessoa observando o movimento urbano diante de um trem amarelo"
             className="landing-hero-media absolute inset-0 h-full w-full object-cover object-[68%_center] sm:object-[62%_center]"
             fetchPriority="high"
-            src="/assets/hero-vaggu.png"
+            width="1672"
+            height="941"
+            src="/assets/hero-vaggu.webp"
           />
           <div className="absolute inset-0 bg-[linear-gradient(90deg,rgba(0,0,0,.92)_0%,rgba(0,0,0,.58)_42%,rgba(0,0,0,.08)_75%),linear-gradient(0deg,rgba(0,0,0,.5)_0%,transparent_45%)]" />
           <div className="relative mx-auto flex min-h-[760px] max-w-[1440px] flex-col justify-end px-5 pb-14 pt-32 sm:px-8 lg:min-h-[850px] lg:px-12 lg:pb-20">
@@ -190,7 +192,10 @@ export function LandingPage() {
               alt="Celulares amarelos com a identidade VAGGU"
               className="hidden w-full max-h-[420px] object-contain lg:block"
               loading="lazy"
-              src="/assets/phones-vaggu.png"
+              src="/assets/phones-vaggu.webp"
+              decoding="async"
+              width="1470"
+              height="1070"
               initial={{ opacity: 0, x: 40 }}
               whileInView={{ opacity: 0.85, x: 0 }}
               transition={{ duration: 0.8 }}
