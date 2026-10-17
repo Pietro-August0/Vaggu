@@ -1,10 +1,12 @@
 # VAGGU — regras visuais permanentes
 
-Versão 1.0 • 09/09/2026
+Atualização de aprovação visual: 16/10/2026. Regras iniciais de 09/09/2026.
 
 ## 1. Referência e grau de confirmação
 
-Referência principal: [Figma VAGGU — página Web](https://www.figma.com/design/xKI9wjoiZ5CoXC3DXIJNmq/Vaggu?node-id=2022-2).
+**Referência visual vigente: site atual aprovado pela equipe em 16/10/2026.** A equipe confirmou que o site evoluiu e melhorou a proposta criada no Figma. O Figma preserva a origem do projeto; reprodução exata de suas medidas e componentes não é condição para concluir a documentação.
+
+Referência inicial: [Figma VAGGU — página Web](https://www.figma.com/design/xKI9wjoiZ5CoXC3DXIJNmq/Vaggu?node-id=2022-2).
 
 - Arquivo: `xKI9wjoiZ5CoXC3DXIJNmq`.
 - Nó indicado: `2022:2`.
@@ -12,7 +14,7 @@ Referência principal: [Figma VAGGU — página Web](https://www.figma.com/desig
 - Em 09/09, a nova consulta à integração foi bloqueada por limite de chamadas. Não foi possível extrair novamente cores numéricas, fontes, espaçamentos e componentes deste nó.
 - Em 23/09, a equipe forneceu um guia de identidade com paleta hexadecimal e Poppins. Essa imagem é uma fonte entregue pela equipe, não uma extração do Figma.
 - As regras abaixo distinguem **identidade fornecida**, **cores e medidas encontradas no código**, **regras de implementação** e **itens a conferir**.
-- Frames podem preservar escopo antigo, como motos. As decisões atuais de produto prevalecem; o estilo visual continua sendo a referência.
+- Frames podem preservar escopo antigo, como motos. As decisões atuais de produto prevalecem; o site aprovado orienta o resultado visual atual.
 
 ## 2. Identidade conhecida e obrigatória
 
@@ -47,7 +49,7 @@ Não atribuir automaticamente um papel funcional a cada cor apenas pela ordem do
 
 ## 3. Registro de tokens e pendências
 
-Antes de introduzir valores novos, localizar os tokens no repositório e compará-los ao Figma. Registrar valor, origem, nó, modo e data. Até essa conferência, preservar o que já está implementado e marcar divergências.
+Antes de introduzir valores novos, localizar os tokens no repositório e preservar a coerência com o site aprovado. Registrar valor, origem e data. Consultar o Figma quando houver necessidade de recuperar uma referência inicial ou solicitação específica da equipe, sem reverter melhorias aprovadas para igualar medidas antigas.
 
 | Token semântico sugerido | Função | Valor/evidência atual |
 | --- | --- | --- |
@@ -102,7 +104,7 @@ Na troca obrigatória de senha, não depender da mensagem nativa do navegador. I
 
 ### Landing page
 
-Manter a identidade da apresentação do Figma e o CTA de WhatsApp. Explicar o serviço e as funcionalidades com clareza. Acesso ao login é distinto do contato comercial. Não incluir formulário público de cadastro do gerente nem transformar o fluxo em checkout. Layouts e animações devem favorecer leitura e navegação.
+Manter a identidade do site aprovado e o CTA de WhatsApp. Explicar o serviço e as funcionalidades com clareza. Acesso ao login é distinto do contato comercial. Não incluir formulário público de cadastro do gerente nem transformar o fluxo em checkout. Layouts e animações devem favorecer leitura e navegação.
 
 ### Painel do gerente
 
@@ -146,23 +148,23 @@ Aceternity UI e Font Awesome foram indicados pela equipe como referências. Sele
 
 Se um asset exato vier do Figma, preservar o desenho e dar nome descritivo em português. Baixar assets necessários ao código durável conforme permissões e registrar a origem; não depender de URL temporária. Logos, plantas e ícones não devem ser recriados por aproximação quando o original estiver disponível.
 
-## 9. Procedimento para confirmar a identidade
+## 9. Referência para novas alterações visuais
 
-1. Localizar o nó da tela e consultar o contexto disponível no Figma.
-2. Obter/revisar sua captura e os componentes associados.
-3. Inventariar tokens, fontes, assets, variantes e espaçamentos reais, distinguindo o que veio do Figma do que foi fornecido diretamente pela equipe.
-4. Comparar com o repositório e reutilizar o que corresponde.
-5. Registrar divergências do escopo antigo, aplicando as decisões atuais.
-6. Implementar e comparar a página renderizada em tamanho equivalente, conferindo também versões menores.
-7. Preencher o registro de tokens com evidência e data. Se faltar acesso, manter a pendência explícita.
+1. Usar o site aprovado em 16/10/2026 e os tokens existentes como base.
+2. Preservar marca, proporções, padrões de componentes e melhorias aprovadas.
+3. Documentar a origem de novos assets e decisões. Consultar o Figma como referência inicial quando necessário.
+4. Conferir a página renderizada, responsividade, contraste, foco e navegação por teclado.
+5. Registrar evidências técnicas sem apresentar a aprovação da equipe como auditoria completa de acessibilidade ou validação de integrações.
 
 ## 10. Aceite visual
+
+**Aprovação da equipe em 16/10/2026:** site atual aprovado como evolução da proposta inicial do Figma. A pendência de aprovação visual está encerrada. Os itens técnicos abaixo permanecem uma lista de verificação, sem presumir execução completa, implementação de telões ou conformidade integral de acessibilidade.
 
 ### Revisão da seção Sobre — 09/09/2026
 
 A seção usa como referência complementar os arquivos `Group 132.png` e `Group 132.svg` enviados pela equipe: apresentação com anéis ao redor da marca, quatro etapas com círculos amarelos e notebook conectado aos benefícios. O componente `sobre-vaggu.tsx` reutiliza Poppins, `--primary` e as imagens existentes. As linhas aparecem ao entrar na tela, com disposição vertical no celular; quando o usuário prefere menos movimento, a apresentação reduz ou remove a animação decorativa.
 
-Os textos foram ajustados ao escopo de estacionamento: “Eventos estratégicos” e “Gestão de público” passam a “Planejamento da operação” e “Visão da ocupação”. A pedido da equipe, a legenda visível do notebook e o controle manual de pausa foram removidos; o notebook mantém descrição alternativa de ilustração. As conexões aguardam a maior parte do painel entrar na área visível da tela antes de iniciar. Medidas exatas e componentes do Figma continuam pendentes de confirmação. Esta revisão da apresentação não comprova implementação das integrações anunciadas.
+Os textos foram ajustados ao escopo de estacionamento: “Eventos estratégicos” e “Gestão de público” passam a “Planejamento da operação” e “Visão da ocupação”. A pedido da equipe, a legenda visível do notebook e o controle manual de pausa foram removidos; o notebook mantém descrição alternativa de ilustração. As conexões aguardam a maior parte do painel entrar na área visível da tela antes de iniciar. Naquele registro, medidas exatas e componentes do Figma estavam pendentes de confirmação. A aprovação do site em 16/10 encerrou essa exigência de fidelidade ao protótipo. Esta revisão da apresentação não comprova implementação das integrações anunciadas.
 
 Refinamento solicitado pela equipe em 09/09: reduzir a escala e o peso da seção para acompanhar o restante da landing. Títulos usam peso 400, textos de apoio 300 e círculos das etapas têm até 136 px. Rótulos do diagrama são posicionados pelo raio dos anéis; pontos luminosos percorrem as órbitas quando o movimento está habilitado. Nenhuma informação essencial depende do movimento. Referências: [Orbiting Circles](https://magicui.design/docs/components/orbiting-circles), [Moving Border](https://ui.aceternity.com/components/moving-border) e [Motion](https://motion.dev/). Implementação própria com CSS e Motion já instalado, sem adicionar bibliotecas.
 
@@ -177,3 +179,7 @@ A seção seguinte, `operacao-vaggu.tsx`, preserva a foto urbana e apresenta um 
 - [ ] Telões com categorias corretas e sem dupla contagem.
 - [ ] Responsividade, foco e uso por teclado verificados.
 - [ ] Comparação visual registrada, sem afirmar extração que não ocorreu.
+
+### Visual do telão — 17/10/2026
+
+Telão: seguir a referência da equipe de 17/10, com logo oficial, Poppins, fundo preto, total amarelo grande, blocos por andar/setor e categorias na base amarela. Sem gradientes, botões ou navegação. Cores operacionais acompanhadas de rótulo; dados parciais ficam neutros.

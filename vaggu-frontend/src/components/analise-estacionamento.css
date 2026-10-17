@@ -73,3 +73,26 @@
 .analise-serie-lista li span{min-width:0;overflow-wrap:break-word}
 
 @media(max-width:1250px){.analise-metricas{grid-template-columns:repeat(2,minmax(0,1fr))}}
+
+/* Centro da rosca limitado ao diâmetro interno, sem invadir as fatias. */
+.analise-rosca > span{width:46%;max-width:46%;line-height:1.15;overflow-wrap:anywhere}
+.analise-rosca > span > small{display:block;font-size:.6rem;line-height:1.2;margin-top:.15rem}
+.analise-rosca strong{font-size:1.15rem;line-height:1.15}
+.analise-grade-secundaria--quatro{grid-template-columns:repeat(2,minmax(0,1fr))}
+.analise-cobertura-lista{display:grid;gap:.8rem;margin-top:1rem;max-height:14rem;overflow-y:auto;padding-right:.25rem}
+.analise-cobertura-lista li>div:first-child{display:flex;justify-content:space-between;gap:.75rem;font-size:.75rem;margin-bottom:.3rem}
+.analise-cobertura-lista li span{min-width:0;overflow-wrap:anywhere;color:var(--an-muted)}
+.analise-cobertura-lista strong{flex-shrink:0;font-variant-numeric:tabular-nums}
+.analise-cobertura-trilha{height:.5rem;border-radius:999px;background:var(--an-inset);overflow:hidden}
+.analise-cobertura-trilha>span{display:block;height:100%;background:#ffe100;border-radius:inherit}
+.analise-cobertura-nota{margin-top:1rem;font-size:.7rem;line-height:1.5;color:var(--an-muted)}
+@media(min-width:681px) and (max-width:1050px){.analise-grade-secundaria>:last-child{grid-column:auto}}
+@media(max-width:680px){.analise-grade-secundaria--quatro{grid-template-columns:1fr}}
+
+/* Datas e ações ocupam a faixa; a orientação permanece alinhada à direita. */
+.analise-filtro{display:grid;grid-template-columns:minmax(0,1fr) auto;align-items:end;gap:1.5rem}
+.analise-filtro-campos{display:flex;align-items:end;gap:.75rem;min-width:0;flex-wrap:wrap}
+.analise-filtro-campos label{flex:1 1 10rem;min-width:0}
+.analise-filtro input{width:100%;min-width:0}
+.analise-filtro small{flex-basis:auto;line-height:1.5;padding-bottom:.2rem}
+@media(max-width:680px){.analise-filtro{grid-template-columns:1fr;gap:.75rem}.analise-filtro small br{display:none}.analise-filtro-campos button{flex:1 1 auto}}

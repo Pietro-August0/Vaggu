@@ -4,6 +4,28 @@ O **Shopping Exemplo** contém cadastro institucional fictício completo, três 
 
 O funcionamento e os testes do editor e dos sensores estão em [edição visual e monitoramento](edicao-visual-e-monitoramento.md).
 
+## Formato da apresentação — informado pela equipe em 17/10/2026
+
+- **Slides:** serão criados pela própria equipe.
+- **Data prevista:** início de dezembro de 2026; dia e horário exatos ainda não confirmados.
+- **Duração de referência:** normalmente 20 a 25 minutos, conforme relato da equipe; confirmar o limite final com a organização.
+- **WhatsApp:** demonstrar uma interação real entre cliente e robô, com recebimento e respostas funcionando no número da equipe. A equipe informou que já comprou um chip e dispõe de um celular para configurar o serviço. Isso registra recursos disponíveis, sem comprovar ativação do número, configuração Meta ou homologação do bot.
+- **Telões:** apresentação breve, podendo usar uma interação ou fotos do formato. A escolha do formato ainda está aberta; fotos demonstram o layout, sem comprovar atualização operacional ao vivo. Esta escolha para a apresentação não encerra o pacote funcional de telões.
+- **Power BI:** a equipe considera suficiente uma imagem com os modelos de gráficos nos slides. Não é necessária demonstração ao vivo de recebimento de dados, atualização do relatório ou integração com o site para esta apresentação. A imagem ilustra a proposta visual e não comprova uma integração funcional. Esta decisão reduz a exigência da apresentação; não encerra P09 nem altera automaticamente o escopo do produto.
+- **Site:** ficará aberto durante a apresentação, com uma navegação breve para demonstrar seu uso. Telas, sequência e responsável pela navegação ainda precisam ser escolhidos.
+- **Protótipo físico:** sensores ficarão instalados na maquete. Um deles ficará dentro de uma caixa/carcaça de proteção a ser criada pela equipe, para demonstrar o formato de acondicionamento do sensor. Material, dimensões, fixação e modelo do sensor ainda não foram informados.
+- **Integração física:** a presença dos sensores na maquete não comprova, por si só, atualização das vagas no site. Esse fluxo precisa de teste próprio. O Shopping Exemplo descrito neste documento continua sendo sintético; não foi confirmado como destino da telemetria da maquete.
+
+### Informações dos sensores — responsável e retomada
+
+Em 17/10/2026, a equipe informou que as definições dos sensores estão sob responsabilidade de **Kamilly** e serão repassadas posteriormente. Aguardar modelo do sensor/hardware, frequência das leituras, tempos de confirmação e perda de comunicação e procedimento de manutenção. Detalhes da carcaça também permanecem pendentes. Não adotar valores provisórios do código como decisões finais da equipe.
+
+### Preparação necessária do WhatsApp
+
+Configurar o número e o ambiente Meta, concluir os fluxos escolhidos e ensaiar a conversa real antes da apresentação. O roteiro deve indicar a mensagem inicial, as respostas/opções do cliente, as respostas esperadas do robô e o encerramento ou encaminhamento humano, quando fizer parte do fluxo. As opções e os textos finais ainda precisam ser definidos com a equipe.
+
+A integração atual permanece parcial conforme [guia do WhatsApp](whatsapp-webhook.md). A exigência de funcionamento na apresentação é uma meta confirmada, não uma declaração de implementação concluída. Segredos e códigos de ativação ficam fora da documentação e do Git.
+
 ## Aplicação automática no ambiente publicado
 
 Na inicialização com `NODE_ENV=production`, a API garante a existência do exemplo na mesma conexão `DATABASE_URL` usada pelo site. Assim, a publicação já configurada no Render cria o exemplo no Neon sem acesso manual ao banco nem botão adicional na interface. A criação é atômica; reinicializações preservam senhas e histórico, inclusive com duas instâncias iniciando juntas.

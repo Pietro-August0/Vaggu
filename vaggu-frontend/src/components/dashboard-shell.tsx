@@ -15,6 +15,7 @@ import {
   ChevronDown,
   UsersRound,
   UserRound,
+  Monitor,
 } from "lucide-react"
 import { useTheme } from "next-themes"
 import { useEffect, useRef, useState, type ReactNode } from "react"
@@ -50,7 +51,7 @@ function Navigation({ items, admin = false, aoNavegar }: { items: NavItem[]; adm
     <nav aria-label="Navegação do painel" className="grid gap-1">
       {items.map((item) => {
         const Icon = item.icon
-        const active = pathname === item.href
+        const active = pathname === item.href || (item.href === "/painel/telao" && pathname.startsWith("/painel/telao/"))
 
         return (
           <Button
@@ -104,7 +105,7 @@ export function DashboardShell({
       { label: "Cadastrar shopping", href: "/admin/cadastrar", icon: FilePlus2 },
       { label: "Shoppings", href: "/admin/shoppings", icon: Building2 },
     ]
-    : [{ label: "Estacionamento", href: "/painel", icon: LayoutDashboard }, { label: "Análise", href: "/painel/analise", icon: ChartNoAxesCombined }]
+    : [{ label: "Estacionamento", href: "/painel", icon: LayoutDashboard }, { label: "Análise", href: "/painel/analise", icon: ChartNoAxesCombined }, { label: "Telões", href: "/painel/telao", icon: Monitor }]
   const shoppingItems: NavItem[] = shoppingId ? [
     { label: "Visão geral", href: `/admin/shoppings/${shoppingId}`, icon: LayoutDashboard },
     { label: "Estrutura e mapa", href: `/admin/shoppings/${shoppingId}/estrutura`, icon: Map },

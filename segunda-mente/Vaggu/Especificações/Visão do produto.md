@@ -104,11 +104,11 @@ Itens apenas aventados ou dependentes dessas decisões não devem ser apresentad
 - navegação 3D;
 - leitura automática de planta e editor CAD completo.
 
-## Personas — INFORMAÇÃO A SER FORNECIDA
+## Personas — material recebido e propostas em validação
 
-A equipe ainda não forneceu pesquisa, entrevistas ou dados suficientes para criar personas sem suposição. Quando essas informações existirem, registrar para cada persona: contexto, objetivos, dificuldades, rotina, dispositivos usados, decisões que toma e evidências que sustentam o perfil.
+A equipe forneceu a persona Carlos, 45 anos, do setor administrativo do Shopping Granja Vianna, com necessidades de estacionamento e contatos comerciais. Os complementos e as personas Mariana (motorista) e Rafael (operação) foram propostos a pedido da equipe, sem entrevistas documentadas. Perfis completos, fontes, hipóteses e limites estão em [[Vaggu/Especificações/Personas]].
 
-Até lá, usar somente os papéis confirmados de visitante, Admin VAGGU e gerente. Não transformar esses papéis em personas fictícias.
+Essas personas não criam perfis de acesso nem ampliam o escopo. Gestão de lojas permanece fora do produto, telões continuam pendentes e operações administrativas mantêm as permissões existentes.
 
 ## Decisões atuais que não devem regredir
 

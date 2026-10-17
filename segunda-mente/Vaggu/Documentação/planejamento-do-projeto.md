@@ -1,6 +1,6 @@
 # VAGGU — planejamento e continuidade do projeto
 
-Última atualização: **15/10/2026**, fuso **America/Sao_Paulo**. A revisão da landing e seu fechamento permanecem atribuídos a **09/09/2026**, conforme solicitado. Base de P01: `c127b5e`; registros das entregas na seção 7. Este documento registra evidências e orienta o trabalho diário; não substitui o [SSD](SSD-VAGGU.md) nem os [critérios de aceite](plano-e-aceite.md).
+Última atualização: **17/10/2026**, fuso **America/Sao_Paulo**. A revisão da landing e seu fechamento permanecem atribuídos a **09/09/2026**, conforme solicitado. Base de P01: `c127b5e`; registros das entregas na seção 7. Este documento registra evidências e orienta o trabalho diário; não substitui o [SSD](SSD-VAGGU.md) nem os [critérios de aceite](plano-e-aceite.md).
 
 ### Retomada e revisão da última entrega — 15/10
 
@@ -573,3 +573,69 @@ Por solicitação da equipe, as alterações e verificações desta sessão pert
 ### Contraste da verificação de acesso — 15/10
 
 Corrigidos carregamento e erro de sessão para usar fundo e texto do tema; botão amarelo mantém texto escuro e foco visível. Conferidos em Edge/Playwright local, com resposta 503 controlada para `/auth/me`, nos temas claro/escuro e larguras 1440, 768 e 390 px. Botão acionado por teclado realizou nova consulta; sem transbordamento ou erros JavaScript. Build e lint aprovados (aviso de bundle já conhecido). Plugin Browser ausente, utilizado Playwright. Capturas locais fora do repositório. Produção não validada nesta correção. Lacunas documentais adiadas a pedido do usuário, preservadas na auditoria documental.
+
+
+### Calendário das sprints — 16/10
+
+Equipe confirmou Sprint 5 em andamento e transição para a Sprint 6 na quarta-feira, 21/10/2026. Calculados os ciclos semanais: Sprint 5 em 14–21/10 e Sprint 6 em 21–28/10, com retrocálculo até a Sprint 1 no [registro das sprints](../Planejamento/Sprints%20do%20projeto.md). Preservada a divergência da data histórica da Sprint 3, sem remapear entregas por suposição. Divisão de tarefas e conciliação das fontes permanecem pendentes. Conferência: intervalos de sete dias e marcos às quartas-feiras.
+
+
+### Complementação documental — 16/10
+
+Descritos no mapa sete assets otimizados e o script Pillow, com uso real ou condição de variante preservada. Consolidada a persona Carlos fornecida pela equipe e os perfis propostos Mariana/Rafael, com hipóteses e limites explícitos, no documento de personas e no PRD. Atualizado o índice principal. Nenhuma funcionalidade ou permissão foi alterada. Validação: verificador documental e revisão do diff; as decisões e fontes que exigem a equipe continuam abertas.
+
+
+### Aprovação visual — 16/10
+
+Equipe aprovou o site atual como evolução da proposta do Figma. Encerrada a pendência documental de aprovação visual e reprodução das medidas do protótipo. Atualizados identidade visual, regras permanentes e auditoria. Permanecem as verificações técnicas e demais decisões operacionais; nenhuma alteração na interface foi realizada. Conferência documental executada após a atualização.
+
+
+### Formato da apresentação — 17/10
+
+Registrada a decisão da equipe: slides próprios, WhatsApp funcionando em interação real e telões em demonstração breve por interação ou fotos. Chip e celular disponíveis segundo relato. Power BI aguarda confirmação do formato, e data/duração serão informadas. Atualizados cenário de apresentação, guia WhatsApp e auditoria; nenhuma integração foi configurada nesta atualização documental.
+
+
+### Power BI na apresentação — esclarecimento de 17/10
+
+Equipe confirmou que uma imagem dos modelos de gráficos nos slides é suficiente. Atualizado o cenário de apresentação, sem exigir demonstração ao vivo do Power BI nesse roteiro. Esta decisão não encerra P09 nem comprova integração funcional. Verificação documental executada após a atualização.
+
+
+### Apresentação: site e maquete — 17/10
+
+Equipe confirmou navegação breve com site aberto, sensores na maquete e um deles acondicionado em caixa/carcaça de proteção a construir. Previsão: início de dezembro de 2026, duração habitual de 20–25 minutos; dia e limite final pendentes. Atualizados cenário e auditoria, sem assumir integração física concluída ou ligação dos sensores ao Shopping Exemplo. Verificação documental executada após a atualização.
+
+
+### Retomada das definições dos sensores — 17/10
+
+Kamilly indicada pela equipe como responsável pelas informações dos sensores; usuário fará o repasse posteriormente. Pendências técnicas mantidas abertas, com responsável registrado no cenário de apresentação e na auditoria. Nenhuma definição de hardware ou tempo foi presumida. Verificação documental executada após a atualização.
+
+
+### Recálculo do calendário de sprints — 17/10
+
+Foto da equipe confirma Sprint 3 em 09–16/09. Recalculada a sequência semanal: Sprint 5 em 23–30/09; 21/10 inicia a Sprint 9. Isso diverge do relato de Sprint 5 terminando em 21/10. Registrar pausas, durações diferentes ou renumeração antes de fechar o calendário. Ver tabela e limites no registro das sprints. Validação documental executada após a atualização.
+
+
+### Confirmação do calendário — pendente da equipe
+
+Usuário informou em 17/10 que ainda precisa confirmar se houve pausas, sprints com outras durações ou alteração na numeração. Manter os cálculos como condicionais até retorno da equipe.
+
+
+### Prévia funcional dos telões — 17/10
+
+Implementadas telas autenticadas de disponibilidade por andar e setor para o gerente, com estados parciais/sem leitura, atualização a cada 30 segundos e aviso nos dados do shopping de demonstração. Ela usa o endpoint atual protegido e não altera o sistema de sensores. Instalação pública de telão, autorização própria, configuração do recorte e atualização por evento seguem pendentes. A prévia cobre a demonstração visual enquanto a equipe decide o dispositivo físico; P07 não está concluído. Ver [fluxo de telas](fluxo-de-telas.md) e [arquitetura](arquitetura-estrutura-sensores-telao.md).
+
+### Telões para motoristas — 17/10
+
+A equipe confirmou que o telão é somente para exibição aos clientes que entram de carro. Removidos botões, links, navegação por andar e controle de tela cheia da superfície exibida. A atualização permanece automática. Cada endereço define entrada ou andar; a abertura e o modo kiosk ficam sob responsabilidade da operação do dispositivo.
+
+### Visual do telão — 17/10/2026
+
+Redesenhado o telão conforme referência enviada pela equipe: logo oficial, Poppins, preto e amarelo #ffe100 do site; total destacado, andares/setores centrais e faixa de categorias. Sem interação. Faixas provisórias de disponibilidade: até 20% de vagas livres, poucas vagas; até 50%, vagas disponíveis; acima, maior disponibilidade. Dados parciais usam estado neutro, sem recomendação. Build e validador documental aprovados; conferida renderização no navegador local em largura estreita.
+
+### Análises — cobertura por setor e centro da rosca — 17/10/2026
+
+O componente `analise-estacionamento.tsx` exibe cobertura histórica por setor à direita de Tipo de vaga, a partir de `porSetor.coberturaPercentual` da API, respeitando o período consultado (SSD §10.2). Sem histórico, mantém aviso de ausência de dados; Shopping Exemplo identifica histórico demonstrativo. Barras de 0–100% representam tempo conhecido, não disponibilidade de vagas. O CSS limita o texto central da rosca ao diâmetro interno e divide “ocupadas agora” em duas linhas. Build aprovado e composição conferida no navegador local a 1440 px.
+
+### Consolidação com prints — 17/10/2026
+
+Filtro de datas redistribuído após revisão da equipe, preservando campos e ações. Telão ajustado para caber em Full HD e 1366×768. Mudanças desta conversa e evidências atuais reunidas no [registro da entrega](entrega-teloes-analises-2026-10-17.md), com dependências e limites explícitos. Arquivos de ambiente/credenciais não entram no commit.

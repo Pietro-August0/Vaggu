@@ -83,3 +83,7 @@ Capturas locais com Edge/Playwright, API e PostgreSQL reais exclusivos de QA. Us
 | [Confirmação pendente](2026-10-15%20-%20Editor%20e%20sensores/sensor-confirmacao.png) | Sensor, placa, horários e transição pendente no detalhe de N-03. |
 | [Sensor sem resposta](2026-10-15%20-%20Editor%20e%20sensores/sensor-sem-resposta.png) | Falha individual com o registro de contato da placa preservado. |
 | [Análise para apresentação](2026-10-15%20-%20Editor%20e%20sensores/analise-apresentacao.png) | Indicadores do exemplo sem os antigos selos de origem sintética, conforme solicitado. |
+
+## Telões e análises — 17/10/2026
+
+O [registro da entrega](../Documentação/entrega-teloes-analises-2026-10-17.md) reúne os oito prints atuais, resoluções, origem local, mudanças, verificações e limites. Inclui telão de entrada/setores, rosca corrigida, cobertura por setor e filtro responsivo nos temas claro e escuro.

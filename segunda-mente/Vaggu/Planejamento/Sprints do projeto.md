@@ -2,9 +2,27 @@
 
 Este documento registra a sequência das sprints da equipe em linguagem simples. Ele não substitui os pacotes técnicos `P01` a `P11`: as sprints organizam o trabalho do grupo e os pacotes registram dependências e critérios técnicos do sistema.
 
+## Calendário calculado a partir da data confirmada da Sprint 3
+
+A foto fornecida pela equipe confirma a Sprint 3 entre 09/09/2026 e 16/09/2026. Aplicando ciclos semanais consecutivos de sete dias, com transição às quartas-feiras, os períodos calculados são:
+
+| Sprint | Início (quarta-feira) | Encerramento e transição (quarta-feira) |
+| --- | --- | --- |
+| 1 | 26/08/2026 | 02/09/2026 |
+| 2 | 02/09/2026 | 09/09/2026 |
+| 3 | 09/09/2026 | 16/09/2026 |
+| 4 | 16/09/2026 | 23/09/2026 |
+| 5 | 23/09/2026 | 30/09/2026 |
+| 6 | 30/09/2026 | 07/10/2026 |
+| 7 | 07/10/2026 | 14/10/2026 |
+| 8 | 14/10/2026 | 21/10/2026 |
+| 9 | 21/10/2026 | 28/10/2026 |
+
+A equipe também informou em 16/10 que está na Sprint 5, encerrando-a em 21/10/2026 e iniciando a Sprint 6. Esse relato não coincide com a sequência calculada a partir da foto: no calendário semanal, 21/10 encerra a Sprint 8 e inicia a Sprint 9. Portanto, a data da Sprint 3 está confirmada, mas a continuidade semanal sem pausas ou alterações de duração não explica o número atual informado pela equipe. Em 17/10, o usuário informou que ainda precisa confirmar com a equipe se houve pausas, sprints com outras durações ou mudança de numeração. Manter os períodos acima somente como cálculo condicionado a ciclos consecutivos de sete dias até essa confirmação. As datas calculadas não comprovam realização ou conclusão das atividades.
+
 ## Fontes e limites
 
-- As Sprints 1 e 2 foram confirmadas pela equipe em 23/09/2026. Como ainda não foram fornecidas datas, tarefas individuais ou atas, esses campos permanecem como `PENDENTE DE DEFINIÇÃO`.
+- As Sprints 1 e 2 foram confirmadas pela equipe em 23/09/2026. Seus períodos foram retrocalculados a partir da Sprint 3 confirmada pela foto, assumindo ciclos semanais consecutivos; tarefas individuais e conciliação com o status atual da equipe continuam pendentes.
 - As Sprints 3 e 4 foram transcritas das fotografias fornecidas pela equipe em 23/09/2026. A Sprint 3 informa o período de 09/09/2026 a 16/09/2026; a Sprint 4 não apresenta período legível.
 - As fotografias registram o planejamento feito naquele momento. Elas não comprovam sozinhas que todas as tarefas foram concluídas.
 
@@ -20,7 +38,7 @@ Este documento registra a sequência das sprints da equipe em linguagem simples.
 
 **Resultado:** base de ideias usada para iniciar a definição da VAGGU.
 
-**Período e evidências adicionais:** `INFORMAÇÃO A SER FORNECIDA`.
+**Período calculado:** 26/08/2026 a 02/09/2026. Evidências adicionais e confirmação da continuidade semanal ainda precisam ser fornecidas.
 
 ## Sprint 2 — definição inicial da VAGGU e planejamento do Figma
 
@@ -34,11 +52,11 @@ Este documento registra a sequência das sprints da equipe em linguagem simples.
 
 **Resultado:** conceito da VAGGU mais definido e base para as primeiras telas.
 
-**Período e evidências adicionais:** `INFORMAÇÃO A SER FORNECIDA`.
+**Período calculado:** 02/09/2026 a 09/09/2026. Evidências adicionais e confirmação da continuidade semanal ainda precisam ser fornecidas.
 
 ## Sprint 3 — primeiros componentes e base técnica
 
-**Período registrado:** 09/09/2026 a 16/09/2026.
+**Período confirmado pela equipe na fotografia:** 09/09/2026 a 16/09/2026. Os períodos de outras sprints são calculados a partir desta data sob a hipótese de ciclos semanais consecutivos.
 
 **Objetivo:** concluir a landing page e a tela de login por convite, iniciar testes com Arduino, criar APIs e estruturar melhor o backend.
 
@@ -57,7 +75,7 @@ Este documento registra a sequência das sprints da equipe em linguagem simples.
 
 ## Sprint 4 — organização, protótipo físico e apresentação
 
-**Período registrado:** `PENDENTE DE DEFINIÇÃO`.
+**Período calculado:** 16/09/2026 a 23/09/2026. A fotografia histórica não apresentava período legível; confirmar se a duração semanal consecutiva se aplica.
 
 **Objetivo:** organizar documentação e cronogramas, avançar no protótipo do Arduino, preparar banco e Power BI e montar uma nova apresentação do projeto.
 
@@ -85,7 +103,11 @@ As sprints acima começaram antes da organização atual do repositório em paco
 
 ## Registro da Sprint 5 proposta em 23/09
 
-**Número:** Sprint 5, a confirmar pela equipe.
+**Relato da equipe em 16/10:** Sprint 5 em andamento, com término em 21/10/2026.
+
+**Cálculo pela sequência da Sprint 3:** Sprint 5 seria de 23/09/2026 a 30/09/2026. O número/período relatado pela equipe conflita com a numeração da sequência semanal calculada; confirmar pausas, duração diferente ou renumeração.
+
+A proposta abaixo foi registrada em 23/09 e não comprova a divisão efetiva da sprint atual. Objetivo, responsáveis e entregas atuais ainda precisam ser confirmados.
 
 **Objetivo naquela data:** alinhar documentação e implementação antes de iniciar a base de sensores do P06.
 
@@ -102,6 +124,12 @@ As sprints acima começaram antes da organização atual do repositório em paco
 **Situação em 30/09 — registro histórico:** a consolidação documental e as correções de interface foram concluídas. A base do P06 já recebe, confirma e expira leituras em testes com PostgreSQL. Naquele resumo, hardware real, manutenção e validade no mapa permaneciam pendentes. A atualização de 15/10 entregou validade na consulta, editor visual, monitoramento individual e Excel/PDF; o [estado atual](../Documenta%C3%A7%C3%A3o/auditoria-documental-2026-10-15.md) separa as entregas das pendências operacionais.
 
 Detalhamento da execução: [[Vaggu/Planejamento/Plano de correção e implementação]].
+
+## Sprint 6 — período calculado
+
+**Período calculado a partir da Sprint 3:** 30/09/2026 a 07/10/2026. Segundo o relato da equipe em 16/10, a Sprint 6 começaria em 21/10; essa transição corresponde à Sprint 9 na sequência semanal calculada.
+
+**Objetivo, tarefas e responsáveis:** a definir pela equipe. A sequência técnica abaixo é referência de backlog, sem alocação automática para a Sprint 6.
 
 ## Sequência posterior — atualizada em 15/10
 

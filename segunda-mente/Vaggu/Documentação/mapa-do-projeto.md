@@ -22,7 +22,7 @@ As cópias de imagens entre `segunda-mente/Vaggu/Identidade visual/Assets/` e `v
 | `segunda-mente/Vaggu/Documentação/fluxo-de-telas.md` | Registra rotas, jornadas por perfil, páginas planejadas e divergências atuais entre frontend, backend e evidências históricas. |
 | `segunda-mente/Vaggu/Documentação/modelo-de-dados.md` | Explica o schema Prisma/PostgreSQL implementado, suas restrições e os limites que ainda precisam ser resolvidos no P06. |
 | `segunda-mente/Vaggu/Documentação/cenario-de-apresentacao.md` | Explica a aplicação controlada do shopping fictício no ambiente escolhido e a entrega privada das três senhas. |
-| `segunda-mente/Vaggu/Planejamento/Sprints do projeto.md` | Preserva o relato confirmado das Sprints 1–2 e transcreve o planejamento fotografado das Sprints 3–4 sem confundi-las com P01–P11. |
+| `segunda-mente/Vaggu/Planejamento/Sprints do projeto.md` | Registra o calendário semanal informado em 16/10, as tarefas históricas e a divergência de datas da Sprint 3, sem confundir sprints com P01–P11. |
 | `segunda-mente/Vaggu/Planejamento/Plano de correção e implementação.md` | Ordena D01, C01 e P06, com responsáveis, dependências, riscos e critérios de aceite. |
 | `segunda-mente/Vaggu/Evidências visuais/Planejamento/sprint-03-planejamento-09-09-2026.jpeg` | Cópia versionada da fotografia fornecida pela equipe com o planejamento da Sprint 3. |
 | `segunda-mente/Vaggu/Evidências visuais/Planejamento/sprint-04-divisao-equipe.jpeg` | Cópia versionada da fotografia fornecida pela equipe com a divisão registrada para a Sprint 4. |
@@ -31,6 +31,20 @@ As cópias de imagens entre `segunda-mente/Vaggu/Identidade visual/Assets/` e `v
 | `segunda-mente/Vaggu/Evidências visuais/rodape-mobile-2026-09-24.png` | Captura do rodapé público local em 390 px, sem a imagem de celulares, feita em 24/09. |
 | `segunda-mente/Vaggu/Evidências visuais/rodape-desktop-2026-09-24.png` | Captura do rodapé público local em 1440 px, com a imagem de celulares preservada, feita em 24/09. |
 | `segunda-mente/Vaggu/Evidências visuais/login-mobile-2026-09-24.png` | Captura do login público local em 390 px, sem uso de credenciais, feita em 24/09. |
+
+## Personas e otimização de imagens — atualização de 16/10/2026
+
+| Arquivo | Responsabilidade |
+| --- | --- |
+| `vaggu-frontend/public/assets/city-flow-vaggu.webp` | Versão WebP sem perda do visual urbano usado no componente operacao-vaggu, com carregamento adiado. |
+| `vaggu-frontend/public/assets/hero-vaggu.webp` | Versão WebP sem perda da imagem principal publicada na abertura da landing. |
+| `vaggu-frontend/public/assets/mockup-laptop-vaggu-optimized.svg` | Variante do mockup que preserva a geometria SVG e comprime a imagem incorporada em WebP; preservada como asset alternativo, sem referência nas telas atuais. |
+| `vaggu-frontend/public/assets/mockup-laptop-vaggu.webp` | Imagem WebP do notebook exibida na seção sobre a VAGGU, com carregamento adiado. |
+| `vaggu-frontend/public/assets/phones-vaggu.webp` | Versão WebP sem perda dos celulares do rodapé desktop da landing; composição oculta no mobile. |
+| `vaggu-frontend/public/assets/vaggu-circulado.webp` | Versão WebP sem perda da variante circular da marca; preservada no catálogo, sem uso nas telas atuais. |
+| `vaggu-frontend/public/assets/vaggu-foto-homem-login-sem-fundo.webp` | Versão WebP sem perda do retrato decorativo recortado usado no login, preservando transparência. |
+| `vaggu-frontend/scripts/optimize-images.py` | Gera WebP sem perda com Pillow quando o resultado é menor, confere dimensões e pixels RGBA e cria variante SVG com raster incorporado comprimido, preservando os originais. |
+| `segunda-mente/Vaggu/Especificações/Personas.md` | Registra Carlos a partir dos slides da equipe, complementos e personas propostas, fontes, necessidades, hipóteses de validação e limites de escopo e permissões. |
 
 ## Arquivos versionáveis
 
@@ -187,7 +201,7 @@ As cópias de imagens entre `segunda-mente/Vaggu/Identidade visual/Assets/` e `v
 | `vaggu-frontend/src/index.css` | Reúne temas claro/escuro, compatibilidade visual dos painéis, responsividade e microinterações dos cards acionáveis. |
 | `vaggu-frontend/src/lib/constants.ts` | Publica links de contato somente após configurar o número oficial da equipe. |
 | `vaggu-frontend/src/lib/utils.ts` | Combina classes condicionais e resolve conflitos de utilitários Tailwind. |
-| `vaggu-frontend/src/main.tsx` | Inicializa o React, respeita a preferência de movimento reduzido e reúne tema, mensagens, sessão e rotas autenticadas, incluindo `/painel/analise`. |
+| `vaggu-frontend/src/main.tsx` | Inicializa o React, respeita a preferência de movimento reduzido e reúne tema, mensagens, sessão e rotas autenticadas, incluindo análise e prévia de telões do gerente. |
 | `vaggu-frontend/src/pages/admin-page.tsx` | Implementa a visão geral administrativa, cadastro, lista e ficha do shopping; o resumo inclui análise compacta e estrutura/mapa e gerentes mantêm seus fluxos próprios. |
 | `vaggu-frontend/src/pages/area-autenticada.tsx` | Centraliza mapa e análise do gerente; a rota legada de conta mantém o painel ao fundo enquanto o diálogo compartilhado abre. |
 | `vaggu-frontend/src/pages/landing-page.tsx` | Compõe a landing pública, respeita movimento reduzido e mantém contato, temas e rodapé móvel legíveis. |
@@ -218,3 +232,23 @@ As cópias de imagens entre `segunda-mente/Vaggu/Identidade visual/Assets/` e `v
 | `vaggu-frontend/tsconfig.json` | Configura compilação TypeScript e limites dos arquivos incluídos neste projeto. |
 | `vaggu-frontend/tsconfig.node.json` | Configura compilação TypeScript e limites dos arquivos incluídos neste projeto. |
 | `vaggu-frontend/vite.config.ts` | Configura React, Tailwind, aliases e proxy local de /api para o backend. |
+
+
+## Prévia dos telões — atualização de 17/10/2026
+
+| Arquivo | Responsabilidade |
+| --- | --- |
+| `vaggu-frontend/src/pages/telao-page.tsx` | Apresenta prévia autenticada de disponibilidade por andar/setor, consulta o escopo do gerente a cada 30 segundos, não possui controles interativos e oculta contagens quando as leituras não são confiáveis. |
+| `vaggu-frontend/src/pages/telao-page.css` | Define layout de alto contraste para telão, legibilidade a distância e adaptação a telas menores. |
+
+### Visual do telão — 17/10/2026
+
+O telão foi redesenhado com a referência visual da equipe, logo oficial e tipografia do site. A página calcula faixas provisórias pela proporção de vagas livres monitoradas e mantém dados incompletos em estado neutro.
+
+### Análises — cobertura por setor e centro da rosca — 17/10/2026
+
+O componente `analise-estacionamento.tsx` exibe cobertura histórica por setor à direita de Tipo de vaga, a partir de `porSetor.coberturaPercentual` da API, respeitando o período consultado (SSD §10.2). Sem histórico, mantém aviso de ausência de dados; Shopping Exemplo identifica histórico demonstrativo. Barras de 0–100% representam tempo conhecido, não disponibilidade de vagas. O CSS limita o texto central da rosca ao diâmetro interno e divide “ocupadas agora” em duas linhas. Build aprovado e composição conferida no navegador local a 1440 px.
+
+| Arquivo | Responsabilidade |
+| --- | --- |
+| segunda-mente/Vaggu/Documentação/entrega-teloes-analises-2026-10-17.md | Consolida mudanças, prints atuais, verificações e pendências de telões e análises. |

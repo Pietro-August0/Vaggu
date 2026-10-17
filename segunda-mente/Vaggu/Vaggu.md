@@ -11,6 +11,7 @@ Plataforma web responsiva para gestão de estacionamentos de shopping centers, d
 ## Comece aqui
 
 - [[Vaggu/Especificações/Visão do produto]]
+- [[Vaggu/Especificações/Personas]]
 - [[Vaggu/Tecnologias/Tecnologias e arquitetura]]
 - [[Vaggu/Identidade visual/Identidade visual]]
 - [[Vaggu/Evidências visuais/Índice de evidências|Evidências visuais]]
@@ -36,7 +37,7 @@ Plataforma web responsiva para gestão de estacionamentos de shopping centers, d
 
 O próprio cofre está versionado na pasta `segunda-mente/` do repositório VAGGU.
 
-**Estado atual:** P01–P05, D01 e C01 estão concluídos. O sistema já possui login, gestão de shoppings e gerentes, importação, mapa compartilhado, histórico confirmado e painéis de análise. A base de sensores também já recebe eventos, evita repetições, confirma mudanças e marca como indisponível o sensor que parou de responder; os testes com PostgreSQL foram aprovados. O mapa já aplica a validade individual na consulta e possui editor visual e monitoramento por sensor; Excel/PDF e seleção de período também estão implementados. Faltam testar com ESP32 real, criar o cadastro operacional de equipamentos, comandos/ocorrências de manutenção, atualização automática das leituras na tela, telões, métricas/filtros analíticos complementares e homologar a versão publicada. O Power BI ainda não está integrado ao produto. Ver [[Vaggu/Documentação/planejamento-do-projeto|planejamento]] e [[Vaggu/Documentação/fluxo-de-telas|fluxo de telas]].
+**Estado atual:** P01–P05, D01 e C01 estão concluídos. O sistema já possui login, gestão de shoppings e gerentes, importação, mapa compartilhado, histórico confirmado e painéis de análise. A base de sensores também já recebe eventos, evita repetições, confirma mudanças e marca como indisponível o sensor que parou de responder; os testes com PostgreSQL foram aprovados. O mapa já aplica a validade individual na consulta e possui editor visual e monitoramento por sensor; Excel/PDF e seleção de período também estão implementados. Foi criada uma prévia autenticada de telões para gerente, mas a instalação pública, autorização própria, configuração administrativa e integração com o ESP32 físico continuam pendentes. Também faltam cadastro operacional de equipamentos, comandos/ocorrências de manutenção, atualização automática das leituras na tela, métricas/filtros analíticos complementares e homologar a versão publicada. O Power BI ainda não está integrado ao produto. Ver [[Vaggu/Documentação/planejamento-do-projeto|planejamento]] e [[Vaggu/Documentação/fluxo-de-telas|fluxo de telas]].
 
 **Hospedagem registrada em 23/09:** frontend e API são entregues pelo mesmo serviço Render, conectado ao PostgreSQL no Neon. Consulte [[Vaggu/Documentação/configuracao|configuração]] e [[Vaggu/Tecnologias/Tecnologias e arquitetura|arquitetura]] para o funcionamento versionado; endereço público e resultado das publicações devem ser conferidos no Render/GitHub.
 

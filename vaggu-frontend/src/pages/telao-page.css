@@ -1,0 +1,52 @@
+.telao-vaggu {
+  --telao-amarelo: #ffe100;
+  min-height: 100svh;
+  box-sizing: border-box;
+  display: flex;
+  flex-direction: column;
+  gap: clamp(20px, 2.2vh, 24px);
+  padding: clamp(28px, 3vw, 48px);
+  border-top: 6px solid var(--telao-amarelo);
+  background: #080808;
+  color: #f5f5f5;
+  font-family: var(--font-landing), sans-serif;
+}
+.telao-vaggu__topo { display: flex; justify-content: space-between; align-items: center; gap: 32px; }
+.telao-vaggu__logo { width: clamp(110px, 10vw, 170px); height: auto; }
+.telao-vaggu__topo h1 { margin: 0; font-size: clamp(14px, 1.35vw, 24px); font-weight: 600; text-align: right; text-transform: uppercase; }
+.telao-vaggu__principal { display: grid; grid-template-columns: 27% 1fr; align-items: center; gap: 28px; margin-top: 1vh; }
+.telao-vaggu__total h2 { margin: 0 0 14px; font-size: clamp(16px, 1.6vw, 29px); font-weight: 500; text-transform: uppercase; }
+.telao-vaggu__total > strong { display: block; color: var(--telao-amarelo); font-size: clamp(100px, 13vw, 240px); font-weight: 700; line-height: 1; letter-spacing: -.06em; font-variant-numeric: tabular-nums; }
+.telao-vaggu__mensagem { margin: 0; color: #c5c5c5; font-size: clamp(22px, 2.65vw, 46px); font-weight: 500; line-height: 1.4; }
+.telao-vaggu__andares { display: grid; grid-template-columns: repeat(auto-fit, minmax(230px, 1fr)); gap: clamp(18px, 2.3vw, 36px); flex: 1; }
+.telao-vaggu__andar { --situacao: #ffe100; padding: clamp(22px, 2vw, 36px); border-radius: 16px; background: #202020; display: flex; flex-direction: column; justify-content: space-between; gap: 20px; min-height: 200px; }
+.telao-vaggu__andar h2 { margin: 0; font-size: clamp(17px, 1.4vw, 25px); font-weight: 600; text-transform: uppercase; }
+.telao-vaggu__andar p { display: flex; align-items: baseline; gap: 24px; margin: 0; }
+.telao-vaggu__andar strong { color: var(--situacao); font-size: clamp(60px, 6vw, 108px); line-height: 1; font-weight: 700; font-variant-numeric: tabular-nums; letter-spacing: -.04em; }
+.telao-vaggu__andar p span { color: #b9b9b9; font-size: clamp(14px, 1.2vw, 22px); }
+.telao-vaggu__situacao { align-self: flex-start; padding: 8px 18px; border-radius: 999px; background: var(--situacao); color: #080808; font-weight: 700; font-size: clamp(11px, .9vw, 16px); text-transform: uppercase; }
+.telao-vaggu__andar--alta { --situacao: #ff6257; }
+.telao-vaggu__andar--baixa { --situacao: #40d46b; }
+.telao-vaggu__andar--parcial { --situacao: #c6c6c6; }
+.telao-vaggu__categorias { padding: clamp(20px, 2vw, 32px); background: var(--telao-amarelo); border-radius: 16px; color: #080808; }
+.telao-vaggu__categorias > h2 { margin: 0 0 16px; font-size: clamp(16px, 1.2vw, 22px); font-weight: 600; }
+.telao-vaggu__categorias > div { display: grid; grid-template-columns: repeat(3, 1fr); gap: 24px; }
+.telao-vaggu__categoria { display: flex; align-items: center; justify-content: space-between; gap: 16px; padding: 14px 22px; border-radius: 10px; background: #111; color: #fff; }
+.telao-vaggu__categoria h3 { margin: 0; color: var(--telao-amarelo); text-transform: uppercase; font-size: clamp(12px, 1vw, 18px); font-weight: 600; }
+.telao-vaggu__categoria strong { font-size: clamp(26px, 2.3vw, 42px); line-height: 1.2; font-variant-numeric: tabular-nums; }
+.telao-vaggu__rodape { display: flex; justify-content: space-between; gap: 20px; color: #a3a3a3; font-size: clamp(11px, .9vw, 16px); }
+.telao-vaggu__indisponivel { color: #c5c5c5; font-size: 24px; }
+@media (max-width: 700px) {
+  .telao-vaggu { padding: 24px; gap: 28px; }
+  .telao-vaggu__principal { grid-template-columns: 1fr; gap: 12px; }
+  .telao-vaggu__total > strong { font-size: 110px; }
+  .telao-vaggu__andares { grid-template-columns: 1fr; }
+  .telao-vaggu__categorias > div { grid-template-columns: 1fr; gap: 10px; }
+  .telao-vaggu__rodape { flex-direction: column; gap: 6px; }
+}
+@media (min-width: 701px) and (max-height: 800px) {
+  .telao-vaggu { gap: 18px; padding: 24px 4vw 16px; }
+  .telao-vaggu__andar { min-height: 160px; padding: 22px; gap: 14px; }
+  .telao-vaggu__total > strong { font-size: clamp(100px, 12vw, 170px); }
+  .telao-vaggu__categorias { padding: 18px 22px; }
+}

@@ -64,3 +64,8 @@ O erro 130497 é tratado como restrição de envio informada pela Meta. O códig
 ## Limites
 
 A deduplicação usa `meta_message_id` único no PostgreSQL. Se uma tentativa de envio falhar, o evento fica como `FALHOU` e uma nova entrega legítima do mesmo webhook pode tentar novamente. Um evento `PROCESSANDO` há mais de dois minutos também pode ser retomado por uma única reentrega; a tentativa antiga não pode sobrescrever o resultado da nova. Se o processo cair depois que a Meta recebeu o pedido de envio, o resultado é incerto e a retomada pode enviar a resposta novamente. A integração não promete entrega exatamente uma vez.
+
+
+## Demonstração confirmada pela equipe — 17/10/2026
+
+A equipe exige funcionamento real do bot na apresentação, com interação entre cliente e robô. Chip já comprado e celular disponível, conforme relato da equipe. Ativação do número, ambiente Meta, fluxos finais e homologação ainda não foram comprovados. Data e duração da apresentação serão informadas. O formato e as dependências estão no [cenário de apresentação](cenario-de-apresentacao.md).

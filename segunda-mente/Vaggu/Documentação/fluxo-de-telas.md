@@ -47,8 +47,8 @@ O resumo não converte ausência de leitura em vaga livre. A ficha já mostra um
 | Atendimentos | Admin | Navegação administrativa | Consultar e encaminhar demonstrações e solicitações de suporte | Continuidade do contato no WhatsApp sem criar acesso automaticamente | Ausente; rota web não definida |
 | Análises e relatórios | Gerente | Navegação do painel | Consultar histórico por datas, comparar período anterior e exportar Excel/PDF | Indicadores e arquivos restritos ao shopping da sessão | Parcial em `/painel/analise`: filtro de datas e comparação inicial prontos; filtros por setor/categoria e métricas complementares ainda ausentes |
 | Minha conta e troca voluntária de senha | Admin ou gerente | Cartão no rodapé da sidebar | Abrir conta em diálogo, editar dados permitidos e solicitar troca de senha | Conta atualizada sem mudar perfil ou vínculo com shopping; formulário de segurança aparece somente quando solicitado | Implementado; `/admin/conta` e `/painel/conta` continuam abrindo o diálogo por link direto |
-| Telão de entrada | Telão autorizado | Endereço de exibição ainda a definir | Exibir disponibilidade agregada por andar e validade dos dados | Vagas livres e categorias especiais sem duplicação | Ausente; rota web não definida |
-| Telão de andar | Telão autorizado | Endereço de exibição ainda a definir | Exibir disponibilidade agregada por setor | Vagas livres por setor e aviso de dados expirados | Ausente; rota web não definida |
+| Telão de entrada | Gerente autenticado (prévia) | `/painel/telao` | Exibir vagas livres confirmadas por andar e leitura atual | Categorias especiais em recortes separados, sem duplicar o total; aviso de dados parciais | Prévia autenticada implementada em 17/10; instalação pública ainda não definida |
+| Telão de andar | Gerente autenticado (prévia) | `/painel/telao/andares/:andarId` | Exibir vagas livres confirmadas por setor | Leitura por setor, estado sem leitura e dados parciais explícitos | Prévia autenticada implementada em 17/10; instalação pública ainda não definida |
 
 O WhatsApp é um canal externo à navegação web. Landing e login apenas abrem o contato configurado; o menu automatizado e o atendimento humano não devem ser descritos como páginas do frontend.
 
@@ -58,7 +58,7 @@ O WhatsApp é um canal externo à navegação web. Landing e login apenas abrem 
 
 O backend mantém `DELETE /gerentes/:gerenteId` e `POST /gerentes/:gerenteId/desfazer-exclusao`, com janela de sete segundos para desfazer. A ficha atual confirma a exclusão, remove o acesso da lista e apresenta a ação “Desfazer” durante a mesma janela aceita pelo servidor.
 
-As imagens `confirmacao-excluir-gerente.png` e `aviso-desfazer-exclusao.png` continuam sendo evidências históricas da versão anterior. A implementação atual foi revalidada pelo contrato e por testes; uma nova captura autenticada ainda deve substituir as imagens antigas como evidência visual da ficha atual.
+As imagens `confirmacao-excluir-gerente.png` e `aviso-desfazer-exclusao.png` continuam sendo evidências históricas da versão anterior. Uma nova captura autenticada ainda deve substituir as imagens antigas como evidência visual da ficha atual.
 
 ### Exclusão de shopping
 
@@ -73,3 +73,14 @@ As capturas de P02, P03, P04 e “Melhorias — interações e gerentes” prese
 1. criar evidências atuais da ficha, exclusões, importação, mapa, estados vazios, erros e larguras menores;
 2. validar as novas rotas e janelas contra a API hospedada e com usuários reais, sem confundir o ensaio local simulado com essa integração;
 3. manter este documento sincronizado com `src/main.tsx` e com os itens reais da navegação.
+
+
+### Prévia autenticada dos telões — 17/10/2026
+
+O gerente abre “Telões” no painel. A visão de entrada lista disponibilidade confirmada por andar; a rota específica de cada andar mostra os setores. A tela consulta a estrutura da sessão a cada 30 segundos, funciona somente para exibição, sem botões, links ou controles. Estados desconhecidos, indisponíveis, sem monitoramento e sem leitura válida não são somados como livres. Se não houver leitura atual, a contagem fica oculta; leituras incompletas recebem aviso. Shopping marcado como demonstração recebe identificação visível de prévia. As rotas `/painel/telao` e `/painel/telao/andares/:andarId` usam a autenticação e o escopo do gerente existente.
+
+Esta entrega é uma prévia operacional para apresentação e desenvolvimento. Não cria instalação pública/autorização própria de telão, configuração de recorte pelo Admin, rota agregada sem sessão, cadastro de equipamentos, atualização por evento nem vínculo com ESP32 físico. Essas partes continuam no P07/P06 e dependem das decisões documentadas.
+
+### Análises — cobertura por setor e centro da rosca — 17/10/2026
+
+O componente `analise-estacionamento.tsx` exibe cobertura histórica por setor à direita de Tipo de vaga, a partir de `porSetor.coberturaPercentual` da API, respeitando o período consultado (SSD §10.2). Sem histórico, mantém aviso de ausência de dados; Shopping Exemplo identifica histórico demonstrativo. Barras de 0–100% representam tempo conhecido, não disponibilidade de vagas. O CSS limita o texto central da rosca ao diâmetro interno e divide “ocupadas agora” em duas linhas. Build aprovado e composição conferida no navegador local a 1440 px.
