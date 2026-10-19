@@ -15,19 +15,23 @@ export function MonitoramentoSensores({ vagas, demonstracao, aoSelecionar }: {
 }) {
   const filtroId = useId()
   const [situacao, setSituacao] = useState("TODOS")
-  const exibidas = vagas.filter(vaga => situacao === "TODOS" || vaga.monitoramento?.situacao === situacao || situacao === "SEM_SENSOR" && !vaga.monitoramento)
+  const [busca, setBusca] = useState("")
+  const termo = busca.trim().toLocaleLowerCase("pt-BR")
+  const exibidas = vagas.filter(vaga => (situacao === "TODOS" || vaga.monitoramento?.situacao === situacao || situacao === "SEM_SENSOR" && !vaga.monitoramento || situacao === "ATENCAO" && (!vaga.monitoramento || !["OPERANDO", "CONFIRMANDO"].includes(vaga.monitoramento.situacao)))
+    && (!termo || `${vaga.codigo} ${vaga.setor} ${vaga.monitoramento?.sensorCodigo ?? ""} ${vaga.monitoramento?.placaNome ?? ""}`.toLocaleLowerCase("pt-BR").includes(termo)))
+  const precisamAtencao = vagas.filter(vaga => !vaga.monitoramento || !["OPERANDO", "CONFIRMANDO"].includes(vaga.monitoramento.situacao)).length
   return <section aria-label="Monitoramento dos sensores" className="grid min-w-0 gap-4">
     <div className="rounded-xl border bg-background p-4"><h3 className="font-bold">Monitoramento por sensor</h3><p className="mt-1 text-sm text-muted-foreground">{demonstracao ? "Situação individual, última observação e vínculo de cada sensor com a placa ESP32." : "Situação individual na última consulta. O contato da placa não substitui a leitura de cada sensor."}</p>
-      <div className="mt-3 flex flex-wrap gap-2 text-sm">{Object.entries(nomesSituacaoSensor).map(([chave, nome]) => <span className="rounded-lg border px-2 py-1" key={chave}>{nome}: <strong>{vagas.filter(vaga => vaga.monitoramento?.situacao === chave).length}</strong></span>)}</div>
+      <div className="mt-3 flex flex-wrap gap-2 text-sm"><span className="rounded-lg border border-amber-300 bg-amber-50 px-2 py-1 text-amber-950">Precisam de atenção: <strong>{precisamAtencao}</strong></span>{Object.entries(nomesSituacaoSensor).map(([chave, nome]) => <span className="rounded-lg border px-2 py-1" key={chave}>{nome}: <strong>{vagas.filter(vaga => vaga.monitoramento?.situacao === chave).length}</strong></span>)}<span className="rounded-lg border px-2 py-1">Sem sensor: <strong>{vagas.filter(vaga => !vaga.monitoramento).length}</strong></span></div>
     </div>
-    <div className="grid max-w-sm gap-1 text-sm font-semibold"><label htmlFor={filtroId}>Situação do sensor</label><select id={filtroId} className="min-h-11 rounded-md border bg-background px-3" value={situacao} onChange={e => setSituacao(e.target.value)}><option value="TODOS">Todas as situações</option>{Object.entries(nomesSituacaoSensor).map(([chave, nome]) => <option key={chave} value={chave}>{nome}</option>)}<option value="SEM_SENSOR">Sem sensor vinculado</option></select></div>
-    <p role="status" className="text-sm text-muted-foreground">{exibidas.length} sensor(es)/vaga(s) no recorte.</p>
+    <div className="grid gap-3 sm:grid-cols-2"><div className="grid gap-1 text-sm font-semibold"><label htmlFor={`${filtroId}-busca`}>Buscar vaga ou sensor</label><input id={`${filtroId}-busca`} type="search" className="min-h-11 min-w-0 rounded-md border bg-background px-3" placeholder="Código, setor, sensor ou placa" value={busca} onChange={e => setBusca(e.target.value)} /></div><div className="grid gap-1 text-sm font-semibold"><label htmlFor={filtroId}>Situação do sensor</label><select id={filtroId} className="min-h-11 min-w-0 rounded-md border bg-background px-3" value={situacao} onChange={e => setSituacao(e.target.value)}><option value="TODOS">Todas as situações</option><option value="ATENCAO">Precisam de atenção</option>{Object.entries(nomesSituacaoSensor).map(([chave, nome]) => <option key={chave} value={chave}>{nome}</option>)}<option value="SEM_SENSOR">Sem sensor vinculado</option></select></div></div>
+    <p role="status" className="text-sm text-muted-foreground">{exibidas.length} de {vagas.length} vagas no recorte.</p>
     <ul className="grid min-w-0 gap-3 md:grid-cols-2 xl:grid-cols-3">{exibidas.map(vaga => <li key={vaga.id} className="min-w-0 rounded-xl border bg-background p-4">
       <div className="flex flex-wrap items-center justify-between gap-2"><strong>Vaga {vaga.codigo}</strong><span className={`rounded-full px-2 py-1 text-xs font-semibold ${vaga.monitoramento?.situacao === "OPERANDO" ? "bg-emerald-100 text-emerald-950" : "bg-amber-100 text-amber-950"}`}>{vaga.monitoramento ? nomesSituacaoSensor[vaga.monitoramento.situacao] : "Sem sensor vinculado"}</span></div>
       <p className="mt-1 text-sm text-muted-foreground">{vaga.setor}</p>
       <dl className="my-3 grid gap-2 text-sm"><div><dt className="text-muted-foreground">Sensor</dt><dd className="break-all font-medium">{vaga.monitoramento?.sensorCodigo ?? "Não configurado"}</dd></div><div><dt className="text-muted-foreground">Placa ESP32</dt><dd className="break-words">{vaga.monitoramento?.placaNome ?? "Não vinculada"}</dd></div><div><dt className="text-muted-foreground">Última observação individual</dt><dd>{horarioSensor(vaga.monitoramento?.ultimaObservacaoEm ?? null)}</dd></div></dl>
       <Button variant="outline" onClick={() => aoSelecionar(vaga.id)} aria-label={`Ver monitoramento da vaga ${vaga.codigo}`}>Ver detalhes</Button>
     </li>)}</ul>
-    {exibidas.length === 0 && <p className="rounded-xl border p-5">Nenhum sensor corresponde aos filtros.</p>}
+    {exibidas.length === 0 && <p className="rounded-xl border p-5">Nenhuma vaga corresponde à busca e à situação selecionadas.</p>}
   </section>
 }

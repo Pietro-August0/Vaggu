@@ -9,7 +9,7 @@
   <img alt="PostgreSQL" src="https://img.shields.io/badge/PostgreSQL-343231?logo=postgresql&logoColor=FFE100&labelColor=171717">
 </p>
 
-<p align="center"><img src="./vaggu-frontend/public/assets/hero-vaggu.png" alt="Apresentação visual da VAGGU com movimento urbano" width="900"></p>
+<p align="center"><img src="./vaggu-frontend/public/assets/estacionamento-hero-vaggu.webp" alt="Imagem ilustrativa de estacionamento em preto e amarelo" width="900"></p>
 
 ## O projeto
 

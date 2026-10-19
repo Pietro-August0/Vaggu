@@ -43,14 +43,14 @@ export function LandingPage() {
       <main>
         <section className="relative min-h-[760px] bg-neutral-950 text-white lg:min-h-[850px]">
           <img
-            alt="Pessoa observando o movimento urbano diante de um trem amarelo"
-            className="landing-hero-media absolute inset-0 h-full w-full object-cover object-[68%_center] sm:object-[62%_center]"
+            alt="Imagem ilustrativa de estacionamento coberto com pilares amarelos"
+            className="landing-hero-media absolute inset-0 h-full w-full object-cover object-[72%_center] sm:object-center"
             fetchPriority="high"
             width="1672"
             height="941"
-            src="/assets/hero-vaggu.webp"
+            src="/assets/estacionamento-hero-vaggu.webp"
           />
-          <div className="absolute inset-0 bg-[linear-gradient(90deg,rgba(0,0,0,.92)_0%,rgba(0,0,0,.58)_42%,rgba(0,0,0,.08)_75%),linear-gradient(0deg,rgba(0,0,0,.5)_0%,transparent_45%)]" />
+          <div className="absolute inset-0 bg-[linear-gradient(0deg,rgba(0,0,0,.78)_0%,rgba(0,0,0,.35)_35%,transparent_72%),linear-gradient(90deg,rgba(0,0,0,.3),transparent_60%)]" />
           <div className="relative mx-auto flex min-h-[760px] max-w-[1440px] flex-col justify-end px-5 pb-14 pt-32 sm:px-8 lg:min-h-[850px] lg:px-12 lg:pb-20">
             <div className="grid min-w-0 items-end gap-12 lg:grid-cols-[1.15fr_.85fr]">
               <motion.div
