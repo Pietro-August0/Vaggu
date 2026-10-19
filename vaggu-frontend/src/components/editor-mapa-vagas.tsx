@@ -28,12 +28,18 @@ export function EditorMapaVagas({ andar, ocupado, aoSalvar, aoMudarRascunho }: {
   }])))
   const [posicoes, setPosicoes] = useState<Record<string, PosicaoVaga>>(iniciais)
   const [selecionada, setSelecionada] = useState(vagas[0]?.id ?? "")
+  const [buscaVaga, setBuscaVaga] = useState("")
+  const [setorFiltro, setSetorFiltro] = useState("TODOS")
   const [alterado, setAlterado] = useState(false)
   const [aviso, setAviso] = useState("")
   const mapa = useRef<HTMLDivElement>(null)
   const [aspecto, setAspecto] = useState(720 / 640)
   const arraste = useRef<{ id: string; pointerId: number; x: number; y: number; inicial: PosicaoVaga; largura: number; altura: number } | null>(null)
   const vaga = vagas.find(item => item.id === selecionada)
+  const setores = [...new Set(vagas.map(item => item.setor))]
+  const termoVaga = buscaVaga.trim().toLocaleLowerCase("pt-BR")
+  const vagasEncontradas = vagas.filter(item => (setorFiltro === "TODOS" || item.setor === setorFiltro)
+    && (!termoVaga || `${item.codigo} ${item.setor} ${item.monitoramento?.sensorCodigo ?? ""}`.toLocaleLowerCase("pt-BR").includes(termoVaga)))
 
   useEffect(() => {
     const elemento = mapa.current!
@@ -93,7 +99,12 @@ export function EditorMapaVagas({ andar, ocupado, aoSalvar, aoMudarRascunho }: {
   return <section className="mt-5 grid min-w-0 gap-4" aria-label="Editor visual das vagas">
     <div><h3 className="text-lg font-bold">Organize as vagas no mapa</h3><p id="instrucoes-editor" className="mt-1 text-sm text-muted-foreground">Arraste uma vaga ou selecione-a e toque no lugar desejado. Use as setas do teclado para ajustes; Shift move mais rápido. No celular, deslize a área ao redor das vagas para navegar.</p></div>
     <div className="flex flex-wrap items-end gap-3 rounded-xl border p-3">
-      <div className="grid min-w-0 gap-1 text-sm font-semibold"><label htmlFor={selecaoId}>Vaga selecionada</label><select id={selecaoId} className="min-h-11 rounded-md border bg-background px-3" value={selecionada} disabled={ocupado} onChange={e => setSelecionada(e.target.value)}>{vagas.map(item => <option key={item.id} value={item.id}>{item.codigo} · {item.setor}</option>)}</select></div>
+      <div className="grid min-w-0 flex-1 gap-2 sm:grid-cols-2 lg:grid-cols-3">
+        <div className="grid gap-1 text-sm font-semibold"><label htmlFor={`${selecaoId}-busca`}>Buscar vaga ou sensor</label><input id={`${selecaoId}-busca`} type="search" className="min-h-11 min-w-0 rounded-md border bg-background px-3" placeholder="Código, setor ou sensor" value={buscaVaga} onChange={e => setBuscaVaga(e.target.value)} /></div>
+        <div className="grid gap-1 text-sm font-semibold"><label htmlFor={`${selecaoId}-setor`}>Setor</label><select id={`${selecaoId}-setor`} className="min-h-11 min-w-0 rounded-md border bg-background px-3" value={setorFiltro} onChange={e => setSetorFiltro(e.target.value)}><option value="TODOS">Todos os setores</option>{setores.map(setor => <option key={setor} value={setor}>{setor}</option>)}</select></div>
+        <div className="grid gap-1 text-sm font-semibold"><label htmlFor={selecaoId}>Vaga selecionada</label><select id={selecaoId} className="min-h-11 min-w-0 rounded-md border bg-background px-3" value={selecionada} disabled={ocupado || vagas.length === 0} onChange={e => setSelecionada(e.target.value)}>{vaga && !vagasEncontradas.some(item => item.id === vaga.id) && <option value={vaga.id}>{vaga.codigo} · {vaga.setor} (fora do filtro)</option>}{vagasEncontradas.map(item => <option key={item.id} value={item.id}>{item.codigo} · {item.setor}{item.monitoramento ? ` · ${item.monitoramento.sensorCodigo}` : ""}</option>)}</select></div>
+        <p role="status" className="text-xs font-normal text-muted-foreground sm:col-span-2 lg:col-span-3">{vagasEncontradas.length} de {vagas.length} vagas encontradas. {vaga ? `Selecionada: ${vaga.codigo} · ${vaga.setor}.` : ""}</p>
+      </div>
       <Button variant="outline" disabled={ocupado || !vaga} onClick={() => redimensionar(1.1)}>Aumentar vaga</Button>
       <Button variant="outline" disabled={ocupado || !vaga} onClick={() => redimensionar(1 / 1.1)}>Diminuir vaga</Button>
       <Button variant="outline" disabled={ocupado || !vaga} onClick={() => vaga && alterar(vaga.id, { ...posicoes[vaga.id], rotacao: (posicoes[vaga.id].rotacao + 90) % 360 })}>Girar 90°</Button>
