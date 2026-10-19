@@ -102,6 +102,7 @@ A API usa `/api/v1`; o comando de desenvolvimento informa o endereço local do f
 
 ## Leia também
 
+- [Protótipo físico com três vagas](./hardware/esp32-3-vagas/README.md): análise do demo ESP32, firmware compatível, diagramas elétricos e roteiro de bancada.
 - [Segunda mente VAGGU](./segunda-mente/Vaggu/Vaggu.md): índice de produto e documentação.
 - [Fluxo de telas](./segunda-mente/Vaggu/Documentação/fluxo-de-telas.md): jornadas de Admin, gerente e visitante.
 - [Tecnologias e arquitetura](./segunda-mente/Vaggu/Tecnologias/Tecnologias%20e%20arquitetura.md): decisões técnicas e integrações.
