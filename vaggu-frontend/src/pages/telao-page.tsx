@@ -1,5 +1,7 @@
 /** Exibe agregados confirmados para prévia autenticada dos telões. */
 import { useCallback, useEffect, useState } from "react"
+import { Accessibility, PersonStanding, Zap } from "lucide-react"
+import type { LucideIcon } from "lucide-react"
 import { useParams } from "react-router-dom"
 
 import { useAppStore } from "@/app/app-store"
@@ -10,10 +12,10 @@ import "./telao-page.css"
 type VagaConhecida = VagaEstrutura & { andarId: string; andarNome: string; setorId: string; setorNome: string }
 type Contagem = { livres: number; monitoradas: number; total: number; parcial: boolean }
 
-const tipos: Array<{ codigo: TipoVaga; nome: string }> = [
-  { codigo: "PCD", nome: "PCD" },
-  { codigo: "IDOSO", nome: "Idoso" },
-  { codigo: "ELETRICA", nome: "Elétrica" },
+const tipos: Array<{ codigo: TipoVaga; nome: string; icone: LucideIcon }> = [
+  { codigo: "PCD", nome: "PCD", icone: Accessibility },
+  { codigo: "IDOSO", nome: "Idoso", icone: PersonStanding },
+  { codigo: "ELETRICA", nome: "Elétrica", icone: Zap },
 ]
 
 function vagasDaEstrutura(estrutura: EstruturaEstacionamento): VagaConhecida[] {
@@ -93,10 +95,14 @@ export function TelaoPage() {
       </header>
       <section className="telao-vaggu__principal" aria-label="Vagas disponíveis">
         <div className="telao-vaggu__total">
-          <h2>Vagas disponíveis</h2>
+          <h2>Vagas livres agora</h2>
           <strong>{disponivel && contagemGeral.monitoradas ? contagemGeral.livres : "—"}</strong>
+          <span className="telao-vaggu__total-legenda">{andarAtual ? "neste andar" : "no estacionamento"}</span>
         </div>
-        <p className="telao-vaggu__mensagem">{erro ? "Informações temporariamente indisponíveis" : carregando ? "Atualizando disponibilidade" : "Siga a sinalização para o melhor acesso"}</p>
+        <div className="telao-vaggu__orientacao">
+          <p className="telao-vaggu__chamada">{andarAtual ? "Encontre um setor com vagas" : "Encontre seu andar"}</p>
+          <p className="telao-vaggu__mensagem">{erro ? "Informações temporariamente indisponíveis" : carregando ? "Atualizando disponibilidade" : contagemGeral.parcial ? "Dados parciais · siga a sinalização local" : "Compare as vagas livres abaixo"}</p>
+        </div>
       </section>
       <section className="telao-vaggu__andares" aria-label={andarAtual ? "Vagas por setor" : "Vagas por andar"}>
         {disponivel && grupos.map(({ id, nome, contagem }) => {
@@ -105,17 +111,22 @@ export function TelaoPage() {
           const rotulo = !contagem.monitoradas ? "Indisponível" : contagem.parcial ? "Dados parciais" : !contagem.livres ? "Lotado" : tom === "alta" ? "Poucas vagas" : tom === "media" ? "Vagas disponíveis" : "Maior disponibilidade"
           return <article className={"telao-vaggu__andar telao-vaggu__andar--" + tom} key={id}>
             <h2>{nome}</h2>
-            <p><strong>{contagem.monitoradas ? contagem.livres : "—"}</strong><span>vagas livres</span></p>
+            <p><strong>{contagem.monitoradas ? contagem.livres : "—"}</strong><span>vagas<br />livres</span></p>
             <span className="telao-vaggu__situacao">{rotulo}</span>
           </article>
         })}
         {!disponivel && <p className="telao-vaggu__indisponivel">{carregando ? "Aguarde um instante." : "Consulte a sinalização do estacionamento."}</p>}
       </section>
       <section className="telao-vaggu__categorias" aria-label="Vagas livres por categoria">
-        <h2>Vagas por categoria</h2>
-        <div>{porTipo.map(tipo => <div className="telao-vaggu__categoria" key={tipo.codigo}>
-          <h3>{tipo.nome}</h3><strong>{disponivel && tipo.contagem.monitoradas ? tipo.contagem.livres : "—"}</strong>
-        </div>)}</div>
+        <h2>Vagas livres por categoria</h2>
+        <div className="telao-vaggu__categorias-grade">{porTipo.map(tipo => {
+          const Icone = tipo.icone
+          return <div className={`telao-vaggu__categoria telao-vaggu__categoria--${tipo.codigo.toLowerCase()}`} key={tipo.codigo}>
+            <span className="telao-vaggu__categoria-icone" aria-hidden="true"><Icone strokeWidth={2.5} /></span>
+            <h3>{tipo.nome}</h3>
+            <p><strong>{disponivel && tipo.contagem.monitoradas ? tipo.contagem.livres : "—"}</strong><span>livres</span></p>
+          </div>
+        })}</div>
       </section>
       <footer className="telao-vaggu__rodape">
         <span>{estrutura?.shopping.demonstracao ? "Dados de demonstração" : "Categorias especiais incluídas no total"}{disponivel && contagemGeral.parcial ? " · Disponibilidade parcial" : ""}</span>
