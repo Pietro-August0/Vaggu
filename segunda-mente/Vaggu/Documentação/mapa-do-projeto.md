@@ -36,8 +36,9 @@ As cópias de imagens entre `segunda-mente/Vaggu/Identidade visual/Assets/` e `v
 
 | Arquivo | Responsabilidade |
 | --- | --- |
-| `vaggu-frontend/public/assets/city-flow-vaggu.webp` | Versão WebP sem perda do visual urbano usado no componente operacao-vaggu, com carregamento adiado. |
-| `vaggu-frontend/public/assets/hero-vaggu.webp` | Versão WebP sem perda da imagem principal publicada na abertura da landing. |
+| `vaggu-frontend/public/assets/estacionamento-aereo-vaggu.webp` | Imagem ilustrativa criada a partir da referência visual da equipe em 19/10/2026; usada na seção de operação com carregamento adiado. |
+| `vaggu-frontend/public/assets/estacionamento-hero-vaggu.webp` | Imagem ilustrativa criada a partir da referência visual da equipe em 19/10/2026; exibida na abertura da landing. |
+| `vaggu-frontend/public/assets/favicon-vaggu.svg` | Favicon vetorial baseado no ícone enviado pela equipe, com o “v” da marca oficial. |
 | `vaggu-frontend/public/assets/mockup-laptop-vaggu-optimized.svg` | Variante do mockup que preserva a geometria SVG e comprime a imagem incorporada em WebP; preservada como asset alternativo, sem referência nas telas atuais. |
 | `vaggu-frontend/public/assets/mockup-laptop-vaggu.webp` | Imagem WebP do notebook exibida na seção sobre a VAGGU, com carregamento adiado. |
 | `vaggu-frontend/public/assets/phones-vaggu.webp` | Versão WebP sem perda dos celulares do rodapé desktop da landing; composição oculta no mobile. |
@@ -150,8 +151,6 @@ As cópias de imagens entre `segunda-mente/Vaggu/Identidade visual/Assets/` e `v
 | `vaggu-frontend/index.html` | Documento de entrada do Vite e ponto de montagem do React. |
 | `vaggu-frontend/package-lock.json` | Fixa a árvore de dependências e integridade para instalação reproduzível via npm ci. |
 | `vaggu-frontend/package.json` | Declara dependências, faixa do Node e scripts de desenvolvimento, build e verificação. |
-| `vaggu-frontend/public/assets/city-flow-vaggu.png` | Asset visual city-flow-vaggu.png; reutilizado na identidade e composição da interface. |
-| `vaggu-frontend/public/assets/hero-vaggu.png` | Asset visual hero-vaggu.png; reutilizado na identidade e composição da interface. |
 | `vaggu-frontend/public/assets/mockup-laptop-vaggu.svg` | Asset visual mockup-laptop-vaggu.svg; reutilizado na identidade e composição da interface. |
 | `vaggu-frontend/public/assets/phones-vaggu.png` | Imagem de celulares usada apenas na composição do rodapé desktop da landing; no mobile, o rodapé prioriza conteúdo e links. |
 | `vaggu-frontend/public/assets/vaggu-circulado.png` | Variante circular da marca preservada no catálogo público; não está montada nas telas atuais. |

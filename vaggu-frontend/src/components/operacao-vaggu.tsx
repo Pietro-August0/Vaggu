@@ -7,7 +7,7 @@ import "./operacao-vaggu.css"
 export function OperacaoVaggu() {
   return (
     <section className="operacao-vaggu" aria-labelledby="titulo-operacao">
-      <img className="operacao-imagem" src="/assets/city-flow-vaggu.webp" alt="" loading="lazy" decoding="async" width="1030" height="1527" />
+      <img className="operacao-imagem" src="/assets/estacionamento-aereo-vaggu.webp" alt="" loading="lazy" decoding="async" width="1672" height="941" />
       <div className="operacao-conteudo">
         <div className="operacao-texto" data-reveal>
           <h2 id="titulo-operacao">O shopping em movimento.<br /><span>Sua gestão mais clara.</span></h2>
