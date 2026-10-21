@@ -39,7 +39,7 @@ Os quatro testes focados não representam nova execução da suíte completa de 
 
 As 20 capturas estão no [índice de evidências](../Evidências%20visuais/Índice%20de%20evidências.md#21102026--telão-para-apresentação), com perfil, rota, viewport e origem. A imagem do telão no README foi atualizada; as anteriores permanecem como histórico.
 
-Trabalho local na branch `codex/feat/telao-apresentacao-elisa`, base `1b7ae6fb`, com identidade Git mantida em Elisa. Revisão estática independente não apontou bloqueadores. Não houve commit, push ou publicação desta entrega. O ambiente descartável e as credenciais de QA são removidos após a conferência.
+Na conferência de 21/10, o checkout `codex/feat/telao-apresentacao-elisa` e `origin/main` apontavam para `689306c7`; a implementação do telão já estava integrada ao remoto. Não havia alteração funcional pendente para reenviar. A integração no Git não comprova publicação, funcionamento em televisão física ou homologação de produção. O arquivo de acessos de QA e o roteiro temporário desta conferência foram removidos; resultados e backup local foram preservados.
 
 
 ## Ajustes após a conferência local

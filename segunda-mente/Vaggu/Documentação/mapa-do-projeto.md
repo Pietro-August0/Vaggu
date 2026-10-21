@@ -297,6 +297,7 @@ Regras, contratos, operação e limitações estão em [conclusao-software-2026-
 
 ### Telões para apresentação — 21/10/2026
 
+| `vaggu-frontend/src/components/apresentar-telao.tsx` | Aciona tela cheia diretamente no clique e navega para o recorte escolhido na mesma aba. |
 | `vaggu-frontend/src/components/telao-apresentacao.tsx` | Compartilha apresentação enxuta, contagens confirmadas, paginação automática de áreas e tela cheia com saída por Esc. |
 | `vaggu-frontend/src/pages/teloes-page.tsx` | Mantém a gestão de instalações e as prévias geral/por andar no painel do gerente em `/painel/teloes`. |
 

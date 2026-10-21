@@ -1,6 +1,6 @@
 # Conclusão do software
 
-> **Fechamento local de 21/10/2026:** a suíte completa aprovou **130 testes**, zero falhas e zero ignorados, com PostgreSQL descartável e dump/restauração. Build e lint do frontend passaram. A rodada no navegador com API e banco reais locais conferiu filtros, estados sem observação, exportações, análise em desktop/tablet/celular, monitoramento e telão. O corte das categorias no telão foi corrigido e documentado com novos prints. Os resultados 127/129 abaixo são históricos. Power BI publicado permanece opcional; WhatsApp real, hardware físico e homologação publicada seguem etapas próprias. Ver [[Vaggu/Documentação/revisao-geral-2026-10-21]].
+> **Fechamento de 21/10/2026:** a suíte completa aprovou **130 testes**, zero falhas e zero ignorados, com PostgreSQL descartável e dump/restauração. Build e lint do frontend passaram. A rodada no navegador com API e banco reais locais conferiu filtros, estados sem observação, exportações, análise em desktop/tablet/celular, monitoramento e telão. O corte das categorias no telão foi corrigido e documentado com novos prints. A implementação está integrada em `origin/main`; isso não representa homologação publicada ou física. Os resultados 127/129 abaixo são históricos. Power BI publicado permanece opcional; WhatsApp real e hardware físico seguem etapas próprias. Ver [[Vaggu/Documentação/revisao-geral-2026-10-21]].
 
 Iniciado em 19/10/2026, por solicitação de concluir as pendências sem a conexão física do hardware, em etapas das menores para as maiores.
 
@@ -15,15 +15,26 @@ Iniciado em 19/10/2026, por solicitação de concluir as pendências sem a conex
 
 | Etapa | Entrega | Critério de encerramento | Estado |
 | --- | --- | --- | --- |
-| 1 | Renovação explícita do cenário de apresentação | Prévia sem escrita; aplicação apenas no exemplo; IDs e acessos preservados; execução repetida segura | Implementado localmente; validação em andamento |
-| 2 | Estados vazios e proteção de edição | Nenhuma métrica genérica substitui falta de histórico; saída do editor alerta sobre rascunho | Implementado localmente; validação em andamento |
-| 3 | Atualização de mapa, monitoramento e telão | Consulta periódica sem sobreposição, retorno da conexão, invalidação de dado antigo e atualização manual | Implementado localmente; validação em andamento |
-| 4 | Análise e relatórios | Cobertura zero não vira ocupação zero; filtros de setor/categoria; saídas, permanência e rotatividade com regras verificáveis | Implementado localmente; validação em andamento |
-| 5 | Preservação histórica | Alterações futuras do cadastro não reclassificam eventos anteriores; limites dos registros legados explícitos | Implementado localmente; validação em andamento |
-| 6 | Equipamentos e manutenção | Cadastro, vínculo, chave protegida, ocorrência e fechamento com isolamento por shopping | Implementado localmente; validação em andamento |
-| 7 | Telões instalados | Recorte administrativo e credencial própria; somente agregados públicos autorizados | Implementado localmente; validação em andamento |
-| 8 | Power BI e WhatsApp | Artefatos/fluxos reproduzíveis; configuração externa e homologação comprovadas | WhatsApp implementado localmente; validação em andamento. Power BI e homologação externa pendentes |
-| 9 | Entrega integrada | Testes, navegador, documentação e validação autenticada do ambiente publicado | Documentação, 127 testes backend, build e lint frontend aprovados localmente; telão verificado com API interceptada; demais jornadas e produção não homologadas |
+| 1 | Renovação explícita do cenário de apresentação | Prévia sem escrita; aplicação apenas no exemplo; IDs e acessos preservados; execução repetida segura | Validado localmente; cobertura na suíte PostgreSQL completa |
+| 2 | Estados vazios e proteção de edição | Nenhuma métrica genérica substitui falta de histórico; saída do editor alerta sobre rascunho | Validado localmente; estados sem observação conferidos no navegador |
+| 3 | Atualização de mapa, monitoramento e telão | Consulta periódica sem sobreposição, retorno da conexão, invalidação de dado antigo e atualização manual | Validado localmente; builds, testes e fluxos de navegador aprovados |
+| 4 | Análise e relatórios | Cobertura zero não vira ocupação zero; filtros de setor/categoria; saídas, permanência e rotatividade com regras verificáveis | Validado localmente; filtros e exportações conferidos no navegador |
+| 5 | Preservação histórica | Alterações futuras do cadastro não reclassificam eventos anteriores; limites dos registros legados explícitos | Validado localmente; suíte completa aprovada |
+| 6 | Equipamentos e manutenção | Cadastro, vínculo, chave protegida, ocorrência e fechamento com isolamento por shopping | Validado localmente; suíte completa aprovada |
+| 7 | Telões instalados | Recorte administrativo e credencial própria; somente agregados públicos autorizados | Concluído e validado localmente com API/PostgreSQL reais, testes de autorização e capturas responsivas |
+| 8 | Power BI e WhatsApp | Artefatos/fluxos reproduzíveis; configuração externa e homologação comprovadas | WhatsApp local implementado; conexão real pendente. Publicação do Power BI opcional; homologações externas não realizadas |
+| 9 | Entrega integrada | Testes, navegador, documentação e validação autenticada do ambiente publicado | Integração local aprovada; 130 testes, build e lint aprovados; implementação em `origin/main`. Produção e hardware físico não homologados |
+
+## Consolidação documental e limpeza — 21/10/2026
+
+- O checkout `codex/feat/telao-apresentacao-elisa` e `origin/main` estavam no commit `689306c7`; a implementação dos telões já estava integrada na `main`. Não havia código de telão pendente para reenviar.
+- Corrigimos o estado da etapa 7 e da entrega integrada, atualizamos o registro do telão e completamos no mapa a responsabilidade do componente que solicita tela cheia.
+- Removemos de `ambiente.local` somente `validar-atalhos.cjs` e `acessos-telao-local.local`, usados na conferência concluída. Mantivemos o cluster PostgreSQL ativo, o dump anterior ao telão, JSONs de resultados, exports e perfis locais; nenhuma base ou evidência foi apagada.
+- `node scripts/verificar-documentacao.mjs`: aprovado; 400 arquivos cobertos e 55 Markdown com links e âncoras locais válidos.
+- `npm.cmd --prefix vaggu-backend run build`: aprovado. `npm.cmd --prefix vaggu-frontend run build` e `npm.cmd --prefix vaggu-frontend run lint`: aprovados. O build frontend mantém o aviso de chunks acima de 500 kB.
+- `git diff --check`: aprovado nesta consolidação.
+- A revisão geral do mesmo dia registra a suíte backend completa com 130 aprovados, zero falhas e zero ignorados. A tentativa de repetição nesta sessão não produziu um resultado confiável por alternância de contexto no terminal e não é contada como nova execução.
+- Permanecem fora do aceite local: hardware/televisores físicos, homologação autenticada em produção e conexão real do WhatsApp. Power BI publicado segue opcional.
 
 ## Registro de retomada
 
