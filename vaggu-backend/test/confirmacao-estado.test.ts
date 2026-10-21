@@ -5,6 +5,29 @@ import { criarConfirmacaoEstado, observarEstado } from '../src/telemetria/confir
 
 const lacunaMaximaMs = 15_000;
 
+test('janela de dois segundos aceita o ciclo físico de quatro segundos mas rejeita silêncio maior que 4,5 s', () => {
+  const primeira = observarEstado(criarConfirmacaoEstado('LIVRE'), { estado: 'OCUPADA', recebidoEmMs: 0 }, 4500, 2000);
+  assert.equal(primeira.situacao, 'PENDENTE');
+  const segunda = observarEstado(primeira.proximo, { estado: 'OCUPADA', recebidoEmMs: 4000 }, 4500, 2000);
+  assert.equal(segunda.situacao, 'CONFIRMADA');
+  const silencio = observarEstado(primeira.proximo, { estado: 'OCUPADA', recebidoEmMs: 5000 }, 4500, 2000);
+  assert.equal(silencio.situacao, 'PENDENTE');
+});
+
+test('janela de bancada confirma após cinco segundos, reiniciando diante de oscilação ou silêncio', () => {
+  let r = observarEstado(criarConfirmacaoEstado('LIVRE'), { estado: 'OCUPADA', recebidoEmMs: 0 }, 4500, 5000);
+  r = observarEstado(r.proximo, { estado: 'OCUPADA', recebidoEmMs: 4000 }, 4500, 5000);
+  assert.equal(r.situacao, 'PENDENTE');
+  const confirmada = observarEstado(r.proximo, { estado: 'OCUPADA', recebidoEmMs: 8000 }, 4500, 5000);
+  assert.equal(confirmada.situacao, 'CONFIRMADA');
+  const silencio = observarEstado(r.proximo, { estado: 'OCUPADA', recebidoEmMs: 9000 }, 4500, 5000);
+  assert.equal(silencio.situacao, 'PENDENTE');
+  assert.equal(silencio.proximo.candidato?.iniciadoEmMs, 9000);
+  const alternada = observarEstado(r.proximo, { estado: 'LIVRE', recebidoEmMs: 4500 }, 4500, 5000);
+  assert.equal(alternada.proximo.candidato, null);
+  assert.throws(() => observarEstado(criarConfirmacaoEstado(), { estado: 'LIVRE', recebidoEmMs: 0 }, 4500, 999), RangeError);
+});
+
 test('confirma apenas após observações consistentes durante trinta segundos', () => {
   const inicial = criarConfirmacaoEstado();
   const primeira = observarEstado(inicial, { estado: 'LIVRE', recebidoEmMs: 0 }, lacunaMaximaMs);

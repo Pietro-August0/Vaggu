@@ -1,5 +1,9 @@
 # VAGGU — fluxo de telas
 
+Configuração atual da bancada em 21/10: mapa com consulta de **2 s**, backend local com confirmação de **5 s**, preservando 30 s como padrão dos demais ambientes. Três canais físicos confirmaram ocupado/livre e apareceram no mapa do gerente. A edição de posições permanece sem polling.
+
+Atualização de 21/10/2026: mapa do gerente e aba Visualizar mapa do Admin consultam estados a cada 5 s após cada resposta, com pausa em aba oculta e recuperação de falha. O editor de posições não recebe atualização periódica. Bancada local com shopping/gerente próprios: ESP32 conectada, leitura de S02 persistida e A02 Livre exibida no mapa. S01/S03 e ensaios das três vagas ainda precisam de validação física completa.
+
 Este documento registra a navegação encontrada na interface, com atualização de edição visual e monitoramento em 15/10/2026 e a compara com as páginas previstas no SSD. **Implementado** significa que existe rota e tela no código atual; não significa que sensores e Power BI estejam concluídos. **Parcial** indica que parte da experiência está pronta. **Ausente** indica que a página foi planejada, mas ainda não existe no site.
 
 ## Perfis e regras comuns de navegação

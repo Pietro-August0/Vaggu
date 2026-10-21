@@ -1,5 +1,11 @@
 # Edição visual e monitoramento dos sensores
 
+Último ajuste de velocidade: polling do mapa em **500 ms** após cada resposta, sem sobreposição. Confirmação local em 2 s; ausência de leitura individual continua impedindo mudança para livre. Firmware rápido também reduz espera entre lotes.
+
+Configuração mais recente da bancada, a pedido do usuário: mapa consulta a cada **2 s**; janela do backend local em **5 s** com lacuna máxima 4,5 s. Sem configuração explícita, backend preserva 30 s. Tempo real de transição inclui ciclos de envio da ESP32 e consulta do mapa. Leituras físicas já confirmaram ocupado/livre nos três canais da bancada local.
+
+Atualização de 21/10/2026: Admin em **Visualizar mapa** e gerente em `/painel` consultam automaticamente a cada 5 s após a resposta anterior; abas ocultas pausam consultas. Erro retira a leitura antiga da tela e inicia recuperação automática. Edição de posições permanece sem polling para preservar rascunhos. Ver [guia da bancada física](../../../hardware/esp32-3-vagas/README.md).
+
 Entrega de 15/10/2026. As alterações usam as rotas e os modelos PostgreSQL existentes. A consulta continua isolada pelo shopping autorizado; somente o Admin salva posições.
 
 ## Como editar o mapa

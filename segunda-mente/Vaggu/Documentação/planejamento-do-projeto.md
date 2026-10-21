@@ -1,5 +1,38 @@
 # VAGGU — planejamento e continuidade do projeto
 
+### Velocidade e sensores laterais — 21/10/2026
+
+- Upload rápido concluído e ESP32 reiniciada via RTS após BOOT liberado. Nova inicialização física esp32-c71d8480-e174198e-b8c9204e; Serial HTTP202. Intervalos saudáveis medidos em cerca de 1,1 s, com alguns atrasos de rede de até ~2,9 s no recorte. S02 confirmou ocupação de 16:27:15.205Z a 16:27:17.437Z (2,232 s); posteriormente os três sensores tiveram observação recente no mesmo lote às 16:27:28.358Z. Não garante estabilidade elétrica/acústica permanente; ausência de eco continua exigindo conferência física.
+
+- Usuário relatou apenas vaga central mudando. Banco confirmou S01/S03 sem observação por dezenas de segundos e S02 atual; problema não era só frontend. Mapa reduzido para 500 ms sem sobreposição; Edge/Playwright registrou 15 consultas durante o ensaio, sem erros em desktop/mobile. Build/lint aprovados.
+- Firmware compilado (935588 bytes; 48368 bytes RAM): espera final de 3 s reduzida para 100 ms, separação acústica de 65 ms preservada. Filtro aceita duas leituras próximas se terceira falhar, mas nunca sem eco ou par inconsistente; mediana mantida quando três válidas. Upload iniciado com BOOT manual; confirmar envio e intervalo real após gravação.
+
+### Janela local de dois segundos — 21/10/2026
+
+- A pedido do usuário, TELEMETRIA_CONFIRMACAO_MS local reduzida a 2000 ms e API reiniciada; polling permanece em 2 s. Lacuna de 4500 ms mantida para o firmware atual enviar aproximadamente a cada 4 s. Validação separa limite de continuidade (no mínimo referência 30 s) da janela curta para não reiniciar toda confirmação antes da próxima mensagem. Continua exigindo uma segunda observação válida; silêncio além da lacuna reinicia candidato. Padrão de 30 s preservado para ambientes sem ajuste.
+- Build e 15 testes de ambiente, confirmação e persistência PostgreSQL aprovados, incluindo janela de 2 s com envio a 4 s e silêncio a 5 s recusado. Firmware não regravado; tempo ponta a ponta depende dos ciclos de envio e consulta.
+
+### Aceite físico inicial e transição rápida — 21/10/2026
+
+- Após posicionamento, os três sensores físicos enviaram leituras e o histórico por evento esp32 confirmou OCUPADA → LIVRE em A01/A02/A03; mapa gerente mostrou as três livres. Não houve simulador concorrente. Isto comprova o fluxo local inicial, não uma homologação de estacionamento real ou da versão publicada.
+- Usuário pediu transição menor que 30 s: janela tornou-se configurável com padrão preservado de 30000 ms. Somente .env local configurado com 5000 ms e lacuna 4500 ms; API reiniciada. Mapa passou a consultar a cada 2 s e removeu texto fixo de 30 s. Com o firmware atual, expectativa de 8–12 s em leituras estáveis, podendo reiniciar diante de falha/lacuna/oscilação.
+- Build backend/frontend e lint aprovados. Testes de configuração e núcleo temporal ampliados para janela rápida sem alterar o padrão; integração PostgreSQL verifica confirmação de 5 s após leituras em 0/4/8 s. Edge/Playwright confirmou cinco consultas de mapa em aproximadamente 6 s com dados físicos, detalhes e ausência de erro/transbordamento em desktop/mobile. Sem alteração de senhas reais e sem publicar ou fazer push.
+
+### Integração da bancada local ao mapa — 21/10/2026
+
+- Resultado físico posterior: diagnóstico apontou NO_AP_FOUND (201). A API WinRT do Windows confirmou hotspot Vaggu em 2,4 GHz configurado, porém Off; ativado sem alterar senha e apareceu um cliente. Firmware diagnóstico compilado (935500 bytes/48368 bytes RAM) e gravado com BOOT manual. Serial mostrou HTTP202 e inicialização esp32-d9f9adf2-dcba5a09-73f370ba persistida; S02 confirmou LIVRE após 30 s. S01 ainda sem leitura válida e S03 com leitura intermitente, mantendo indisponibilidade quando não confirmado.
+- Verificação física no frontend: Edge/Playwright com gerente QA temporário em `/painel` mostrou A02 Livre, abriu detalhes e fez três consultas automáticas; desktop 1440×1000 e mobile 390×844 sem transbordamento/erros de console. Usuário QA e sessões removidos ao final; não foi alterada a senha do gerente da bancada. Evidências em Temp/vaggu-esp32-fisico-desktop.png e Temp/vaggu-esp32-fisico-mobile.png, fora do Git. Fluxo físico validado para S02; aceite dos três canais e mudanças livre/ocupada por objeto ainda requer posicionamento e ensaio.
+
+- PostgreSQL portátil existente reiniciado em 127.0.0.1:55432; API em 0.0.0.0:3000 e Vite em 127.0.0.1:5173. Criados shopping próprio Bancada ESP32 — 3 vagas (não demonstrativo), três vagas/sensores, placa individual e gerente com troca obrigatória. Segredos somente em config.h/acesso.local ignorados; preparação repetida preservou registros e chave. Corrigida rotação zero nas posições recém-criadas da bancada.
+- MapaAoVivo consulta estados a cada 5 s após resposta, pausa em aba oculta e oculta mapa antigo em falha; Admin usa somente na aba Visualizar mapa, gerente no mapa principal. Editor e rascunhos preservados. Aplicadas orientações de verificação de fluxo, React e componentes existentes.
+- Build/lint frontend e build backend aprovados, seis testes de contrato/rotas/PostgreSQL aprovados sem skips. Browser plugin not available: Edge/Playwright em 1440×1000 e 390×844 comprovou mensagens HTTP sintéticas → confirmação real PostgreSQL → mapa Admin atualizado, detalhes e recuperação de 503, sem erros inesperados/transbordamento. Usuário QA/sessão temporários removidos; eventos sintéticos ficam apenas na bancada.
+- Firmware alinhado a TRIG 27/26/25, ECHO 32/33/34, um LED GPIO13. Core ESP32 3.3.12 compilou (933692 bytes de programa; 48360 bytes de dados na revisão inicial). Upload COM3 bem-sucedido após BOOT manual; chip ESP32-D0WD-V3. API_BASE ajustada ao hotspot Windows 192.168.137.1 sem revelar Wi-Fi/chave.
+- Primeira observação física: Serial aguarda Wi-Fi e banco permanece na inicialização QA, sem evento físico. Usuário confirmou hotspot Vaggu ligado em 2,4 GHz. Acrescentado diagnóstico de scan/motivo de desconexão e tentativas espaçadas de 15 s, em compilação. Envio físico, confirmação dos três sensores e exibição ao vivo permanecem pendentes até resolver a conexão; sucesso sintético não foi tratado como sucesso físico.
+
+### Diagnóstico de LED no teste USB — 21/10/2026
+
+- Usuário relatou leitura nos três sensores e falha do LED no programa combinado. Sketch USB atualizado com controle integrado do LED GPIO13 pelo S01 (2–15 cm), três piscadas ao iniciar e saída serial explícita; TRIG corrigido para 27/26/25 conforme fiação informada e ECHO mantido em 32/33/34. Manual/mapa alinhados com a revisão. A causa no programa gravado pelo usuário ainda não foi comprovada; compilação Arduino e ensaio físico pendentes.
+
 Última atualização: **19/10/2026**, fuso **America/Sao_Paulo**. A revisão da landing e seu fechamento permanecem atribuídos a **09/09/2026**, conforme solicitado. Base de P01: `c127b5e`; registros das entregas na seção 7. Este documento registra evidências e orienta o trabalho diário; não substitui o [SSD](SSD-VAGGU.md) nem os [critérios de aceite](plano-e-aceite.md).
 
 ### Preparação da bancada ESP32 com três vagas — 19/10

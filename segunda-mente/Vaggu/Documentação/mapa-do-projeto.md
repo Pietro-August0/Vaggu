@@ -6,10 +6,22 @@ Conhecimento, documentos e regras ficam em `segunda-mente`. O planejamento canô
 
 ## Pastas principais
 
+| Arquivo do piloto HTTPS | Responsabilidade |
+| --- | --- |
+| `hardware/esp32-3-vagas/vaggu_3_vagas/transporte.h` | Seleciona HTTPS com bundle oficial e relógio NTP; HTTP somente quando explicitamente habilitado para IPv4 privado de bancada. |
+| `vaggu-backend/src/telemetria/piloto.ts` | Cria transacionalmente shopping, três vagas e sensores, placa e gerente próprios de piloto, sem redefinir cadastros existentes. |
+| `vaggu-backend/scripts/preparar-piloto-esp32.ts` | Provisiona destino PostgreSQL explicitamente selecionado e grava configuração HTTPS/acesso somente em pasta local ignorada. |
+| `vaggu-backend/test/piloto-esp32-postgresql.test.ts` | Verifica isolamento, hashes, vínculo das três vagas, estado inicial e recusa de repetição em banco descartável. |
+
+| Arquivo da integração física | Responsabilidade |
+| --- | --- |
+| `vaggu-backend/scripts/preparar-bancada-esp32.ts` | Prepara shopping local de três vagas, sensores, placa e gerente; preserva execuções anteriores e grava credenciais somente em arquivos locais ignorados. |
+| `vaggu-frontend/src/components/mapa-ao-vivo.tsx` | Consulta mapa a cada 500 ms sem sobreposição, pausa com aba oculta, preserva filtros e oculta leitura anterior quando há erro. |
+
 | Arquivo de hardware | Responsabilidade |
 | --- | --- |
 | `hardware/esp32-3-vagas/README.md` | Parecer de viabilidade do demo, diagramas de ligação/arquitetura/posição, preparação da API, provisionamento, calibração e aceite físico. |
-| `hardware/esp32-3-vagas/teste_sensores_usb/teste_sensores_usb.ino` | Primeiro ensaio independente por USB/Serial, sem rede ou LEDs, para verificar distâncias dos três HC-SR04 com TRIG 25/26/27 e ECHO 32/33/34. |
+| `hardware/esp32-3-vagas/teste_sensores_usb/teste_sensores_usb.ino` | Ensaio independente USB/Serial, sem rede, com TRIG 27/26/25, ECHO 32/33/34 e LED GPIO13 controlado pelo S01 até 15 cm; três piscadas iniciais e diagnóstico serial. |
 | `hardware/esp32-3-vagas/vaggu_3_vagas/vaggu_3_vagas.ino` | Firmware de bancada WROOM-32 para três HC-SR04, ECHO 32/33/34, LEDs de detecção local 13/14/23, autenticação Device, sequência por boot e leituras filtradas com omissão de sensores sem leitura válida. |
 | `hardware/esp32-3-vagas/vaggu_3_vagas/config.example.h` | Modelo sem segredos para gerar config.h local ignorado pelo Git. |
 

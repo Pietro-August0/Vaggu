@@ -99,4 +99,21 @@ test('telemetria confirma após 30 s, deduplica e não usa heartbeat para renova
   assert.equal(analise.resumo.ocupacaoPercentual, 100);
   assert.equal(analise.resumo.coberturaPercentual, 0.02);
   assert.equal(analise.porSetor[0]?.setor, 'Setor P06');
+
+  const bancadaRapida = createTelemetriaService(prisma, {
+    ...configuracao, janelaConfirmacaoMs: 5000, lacunaMaximaMs: 4500,
+  }, { now: () => instante });
+  for (const [sequencia, segundos] of [[4, 0], [5, 4], [6, 8]] as const) {
+    instante = new Date(`2026-09-28T12:03:${String(segundos).padStart(2, '0')}.000Z`);
+    await bancadaRapida.receberEstados(autorizacao, {
+      ...base, sequencia,
+      leituras: [{ sensorCodigo: sensor.codigo, estadoDetectado: 'LIVRE' }],
+    });
+    const persistida = await prisma.vaga.findUniqueOrThrow({ where: { id: vaga.id } });
+    assert.equal(persistida.estadoAtual, segundos < 5 ? 'INDISPONIVEL' : 'LIVRE');
+  }
+  const confirmacaoRapida = await prisma.historicoVaga.findFirstOrThrow({
+    where: { vagaId: vaga.id, estado: 'LIVRE' }, orderBy: { recebidoEm: 'desc' },
+  });
+  assert.equal(confirmacaoRapida.efetivoEm.toISOString(), '2026-09-28T12:03:08.000Z');
 });
