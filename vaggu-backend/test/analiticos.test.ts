@@ -1,6 +1,24 @@
 // Confere ponderação temporal, estado vazio e isolamento HTTP da análise histórica.
 import test from 'node:test';
 import assert from 'node:assert/strict';
+test('cobertura incompatível com capacidade atual fica indisponível', () => {
+  const inicio = new Date('2026-10-01T00:00:00Z'), fim = new Date('2026-10-01T01:00:00Z');
+  const intervalo = { setor: 'A', estado: 'LIVRE' as const, inicioEm: inicio, fimEm: fim, entradaObservada: false };
+  const resultado = calcularAnaliseHistorica([intervalo, intervalo], inicio, fim, { total: 1, porSetor: new Map([['A', 1]]) });
+  assert.equal(resultado.resumo.coberturaPercentual, null);
+  assert.equal(resultado.porDia[0].coberturaPercentual, null);
+  assert.equal(resultado.porSetor[0].coberturaPercentual, null);
+});
+
+test('histórico sem capacidade ativa atual não produz cobertura estimada', () => {
+  const inicio = new Date('2026-10-01T00:00:00Z'), fim = new Date('2026-10-01T01:00:00Z');
+  const resultado = calcularAnaliseHistorica([
+    { setor: 'Térreo / A', estado: 'LIVRE', inicioEm: inicio, fimEm: fim, entradaObservada: false },
+  ], inicio, fim, { total: 0, porSetor: new Map() });
+  assert.equal(resultado.resumo.coberturaPercentual, null);
+  assert.equal(resultado.porDia[0].coberturaPercentual, null);
+  assert.equal(resultado.porSetor[0].coberturaPercentual, null);
+});
 import request from 'supertest';
 import { calcularAnaliseHistorica, createAnaliticosService } from '../src/analiticos/service.js';
 import { createApp } from '../src/app.js';
@@ -24,7 +42,7 @@ test('calcula ocupação e cobertura sem tratar indisponibilidade como livre', (
 test('retorna estado vazio quando ainda não existem intervalos confirmados', () => {
   const resultado = calcularAnaliseHistorica([], inicio, fim);
   assert.equal(resultado.temHistorico, false);
-  assert.equal(resultado.resumo.ocupacaoPercentual, 0);
+  assert.equal(resultado.resumo.ocupacaoPercentual, null);
   assert.deepEqual(resultado.porDia, []);
 });
 
@@ -169,4 +187,42 @@ test('rejeita data impossível, intervalo invertido e período superior a 31 dia
     assert.equal(resposta.body.erro.codigo, 'PERIODO_INVALIDO');
   }
   assert.equal(consultas, 0);
+});
+
+test('cobertura zero não vira ocupação zero, mas vaga livre observada continua em zero', () => {
+  const inicio = new Date('2026-10-01T00:00:00Z'), fim = new Date('2026-10-01T01:00:00Z');
+  const base = { setor: 'A', inicioEm: inicio, fimEm: fim, entradaObservada: false };
+  const semLeitura = calcularAnaliseHistorica([{ ...base, estado: 'INDISPONIVEL' }], inicio, fim);
+  assert.equal(semLeitura.temHistorico, true);
+  assert.equal(semLeitura.resumo.ocupacaoPercentual, null);
+  assert.equal(semLeitura.resumo.coberturaPercentual, 0);
+  assert.equal(semLeitura.porDia[0].ocupacaoPercentual, null);
+  assert.equal(semLeitura.porSetor[0].ocupacaoPercentual, null);
+  assert.equal(calcularAnaliseHistorica([{ ...base, estado: 'LIVRE' }], inicio, fim).resumo.ocupacaoPercentual, 0);
+});
+
+test('permanência inclui ciclo completo iniciado antes do período e exclui falha e ciclo aberto', () => {
+  const inicio = new Date('2026-10-01T10:00:00Z'), fim = new Date('2026-10-01T12:00:00Z');
+  const intervalos = [
+    { setor: 'A', estado: 'OCUPADA' as const, inicioEm: new Date('2026-10-01T09:00:00Z'), fimEm: new Date('2026-10-01T11:00:00Z'), entradaObservada: true, saidaObservada: true },
+    { setor: 'A', estado: 'OCUPADA' as const, inicioEm: inicio, fimEm: fim, entradaObservada: true, saidaObservada: false },
+    { setor: 'A', estado: 'OCUPADA' as const, inicioEm: inicio, fimEm: new Date('2026-10-01T11:00:00Z'), entradaObservada: false, saidaObservada: true },
+  ];
+  const r = calcularAnaliseHistorica(intervalos, inicio, fim, { total: 3, porSetor: new Map([['A', 3]]) });
+  assert.equal(r.resumo.saidasObservadas, 2);
+  assert.equal(r.resumo.ciclosCompletos, 1);
+  assert.equal(r.resumo.permanenciaMediaMinutos, 120);
+  assert.equal(r.resumo.entradasObservadas, 1);
+  assert.equal(r.resumo.rotatividadeObservada, 0.33);
+});
+
+test('rejeita filtros inválidos e preserva setor/categoria no contrato', async () => {
+  const shoppingId = '11111111-1111-4111-8111-111111111111';
+  const setorId = '22222222-2222-4222-8222-222222222222';
+  let filtros: unknown;
+  const auth = { authenticate: async () => ({ usuario: { perfil: 'SHOPPING', shoppingId, trocarSenhaObrigatoria: false } }) };
+  const app = createApp({ checkDatabase: () => 1, auth, analiticos: { buscarAnalise: async (_id: string, _periodo: unknown, f: unknown) => { filtros = f; return {}; } } });
+  for (const query of ['tipo=MOTO', 'setorId=outro', 'tipo=PCD&tipo=IDOSO']) await request(app).get(`/api/v1/estacionamento/analise?${query}`).expect(400);
+  await request(app).get(`/api/v1/estacionamento/analise?setorId=${setorId}&tipo=PCD`).expect(200);
+  assert.deepEqual(filtros, { setorId, tipo: 'PCD' });
 });

@@ -1,108 +1,90 @@
-<p align="center"><img src="./vaggu-frontend/public/assets/vaggu-logo-yellow.svg" alt="Logotipo da VAGGU" width="210"></p>
-<p align="center">Uma visão clara do estacionamento, do shopping inteiro à vaga individual.</p>
+<p align="center"><img src="./vaggu-frontend/public/assets/vaggu-logo-yellow.svg" alt="VAGGU" width="210"></p>
+<p align="center"><strong>Gestão de estacionamentos, da visão do shopping à vaga individual.</strong></p>
 
-<p align="center">
-  <img alt="React" src="https://img.shields.io/badge/React-343231?logo=react&logoColor=FFE100&labelColor=171717">
-  <img alt="TypeScript" src="https://img.shields.io/badge/TypeScript-343231?logo=typescript&logoColor=FFE100&labelColor=171717">
-  <img alt="Tailwind CSS" src="https://img.shields.io/badge/Tailwind%20CSS-343231?logo=tailwindcss&logoColor=FFE100&labelColor=171717">
-  <img alt="Node.js" src="https://img.shields.io/badge/Node.js-343231?logo=nodedotjs&logoColor=FFE100&labelColor=171717">
-  <img alt="PostgreSQL" src="https://img.shields.io/badge/PostgreSQL-343231?logo=postgresql&logoColor=FFE100&labelColor=171717">
-</p>
+A VAGGU é uma plataforma web responsiva desenvolvida como TCC em Desenvolvimento de Sistemas. Reunimos estrutura do estacionamento, monitoramento de sensores, mapa 2D, telões e análises em uma interface para Admin VAGGU e gerentes de shopping.
 
-<p align="center"><img src="./vaggu-frontend/public/assets/estacionamento-hero-vaggu.webp" alt="Imagem ilustrativa de estacionamento em preto e amarelo" width="900"></p>
+Cada gerente consulta somente seu shopping. Categorias de vaga — comum, PCD, idoso e elétrica — são separadas do estado operacional; falha de comunicação ou ausência de leitura não significa vaga livre.
 
-## O projeto
+![Mapa do Shopping Exemplo, com andares, filtros e disponibilidade das vagas](./segunda-mente/Vaggu/Evid%C3%AAncias%20visuais/2026-10-21%20-%20Revisao%20geral/mapa-desktop.png)
 
-A VAGGU é uma plataforma web responsiva para organizar estacionamentos de shopping centers. A equipe administrativa cadastra shoppings, gerentes e a estrutura do estacionamento; cada gerente acessa apenas o shopping ao qual está vinculado. A experiência une configuração, mapa 2D e consulta de vagas em uma interface pensada para computador e celular.
+*Captura local de 21/10/2026, com API real, PostgreSQL descartável e dados fictícios do Shopping Exemplo.*
 
-O projeto foi desenvolvido como trabalho de conclusão de curso em Desenvolvimento de Sistemas. Seu desenho separa tipo de vaga — comum, PCD, idoso ou elétrica — de estado — livre, ocupada ou indisponível. Quando não existe uma leitura confirmada, a interface não apresenta a vaga como livre.
+## Funcionalidades
 
-## Da configuração à visualização
+- **Acessos por shopping:** logins individuais, troca de senha provisória e isolamento dos dados.
+- **Estrutura e mapa:** andares, setores, vagas, importação CSV/XLSX com prévia e editor de posições por arraste, toque ou teclado.
+- **Monitoramento:** vínculo entre placas ESP32, sensores e vagas; confirmação de leituras, expiração, manutenção e ocorrências.
+- **Disponibilidade atualizada:** consultas automáticas a cada 15 segundos, atualização manual e invalidação dos dados antigos.
+- **Análises e relatórios:** período, setor e categoria; comparação, entradas, saídas, permanência, rotatividade e exportações Excel/PDF.
+- **Telões web autorizados:** credencial por instalação, recorte por andar/setor e contagens agregadas ocultadas quando a consulta perde validade.
 
-### Administração por shopping
-
-O painel Admin reúne a ficha do shopping, os acessos individuais dos gerentes e a estrutura do estacionamento. A configuração segue a hierarquia **shopping → andar → setor → vaga**. O cadastro de shopping é dividido em etapas, e sua ficha destaca os dados essenciais antes da edição.
-
-Para preparar uma estrutura maior, a equipe pode importar CSV ou XLSX, revisar a prévia e confirmar a aplicação. A exportação XLSX reúne vagas e resumo da estrutura. Essas ações permanecem no contexto do shopping selecionado.
-
-### Mapa para Admin e gerente
-
-Admin e gerente usam a mesma visualização 2D de vagas. O mapa permite navegar pelos andares, localizar setores, buscar uma vaga e distinguir categorias e estados. O gerente consulta somente o shopping associado à sua sessão; alterações estruturais ficam sob responsabilidade administrativa.
-
-O Admin organiza as posições diretamente no mapa por arraste, toque ou teclado, com ajustes de tamanho, rotação e salvamento da prévia. A visualização também oferece monitoramento por sensor: placa vinculada, horários de observação, situação e confirmação pendente. O [guia de edição e monitoramento](./segunda-mente/Vaggu/Documentação/edicao-visual-e-monitoramento.md) reúne os fluxos e as evidências de validação.
-
-### Acesso e identidade
-
-Os acessos são criados pela equipe VAGGU, sem cadastro público de gerente. Cada gerente possui credenciais próprias. A senha provisória é exibida ao Admin somente quando é emitida e precisa ser trocada no primeiro acesso; o banco mantém o hash, não a senha em texto puro. Os painéis oferecem navegação por seção e modo claro/escuro.
-
-## Imagens da experiência
-
-As imagens abaixo apresentam a interface pública. Os painéis protegidos exigem uma sessão autorizada e são descritos no [fluxo de telas](./segunda-mente/Vaggu/Documentação/fluxo-de-telas.md).
+## Interface
 
 <table>
   <tr>
-    <td width="50%"><img src="./segunda-mente/Vaggu/Evid%C3%AAncias%20visuais/landing-mobile-2026-09-24.png" alt="Landing da VAGGU em uma tela móvel" width="280"></td>
-    <td width="50%"><img src="./segunda-mente/Vaggu/Evid%C3%AAncias%20visuais/login-mobile-2026-09-24.png" alt="Tela de acesso da VAGGU em uma tela móvel" width="280"></td>
+    <td width="50%"><img src="./segunda-mente/Vaggu/Evid%C3%AAncias%20visuais/2026-10-21%20-%20Revisao%20geral/landing-desktop.png" alt="Página de apresentação da VAGGU com a identidade preta e amarela"></td>
+    <td width="50%"><img src="./segunda-mente/Vaggu/Evid%C3%AAncias%20visuais/2026-10-21%20-%20Revisao%20geral/telao-desktop.png" alt="Telão autorizado com contagens por andar e categorias especiais"></td>
   </tr>
   <tr>
-    <td><strong>Apresentação.</strong> A landing introduz a proposta da VAGGU e separa a conversa comercial do acesso ao sistema.</td>
-    <td><strong>Entrada.</strong> O login único direciona Admin e gerente à experiência correspondente ao próprio perfil.</td>
+    <td><strong>Apresentação.</strong> Proposta do serviço e contato para parceria.</td>
+    <td><strong>Orientação.</strong> Disponibilidade agregada para quem chega ao estacionamento.</td>
   </tr>
 </table>
 
-<p align="center"><img src="./segunda-mente/Vaggu/Evid%C3%AAncias%20visuais/rodape-desktop-2026-09-24.png" alt="Rodapé da landing VAGGU em tela ampla" width="900"></p>
-
-O rodapé mantém a identidade amarela e escura da marca. Em telas menores, prioriza mensagem e navegação sem repetir a imagem de celulares. A [galeria da segunda mente](./segunda-mente/Vaggu/Evid%C3%AAncias%20visuais/%C3%8Dndice%20de%20evid%C3%AAncias.md) guarda as demais imagens com a origem de cada registro.
+Veja também [análise](./segunda-mente/Vaggu/Evid%C3%AAncias%20visuais/2026-10-21%20-%20Revisao%20geral/analise-desktop.png), [editor](./segunda-mente/Vaggu/Evid%C3%AAncias%20visuais/2026-10-21%20-%20Revisao%20geral/editor-desktop.png), [mapa no celular](./segunda-mente/Vaggu/Evid%C3%AAncias%20visuais/2026-10-21%20-%20Revisao%20geral/mapa-mobile.png) e [login no celular](./segunda-mente/Vaggu/Evid%C3%AAncias%20visuais/2026-10-21%20-%20Revisao%20geral/login-mobile.png). A [galeria de evidências](./segunda-mente/Vaggu/Evid%C3%AAncias%20visuais/%C3%8Dndice%20de%20evid%C3%AAncias.md) registra rotas, resoluções, verificações e limites de cada captura.
 
 ## Tecnologias
 
-| Camada | Tecnologias e papel |
+| Camada | Stack |
 | --- | --- |
-| Interface | React e TypeScript para as telas; Tailwind CSS e estilos CSS próprios para identidade visual e responsividade; Radix UI e Lucide para componentes e ícones. |
-| API | Node.js, Express e TypeScript para autenticação, autorização e regras administrativas. |
-| Dados | PostgreSQL e Prisma para persistência, relações entre shoppings e migrations. |
-| Integrações e publicação | WhatsApp Cloud API no backend; Render para servir frontend e API na mesma origem. |
-
-```text
-Navegador React ── /api/v1 ──> Express ──> Prisma ──> PostgreSQL
-```
-
-Os ícones dos badges usam [Simple Icons](https://github.com/simple-icons/simple-icons) por meio do [Shields.io](https://shields.io/docs/logos). Eles apenas apresentam a stack; não são dependências do sistema.
-
-## Estrutura do repositório
-
-```text
-Vaggu/
-├── vaggu-frontend/   interface React
-├── vaggu-backend/    API, Prisma e testes
-├── segunda-mente/    produto, arquitetura e evidências visuais
-├── scripts/          verificações do repositório
-├── CONTRIBUTING.md   acordos de contribuição da equipe
-└── README.md
-```
+| Interface | React 19, TypeScript, Vite, Tailwind CSS, Radix UI e Lucide |
+| API | Node.js, Express e TypeScript |
+| Dados | PostgreSQL e Prisma |
+| Relatórios | ExcelJS e jsPDF |
+| Publicação configurada | Render, com frontend e API na mesma origem |
 
 ## Executar localmente
 
-Use Node.js `>=22.12.0 <25`, npm e PostgreSQL. O [guia de configuração](./segunda-mente/Vaggu/Documentação/configuracao.md) cobre a primeira instalação, variáveis de ambiente, migrations e criação do acesso Admin. Depois dessa preparação, inicie em dois terminais a partir da raiz:
+Requisitos: Node.js `>=22.12.0 <25`, npm e PostgreSQL. O [guia de configuração](./segunda-mente/Vaggu/Documenta%C3%A7%C3%A3o/configuracao.md) explica a instalação do banco, variáveis e criação dos acessos.
+
+Na primeira instalação, a partir da raiz:
 
 ```powershell
-# API
-Set-Location .\vaggu-backend
-npm.cmd run build
-npm.cmd start
+npm.cmd --prefix vaggu-backend ci
+npm.cmd --prefix vaggu-frontend ci
+```
+
+Configure `vaggu-backend/.env` a partir de [`.env.example`](./vaggu-backend/.env.example), apontando para seu PostgreSQL. Preserve um `.env` existente. Depois, aplique o schema e crie o primeiro Admin somente se ele ainda não existir:
+
+```powershell
+npm.cmd --prefix vaggu-backend run db:setup
+npm.cmd --prefix vaggu-backend run admin:create
+```
+
+Inicie a API e a interface em dois terminais:
+
+```powershell
+# Terminal 1 — API
+npm.cmd --prefix vaggu-backend run dev
 ```
 
 ```powershell
-# Interface
-Set-Location .\vaggu-frontend
-npm.cmd run dev
+# Terminal 2 — interface
+npm.cmd --prefix vaggu-frontend run dev
 ```
 
-A API usa `/api/v1`; o comando de desenvolvimento informa o endereço local do frontend ao iniciar. Para encerrar, use `Ctrl+C` em cada terminal.
+Abra o endereço informado pelo Vite. O proxy encaminha `/api` à API local em `127.0.0.1:3000`; `/api/v1/health/ready` confirma a conexão com o banco. Encerre cada terminal com `Ctrl+C`.
 
-## Leia também
+## Estado e verificações
 
-- [Segunda mente VAGGU](./segunda-mente/Vaggu/Vaggu.md): índice de produto e documentação.
-- [Fluxo de telas](./segunda-mente/Vaggu/Documentação/fluxo-de-telas.md): jornadas de Admin, gerente e visitante.
-- [Tecnologias e arquitetura](./segunda-mente/Vaggu/Tecnologias/Tecnologias%20e%20arquitetura.md): decisões técnicas e integrações.
-- [README da API](./vaggu-backend/README.md): comandos, contratos e testes do backend.
+Em 21/10/2026, a suíte do backend aprovou **130 testes**, incluindo PostgreSQL descartável e ensaio de dump/restauração. A revisão no navegador exercitou filtros, estado sem observação, exportações, monitoramento e telão, com capturas em computador, tablet e celular. Os [resultados e limites](./segunda-mente/Vaggu/Documenta%C3%A7%C3%A3o/revisao-geral-2026-10-21.md) estão documentados.
+
+A implementação foi validada localmente com dados fictícios. A homologação da versão publicada e a integração com hardware físico seguem pendentes; a conexão real do WhatsApp está adiada e Power BI publicado é uma evolução opcional.
+
+## Documentação
+
+- [Índice do projeto](./segunda-mente/Vaggu/Vaggu.md): produto, arquitetura e continuidade.
+- [Configuração](./segunda-mente/Vaggu/Documenta%C3%A7%C3%A3o/configuracao.md): instalação e execução completas.
+- [API](./vaggu-backend/README.md): contratos, scripts e testes.
+- [Backup e restauração](./segunda-mente/Vaggu/Documenta%C3%A7%C3%A3o/backup-e-restauracao.md): procedimentos e proteções.
+- [Acordos de desenvolvimento](./AGENTS.md): regras do projeto e prints obrigatórios após alterações de design ou frontend.

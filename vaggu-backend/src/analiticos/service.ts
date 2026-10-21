@@ -8,10 +8,12 @@ export type IntervaloHistorico = {
   inicioEm: Date;
   fimEm: Date;
   entradaObservada: boolean;
+  saidaObservada?: boolean;
 };
 
 type Acumulador = { ocupadoMs: number; conhecidoMs: number; ativoMs: number; entradas: number };
 type CapacidadesAtivas = { total: number; porSetor: ReadonlyMap<string, number> };
+export type FiltrosAnalise = { setorId?: string; tipo?: 'COMUM' | 'PCD' | 'IDOSO' | 'ELETRICA' };
 export type PeriodoAnalise = { inicio: Date; fim: Date };
 const DIA_MS = 86_400_000;
 
@@ -26,11 +28,28 @@ function percentual(numerador: number, denominador: number) {
   return denominador > 0 ? Number((numerador / denominador * 100).toFixed(2)) : 0;
 }
 
+// A capacidade atual é apenas referência; inconsistência histórica não vira percentual impossível.
+function cobertura(observado: number, referencia: number) {
+  return referencia <= 0 || observado > referencia ? null : percentual(observado, referencia);
+}
+
 function shoppingIdValido(valor: string) {
   if (!/^[0-9a-f]{8}-[0-9a-f]{4}-[1-5][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$/i.test(valor)) {
     throw new ApiError(400, 'SHOPPING_ID_INVALIDO', 'O shopping informado é inválido.');
   }
   return valor;
+}
+
+/** Atribui ciclos ao encerramento e preserva sua duração integral. */
+function metricasCiclos(intervalos: readonly IntervaloHistorico[], inicio: Date, fim: Date, entradas: number, capacidade?: number) {
+  const encerrados = intervalos.filter(i => i.saidaObservada && i.fimEm >= inicio && i.fimEm < fim);
+  const completos = encerrados.filter(i => i.entradaObservada && i.estado === 'OCUPADA');
+  return {
+    saidasObservadas: encerrados.length,
+    ciclosCompletos: completos.length,
+    permanenciaMediaMinutos: completos.length ? Number((completos.reduce((total, i) => total + (i.fimEm.getTime() - i.inicioEm.getTime()) / 60_000, 0) / completos.length).toFixed(2)) : null,
+    rotatividadeObservada: capacidade && capacidade > 0 ? Number((entradas / capacidade).toFixed(2)) : null,
+  };
 }
 
 /** Calcula métricas ponderadas pelo tempo e limita cada intervalo ao período solicitado. */
@@ -73,39 +92,40 @@ export function calcularAnaliseHistorica(
   }
 
   const duracaoPeriodoMs = fim.getTime() - inicio.getTime();
-  const tempoAtivoTotalMs = capacidades && capacidades.total > 0
-    ? capacidades.total * duracaoPeriodoMs
-    : resumo.ativoMs;
+  const tempoAtivoTotalMs = capacidades ? capacidades.total * duracaoPeriodoMs : resumo.ativoMs;
 
   return {
     temHistorico: resumo.ativoMs > 0,
     periodo: { inicioEm: inicio.toISOString(), fimEm: fim.toISOString() },
     resumo: {
-      ocupacaoPercentual: percentual(resumo.ocupadoMs, resumo.conhecidoMs),
-      coberturaPercentual: percentual(resumo.conhecidoMs, tempoAtivoTotalMs),
+      ocupacaoPercentual: resumo.conhecidoMs > 0 ? percentual(resumo.ocupadoMs, resumo.conhecidoMs) : null,
+      coberturaPercentual: cobertura(resumo.conhecidoMs, tempoAtivoTotalMs),
       entradasObservadas: resumo.entradas,
+      ...metricasCiclos(intervalos, inicio, fim, resumo.entradas, capacidades?.total),
+      capacidadeAtivaReferencia: capacidades?.total ?? null,
+      regraCobertura: 'Estimativa sobre capacidade atual. Indisponível se o histórico exceder a referência; mudanças de cadastro limitam a comparação.',
+      regraRotatividade: 'Entradas observadas no período / vagas atualmente ativas no filtro.',
+      regraPermanencia: 'Ciclos completos encerrados no período UTC, com duração total observada, sem falha intermediária.',
     },
     porDia: resumo.ativoMs > 0 ? dias.map((dia) => ({
       inicioEm: dia.inicio.toISOString(),
-      ocupacaoPercentual: percentual(dia.acumulador.ocupadoMs, dia.acumulador.conhecidoMs),
+      ocupacaoPercentual: dia.acumulador.conhecidoMs > 0 ? percentual(dia.acumulador.ocupadoMs, dia.acumulador.conhecidoMs) : null,
       entradasObservadas: dia.acumulador.entradas,
-      coberturaPercentual: percentual(
+      ...metricasCiclos(intervalos, new Date(Math.max(inicio.getTime(), dia.inicio.getTime())), dia.fim, dia.acumulador.entradas, capacidades?.total),
+      coberturaPercentual: cobertura(
         dia.acumulador.conhecidoMs,
-        capacidades && capacidades.total > 0
-          ? capacidades.total * (dia.fim.getTime() - dia.inicio.getTime())
-          : dia.acumulador.ativoMs,
+        capacidades ? capacidades.total * (dia.fim.getTime() - dia.inicio.getTime()) : dia.acumulador.ativoMs,
       ),
     })) : [],
     porSetor: [...setores.entries()].map(([setor, valor]) => ({
       setor,
-      ocupacaoPercentual: percentual(valor.ocupadoMs, valor.conhecidoMs),
-      coberturaPercentual: percentual(
+      ocupacaoPercentual: valor.conhecidoMs > 0 ? percentual(valor.ocupadoMs, valor.conhecidoMs) : null,
+      coberturaPercentual: cobertura(
         valor.conhecidoMs,
-        (capacidades?.porSetor.get(setor) ?? 0) > 0
-          ? (capacidades?.porSetor.get(setor) ?? 0) * duracaoPeriodoMs
-          : valor.ativoMs,
+        capacidades ? (capacidades.porSetor.get(setor) ?? 0) * duracaoPeriodoMs : valor.ativoMs,
       ),
       entradasObservadas: valor.entradas,
+      ...metricasCiclos(intervalos.filter(i => i.setor === setor), inicio, fim, valor.entradas, capacidades?.porSetor.get(setor)),
     })).sort((a, b) => a.setor.localeCompare(b.setor, 'pt-BR')),
   };
 }
@@ -113,8 +133,11 @@ export function calcularAnaliseHistorica(
 /** Usa a view analítica para restringir a leitura ao período UTC do shopping autenticado. */
 export function createAnaliticosService(prisma: PrismaClient, agora = () => new Date()) {
   return {
-    async buscarAnalise(shoppingId: string, periodo?: PeriodoAnalise) {
+    async buscarAnalise(shoppingId: string, periodo?: PeriodoAnalise, filtros: FiltrosAnalise = {}) {
       const idShopping = shoppingIdValido(shoppingId);
+      if (filtros.setorId && !await prisma.setor.findFirst({ where: { id: filtros.setorId, shoppingId: idShopping }, select: { id: true } })) {
+        throw new ApiError(404, 'SETOR_NAO_ENCONTRADO', 'Setor não encontrado neste shopping.');
+      }
       const hoje = agora();
       const inicioHoje = Date.UTC(hoje.getUTCFullYear(), hoje.getUTCMonth(), hoje.getUTCDate());
       const inicio = periodo?.inicio ?? new Date(inicioHoje - 6 * DIA_MS);
@@ -125,25 +148,28 @@ export function createAnaliticosService(prisma: PrismaClient, agora = () => new 
       const fim = new Date(Math.min(periodo?.fim.getTime() ?? hoje.getTime(), hoje.getTime()));
       const [intervalos, vagasAtivas] = await Promise.all([
         prisma.$queryRaw<IntervaloHistorico[]>(Prisma.sql`
-        SELECT setor,
+        SELECT andar || ' / ' || setor AS setor,
                estado::text AS estado,
                inicio_em AS "inicioEm",
                fim_em AS "fimEm",
-               entrada_observada AS "entradaObservada"
+               entrada_observada AS "entradaObservada",
+               saida_observada AS "saidaObservada"
           FROM power_bi_intervalos_ocupacao
          WHERE shopping_codigo = ${idShopping}
-           AND fim_em > ${inicio}
+           AND fim_em >= ${inicio}
+           ${filtros.setorId ? Prisma.sql`AND setor_id = ${filtros.setorId}` : Prisma.empty}
+           ${filtros.tipo ? Prisma.sql`AND tipo_vaga = ${filtros.tipo}` : Prisma.empty}
            AND inicio_em < ${fim}
          ORDER BY inicio_em
       `),
         prisma.vaga.findMany({
-          where: { shoppingId: idShopping, ativo: true },
-          select: { setor: { select: { nome: true } } },
+          where: { shoppingId: idShopping, ativo: true, ...filtros },
+          select: { andar: { select: { nome: true } }, setor: { select: { nome: true } } },
         }),
       ]);
       const porSetor = new Map<string, number>();
       for (const vaga of vagasAtivas) {
-        const setor = vaga.setor?.nome ?? 'Sem setor';
+        const setor = `${vaga.andar?.nome ?? 'Sem andar'} / ${vaga.setor?.nome ?? 'Sem setor'}`;
         porSetor.set(setor, (porSetor.get(setor) ?? 0) + 1);
       }
       return calcularAnaliseHistorica(intervalos, inicio, fim, { total: vagasAtivas.length, porSetor });

@@ -2,15 +2,15 @@
 
 ## Aprovação do site — 16/10/2026
 
-A equipe confirmou: “o site está aprovado, nós melhoramos o escopo que foi criado dentro do Figma”. O visual atual do site é a referência vigente; o Figma documenta a proposta inicial e sua evolução, sem obrigação de reproduzir exatamente suas medidas ou componentes. A pendência de aprovação visual foi encerrada. Essa decisão não comprova testes de acessibilidade, funcionamento de integrações ou aprovação automática de alterações futuras.
+Em 16/10/2026, aprovamos o site como evolução do escopo criado no Figma. O visual atual do site é a referência vigente; o Figma documenta a proposta inicial e sua evolução, sem obrigação de reproduzir exatamente suas medidas ou componentes. A pendência de aprovação visual foi encerrada. Essa decisão não comprova testes de acessibilidade, funcionamento de integrações ou aprovação automática de alterações futuras.
 
 ## Direção confirmada
 
 Marca VAGGU, amarelo em destaque, preto e cinzas, textos claros, interface minimalista e legível. Manter proporções dos assets, consistência dos ícones e responsividade web.
 
-## Guia fornecido pela equipe em 23/09/2026
+## Guia de referência do projeto em 23/09/2026
 
-A equipe forneceu uma imagem de referência com a marca, a família Poppins e a paleta abaixo. Estes valores são **evidência entregue pela equipe**, não extração do Figma nem confirmação de medidas, espaçamentos ou componentes do arquivo de design.
+Registramos uma imagem de referência com a marca, a família Poppins e a paleta abaixo. Estes valores são **evidência interna do projeto**, não extração do Figma nem confirmação de medidas, espaçamentos ou componentes do arquivo de design.
 
 | Papel no guia | Valor |
 | --- | --- |
@@ -23,7 +23,7 @@ A equipe forneceu uma imagem de referência com a marca, a família Poppins e a 
 | Branco | `#ffffff` |
 | Família tipográfica | Poppins |
 
-Referência visual versionada pela equipe: ![[Vaggu/Evidências visuais/Planejamento/guia-identidade-visual-vaggu.png]]
+Referência visual versionada: ![[Vaggu/Evidências visuais/Planejamento/guia-identidade-visual-vaggu.png]]
 
 Os papéis semânticos de cada tom na interface ainda devem ser conciliados com contraste, tokens reais do código e contexto da tela. Não substituir automaticamente cores de estado, foco ou feedback pelos amarelos da marca.
 
@@ -50,7 +50,7 @@ Fonte: vaggu-frontend/src/index.css, 11/09/2026.
 | Fonte sans geral | Geist Variable |
 | Raio base | 0.625rem |
 
-O amarelo `#FFE100`, o carvão `#171717`, o preto e o branco coincidem com valores do guia fornecido pela equipe. Essa coincidência não comprova fidelidade ao Figma. Os tons `#ffeb54`, `#fff49d` e `#343231` ainda precisam ser conciliados com os usos reais antes de virar novos tokens executáveis.
+O amarelo `#FFE100`, o carvão `#171717`, o preto e o branco coincidem com valores do guia de referência do projeto. Essa coincidência não comprova fidelidade ao Figma. Os tons `#ffeb54`, `#fff49d` e `#343231` ainda precisam ser conciliados com os usos reais antes de virar novos tokens executáveis.
 
 O tema escuro atual mantém o amarelo principal `#FFE100`. Essa observação registra o código; a aprovação atual não depende de comparação completa com o Figma.
 

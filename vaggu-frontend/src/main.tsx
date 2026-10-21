@@ -1,8 +1,9 @@
+import { TelaoInstaladoPage } from "@/pages/telao-instalado-page"
 /** Inicializa o React e reúne tema, navegação, mensagens e sessão autenticada das páginas. */
 import { StrictMode } from "react"
 import { createRoot } from "react-dom/client"
 import { ThemeProvider } from "next-themes"
-import { BrowserRouter, Route, Routes } from "react-router-dom"
+import { createBrowserRouter, RouterProvider, Route, Routes } from "react-router-dom"
 import { MotionConfig } from "motion/react"
 
 import "./index.css"
@@ -21,6 +22,7 @@ import { TelaoPage } from "@/pages/telao-page"
 function App() {
   return (
     <Routes>
+      <Route element={<TelaoInstaladoPage />} path="/telao/:telaoId" />
       <Route element={<LandingPage />} path="/" />
       <Route element={<LoginPage />} path="/login" />
       <Route element={<TrocarSenhaPage />} path="/trocar-senha" />
@@ -41,16 +43,13 @@ function App() {
   )
 }
 
+const router = createBrowserRouter([{ path: "*", element: <AppStoreProvider><App /><Toaster position="top-right" richColors /></AppStoreProvider> }])
+
 createRoot(document.getElementById("root")!).render(
   <StrictMode>
     <ThemeProvider attribute="class" defaultTheme="light" enableSystem={false}>
       <MotionConfig reducedMotion="user">
-        <BrowserRouter>
-          <AppStoreProvider>
-            <App />
-            <Toaster position="top-right" richColors />
-          </AppStoreProvider>
-        </BrowserRouter>
+        <RouterProvider router={router} />
       </MotionConfig>
     </ThemeProvider>
   </StrictMode>,

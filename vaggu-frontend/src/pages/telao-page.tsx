@@ -1,11 +1,11 @@
 /** Exibe agregados confirmados para prévia autenticada dos telões. */
-import { useCallback, useEffect, useState } from "react"
+
 import { Accessibility, PersonStanding, Zap } from "lucide-react"
 import type { LucideIcon } from "lucide-react"
 import { useParams } from "react-router-dom"
 
-import { useAppStore } from "@/app/app-store"
-import { lerEstrutura } from "@/servicos/estrutura"
+import { useEstruturaAtualizada } from "@/hooks/use-estrutura-atualizada"
+
 import type { EstruturaEstacionamento, TipoVaga, VagaEstrutura } from "@/types/estrutura"
 import "./telao-page.css"
 
@@ -37,39 +37,9 @@ function contar(vagas: VagaConhecida[]): Contagem {
 
 /** Usa exclusivamente a estrutura autorizada pela sessão do gerente e renova a consulta periodicamente. */
 export function TelaoPage() {
-  const { consultar } = useAppStore()
   const { andarId } = useParams()
-  const [estrutura, setEstrutura] = useState<EstruturaEstacionamento | null>(null)
-  const [consultadoEm, setConsultadoEm] = useState<Date | null>(null)
-  const [erro, setErro] = useState("")
-  const [carregando, setCarregando] = useState(true)
-
-  const atualizar = useCallback(async () => {
-    if (document.visibilityState !== "visible") return
-    try {
-      const resultado = lerEstrutura(await consultar("/estacionamento/estrutura"))
-      setEstrutura(resultado)
-      setConsultadoEm(new Date())
-      setErro("")
-    } catch (falha) {
-      setErro(falha instanceof Error ? falha.message : "Não foi possível atualizar as informações do estacionamento.")
-    } finally {
-      setCarregando(false)
-    }
-  }, [consultar])
-
-  useEffect(() => {
-    const primeiraConsulta = window.setTimeout(() => { void atualizar() }, 0)
-    const intervalo = window.setInterval(() => { void atualizar() }, 30000)
-    const aoRetornar = () => { if (document.visibilityState === "visible") void atualizar() }
-    document.addEventListener("visibilitychange", aoRetornar)
-    return () => {
-      window.clearTimeout(primeiraConsulta)
-      window.clearInterval(intervalo)
-      document.removeEventListener("visibilitychange", aoRetornar)
-    }
-  }, [atualizar])
-
+  const { estrutura, consultadoEm, erro, vencida } = useEstruturaAtualizada("/estacionamento/estrutura")
+  const carregando = !estrutura && !erro
   const vagas = estrutura ? vagasDaEstrutura(estrutura) : []
   const andares = estrutura?.andares.filter(andar => andar.ativo) ?? []
   const andarAtual = andares.find(andar => andar.id === andarId)
@@ -85,7 +55,7 @@ export function TelaoPage() {
   const grupos = andarAtual
     ? porSetor.map(({ setor, contagem }) => ({ id: setor.id, nome: setor.nome, contagem }))
     : porAndar.map(({ andar, contagem }) => ({ id: andar.id, nome: andar.nome, contagem }))
-  const disponivel = !carregando && !erro && !semAndares && (!andarId || !!andarAtual)
+  const disponivel = !carregando && !erro && !vencida && !semAndares && (!andarId || !!andarAtual)
 
   return (
     <main className="telao-vaggu" aria-label="Disponibilidade do estacionamento">
@@ -130,7 +100,7 @@ export function TelaoPage() {
       </section>
       <footer className="telao-vaggu__rodape">
         <span>{estrutura?.shopping.demonstracao ? "Dados de demonstração" : "Categorias especiais incluídas no total"}{disponivel && contagemGeral.parcial ? " · Disponibilidade parcial" : ""}</span>
-        <span>{consultadoEm ? "Atualizado às " + consultadoEm.toLocaleTimeString("pt-BR", { hour: "2-digit", minute: "2-digit" }) : "Aguardando atualização"}</span>
+        <span>{consultadoEm ? "Atualizado às " + new Date(consultadoEm).toLocaleTimeString("pt-BR", { hour: "2-digit", minute: "2-digit" }) : "Aguardando atualização"}</span>
       </footer>
     </main>
   )

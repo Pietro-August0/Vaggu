@@ -82,7 +82,8 @@ export function createTelemetriaService(
       // Serializa mensagens da mesma placa, inclusive quando chegam em instâncias diferentes da API.
       await tx.$executeRaw`SELECT pg_advisory_xact_lock(hashtext(${autenticado.id}))`;
       const dispositivo = await tx.dispositivo.findUnique({ where: { id: autenticado.id } });
-      if (!dispositivo || !dispositivo.ativo) throw erroCredencial();
+      if (!dispositivo || !dispositivo.ativo || dispositivo.chaveApiHash !== autenticado.chaveApiHash) throw erroCredencial();
+      if (!await tx.shopping.findFirst({ where: { id: dispositivo.shoppingId, ativo: true, excluidoEm: null } })) throw erroCredencial();
 
       const chaveEvento = {
         dispositivoId_inicializacaoId_sequencia: {
@@ -192,6 +193,7 @@ export function createTelemetriaService(
         },
       });
 
+      await tx.ocorrenciaEquipamento.updateMany({ where: { dispositivoId: dispositivo.id, sensorId: null, tipo: 'COMUNICACAO', encerradaEm: null }, data: { encerradaEm: recebidoEm, chaveAtiva: null, conclusao: 'Contato válido da placa restabelecido.' } });
       const leiturasProcessadas: Array<{ sensorCodigo: string; situacao: string; estadoConfirmado: string }> = [];
       if (tipo === 'ESTADOS') {
         const estados = mensagem as MensagemEstados;
@@ -200,6 +202,12 @@ export function createTelemetriaService(
           const sensor = sensoresPorCodigo.get(leitura.sensorCodigo);
           if (!sensor) {
             throw new ApiError(403, 'SENSOR_NAO_AUTORIZADO', 'O lote contém sensor não vinculado à placa autenticada.');
+          }
+          await tx.ocorrenciaEquipamento.updateMany({ where: { sensorId: sensor.id, tipo: 'COMUNICACAO', encerradaEm: null }, data: { encerradaEm: recebidoEm, chaveAtiva: null, conclusao: 'Observação individual restabelecida.' } });
+          if (sensor.emManutencao || dispositivo.emManutencao) {
+            await tx.sensor.update({ where: { id: sensor.id }, data: { ultimaObservacaoEm: recebidoEm } });
+            leiturasProcessadas.push({ sensorCodigo: sensor.codigo, situacao: 'MANUTENCAO', estadoConfirmado: 'INDISPONIVEL' });
+            continue;
           }
           const leituraAnteriorExpirada = sensor.ultimaObservacaoEm !== null
             && recebidoEm.getTime() - sensor.ultimaObservacaoEm.getTime() >= configuracao.timeoutSensorMs;

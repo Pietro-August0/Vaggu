@@ -51,7 +51,7 @@ export function shouldSendTestMenu(message) {
   return ['OI', 'OLA', 'MENU'].includes(normalized);
 }
 
-// Menu de demonstração: as opções ainda não executam os fluxos comerciais completos.
+// Menu de orientação; demonstração e suporte são tratados na conversa comercial.
 export const testMenuText = 'Olá! 👋 Bem-vindo à VAGGU.\n\n'
   + 'Como podemos ajudar?\n\n'
   + '1 — Conhecer a VAGGU\n'
@@ -60,4 +60,16 @@ export const testMenuText = 'Olá! 👋 Bem-vindo à VAGGU.\n\n'
   + '4 — Solicitar suporte\n'
   + '5 — Falar com a equipe';
 
-export const flowSetupText = 'Esse fluxo ainda está em configuração.';
+/** Respostas úteis sem prometer preços, prazos ou disponibilidade humana não configurados. */
+export function respostaAtendimento(message: { type: string; text: string }) {
+  if (shouldSendTestMenu(message)) return testMenuText;
+  if (message.type !== 'text') return null;
+  const respostas: Record<string, string> = {
+    '1': 'A VAGGU organiza estacionamentos de shoppings com mapa de vagas, acompanhamento de ocupação e acessos separados por unidade. Digite 2 para conhecer as funcionalidades ou 3 para solicitar uma demonstração.',
+    '2': 'Você pode acompanhar vagas por andar, setor e categoria; consultar o monitoramento; analisar períodos e exportar relatórios. A disponibilidade depende de leituras confirmadas. Digite MENU para voltar.',
+    '3': 'Para solicitar uma demonstração, envie nesta conversa o nome do shopping, a cidade e seu nome. A equipe poderá combinar os detalhes por aqui. Não envie senhas ou dados de documentos. Digite MENU para voltar.',
+    '4': 'Descreva o problema, o shopping e o código da vaga ou equipamento, se houver. Informe quando começou. Nunca envie sua senha ou chave de equipamento. Para redefinir acesso, procure o Admin VAGGU. Digite MENU para voltar.',
+    '5': 'Escreva sua solicitação nesta conversa para o atendimento da equipe. Este menu automático não confirma horário nem prazo de resposta. Digite MENU para voltar.',
+  };
+  return respostas[message.text.trim()] ?? null;
+}

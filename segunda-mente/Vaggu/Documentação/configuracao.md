@@ -317,7 +317,7 @@ ALTER ROLE vaggu_teste_runner CREATEDB;
 
 ## Hospedagem no Render
 
-O [registro de hospedagem](planejamento-do-projeto.md) informa que a equipe colocou o PostgreSQL no Neon e publicou a VAGGU no serviço `vaggu-tcc` do Render. O `render.yaml` versionado descreve um único serviço web no plano gratuito: ele instala as dependências, gera o cliente Prisma, compila backend e frontend, aplica migrations com `db:deploy` e inicia a API. O endereço público exato e o painel do provedor não estão no repositório; esta revisão não realizou uma requisição ao serviço hospedado.
+O [registro de hospedagem](planejamento-do-projeto.md) documenta a instalação do PostgreSQL no Neon e a publicação da VAGGU no serviço `vaggu-tcc` do Render. O `render.yaml` versionado descreve um único serviço web no plano gratuito: ele instala as dependências, gera o cliente Prisma, compila backend e frontend, aplica migrations com `db:deploy` e inicia a API. O endereço público exato e o painel do provedor não estão no repositório; esta revisão não realizou uma requisição ao serviço hospedado.
 
 O manifesto define `HOST=0.0.0.0`, `NODE_ENV=production` e `FRONTEND_DIST_PATH=../vaggu-frontend/dist`. O Express entrega o build React e as rotas `/api/v1` na mesma origem, sem CORS amplo; o cliente usa caminhos relativos. A plataforma usa `/api/v1/health/ready` como verificação de prontidão, incluindo a conexão ao banco. `DATABASE_URL` é solicitado como segredo do serviço, sem valor no Git. Não executar o banco de testes contra a conexão do Neon.
 
@@ -327,7 +327,7 @@ O plano gratuito pode suspender a instância após inatividade; a primeira abert
 
 ### Publicação automática pela `main`
 
-O histórico da equipe registra que o serviço foi criado a partir da URL pública do repositório e não recebia os eventos de push do GitHub. O workflow `.github/workflows/publicar-render.yml` está commitado e solicita o deploy pelo hook quando recebe push na `main` ou disparo manual. Ele falha explicitamente se `RENDER_DEPLOY_HOOK_URL` não existir; o commit do workflow não comprova que o segredo já foi cadastrado ou que cada publicação terminou com sucesso.
+Nosso histórico registra que o serviço foi criado a partir da URL pública do repositório e não recebia os eventos de push do GitHub. O workflow `.github/workflows/publicar-render.yml` está commitado e solicita o deploy pelo hook quando recebe push na `main` ou disparo manual. Ele falha explicitamente se `RENDER_DEPLOY_HOOK_URL` não existir; o commit do workflow não comprova que o segredo já foi cadastrado ou que cada publicação terminou com sucesso.
 
 O administrador do repositório deve concluir uma única configuração:
 

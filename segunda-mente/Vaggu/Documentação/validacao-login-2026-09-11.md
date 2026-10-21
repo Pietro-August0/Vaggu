@@ -12,7 +12,7 @@ Integração funcional e acabamento visual validados localmente. A consulta deta
 - Consulta da identidade a cada 30 segundos com aba visível e ao recuperar foco; backend valida cada requisição. Falhas de verificação bloqueiam conteúdo protegido até recuperação.
 - API no mesmo domínio via proxy /api; erros de rede não concedem acesso alternativo.
 - Listagem administrativa real; painel do gerente indica preparação. CRUD administrativo e operação não foram entregues por esta etapa.
-- WhatsApp oficial inexistente conforme a equipe. Removido número fictício; recuperação informa procurar a equipe no canal da parceria.
+- WhatsApp oficial inexistente conforme o registro da época. Removido número fictício; recuperação informa procurar o atendimento VAGGU no canal da parceria.
 
 ## Evidências
 
@@ -44,4 +44,4 @@ As evidências foram geradas localmente: resultado da validação e capturas do 
 
 ## Limites e continuidade
 
-Pietro forneceu a foto recortada e o contorno usados no Figma. Ambos foram versionados em `public/assets`, posicionados no painel amarelo e conferidos em 1440×1024 e 390×844. Não houve nova extração de medidas por limite do plano; a comparação usa o frame observado e os arquivos originais enviados pela equipe. Nenhum teste desta data comprova publicação, entrega pela Meta, sensores ou Power BI. Recuperação automatizada de senha não foi implementada: a equipe redefine o acesso. Para produção, encaminhar `/api` à API, demais rotas ao `index.html` e configurar HTTPS. Não houve commit, push ou publicação.
+Pietro forneceu a foto recortada e o contorno usados no Figma. Ambos foram versionados em `public/assets`, posicionados no painel amarelo e conferidos em 1440×1024 e 390×844. Não houve nova extração de medidas por limite do plano; a comparação usa o frame observado e os arquivos originais do projeto. Nenhum teste desta data comprova publicação, entrega pela Meta, sensores ou Power BI. Recuperação automatizada de senha não foi implementada: redefinimos o acesso pelo perfil Admin. Para produção, encaminhar `/api` à API, demais rotas ao `index.html` e configurar HTTPS. Não houve commit, push ou publicação.

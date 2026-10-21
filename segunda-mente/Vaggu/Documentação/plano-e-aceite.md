@@ -1,6 +1,6 @@
 # VAGGU — plano de implementação e critérios de aceite
 
-Versão 1.1 • revisão de 15/10/2026 (origem em 09/09/2026)
+Versão 1.2 • revisão de 21/10/2026 (origem em 09/09/2026)
 
 Este plano organiza dependências e evidências. Não é um registro de funcionalidades já concluídas. Cada etapa deve ser conciliada com o código existente; não recriar o que estiver implementado e validado.
 
@@ -27,8 +27,8 @@ Não usar “concluído” porque uma tela existe no Figma ou um cartão está m
 | E2 — Estrutura e mapa | Andares, setores, vagas, importação, mapas e posições | E1 | Dois andares navegáveis e importação sem perda de registros. |
 | E3 — Equipamentos | Placa, sensor, recebimento das leituras, expiração, ocorrências e manutenção | E1/E2 e acordo com o firmware | Maquete ou simulador identificado demonstra estados, falhas e retorno. |
 | E4 — Operação e histórico | Indicadores, telões, filtros, eventos, comparações e exportação | E2/E3 | Contagens reconciliadas e histórico com indisponibilidade explícita. |
-| E5 — Power BI | Views, medidas, relatório e atualização | E4 | Relatório funcional com números iguais ao conjunto controlado. |
-| E6 — Integração | Fluxo completo, responsividade, permissões e preparação de apresentação | E1–E5 | Roteiro completo reproduzível e limitações declaradas. |
+| E5 — Power BI (opcional) | Views, medidas, relatório e atualização | E4 | Se adotado, relatório funcional com números iguais ao conjunto controlado. |
+| E6 — Integração | Fluxo completo, responsividade, permissões e preparação de apresentação | E1–E4; conexão real WhatsApp adiada | Roteiro completo reproduzível e limitações declaradas. |
 
 O fluxo comercial pode ser testado com atendimento demonstrativo. Dados simulados devem estar identificados. Quando houver hardware real, conferir ingestão e interrupção física de comunicação; não chamar um simulador de integração física.
 
@@ -85,15 +85,15 @@ Esta matriz conecta o motivo da funcionalidade ao trabalho técnico. `Planejado`
 | Apresentar a solução e iniciar o atendimento | RF01–RF02; CA01–CA03 | Landing → WhatsApp → atendimento humano | Webhook WhatsApp; `WhatsappEvento` | `landing-page.tsx`; `src/whatsapp/*` | Elisa/Ana no fluxo; Kamilly no backend; Pietro na integração | P10 — parcial/planejado |
 | Criar acessos individuais e proteger cada shopping | RF04–RF05/RF17; CA04–CA07 | Login → troca obrigatória → Admin ou painel | `/auth/*`, `/shoppings/*`, `/gerentes/*`, `/minha-conta`; `Usuario`, `Sessao`, `Shopping` | `app-store.tsx`, páginas de acesso e módulos `auth`, `shoppings`, `conta` | Pietro, Ana e Samuel | P02–P03 — implementado, com correções de interface em C01 |
 | Configurar e consultar o estacionamento | RF03/RF06–RF08; CA08–CA14 | Ficha Admin → estrutura/importação/mapa; gerente → mapa | Rotas de estrutura e importação; `Andar`, `Setor`, `Vaga`, `ImportacaoEstrutura` | `estrutura-admin.tsx`, `visualizacao-vagas.tsx`, módulos `estrutura` e `importacao` | Samuel nos dados; Juan/Elisa na interface; Pietro na integração | P04–P05 — implementado |
-| Receber estados confiáveis dos sensores | RF09–RF13; CA15–CA24 | Equipamentos e estado operacional | Recepção, placa, sensor, ordem, confirmação e expiração implementadas; validade na consulta e monitoramento individual implementados; cadastro operacional, ocorrências, manutenção e atualização automática ainda incompletos | Testes locais e integração PostgreSQL aprovados; ESP32 real ainda pendente | Kamilly, Samuel e Pietro | P06 — em andamento |
-| Exibir contagens sem duplicar categorias | RF14; CA25–CA26 | Mapa operacional e telões | Consultas agregadas e autorização do telão ainda planejadas | Ainda sem telas/rotas funcionais | Juan/Elisa na apresentação; Kamilly/Samuel nos dados | P07 — bloqueado por P06 |
-| Explicar o uso no tempo e exportar resultados | RF13/RF15; CA27–CA31 | Histórico, comparação e relatórios | Histórico confirmado, filtro por até 31 dias UTC, comparação com período anterior e exportações Excel/PDF implementados; filtro por categoria e métricas complementares ainda faltam | API e painéis distinguem medições confirmadas, ausência de histórico e situação atual; arquivos incluem séries dos gráficos e recorte aplicado | Samuel nos dados; Ana/Elisa na interface; Pietro na integração | P08 — parcial, ainda dependente da conclusão operacional |
-| Produzir análise externa com os mesmos números | RF16–RF17; CA32–CA33 | Relatório Power BI | A preparação dos intervalos históricos existe no banco | Conjunto de conferência e testes existem; nenhum relatório funcional versionado foi encontrado | Samuel e Pietro, com validação de Elisa | P09 — iniciado na preparação dos dados; relatório pendente |
+| Receber estados confiáveis dos sensores | RF09–RF13; CA15–CA24 | Equipamentos e estado operacional | Recepção, placa, sensor, ordem, confirmação e expiração implementadas; validade na consulta e monitoramento individual implementados; cadastro operacional, ocorrências, manutenção e atualização periódica implementados; hardware e homologação pendentes | Testes locais e integração PostgreSQL aprovados; ESP32 real ainda pendente | Kamilly, Samuel e Pietro | P06 — em andamento |
+| Exibir contagens sem duplicar categorias | RF14; CA25–CA26 | Mapa operacional e telões | Consultas agregadas e autorização própria revogável implementadas | Prévia do gerente e instalação web; configuração administrativa na estrutura do shopping | Juan/Elisa na apresentação; Kamilly/Samuel nos dados | P07 — implementado localmente; homologação e instalação física pendentes |
+| Explicar o uso no tempo e exportar resultados | RF13/RF15; CA27–CA31 | Histórico, comparação e relatórios | Histórico confirmado, filtro por até 31 dias UTC, comparação com período anterior e exportações Excel/PDF implementados; setor/categoria, entradas/saídas, permanência, rotatividade, cobertura e fotografia de classificação implementados; eventos legados permanecem identificados | API e painéis distinguem medições confirmadas, ausência de histórico e situação atual; arquivos incluem séries dos gráficos e recorte aplicado | Samuel nos dados; Ana/Elisa na interface; Pietro na integração | P08 — implementado localmente; homologação publicada pendente |
+| Produzir análise externa com os mesmos números | RF16–RF17; CA32–CA33 | Relatório Power BI | A preparação dos intervalos históricos existe no banco | Conjunto de conferência e testes existem; nenhum relatório funcional versionado foi encontrado | Samuel e Pietro, com validação de Elisa | P09 — dados preparados; relatório/publicação opcional |
 | Desativar sem apagar histórico | RF18; CA34 | Administração de shopping e gerente | Exclusão lógica confirmada; gerente pode ser restaurado por sete segundos | Serviços `shoppings`; ações e diálogos na ficha administrativa | Samuel no dado; Ana/Elisa/Juan na jornada; Pietro na integração | P03 e C01 implementados |
 
 Detalhes de cada rota real ficam no README do backend; entidades atuais ficam em [modelo de dados](modelo-de-dados.md); telas reais e planejadas ficam em [fluxo de telas](fluxo-de-telas.md).
 
-### Pendências de aceite confirmadas em 15/10
+### Registro histórico — pendências de aceite confirmadas em 15/10
 
 - **CA21/CA22:** API e job aplicam validade individual; uma tela já aberta ainda não recebe leituras novas/expiração automaticamente. O intervalo de verificação de sessão não atualiza as vagas.
 - **CA23/CA24:** manutenção manual, ocorrências e sua conciliação com retorno de comunicação ainda não possuem fluxo operacional.
@@ -101,9 +101,9 @@ Detalhes de cada rota real ficam no README do backend; entidades atuais ficam em
 - **CA30:** a view histórica usa o cadastro atual de vaga, setor e andar; falta preservar a classificação vigente no instante observado.
 - **CA31:** período/comparação e PDF/XLSX entregues, filtros por setor/categoria ainda pendentes. O texto foi alinhado ao SSD §10.3, que aceita planilha e apresenta CSV como alternativa; não se exige um novo exportador CSV para substituir o XLSX existente.
 
-Esses itens impedem declarar P06/P08 integralmente aceitos, mesmo com a suíte automatizada vigente aprovada. A [auditoria documental](auditoria-documental-2026-10-15.md) registra evidências e a prioridade da próxima etapa.
+Esses eram os bloqueios registrados em 15/10. A implementação posterior acrescentou atualização periódica, manutenção/ocorrências, ausência explícita de métrica sem observação, fotografia histórica e filtros. As verificações locais e os limites de homologação estão no [registro de conclusão](conclusao-software-2026-10-19.md); a revisão documental não repete esses testes nem encerra o aceite de hardware/produção.
 
-CA33 só pode ser declarado concluído após implementar a forma de publicação/acesso. Enquanto a demonstração ficar apenas no Desktop, registrar a incorporação como pendente; não fingir teste de RLS no portal.
+CA32/CA33 pertencem à evolução opcional Power BI e não bloqueiam a conclusão dos gráficos do site. CA33 só pode ser declarado concluído após implementar a forma de publicação/acesso. Enquanto a demonstração ficar apenas no Desktop, registrar a incorporação como pendente; não fingir teste de RLS no portal.
 
 ## 4. Conjunto controlado para conferir os números
 

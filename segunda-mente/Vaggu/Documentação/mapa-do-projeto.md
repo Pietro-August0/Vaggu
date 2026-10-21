@@ -1,8 +1,12 @@
 # Mapa do projeto VAGGU
 
+**Atualização de 21/10/2026:** `Especificações/Personas.md` reúne Carlos, Mariana e Rafael, separando material recebido de hipóteses. `Evidências visuais/Personas/` guarda duas páginas originais de Carlos, dois retratos gerados e quatro slides ilustrativos de Mariana e Rafael; `scripts/gerar-slides-personas.py` reproduz a diagramação desses quatro slides. A análise histórica distingue setores pelo andar e nome e deixa cobertura indisponível sem capacidade atual de referência.
+
 O frontend começa em main.tsx, monta o provedor de sessão e encaminha /login, /trocar-senha, /admin e /painel. O cliente HTTP chama /api/v1 pelo proxy local do Vite; o backend server.ts conecta os serviços e app.ts monta as rotas. Serviços validam permissões antes de acessar o Prisma/PostgreSQL. O cookie HttpOnly preserva a sessão no refresh; a identidade pública é restaurada da API.
 
 Conhecimento, documentos e regras ficam em `segunda-mente`. O planejamento canônico registra a situação atual e a continuidade. Imagens da aplicação ficam no `public` do frontend; o cofre mantém cópias próprias das evidências necessárias ao Obsidian. Dependências, builds, segredos e bancos ignorados não integram o mapa.
+
+**Revisão geral de 21/10/2026:** `AGENTS.md` consolida os acordos antes mantidos em `CONTRIBUTING.md` e exige prints após alterações de design/frontend. O README usa capturas da aplicação atual com dados fictícios. `Evidências visuais/2026-10-21 - Revisao geral/` reúne telas públicas, painéis, filtros, estados vazios, editor e telão; `Documentação/revisao-geral-2026-10-21.md` registra verificação, limites e limpeza. Removemos quatro assets públicos redundantes e o otimizador antigo sem função atual, preservando fontes e WebP usados. Reparados os rasters incorporados dos dois SVGs documentais, sem alterar a geometria.
 
 ## Pastas principais
 
@@ -22,11 +26,11 @@ As cópias de imagens entre `segunda-mente/Vaggu/Identidade visual/Assets/` e `v
 | `segunda-mente/Vaggu/Documentação/fluxo-de-telas.md` | Registra rotas, jornadas por perfil, páginas planejadas e divergências atuais entre frontend, backend e evidências históricas. |
 | `segunda-mente/Vaggu/Documentação/modelo-de-dados.md` | Explica o schema Prisma/PostgreSQL implementado, suas restrições e os limites que ainda precisam ser resolvidos no P06. |
 | `segunda-mente/Vaggu/Documentação/cenario-de-apresentacao.md` | Explica a aplicação controlada do shopping fictício no ambiente escolhido e a entrega privada das três senhas. |
-| `segunda-mente/Vaggu/Planejamento/Sprints do projeto.md` | Registra o calendário semanal informado em 16/10, as tarefas históricas e a divergência de datas da Sprint 3, sem confundir sprints com P01–P11. |
+| `segunda-mente/Vaggu/Planejamento/Sprints do projeto.md` | Registra as datas das Sprints 3–6 nas fotografias, as Sprints 1–2 sem dias exatos e o calendário previsto das Sprints 7–8, sendo a 8 a última; preserva a duração variável e separa sprints de P01–P11. |
 | `segunda-mente/Vaggu/Planejamento/Plano de correção e implementação.md` | Ordena D01, C01 e P06, com responsáveis, dependências, riscos e critérios de aceite. |
-| `segunda-mente/Vaggu/Evidências visuais/Planejamento/sprint-03-planejamento-09-09-2026.jpeg` | Cópia versionada da fotografia fornecida pela equipe com o planejamento da Sprint 3. |
-| `segunda-mente/Vaggu/Evidências visuais/Planejamento/sprint-04-divisao-equipe.jpeg` | Cópia versionada da fotografia fornecida pela equipe com a divisão registrada para a Sprint 4. |
-| `segunda-mente/Vaggu/Evidências visuais/Planejamento/guia-identidade-visual-vaggu.png` | Cópia versionada do guia visual fornecido pela equipe, usado como evidência para paleta e tipografia, sem atribuí-lo a uma extração do Figma. |
+| `segunda-mente/Vaggu/Evidências visuais/Planejamento/sprint-03-planejamento-09-09-2026.jpeg` | Cópia versionada da fotografia de referência do projeto com o planejamento da Sprint 3. |
+| `segunda-mente/Vaggu/Evidências visuais/Planejamento/sprint-04-divisao-equipe.jpeg` | Cópia versionada da fotografia de referência do projeto com a divisão registrada para a Sprint 4. |
+| `segunda-mente/Vaggu/Evidências visuais/Planejamento/guia-identidade-visual-vaggu.png` | Cópia versionada do guia visual de referência do projeto, usado como evidência para paleta e tipografia, sem atribuí-lo a uma extração do Figma. |
 | `segunda-mente/Vaggu/Evidências visuais/landing-mobile-2026-09-24.png` | Captura da landing pública local em 390 px, feita em 24/09 após as animações; não comprova sessão ou deploy. |
 | `segunda-mente/Vaggu/Evidências visuais/rodape-mobile-2026-09-24.png` | Captura do rodapé público local em 390 px, sem a imagem de celulares, feita em 24/09. |
 | `segunda-mente/Vaggu/Evidências visuais/rodape-desktop-2026-09-24.png` | Captura do rodapé público local em 1440 px, com a imagem de celulares preservada, feita em 24/09. |
@@ -36,16 +40,14 @@ As cópias de imagens entre `segunda-mente/Vaggu/Identidade visual/Assets/` e `v
 
 | Arquivo | Responsabilidade |
 | --- | --- |
-| `vaggu-frontend/public/assets/estacionamento-aereo-vaggu.webp` | Imagem ilustrativa criada a partir da referência visual da equipe em 19/10/2026; usada na seção de operação com carregamento adiado. |
-| `vaggu-frontend/public/assets/estacionamento-hero-vaggu.webp` | Imagem ilustrativa criada a partir da referência visual da equipe em 19/10/2026; exibida na abertura da landing. |
-| `vaggu-frontend/public/assets/favicon-vaggu.svg` | Favicon vetorial baseado no ícone enviado pela equipe, com o “v” da marca oficial. |
-| `vaggu-frontend/public/assets/mockup-laptop-vaggu-optimized.svg` | Variante do mockup que preserva a geometria SVG e comprime a imagem incorporada em WebP; preservada como asset alternativo, sem referência nas telas atuais. |
+| `vaggu-frontend/public/assets/estacionamento-aereo-vaggu.webp` | Imagem ilustrativa criada a partir da referência visual do projeto em 19/10/2026; usada na seção de operação com carregamento adiado. |
+| `vaggu-frontend/public/assets/estacionamento-hero-vaggu.webp` | Imagem ilustrativa criada a partir da referência visual do projeto em 19/10/2026; exibida na abertura da landing. |
+| `vaggu-frontend/public/assets/favicon-vaggu.svg` | Favicon vetorial baseado no ícone de referência do projeto, com o “v” da marca oficial. |
 | `vaggu-frontend/public/assets/mockup-laptop-vaggu.webp` | Imagem WebP do notebook exibida na seção sobre a VAGGU, com carregamento adiado. |
 | `vaggu-frontend/public/assets/phones-vaggu.webp` | Versão WebP sem perda dos celulares do rodapé desktop da landing; composição oculta no mobile. |
 | `vaggu-frontend/public/assets/vaggu-circulado.webp` | Versão WebP sem perda da variante circular da marca; preservada no catálogo, sem uso nas telas atuais. |
 | `vaggu-frontend/public/assets/vaggu-foto-homem-login-sem-fundo.webp` | Versão WebP sem perda do retrato decorativo recortado usado no login, preservando transparência. |
-| `vaggu-frontend/scripts/optimize-images.py` | Gera WebP sem perda com Pillow quando o resultado é menor, confere dimensões e pixels RGBA e cria variante SVG com raster incorporado comprimido, preservando os originais. |
-| `segunda-mente/Vaggu/Especificações/Personas.md` | Registra Carlos a partir dos slides da equipe, complementos e personas propostas, fontes, necessidades, hipóteses de validação e limites de escopo e permissões. |
+| `segunda-mente/Vaggu/Especificações/Personas.md` | Registra Carlos a partir dos slides originais do projeto, complementos e personas propostas, fontes, necessidades, hipóteses de validação e limites de escopo e permissões. |
 
 ## Arquivos versionáveis
 
@@ -54,10 +56,12 @@ As cópias de imagens entre `segunda-mente/Vaggu/Identidade visual/Assets/` e `v
 | `.gitattributes` | Padroniza tratamento de arquivos e terminações de linha no Git. |
 | `.github/workflows/publicar-render.yml` | Solicita ao Render um novo deploy após cada push na `main`, usando um Deploy Hook guardado como segredo do GitHub. |
 | `.gitignore` | Exclui ferramentas locais, segredos, dependências e saídas de build. |
-| `CONTRIBUTING.md` | Reúne os acordos humanos de contribuição, produto, documentação, verificação e Git. |
+| `AGENTS.md` | Reúne nossos acordos de desenvolvimento, isolamento, documentação, autoria e prints obrigatórios após alterações de design ou frontend. |
 | `README.md` | Apresenta a VAGGU no GitHub com proposta, experiência por perfil, imagens comentadas, tecnologias, início local e links para a documentação técnica. |
 | `render.yaml` | Define build, inicialização, saúde e solicita os segredos de banco e Blob sem versionar seus valores. |
 | `scripts/verificar-documentacao.mjs` | Confere cobertura do mapa, wikilinks e destinos/âncoras locais de todos os Markdown versionáveis, incluindo READMEs; ignora exemplos em blocos de código. |
+| `scripts/gerar-slides-personas.py` | Gera os quatro slides PNG ilustrativos de Mariana e Rafael, reutilizando retratos locais e a identidade preta e amarela da referência. |
+| `segunda-mente/Vaggu/Evidências visuais/Personas/README.md` | Registra fontes e prompts dos recortes e fundos, reprodução com Poppins e conferência dos slides de Mariana e Rafael com os originais de Carlos. |
 | `segunda-mente/Vaggu/Documentação/auditoria-documental-2026-10-15.md` | Consolida a auditoria semântica, as pendências funcionais e de aceite, as evidências e os limites da revisão de 15/10. |
 | `vaggu-backend/.env.example` | Documenta banco, servidor, WhatsApp e parâmetros provisórios da telemetria sem incluir credenciais reais. |
 | `vaggu-backend/README.md` | Documentação: Vaggu Backend — 0.5.0. |
@@ -151,10 +155,7 @@ As cópias de imagens entre `segunda-mente/Vaggu/Identidade visual/Assets/` e `v
 | `vaggu-frontend/index.html` | Documento de entrada do Vite e ponto de montagem do React. |
 | `vaggu-frontend/package-lock.json` | Fixa a árvore de dependências e integridade para instalação reproduzível via npm ci. |
 | `vaggu-frontend/package.json` | Declara dependências, faixa do Node e scripts de desenvolvimento, build e verificação. |
-| `vaggu-frontend/public/assets/mockup-laptop-vaggu.svg` | Asset visual mockup-laptop-vaggu.svg; reutilizado na identidade e composição da interface. |
-| `vaggu-frontend/public/assets/phones-vaggu.png` | Imagem de celulares usada apenas na composição do rodapé desktop da landing; no mobile, o rodapé prioriza conteúdo e links. |
-| `vaggu-frontend/public/assets/vaggu-circulado.png` | Variante circular da marca preservada no catálogo público; não está montada nas telas atuais. |
-| `vaggu-frontend/public/assets/vaggu-foto-homem-login-sem-fundo.png` | Asset visual vaggu-foto-homem-login-sem-fundo.png; reutilizado na identidade e composição da interface. |
+| `vaggu-frontend/public/assets/mockup-laptop-vaggu.svg` | Fonte SVG válida do notebook, preservada para edição e recuperação do raster original; a interface carrega o WebP. |
 | `vaggu-frontend/public/assets/vaggu-logo-white.svg` | Variante vetorial branca da marca, sem filtro de sombra, usada na landing e em outras superfícies escuras. |
 | `vaggu-frontend/public/assets/vaggu-logo-yellow.svg` | Variante amarela do logotipo preservada no catálogo público; não está montada nas telas atuais. |
 | `vaggu-frontend/public/assets/vaggu-logo.svg` | Asset visual vaggu-logo.svg; reutilizado na identidade e composição da interface. |
@@ -198,7 +199,7 @@ As cópias de imagens entre `segunda-mente/Vaggu/Identidade visual/Assets/` e `v
 | `vaggu-frontend/src/components/ui/tooltip.tsx` | Componente de interface reutilizável tooltip; usado para controles, estados e composição acessível. |
 | `vaggu-frontend/src/hooks/use-scroll-reveal.ts` | Revela uma vez os blocos da landing conforme entram na viewport; a decisão atual mantém esse movimento automático. |
 | `vaggu-frontend/src/index.css` | Reúne temas claro/escuro, compatibilidade visual dos painéis, responsividade e microinterações dos cards acionáveis. |
-| `vaggu-frontend/src/lib/constants.ts` | Publica links de contato somente após configurar o número oficial da equipe. |
+| `vaggu-frontend/src/lib/constants.ts` | Publica links de contato somente após configurar o número oficial da VAGGU. |
 | `vaggu-frontend/src/lib/utils.ts` | Combina classes condicionais e resolve conflitos de utilitários Tailwind. |
 | `vaggu-frontend/src/main.tsx` | Inicializa o React, respeita a preferência de movimento reduzido e reúne tema, mensagens, sessão e rotas autenticadas, incluindo análise e prévia de telões do gerente. |
 | `vaggu-frontend/src/pages/admin-page.tsx` | Implementa a visão geral administrativa, cadastro, lista e ficha do shopping; o resumo inclui análise compacta e estrutura/mapa e gerentes mantêm seus fluxos próprios. |
@@ -242,7 +243,7 @@ As cópias de imagens entre `segunda-mente/Vaggu/Identidade visual/Assets/` e `v
 
 ### Visual do telão — 17/10/2026
 
-O telão foi redesenhado com a referência visual da equipe, logo oficial e tipografia do site. A página calcula faixas provisórias pela proporção de vagas livres monitoradas e mantém dados incompletos em estado neutro.
+O telão foi redesenhado com a referência visual do projeto, logo oficial e tipografia do site. A página calcula faixas provisórias pela proporção de vagas livres monitoradas e mantém dados incompletos em estado neutro.
 
 ### Análises — cobertura por setor e centro da rosca — 17/10/2026
 
@@ -251,3 +252,38 @@ O componente `analise-estacionamento.tsx` exibe cobertura histórica por setor �
 | Arquivo | Responsabilidade |
 | --- | --- |
 | segunda-mente/Vaggu/Documentação/entrega-teloes-analises-2026-10-17.md | Consolida mudanças, prints atuais, verificações e pendências de telões e análises. |
+
+
+### Evidências de sprints recebidas em 19/10/2026
+
+As quatro fotos em `Evidências visuais/Planejamento/sprint-03-09-a-16-09-2026.jpeg`, `sprint-04-23-a-30-09-2026.jpeg`, `sprint-05-05-a-19-10-2026.jpeg` e `sprint-06-19-a-28-10-2026.jpeg` sustentam o calendário vigente. Origem dos anexos e limites constam no [índice de evidências](../Evid%C3%AAncias%20visuais/%C3%8Dndice%20de%20evid%C3%AAncias.md); responsáveis e regra de registro estão em [Sprints do projeto](../Planejamento/Sprints%20do%20projeto.md).
+
+## Conclusão do software — arquivos acrescentados em 19/10/2026
+
+Regras, contratos, operação e limitações estão em [conclusao-software-2026-10-19.md](conclusao-software-2026-10-19.md). O [plano de conclusão](../Planejamento/Conclus%C3%A3o%20do%20software.md) acompanha os aceites; implementação local não comprova homologação publicada.
+
+| Caminho | Responsabilidade |
+| --- | --- |
+| `segunda-mente/Vaggu/Documentação/conclusao-software-2026-10-19.md` | Consolida as novas regras, endpoints, migrações, renovação do exemplo e limites de validação. |
+| `segunda-mente/Vaggu/Planejamento/Conclusão do software.md` | Ordena as etapas da solicitação, critérios de aceite, andamento e dependências externas. |
+| `vaggu-backend/prisma/migrations/20261019000100_classificacao_historica/migration.sql` | Congela classificação em novas inserções do histórico e expõe snapshots na view; marca legado como não confirmado. |
+| `vaggu-backend/prisma/migrations/20261019000200_operacao_equipamentos/migration.sql` | Cria ocorrências e campos de manutenção com integridade de vínculo por shopping, placa e sensor. |
+| `vaggu-backend/prisma/migrations/20261019000300_teloes/migration.sql` | Persiste instalações de telões com credencial em hash, ativação e recorte consistente. |
+| `vaggu-backend/prisma/migrations/20261019000400_whatsapp_envio_incerto/migration.sql` | Acrescenta ENVIANDO e REVISAO ao status persistido para evitar repetição automática de envio incerto. |
+| `vaggu-backend/scripts/renovar-cenario-apresentacao.ts` | Planeja ou aplica transições sintéticas recentes somente no Shopping Exemplo explicitamente marcado, preservando contas e IDs. |
+| `vaggu-backend/scripts/backup-banco.ts` | Cria dump explícito sem sobrescrita e permite restauração somente em banco novo local de teste, sem expor credenciais em argumentos. |
+| `vaggu-backend/test/backup-postgresql.test.ts` | Ensaios de dump/restauração verificam integridade, restrições e recusa de sobrescrita em bancos isolados. |
+| `vaggu-backend/src/equipamentos/ocorrencias.ts` | Deduplica falhas de comunicação e agrupa sensores quando a placa perde contato, preservando manutenção manual. |
+| `vaggu-backend/src/equipamentos/routes.ts` | Expõe operações administrativas de equipamentos/manutenção e consulta de ocorrências no shopping da sessão. |
+| `vaggu-backend/src/equipamentos/service.ts` | Valida vínculos, administra credenciais e manutenção, invalida leituras e exige nova confirmação no retorno. |
+| `vaggu-backend/src/teloes/routes.ts` | Expõe cadastro/revogação administrativa e consulta agregada autorizada por credencial do telão. |
+| `vaggu-backend/src/teloes/service.ts` | Valida recortes e credenciais; agrega somente capacidade ativa e leituras válidas sem expor detalhes administrativos. |
+| `vaggu-backend/test/analiticos-postgresql.test.ts` | Exercita snapshots históricos, ciclos e isolamento/filtros em PostgreSQL descartável. |
+| `vaggu-backend/test/equipamentos-postgresql.test.ts` | Exercita escopo, vínculo, manutenção, recuperação de comunicação, rotação de chave e autorização. |
+| `vaggu-backend/test/renovar-cenario-apresentacao.test.ts` | Verifica planejamento, prévia, proteção do exemplo e repetição da renovação. |
+| `vaggu-backend/test/teloes-postgresql.test.ts` | Verifica agregação, recorte, credenciais, revogação e isolamento de instalações com banco de teste. |
+| `vaggu-frontend/src/components/equipamentos-admin.tsx` | Oferece cadastro, vínculo e manutenção, consulta de ocorrências e exibição única de chaves no Admin. |
+| `vaggu-frontend/src/components/teloes-admin.tsx` | Configura nome/recorte da instalação, apresenta chave uma vez e permite revogação. |
+| `vaggu-frontend/src/hooks/use-estrutura-atualizada.ts` | Centraliza consulta periódica/manual, descarte de respostas antigas e invalidação por erro ou prazo. |
+| `vaggu-frontend/src/pages/telao-instalado-page.tsx` | Exibe agregados com chave própria por aba e oculta contagens quando a consulta perde validade. |
+| `vaggu-frontend/src/servicos/validade-estrutura.ts` | Produz estrutura com leituras indisponíveis quando a consulta vence, preservando indicação de manutenção. |

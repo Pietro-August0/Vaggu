@@ -26,10 +26,13 @@ export async function garantirMonitoramentoApresentacao(prisma: PrismaClient) {
         const manutencao = indice === 0;
         const semResposta = indice === 1;
         const pendente = indice === 2;
+        // O exemplo reserva uma confirmação por setor mesmo quando o histórico sintético do dia termina sem leitura.
+        const estadoConfirmado = pendente && !['LIVRE', 'OCUPADA'].includes(vaga.estadoAtual) ? 'LIVRE' : vaga.estadoAtual;
+        if (estadoConfirmado !== vaga.estadoAtual) await tx.vaga.update({ where: { id: vaga.id }, data: { estadoAtual: estadoConfirmado } });
         await tx.sensor.create({ data: { shoppingId, dispositivoId: placa.id, vagaId: vaga.id,
           codigo: `DEMO-${vaga.codigo}`, ativo: !manutencao,
-          estadoConfirmado: manutencao || semResposta ? 'INDISPONIVEL' : vaga.estadoAtual,
-          estadoCandidato: pendente ? vaga.estadoAtual === 'LIVRE' ? 'OCUPADA' : 'LIVRE' : null,
+          estadoConfirmado: manutencao || semResposta ? 'INDISPONIVEL' : estadoConfirmado,
+          estadoCandidato: pendente ? estadoConfirmado === 'LIVRE' ? 'OCUPADA' : 'LIVRE' : null,
           candidatoIniciadoEm: pendente ? new Date(referencia.getTime() - 15_000) : null,
           ultimaObservacaoEm: new Date(referencia.getTime() - (semResposta ? 600_000 : 5_000)),
           expiradoEm: semResposta ? new Date(referencia.getTime() - 480_000) : null,

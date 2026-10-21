@@ -1,8 +1,8 @@
 # SSD VAGGU — especificação de produto e desenho do sistema
 
-**Versão:** 1.2 • **Revisão:** 15/10/2026 • **Idioma:** português brasileiro.
+**Versão:** 1.3 • **Revisão:** 21/10/2026 • **Idioma:** português brasileiro.
 
-**Objetivo:** reunir as regras, os limites e o resultado esperado da VAGGU em um único lugar. Este documento explica o produto; o planejamento mostra o que já foi entregue e o que ainda falta. A [auditoria de 15/10](auditoria-documental-2026-10-15.md) reconcilia os resumos com o código e registra os critérios ainda não atendidos.
+**Objetivo:** reunir as regras, os limites e o resultado esperado da VAGGU em um único lugar. Este documento explica o produto; o planejamento mostra o que já foi entregue e o que ainda falta. A [auditoria de 15/10](auditoria-documental-2026-10-15.md) preserva os achados daquela data; o [registro de conclusão](conclusao-software-2026-10-19.md) reúne a implementação posterior e as verificações datadas.
 
 ## Sumário
 
@@ -24,15 +24,15 @@
 
 ## 1. Contexto, fontes e autoridade
 
-A VAGGU é o TCC de Desenvolvimento de Sistemas de uma equipe de seis integrantes. A organização confirmada em 14/09/2026 é: Pietro em desenvolvimento completo e liderança; Ana Clara como Scrum Master, documentação e interface; Elisa em interface, experiência e qualidade; Juan em interface e design; Samuel em servidor, dados e produto; Kamilly em servidor, Arduino e IoT. O horizonte informado é a apresentação até dezembro de 2026; não existe cronograma diário aprovado neste pacote.
+A VAGGU é nosso TCC de Desenvolvimento de Sistemas, desenvolvido por seis integrantes. A organização confirmada em 14/09/2026 é: Pietro em desenvolvimento completo e liderança; Ana Clara como Scrum Master, documentação e interface; Elisa em interface, experiência e qualidade; Juan em interface e design; Samuel em servidor, dados e produto; Kamilly em servidor, Arduino e IoT. O horizonte informado é a apresentação até dezembro de 2026; não existe cronograma diário aprovado neste pacote.
 
-O sistema recebe dados de sensores em vagas de estacionamento de shoppings, apresenta ocupação e disponibilidade por andar/setor, oferece mapa operacional e telões e preserva histórico para análise. A equipe VAGGU administra implantação, acessos e equipamentos; gerentes acompanham a operação.
+O sistema recebe dados de sensores em vagas de estacionamento de shoppings, apresenta ocupação e disponibilidade por andar/setor, oferece mapa operacional e telões e preserva histórico para análise. Administramos implantação, acessos e equipamentos; gerentes acompanham a operação.
 
 ### 1.1 Fontes usadas
 
 | Fonte | Uso e limite |
 | --- | --- |
-| Decisões de Pietro nesta conversa, em 09/09 | Autoridade para mapa, WhatsApp, múltiplos gerentes, categorias, placas e Power BI. |
+| Decisões de Pietro nesta etapa, em 09/09 | Autoridade para mapa, WhatsApp, múltiplos gerentes, categorias, placas e Power BI. |
 | `VAGGU_Documento_Mestre_Atualizado.docx`, revisão de 09/09, 17 páginas | Base consolidada de fluxos, regras, modelo proposto e planejamento. |
 | Documento mestre de 03/09 e endpoints MVP de 02/09 | Contexto anterior. Regras conflitantes foram substituídas. |
 | Figma VAGGU, arquivo `xKI9wjoiZ5CoXC3DXIJNmq`, nó `2022:2` | Referência de identidade e telas. Nova extração bloqueada por limite; detalhes no guia visual. |
@@ -49,12 +49,14 @@ Este pacote não atesta revisão completa do código no GitHub nem dos cartões 
 
 Em conflito, decisão recente explícita prevalece sobre documentação antiga. Figma define identidade, mas não restaura recursos retirados. Registrar mudanças relevantes com data e impacto; não modificar silenciosamente escopo para facilitar implementação.
 
+**Revisão de escopo — 21/10/2026:** a DEC07 registra a intenção de 09/09. No escopo atual, os gráficos e relatórios do site são renderizados pela aplicação; publicação/incorporação de Power BI é evolução opcional. A conexão real do WhatsApp está adiada. Hardware físico e homologação publicada continuam etapas próprias.
+
 ## 2. Escopo e decisões atuais
 
 | ID e data | Decisão | Motivo | Impacto | Regra anterior substituída |
 | --- | --- | --- | --- | --- |
 | DEC01 — 09/09/2026 | Mapa operacional com navegação entre andares. | Permitir localizar e acompanhar vagas no espaço real do shopping. | Exige hierarquia, posições, filtros, busca, interface responsiva e autorização por shopping. | “Sem mapa”, apenas lista/tabela. |
-| DEC02 — 09/09/2026 | Landing conduz ao WhatsApp, principal canal de atendimento e parceria. | Manter apresentação, negociação e fechamento com a equipe. | A landing usa CTA de contato; não existe cadastro ou contratação pública. | Cadastro ou contratação pública pelo site. |
+| DEC02 — 09/09/2026 | Landing conduz ao WhatsApp, principal canal de atendimento e parceria. | Manter apresentação, negociação e fechamento sob nossa responsabilidade. | A landing usa CTA de contato; não existe cadastro ou contratação pública. | Cadastro ou contratação pública pelo site. |
 | DEC03 — 09/09/2026 | Admin cria login individual após a parceria. | Controlar quem recebe acesso operacional. | Cadastro de gerente fica em rota e tela administrativa; não há registro público. | Gerente cria seu próprio acesso. |
 | DEC04 — 09/09/2026 | Um shopping pode ter vários gerentes. | Permitir acessos pessoais sem compartilhar senha. | `shoppingId` não é único em usuários; bloqueio de uma conta não encerra as demais. | Apenas uma conta de gerente por shopping. |
 | DEC05 — 09/09/2026 | Telões destacam PCD, idosos e elétricas, além da disponibilidade geral. | Exibir categorias relevantes sem distorcer a capacidade. | Categorias especiais integram o total e não podem ser somadas novamente; motos ficam fora do escopo. | Inclusão de motos no protótipo. |
@@ -65,7 +67,7 @@ Em conflito, decisão recente explícita prevalece sobre documentação antiga. 
 
 ### 2.1 Entrega funcional planejada
 
-Landing, login, troca de senha, bot de WhatsApp, administração de shoppings e acessos, estrutura/importação, mapa por andar, placas/sensores, ingestão, estados atuais, histórico, ocorrências, indicadores, exportação de resumos, páginas de telão e primeiro relatório funcional no Power BI.
+Landing, login, troca de senha, bot de WhatsApp, administração de shoppings e acessos, estrutura/importação, mapa por andar, placas/sensores, ingestão, estados atuais, histórico, ocorrências, indicadores, exportação de resumos, páginas de telão e preparação histórica para evolução opcional no Power BI. A conexão real do WhatsApp está adiada; hardware físico e homologação publicada permanecem pendentes.
 
 ### 2.2 Fora do escopo
 
@@ -92,9 +94,9 @@ Manter dois perfis humanos autenticados: Admin e gerente. Uma conta Admin inicia
 1. Admin cadastra nome, e-mail de login, telefone e shopping de cada gerente.
 2. E-mail identifica a conta; o sistema não cria uma caixa postal.
 3. Sistema emite senha provisória individual. O login usa seu hash; o texto aparece somente na resposta imediata de criação ou redefinição para o Admin copiar por um canal seguro.
-4. Equipe entrega o acesso pelo processo de atendimento no WhatsApp.
+4. Entregamos o acesso pelo processo de atendimento no WhatsApp.
 5. Primeiro login deve exigir troca de senha. Backend bloqueia acesso operacional até concluir.
-6. Recuperação é solicitada à equipe; Admin verifica o solicitante e redefine o acesso com nova senha provisória.
+6. Recuperação é solicitada ao atendimento VAGGU; Admin verifica o solicitante e redefine o acesso com nova senha provisória.
 7. Bloqueio de conta deve interromper acesso também com sessão previamente emitida.
 8. Listagens posteriores nunca revelam a senha provisória; se ela for perdida antes da troca, o Admin precisa redefinir o acesso e entregar a nova senha exibida naquele momento.
 
@@ -126,7 +128,7 @@ Suporte deve contemplar painel, dados incorretos, sensor/placa, telão, acesso e
 
 Guardar sessão mínima do menu, contato, etapa, datas, demonstração ou chamado. Não é requisito copiar todas as conversas para a VAGGU. A conversa humana e a negociação permanecem no WhatsApp. Não criar chat comercial interno.
 
-**Proposta técnica:** deduplicar mensagens pelo identificador do provedor; separar mensagens recebidas de eventos de entrega/falha. Mensagens de status não devem iniciar conversa nem duplicar cadastro. Assinatura, confirmação e envio devem seguir a API e a versão efetivamente configuradas pela equipe.
+**Proposta técnica:** deduplicar mensagens pelo identificador do provedor; separar mensagens recebidas de eventos de entrega/falha. Mensagens de status não devem iniciar conversa nem duplicar cadastro. Assinatura, confirmação e envio devem seguir a API e a versão efetivamente configuradas no ambiente.
 
 O Admin trata pedidos de demonstração e suporte no painel, mas credenciais não são emitidas automaticamente apenas porque alguém preencheu o menu. A parceria e a validação continuam sendo etapas humanas.
 
@@ -160,7 +162,7 @@ Tipos aceitos: `COMUM`, `PCD`, `IDOSO`, `ELETRICA`. Rejeitar motos, categoria in
 
 **Proposta técnica:** processamento inicial gera uma prévia sem alterar a estrutura; confirmação aplica os registros válidos em transação ou estratégia atômica equivalente. Se houver erro bloqueante, nada é confirmado. Usar revisão/identificador para não confirmar duas vezes a mesma prévia.
 
-O código atual preserva várias prévias de importação e não possui política automática de retenção. A proposta anterior de manter somente a última importação como artefato ativo permanece **PENDENTE DE DEFINIÇÃO**: a equipe deve decidir se ela continua necessária antes de alterar ou apagar prévias. Conciliar por código no shopping, preservando IDs. Registro ausente em uma nova planilha não deve ser apagado silenciosamente; eventual desativação precisa aparecer na prévia.
+O código atual preserva várias prévias de importação e não possui política automática de retenção. A proposta anterior de manter somente a última importação como artefato ativo permanece **PENDENTE DE DEFINIÇÃO**: precisamos decidir se ela continua necessária antes de alterar ou apagar prévias. Conciliar por código no shopping, preservando IDs. Registro ausente em uma nova planilha não deve ser apagado silenciosamente; eventual desativação precisa aparecer na prévia.
 
 ### 5.4 Desativação
 
@@ -188,7 +190,7 @@ Interface precisa tratar carregamento, ausência de registros, ausência de obse
 
 ### 7.1 Mapa
 
-Mapa é funcionalidade obrigatória e compartilha a mesma representação visual entre Admin e gerente. Selecionar andar carrega sua base e vagas, com código, setor, categoria e estado. Clicar em uma vaga posicionada, em um card móvel ou em uma vaga sem posição abre o mesmo diálogo de detalhes, que informa localização, categoria, cadastro e situação do monitoramento. A consulta do mapa já aplica a validade individual e retorna monitoramento com situação, placa, horários e confirmação pendente, sem credenciais. A tela ainda não busca novas leituras automaticamente; isso continua necessário para a operação. O Admin edita posições por arraste, toque e teclado, com prévia e salvamento da revisão. A interface não pode inventar um sensor saudável apenas porque a vaga está cadastrada ou a placa enviou um sinal geral. Busca por um código exato de outro andar navega ao recorte correto e abre o detalhe da vaga. Filtros por setor, tipo e estado devem ter comportamento visível; não misturar total do shopping com total filtrado sem rótulo. No Admin, mudanças de estrutura atualizam o que aparece sem exigir recarga manual da página.
+Mapa é funcionalidade obrigatória e compartilha a mesma representação visual entre Admin e gerente. Selecionar andar carrega sua base e vagas, com código, setor, categoria e estado. Clicar em uma vaga posicionada, em um card móvel ou em uma vaga sem posição abre o mesmo diálogo de detalhes, que informa localização, categoria, cadastro e situação do monitoramento. A consulta do mapa já aplica a validade individual e retorna monitoramento com situação, placa, horários e confirmação pendente, sem credenciais. A tela consulta novas leituras a cada 15 segundos, pausa durante a edição e invalida dados após 30 segundos ou falha de conexão. O Admin edita posições por arraste, toque e teclado, com prévia e salvamento da revisão. A interface não pode inventar um sensor saudável apenas porque a vaga está cadastrada ou a placa enviou um sinal geral. Busca por um código exato de outro andar navega ao recorte correto e abre o detalhe da vaga. Filtros por setor, tipo e estado devem ter comportamento visível; não misturar total do shopping com total filtrado sem rótulo. No Admin, mudanças de estrutura atualizam o que aparece sem exigir recarga manual da página.
 
 **Proposta técnica do MVP:** representação 2D simples por andar, base visual e coordenadas normalizadas. Posição usa `x`/`y` do canto superior esquerdo e largura/altura em relação às dimensões da base; rotação em graus, com âncora documentada. Definir validação de limites, inclusive elemento rotacionado. A proposta evita depender de coordenadas absolutas de um único monitor.
 
@@ -210,7 +212,7 @@ Uma vaga PCD ocupada continua do tipo PCD, mas não entra no número de PCD livr
 
 Entrada mostra vagas livres por andar; telão de andar mostra vagas livres por setor. Admin escolhe o recorte exibido. Mostrar PCD, idosos e elétricas, sem motos. Os destaques especiais fazem parte do total geral.
 
-Contagens usam a mesma fonte e validade do mapa. Dados expirados devem ser sinalizados e não mantidos como disponibilidade ao vivo. Resposta pública/autorizada contém agregados, não detalhes de gerentes ou credenciais. A forma de autorizar cada instalação do telão é uma decisão técnica pendente.
+Contagens usam a mesma fonte e validade do mapa. Dados expirados devem ser sinalizados e não mantidos como disponibilidade ao vivo. Resposta pública/autorizada contém agregados, não detalhes de gerentes ou credenciais. Cada instalação web possui credencial própria, com hash persistido, recorte configurado pelo Admin e revogação; hardware e homologação publicada seguem pendentes.
 
 ## 8. Placas, sensores e manutenção
 
@@ -240,7 +242,7 @@ Retorno de contato encerra a falha de comunicação correspondente, mas o histó
 
 Esta seção é **proposta técnica** de contrato e algoritmo. Deve ser conciliada com o firmware existente e implementada com testes de tempo, concorrência e reinicialização.
 
-**Estado local atualizado em 15/10/2026:** a base já controla a ordem das mensagens, usa o horário do servidor, rejeita um grupo inteiro quando há leitura inválida e exige uma credencial própria da placa. A integração com PostgreSQL foi executada com sucesso. Os tempos usados ainda são provisórios e precisam ser comparados com o ESP32 real. Também faltam cadastro/vínculo operacional de equipamentos, comandos de manutenção e ocorrências, atualização automática das telas e conferência no ambiente publicado; por isso, o P06 continua em andamento.
+**Estado local atualizado em 21/10/2026:** a base já controla a ordem das mensagens, usa o horário do servidor, rejeita um grupo inteiro quando há leitura inválida e exige uma credencial própria da placa. A integração com PostgreSQL foi executada com sucesso. Os tempos usados ainda são provisórios e precisam ser comparados com o ESP32 real. Cadastro/vínculo de equipamentos, manutenção/ocorrências e atualização periódica das telas estão implementados. O P06 ainda depende do ensaio físico e da conferência no ambiente publicado.
 
 ### 9.1 Parâmetros
 
@@ -328,7 +330,7 @@ Estados confirmados com origem, instante efetivo, recebimento e motivo; interval
 | Livres/ocupadas/indisponíveis | Contagens por estado cuja soma corresponde à capacidade ativa. |
 | Ocupação atual | `ocupadas / (ocupadas + livres) × 100`. Denominador zero produz ausência de dado, não 0%. |
 | Ocupação histórica | `segundos-vaga ocupados / segundos-vaga conhecidos × 100`. |
-| Cobertura histórica | `segundos-vaga conhecidos / segundos-vaga ativos × 100`. |
+| Cobertura histórica | Alvo: `segundos-vaga conhecidos / segundos-vaga ativos × 100`. Implementação atual: estimativa pela capacidade ativa atual; retorna ausência quando não há referência ou quando o observado excede a capacidade. Não existe reconstrução exata de capacidade histórica. |
 | Duração média | Média de ciclos completos com início/fim confirmados e sem falha intermediária. |
 | Rotatividade observada | Transições confirmadas de livre para ocupada por vaga no período, com exposição informada. |
 | Horário de pico | Intervalo com maior ocupação no recorte, acompanhado da cobertura. |
@@ -348,9 +350,9 @@ Insights são frases derivadas de regras e métricas conferíveis. Exemplo: “O
 
 ### 11.1 Primeira entrega
 
-Power BI faz parte do planejamento de implementação. **Proposta inicial:** relatório no Power BI Desktop, em modo Importação, alimentado por views do PostgreSQL. O conector oficial suporta Importação e DirectQuery [R2]; escolher Importação inicialmente simplifica a validação para o TCC. Essa escolha é recomendação de implementação, não indicação de licença já contratada.
+Power BI é evolução opcional no escopo atualizado em 21/10/2026; sua publicação não bloqueia a entrega do software. **Proposta inicial:** relatório no Power BI Desktop, em modo Importação, alimentado por views do PostgreSQL. O conector oficial suporta Importação e DirectQuery [R2]; escolher Importação inicialmente simplifica a validação para o TCC. Essa escolha é recomendação de implementação, não indicação de licença já contratada.
 
-Entregar um PBIX funcional ou o formato de projeto compatível adotado pela equipe, com dados, medidas e atualização verificadas. Uma tela com iframe vazio ou botão sem relatório não satisfaz o requisito. Não é necessário servir cada gráfico por uma rota REST.
+Entregar um PBIX funcional ou o formato de projeto compatível adotado no projeto, com dados, medidas e atualização verificadas. Uma tela com iframe vazio ou botão sem relatório não satisfaz o requisito. Não é necessário servir cada gráfico por uma rota REST.
 
 ### 11.2 Modelo analítico proposto
 
@@ -379,7 +381,7 @@ Publicação e incorporação no portal continuam pendentes. A opção de incorp
 
 Se um relatório reúne vários shoppings, definir RLS e identidade autorizada no servidor. Um filtro no navegador não protege os dados [R5]. Testar pelo menos dois shoppings antes de liberar relatórios a gerentes.
 
-“Publicar na Web” torna o relatório acessível publicamente; não usar para dados internos [R6]. Para o TCC, demonstrar no Desktop é um caminho enquanto a equipe define publicação. Revisar dados importados antes de compartilhar o PBIX.
+“Publicar na Web” torna o relatório acessível publicamente; não usar para dados internos [R6]. Para o TCC, demonstrar no Desktop é um caminho enquanto definimos publicação. Revisar dados importados antes de compartilhar o PBIX.
 
 ## 12. Arquitetura e modelo de dados
 
@@ -395,7 +397,7 @@ Se um relatório reúne vários shoppings, definir RLS e identidade autorizada n
 | Firmware ESP32 | Leitura local, envio autenticado e recuperação de comunicação. |
 | Views + Power BI | Análise histórica, sem depender do relatório para operar o estacionamento. |
 
-A implantação registrada em 23/09 usa um serviço Render que entrega API e frontend na mesma origem e uma conexão PostgreSQL no Neon; a [configuração](configuracao.md#hospedagem-no-render) descreve o manifesto e suas verificações pendentes. **Proposta de atualização:** polling controlado pode servir ao MVP para telemetria; Socket.IO requer suporte a conexões persistentes. Mutações administrativas já devem atualizar por estado local ou refetch, sem recarga manual. Não colocar uma rotina crítica apenas em timer de função efêmera.
+A implantação registrada em 23/09 usa um serviço Render que entrega API e frontend na mesma origem e uma conexão PostgreSQL no Neon; a [configuração](configuracao.md#hospedagem-no-render) descreve o manifesto e suas verificações pendentes. **Atualização implementada:** polling a cada 15 segundos, invalidação após 30 segundos ou falha de conexão e pausa durante edição do mapa; Socket.IO não está instalado. Mutações administrativas já devem atualizar por estado local ou refetch, sem recarga manual. Não colocar uma rotina crítica apenas em timer de função efêmera.
 
 Separar consulta operacional de análise. Falha do Power BI não interrompe leitura das vagas. Organizar módulos conforme [regras-de-codigo.md](regras-de-codigo.md), conciliando com o repositório existente.
 
@@ -448,7 +450,7 @@ Um campo de shopping redundante na vaga, se necessário para restrição compost
 
 ### 12.4 Evolução do banco
 
-Já foram concluídos: vários gerentes no mesmo shopping, mapa e posições, separação entre placa e sensor, eventos de telemetria, histórico e a primeira consulta preparada para análise. Ainda faltam as mudanças ligadas a ocorrências e manutenção, histórico das alterações cadastrais e permissões definitivas para o Power BI.
+Já foram concluídos: vários gerentes no mesmo shopping, mapa e posições, separação entre placa e sensor, eventos de telemetria, histórico e a primeira consulta preparada para análise. Ocorrências/manutenção, telões e fotografias da classificação dos novos eventos estão implementados. Uma auditoria completa de alterações cadastrais e permissões de uma futura publicação Power BI continuam como evoluções próprias.
 
 Cada migração precisa declarar pré-condições, compatibilidade com a API, backfill quando necessário e estratégia de recuperação. Não resetar dados reais.
 
@@ -591,7 +593,7 @@ Usar `400` para entrada inválida, `401` para ausência/sessão inválida, `403`
 | RF13 | Histórico preserva ocupação, falhas e contexto cadastral. |
 | RF14 | Telões agrupam disponibilidade e categorias sem duplicação. |
 | RF15 | Estatísticas, comparações e exportações resumidas com recorte. |
-| RF16 | Dados analíticos e primeiro relatório funcional no Power BI. |
+| RF16 | Dados analíticos; relatório funcional/publicação Power BI como evolução opcional. |
 | RF17 | Isolamento por shopping também em análises e incorporação. |
 | RF18 | Desativação lógica, desfazer e reativação sem apagar histórico. |
 
@@ -614,16 +616,16 @@ Para engenharia e comentários, seguir [regras-de-codigo.md](regras-de-codigo.md
 | API, rotina de expiração e atualização web | Hospedagem e capacidade verificadas | Separar contratos do transporte. |
 | Formato e edição do mapa | Planta/base por andar e interação aprovada | Manter IDs e posições como entidades. |
 | Publicação/licenciamento Power BI | Conta, conectividade e forma de acesso | Criar relatório Desktop com dados de teste. |
-| Autorização dos telões | Modelo de instalação e acesso | Definir resposta agregada sem dados pessoais. |
+| Instalação física e homologação dos telões | Testes da credencial própria, revogação, recorte e perda de conexão no ambiente publicado | Usar a instalação web já implementada com agregados sem dados pessoais. |
 | Volumes, retenção e arquivos | Requisitos reais de implantação | Desenvolver MVP com limites documentados. |
 
-Riscos principais: perda de comunicação interpretada como vaga livre; isolamento apenas visual; duplicação de eventos; histórico reclassificado incorretamente após edição cadastral; mapa dessincronizado do andar; integração Power BI apenas aparente; tokens visuais inventados; refatoração ampla que dificulta a equipe.
+Riscos principais: perda de comunicação interpretada como vaga livre; isolamento apenas visual; duplicação de eventos; histórico reclassificado incorretamente após edição cadastral; mapa dessincronizado do andar; integração Power BI apenas aparente; tokens visuais inventados; refatoração ampla que dificulta a manutenção.
 
-Toda decisão relevante registra: identificador, data, contexto, escolha, alternativa descartada, impacto e cenários de aceite. Se a equipe alterar uma regra, atualizar as referências afetadas em vez de manter duas “versões oficiais”.
+Toda decisão relevante registra: identificador, data, contexto, escolha, alternativa descartada, impacto e cenários de aceite. Se alterarmos uma regra, atualizar as referências afetadas em vez de manter duas “versões oficiais”.
 
 ## Referencias
 
-Fontes do projeto: decisões da conversa e documento mestre de 09/09/2026. O documento antigo é histórico; não deve reinstalar as regras “sem mapa” e “um gerente”.
+Fontes do projeto: decisões registradas e documento mestre de 09/09/2026. O documento antigo é histórico; não deve reinstalar as regras “sem mapa” e “um gerente”.
 
 - **R2 — Microsoft:** [Conector PostgreSQL](https://learn.microsoft.com/pt-br/power-query/connectors/postgresql). Modos suportados e conexão.
 - **R3 — Microsoft:** [Atualização de dados](https://learn.microsoft.com/en-us/power-bi/connect-data/refresh-data). Atualização e conectividade ao serviço.
