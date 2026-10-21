@@ -1,5 +1,5 @@
 // Coordena mensagens recebidas, deduplicação persistente e respostas do menu demonstrativo.
-import { flowSetupText, shouldSendTestMenu, testMenuText } from './payload.js';
+import { respostaAtendimento } from './payload.js';
 
 // A chamada à Meta expira em oito segundos; a margem cobre atrasos de banco e do processo.
 const TEMPO_LIMITE_PROCESSAMENTO_MS = 2 * 60 * 1000;
@@ -18,17 +18,18 @@ export function createWhatsappService(prisma, client, config) {
       const claim = await claimMessage(prisma, message);
       if (!claim.shouldProcess) return { duplicate: true };
 
+      let envioIniciado = false;
       try {
-        if (config.autoReplyEnabled && message.from) {
-          if (shouldSendTestMenu(message)) {
-            await client.sendText(message.from, testMenuText);
-          } else if (message.type === 'text' && /^[1-5]$/.test(message.text.trim())) {
-            await client.sendText(message.from, flowSetupText);
-          }
+        const resposta = config.autoReplyEnabled && message.from ? respostaAtendimento(message) : null;
+        if (resposta) {
+          // Um envio de resultado incerto não será repetido automaticamente.
+          const marcado = await prisma.whatsappEvento.updateMany({ where: { id: claim.eventId, status: envioIniciado ? 'ENVIANDO' : 'PROCESSANDO', atualizadoEm: claim.claimedAt }, data: { status: 'ENVIANDO', atualizadoEm: claim.claimedAt } });
+          if (!marcado.count) return { duplicate: true };
+          envioIniciado = true;
+          await client.sendText(message.from, resposta);
         }
-
         await prisma.whatsappEvento.updateMany({
-          where: { id: claim.eventId, status: 'PROCESSANDO', atualizadoEm: claim.claimedAt },
+          where: { id: claim.eventId, status: envioIniciado ? 'ENVIANDO' : 'PROCESSANDO', atualizadoEm: claim.claimedAt },
           data: { status: 'PROCESSADO', erroCodigo: null, processadoEm: new Date() },
         });
         return { duplicate: false };
@@ -40,8 +41,8 @@ export function createWhatsappService(prisma, client, config) {
           erroCodigo: code,
         });
         await prisma.whatsappEvento.updateMany({
-          where: { id: claim.eventId, status: 'PROCESSANDO', atualizadoEm: claim.claimedAt },
-          data: { status: 'FALHOU', erroCodigo: code },
+          where: { id: claim.eventId, status: envioIniciado ? 'ENVIANDO' : 'PROCESSANDO', atualizadoEm: claim.claimedAt },
+          data: { status: envioIniciado && !code.startsWith('META_ENVIO_FALHOU:') && code !== 'WHATSAPP_ENVIO_NAO_CONFIGURADO' ? 'REVISAO' : 'FALHOU', erroCodigo: code },
         });
         throw error;
       }
@@ -79,7 +80,13 @@ async function claimMessage(prisma, message) {
   }
 
   const existing = await prisma.whatsappEvento.findUnique({ where: { metaMessageId: message.id } });
-  if (!existing || existing.status === 'PROCESSADO') return { shouldProcess: false };
+  if (!existing || ['PROCESSADO', 'REVISAO'].includes(existing.status)) return { shouldProcess: false };
+  if (existing.status === 'ENVIANDO') {
+    if (existing.atualizadoEm <= new Date(Date.now() - TEMPO_LIMITE_PROCESSAMENTO_MS)) {
+      await prisma.whatsappEvento.updateMany({ where: { id: existing.id, status: 'ENVIANDO', atualizadoEm: existing.atualizadoEm }, data: { status: 'REVISAO', erroCodigo: 'RESULTADO_ENVIO_INCERTO' } });
+    }
+    return { shouldProcess: false };
+  }
 
   const expiredAt = new Date(Date.now() - TEMPO_LIMITE_PROCESSAMENTO_MS);
   if (existing.status === 'PROCESSANDO' && existing.atualizadoEm > expiredAt) {

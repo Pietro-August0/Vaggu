@@ -13,6 +13,6 @@ Definida por Pietro em 11/09/2026, fuso America/Sao_Paulo.
 
 ## Como a continuidade funciona
 
-O `CONTRIBUTING.md`, na raiz do repositório, orienta a equipe a manter estes registros. O planejamento concentra a situação atual, e os diários preservam o que aconteceu em cada data sem criar outra versão das decisões.
+O `AGENTS.md`, na raiz do repositório, reúne nossos acordos de manutenção, incluindo a obrigação de gerar prints após alterações de design ou frontend. O planejamento concentra a situação atual, e os diários preservam o que aconteceu em cada data sem criar outra versão das decisões.
 
-O registro diário é uma síntese fiel das decisões e ações da equipe. A segunda mente dentro do repositório continua sendo a fonte principal de produto, documentação e continuidade.
+O registro diário é uma síntese fiel de nossas decisões e ações. A segunda mente dentro do repositório continua sendo a fonte principal de produto, documentação e continuidade.

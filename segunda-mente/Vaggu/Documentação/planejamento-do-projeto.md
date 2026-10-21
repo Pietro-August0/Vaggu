@@ -1,5 +1,17 @@
 # VAGGU — planejamento e continuidade do projeto
 
+Última atualização: **21/10/2026**, fuso **America/Sao_Paulo**. A revisão da landing e seu fechamento permanecem atribuídos a **09/09/2026**, conforme o registro original. Base de P01: `c127b5e`; registros das entregas na seção 7. Este documento registra evidências e orienta o trabalho diário; não substitui o [SSD](SSD-VAGGU.md) nem os [critérios de aceite](plano-e-aceite.md).
+
+### Estado verificado na revisão geral — 21/10/2026
+
+Reconciliamos os resumos atuais com equipamentos/manutenção, polling, telões autorizados, filtros/métricas e snapshots implementados localmente. A suíte completa passou com **130 testes, zero falhas e zero ignorados**, incluindo PostgreSQL descartável e dump/restauração. Frontend build/lint passaram, com aviso conhecido de chunks. A revisão da análise no navegador agora cobre setor/categoria, período sem histórico, exportações, desktop/tablet/celular e tema escuro, com API e banco reais locais. O telão recebeu ajuste de grade/ícones e novos prints; a [revisão geral](revisao-geral-2026-10-21.md) concentra resultados, limites, arquivos removidos e a galeria atualizada. Homologação publicada e hardware físico continuam pendentes.
+
+Consolidamos `CONTRIBUTING.md` no `AGENTS.md`, que exige prints após toda alteração de design ou frontend. Preservamos fontes e evidências históricas; removemos apenas cópias públicas redundantes e o utilitário de otimização sem uso atual. Mantivemos as alterações locais na branch existente, sem commit ou publicação.
+
+Registramos a Sprint 7 em **04/11–11/11/2026** e a Sprint 8, última, em **16/11–26/11/2026**. Não atribuímos tarefas sem planejamento nem criamos sprints nos intervalos. Ver [Sprints do projeto](../Planejamento/Sprints%20do%20projeto.md).
+
+Os registros datados abaixo preservam a informação disponível em cada etapa; pendências antigas já corrigidas não redefinem o estado atual acima.
+
 Última atualização: **19/10/2026**, fuso **America/Sao_Paulo**. A revisão da landing e seu fechamento permanecem atribuídos a **09/09/2026**, conforme solicitado. Base de P01: `c127b5e`; registros das entregas na seção 7. Este documento registra evidências e orienta o trabalho diário; não substitui o [SSD](SSD-VAGGU.md) nem os [critérios de aceite](plano-e-aceite.md).
 
 ### Preparação da bancada ESP32 com três vagas — 19/10
@@ -23,7 +35,7 @@
 - Shopping Exemplo: criação automática na inicialização de produção pela conexão já configurada no site, sem botão ou rota de criação no painel. Contém 80 vagas, dois pisos, quatro setores, três gerentes e 15 dias de histórico fictício. A migration renomeia o cenário anterior pelo ID fixo sem alterar senhas ou histórico. O Admin pode emitir o acesso pela redefinição de senha já existente na ficha do gerente.
 - PostgreSQL 17 portátil preparado exclusivamente para QA local. Suíte completa: 113 testes aprovados, zero falhas e zero skips, incluindo criação concorrente e preservação de acessos na reinicialização. Frontend: lint e build aprovados, com o aviso conhecido de chunks acima de 500 kB.
 - Navegador: Edge headless com Playwright (plugin Browser ausente), API e PostgreSQL reais em `http://127.0.0.1:3102`. Login Admin, lista do exemplo e ausência do botão confirmados; login gerente e análise conferidos em 1440, 768 e 390 px sem transbordamento horizontal. Excel gerado e relido, PDF com assinatura válida; zero erros inesperados de console ou HTTP. Os 401 de `/auth/me` antes do login são esperados. Corrigida a política de imagens para permitir os gráficos locais `blob:` nos relatórios. Evidências e arquivos de QA ficaram fora do repositório.
-- Publicação: usuário autorizou push na `main` e confirmou atualização automática do site. A verificação autenticada no endereço publicado e o hardware ainda não foram executados.
+- Publicação: autorizamos o push na `main` e registramos a atualização automática do site. A verificação autenticada no endereço publicado e o hardware ainda não foram executados.
 
 ## 1. Situação atual
 
@@ -39,7 +51,7 @@
 - O Admin edita posições por arraste, toque, clique no mapa ou setas, sem a tabela de X/Y. Controles de tamanho e rotação, desfazer, rascunho, confirmação ao trocar piso/aba, limites e bloqueio de sobreposição foram conferidos. O salvamento preserva a autorização, revisão concorrente e transação já existentes.
 - A visualização de Admin e gerente ganhou monitoramento dos sensores com contagens, filtros e detalhes individuais, horários independentes de placa e sensor, estado confirmado e candidato pendente. A API usa projeção explícita sem chaves ou hashes.
 - O exemplo recebe automaticamente quatro placas e 80 sensores persistidos, sem duplicação nem alteração de sensores existentes. O job de expiração ignora o shopping sintético, preservando a fotografia de apresentação. Nenhum hardware físico foi exercitado.
-- A pedido explícito do usuário, foram retirados do exemplo os avisos/selos de dados fictícios nas telas e nos relatórios. O isolamento técnico e a origem sintética permanecem documentados; não há nova alegação de transmissão ao vivo.
+- Por decisão de produto, foram retirados do exemplo os avisos/selos de dados fictícios nas telas e nos relatórios. O isolamento técnico e a origem sintética permanecem documentados; não há nova alegação de transmissão ao vivo.
 - Verificação: 114 testes PostgreSQL/backend aprovados, zero falhas/skips; lint e build frontend aprovados com o aviso conhecido de chunks. Edge/Playwright local com API e PostgreSQL reais confirmou mouse, teclado, persistência, desfazer, filtros, Admin/gerente, larguras de 1440/768/390 px, arraste e posicionamento por toque, proteção de sobreposição e temas. Sem erros de execução. Excel gerado/relido e PDF de quatro páginas com texto extraído: sem avisos no exemplo.
 - Oito prints finais guardados no repositório, em `Evidências visuais/2026-10-15 - Editor e sensores`, e indexados na galeria. O [guia da entrega](edicao-visual-e-monitoramento.md) documenta uso, contratos, testes e limites. A publicação segue por push autorizado na `main`; a conferência autenticada remota continua pendente.
 
@@ -53,12 +65,12 @@ A VAGGU já possui login real, troca de senha, gestão de shoppings e gerentes, 
 
 P01 foi concluído em 10/09 e P02 em 11/09, incluindo autenticação e acabamento visual. P03 foi concluído em 12/09 com gestão administrativa, vários gerentes e Minha conta. P04 foi concluído em 12/09 com estrutura e mapa validados no banco e no navegador. O P05 foi concluído em 21/09: a importação de CSV/XLSX mostra uma prévia, pode ser repetida sem duplicar o resultado e preserva os registros existentes. O fluxo foi conferido no computador e em tela de celular. A base local está verificável, mas o sistema ainda não está liberado para operação com clientes.
 
-A equipe registrou em 23/09 a hospedagem do frontend e da API no mesmo serviço Render, com banco PostgreSQL no Neon. O repositório contém o manifesto e o workflow de solicitação de deploy; URL pública, segredo do hook e resultado da última publicação não foram verificados nesta revisão documental. Veja [configuração](configuracao.md#hospedagem-no-render).
+Registramos em 23/09 a hospedagem do frontend e da API no mesmo serviço Render, com banco PostgreSQL no Neon. O repositório contém o manifesto e o workflow de solicitação de deploy; URL pública, segredo do hook e resultado da última publicação não foram verificados nesta revisão documental. Veja [configuração](configuracao.md#hospedagem-no-render).
 
 ### Cenário fictício de apresentação — 14/10
 
 - O comando `demo:create` prepara um shopping identificado como demonstração, três gerentes, 80 vagas e 15 dias de histórico sintético. Ele exige uma conexão explícita em `DEMO_DATABASE_URL`, não modifica outros shoppings e guarda as senhas provisórias fora do Git.
-- Na entrega original, a marcação de demonstração fazia o mapa mostrar os estados sintéticos persistidos, e as telas/relatórios os identificavam. Os textos foram substituídos pela redação neutra solicitada em 15/10; a marcação interna permanece. A criação por botão desta entrega foi substituída pela inicialização automática de produção em 15/10, a pedido do usuário. Consulte [o procedimento atual](cenario-de-apresentacao.md).
+- Na entrega original, a marcação de demonstração fazia o mapa mostrar os estados sintéticos persistidos, e as telas/relatórios os identificavam. Os textos foram substituídos pela redação neutra solicitada em 15/10; a marcação interna permanece. A criação por botão desta entrega foi substituída pela inicialização automática de produção em 15/10, por decisão interna. Consulte [o procedimento atual](cenario-de-apresentacao.md).
 
 ### Revisão de código e relatórios — 14/10
 
@@ -73,23 +85,23 @@ A equipe registrou em 23/09 a hospedagem do frontend e da API no mesmo serviço 
 
 - A documentação foi comparada com o código, os testes e as mudanças do banco. P06 passou a aparecer como **em andamento com base validada no PostgreSQL**, e P08 como **iniciado com histórico e análise parcial**. Hardware, manutenção, validade no mapa, telões, exportações e relatório Power BI continuam pendentes.
 - Foram corrigidas contradições sobre exclusões administrativas, sessão após recarregar a página, foto do login, tema escuro, movimento reduzido, rota do WhatsApp, hospedagem e documentos de shopping.
-- Índices, regras e planos foram simplificados para privilegiar linguagem direta. Registros importados e rotinas internas que não pertenciam ao TCC foram removidos; os acordos úteis da equipe foram reunidos no `CONTRIBUTING.md`.
+- Índices, regras e planos foram simplificados para privilegiar linguagem direta. Registros importados e rotinas internas que não pertenciam ao TCC foram removidos; nossos acordos úteis foram reunidos no `CONTRIBUTING.md`.
 - Verificações desta revisão: mapa e links internos aprovados para 246 arquivos; `git diff --check`, lint e build da interface aprovados; testes básicos do servidor com 70 aprovações, nenhuma falha e quatro integrações puladas por falta de `TEST_DATABASE_URL`. O build mantém o aviso conhecido de arquivos acima de 500 kB.
 
 ### Análise demonstrativa no sistema — 30/09
 
-- O painel do gerente ganhou a rota `/painel/analise`, inspirada no frame fornecido pela equipe: cartões de capacidade, gráfico de ocupação diária, distribuição por setor e tipo, entradas e saídas, ocupação por horário, resumo do período e tabela setorial. A composição usa preto, grafite, textos claros e amarelo VAGGU.
+- O painel do gerente ganhou a rota `/painel/analise`, inspirada no frame de referência do projeto: cartões de capacidade, gráfico de ocupação diária, distribuição por setor e tipo, entradas e saídas, ocupação por horário, resumo do período e tabela setorial. A composição usa preto, grafite, textos claros e amarelo VAGGU.
 - A tela usa nome, capacidade, setores e tipos do shopping da sessão. Sem histórico, exibe dados de exemplo com o aviso `Dados genéricos · demonstração` e não grava esses exemplos no banco.
 - Quando há histórico, ocupação, cobertura, entradas observadas, dias e setores usam dados confirmados. Entradas e saídas por dia, ocupação por horário, permanência e rotatividade ainda são demonstrações e precisam ser identificadas separadamente.
 - A consulta cobre os últimos sete dias e nunca usa dados de outro shopping. Os testes básicos aprovaram 68 cenários; a execução com PostgreSQL aprovou 34/34, incluindo sensores e histórico. Ainda faltam seleção de período, exportação e uma nova conferência visual com login.
 
-As Sprints 1 e 2 foram confirmadas pela equipe como etapas de descoberta, definição da ideia e planejamento inicial do Figma. As fotografias das Sprints 3 e 4 foram incorporadas como evidências históricas. O registro consolidado está em [Sprints do projeto](../Planejamento/Sprints%20do%20projeto.md); essa numeração não corresponde aos pacotes técnicos P01–P11.
+O relato de 19/10 situa a Sprint 1 no começo de agosto (brainstorming) e a Sprint 2 na criação da ideia no Figma até a Sprint 3, sem datas exatas. As fotografias recebidas em 19/10 confirmam a Sprint 3 em 09–16/09, a Sprint 4 em 23–30/09, a Sprint 5 em 05–19/10 e a Sprint 6 em 19–28/10/2026. Os ciclos têm duração variável e não devem ser retrocalculados. O registro consolidado está em [Sprints do projeto](../Planejamento/Sprints%20do%20projeto.md); essa numeração não corresponde aos pacotes técnicos P01–P11.
 
 Classificações: **verificado** exige execução do comportamento indicado; **presente no código** significa inspeção estática; **parcial** identifica uma entrega incompleta; **ausente** indica que não foi encontrada implementação no escopo inspecionado. Um teste simulado não comprova banco, hardware ou serviço externo real.
 
 ### Experiência dos painéis — entrega de 24/09
 
-- A pedido da equipe, a navegação Admin foi separada em visão geral, estrutura/mapa e gerentes; o painel Gerente separa estacionamento de Minha conta. A sidebar agrupa itens globais e contextuais, fecha no celular após navegar e oferece alternância clara/escura com ícones de sol e lua.
+- Por decisão interna, a navegação Admin foi separada em visão geral, estrutura/mapa e gerentes; o painel Gerente separa estacionamento de Minha conta. A sidebar agrupa itens globais e contextuais, fecha no celular após navegar e oferece alternância clara/escura com ícones de sol e lua.
 - A área estrutural alterna configuração, mapa e posições. Importar e exportar abrem janelas. A exportação gera localmente um XLSX estilizado com abas Vagas e Resumo, filtro, primeira linha fixa, larguras legíveis e códigos textuais; não exporta histórico de ocupação nem usa uma rota nova da API.
 - O ensaio visual nesta tarefa usou frontend local e uma API **simulada** em `127.0.0.1`; verificou rotas Admin/Gerente, andares, janelas, temas e ausência de transbordamento horizontal nas larguras inspecionadas. Não comprova o deploy, PostgreSQL ou autenticação com contas reais. A comparação exata com o Figma e a abertura do arquivo no Microsoft Excel ficam pendentes.
 - Verificações: `npm.cmd run lint` e `npm.cmd run build` no frontend passaram; TypeScript foi conferido pelo build. O XLSX foi gerado e relido programaticamente, mas não aberto no Microsoft Excel. O navegador não registrou erros/avisos de console no ensaio. O build mantém aviso de chunk maior que 500 kB; ExcelJS carrega somente ao pedir o arquivo. O frontend não declara scripts `test` ou `typecheck` separados.
@@ -131,7 +143,7 @@ Classificações: **verificado** exige execução do comportamento indicado; **p
 
 ### Remoção de imagem do cadastro de shopping — 25/09
 
-- Por decisão explícita da equipe, o cadastro de shopping não recebe nem apresenta imagem. Foram removidos seletor, prévia, fallback, contratos, rotas, adaptador de armazenamento, configuração de ambiente e dependência do provedor externo.
+- Por decisão interna, o cadastro de shopping não recebe nem apresenta imagem. Foram removidos seletor, prévia, fallback, contratos, rotas, adaptador de armazenamento, configuração de ambiente e dependência do provedor externo.
 - O schema Prisma deixou de expor o campo e recebeu migration incremental para remover a coluna legada. As migrations anteriores permanecem imutáveis para conservar a sequência de bancos já atualizados.
 - A documentação de produto, telas, configuração e arquitetura foi alinhada ao novo escopo. A remoção foi validada por typecheck e testes do backend, lint e build do frontend; a integração PostgreSQL aprovou 33/33 cenários em banco descartável.
 
@@ -139,7 +151,7 @@ Classificações: **verificado** exige execução do comportamento indicado; **p
 
 | Área | Estado atual | Evidência e limite |
 | --- | --- | --- |
-| Landing, marca, login separado e contato comercial | Verificado na interface; contato real pendente | [Landing](../../../vaggu-frontend/src/pages/landing-page.tsx). Número de exemplo removido em 11/09; equipe ainda não possui número oficial. Não foi enviada mensagem. |
+| Landing, marca, login separado e contato comercial | Verificado na interface; contato real pendente | [Landing](../../../vaggu-frontend/src/pages/landing-page.tsx). Número de exemplo removido em 11/09; ainda não dispomos de número oficial. Não foi enviada mensagem. |
 | Seção Sobre | Verificado | [Componente](../../../vaggu-frontend/src/components/sobre-vaggu.tsx) e [estilos](../../../vaggu-frontend/src/components/sobre-vaggu.css): texto de apresentação, anéis, etapas, notebook e benefícios. |
 | Movimento e responsividade da seção Sobre | Atualizado em 28/09 | Pontos percorrem os anéis automaticamente quando o movimento está habilitado. A versão atual respeita a preferência do usuário por menos movimento. Conexões das etapas e benefícios acompanham o layout. |
 | Seção abaixo do Sobre | Verificado | [Operação VAGGU](../../../vaggu-frontend/src/components/operacao-vaggu.tsx): foto urbana, título, explicação, benefícios e contato. Conteúdo usa hierarquia mais leve e altura ajustada. |
@@ -168,7 +180,7 @@ Classificações: **verificado** exige execução do comportamento indicado; **p
 | R03 | Resolvido para o ambiente local de P01 | Node portátil 24.18.0 e npm 11.16.0 em `ambiente.local`; dependências instaladas pelo lockfile. | A versão global 26.7.0 foi observada naquela máquina em P01, não é requisito nem medição deste computador. Respeitar a faixa >=22.12.0 <25 do [guia local](configuracao.md). Engines e versões de dependências preservados. |
 | R04 | Resolvido e atualizado em 24/09 | Login e consulta de identidade na API, sessão em cookie protegido e validação de perfil/primeira senha. | A sessão volta após recarregar a página; logout, bloqueio e expiração encerram o acesso. |
 | R05 | Resolvido em P01 | Removido apenas o import `useMotionTemplate` sem uso. | Frontend `npm.cmd run lint` e `npm.cmd run build` aprovados; aviso de bundle permanece. |
-| R06 | Pendente de definição comercial | A equipe informou em 11/09 que ainda não há WhatsApp oficial. | Número fictício removido; login orienta contato pelo canal da parceria. Configurar VITE_WHATSAPP_NUMBER quando disponível. |
+| R06 | Pendente de definição comercial | Registramos em 11/09 a ausência de WhatsApp oficial. | Número fictício removido; login orienta contato pelo canal da parceria. Configurar VITE_WHATSAPP_NUMBER quando disponível. |
 | R07 | Retomada implementada em 14/10; duplicação de envio ainda possível | `src/whatsapp/service.ts`, `claimMessage`: `FALHOU` e `PROCESSANDO` abandonado há mais de dois minutos podem ser retomados por uma tentativa concorrente. | A tentativa antiga não sobrescreve a nova. Queda após envio à Meta e antes de registrar sucesso pode gerar resposta duplicada; não há transação distribuída com a API externa. |
 | R08 | Resolvido em P03 e endurecido em 21/09 | A resposta administrativa informa `ativo` sem expor hash, senha definitiva ou token. A senha provisória em texto existe somente na resposta imediata de criação ou redefinição. | Listagem, bloqueio e reativação foram validados; a migration remove a cópia reversível e os testes asseguram que a listagem não reapresente a senha. |
 | R09 | Média, evolução do backend | `tsconfig.json`: `strict` e `noImplicitAny` desativados; contratos de serviços incompletos. | Tipar fronteiras e módulos tocados progressivamente; evitar refatoração global junto da integração. |
@@ -176,7 +188,7 @@ Classificações: **verificado** exige execução do comportamento indicado; **p
 | R11 | Resolvido em C01 | A auditoria de 23/09 encontrou uma regressão na ficha nova: as ações de excluir shopping, excluir gerente e desfazer não estavam montadas. | A ficha voltou a chamar os contratos existentes, com confirmação, feedback, sete segundos para desfazer gerente e retorno à lista após excluir shopping. |
 | R12 | Alta, consistência documental — resolvida no D01 | A auditoria encontrou Visão do produto e tecnologias descrevendo P05 como parcial; evidências visuais antigas apareciam sem aviso histórico. | Resumos corrigidos, novas evidências catalogadas e estados implementado, histórico e planejado separados em 23/09. |
 
-Revisão visual: composição, tipografia, cores, imagens, conexões e comportamento em telas menores foram comparados com os anexos e com as correções posteriores da equipe. Não houve nova extração de medidas do Figma: a integração retornou erro de seleção na etapa anterior. Mantêm-se as pendências do [guia visual](regras-visuais.md).
+Revisão visual: composição, tipografia, cores, imagens, conexões e comportamento em telas menores foram comparados com os anexos e com as revisões posteriores registradas. Não houve nova extração de medidas do Figma: a integração retornou erro de seleção na etapa anterior. Mantêm-se as pendências do [guia visual](regras-visuais.md).
 
 ## 4. Verificações executadas e limites
 
@@ -188,7 +200,7 @@ Revisão visual: composição, tipografia, cores, imagens, conexões e comportam
 | Movimento/teclado, etapas anteriores da mesma sessão | Pausa/retomada por teclado, movimento reduzido, pausa fora da tela e larguras 320/360/768/1024/1440 px conferidas. Não constituem auditoria completa de acessibilidade. |
 | Backend build/typecheck/test/Prisma | Não executados nesta revisão: dependências ausentes e Node fora da faixa declarada. A existência dos testes foi inspecionada, não apresentada como execução. |
 | PostgreSQL, Meta e hardware reais | Não acessados/validados nesta revisão. Testes HTTP simulados e leitura de schema não comprovam essas integrações. |
-| Git e diffs | Alterações preservadas e `git diff --check` aprovado. Após a revisão, a equipe autorizou explicitamente commit e push na `main` ao invocar `$end`; publicação preparada neste fechamento. |
+| Git e diffs | Alterações preservadas e `git diff --check` aprovado. Após a revisão, autorizamos explicitamente commit e push na `main` ao invocar `$end`; publicação preparada neste fechamento. |
 
 Os comandos acima são relativos ao diretório de cada pacote. Em PowerShell deste ambiente, usar `npm.cmd`, pois `npm.ps1` está bloqueado pela política de execução. Para outras máquinas, confirmar gerenciador e scripts atuais; não copiar comandos de migration para um banco sem identificar seu destino.
 
@@ -213,11 +225,11 @@ O PostgreSQL portátil escuta somente em `127.0.0.1:55432`. Configurações loca
 
 Estados do backlog: **pronto**, **em andamento**, **bloqueado**, **concluído**. Dependências ainda não entregues permanecem explícitas. A prioridade não é uma promessa de prazo.
 
-As sprints reais da equipe estão registradas em [Sprints do projeto](../Planejamento/Sprints%20do%20projeto.md). Os itens abaixo são pacotes técnicos e de correção; a numeração não deve ser confundida.
+Nossas sprints reais estão registradas em [Sprints do projeto](../Planejamento/Sprints%20do%20projeto.md). Os itens abaixo são pacotes técnicos e de correção; a numeração não deve ser confundida.
 
 | ID | Entrega | Estado | Dependências | Critério para concluir |
 | --- | --- | --- | --- | --- |
-| D01 | Consolidar documentação, sprints e evidências após a auditoria de 23/09 | Concluído em 23/09 | Auditoria concluída e fontes fornecidas pela equipe. | PRD, TRD, fluxo, modelo de dados, API, identidade, sprints, índices e mapa coerentes; verificador documental aprovado. |
+| D01 | Consolidar documentação, sprints e evidências após a auditoria de 23/09 | Concluído em 23/09 | Auditoria concluída e fontes visuais do projeto. | PRD, TRD, fluxo, modelo de dados, API, identidade, sprints, índices e mapa coerentes; verificador documental aprovado. |
 | C01 | Corrigir divergências funcionais da interface atual | Concluído em 23/09 | D01 concluído; contratos administrativos existentes preservados. | Exclusões e desfazer reconciliados com o backend; estados e documentos atualizados; frontend lint/build e integração PostgreSQL aprovados. |
 | P01 | Base local verificável: R01, R02, R03 e R05 | Concluído em 10/09 | Runtime compatível e PostgreSQL local preparados; evidências na seção 4.1. | API inicia pelo caminho gerado; frontend lint/build aprovados; cenários auth/admin executados em banco real isolado. |
 | P02 | Integrar login, sessão, troca obrigatória e saída | Concluído em 11/09 | P01 concluído. Contratos `/api/v1/auth/login`, `/me`, `/change-password` e `/logout` integrados pelo proxy local; token fica apenas em memória. | Frontend consulta identidade da API; senha provisória restringe acesso, troca libera; expiração e logout revogam acesso. Fluxos validados no navegador/API. |
@@ -228,7 +240,7 @@ As sprints reais da equipe estão registradas em [Sprints do projeto](../Planeja
 | P07 | Operação, manutenção, contagens e telões | Bloqueado por P06 | Observações confiáveis e ocorrências. | Contagens reconciliadas sem duplicar categorias; dado vencido não vira livre. CA23–CA26. |
 | P08 | Histórico, métricas e exportações | Em andamento | Consulta e resumo dos últimos sete dias por padrão, filtro UTC de até 31 dias, comparação com período anterior e exportações locais iniciais implementados; métricas complementares e filtros de setor/categoria ainda faltam. | Cálculos reproduzem o conjunto de conferência; exportações respeitam shopping e filtro de datas. CA27–CA31 seguem parciais. |
 | P09 | Primeiro relatório funcional Power BI | Bloqueado por P08 | Histórico disponível e decisão de distribuição/acesso. | Atualização funcional e métricas reconciliadas (CA32); isolamento de acesso (CA33) só concluído na distribuição efetiva. |
-| P10 | Concluir contato e fluxos comerciais WhatsApp | Pronto para trabalho independente | Número oficial, ambiente Meta autorizado; recuperação de processamento (R07). | Demonstração/suporte coletam dados e registram solicitação sem duplicação; atendimento encaminhado à equipe. CA01–CA03. |
+| P10 | Concluir contato e fluxos comerciais WhatsApp | Pronto para trabalho independente | Número oficial, ambiente Meta autorizado; recuperação de processamento (R07). | Demonstração/suporte coletam dados e registram solicitação sem duplicação; atendimento encaminhado ao suporte VAGGU. CA01–CA03. |
 | P11 | Revisão integrada para apresentação do TCC | Bloqueado pelas entregas utilizadas na demonstração | Fluxos completos, dados identificados e ambiente reproduzível. | Executar roteiro de `plano-e-aceite.md`, declarar limitações e validar CA34–CA36 conforme o escopo. |
 
 Preservar os limites do produto: site responsivo, sem cadastro público de gerente, sem reservas, pagamentos ou reconhecimento de veículos. Power BI e hardware não podem ser declarados integrados a partir de imagens, dados de exemplo ou espaços reservados.
@@ -269,8 +281,8 @@ Cada entrada mantém: data local, estado do dia, pacote/objetivo, evidências de
 
 - **Estado:** aberto.
 - **Pacote e objetivo:** continuar a auditoria responsiva e acessível dos fluxos autenticados, começando pela ficha de shopping e pela edição de posições; alinhar a barra de rolagem global às cores da VAGGU sem reduzir sua visibilidade.
-- **Situação de entrada:** `main` em `52839913`, com uma alteração local autorizada no comentário de `.github/workflows/publicar-render.yml`. A equipe autorizou incorporá-la ao pacote atual. A branch local `fix/auditoria-paineis-elisa` foi criada preservando esse diff.
-- **Alterações iniciais:** a tabela de posições passou a expor legenda, cabeçalhos de coluna e linha e nome acessível para cada campo numérico. O seletor de andar deixou de depender de margem horizontal e se reorganiza em telas estreitas. Por decisão da equipe, a rolagem usa fundo preto e indicador no amarelo oficial da VAGGU em ambos os temas.
+- **Situação de entrada:** `main` em `52839913`, com uma alteração local autorizada no comentário de `.github/workflows/publicar-render.yml`. Autorizamos sua incorporação ao pacote atual. A branch local `fix/auditoria-paineis-elisa` foi criada preservando esse diff.
+- **Alterações iniciais:** a tabela de posições passou a expor legenda, cabeçalhos de coluna e linha e nome acessível para cada campo numérico. O seletor de andar deixou de depender de margem horizontal e se reorganiza em telas estreitas. Por decisão interna, a rolagem usa fundo preto e indicador no amarelo oficial da VAGGU em ambos os temas.
 - **Verificações:** frontend `npm.cmd run lint` e `npm.cmd run build` aprovados após a definição final de fundo preto e indicador amarelo; o build mantém apenas o aviso conhecido de chunks maiores que 500 kB. O verificador documental cobriu 241 arquivos e aprovou os links internos. O ensaio anterior em 1280 × 720 e 390 × 844 confirmou ausência de rolagem horizontal, mas antecede a troca final da cor do trilho. O backend não foi iniciado nesse ensaio, portanto o proxy de `/auth/me` recusou conexão e a tabela autenticada de posições ainda precisa de validação renderizada com dados, embora sua legenda, cabeçalhos e nomes acessíveis tenham sido conferidos no código. As descrições dos arquivos alterados no mapa do projeto permanecem corretas.
 - **Próxima ação:** validar teclado, nomes acessíveis, ausência de cortes e rolagens horizontal e vertical nas telas de estrutura e importação; corrigir os próximos bloqueios reproduzíveis.
 - **Preparação analítica:** iniciado um recorte independente para o Power BI com seis intervalos confirmados sintéticos, cálculo de métricas e CSV versionado em `test/fixtures`. O conjunto reproduz 60% de ocupação, 83,33% de cobertura, uma entrada observada e 30 minutos de duração completa. Typecheck e suíte do backend foram aprovados: 58 testes, 55 aprovados, zero falhas e três integrações PostgreSQL puladas explicitamente sem `TEST_DATABASE_URL`. O material não grava dados no Neon nem substitui ingestão, confirmação ou expiração do P06; serve para reconciliar fórmulas e prototipar os gráficos antes do hardware.
@@ -291,7 +303,7 @@ Cada entrada mantém: data local, estado do dia, pacote/objetivo, evidências de
 
 ### 25/09/2026 — validação da produção e visão geral administrativa
 
-- **Produção:** a jornada administrativa publicada foi conferida com o acesso fornecido pela equipe. Foram criados um shopping e um gerente de teste; nenhum dado real foi usado. A criação e a listagem responderam sem erro no navegador. Credenciais não foram registradas na documentação.
+- **Produção:** a jornada administrativa publicada foi conferida com o acesso de homologação. Foram criados um shopping e um gerente de teste; nenhum dado real foi usado. A criação e a listagem responderam sem erro no navegador. Credenciais não foram registradas na documentação.
 - **Implementação local:** `/admin` passou a ser uma visão geral com indicadores derivados da API, pendências cadastrais e atalhos para as fichas. O cadastro foi separado em `/admin/cadastrar`; a navegação diferencia visão geral, cadastro e lista de shoppings.
 - **Contrato:** a listagem administrativa informa totais ativos de andares, setores e vagas, além dos gerentes já disponíveis. Os agregados são calculados no backend e tratados no frontend sem inferir saúde de sensor ou telemetria.
 - **Verificações:** typecheck, 51 testes unitários e 32 cenários de integração em PostgreSQL descartável foram aprovados no backend; lint e build do frontend também passaram. A revisão visual final da visão geral confirmou os cinco indicadores, pendências e atalhos em 1280 × 720 e 390 × 844, sem rolagem horizontal nem erros ou avisos no console.
@@ -325,7 +337,7 @@ Cada entrada mantém: data local, estado do dia, pacote/objetivo, evidências de
 ### 23/09/2026 — atualização local e reconciliação da hospedagem
 
 - **Pedido:** descartar as alterações não commitadas da auditoria interrompida, atualizar a `main` e documentar a hospedagem com o que o repositório comprova.
-- **Entrada e Git:** 18 arquivos rastreados modificados e sete arquivos novos não commitados pertenciam à auditoria local interrompida. Após conferir a lista, as alterações foram removidas a pedido do usuário. `git pull --ff-only origin main` avançou de `4261b16` para `f1172fa`, sem conflito nem merge novo; `HEAD` e `origin/main` coincidiram e a árvore ficou limpa antes desta revisão. A documentação foi preparada em `docs/hospedagem-render-ana` a partir da `main` atualizada.
+- **Entrada e Git:** 18 arquivos rastreados modificados e sete arquivos novos não commitados pertenciam à auditoria local interrompida. Após conferir a lista, as alterações foram removidas por decisão interna. `git pull --ff-only origin main` avançou de `4261b16` para `f1172fa`, sem conflito nem merge novo; `HEAD` e `origin/main` coincidiram e a árvore ficou limpa antes desta revisão. A documentação foi preparada em `docs/hospedagem-render-ana` a partir da `main` atualizada.
 - **Commits recebidos:** `ee5b407` integrou mapa/foto; `ebcdaed` consolidou sprints/documentação; `c7773a7` configurou o serviço Render; `42ad219` corrigiu a ficha administrativa e a página 404; `480b01a` registrou o fechamento C01; `f1172fa` acrescentou o workflow de deploy. Esses commits estão na `main` remota, não são alterações pendentes da auditoria descartada.
 - **Conferência técnica:** `render.yaml` descreve build e inicialização do único serviço; `app.ts` entrega o build React e `/api/v1` na mesma origem; `server.ts` recebe `FRONTEND_DIST_PATH`; o frontend chama `/api/v1` relativamente. O registro anterior informa PostgreSQL no Neon, com `DATABASE_URL` fora do Git. O workflow solicita deploy por hook, mas seu segredo e execuções não são visíveis no repositório.
 - **Documentação:** guia de configuração, TRD, SSD, READMEs e índice reconciliados com a topologia recebida. Descrições do mapa de arquivos revisadas; responsabilidades e caminhos permanecem corretos.
@@ -338,11 +350,11 @@ Cada entrada mantém: data local, estado do dia, pacote/objetivo, evidências de
 - **Pacote e objetivo:** P06, primeiro recorte: estabelecer o núcleo testável de confirmação temporal de estados de vaga, sem criar contrato HTTP, migration ou processamento de dados reais antes de conhecer o firmware.
 - **Entrada:** `origin/main` em `f1172fa`, árvore limpa. A revisão documental de hospedagem permanece preservada no commit local `dc84a26` da branch `docs/hospedagem-render-ana`, ainda separada da `main`. Não havia código de telemetria operacional nem tabela `Sensor` no schema atual.
 - **Roteamento:** Kamilly conduz backend/IoT; Samuel revisa dados e Pietro integra o fluxo. A branch local `feat/p06-confirmacao-estado-kamilly` parte de `origin/main`. O Git mantém a identidade de quem realmente executar eventual commit.
-- **Dependência de contrato:** frequência das leituras, lacuna máxima, identidade de inicialização e sequência do ESP32 ainda precisam ser confirmadas com a equipe. Enquanto isso, o cálculo temporal pode exigir esses valores como parâmetros explícitos e ser testado sem rede ou banco.
+- **Dependência de contrato:** frequência das leituras, lacuna máxima, identidade de inicialização e sequência do ESP32 ainda precisam de confirmação interna. Enquanto isso, o cálculo temporal pode exigir esses valores como parâmetros explícitos e ser testado sem rede ou banco.
 - **Aceite deste recorte:** CA16–CA17 para alternância, lacuna e leitura isolada. CA18–CA20 exigem deduplicação persistente e identidade de inicialização/ordem do firmware; não declarar CA15–CA24 ou P06 concluídos sem autenticação, persistência, expiração, hardware e integração.
 - **Entrega deste recorte:** `src/telemetria/confirmacao-estado.ts` calcula a janela de 30 segundos somente com leituras contínuas, reinicia após alternância ou lacuna e nunca transforma silêncio em vaga livre; `test/confirmacao-estado.test.ts` cobre os casos com tempo determinístico. A lacuna de 15 segundos usada nos testes não define frequência nem configuração de produção. Sem API, migration, escrita no banco ou alteração de estado visível ao gerente.
 - **Verificações:** compilação TypeScript aprovada com Node 24.18.0; seis testes novos aprovados; suíte básica do backend com 49 aprovações, zero falhas e três integrações pendentes sem `TEST_DATABASE_URL`. A primeira tentativa da suíte partiu incorretamente da raiz, onde os testes de migration não encontram caminhos relativos; a repetição no diretório `vaggu-backend` passou. Verificador documental cobriu 228 arquivos e validou os links internos; `git diff --check` não apontou erros.
-- **Próxima ação:** confirmar com a equipe o contrato do ESP32 — frequência, lacuna permitida, identificadores de placa/sensor e inicialização/sequência — e só então projetar deduplicação persistente, autenticação, expiração e histórico transacional. Não usar o cálculo isolado como evidência de integração real.
+- **Próxima ação:** confirmar internamente o contrato do ESP32 — frequência, lacuna permitida, identificadores de placa/sensor e inicialização/sequência — e só então projetar deduplicação persistente, autenticação, expiração e histórico transacional. Não usar o cálculo isolado como evidência de integração real.
 
 ### 23/09/2026 — consolidação das sprints e plano de correção
 
@@ -352,7 +364,7 @@ Cada entrada mantém: data local, estado do dia, pacote/objetivo, evidências de
 - **Roteamento:** Ana como responsável principal pela documentação; Samuel revisa produto, API e dados; Juan revisa identidade; Elisa revisa jornada; Pietro revisa integração. A branch local `test/p05-integracao-samuel` foi preservada porque já continha trabalho e acompanha `origin/main`; não foi criada nova branch em árvore suja.
 - **Entrega:** PRD e TRD consolidados; Sprints 1–4 registradas; paleta e Poppins catalogadas a partir da evidência fornecida; fluxo de telas, modelo de dados, inventário da API, decisões, matriz de rastreabilidade, índices e mapa atualizados. Capturas antigas de exclusão foram marcadas como históricas. O plano coloca C01 antes do P06.
 - **Verificações:** `git diff --check` e `node scripts/verificar-documentacao.mjs` aprovados sobre o conjunto integrado. Não houve mudança funcional no frontend ou backend, portanto as suítes de código não foram repetidas nesta etapa documental.
-- **Limites:** datas e divisão individual das Sprints 1–2, período da Sprint 4 e personas continuam como informação a ser fornecida. O Figma não foi alterado nem teve novos tokens atribuídos; a evidência de identidade é uma imagem fornecida pela equipe. PostgreSQL, navegador, Meta, hardware e Power BI não foram executados nesta etapa.
+- **Limites:** datas e divisão individual das Sprints 1–2, período da Sprint 4 e personas continuam como informação a ser fornecida. O Figma não foi alterado nem teve novos tokens atribuídos; a evidência de identidade é uma imagem de referência do projeto. PostgreSQL, navegador, Meta, hardware e Power BI não foram executados nesta etapa.
 - **Próxima ação:** iniciar C01 revalidando a ficha Admin no navegador e restaurar os fluxos de exclusão de gerente, desfazer por sete segundos e exclusão de shopping conforme os contratos reais.
 - **Git:** alterações locais, sem commit, push, PR ou deploy; a modificação preexistente em `vaggu-backend/.env.example` foi preservada.
 
@@ -368,12 +380,12 @@ Cada entrada mantém: data local, estado do dia, pacote/objetivo, evidências de
 - **Estado:** implementação concluída; validação visual e técnica executada na rota curinga.
 - **Roteamento:** Juan como responsável visual, Elisa como revisora de UX e acessibilidade; branch atual preservada por conter alterações locais anteriores ainda não publicadas.
 - **Entrega:** URLs desconhecidas agora exibem uma página 404 própria. O carro inicia sobre o sensor vermelho e imediatamente faz uma ré em curva curta e leve para baixo e para a direita, aumentando progressivamente tanto o deslocamento lateral quanto o giro; ao terminar de girar, ainda avança um pouco mais para a direita em ré antes de seguir em linha reta para a esquerda. O sensor fica verde após a liberação. A sequência acelerada acontece uma vez por carregamento, sem atraso inicial ou pausa entre suas fases, e reaparece ao reiniciar a página. A vaga permanece centralizada nos eixos horizontal e vertical entre os dois algarismos, o sensor usa luz fosca sem volume esférico e a mensagem recebe espaçamento maior para não competir com a manobra.
-- **Acessibilidade e responsividade:** conteúdo textual permanece semântico, links têm foco visível e WhatsApp só aparece quando configurado. Por decisão posterior da equipe, a animação permanece ativa independentemente da preferência de movimento do sistema. Layout adaptado para celular sem depender de asset raster novo.
+- **Acessibilidade e responsividade:** conteúdo textual permanece semântico, links têm foco visível e WhatsApp só aparece quando configurado. Por decisão posterior do projeto, a animação permanece ativa independentemente da preferência de movimento do sistema. Layout adaptado para celular sem depender de asset raster novo.
 - **Verificações:** frontend lint e build; inspeção da rota desconhecida em desktop e largura móvel; verificador documental e `git diff --check`.
 
 ### 23/09/2026 — C01 e fechamento do dia
 
-- **Estado:** encerrado por solicitação da equipe; C01 concluído sem iniciar o P06.
+- **Estado:** encerrado por decisão interna; C01 concluído sem iniciar o P06.
 - **Pacote e objetivo:** corrigir as divergências funcionais confirmadas na ficha administrativa, concluir os ajustes de formulário e erro 404 e deixar a retomada de telemetria preparada.
 - **Roteamento:** Pietro como responsável primário pela integração fullstack; Juan responsável pelos ajustes visuais; Elisa indicada para UX/QA; Samuel para contratos e dados. A branch `test/p05-integracao-samuel`, baseada em `origin/main`, foi preservada por já conter o conjunto integrado.
 - **Entrega:** a ficha atual voltou a excluir gerente com confirmação e aviso de sete segundos para desfazer, e a excluir shopping com confirmação, encerramento dos acessos e retorno à lista. O formulário deixou de expor fuso horário. URLs desconhecidas exibem a página 404 animada da VAGGU.
@@ -412,9 +424,9 @@ Cada entrada mantém: data local, estado do dia, pacote/objetivo, evidências de
 - **Próxima ação:** iniciar P06 estabilizando o contrato de firmware/telemetria e os testes CA15–CA24 antes da implementação.
 - **Git:** alterações locais na branch `test/p05-integracao-samuel`, baseada em `origin/main` (`e5cfcc84`); nenhum commit, push, PR ou deploy solicitado.
 
-### 21/09/2026 — banco local de testes para a equipe
+### 21/09/2026 — banco local de testes de desenvolvimento
 
-- **Decisão:** a proposta Docker da branch foi cancelada pela equipe. Todos os arquivos e ajustes do commit `c957f349` foram revertidos sem reescrever o histórico; execução e instalação permanecem pelo fluxo npm/PostgreSQL anterior.
+- **Decisão:** a proposta Docker da branch foi cancelada por decisão interna. Todos os arquivos e ajustes do commit `c957f349` foram revertidos sem reescrever o histórico; execução e instalação permanecem pelo fluxo npm/PostgreSQL anterior.
 - **Documentação:** o guia canônico agora ensina cada integrante a criar o papel local `vaggu_teste_runner`, o banco de controle `vaggu_teste`, o arquivo ignorado `.env.teste.local` e executar `test:integracao`. Também explica isolamento, limpeza automática e diagnóstico sem expor credenciais.
 - **Execução local da API:** o mesmo guia passou a diferenciar explicitamente produção, desenvolvimento e integração e inclui o fluxo Windows para criar `vaggu_local`, configurar o `.env`, aplicar migrations, iniciar a API e verificar os endpoints de saúde e prontidão.
 - **Revisão de clareza:** `configuracao.md` foi reorganizado para parceiros novos, com pré-requisitos, primeira instalação, uso diário, resultados esperados, Prisma Studio, testes, encerramento, diagnóstico e distinção explícita entre o ambiente portátil desta máquina e uma instalação comum. O README da raiz agora aponta para esse guia como fonte única, sem duplicar uma configuração incompleta.
@@ -422,28 +434,28 @@ Cada entrada mantém: data local, estado do dia, pacote/objetivo, evidências de
 - **Padrão documental:** `regras-de-codigo.md` agora exige instruções ordenadas, resultado verificável, separação entre instalação/uso/testes/produção e texto compreensível sem conversas anteriores ou arquivos ignorados.
 - **Revisão do mapa:** as finalidades dos arquivos documentais e do README continuam corretas no mapa do projeto; nenhuma responsabilidade ou caminho estrutural mudou.
 - **Segurança:** o banco de teste é local e separado de desenvolvimento/produção; o usuário possui `LOGIN` e `CREATEDB`, sem `SUPERUSER`. Nenhuma senha, banco ou arquivo local foi versionado.
-- **Git:** correção preparada na mesma branch da proposta cancelada, com Juan como identidade executora e Pietro como coautor confirmado pela configuração local da equipe.
+- **Git:** correção preparada na mesma branch da proposta cancelada, com Juan como identidade executora e Pietro como coautor confirmado pela configuração local do projeto.
 
 ### 21/09/2026 — auditoria de documentação e estrutura
 
 - **Objetivo:** confirmar que pastas e arquivos versionáveis possuem finalidade clara, reconciliar o estado atual e remover redundâncias sem uso.
-- **Decisões:** removidos o painel demonstrativo sem rota e o recurso de animação nunca usado; também saíram tipos antigos e uma regra visual sem uso. A ponte `docs/` foi removida após confirmação da equipe, pois não possuía consumidor necessário.
+- **Decisões:** removidos o painel demonstrativo sem rota e o recurso de animação nunca usado; também saíram tipos antigos e uma regra visual sem uso. A ponte `docs/` foi removida após confirmação interna, pois não possuía consumidor necessário.
 - **Documentação:** o mapa passou a explicar as pastas principais e os 212 arquivos versionáveis; descrições genéricas foram corrigidas e o estado do P05 foi alinhado à implementação presente.
 - **Verificação:** `node scripts/verificar-documentacao.mjs`, `npm.cmd run lint`, `npm.cmd run build` e `git diff --check` concluídos com código 0. O build mantém o aviso conhecido de chunk JavaScript acima de 500 kB.
 - **Git:** trabalho local na branch `docs/auditoria-estrutura-ana`, criada a partir de `origin/main`; sem commit, push ou PR nesta sessão.
 
 ### 09/09/2026 — fechamento da revisão e preparação da continuidade
 
-Por solicitação da equipe, as alterações e verificações desta sessão pertencem ao dia de trabalho **09/09/2026**, embora tenham avançado pela madrugada de **10/09/2026** (America/Sao_Paulo). A correção documental foi solicitada via `$start` em 10/09 e constitui o escopo desta retomada; P01 permanece preparado para o próximo início. Os horários originais dos commits permanecem preservados.
+Por decisão interna, as alterações e verificações desta sessão pertencem ao dia de trabalho **09/09/2026**, embora tenham avançado pela madrugada de **10/09/2026** (America/Sao_Paulo). A correção documental foi solicitada via `$start` em 10/09 e constitui o escopo desta retomada; P01 permanece preparado para o próximo início. Os horários originais dos commits permanecem preservados.
 
 - **Estado:** encerrado, referente ao dia de trabalho 09/09/2026; fechamento consolidado por `$end`, sem invocação prévia de `$start` nesta sessão. P01 preparado para o próximo início. Nenhuma etapa operacional adicional foi implementada nesta revisão.
-- **Entrega da sessão:** refinamento da landing (Sobre, anéis, etapas e seção da foto), remoção das legendas a pedido da equipe e criação deste planejamento.
+- **Entrega da sessão:** refinamento da landing (Sobre, anéis, etapas e seção da foto), remoção das legendas por decisão interna e criação deste planejamento.
 - **Verificação:** resultados e limites na seção 4. As verificações anteriores permanecem válidas para o mesmo código; não foram repetidas sem mudança correspondente.
 - **Arquivos da entrega:** componentes `sobre-vaggu` e `operacao-vaggu` (TSX/CSS), `landing-page.tsx`, este planejamento, guia visual e índices README.
 - **Ambiente local:** servidor Vite iniciado pela sessão em `http://127.0.0.1:5173/`; não foi encerrado pelo fechamento. Confirmar disponibilidade ao retomar.
 - **Pendências preservadas:** R01–R10 e backlog P01–P11. Não há data prometida para uma implantação real.
 - **Próxima retomada:** P01, começando pelos caminhos de inicialização e pela verificação de código. Este registro sozinho não inicia o trabalho.
-- **Git:** entrega preparada sobre `368a774` na `main`, com commit e push explicitamente autorizados pela equipe. Este registro integra o commit de fechamento; consultar `git log` e a referência `origin/main` para identificar o hash publicado e conferir sincronização no próximo início. Não houve solicitação de deploy.
+- **Git:** entrega preparada sobre `368a774` na `main`, com commit e push autorizados no registro de fechamento. Este registro integra o commit de fechamento; consultar `git log` e a referência `origin/main` para identificar o hash publicado e conferir sincronização no próximo início. Não houve solicitação de deploy.
 
 ### 10/09/2026 — P01: base local verificável
 
@@ -466,7 +478,7 @@ Por solicitação da equipe, as alterações e verificações desta sessão pert
 - **Entrada:** alterações locais da reorganização anterior preservadas; mapa de arquivos ausente. Nenhum resultado antigo comprova as alterações desta sessão.
 - **Figma:** o frame 2580:30 foi localizado e visualizado; a consulta detalhada estava limitada pelo plano disponível.
 
-- **Entrega de 11/09:** layout do login ajustado à composição observada no Figma; contas demonstrativas removidas; autenticação, primeira senha, verificação periódica e logout integrados. Número fictício removido após confirmação da equipe.
+- **Entrega de 11/09:** layout do login ajustado à composição observada no Figma; contas demonstrativas removidas; autenticação, primeira senha, verificação periódica e logout integrados. Número fictício removido após confirmação interna.
 - **Verificações atuais:** 47/47 testes backend com PostgreSQL isolado, lint aprovado, build aprovado com aviso de tamanho; 12 cenários E2E aprovados e nenhum erro JavaScript não tratado. Detalhes em [validação](validacao-login-2026-09-11.md).
 - **Acabamento visual:** Pietro enviou a foto recortada e o contorno do termo “vagas”; ambos foram aplicados e conferidos em computador e celular. Não houve nova extração de medidas do Figma por limite do plano.
 - **Resultado:** P02 concluído. A autenticação real e o acabamento visual foram entregues dentro do escopo; telemetria, operação e Power BI permanecem fora deste pacote.
@@ -498,7 +510,7 @@ Por solicitação da equipe, as alterações e verificações desta sessão pert
 - **Verificações:** migration aplicada ao banco persistente `vaggu_local`; suíte completa do backend com PostgreSQL real: 52/52 testes aprovados. Os cenários de P04 cobrem dois andares, tipos especiais, isolamento, rejeição de vaga de outro andar e conflito de revisão. Frontend: lint e build aprovados, com o aviso conhecido de chunk acima de 500 kB. Navegador/Playwright: criação de estrutura, salvamento de posições, ativação, troca de andar, busca entre andares e celular sem rolagem horizontal aprovados. Mapa de documentação: 122 arquivos cobertos; `git diff --check` sem erro.
 - **Resultado:** P04 concluído. P05 está pronto para a próxima retomada.
 - **Limites:** ainda não há importação CSV/XLSX, ingestão de sensores, atualização em tempo real ou telão. O mapa atual usa uma base neutra e posições proporcionais; uma planta ilustrada poderá ser associada depois. Nenhum dado exibido foi apresentado como leitura real de sensor.
-- **Ambiente:** PostgreSQL local permanece iniciado para uso da equipe; o Vite temporário de validação foi encerrado. O dia continua aberto até pedido de fechamento.
+- **Ambiente:** PostgreSQL local permanece iniciado para nosso uso; o Vite temporário de validação foi encerrado. O dia continua aberto até pedido de fechamento.
 - **Git:** P01–P04 e a reorganização documental publicados na `main` no commit `dc316b2`. Nenhum deploy foi solicitado.
 
 ### 12–13/09/2026 — melhorias de interação, gerentes e senha
@@ -507,7 +519,7 @@ Por solicitação da equipe, as alterações e verificações desta sessão pert
 - **Objetivo:** acrescentar resposta de clique aos cards, animar o rabisco em torno de “vagas”, permitir excluir um gerente com confirmação e sete segundos para desfazer e reforçar a criação da senha definitiva.
 - **Decisão:** exclusão lógica preserva o ID e o estado anterior, encerra sessões imediatamente e oculta o acesso. O desfazer restaura o mesmo registro dentro da janela; depois dela, o e-mail pode ser cadastrado novamente sem duplicar a identidade.
 - **Entrega presente no código:** migration incremental; rotas `DELETE /gerentes/:id` e `POST /gerentes/:id/desfazer-exclusao`; modal acessível; aviso Sonner com ação; microinterações de cards e rabisco SVG com movimento reduzido. A troca de senha agora exige 12–128 caracteres, minúscula, maiúscula, número, símbolo e ausência de espaços; possui olhos independentes, checklist vivo, confirmação e erros associados aos campos. A API é a autoridade e usa códigos distintos para cada requisito.
-- **Verificações:** suíte completa 54/54 e integração PostgreSQL 29/29; os cenários cobrem sete falhas da política, repetição, senha atual incorreta e sucesso. Lint e build aprovados, com o aviso conhecido do bundle. Navegador aprovou rabisco, pressão do card, confirmação, encerramento do acesso, aviso e restauração do mesmo gerente; na troca de senha, aprovou os três olhos, checklist, confirmação, erros por campo, desktop 1440×1024 e viewport móvel, sem erros de console. A submissão válida pela interface não foi repetida porque a política de controle do navegador exige entrega ao usuário nesse passo; o mesmo contrato foi comprovado pela integração HTTP. Migration aplicada ao banco persistente `vaggu_local`; conta temporária e servidores de QA removidos. Mapa documental: 123 arquivos cobertos; `git diff --check` aprovado.
+- **Verificações:** suíte completa 54/54 e integração PostgreSQL 29/29; os cenários cobrem sete falhas da política, repetição, senha atual incorreta e sucesso. Lint e build aprovados, com o aviso conhecido do bundle. Navegador aprovou rabisco, pressão do card, confirmação, encerramento do acesso, aviso e restauração do mesmo gerente; na troca de senha, aprovou os três olhos, checklist, confirmação, erros por campo, desktop 1440×1024 e viewport móvel, sem erros de console. A submissão válida pela interface não foi repetida porque a política de controle do navegador exige intervenção manual nesse passo; o mesmo contrato foi comprovado pela integração HTTP. Migration aplicada ao banco persistente `vaggu_local`; conta temporária e servidores de QA removidos. Mapa documental: 123 arquivos cobertos; `git diff --check` aprovado.
 - **Evidências visuais:** três capturas guardadas em `Minha segunda mente/Vaggu/Evidências visuais/Melhorias - interações e gerentes`.
 - **Resultado:** melhorias concluídas e dia encerrado; P05 continua sendo a próxima entrega planejada, sem início automático.
 - **Próxima ação:** criar o contrato intermediário da importação e a prévia CSV sem escrita no banco, preparando a leitura XLSX sobre a mesma estrutura.
@@ -587,65 +599,65 @@ Por solicitação da equipe, as alterações e verificações desta sessão pert
 
 ### Contraste da verificação de acesso — 15/10
 
-Corrigidos carregamento e erro de sessão para usar fundo e texto do tema; botão amarelo mantém texto escuro e foco visível. Conferidos em Edge/Playwright local, com resposta 503 controlada para `/auth/me`, nos temas claro/escuro e larguras 1440, 768 e 390 px. Botão acionado por teclado realizou nova consulta; sem transbordamento ou erros JavaScript. Build e lint aprovados (aviso de bundle já conhecido). Plugin Browser ausente, utilizado Playwright. Capturas locais fora do repositório. Produção não validada nesta correção. Lacunas documentais adiadas a pedido do usuário, preservadas na auditoria documental.
+Corrigidos carregamento e erro de sessão para usar fundo e texto do tema; botão amarelo mantém texto escuro e foco visível. Conferidos em Edge/Playwright local, com resposta 503 controlada para `/auth/me`, nos temas claro/escuro e larguras 1440, 768 e 390 px. Botão acionado por teclado realizou nova consulta; sem transbordamento ou erros JavaScript. Build e lint aprovados (aviso de bundle já conhecido). Plugin Browser ausente, utilizado Playwright. Capturas locais fora do repositório. Produção não validada nesta correção. Lacunas documentais adiadas por decisão interna, preservadas na auditoria documental.
 
 
 ### Calendário das sprints — 16/10
 
-Equipe confirmou Sprint 5 em andamento e transição para a Sprint 6 na quarta-feira, 21/10/2026. Calculados os ciclos semanais: Sprint 5 em 14–21/10 e Sprint 6 em 21–28/10, com retrocálculo até a Sprint 1 no [registro das sprints](../Planejamento/Sprints%20do%20projeto.md). Preservada a divergência da data histórica da Sprint 3, sem remapear entregas por suposição. Divisão de tarefas e conciliação das fontes permanecem pendentes. Conferência: intervalos de sete dias e marcos às quartas-feiras.
+Registramos a Sprint 5 como em andamento e a transição para a Sprint 6 na quarta-feira, 21/10/2026. Calculados os ciclos semanais: Sprint 5 em 14–21/10 e Sprint 6 em 21–28/10, com retrocálculo até a Sprint 1 no [registro das sprints](../Planejamento/Sprints%20do%20projeto.md). Preservada a divergência da data histórica da Sprint 3, sem remapear entregas por suposição. Divisão de tarefas e conciliação das fontes permanecem pendentes. Conferência: intervalos de sete dias e marcos às quartas-feiras.
 
 
 ### Complementação documental — 16/10
 
-Descritos no mapa sete assets otimizados e o script Pillow, com uso real ou condição de variante preservada. Consolidada a persona Carlos fornecida pela equipe e os perfis propostos Mariana/Rafael, com hipóteses e limites explícitos, no documento de personas e no PRD. Atualizado o índice principal. Nenhuma funcionalidade ou permissão foi alterada. Validação: verificador documental e revisão do diff; as decisões e fontes que exigem a equipe continuam abertas.
+Descritos no mapa sete assets otimizados e o script Pillow, com uso real ou condição de variante preservada. Consolidados o perfil original de Carlos e os perfis propostos Mariana/Rafael, com hipóteses e limites explícitos, no documento de personas e no PRD. Atualizado o índice principal. Nenhuma funcionalidade ou permissão foi alterada. Validação: verificador documental e revisão do diff; as decisões e fontes que exigem definição interna continuam abertas.
 
 
 ### Aprovação visual — 16/10
 
-Equipe aprovou o site atual como evolução da proposta do Figma. Encerrada a pendência documental de aprovação visual e reprodução das medidas do protótipo. Atualizados identidade visual, regras permanentes e auditoria. Permanecem as verificações técnicas e demais decisões operacionais; nenhuma alteração na interface foi realizada. Conferência documental executada após a atualização.
+Aprovamos o site atual como evolução da proposta do Figma. Encerrada a pendência documental de aprovação visual e reprodução das medidas do protótipo. Atualizados identidade visual, regras permanentes e auditoria. Permanecem as verificações técnicas e demais decisões operacionais; nenhuma alteração na interface foi realizada. Conferência documental executada após a atualização.
 
 
 ### Formato da apresentação — 17/10
 
-Registrada a decisão da equipe: slides próprios, WhatsApp funcionando em interação real e telões em demonstração breve por interação ou fotos. Chip e celular disponíveis segundo relato. Power BI aguarda confirmação do formato, e data/duração serão informadas. Atualizados cenário de apresentação, guia WhatsApp e auditoria; nenhuma integração foi configurada nesta atualização documental.
+Registrada nossa decisão: slides próprios, WhatsApp funcionando em interação real e telões em demonstração breve por interação ou fotos. Chip e celular disponíveis segundo relato. Power BI aguarda confirmação do formato, e data/duração serão informadas. Atualizados cenário de apresentação, guia WhatsApp e auditoria; nenhuma integração foi configurada nesta atualização documental.
 
 
 ### Power BI na apresentação — esclarecimento de 17/10
 
-Equipe confirmou que uma imagem dos modelos de gráficos nos slides é suficiente. Atualizado o cenário de apresentação, sem exigir demonstração ao vivo do Power BI nesse roteiro. Esta decisão não encerra P09 nem comprova integração funcional. Verificação documental executada após a atualização.
+Definimos que uma imagem dos modelos de gráficos nos slides é suficiente. Atualizado o cenário de apresentação, sem exigir demonstração ao vivo do Power BI nesse roteiro. Esta decisão não encerra P09 nem comprova integração funcional. Verificação documental executada após a atualização.
 
 
 ### Apresentação: site e maquete — 17/10
 
-Equipe confirmou navegação breve com site aberto, sensores na maquete e um deles acondicionado em caixa/carcaça de proteção a construir. Previsão: início de dezembro de 2026, duração habitual de 20–25 minutos; dia e limite final pendentes. Atualizados cenário e auditoria, sem assumir integração física concluída ou ligação dos sensores ao Shopping Exemplo. Verificação documental executada após a atualização.
+Definimos a navegação breve com site aberto, sensores na maquete e um deles acondicionado em caixa/carcaça de proteção a construir. Previsão: início de dezembro de 2026, duração habitual de 20–25 minutos; dia e limite final pendentes. Atualizados cenário e auditoria, sem assumir integração física concluída ou ligação dos sensores ao Shopping Exemplo. Verificação documental executada após a atualização.
 
 
 ### Retomada das definições dos sensores — 17/10
 
-Kamilly indicada pela equipe como responsável pelas informações dos sensores; usuário fará o repasse posteriormente. Pendências técnicas mantidas abertas, com responsável registrado no cenário de apresentação e na auditoria. Nenhuma definição de hardware ou tempo foi presumida. Verificação documental executada após a atualização.
+Kamilly é a responsável pelas informações dos sensores; os detalhes serão documentados posteriormente. Pendências técnicas mantidas abertas, com responsável registrado no cenário de apresentação e na auditoria. Nenhuma definição de hardware ou tempo foi presumida. Verificação documental executada após a atualização.
 
 
 ### Recálculo do calendário de sprints — 17/10
 
-Foto da equipe confirma Sprint 3 em 09–16/09. Recalculada a sequência semanal: Sprint 5 em 23–30/09; 21/10 inicia a Sprint 9. Isso diverge do relato de Sprint 5 terminando em 21/10. Registrar pausas, durações diferentes ou renumeração antes de fechar o calendário. Ver tabela e limites no registro das sprints. Validação documental executada após a atualização.
+A fotografia do planejamento confirma Sprint 3 em 09–16/09. Recalculada a sequência semanal: Sprint 5 em 23–30/09; 21/10 inicia a Sprint 9. Isso diverge do relato de Sprint 5 terminando em 21/10. Registrar pausas, durações diferentes ou renumeração antes de fechar o calendário. Ver tabela e limites no registro das sprints. Validação documental executada após a atualização.
 
 
-### Confirmação do calendário — pendente da equipe
+### Confirmação do calendário — pendente de confirmação interna
 
-Usuário informou em 17/10 que ainda precisa confirmar se houve pausas, sprints com outras durações ou alteração na numeração. Manter os cálculos como condicionais até retorno da equipe.
+Em 17/10, registramos a necessidade de confirmar se houve pausas, sprints com outras durações ou alteração na numeração. Manter os cálculos como condicionais até a confirmação interna.
 
 
 ### Prévia funcional dos telões — 17/10
 
-Implementadas telas autenticadas de disponibilidade por andar e setor para o gerente, com estados parciais/sem leitura, atualização a cada 30 segundos e aviso nos dados do shopping de demonstração. Ela usa o endpoint atual protegido e não altera o sistema de sensores. Instalação pública de telão, autorização própria, configuração do recorte e atualização por evento seguem pendentes. A prévia cobre a demonstração visual enquanto a equipe decide o dispositivo físico; P07 não está concluído. Ver [fluxo de telas](fluxo-de-telas.md) e [arquitetura](arquitetura-estrutura-sensores-telao.md).
+Implementadas telas autenticadas de disponibilidade por andar e setor para o gerente, com estados parciais/sem leitura, atualização a cada 30 segundos e aviso nos dados do shopping de demonstração. Ela usa o endpoint atual protegido e não altera o sistema de sensores. Instalação pública de telão, autorização própria, configuração do recorte e atualização por evento seguem pendentes. A prévia cobre a demonstração visual enquanto definimos o dispositivo físico; P07 não está concluído. Ver [fluxo de telas](fluxo-de-telas.md) e [arquitetura](arquitetura-estrutura-sensores-telao.md).
 
 ### Telões para motoristas — 17/10
 
-A equipe confirmou que o telão é somente para exibição aos clientes que entram de carro. Removidos botões, links, navegação por andar e controle de tela cheia da superfície exibida. A atualização permanece automática. Cada endereço define entrada ou andar; a abertura e o modo kiosk ficam sob responsabilidade da operação do dispositivo.
+Definimos que o telão é somente para exibição aos clientes que entram de carro. Removidos botões, links, navegação por andar e controle de tela cheia da superfície exibida. A atualização permanece automática. Cada endereço define entrada ou andar; a abertura e o modo kiosk ficam sob responsabilidade da operação do dispositivo.
 
 ### Visual do telão — 17/10/2026
 
-Redesenhado o telão conforme referência enviada pela equipe: logo oficial, Poppins, preto e amarelo #ffe100 do site; total destacado, andares/setores centrais e faixa de categorias. Sem interação. Faixas provisórias de disponibilidade: até 20% de vagas livres, poucas vagas; até 50%, vagas disponíveis; acima, maior disponibilidade. Dados parciais usam estado neutro, sem recomendação. Build e validador documental aprovados; conferida renderização no navegador local em largura estreita.
+Redesenhado o telão conforme referência visual do projeto: logo oficial, Poppins, preto e amarelo #ffe100 do site; total destacado, andares/setores centrais e faixa de categorias. Sem interação. Faixas provisórias de disponibilidade: até 20% de vagas livres, poucas vagas; até 50%, vagas disponíveis; acima, maior disponibilidade. Dados parciais usam estado neutro, sem recomendação. Build e validador documental aprovados; conferida renderização no navegador local em largura estreita.
 
 ### Análises — cobertura por setor e centro da rosca — 17/10/2026
 
@@ -653,4 +665,19 @@ O componente `analise-estacionamento.tsx` exibe cobertura histórica por setor �
 
 ### Consolidação com prints — 17/10/2026
 
-Filtro de datas redistribuído após revisão da equipe, preservando campos e ações. Telão ajustado para caber em Full HD e 1366×768. Mudanças desta conversa e evidências atuais reunidas no [registro da entrega](entrega-teloes-analises-2026-10-17.md), com dependências e limites explícitos. Arquivos de ambiente/credenciais não entram no commit.
+Filtro de datas redistribuído após revisão interna, preservando campos e ações. Telão ajustado para caber em Full HD e 1366×768. Mudanças desta etapa e evidências atuais reunidas no [registro da entrega](entrega-teloes-analises-2026-10-17.md), com dependências e limites explícitos. Arquivos de ambiente/credenciais não entram no commit.
+
+
+## Correção histórica das sprints — 19/10/2026
+
+As quatro fotografias recebidas em 19/10 substituem a hipótese de calendário semanal usada nos registros anteriores: Sprint 3 em 09–16/09, Sprint 4 em 23–30/09, Sprint 5 em 05–19/10 e Sprint 6 em 19–28/10/2026. Nossa memória situa a Sprint 1 no começo de agosto (brainstorming) e a Sprint 2 na criação da ideia no Figma até a Sprint 3; não há fotografias nem datas exatas dessas duas etapas. Os registros anteriores permanecem como histórico da informação disponível, mas o retrocálculo e a transição antes citada em 21/10 deixaram de ser referência vigente. Datas variáveis, atribuições e fontes estão em [Sprints do projeto](../Planejamento/Sprints%20do%20projeto.md). Planejamento não comprova conclusão técnica e não altera a numeração P01–P11.
+
+## Personas, slides e voz documental — 21/10/2026
+
+Revisamos Mariana e Rafael contra as funcionalidades atuais: Mariana recebe a sinalização agregada do telão web; Rafael consulta monitoramento e encaminha falhas ao Admin VAGGU, que mantém os controles de equipamentos e manutenção. Preservamos Carlos e corrigimos a jornada de Rafael, o alcance dos agregados de categorias e a indicação de implantação física pendente. A revisão confirma coerência com o produto; entrevistas e testes com representantes dos públicos permanecem pendentes. Ver [Personas](../Especificações/Personas.md).
+
+Refizemos os quatro slides em 1920×1080 para acompanhar a referência original de Carlos: Poppins, idade leve em amarelo, títulos e destaques no padrão original, retratos recortados e fundos com textura, retícula e estrelas. Conferimos os quatro slides visualmente e reunimos os seis na [visão geral](../Evidências%20visuais/Personas/personas-visao-geral.png). Assets, prompts e reprodução estão no [registro dos slides](../Evidências%20visuais/Personas/README.md).
+
+Revisamos a documentação e os READMEs para usar voz interna ou neutra, substituindo relatos externos por referências aos nossos materiais e decisões. Mantivemos datas, atribuições, histórico e limites das evidências. A busca final não encontrou os padrões de narrador externo pesquisados; o verificador documental passou com 330 arquivos cobertos e 52 documentos com links/âncoras válidos. `git diff --check` passou.
+
+Roteamento de responsabilidade: Ana para documentação, com revisão indicada de Elisa para UX e Juan para visual. Preservamos as alterações locais na branch `feat/landing-fotos-favicon-juan`, em `16383524`; não criamos branch, commit, push ou PR nesta revisão. A branch não possui referência homônima no `origin` localmente disponível; nenhum integrante recebeu autoria Git ou aprovação atribuída por esta revisão.

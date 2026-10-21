@@ -1,6 +1,6 @@
 # Tecnologias e arquitetura
 
-**Atualização:** 15/10/2026 · **Fontes do estado real:** configurações, código, mudanças do banco e testes versionados.
+**Atualização:** 21/10/2026 · **Fontes do estado real:** configurações, código, mudanças do banco e testes versionados.
 
 ![React](https://img.shields.io/badge/React-19-343231?logo=react&logoColor=FFE100&labelColor=171717) ![TypeScript](https://img.shields.io/badge/TypeScript-frontend%20e%20API-343231?logo=typescript&logoColor=FFE100&labelColor=171717) ![Node.js](https://img.shields.io/badge/Node.js-API-343231?logo=nodedotjs&logoColor=FFE100&labelColor=171717) ![PostgreSQL](https://img.shields.io/badge/PostgreSQL-dados-343231?logo=postgresql&logoColor=FFE100&labelColor=171717)
 
@@ -23,9 +23,9 @@ Este documento apresenta as escolhas técnicas e separa o que está implementado
 | Express `^5.1.0` | `vaggu-backend/src` | Rotas REST, middleware e webhook. | API HTTP direta e compatível com a escala do TCC. | Implementado. |
 | Helmet `^8.1.0` | Montagem da API | Cabeçalhos HTTP de proteção. | Aplicar uma base segura sem espalhar configuração nas rotas. | Implementado; a publicação atual mantém frontend e API na mesma origem. |
 | `node:crypto` com scrypt | Módulo de autenticação | Hash de senhas, tokens e comparação segura. | Evitar senha reversível e manter a credencial provisória apenas na resposta imediata. | Implementado. |
-| PostgreSQL + Prisma `7.10.0`, adaptador pg `^7.10.0` e pg `^8.23.0` | Schema, migrations, serviços e testes do backend | Persistência relacional, integridade, transações e isolamento por shopping. | As regras dependem de vínculos e operações atômicas que o banco deve garantir. | Implementado; registro da equipe indica banco Neon para a hospedagem. Versão do servidor remoto não consta do repositório. |
+| PostgreSQL + Prisma `7.10.0`, adaptador pg `^7.10.0` e pg `^8.23.0` | Schema, migrations, serviços e testes do backend | Persistência relacional, integridade, transações e isolamento por shopping. | As regras dependem de vínculos e operações atômicas que o banco deve garantir. | Implementado; registro de hospedagem indica banco Neon para a hospedagem. Versão do servidor remoto não consta do repositório. |
 | Render, manifesto `render.yaml` | Serviço web `vaggu-tcc` | Executar Express, servir o build React e verificar prontidão. | Manter interface e API sob a mesma origem e conexão privada com o banco. | Configuração e publicação registradas em 23/09; URL e estado atual do serviço não foram conferidos nesta revisão. |
-| GitHub Actions, workflow `publicar-render.yml` | Repositório, branch `main` | Solicitar novo deploy pelo hook do Render. | Compensar a ausência de eventos automáticos na ligação por URL pública registrada pela equipe. | Workflow commitado; execução depende do segredo `RENDER_DEPLOY_HOOK_URL`, não verificável no Git. |
+| GitHub Actions, workflow `publicar-render.yml` | Repositório, branch `main` | Solicitar novo deploy pelo hook do Render. | Compensar a ausência de eventos automáticos na ligação por URL pública registrada no projeto. | Workflow commitado; execução depende do segredo `RENDER_DEPLOY_HOOK_URL`, não verificável no Git. |
 | `read-excel-file` `^9.3.10` e leitor CSV próprio | Módulo de importação | Prévia e confirmação de arquivos CSV/XLSX. | Importar estrutura com validação por linha sem adicionar outra biblioteca para CSV. | P05 concluído em 21/09/2026, inclusive confirmação idempotente no PostgreSQL. |
 | WhatsApp Cloud API, sem SDK versionado | Backend `whatsapp` e links do frontend | Webhook assinado, deduplicação, envio de texto e encaminhamento comercial. | Manter o WhatsApp como canal de parceria e suporte. | Parcial: infraestrutura e menu demonstrativo existem; fluxo P10 e número oficial estão pendentes. |
 | ESLint `^10.9.1`, Node Test Runner e Supertest `^7.1.4` | Verificação dos pacotes | Lint, compilação e testes HTTP/unitários/integração. | Verificar contratos e regressões com poucas dependências adicionais. | Implementado. |
@@ -34,11 +34,11 @@ Este documento apresenta as escolhas técnicas e separa o que está implementado
 
 | Tecnologia ou componente | Onde entrará | Finalidade | Motivo no projeto | Estado |
 | --- | --- | --- | --- | --- |
-| ESP32 + firmware | Maquete e instalação | Autenticar o controlador, ler sensores e enviar sequência/reinicialização. | Controlador acessível para a demonstração e capaz de agrupar sensores. | P06; contrato ainda precisa ser estabilizado. |
+| ESP32 + firmware | Maquete e instalação | Autenticar o controlador, ler sensores e enviar sequência/reinicialização. | Controlador acessível para a demonstração e capaz de agrupar sensores. | Contrato de API implementado; firmware e tempos definitivos dependem do ensaio físico. |
 | Sensores ultrassônicos + Wi-Fi | Vagas e comunicação local | Observar ocupação e transmitir leituras. | Base física prevista para a maquete do TCC. | Planejado; topologia e frequências dependem de ensaio. |
-| Serviço de confirmação e expiração | Servidor | Confirmar mudança após 30 segundos consistentes, ignorar mensagens repetidas ou antigas e invalidar dados vencidos. | Dado ausente ou expirado não pode virar vaga livre. | Implementado e testado com PostgreSQL; validade na consulta do mapa e monitoramento individual implementados; faltam ESP32 real e atualização automática das telas. |
-| Atualização operacional por polling controlado ou transporte a confirmar | API e frontend | Atualizar mapa e telões sem recarga manual. | Separar o contrato de estado do transporte e adequá-lo à hospedagem disponível. | Decisão pendente; Socket.IO não está instalado. |
-| Telões web | Frontend + API agregada | Mostrar vagas livres por andar/setor e categorias especiais sem duplicação. | Reutilizar a fonte confiável do mapa em monitores convencionais. | P07, não implementado. |
+| Serviço de confirmação e expiração | Servidor | Confirmar mudança após 30 segundos consistentes, ignorar mensagens repetidas ou antigas e invalidar dados vencidos. | Dado ausente ou expirado não pode virar vaga livre. | Implementado e testado com PostgreSQL; validade na consulta do mapa e monitoramento individual implementados; atualização periódica implementada; faltam ESP32 real e homologação. |
+| Atualização operacional por polling controlado | API e frontend | Atualizar mapa e telões sem recarga manual. | Separar o contrato de estado do transporte e adequá-lo à hospedagem disponível. | Implementado a cada 15 segundos; leituras são invalidadas após 30 segundos ou em falha de conexão. Socket.IO não está instalado. |
+| Telões web | Frontend + API agregada | Mostrar vagas livres por andar/setor e categorias especiais sem duplicação. | Reutilizar a fonte confiável do mapa em monitores convencionais. | Implementado localmente: prévia e instalação web com credencial própria revogável; instalação física e homologação pendentes. |
 | Consultas PostgreSQL + Power BI Desktop | Análises | Preparar histórico, métricas e o primeiro relatório funcional. | Manter a análise separada da operação e conferir os números com um conjunto conhecido. | A consulta histórica e a preparação dos dados existem; o relatório funcional no Power BI ainda não existe no repositório. |
 
 ## Arquitetura atual
@@ -58,7 +58,7 @@ flowchart LR
 
 O servidor decide as permissões e identifica o shopping pela sessão do gerente. Esconder um botão na tela não substitui essa proteção. A base atual cobre autenticação, administração, estrutura, mapa, importação, histórico, análises iniciais e uma integração parcial com o WhatsApp.
 
-P01–P05 estão concluídos. A recepção de leituras, a confirmação, a expiração, o histórico e a análise inicial já estão presentes e foram testados localmente. Isso ainda não comprova a operação completa: faltam ESP32 real, cadastro/vínculo de equipamentos, comandos de manutenção e ocorrências, atualização automática das telas, telões, métricas/filtros complementares e relatório Power BI. Editor visual, monitoramento e Excel/PDF estão implementados.
+P01–P05 estão concluídos. O código atual inclui confirmação/expiração dos sensores, cadastro e vínculo de equipamentos, manutenção e ocorrências, mapa com atualização a cada 15 segundos e telões com credencial própria revogável. A análise oferece até 31 dias UTC, comparação, setor/categoria, entradas, saídas, permanência, rotatividade, cobertura e Excel/PDF. Os novos eventos preservam a classificação histórica; eventos legados sem fotografia confirmada continuam sinalizados. Hardware físico e homologação publicada seguem pendentes. Power BI publicado é opcional e a conexão real do WhatsApp foi adiada.
 
 ## Arquitetura planejada para a operação
 
@@ -87,17 +87,17 @@ A arquitetura planejada conserva dois caminhos: operação e análise. Mapa e te
 - Senhas, hashes, credenciais de placas e conexão de banco nunca chegam ao frontend ou ao Power BI.
 - A senha provisória aparece somente na resposta imediata de criação ou redefinição; apenas o hash permanece no banco.
 - A confirmação da importação P05 é serializada por shopping e idempotente; vagas ausentes não são removidas silenciosamente.
-- O transporte de atualização do P06/P07 ainda não foi escolhido. Polling é uma proposta compatível com o MVP; Socket.IO exige infraestrutura para conexão persistente.
+- O transporte atual é polling a cada 15 segundos. O mapa pausa a atualização automática durante a edição e invalida leituras quando a consulta vence ou a conexão falha.
 - A hospedagem registrada é Render para API e frontend na mesma origem, com PostgreSQL no Neon; backup, monitoramento e homologação externa ainda requerem verificação.
 - Power BI começa pelo Desktop e por histórico controlado; publicação, incorporação e segurança por linha dependem da forma de distribuição aprovada.
 
 ## Sequência técnica
 
-1. **P06:** validar a base já criada com o ESP32 real, fechar os tempos de leitura e expiração e implementar atualização automática; a validade na consulta já existe.
-2. **P07:** consumir apenas estados confiáveis para contagens, painel e telões.
-3. **P08:** ampliar métricas e filtros analíticos sobre o histórico e Excel/PDF existentes; concluir cobertura zero/classificação histórica e preservar isolamento. CSV continua uma alternativa de planilha, conforme o SSD.
-4. **P09:** usar a preparação de dados existente para criar e conferir o primeiro relatório funcional no Power BI.
-5. **P10:** concluir o fluxo do WhatsApp em trabalho independente quando número e ambiente Meta estiverem disponíveis.
+1. **P06:** ensaiar o ESP32 real e fechar os tempos de leitura e expiração; cadastro, manutenção e atualização automática já existem no software.
+2. **P07:** homologar equipamentos e telões já implementados, conferindo revogação, recortes e perda de conexão.
+3. **P08:** homologar métricas e filtros, cobertura zero, classificação histórica e Excel/PDF já implementados, com dados conhecidos. CSV continua uma alternativa de planilha, conforme o SSD.
+4. **P09:** manter a preparação de dados; publicação/incorporação Power BI é evolução opcional.
+5. **P10:** retomar a conexão real do WhatsApp quando número e ambiente Meta estiverem disponíveis; etapa adiada.
 6. **P11:** integrar e reproduzir o roteiro final do TCC.
 
 ## Referências

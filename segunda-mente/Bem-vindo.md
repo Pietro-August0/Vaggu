@@ -3,7 +3,7 @@ tags: [indice, equipe]
 ---
 # Bem-vindo à segunda mente da VAGGU
 
-Este cofre reúne decisões, documentação, planejamento, fontes históricas e evidências visuais compartilhadas pela equipe.
+Este cofre reúne nossas decisões, documentação, planejamento, fontes históricas e evidências visuais.
 
 - Comece pelo [[Início]].
 - Para entender o produto, abra [[Vaggu/Vaggu|índice da VAGGU]].

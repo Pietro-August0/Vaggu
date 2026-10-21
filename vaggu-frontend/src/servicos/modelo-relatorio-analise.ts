@@ -1,94 +1,38 @@
-/** Reúne a fotografia do mapa, o histórico confirmado e as séries de demonstração exibidas no painel. */
+/** Reúne somente a fotografia atual e os eventos efetivamente recebidos da API. */
 import type { AnaliseHistorica } from "@/servicos/analise"
-import type { EstruturaEstacionamento } from "@/types/estrutura"
-
-export interface SetorRelatorio {
-  nome: string
-  total: number
-  livres: number
-  ocupadas: number
-  semLeitura: number
-  indisponiveis: number
-}
-
-export const DIAS_DEMONSTRACAO = ["11 Mai", "12 Mai", "13 Mai", "14 Mai", "15 Mai", "16 Mai", "17 Mai"]
-export const OCUPACAO_DIARIA_DEMONSTRACAO = [58, 62, 65, 70, 68, 72, 65]
-export const OCUPACAO_HORARIA_DEMONSTRACAO = [18, 12, 9, 14, 22, 36, 51, 63, 72, 79, 84, 87, 82, 73, 61, 48, 39]
+import type { EstruturaEstacionamento, TipoVaga } from "@/types/estrutura"
 
 export interface OpcoesRelatorioAnalise {
   periodoSelecionado?: { inicio: string; fim: string }
   comparacao?: AnaliseHistorica | null
-  permitirDemonstracao?: boolean
+  setorId?: string
+  tipo?: TipoVaga | ""
 }
-
 const NOMES_TIPO = { COMUM: "Convencional", PCD: "PCD", IDOSO: "Idoso", ELETRICA: "Elétrica" } as const
 
-/** A fotografia atual vem do mapa; métricas históricas só entram quando confirmadas. */
 export function montarRelatorioAnalise(estrutura: EstruturaEstacionamento, historico: AnaliseHistorica | null, opcoes: OpcoesRelatorioAnalise = {}) {
-  const setores: SetorRelatorio[] = estrutura.andares.flatMap((andar) => andar.setores.map((setor) => {
-    const vagas = setor.vagas.filter((vaga) => vaga.ativo)
-    return {
-      nome: `${andar.nome} · ${setor.nome}`,
-      total: vagas.length,
-      livres: vagas.filter((vaga) => vaga.estadoAtual === "LIVRE").length,
-      ocupadas: vagas.filter((vaga) => vaga.estadoAtual === "OCUPADA").length,
-      semLeitura: vagas.filter((vaga) => vaga.estadoAtual === "DESCONHECIDA").length,
-      indisponiveis: vagas.filter((vaga) => vaga.estadoAtual === "INDISPONIVEL").length,
-    }
+  const setores = estrutura.andares.filter(a => a.ativo).flatMap(andar => andar.setores.filter(setor => setor.ativo && (!opcoes.setorId || setor.id === opcoes.setorId)).map(setor => {
+    const vagas = setor.vagas.filter(vaga => vaga.ativo && (!opcoes.tipo || vaga.tipo === opcoes.tipo))
+    return { nome: `${andar.nome} · ${setor.nome}`, vagas, total: vagas.length,
+      livres: vagas.filter(v => v.estadoAtual === "LIVRE").length, ocupadas: vagas.filter(v => v.estadoAtual === "OCUPADA").length,
+      semLeitura: vagas.filter(v => v.estadoAtual === "DESCONHECIDA").length, indisponiveis: vagas.filter(v => v.estadoAtual === "INDISPONIVEL").length }
   }))
-  const totais = setores.reduce((acumulado, setor) => ({
-    total: acumulado.total + setor.total,
-    livres: acumulado.livres + setor.livres,
-    ocupadas: acumulado.ocupadas + setor.ocupadas,
-    semLeitura: acumulado.semLeitura + setor.semLeitura,
-    indisponiveis: acumulado.indisponiveis + setor.indisponiveis,
-  }), { total: 0, livres: 0, ocupadas: 0, semLeitura: 0, indisponiveis: 0 })
-  // Os gráficos do painel usam todas as vagas cadastradas; o resumo acima mantém apenas as ativas.
-  const vagasDoPainel = estrutura.andares.flatMap((andar) => andar.setores.flatMap((setor) => setor.vagas))
-  const dadosConfirmados = historico?.temHistorico ? historico : null
-  const demonstracaoAtiva = !dadosConfirmados && opcoes.permitirDemonstracao !== false
-  const totalDoPainel = demonstracaoAtiva ? Math.max(vagasDoPainel.length, 16) : vagasDoPainel.length
-  const porTipo = (Object.keys(NOMES_TIPO) as (keyof typeof NOMES_TIPO)[]).map((tipo) => ({
-    nome: NOMES_TIPO[tipo], quantidade: vagasDoPainel.filter((vaga) => vaga.tipo === tipo).length,
-  }))
-  const tiposDemonstrativos = porTipo.every((tipo) => tipo.quantidade === 0)
-  // O painel preenche a categoria convencional apenas quando não existe nenhuma vaga cadastrada.
-  if (tiposDemonstrativos && demonstracaoAtiva) porTipo[0].quantidade = totalDoPainel
-  const setoresDoGrafico = (estrutura.andares.flatMap((andar) => andar.setores.map((setor) => ({
-    nome: setor.nome, total: setor.vagas.length, ocupadasAtuais: setor.vagas.filter((vaga) => vaga.estadoAtual === "OCUPADA").length,
-  }))).slice(0, 4))
-  const setoresDemonstrados = setoresDoGrafico.length ? setoresDoGrafico : demonstracaoAtiva ? [
-    { nome: "Setor A", total: Math.ceil(totalDoPainel / 4), ocupadasAtuais: 0 },
-    { nome: "Setor B", total: Math.floor(totalDoPainel / 4), ocupadasAtuais: 0 },
-    { nome: "Setor C", total: Math.floor(totalDoPainel / 4), ocupadasAtuais: 0 },
-    { nome: "Setor D", total: totalDoPainel - Math.ceil(totalDoPainel / 4) - Math.floor(totalDoPainel / 2), ocupadasAtuais: 0 },
-  ] : []
+  const vagas = setores.flatMap(s => s.vagas)
+  const totais = setores.reduce((a, s) => ({ total: a.total + s.total, livres: a.livres + s.livres, ocupadas: a.ocupadas + s.ocupadas, semLeitura: a.semLeitura + s.semLeitura, indisponiveis: a.indisponiveis + s.indisponiveis }), { total: 0, livres: 0, ocupadas: 0, semLeitura: 0, indisponiveis: 0 })
+  const confirmado = historico?.temHistorico ? historico : null
   return {
-    shopping: estrutura.shopping.nome,
-    cenarioFicticio: estrutura.shopping.demonstracao === true,
-    geradoEm: new Date(),
-    historico: dadosConfirmados,
-    filtro: opcoes.periodoSelecionado ?? null,
-    comparacao: opcoes.comparacao?.temHistorico ? opcoes.comparacao : null,
-    demonstracaoAtiva,
-    totais,
-    setores,
-    porTipo,
-    origemTipos: tiposDemonstrativos && demonstracaoAtiva ? "demonstração" : "situação atual",
-    participacaoSetores: setoresDemonstrados.map((setor, indice) => ({
-      nome: setor.nome,
-      ocupadas: demonstracaoAtiva ? Math.round(setor.total * [66.7, 65.8, 65.6, 62.3][indice] / 100) : setor.ocupadasAtuais,
-      origem: demonstracaoAtiva ? "demonstração" : "situação atual",
-    })),
-    serieDiaria: dadosConfirmados
-      ? dadosConfirmados.porDia.map((dia) => ({ rotulo: dia.inicioEm, ocupacao: dia.ocupacaoPercentual, entradas: dia.entradasObservadas, origem: estrutura.shopping.demonstracao ? "fictício" as const : "confirmado" as const }))
-      : demonstracaoAtiva ? DIAS_DEMONSTRACAO.map((rotulo, indice) => ({ rotulo, ocupacao: OCUPACAO_DIARIA_DEMONSTRACAO[indice], entradas: (42 + indice * 5 + (indice % 2) * 9) * 10, saidas: (38 + indice * 5 + ((indice + 1) % 2) * 8) * 10, origem: "demonstração" as const })) : [],
-    serieHoraria: demonstracaoAtiva ? OCUPACAO_HORARIA_DEMONSTRACAO.map((ocupacao, indice) => ({ horario: `${String(indice + 6).padStart(2, "0")}h`, ocupacao })) : [],
+    shopping: estrutura.shopping.nome, cenarioFicticio: estrutura.shopping.demonstracao === true, geradoEm: new Date(),
+    historico: confirmado, filtro: opcoes.periodoSelecionado ?? null, comparacao: opcoes.comparacao?.temHistorico ? opcoes.comparacao : null,
+    recorte: `${opcoes.setorId ? setores.map(s => s.nome).join(", ") || "Setor selecionado" : "Todos os setores"} · ${opcoes.tipo ? NOMES_TIPO[opcoes.tipo] : "Todas as categorias"}`,
+    demonstracaoAtiva: false, totais, setores,
+    porTipo: (Object.keys(NOMES_TIPO) as TipoVaga[]).map(tipo => ({ nome: NOMES_TIPO[tipo], quantidade: vagas.filter(v => v.tipo === tipo).length })),
+    origemTipos: "situação atual" as string,
+    participacaoSetores: setores.map(s => ({ nome: s.nome, ocupadas: s.ocupadas, origem: "situação atual" })),
+    serieDiaria: confirmado ? confirmado.porDia.map(d => ({ rotulo: d.inicioEm, ocupacao: d.ocupacaoPercentual, entradas: d.entradasObservadas, saidas: d.saidasObservadas, origem: estrutura.shopping.demonstracao ? "fictício" as string : "confirmado" })) : [],
+    serieHoraria: [] as { horario: string; ocupacao: number }[],
   }
 }
-
 export type RelatorioAnalise = ReturnType<typeof montarRelatorioAnalise>
-
 /** Gera nome estável e seguro para download, sem usar o nome bruto do shopping como caminho. */
 export function nomeArquivoRelatorio(shopping: string, extensao: "xlsx" | "pdf") {
   const slug = shopping.normalize("NFD").replace(/[\u0300-\u036f]/g, "").toLowerCase()

@@ -5,7 +5,17 @@ import request from 'supertest';
 import { createApp } from '../src/app.js';
 import { createWhatsappService } from '../src/whatsapp/service.js';
 import { signMetaPayload } from '../src/whatsapp/signature.js';
-import { testMenuText } from '../src/whatsapp/payload.js';
+import { testMenuText, respostaAtendimento } from '../src/whatsapp/payload.js';
+
+test('opções do atendimento possuem orientação e mídia não dispara resposta', () => {
+  for (const text of ['1', '2', '3', '4', '5']) {
+    const resposta = respostaAtendimento({ type: 'text', text });
+    assert.ok(resposta);
+    assert.doesNotMatch(resposta, /em configuração/i);
+  }
+  assert.equal(respostaAtendimento({ type: 'image', text: '1' }), null);
+  assert.equal(respostaAtendimento({ type: 'text', text: 'mensagem livre' }), null);
+});
 
 const secret = 'segredo-ficticio';
 const verifyToken = 'token-ficticio';
@@ -217,7 +227,7 @@ test('falha transitória não perde definitivamente o evento', async () => {
     autoReplyEnabled: true,
     sendText: async () => {
       calls += 1;
-      if (calls === 1) throw new Error('META_ENVIO_TIMEOUT');
+      if (calls === 1) throw new Error('META_ENVIO_FALHOU:429');
       return {};
     },
   });
@@ -245,7 +255,7 @@ test('reentrega assume evento PROCESSANDO antigo uma única vez', async () => {
   assert.equal(prisma.rows.get('wamid.stale').tentativas, 2);
 });
 
-test('execução antiga não altera o resultado de uma tentativa retomada', async () => {
+test('envio antigo incerto exige revisão sem repetir mensagem', async () => {
   let releaseFirst;
   let firstStarted;
   const started = new Promise((resolve) => { firstStarted = resolve; });
@@ -270,9 +280,9 @@ test('execução antiga não altera o resultado de uma tentativa retomada', asyn
   await service.handleMessage(message);
   releaseFirst();
   await first;
-  assert.equal(row.status, 'PROCESSADO');
-  assert.equal(row.tentativas, 2);
-  assert.equal(sends, 2);
+  assert.equal(row.status, 'REVISAO');
+  assert.equal(row.tentativas, 1);
+  assert.equal(sends, 1);
 });
 
 test('flag desativada impede envio e OI/MENU gera menu quando habilitado', async () => {
@@ -297,7 +307,7 @@ test('falha da Meta e prazo esgotado são tratados sem expor credenciais', async
     });
     const id = `wamid.${error.message}`;
     await signedPost(app, messagePayload([{ id, from: '5511999990008', type: 'text', text: { body: 'OI' } }])).expect(500);
-    assert.equal(prisma.rows.get(id).status, 'FALHOU');
+    assert.equal(prisma.rows.get(id).status, error.message === 'META_ENVIO_TIMEOUT' ? 'REVISAO' : 'FALHOU');
     assert.equal(prisma.rows.get(id).erroCodigo.includes(secret), false);
   }
 });

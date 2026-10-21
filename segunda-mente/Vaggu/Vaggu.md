@@ -10,6 +10,8 @@ Plataforma web responsiva para gestão de estacionamentos de shopping centers, d
 
 ## Comece aqui
 
+- [[Vaggu/Documentação/revisao-geral-2026-10-21|Revisão geral de 21/10 — estado local, capturas atuais e limpeza]]
+
 - [[Vaggu/Especificações/Visão do produto]]
 - [[Vaggu/Especificações/Personas]]
 - [[Vaggu/Tecnologias/Tecnologias e arquitetura]]
@@ -37,12 +39,12 @@ Plataforma web responsiva para gestão de estacionamentos de shopping centers, d
 
 O próprio cofre está versionado na pasta `segunda-mente/` do repositório VAGGU.
 
-**Estado atual:** P01–P05, D01 e C01 estão concluídos. O sistema já possui login, gestão de shoppings e gerentes, importação, mapa compartilhado, histórico confirmado e painéis de análise. A base de sensores também já recebe eventos, evita repetições, confirma mudanças e marca como indisponível o sensor que parou de responder; os testes com PostgreSQL foram aprovados. O mapa já aplica a validade individual na consulta e possui editor visual e monitoramento por sensor; Excel/PDF e seleção de período também estão implementados. Foi criada uma prévia autenticada de telões para gerente, mas a instalação pública, autorização própria, configuração administrativa e integração com o ESP32 físico continuam pendentes. Também faltam cadastro operacional de equipamentos, comandos/ocorrências de manutenção, atualização automática das leituras na tela, métricas/filtros analíticos complementares e homologar a versão publicada. O Power BI ainda não está integrado ao produto. Ver [[Vaggu/Documentação/planejamento-do-projeto|planejamento]] e [[Vaggu/Documentação/fluxo-de-telas|fluxo de telas]].
+**Estado local em 21/10/2026:** P01–P05, D01 e C01 estão concluídos. O código atual inclui confirmação/expiração dos sensores, cadastro e vínculo de equipamentos, manutenção e ocorrências, mapa com atualização a cada 15 segundos e telões com credencial própria revogável. A análise oferece até 31 dias UTC, comparação, setor/categoria, entradas, saídas, permanência, rotatividade, cobertura e Excel/PDF. Os novos eventos preservam a classificação histórica; eventos legados sem fotografia confirmada continuam sinalizados. Hardware físico e homologação publicada seguem pendentes. Power BI publicado é opcional e a conexão real do WhatsApp foi adiada. Ver [[Vaggu/Documentação/conclusao-software-2026-10-19|conclusão do software]] e [[Vaggu/Documentação/planejamento-do-projeto|planejamento]].
 
 **Hospedagem registrada em 23/09:** frontend e API são entregues pelo mesmo serviço Render, conectado ao PostgreSQL no Neon. Consulte [[Vaggu/Documentação/configuracao|configuração]] e [[Vaggu/Tecnologias/Tecnologias e arquitetura|arquitetura]] para o funcionamento versionado; endereço público e resultado das publicações devem ser conferidos no Render/GitHub.
 
 
-**Atualização de 11/09:** autenticação real integrada e validada. A foto e o contorno do login foram fornecidos pela equipe e incorporados à tela. [[Vaggu/Documentação/validacao-login-2026-09-11|Ver resultados]].
+**Atualização de 11/09:** autenticação real integrada e validada. A foto e o contorno de referência do login foram incorporados à tela. [[Vaggu/Documentação/validacao-login-2026-09-11|Ver resultados]].
 
 **Atualização de 12/09:** P03 e P04 concluídos e validados. O mapa usa dois andares, setores, categorias e posições proporcionais; sensores e telões continuam em pacotes posteriores.
 

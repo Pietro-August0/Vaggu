@@ -1,3 +1,4 @@
+import { sincronizarOcorrencias } from '../equipamentos/ocorrencias.js';
 // Persiste indisponibilidade de sensores silenciosos sem usar heartbeat da placa como evidência individual.
 import type { PrismaClient } from '@prisma/client';
 import type { ConfiguracaoTelemetria } from './service.js';
@@ -10,9 +11,10 @@ export async function expirarSensores(
 ) {
   const limite = new Date(referencia.getTime() - configuracao.timeoutSensorMs);
   return prisma.$transaction(async (tx) => {
+    await sincronizarOcorrencias(tx, configuracao, referencia);
     const sensores = await tx.sensor.findMany({
       where: {
-        ativo: true,
+        ativo: true, emManutencao: false, dispositivo: { ativo: true, emManutencao: false },
         shopping: { demonstracao: false },
         expiradoEm: null,
         ultimaObservacaoEm: { lte: limite },

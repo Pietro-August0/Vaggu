@@ -1,3 +1,5 @@
+import { teloesRoutes } from './teloes/routes.js';
+import { equipamentosRoutes } from './equipamentos/routes.js';
 // Monta a API Express, suas rotas e respostas de erro, sem abrir uma porta de rede.
 // Os serviços são recebidos do servidor ou substituídos por simuladores nos testes.
 import express, { type ErrorRequestHandler } from 'express';
@@ -25,10 +27,12 @@ type AppServices = {
   importacao?: any;
   telemetria?: TelemetriaHttpService;
   analiticos?: any;
+  teloes?: ReturnType<typeof import("./teloes/service.js").createTeloesService>;
+  equipamentos?: ReturnType<typeof import("./equipamentos/service.js").createEquipamentosService>;
 };
 
 // Injeção da consulta facilita testar HTTP sem um banco real.
-export function createApp({ checkDatabase, frontendDistPath, auth, whatsapp, shoppings, conta, estrutura, importacao, telemetria, analiticos }: AppServices) {
+export function createApp({ checkDatabase, frontendDistPath, auth, whatsapp, shoppings, conta, estrutura, importacao, telemetria, analiticos, equipamentos, teloes }: AppServices) {
   const app = express();
   app.disable('x-powered-by');
   // O cadastro consulta o ViaCEP no navegador; as demais conexões continuam restritas à origem da API.
@@ -78,6 +82,8 @@ export function createApp({ checkDatabase, frontendDistPath, auth, whatsapp, sho
     app.use('/api/v1/estacionamento/analise', analiticosGerenteRoutes(auth, analiticos));
     app.use('/api/v1', analiticosAdminRoutes(auth, analiticos));
   }
+  if (auth && teloes) app.use('/api/v1', teloesRoutes(auth, teloes));
+  if (auth && equipamentos) app.use('/api/v1', equipamentosRoutes(auth, equipamentos));
   if (telemetria) app.use('/api/v1/telemetria', telemetriaRoutes(telemetria));
 
   // Na hospedagem, entrega o build React pelo mesmo domínio da API. Assim, login e

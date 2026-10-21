@@ -1,6 +1,6 @@
 # Plano de correção e implementação
 
-Atualizado em 15/10/2026. Este plano começou com os problemas encontrados na auditoria de 23/09 e mantém os pacotes P01–P11 como referência. Os registros concluídos foram preservados como histórico; o resumo abaixo mostra o estado atual.
+Atualizado em 21/10/2026. Este plano começou com os problemas encontrados na auditoria de 23/09 e mantém os pacotes P01–P11 como referência. Os registros concluídos foram preservados como histórico; o resumo abaixo mostra o estado atual.
 
 ## Objetivo
 
@@ -14,7 +14,7 @@ Os estados abaixo descrevem o conjunto depois da consolidação D01. Quando a do
 
 | Área | Estado | Evidência atual |
 | --- | --- | --- |
-| Visão geral e PRD | Completo para o escopo conhecido | Problema, público, objetivo, experiência, metas, MVP, posterior e fora do escopo estão em `Visão do produto.md`; personas aguardam o conteúdo já criado pela equipe. |
+| Visão geral e PRD | Completo para o escopo conhecido | Problema, público, objetivo, experiência, metas, MVP, posterior e fora do escopo estão em `Visão do produto.md`; Carlos está documentado a partir da fonte original; Mariana e Rafael são hipóteses de uso, com slides revisados. |
 | TRD e arquitetura | Completo para o estado atual | Tecnologias implementadas e planejadas, versões relevantes, motivos e diagramas estão em `Tecnologias e arquitetura.md`. |
 | Banco de dados | Completo para o schema atual | Entidades, campos, relações, uso e limites do P06 estão em `modelo-de-dados.md`. |
 | API existente | Completo para as rotas atuais | O inventário do backend foi reconciliado no `vaggu-backend/README.md`. |
@@ -25,11 +25,11 @@ Os estados abaixo descrevem o conjunto depois da consolidação D01. Quando a do
 
 | Área | Estado | O que falta |
 | --- | --- | --- |
-| Design | Parcial | Extrair ou confirmar no Figma tamanhos, espaçamentos, sombras, estados e componentes; a paleta e Poppins vieram da evidência fornecida pela equipe. |
+| Design | Parcial | Extrair ou confirmar no Figma tamanhos, espaçamentos, sombras, estados e componentes; a paleta e Poppins estão registradas no guia visual do projeto. |
 | Evidências atuais da interface | Parcial | Editor, monitoramento e análise têm oito capturas autenticadas locais de 15/10. Faltam renovar as capturas específicas de exclusões, importação/erros e validar o site publicado. |
-| Sprints históricas | Parcial | Informar datas e divisão individual das Sprints 1–2 e o período da Sprint 4. |
-| Personas | Parcial por dependência da equipe | Inserir no PRD as personas já desenvolvidas, sem criar substitutas. |
-| WhatsApp comercial | Parcial | Confirmar número e ambiente Meta e concluir o P10. |
+| Sprints históricas | Consolidado com limites | Fotos recebidas em 19/10 confirmam datas e responsáveis das Sprints 3–6. Sprint 1: brainstorming no começo de agosto; Sprint 2: ideia no Figma até a Sprint 3. Datas exatas e divisão individual das Sprints 1–2 não foram informadas. Não retrocalcular. |
+| Personas | Documentadas com limites | Carlos tem fonte original; Mariana e Rafael são hipóteses de uso coerentes com o produto. Validação com pessoas continua pendente. |
+| WhatsApp comercial | Parcial | Conexão real adiada; retomar quando houver número e ambiente Meta disponíveis. |
 
 ### 3. O que estava desatualizado
 
@@ -40,11 +40,11 @@ Os estados abaixo descrevem o conjunto depois da consolidação D01. Quando a do
 
 ### 4. O que ainda falta no estado atual
 
-- A consulta de monitoramento por sensor e seus detalhes já existe. Cadastro/vínculo de equipamentos, comandos e ocorrências de manutenção, atendimentos e telões continuam pendentes.
+- A consulta de monitoramento por sensor e seus detalhes já existe. Cadastro/vínculo de equipamentos, manutenção/ocorrências e telões estão implementados localmente. Atendimentos estruturados continuam fora da entrega atual.
 - A visão geral administrativa, as exclusões, Minha conta e a área de análises já existem. A análise usa histórico real quando disponível e mostra uma demonstração identificada quando não há dados.
-- A base de sensores, confirmação, expiração e histórico já funciona em testes com PostgreSQL. Ainda faltam ESP32 real, tempos definitivos, atualização automática da tela e conferência no ambiente publicado; a validade individual já é aplicada na consulta do mapa.
-- Histórico, filtro de período, comparação e exportações Excel/PDF foram entregues. Faltam filtros por setor/categoria, métricas complementares, cobertura zero e classificação histórica. O aceite de exportação foi alinhado ao SSD: PDF e planilha XLSX; CSV é opcional. No Power BI existem preparação de dados e registro histórico de protótipo externo, sem artefato final versionado ou acesso integrado.
-- Decisões ainda pendentes: contrato final de firmware, retenção operacional e forma de distribuição do Power BI.
+- A base de sensores, confirmação, expiração e histórico já funciona em testes com PostgreSQL. Atualização periódica já existe; faltam ESP32 real, tempos definitivos e conferência no ambiente publicado; a validade individual já é aplicada na consulta do mapa.
+- Histórico, filtro de período, comparação e exportações Excel/PDF foram entregues. Setor/categoria, entradas/saídas, permanência, rotatividade, cobertura zero e classificação dos novos eventos estão implementados; registros legados continuam identificados. O aceite de exportação foi alinhado ao SSD: PDF e planilha XLSX; CSV é opcional. No Power BI existem preparação de dados e registro histórico de protótipo externo, sem artefato final versionado ou acesso integrado.
+- Decisões ainda pendentes: contrato final de firmware, retenção operacional e forma de distribuição de uma futura evolução opcional Power BI.
 
 Essas pendências não autorizam criar tudo de uma vez. Cada pacote continua sujeito às dependências e aos critérios de aceite.
 
@@ -63,9 +63,9 @@ Não foi criada uma pasta `docs/` paralela. A segunda mente já era a fonte can�
 
 1. D01 — consolidar documentação e evidências: concluído em 23/09.
 2. C01 — reconciliar as exclusões da interface administrativa: concluído em 23/09.
-3. P06 — concluir hardware, cadastro/vínculo de equipamentos, manutenção e atualização automática sobre a base e a validade já implementadas.
-4. P07–P09 — concluir operação e telões; ampliar o histórico já iniciado; criar o relatório Power BI funcional.
-5. P10–P11 — concluir WhatsApp e preparar a apresentação integrada conforme dependências.
+3. P06 — ensaiar hardware e fechar tempos finais; cadastro/vínculo, manutenção e atualização periódica já existem.
+4. P07–P09 — homologar operação, telões e análise histórica implementados; Power BI publicado é evolução opcional.
+5. P10–P11 — manter conexão real WhatsApp adiada e preparar a apresentação integrada conforme dependências.
 
 ### 7. Divisão inicial da próxima sprint
 
@@ -92,7 +92,7 @@ A divisão detalhada, dependências e critérios permanecem em [Sprints do proje
 - Consolidar PRD e TRD sem duplicar o SSD.
 - Documentar fluxo de telas e modelo de dados atuais.
 - Corrigir o inventário real da API.
-- Registrar a paleta e a tipografia fornecidas pela equipe.
+- Registrar a paleta e a tipografia dos arquivos de referência do projeto.
 - Marcar capturas antigas como históricas e catalogar as novas evidências.
 - Atualizar decisões, rastreabilidade, índices e mapa do projeto.
 - Corrigir os resumos que ainda apresentavam P05 como parcial.
@@ -102,10 +102,10 @@ A divisão detalhada, dependências e critérios permanecem em [Sprints do proje
 - Nenhum documento atual afirma que a confirmação do P05 está ausente.
 - Funcionalidades históricas ou planejadas não aparecem como implementação atual.
 - Personas permanecem como `INFORMAÇÃO A SER FORNECIDA`.
-- Sprints 1 e 2 preservam somente o que a equipe confirmou.
+- Sprints 1 e 2 preservam somente o que confirmamos.
 - `node scripts/verificar-documentacao.mjs` conclui sem erro.
 
-**Resultado:** documentos e evidências foram reconciliados e o verificador foi aprovado sobre o conjunto integrado. Campos que dependem de confirmação da equipe continuam explicitamente pendentes.
+**Resultado:** documentos e evidências foram reconciliados e o verificador foi aprovado sobre o conjunto integrado. Campos que dependem de confirmação interna continuam explicitamente pendentes.
 
 ## Concluído em 23/09/2026 — C01: reconciliar exclusões administrativas
 
@@ -141,7 +141,7 @@ A divisão detalhada, dependências e critérios permanecem em [Sprints do proje
 
 **Responsáveis principais:** Kamilly para backend/Arduino e Samuel para dados; Pietro integra o fluxo completo.
 
-A recepção e a confirmação das leituras já foram criadas e testadas com PostgreSQL. Para concluir o pacote, a equipe precisa confirmar com o hardware real:
+A recepção e a confirmação das leituras já foram criadas e testadas com PostgreSQL. Para concluir o pacote, precisamos confirmar com o hardware real:
 
 - credencial e identidade da placa;
 - código e vínculo dos sensores;

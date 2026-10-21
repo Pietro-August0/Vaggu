@@ -1,6 +1,6 @@
 # Documentação da VAGGU
 
-Estrutura inicial de 09/09/2026 • revisão de uso em 30/09/2026 • Português brasileiro
+Estrutura inicial de 09/09/2026 • revisão geral em 21/10/2026 • Português brasileiro
 
 Esta pasta reúne as decisões de produto, o desenho técnico, os padrões de código e os critérios de aceite do projeto. “SSD” é o nome adotado para a especificação principal; a documentação descreve tanto o que já existe quanto o destino planejado da plataforma.
 
@@ -8,7 +8,8 @@ Esta pasta reúne as decisões de produto, o desenho técnico, os padrões de c�
 
 | Arquivo | O que contém |
 | --- | --- |
-| [CONTRIBUTING.md](../../../CONTRIBUTING.md) | Acordos da equipe para desenvolver, documentar, verificar e usar Git. |
+| [revisao-geral-2026-10-21.md](revisao-geral-2026-10-21.md) | Revisão atual: 130 testes, capturas reais locais, correção do telão, limpeza e regra de prints. |
+| [AGENTS.md](../../../AGENTS.md) | Nossos acordos para desenvolver, documentar, verificar e usar Git. |
 | [SSD-VAGGU.md](SSD-VAGGU.md) | Escopo, fluxos, permissões, dados, API proposta, telemetria, Power BI e decisões pendentes. |
 | [regras-de-codigo.md](regras-de-codigo.md) | Português brasileiro, comentários, nomes, arquitetura, pastas, segurança e qualidade. |
 | [regras-visuais.md](regras-visuais.md) | Identidade da VAGGU, componentes, mapa, telões, responsividade e conferência do Figma. |
@@ -29,22 +30,23 @@ Para continuar o desenvolvimento, consulte a situação atual e o próximo traba
 ## Como usar no projeto
 
 1. Para executar ou testar o sistema, comece pelo [guia de configuração](configuracao.md).
-2. Antes de alterar o projeto, leia o `CONTRIBUTING.md` da raiz.
+2. Antes de alterar o projeto, leia o `AGENTS.md` da raiz.
 3. Consulte o SSD para entender escopo, regras de negócio e decisões pendentes.
 4. Use os guias de código e interface conforme a área modificada.
 5. Relacione cada entrega aos cenários do plano de aceite.
 6. Confira o código e os testes: documentação planejada não comprova implementação.
 
-O `CONTRIBUTING.md` é o ponto de entrada para os acordos de trabalho. O SSD reúne as regras do produto, e as fontes externas usadas nele ficam nas [referências](SSD-VAGGU.md#referencias).
+O `AGENTS.md` é o ponto de entrada para os acordos de trabalho. O SSD reúne as regras do produto, e as fontes externas usadas nele ficam nas [referências](SSD-VAGGU.md#referencias).
 
 ## O que está confirmado e o que depende de conferência
 
 - O escopo considera as decisões de Pietro e o documento mestre revisado em 09/09/2026.
-- Regras de código e de organização foram elaboradas para este pedido e passam a orientar novas entregas.
+- Nossas regras de código e organização orientam as novas entregas.
 - Modelos de dados, rotas e detalhes de infraestrutura marcados como **proposta** devem ser conciliados com o repositório.
-- P01–P05 e C01 estão concluídos. P06 possui backend de telemetria, validade na consulta e monitoramento individual; P08 possui histórico, até 31 dias UTC, comparação e Excel/PDF. Editor visual e oito prints autenticados locais estão documentados. Faltam ESP32 real, cadastro operacional, manutenção/ocorrências, atualização automática das telas, telões, filtros/métricas/classificação histórica e Power BI funcional. O inventário de prioridades está na auditoria de 15/10.
-- A referência visual é o [Figma VAGGU](https://www.figma.com/design/xKI9wjoiZ5CoXC3DXIJNmq/Vaggu?node-id=2022-2). O histórico registra bloqueio/limite em uma consulta anterior; esta auditoria não acessou o Figma nem extraiu novos tokens. Os valores exatos a confirmar estão registrados no guia visual.
-- A documentação não contém credenciais. Mudanças no Figma, Trello ou repositório remoto só podem ser afirmadas quando houver evidência registrada na sessão correspondente.
+- P01–P05 e C01 estão concluídos. O código atual inclui confirmação/expiração dos sensores, cadastro e vínculo de equipamentos, manutenção e ocorrências, mapa com atualização a cada 15 segundos e telões com credencial própria revogável. A análise oferece até 31 dias UTC, comparação, setor/categoria, entradas, saídas, permanência, rotatividade, cobertura e Excel/PDF. Os novos eventos preservam a classificação histórica; eventos legados sem fotografia confirmada continuam sinalizados. Hardware físico e homologação publicada seguem pendentes. Power BI publicado é opcional e a conexão real do WhatsApp foi adiada. O estado local e as verificações datadas estão na [conclusão do software](conclusao-software-2026-10-19.md).
+
+- A referência visual é o [Figma VAGGU](https://www.figma.com/design/xKI9wjoiZ5CoXC3DXIJNmq/Vaggu?node-id=2022-2); esta revisão confere o repositório e não extrai novos tokens do Figma.
+- Mudanças no Figma, Trello, produção ou repositório remoto só são registradas como realizadas quando houver evidência específica.
 
 ## Atualização do pacote
 

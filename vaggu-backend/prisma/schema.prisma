@@ -48,6 +48,8 @@ enum SituacaoImplantacao {
 }
 
 model Shopping {
+  teloes Telao[]
+  ocorrencias OcorrenciaEquipamento[]
   id                    String        @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
   nome                  String
   cnpj                  String?
@@ -102,6 +104,7 @@ model ImportacaoEstrutura {
 }
 
 model Andar {
+  teloes Telao[]
   id          String   @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
   shoppingId  String   @map("shopping_id") @db.Uuid
   nome        String
@@ -122,6 +125,7 @@ model Andar {
 }
 
 model Setor {
+  teloes Telao[]
   id         String   @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
   shoppingId String   @map("shopping_id") @db.Uuid
   andarId    String   @map("andar_id") @db.Uuid
@@ -173,6 +177,8 @@ model Sessao {
 }
 
 model Dispositivo {
+  emManutencao Boolean @default(false) @map("em_manutencao")
+  ocorrencias OcorrenciaEquipamento[]
   id              String    @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
   shoppingId      String    @map("shopping_id") @db.Uuid
   codigo          String?   @unique
@@ -227,6 +233,13 @@ model Vaga {
 }
 
 model HistoricoVaga {
+  andarIdSnapshot String? @map("andar_id_snapshot") @db.Uuid
+  setorIdSnapshot String? @map("setor_id_snapshot") @db.Uuid
+  andarNomeSnapshot String? @map("andar_nome_snapshot")
+  setorNomeSnapshot String? @map("setor_nome_snapshot")
+  vagaCodigoSnapshot String? @map("vaga_codigo_snapshot")
+  tipoVagaSnapshot String? @map("tipo_vaga_snapshot")
+  classificacaoConfirmada Boolean @default(false) @map("classificacao_confirmada")
   id           String     @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
   shoppingId   String     @map("shopping_id") @db.Uuid
   vagaId       String     @map("vaga_id") @db.Uuid
@@ -248,6 +261,8 @@ model HistoricoVaga {
 
 // Representa cada canal físico separadamente do heartbeat da placa.
 model Sensor {
+  emManutencao Boolean @default(false) @map("em_manutencao")
+  ocorrencias OcorrenciaEquipamento[]
   id                  String      @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
   shoppingId          String      @map("shopping_id") @db.Uuid
   dispositivoId       String      @map("dispositivo_id") @db.Uuid
@@ -264,6 +279,7 @@ model Sensor {
   dispositivo         Dispositivo @relation(fields: [dispositivoId, shoppingId], references: [id, shoppingId], onDelete: Restrict)
   vaga                Vaga        @relation(fields: [vagaId, shoppingId], references: [id, shoppingId], onDelete: Restrict)
 
+  @@unique([id, shoppingId, dispositivoId])
   @@unique([dispositivoId, codigo])
   @@unique([vagaId, shoppingId])
   @@index([shoppingId, ultimaObservacaoEm])
@@ -306,6 +322,8 @@ model EventoTelemetriaRecebido {
 }
 
 enum WhatsappEventStatus {
+  ENVIANDO
+  REVISAO
   PROCESSANDO
   PROCESSADO
   FALHOU
@@ -324,4 +342,41 @@ model WhatsappEvento {
 
   @@index([status, atualizadoEm])
   @@map("whatsapp_eventos")
+}
+
+
+model OcorrenciaEquipamento {
+  id String @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  shoppingId String @map("shopping_id") @db.Uuid
+  dispositivoId String @map("dispositivo_id") @db.Uuid
+  sensorId String? @map("sensor_id") @db.Uuid
+  tipo String @db.VarChar(24)
+  motivo String @db.VarChar(500)
+  conclusao String? @db.VarChar(500)
+  autorId String? @map("autor_id") @db.Uuid
+  encerradoPorId String? @map("encerrado_por_id") @db.Uuid
+  abertaEm DateTime @default(now()) @map("aberta_em")
+  encerradaEm DateTime? @map("encerrada_em")
+  chaveAtiva String? @unique @map("chave_ativa")
+  shopping Shopping @relation(fields: [shoppingId], references: [id], onDelete: Restrict)
+  dispositivo Dispositivo @relation(fields: [dispositivoId, shoppingId], references: [id, shoppingId], onDelete: Restrict)
+  sensor Sensor? @relation(fields: [sensorId, shoppingId, dispositivoId], references: [id, shoppingId, dispositivoId], onDelete: Restrict)
+  @@index([shoppingId, encerradaEm])
+  @@map("ocorrencias_equipamento")
+}
+
+model Telao {
+  id String @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  shoppingId String @map("shopping_id") @db.Uuid
+  andarId String? @map("andar_id") @db.Uuid
+  setorId String? @map("setor_id") @db.Uuid
+  nome String @db.VarChar(120)
+  chaveHash String @map("chave_hash")
+  ativo Boolean @default(true)
+  criadoEm DateTime @default(now()) @map("criado_em")
+  shopping Shopping @relation(fields: [shoppingId], references: [id], onDelete: Restrict)
+  andar Andar? @relation(fields: [andarId, shoppingId], references: [id, shoppingId], onDelete: Restrict)
+  setor Setor? @relation(fields: [setorId, shoppingId, andarId], references: [id, shoppingId, andarId], onDelete: Restrict)
+  @@index([shoppingId])
+  @@map("teloes")
 }

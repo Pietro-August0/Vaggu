@@ -32,13 +32,14 @@ function proporcao(valor: unknown, campo: string, permiteZero = true): number {
 /** Converte Decimals do Prisma em números adequados ao contrato JSON do mapa. */
 function vagaPublica(vaga: Record<string, unknown>, timeoutSensorMs?: number, referencia = new Date(), demonstracao = false) {
   const numero = (valor: unknown) => valor === null || valor === undefined ? null : Number(valor);
-  const sensor = vaga.sensor as { codigo: string; ativo: boolean; estadoConfirmado: string; estadoCandidato: string | null; candidatoIniciadoEm: Date | null; ultimaObservacaoEm: Date | null; expiradoEm: Date | null; dispositivo: { codigo: string | null; nome: string; ultimoContatoEm: Date | null } } | null | undefined;
-  const leituraValida = sensor?.ativo && sensor.expiradoEm === null && sensor.ultimaObservacaoEm !== null
+  const sensor = vaga.sensor as { codigo: string; ativo: boolean; emManutencao: boolean; estadoConfirmado: string; estadoCandidato: string | null; candidatoIniciadoEm: Date | null; ultimaObservacaoEm: Date | null; expiradoEm: Date | null; dispositivo: { ativo: boolean; emManutencao: boolean; codigo: string | null; nome: string; ultimoContatoEm: Date | null } } | null | undefined;
+  const manutencao = !!sensor && (!sensor.ativo || sensor.emManutencao || !sensor.dispositivo.ativo || sensor.dispositivo.emManutencao)
+  const leituraValida = !manutencao && sensor?.ativo && sensor.expiradoEm === null && sensor.ultimaObservacaoEm !== null
     && timeoutSensorMs !== undefined && referencia.getTime() - sensor.ultimaObservacaoEm.getTime() < timeoutSensorMs;
-  const estadoAtual = demonstracao ? sensor && (!sensor.ativo || sensor.expiradoEm) ? 'INDISPONIVEL' : vaga.estadoAtual : sensor
+  const estadoAtual = manutencao ? 'INDISPONIVEL' : demonstracao ? sensor && (!sensor.ativo || sensor.expiradoEm) ? 'INDISPONIVEL' : vaga.estadoAtual : sensor
     ? leituraValida && ['LIVRE', 'OCUPADA'].includes(sensor.estadoConfirmado) ? sensor.estadoConfirmado : 'INDISPONIVEL'
     : 'DESCONHECIDA';
-  const situacao = !sensor?.ativo ? 'MANUTENCAO' : sensor.expiradoEm || (!demonstracao && !leituraValida && sensor.ultimaObservacaoEm)
+  const situacao = !sensor ? 'SEM_LEITURA' : manutencao ? 'MANUTENCAO' : sensor.expiradoEm || (!demonstracao && !leituraValida && sensor.ultimaObservacaoEm)
     ? 'SEM_RESPOSTA' : !sensor.ultimaObservacaoEm || !['LIVRE', 'OCUPADA'].includes(sensor.estadoConfirmado)
       ? 'SEM_LEITURA' : sensor.estadoCandidato ? 'CONFIRMANDO' : 'OPERANDO';
   const monitoramento = sensor ? { sensorCodigo: sensor.codigo, placaCodigo: sensor.dispositivo?.codigo ?? null,
@@ -72,7 +73,7 @@ function conflito(error: unknown): never {
 export function createEstruturaService(prisma: PrismaClient, timeoutSensorMs: number) {
   const obter = async (shoppingId: string) => {
     const shopping = await prisma.shopping.findUnique({ where: { id: idValido(shoppingId, 'shoppingId') },
-      include: { andares: { orderBy: { ordem: 'asc' }, include: { setores: { orderBy: { nome: 'asc' }, include: { vagas: { orderBy: { codigo: 'asc' }, include: { sensor: { include: { dispositivo: { select: { codigo: true, nome: true, ultimoContatoEm: true } } } } } } } } } } } });
+      include: { andares: { orderBy: { ordem: 'asc' }, include: { setores: { orderBy: { nome: 'asc' }, include: { vagas: { orderBy: { codigo: 'asc' }, include: { sensor: { include: { dispositivo: { select: { codigo: true, nome: true, ultimoContatoEm: true, ativo: true, emManutencao: true } } } } } } } } } } } });
     if (!shopping) throw new ApiError(404, 'SHOPPING_NAO_ENCONTRADO', 'Shopping não encontrado.');
     return estruturaPublica(shopping as unknown as Parameters<typeof estruturaPublica>[0], timeoutSensorMs, new Date());
   };

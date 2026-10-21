@@ -4,15 +4,15 @@ Atualização de aprovação visual: 16/10/2026. Regras iniciais de 09/09/2026.
 
 ## 1. Referência e grau de confirmação
 
-**Referência visual vigente: site atual aprovado pela equipe em 16/10/2026.** A equipe confirmou que o site evoluiu e melhorou a proposta criada no Figma. O Figma preserva a origem do projeto; reprodução exata de suas medidas e componentes não é condição para concluir a documentação.
+**Referência visual vigente: site atual aprovado em 16/10/2026.** Reconhecemos que o site evoluiu e melhorou a proposta criada no Figma. O Figma preserva a origem do projeto; reprodução exata de suas medidas e componentes não é condição para concluir a documentação.
 
 Referência inicial: [Figma VAGGU — página Web](https://www.figma.com/design/xKI9wjoiZ5CoXC3DXIJNmq/Vaggu?node-id=2022-2).
 
 - Arquivo: `xKI9wjoiZ5CoXC3DXIJNmq`.
 - Nó indicado: `2022:2`.
-- A referência já consultada na conversa e o documento mestre sustentam a direção visual: amarelo, tons escuros, textos claros, marca VAGGU e interface minimalista.
+- A referência já consultada nos registros de decisão e o documento mestre sustentam a direção visual: amarelo, tons escuros, textos claros, marca VAGGU e interface minimalista.
 - Em 09/09, a nova consulta à integração foi bloqueada por limite de chamadas. Não foi possível extrair novamente cores numéricas, fontes, espaçamentos e componentes deste nó.
-- Em 23/09, a equipe forneceu um guia de identidade com paleta hexadecimal e Poppins. Essa imagem é uma fonte entregue pela equipe, não uma extração do Figma.
+- Em 23/09, registramos um guia de identidade com paleta hexadecimal e Poppins. Essa imagem é uma fonte interna do projeto, não uma extração do Figma.
 - As regras abaixo distinguem **identidade fornecida**, **cores e medidas encontradas no código**, **regras de implementação** e **itens a conferir**.
 - Frames podem preservar escopo antigo, como motos. As decisões atuais de produto prevalecem; o site aprovado orienta o resultado visual atual.
 
@@ -28,9 +28,9 @@ Referência inicial: [Figma VAGGU — página Web](https://www.figma.com/design/
 | Densidade | Painel operacional com informação útil; telões com leitura rápida e poucas distrações. |
 | Dispositivos | Web responsivo em computador, tablet e celular. Não criar visual de aplicativo nativo como novo produto. |
 
-Não importar paletas ou logos de outros projetos do usuário. Não transformar a aplicação em um dashboard genérico com gradientes, efeitos e cores sem relação com o Figma. A biblioteca de componentes deve se adaptar à VAGGU.
+Não importar paletas ou logos de outros projetos. Não transformar a aplicação em um dashboard genérico com gradientes, efeitos e cores sem relação com o Figma. A biblioteca de componentes deve se adaptar à VAGGU.
 
-### Paleta e tipografia fornecidas pela equipe
+### Paleta e tipografia dos arquivos de referência do projeto
 
 | Elemento | Valor confirmado na imagem fornecida |
 | --- | --- |
@@ -49,20 +49,20 @@ Não atribuir automaticamente um papel funcional a cada cor apenas pela ordem do
 
 ## 3. Registro de tokens e pendências
 
-Antes de introduzir valores novos, localizar os tokens no repositório e preservar a coerência com o site aprovado. Registrar valor, origem e data. Consultar o Figma quando houver necessidade de recuperar uma referência inicial ou solicitação específica da equipe, sem reverter melhorias aprovadas para igualar medidas antigas.
+Antes de introduzir valores novos, localizar os tokens no repositório e preservar a coerência com o site aprovado. Registrar valor, origem e data. Consultar o Figma para recuperar uma referência inicial ou atender a uma necessidade específica do projeto, sem reverter melhorias aprovadas para igualar medidas antigas.
 
 | Token semântico sugerido | Função | Valor/evidência atual |
 | --- | --- | --- |
-| `--cor-marca-primaria` | Amarelo principal | `#ffe100`, fornecido pela equipe e encontrado como `--primary` no código |
-| `--cor-marca-intermediaria` | Variação da marca | `#ffeb54`, fornecido pela equipe; uso no código a conciliar |
-| `--cor-marca-clara` | Variação clara da marca | `#fff49d`, fornecido pela equipe; uso no código a conciliar |
+| `--cor-marca-primaria` | Amarelo principal | `#ffe100`, registrado no guia visual e encontrado como `--primary` no código |
+| `--cor-marca-intermediaria` | Variação da marca | `#ffeb54`, registrado no guia visual; uso no código a conciliar |
+| `--cor-marca-clara` | Variação clara da marca | `#fff49d`, registrado no guia visual; uso no código a conciliar |
 | `--cor-fundo-principal` | Fundo da aplicação | `#171717` aparece no painel Admin; confirmar aplicação por contexto |
 | `--cor-superficie` | Cards e áreas elevadas | Entre os tons fornecidos, papel exato ainda pendente de conciliação |
 | `--cor-texto-principal` | Texto de maior contraste | Preto ou branco conforme fundo; validar contraste por componente |
 | `--cor-texto-secundario` | Metadados e apoio | Papel exato pendente; não assumir que `#343231` atende a todo fundo |
 | `--cor-borda` | Separação de elementos | Pendente de conciliação com os tokens reais do código |
 | `--cor-foco` | Foco de teclado | Pendente de conferência de contraste |
-| `--fonte-principal` | Identidade, texto e controles | Poppins foi fornecida pela equipe; o código ainda usa Geist como sans geral |
+| `--fonte-principal` | Identidade, texto e controles | Poppins consta do guia visual do projeto; o código ainda usa Geist como sans geral |
 | `--fonte-destaque` | Títulos, caso exista distinta | Não confirmada; não assumir que há duas famílias na identidade |
 | Espaçamentos, raios e sombras | Consistência de componentes | Extrair escala existente |
 | Cores semânticas dos estados | Livre, ocupada, indisponível, atenção | Conferir no design e validar legibilidade |
@@ -144,7 +144,7 @@ Verificar contraste de texto/controles usando os valores reais; não declarar co
 
 ## 8. Bibliotecas, imagens e assets
 
-Aceternity UI e Font Awesome foram indicados pela equipe como referências. Selecionar apenas o que ajuda a interface, respeitando licença e dependências. Não instalar conjuntos redundantes de ícones. Preferir componentes e ícones já existentes que correspondam visualmente ao design.
+Aceternity UI e Font Awesome foram adotados como referências. Selecionar apenas o que ajuda a interface, respeitando licença e dependências. Não instalar conjuntos redundantes de ícones. Preferir componentes e ícones já existentes que correspondam visualmente ao design.
 
 Se um asset exato vier do Figma, preservar o desenho e dar nome descritivo em português. Baixar assets necessários ao código durável conforme permissões e registrar a origem; não depender de URL temporária. Logos, plantas e ícones não devem ser recriados por aproximação quando o original estiver disponível.
 
@@ -154,21 +154,21 @@ Se um asset exato vier do Figma, preservar o desenho e dar nome descritivo em po
 2. Preservar marca, proporções, padrões de componentes e melhorias aprovadas.
 3. Documentar a origem de novos assets e decisões. Consultar o Figma como referência inicial quando necessário.
 4. Conferir a página renderizada, responsividade, contraste, foco e navegação por teclado.
-5. Registrar evidências técnicas sem apresentar a aprovação da equipe como auditoria completa de acessibilidade ou validação de integrações.
+5. Registrar evidências técnicas sem apresentar a aprovação visual interna como auditoria completa de acessibilidade ou validação de integrações.
 
 ## 10. Aceite visual
 
-**Aprovação da equipe em 16/10/2026:** site atual aprovado como evolução da proposta inicial do Figma. A pendência de aprovação visual está encerrada. Os itens técnicos abaixo permanecem uma lista de verificação, sem presumir execução completa, implementação de telões ou conformidade integral de acessibilidade.
+**Aprovação visual em 16/10/2026:** site atual aprovado como evolução da proposta inicial do Figma. A pendência de aprovação visual está encerrada. Os itens técnicos abaixo permanecem uma lista de verificação, sem presumir execução completa, implementação de telões ou conformidade integral de acessibilidade.
 
 ### Revisão da seção Sobre — 09/09/2026
 
-A seção usa como referência complementar os arquivos `Group 132.png` e `Group 132.svg` enviados pela equipe: apresentação com anéis ao redor da marca, quatro etapas com círculos amarelos e notebook conectado aos benefícios. O componente `sobre-vaggu.tsx` reutiliza Poppins, `--primary` e as imagens existentes. As linhas aparecem ao entrar na tela, com disposição vertical no celular; quando o usuário prefere menos movimento, a apresentação reduz ou remove a animação decorativa.
+A seção usa como referência complementar os arquivos `Group 132.png` e `Group 132.svg`: apresentação com anéis ao redor da marca, quatro etapas com círculos amarelos e notebook conectado aos benefícios. O componente `sobre-vaggu.tsx` reutiliza Poppins, `--primary` e as imagens existentes. As linhas aparecem ao entrar na tela, com disposição vertical no celular; quando o usuário prefere menos movimento, a apresentação reduz ou remove a animação decorativa.
 
-Os textos foram ajustados ao escopo de estacionamento: “Eventos estratégicos” e “Gestão de público” passam a “Planejamento da operação” e “Visão da ocupação”. A pedido da equipe, a legenda visível do notebook e o controle manual de pausa foram removidos; o notebook mantém descrição alternativa de ilustração. As conexões aguardam a maior parte do painel entrar na área visível da tela antes de iniciar. Naquele registro, medidas exatas e componentes do Figma estavam pendentes de confirmação. A aprovação do site em 16/10 encerrou essa exigência de fidelidade ao protótipo. Esta revisão da apresentação não comprova implementação das integrações anunciadas.
+Os textos foram ajustados ao escopo de estacionamento: “Eventos estratégicos” e “Gestão de público” passam a “Planejamento da operação” e “Visão da ocupação”. Por decisão interna, a legenda visível do notebook e o controle manual de pausa foram removidos; o notebook mantém descrição alternativa de ilustração. As conexões aguardam a maior parte do painel entrar na área visível da tela antes de iniciar. Naquele registro, medidas exatas e componentes do Figma estavam pendentes de confirmação. A aprovação do site em 16/10 encerrou essa exigência de fidelidade ao protótipo. Esta revisão da apresentação não comprova implementação das integrações anunciadas.
 
-Refinamento solicitado pela equipe em 09/09: reduzir a escala e o peso da seção para acompanhar o restante da landing. Títulos usam peso 400, textos de apoio 300 e círculos das etapas têm até 136 px. Rótulos do diagrama são posicionados pelo raio dos anéis; pontos luminosos percorrem as órbitas quando o movimento está habilitado. Nenhuma informação essencial depende do movimento. Referências: [Orbiting Circles](https://magicui.design/docs/components/orbiting-circles), [Moving Border](https://ui.aceternity.com/components/moving-border) e [Motion](https://motion.dev/). Implementação própria com CSS e Motion já instalado, sem adicionar bibliotecas.
+Refinamento definido em 09/09: reduzir a escala e o peso da seção para acompanhar o restante da landing. Títulos usam peso 400, textos de apoio 300 e círculos das etapas têm até 136 px. Rótulos do diagrama são posicionados pelo raio dos anéis; pontos luminosos percorrem as órbitas quando o movimento está habilitado. Nenhuma informação essencial depende do movimento. Referências: [Orbiting Circles](https://magicui.design/docs/components/orbiting-circles), [Moving Border](https://ui.aceternity.com/components/moving-border) e [Motion](https://motion.dev/). Implementação própria com CSS e Motion já instalado, sem adicionar bibliotecas.
 
-A seção seguinte, `operacao-vaggu.tsx`, preserva a foto urbana e apresenta um título, explicação, benefícios de planejamento/implantação e contato pelo WhatsApp. Substitui os dois cards no rodapé de uma área alta por conteúdo alinhado à imagem; no celular, a imagem precede o texto. Essas mudanças seguem a correção explícita da equipe, não uma nova extração de medidas do Figma.
+A seção seguinte, `operacao-vaggu.tsx`, preserva a foto urbana e apresenta um título, explicação, benefícios de planejamento/implantação e contato pelo WhatsApp. Substitui os dois cards no rodapé de uma área alta por conteúdo alinhado à imagem; no celular, a imagem precede o texto. Essas mudanças seguem a decisão de revisão registrada, não uma nova extração de medidas do Figma.
 
 - [ ] Logo e paleta da VAGGU preservadas.
 - [ ] Fontes e medidas conferidas ou pendências declaradas.
@@ -182,4 +182,4 @@ A seção seguinte, `operacao-vaggu.tsx`, preserva a foto urbana e apresenta um 
 
 ### Visual do telão — 17/10/2026
 
-Telão: seguir a referência da equipe de 17/10, com logo oficial, Poppins, fundo preto, total amarelo grande, blocos por andar/setor e categorias na base amarela. Sem gradientes, botões ou navegação. Cores operacionais acompanhadas de rótulo; dados parciais ficam neutros.
+Telão: seguir a referência visual de 17/10, com logo oficial, Poppins, fundo preto, total amarelo grande, blocos por andar/setor e categorias na base amarela. Sem gradientes, botões ou navegação. Cores operacionais acompanhadas de rótulo; dados parciais ficam neutros.
