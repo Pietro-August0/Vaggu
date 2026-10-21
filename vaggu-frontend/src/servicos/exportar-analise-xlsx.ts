@@ -84,6 +84,18 @@ export async function gerarPlanilhaAnalise(relatorio: RelatorioAnalise): Promise
   resumo.getCell("A20").alignment = { wrapText: true, vertical: "middle" }
   resumo.getRow(20).height = 38
 
+  resumo.mergeCells("A22:F22")
+  resumo.getCell("A22").value = textoSeguro(`Recorte: ${relatorio.recorte}`)
+  resumo.getCell("A22").alignment = { wrapText: true }
+  resumo.getRow(22).height = 38
+  if (relatorio.historico) {
+    const metricas = livro.addWorksheet("Métricas do período")
+    metricas.columns = [{ header: "Indicador", width: 38 }, { header: "Valor", width: 30 }]
+    metricas.addRow(["Cobertura estimada", "Referência: capacidade atual; mudanças de cadastro limitam a comparação histórica."])
+    for (const [rotulo, valor] of Object.entries(relatorio.historico.resumo)) metricas.addRow([rotulo, valor ?? "Sem observação"])
+    metricas.addRow(["Permanência", "Minutos; ciclos completos encerrados no período, sem falhas intermediárias."])
+    metricas.addRow(["Rotatividade", "Entradas / vagas atualmente ativas no recorte."])
+  }
   const setores = livro.addWorksheet("Setores", { views: [{ state: "frozen", ySplit: 1 }], properties: { tabColor: { argb: COR.escuro } } })
   setores.columns = [
     { header: "Andar · setor", width: 38 }, { header: "Vagas ativas", width: 18 },
@@ -107,7 +119,7 @@ export async function gerarPlanilhaAnalise(relatorio: RelatorioAnalise): Promise
       { header: relatorio.cenarioFicticio ? "Dia UTC" : "Dia UTC", width: 26 }, { header: "Ocupação %", width: 20 },
       { header: "Cobertura %", width: 20 }, { header: "Entradas observadas", width: 23 },
     ]
-    for (const dia of relatorio.historico.porDia) historico.addRow([new Date(dia.inicioEm), dia.ocupacaoPercentual, dia.coberturaPercentual, dia.entradasObservadas])
+    for (const dia of relatorio.historico.porDia) historico.addRow([new Date(dia.inicioEm), dia.ocupacaoPercentual ?? "Sem observação", dia.coberturaPercentual ?? "Indisponível", dia.entradasObservadas])
     historico.getColumn(1).numFmt = "dd/mm/yyyy hh:mm"
     historico.getColumn(2).numFmt = '0.0"%"'
     historico.getColumn(3).numFmt = '0.0"%"'
@@ -127,7 +139,7 @@ export async function gerarPlanilhaAnalise(relatorio: RelatorioAnalise): Promise
     const atual = relatorio.historico?.resumo
     const anterior = relatorio.comparacao.resumo
     for (const [nome, chave] of [["Ocupação %", "ocupacaoPercentual"], ["Cobertura %", "coberturaPercentual"], ["Entradas observadas", "entradasObservadas"]] as const) {
-      comparacao.addRow([nome, atual?.[chave] ?? "Sem medição", anterior[chave], atual ? Number((atual[chave] - anterior[chave]).toFixed(2)) : "Não apurado"])
+      comparacao.addRow([nome, atual?.[chave] ?? "Sem medição", anterior[chave] ?? "Sem observação", atual?.[chave] != null && anterior[chave] != null ? Number((atual[chave]! - anterior[chave]!).toFixed(2)) : "Não apurado"])
     }
   }
   const series = livro.addWorksheet("Gráficos por dia", { views: [{ state: "frozen", ySplit: 1 }] })
@@ -136,7 +148,7 @@ export async function gerarPlanilhaAnalise(relatorio: RelatorioAnalise): Promise
     { header: "Ocupação %", width: 19 }, { header: "Entradas", width: 18 }, { header: "Saídas", width: 18 },
   ]
   for (const dia of relatorio.serieDiaria) series.addRow([
-    dia.origem === "fictício" ? "histórico de ocupação" : dia.origem, textoSeguro(dia.rotulo), dia.ocupacao, dia.entradas, "saidas" in dia ? dia.saidas : "Não apurado",
+    dia.origem === "fictício" ? "histórico de ocupação" : dia.origem, textoSeguro(dia.rotulo), dia.ocupacao ?? "Sem observação", dia.entradas, "saidas" in dia ? dia.saidas : "Não apurado",
   ])
   if (!relatorio.serieDiaria.length) series.addRow(["Sem medições confirmadas", "", "Não apurado", "Não apurado", "Não apurado"])
   series.getColumn(3).numFmt = '0.0"%"'
@@ -159,7 +171,7 @@ export async function gerarPlanilhaAnalise(relatorio: RelatorioAnalise): Promise
   ]
   if (relatorio.historico?.porSetor.length) {
     for (const setor of relatorio.historico.porSetor) setoresHistoricos.addRow([
-      relatorio.cenarioFicticio ? "Histórico de ocupação" : "Histórico confirmado", textoSeguro(setor.setor), setor.ocupacaoPercentual, setor.coberturaPercentual, setor.entradasObservadas,
+      relatorio.cenarioFicticio ? "Histórico de ocupação" : "Histórico confirmado", textoSeguro(setor.setor), setor.ocupacaoPercentual ?? "Sem observação", setor.coberturaPercentual ?? "Indisponível", setor.entradasObservadas,
     ])
   } else setoresHistoricos.addRow(["Sem histórico confirmado", "", "Não apurado", "Não apurado", "Não apurado"])
   setoresHistoricos.getColumn(3).numFmt = '0.0"%"'

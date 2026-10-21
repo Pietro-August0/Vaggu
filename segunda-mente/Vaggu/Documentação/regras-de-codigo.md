@@ -4,7 +4,7 @@ Versão 1.0 • 09/09/2026 • Aplicação: novas implementações e alteraçõe
 
 ## 1. Princípios
 
-Código deve ser legível pela equipe, previsível, testável e proporcional ao TCC. Reutilizar o que já funciona. Uma estrutura organizada separa responsabilidades sem exigir uma grande quantidade de camadas vazias. A mudança deve resolver o problema solicitado e preservar comportamento não relacionado.
+Código deve ser legível por todos os integrantes, previsível, testável e proporcional ao TCC. Reutilizar o que já funciona. Uma estrutura organizada separa responsabilidades sem exigir uma grande quantidade de camadas vazias. A mudança deve resolver o problema solicitado e preservar comportamento não relacionado.
 
 A base definida é React, TypeScript, Tailwind, Node.js, Express, Prisma e PostgreSQL. Vite consta do projeto. Verificar versões e organização reais antes de alterar configurações. Não migrar para Next.js, outro ORM, outro banco, microserviços ou outra biblioteca visual apenas por preferência pessoal.
 
@@ -42,7 +42,7 @@ Antes de concluir uma alteração documental, faça uma leitura como parceiro no
 | Testes | Descrever o comportamento em português | “impede acesso a vagas de outro shopping” |
 | Commits/PRs | Descrição em português; prefixo técnico consistente | `fix(telemetria): impedir estado livre após expiração` |
 
-Preservar APIs externas, palavras reservadas e arquivos obrigatórios de ferramenta. `useState`, `Request`, `Response`, `GET`, `package.json`, `tsconfig.json`, `schema.prisma`, `README.md` e `CONTRIBUTING.md` não precisam ser traduzidos. Abreviações comuns como API, ID, UUID e URL são aceitáveis. Evitar `data`, `obj`, `aux`, `managerData` e nomes genéricos quando existe um termo do domínio.
+Preservar APIs externas, palavras reservadas e arquivos obrigatórios de ferramenta. `useState`, `Request`, `Response`, `GET`, `package.json`, `tsconfig.json`, `schema.prisma`, `README.md` e `AGENTS.md` não precisam ser traduzidos. Abreviações comuns como API, ID, UUID e URL são aceitáveis. Evitar `data`, `obj`, `aux`, `managerData` e nomes genéricos quando existe um termo do domínio.
 
 Manter a convenção local se renomear quebra contratos ou cria um diff desnecessário. Tradução estrutural deve ter escopo próprio, atualizar imports, testes, consumidores, migrations e documentação. Usar mapeamentos do ORM quando for útil preservar nomes físicos existentes.
 
@@ -63,7 +63,7 @@ Comentários devem acompanhar a alteração do código. Remover comentários que
 
 O [mapa do projeto](mapa-do-projeto.md) explica cada arquivo versionável, inclusive os formatos sem comentários e os componentes de origem gerada. Em toda alteração, revisar o comentário e a linha do arquivo no mapa; atualizar finalidade, relações ou caminho quando mudarem. Adições e remoções devem aparecer no mapa na mesma entrega. O estado diário continua somente no planejamento, sem criar diários por módulo.
 
-Execute `node scripts/verificar-documentacao.mjs` na raiz para detectar arquivos sem explicação, entradas removidas e duplicações. Esse comando não comprova a qualidade das descrições: revisar se uma pessoa da equipe entende o papel, a origem dos dados, os efeitos e os limites do arquivo.
+Execute `node scripts/verificar-documentacao.mjs` na raiz para detectar arquivos sem explicação, entradas removidas e duplicações. Esse comando não comprova a qualidade das descrições: revisar se qualquer integrante entende o papel, a origem dos dados, os efeitos e os limites do arquivo.
 
 Exemplo ilustrativo, sem obrigar a criação deste arquivo:
 
@@ -98,7 +98,7 @@ Esta é uma **proposta para adaptação**, não uma ordem de mover todo o reposi
 
 | Caminho proposto | Responsabilidade |
 | --- | --- |
-| `CONTRIBUTING.md` | Acordos de trabalho e referências. |
+| `AGENTS.md` | Acordos de trabalho e referências. |
 | `segunda-mente/Vaggu/Documentação/` | Especificação, decisões, contratos, operação e identidade visual canônicos. |
 | `frontend/src/aplicacao/` | Composição, rotas, provedores e inicialização. |
 | `frontend/src/modulos/autenticacao/` | Login, sessão e troca de senha. |
@@ -120,9 +120,9 @@ Esta é uma **proposta para adaptação**, não uma ordem de mover todo o reposi
 | `backend/src/integracoes/` | WhatsApp e demais provedores externos. |
 | `backend/src/tarefas/` | Expiração de comunicação e processamentos periódicos. |
 | `backend/prisma/` | Schema, migrations e dados de desenvolvimento identificados. |
-| `analises/power-bi/` | Documentação de medidas e artefatos analíticos conforme o fluxo da equipe. |
+| `analises/power-bi/` | Documentação de medidas e artefatos analíticos conforme nosso fluxo. |
 | `analises/sql/` | Views e consultas analíticas versionadas. |
-| `hardware/` | Firmware e protocolo, se a equipe mantiver aqui o código das placas. |
+| `hardware/` | Firmware e protocolo, se mantivermos aqui o código das placas. |
 | `testes/` | Cenários integrados/e2e quando não estiverem junto dos módulos. |
 
 Dentro de um módulo backend, criar apenas arquivos necessários: `rotas.ts`, `validacao.ts`, `controlador.ts`, `servico.ts`, `repositorio.ts` e testes. Um controlador adapta HTTP; o serviço implementa regras; o repositório encapsula consultas. Não colocar Prisma em componentes React nem toda a regra de negócio na rota.
@@ -206,7 +206,7 @@ Logs devem permitir correlacionar evento, equipamento, shopping e falha sem regi
 - Mensagem: `feat(gerentes): permitir logins individuais no mesmo shopping`.
 - PR: problema, mudança de comportamento, validação, migrations e limitações relevantes.
 - Não comitar artefatos de build, dependências, segredos, dumps reais ou resultados temporários.
-- Para Power BI, revisar dados incluídos no PBIX antes de qualquer compartilhamento; ele pode conter dados importados. Seguir a forma de versionamento escolhida pela equipe, sem prometer diffs úteis para um binário.
+- Para Power BI, revisar dados incluídos no PBIX antes de qualquer compartilhamento; ele pode conter dados importados. Seguir a forma de versionamento definida no projeto, sem prometer diffs úteis para um binário.
 
 ## 11. Checklist rápido de revisão
 

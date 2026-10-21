@@ -1,25 +1,21 @@
 # Vaggu Backend — 0.5.0
 
-TypeScript + Node.js + Express + Prisma 7 + PostgreSQL. A base inclui autenticação, administração de shoppings e gerentes, estrutura do estacionamento, prévia de importação CSV/XLSX, webhook do WhatsApp e o primeiro recorte persistente de telemetria P06.
+TypeScript + Node.js + Express + Prisma 7 + PostgreSQL. A API reúne autenticação, administração de shoppings e gerentes, estrutura/importação, telemetria, equipamentos/manutenção, histórico analítico, telões autorizados e webhook do WhatsApp.
 
-## Atualizar a pasta atual
+## Instalar ou atualizar localmente
 
-1. Pare a API com Ctrl+C e feche o Prisma Studio.
-2. Com a API parada, copie sua pasta como backup.
-3. Extraia o ZIP separadamente e copie TODO o conteúdo para a pasta atual, onde está package.json. Aceite substituir arquivos e mesclar pastas. Não apague a pasta prisma.
-4. Preserve seu `.env`. O ZIP não contém banco, credenciais, `node_modules` ou build. Preserve alterações próprias antes de substituir arquivos.
-5. Execute os comandos abaixo, um por vez:
+1. Confira branch, status e alterações locais antes de atualizar o código. Preserve o trabalho existente e pare a API com `Ctrl+C`.
+2. Na primeira instalação, configure `.env` a partir de `.env.example` com seu PostgreSQL; nas atualizações, preserve o arquivo existente.
+3. Na pasta `vaggu-backend`, instale dependências, gere o cliente e aplique as migrations autorizadas no banco local:
 
 ~~~sh
 npm ci
 npm run db:setup
 npm run build
-npm test
-npm run admin:create
 npm run dev
 ~~~
 
-O cabeçalho deve mostrar vaggu-backend@0.5.0. Node 24.14.0 é compatível. No PowerShell com bloqueio de npm.ps1, use npm.cmd, sem alterar a política de segurança.
+Use Node.js `>=22.12.0 <25`. No PowerShell com bloqueio de `npm.ps1`, use `npm.cmd`. Crie o primeiro Admin somente se ele ainda não existir, conforme abaixo. As instruções completas estão no [guia de configuração](../segunda-mente/Vaggu/Documenta%C3%A7%C3%A3o/configuracao.md); os testes de integração exigem a conexão exclusiva de teste descrita neste README.
 
 db:setup gera o cliente e aplica migrations pendentes no PostgreSQL configurado em `DATABASE_URL`. Não use reset em banco real.
 
@@ -69,7 +65,7 @@ No Postman ou outro cliente de API, crie uma requisição POST para /auth/login,
 
 Esses valores são placeholders, não credenciais válidas. A resposta contém token, tipo (Bearer), expiraEm (data ISO) e usuario (id, nome, email, perfil e shoppingId).
 
-Copie o token apenas para o campo Bearer Token da requisição GET /auth/me. Depois faça POST /auth/logout com o mesmo token; repetir /auth/me deve retornar 401. Não coloque token na URL nem compartilhe coleções contendo credenciais reais. Acessar /auth/me pela barra do navegador retorna 401 porque não envia o header.
+Em clientes de API, copie o token apenas para o campo Bearer Token da requisição GET /auth/me. Depois faça POST /auth/logout com o mesmo token; repetir /auth/me deve retornar 401. Não coloque token na URL nem compartilhe coleções contendo credenciais reais. O navegador autenticado usa o cookie HttpOnly; abrir /auth/me sem cookie ou Bearer válido retorna 401.
 
 Respostas: 400 para entrada inválida, 401 para credenciais/sessão inválidas, 429 para excesso de tentativas e 500 genérico para falha interna. Os middlewares de perfil usam 403 para conta autenticada sem permissão.
 
@@ -136,7 +132,7 @@ Essas rotas persistem a prévia na tabela PostgreSQL `importacoes_estrutura`, se
 
 A confirmação por `POST /shoppings/:shoppingId/importacoes/:importacaoId/confirmar` exige `podeConfirmar=true`, reavalia a estrutura dentro de uma transação e registra `confirmadoEm` com um resumo da aplicação. Um advisory lock transacional serializa confirmações do mesmo shopping, inclusive requisições simultâneas. A operação cria andares e setores ausentes, cria vagas novas e atualiza o andar, setor e tipo de vagas existentes pelo código do shopping, preservando o ID e o histórico. Vagas que não aparecem na planilha não são removidas nem desativadas. Repetir a confirmação da mesma prévia devolve o resultado já gravado com `idempotente=true`.
 
-As migrations incrementais `20260914000100_previas_importacao` e `20260915000100_confirmacao_importacao` devem ser aplicadas pelo fluxo `db:deploy` ao banco configurado pela equipe. Identificação de vagas e persistência usam transações consistentes. O XLSX usa a primeira planilha, até 10.000 registros e 50 colunas, por meio de `read-excel-file`.
+As migrations incrementais `20260914000100_previas_importacao` e `20260915000100_confirmacao_importacao` devem ser aplicadas pelo fluxo `db:deploy` ao banco configurado no ambiente. Identificação de vagas e persistência usam transações consistentes. O XLSX usa a primeira planilha, até 10.000 registros e 50 colunas, por meio de `read-excel-file`.
 
 ## Segurança e frontend
 
@@ -158,7 +154,24 @@ As migrations incrementais `20260914000100_previas_importacao` e `20260915000100
 
 requireAuth valida a sessão. requirePasswordReady bloqueia senha provisória fora das rotas necessárias à troca. requirePerfil('VAGGU') protege cadastro/listagem de shoppings, gerentes e estrutura. shoppingScope fornece res.locals.shoppingId a partir do usuário autenticado; a consulta do mapa do gerente usa esse filtro Prisma, nunca IDs enviados pelo cliente.
 
-Os testes montam rotas exclusivas para complementar a demonstração de isolamento entre dois shoppings. Cadastro/listagem de shoppings e gerentes e configuração da estrutura estão expostos para Admin; a consulta do mapa está exposta para o gerente. A ingestão de telemetria existe localmente. As rotas analíticas aceitam `inicio` e `fim` juntos no formato `YYYY-MM-DD`, em dias UTC inclusivos, com intervalo máximo de 31 dias; sem parâmetros, consultam os últimos sete dias UTC. A interface compara o recorte com o período anterior e gera Excel/PDF no navegador. Telões, manutenção, filtro analítico por categoria e a conexão real do Power BI permanecem pendentes.
+Os testes complementam a demonstração de isolamento entre dois shoppings. Cadastro/listagem de shoppings e gerentes, configuração da estrutura, equipamentos, manutenção e instalações de telão estão expostos para Admin; o gerente consulta estrutura e análise do próprio shopping. As rotas analíticas aceitam `inicio` e `fim` juntos no formato `YYYY-MM-DD`, em dias UTC inclusivos, com intervalo máximo de 31 dias; sem parâmetros, consultam os últimos sete dias UTC. `setorId` e `tipo` restringem o histórico e a capacidade de referência. A interface compara períodos e gera Excel/PDF no navegador. A lista de ocorrências retorna todas as abertas e as 100 encerradas mais recentes. Telões web recebem apenas agregados e usam credencial própria em cabeçalho. Hardware físico e homologação publicada seguem pendentes; Power BI publicado é opcional e a conexão real do WhatsApp está adiada.
+
+## Equipamentos e telões web — contratos atuais
+
+As rotas abaixo usam o prefixo `/api/v1`. Operações por shopping exigem Admin VAGGU, exceto a consulta de ocorrências do gerente e a disponibilidade do telão, que possui credencial própria. Na interface, os controles administrativos ficam em **Configurar vagas**, dentro de `/admin/shoppings/:shoppingId/estrutura`.
+
+| Método | Rota | Finalidade |
+| --- | --- | --- |
+| GET / POST | `/shoppings/:shoppingId/equipamentos` | Listar equipamentos/ocorrências ou cadastrar placa. |
+| PATCH | `/shoppings/:shoppingId/equipamentos/:id` | Editar ou ativar/desativar placa. |
+| POST | `/shoppings/:shoppingId/equipamentos/:id/chave` | Rotacionar chave; original exibido somente na emissão. |
+| POST | `/shoppings/:shoppingId/equipamentos/:id/sensores` | Vincular sensor à vaga. |
+| POST | `/shoppings/:shoppingId/equipamentos/:id/manutencao` | Abrir manutenção. |
+| POST | `/shoppings/:shoppingId/ocorrencias/:id/encerrar` | Encerrar manutenção e exigir novas leituras para confirmar disponibilidade. |
+| GET | `/estacionamento/ocorrencias` | Consultar ocorrências do shopping da sessão do gerente. |
+| GET / POST | `/shoppings/:shoppingId/teloes` | Listar ou criar instalação de telão. |
+| DELETE | `/shoppings/:shoppingId/teloes/:id` | Revogar a instalação. |
+| GET | `/teloes/:id/disponibilidade` | Retornar apenas agregados, com `Authorization: Telao <chave>`. |
 
 ## Banco e configuração
 

@@ -1,83 +1,66 @@
 # Sprints do projeto VAGGU
 
-Este documento registra a sequência das sprints da equipe em linguagem simples. Ele não substitui os pacotes técnicos `P01` a `P11`: as sprints organizam o trabalho do grupo e os pacotes registram dependências e critérios técnicos do sistema.
+Atualizado em 21/10/2026 com as quatro fotografias do planejamento, a nossa memória das Sprints 1 e 2 e as datas previstas para as Sprints 7 e 8.
 
-## Calendário calculado a partir da data confirmada da Sprint 3
+## Regra de registro das sprints
 
-A foto fornecida pela equipe confirma a Sprint 3 entre 09/09/2026 e 16/09/2026. Aplicando ciclos semanais consecutivos de sete dias, com transição às quartas-feiras, os períodos calculados são:
+- Usar as datas reais escritas nos nossos registros. A duração varia; não presumir ciclos semanais, continuidade sem intervalos ou transição em um dia fixo.
+- Não retrocalcular datas ausentes nem projetar novas sprints a partir da Sprint 3. Registrar explicitamente o que ainda não é conhecido.
+- Distinguir fotografia do planejamento, registro interno e evidência de execução. Tarefa atribuída, data encerrada ou marca de visto no papel não comprova, isoladamente, entrega técnica validada.
+- Preservar o histórico das correções com a origem e a data da informação. O calendário abaixo substitui o cálculo semanal anterior.
+- Manter os pacotes técnicos `P01` a `P11` separados da numeração das sprints. Os pacotes registram dependências e critérios de aceite; as sprints registram a nossa organização.
 
-| Sprint | Início (quarta-feira) | Encerramento e transição (quarta-feira) |
+## Calendário documentado
+
+| Sprint | Período | Fonte e precisão |
 | --- | --- | --- |
-| 1 | 26/08/2026 | 02/09/2026 |
-| 2 | 02/09/2026 | 09/09/2026 |
-| 3 | 09/09/2026 | 16/09/2026 |
-| 4 | 16/09/2026 | 23/09/2026 |
-| 5 | 23/09/2026 | 30/09/2026 |
-| 6 | 30/09/2026 | 07/10/2026 |
-| 7 | 07/10/2026 | 14/10/2026 |
-| 8 | 14/10/2026 | 21/10/2026 |
-| 9 | 21/10/2026 | 28/10/2026 |
+| 1 | Começo de agosto de 2026; dias exatos não informados | Memória do projeto registrada em 19/10; sem fotografia. |
+| 2 | Depois do brainstorming e até a Sprint 3; datas exatas não informadas | Memória do projeto registrada em 19/10; sem fotografia. |
+| 3 | 09/09/2026 a 16/09/2026 | Fotografia: data no topo e intervalo no corpo. |
+| 4 | 23/09/2026 a 30/09/2026 | Fotografia: 23/09–30/09 no topo. |
+| 5 | 05/10/2026 a 19/10/2026 | Fotografia: 05/10–19/10 no topo. |
+| 6 | 19/10/2026 a 28/10/2026 | Fotografia: 19/10 → 28/10 no topo. |
+| 7 | 04/11/2026 a 11/11/2026 | Calendário previsto registrado em 21/10; sem fotografia ou divisão de tarefas registrada. |
+| 8 — última | 16/11/2026 a 26/11/2026 | Calendário previsto registrado em 21/10; última sprint do projeto. |
 
-A equipe também informou em 16/10 que está na Sprint 5, encerrando-a em 21/10/2026 e iniciando a Sprint 6. Esse relato não coincide com a sequência calculada a partir da foto: no calendário semanal, 21/10 encerra a Sprint 8 e inicia a Sprint 9. Portanto, a data da Sprint 3 está confirmada, mas a continuidade semanal sem pausas ou alterações de duração não explica o número atual informado pela equipe. Em 17/10, o usuário informou que ainda precisa confirmar com a equipe se houve pausas, sprints com outras durações ou mudança de numeração. Manter os períodos acima somente como cálculo condicionado a ciclos consecutivos de sete dias até essa confirmação. As datas calculadas não comprovam realização ou conclusão das atividades.
+O ano de 2026 está explícito na folha da Sprint 3 e é o contexto informado para o conjunto. As folhas das Sprints 4–6 exibem dia e mês. Os intervalos entre registros não recebem sprints ou tarefas inventadas. A data 19/10 aparece no encerramento da Sprint 5 e no início da Sprint 6 conforme as próprias folhas.
 
-## Fontes e limites
+## Sprint 1 — brainstorming
 
-- As Sprints 1 e 2 foram confirmadas pela equipe em 23/09/2026. Seus períodos foram retrocalculados a partir da Sprint 3 confirmada pela foto, assumindo ciclos semanais consecutivos; tarefas individuais e conciliação com o status atual da equipe continuam pendentes.
-- As Sprints 3 e 4 foram transcritas das fotografias fornecidas pela equipe em 23/09/2026. A Sprint 3 informa o período de 09/09/2026 a 16/09/2026; a Sprint 4 não apresenta período legível.
-- As fotografias registram o planejamento feito naquele momento. Elas não comprovam sozinhas que todas as tarefas foram concluídas.
+**Período:** começo de agosto de 2026, sem dias exatos.
 
-## Sprint 1 — descoberta do problema
+**Atividade relatada:** brainstorming no início do projeto, para encontrar a ideia do TCC.
 
-**Estado:** realizada, conforme relato da equipe.
+**Fonte:** memória do projeto, registrada em 19/10/2026. Não há fotografia das Sprints 1 e 2. A divisão individual não foi informada; não atribuir tarefas por suposição.
 
-**Objetivo:** fazer brainstorming, revisar problemas que poderiam ser resolvidos e desenvolver uma ideia inicial para o TCC.
+## Sprint 2 — criação da ideia no Figma
 
-**Trabalho realizado:** discussão coletiva dos problemas, possibilidades de solução e direção inicial do projeto.
+**Período:** após a Sprint 1 e até a Sprint 3; início e encerramento exatos não informados.
 
-**Responsáveis:** participação coletiva; divisão individual `PENDENTE DE DEFINIÇÃO`.
+**Atividade relatada:** criação da ideia no Figma até a Sprint 3.
 
-**Resultado:** base de ideias usada para iniciar a definição da VAGGU.
-
-**Período calculado:** 26/08/2026 a 02/09/2026. Evidências adicionais e confirmação da continuidade semanal ainda precisam ser fornecidas.
-
-## Sprint 2 — definição inicial da VAGGU e planejamento do Figma
-
-**Estado:** realizada, conforme relato da equipe.
-
-**Objetivo:** começar a transformar a ideia em VAGGU, avaliar o que funcionava ou não nas propostas e planejar o protótipo no Figma.
-
-**Trabalho realizado:** refinamento do escopo, descarte de ideias incompatíveis e preparação da direção visual e dos primeiros fluxos.
-
-**Responsáveis:** participação coletiva; divisão individual `PENDENTE DE DEFINIÇÃO`.
-
-**Resultado:** conceito da VAGGU mais definido e base para as primeiras telas.
-
-**Período calculado:** 02/09/2026 a 09/09/2026. Evidências adicionais e confirmação da continuidade semanal ainda precisam ser fornecidas.
+**Fonte:** memória do projeto, registrada em 19/10/2026. Não há fotografia nem divisão individual confirmada. O relato não equivale a uma inspeção dos arquivos do Figma.
 
 ## Sprint 3 — primeiros componentes e base técnica
 
-**Período confirmado pela equipe na fotografia:** 09/09/2026 a 16/09/2026. Os períodos de outras sprints são calculados a partir desta data sob a hipótese de ciclos semanais consecutivos.
-
-**Objetivo:** concluir a landing page e a tela de login por convite, iniciar testes com Arduino, criar APIs e estruturar melhor o backend.
+**Período:** 09/09/2026 a 16/09/2026.
 
 | Integrante | Atividade registrada |
 | --- | --- |
-| Samuel | Ver possibilidades de API e tabelas do banco e iniciar a criação das APIs. |
-| Pietro | Configurar e testar Arduino e trabalhar na landing page. |
+| Samuel | Ver possibilidades de API e tabelas do banco; criar APIs. |
+| Pietro | Configurar e testar Arduino; trabalhar na landing page. |
 | Ana | Programar a tela de login por convite. |
 | Elisa | Programar a tela de login por convite. |
 | Juan | Programar a landing page. |
 | Kamilly | Configurar e testar Arduino. |
 
-**Evidência:** [[Vaggu/Evidências visuais/Planejamento/sprint-03-planejamento-09-09-2026.jpeg]].
+**Resumo da folha:** terminar a landing page e a tela de login por convite, dar os primeiros passos e testes com Arduino, criar APIs e estruturar melhor o backend. A anotação lateral associa o convite a um código. A grafia “leading page” foi normalizada para “landing page” na transcrição.
 
-**Limite:** o registro indica o planejamento da sprint. A conclusão de cada atividade deve ser conferida pelo código, testes e histórico do repositório.
+**Evidência recebida em 19/10:** [[Vaggu/Evidências visuais/Planejamento/sprint-03-09-a-16-09-2026.jpeg]].
 
-## Sprint 4 — organização, protótipo físico e apresentação
+## Sprint 4 — organização, protótipo e apresentação
 
-**Período calculado:** 16/09/2026 a 23/09/2026. A fotografia histórica não apresentava período legível; confirmar se a duração semanal consecutiva se aplica.
-
-**Objetivo:** organizar documentação e cronogramas, avançar no protótipo do Arduino, preparar banco e Power BI e montar uma nova apresentação do projeto.
+**Período:** 23/09/2026 a 30/09/2026.
 
 | Integrante | Atividade registrada |
 | --- | --- |
@@ -86,55 +69,59 @@ A equipe também informou em 16/10 que está na Sprint 5, encerrando-a em 21/10/
 | Pietro | Primeira prototipação de Arduino. |
 | Kamilly | Primeira prototipação de Arduino. |
 | Juan | Pesquisas e novos conhecimentos sobre Power BI. |
-| Samuel | Subir o banco de dados. |
-| Equipe | Organizar um novo pitch para o professor Giovanni, mostrando avanços e o sistema disponível naquele momento. |
+| Samuel | Subir o banco de dados, API e frontend. |
+| Equipe | Organizar um novo pitch para o professor Giovanni, mostrando todos os avanços e o sistema atual. |
 
-**Evidência:** [[Vaggu/Evidências visuais/Planejamento/sprint-04-divisao-equipe.jpeg]].
+**Evidência recebida em 19/10:** [[Vaggu/Evidências visuais/Planejamento/sprint-04-23-a-30-09-2026.jpeg]]. Há marcas de visto junto a Pietro, Kamilly e Samuel; elas são parte do nosso registro, sem substituir testes de funcionamento.
 
-**Limite:** o registro indica tarefas planejadas. A existência de banco, protótipo ou relatório funcional precisa de evidência técnica separada.
+## Sprint 5 — integrações e documentação
 
-## Relação com os pacotes técnicos
+**Período:** 05/10/2026 a 19/10/2026.
 
-As sprints acima começaram antes da organização atual do repositório em pacotes `P01` a `P11`. Não existe correspondência numérica direta: a Sprint 1 não é o pacote P01, e a Sprint 4 não é o pacote P04.
+| Integrante | Atividade registrada |
+| --- | --- |
+| Samuel | Integração do Power BI. |
+| Elisa | Configuração do bot do WhatsApp. |
+| Kamilly | Primeira estrutura do hardware. |
+| Juan | Configuração do bot do WhatsApp. |
+| Ana | Documentação e organização de cronogramas. |
+| Pietro | Integração do Power BI e estilização. |
 
-- As sprints contam a evolução do trabalho da equipe.
-- Os pacotes técnicos registram dependências, implementação verificada e critérios de aceite.
-- O estado atual dos pacotes permanece em [[Vaggu/Documentação/planejamento-do-projeto]].
+**Evidência recebida em 19/10:** [[Vaggu/Evidências visuais/Planejamento/sprint-05-05-a-19-10-2026.jpeg]]. O encerramento previsto no papel não comprova que as integrações estejam homologadas.
 
-## Registro da Sprint 5 proposta em 23/09
+## Sprint 6 — integração e finalização do gerenciamento
 
-**Relato da equipe em 16/10:** Sprint 5 em andamento, com término em 21/10/2026.
+**Período:** 19/10/2026 a 28/10/2026.
 
-**Cálculo pela sequência da Sprint 3:** Sprint 5 seria de 23/09/2026 a 30/09/2026. O número/período relatado pela equipe conflita com a numeração da sequência semanal calculada; confirmar pausas, duração diferente ou renumeração.
+| Integrante | Atividade registrada |
+| --- | --- |
+| Elisa | Continuar a configuração do bot do WhatsApp e sua integração. |
+| Kamilly | Conectar a primeira prototipação de hardware ao backend e fazer testes iniciais da integração. |
+| Ana | Revisão e andamento da documentação. |
+| Samuel | Criar a página de apresentação para o dia do TCC. |
+| Pietro | Finalizar funções do gerenciamento do site. |
+| Juan | Continuar a configuração do bot do WhatsApp e sua integração. |
 
-A proposta abaixo foi registrada em 23/09 e não comprova a divisão efetiva da sprint atual. Objetivo, responsáveis e entregas atuais ainda precisam ser confirmados.
+**Evidência recebida em 19/10:** [[Vaggu/Evidências visuais/Planejamento/sprint-06-19-a-28-10-2026.jpeg]]. A atividade de hardware permanece no nosso registro histórico, embora a solicitação atual de conclusão do software exclua conexões físicas.
 
-**Objetivo naquela data:** alinhar documentação e implementação antes de iniciar a base de sensores do P06.
+## Sprint 7 — calendário previsto
 
-| Frente | Responsável principal | Revisores | Resultado esperado |
-| --- | --- | --- | --- |
-| PRD, sprints e organização | Ana | Samuel e Pietro | Produto, histórico e ordem de trabalho compreensíveis. |
-| TRD, banco e API | Samuel | Kamilly e Pietro | Tecnologias, entidades e endpoints atuais separados do que ainda é planejado. |
-| Fluxos e experiência | Elisa | Ana e Pietro | Telas reais e ausentes documentadas por perfil e ação. |
-| Identidade e evidências | Juan | Elisa e Ana | Paleta, tipografia e capturas com origem e limites registrados. |
-| Preparação dos sensores | Kamilly | Samuel e Pietro | Contrato de firmware pronto para o P06. |
+**Período:** 04/11/2026 a 11/11/2026.
 
-**Dependências:** concluir as correções documentais prioritárias, confirmar as lacunas atuais da interface e validar com a equipe os campos ainda marcados como pendentes.
+Registramos essas datas em 21/10/2026. Objetivo, tarefas e divisão individual ainda não foram definidos neste documento; não atribuir entregas automaticamente a esse período.
 
-**Situação em 30/09 — registro histórico:** a consolidação documental e as correções de interface foram concluídas. A base do P06 já recebe, confirma e expira leituras em testes com PostgreSQL. Naquele resumo, hardware real, manutenção e validade no mapa permaneciam pendentes. A atualização de 15/10 entregou validade na consulta, editor visual, monitoramento individual e Excel/PDF; o [estado atual](../Documenta%C3%A7%C3%A3o/auditoria-documental-2026-10-15.md) separa as entregas das pendências operacionais.
+## Sprint 8 — última sprint do projeto
 
-Detalhamento da execução: [[Vaggu/Planejamento/Plano de correção e implementação]].
+**Período:** 16/11/2026 a 26/11/2026.
 
-## Sprint 6 — período calculado
+Registramos em 21/10/2026 que esta será a última sprint. Objetivo, tarefas e responsáveis ainda precisam de registro. O encerramento previsto não comprova conclusão técnica nem homologação. Os intervalos entre as Sprints 6–7 e 7–8 permanecem sem sprints adicionais.
 
-**Período calculado a partir da Sprint 3:** 30/09/2026 a 07/10/2026. Segundo o relato da equipe em 16/10, a Sprint 6 começaria em 21/10; essa transição corresponde à Sprint 9 na sequência semanal calculada.
+## Execução e pacotes técnicos
 
-**Objetivo, tarefas e responsáveis:** a definir pela equipe. A sequência técnica abaixo é referência de backlog, sem alocação automática para a Sprint 6.
+A execução verificável e as pendências estão em [[Vaggu/Planejamento/Conclusão do software]], [[Vaggu/Planejamento/Plano de correção e implementação]] e [[Vaggu/Documentação/planejamento-do-projeto]]. Não mover entregas antigas para uma sprint apenas por proximidade de datas. Não transformar atribuições históricas em autoria de commits ou em mudança automática da identidade Git.
 
-## Sequência posterior — atualizada em 15/10
+## Correção do calendário — 19/10/2026
 
-1. Corrigir as divergências funcionais atuais da interface que foram identificadas na auditoria.
-2. Concluir P06 com hardware, cadastro/vínculo de equipamentos, manutenção/ocorrências e atualização automática da tela; a validade na consulta já existe.
-3. Executar P07 e concluir P08: telões, filtros/métricas complementares, cobertura zero e classificação histórica. Histórico, período/comparação e Excel/PDF já estão implementados.
-4. Executar P09: primeiro relatório funcional Power BI.
-5. Concluir P10 e P11 conforme dependências externas e roteiro da apresentação.
+O calendário anterior assumia ciclos consecutivos de sete dias, retrocalculava as Sprints 1–2 e projetava as Sprints 4–9. Essa hipótese foi retirada. As novas fotografias confirmam durações diferentes e corrigem a referência anterior de transição em 21/10: a Sprint 5 termina em 19/10 e a Sprint 6 começa em 19/10.
+
+A antiga proposta de distribuição documental registrada em 23/09 era uma proposta técnica, não a divisão efetiva da Sprint 5 fotografada. Os registros datados de 16 e 17/10 são preservados nos documentos de histórico, acompanhados desta correção; não servem mais como calendário vigente. As cópias antigas das fotos das Sprints 3 e 4 também foram preservadas para rastreabilidade.

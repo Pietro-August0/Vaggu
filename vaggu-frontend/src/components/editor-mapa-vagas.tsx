@@ -1,5 +1,7 @@
 /** Edição direta das vagas; mantém o rascunho até salvar a revisão do piso. */
 import { useEffect, useId, useMemo, useRef, useState, type PointerEvent, type KeyboardEvent } from "react"
+import { useBlocker } from "react-router-dom"
+import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogDescription, DialogFooter } from "@/components/ui/dialog"
 import { Button } from "@/components/ui/button"
 import type { AndarEstrutura, PosicaoVaga } from "@/types/estrutura"
 
@@ -31,6 +33,7 @@ export function EditorMapaVagas({ andar, ocupado, aoSalvar, aoMudarRascunho }: {
   const [buscaVaga, setBuscaVaga] = useState("")
   const [setorFiltro, setSetorFiltro] = useState("TODOS")
   const [alterado, setAlterado] = useState(false)
+  const bloqueio = useBlocker(alterado)
   const [aviso, setAviso] = useState("")
   const mapa = useRef<HTMLDivElement>(null)
   const [aspecto, setAspecto] = useState(720 / 640)
@@ -97,6 +100,7 @@ export function EditorMapaVagas({ andar, ocupado, aoSalvar, aoMudarRascunho }: {
     return a.x < b.x + b.largura - 0.00001 && a.x + a.largura > b.x + 0.00001 && a.y < b.y + b.altura - 0.00001 && a.y + a.altura > b.y + 0.00001
   }))
   return <section className="mt-5 grid min-w-0 gap-4" aria-label="Editor visual das vagas">
+    <Dialog open={bloqueio.state === "blocked"} onOpenChange={aberto => { if (!aberto && bloqueio.state === "blocked") bloqueio.reset() }}><DialogContent><DialogHeader><DialogTitle>Há posições ainda não salvas</DialogTitle><DialogDescription>Se sair agora, suas alterações no mapa serão descartadas.</DialogDescription></DialogHeader><DialogFooter><Button variant="outline" onClick={() => bloqueio.state === "blocked" && bloqueio.reset()}>Continuar editando</Button><Button onClick={() => { if (bloqueio.state === "blocked") { aoMudarRascunho(false); bloqueio.proceed() } }}>Descartar e sair</Button></DialogFooter></DialogContent></Dialog>
     <div><h3 className="text-lg font-bold">Organize as vagas no mapa</h3><p id="instrucoes-editor" className="mt-1 text-sm text-muted-foreground">Arraste uma vaga ou selecione-a e toque no lugar desejado. Use as setas do teclado para ajustes; Shift move mais rápido. No celular, deslize a área ao redor das vagas para navegar.</p></div>
     <div className="flex flex-wrap items-end gap-3 rounded-xl border p-3">
       <div className="grid min-w-0 flex-1 gap-2 sm:grid-cols-2 lg:grid-cols-3">

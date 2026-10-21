@@ -98,7 +98,7 @@ test('telemetria confirma após 30 s, deduplica e não usa heartbeat para renova
   assert.equal(analise.temHistorico, true);
   assert.equal(analise.resumo.ocupacaoPercentual, 100);
   assert.equal(analise.resumo.coberturaPercentual, 0.02);
-  assert.equal(analise.porSetor[0]?.setor, 'Setor P06');
+  assert.equal(analise.porSetor[0]?.setor, 'Piso P06 / Setor P06');
 
   const bancadaRapida = createTelemetriaService(prisma, {
     ...configuracao, janelaConfirmacaoMs: 5000, lacunaMaximaMs: 4500,

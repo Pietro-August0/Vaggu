@@ -18,7 +18,7 @@ Entrega de 15/10/2026. As alterações usam as rotas e os modelos PostgreSQL exi
 
 O editor limita as posições à área disponível e bloqueia o salvamento enquanto houver sobreposição entre as caixas das vagas. No celular, o mapa mantém uma área mínima de 720 px para que as vagas continuem legíveis; a navegação horizontal ocorre dentro do editor, sem alargar a página. Arrastar uma vaga usa captura de ponteiro, enquanto o entorno permite navegar pelo mapa.
 
-Trocar de piso ou sair da aba de edição solicita confirmação quando existe rascunho. Fechar ou recarregar a aba do navegador aciona a proteção nativa de alterações não salvas. A navegação interna por outros links do site ainda não possui bloqueio global de rascunho.
+Trocar de piso ou sair da aba de edição solicita confirmação quando existe rascunho. Fechar ou recarregar a aba do navegador aciona a proteção nativa de alterações não salvas. A navegação interna também usa proteção global de rascunho; sair exige confirmar o descarte. Essa proteção foi acrescentada após o registro inicial de 15/10.
 
 ## Persistência e concorrência
 
@@ -37,7 +37,7 @@ Os cartões exibem vaga, setor, código do sensor, placa ESP32 e última observa
 | Operando | Sensor ativo com observação válida e estado confirmado, sem candidato pendente. |
 | Confirmando mudança | Existe candidato pendente e o estado anterior continua sendo apresentado até confirmação. |
 | Sem resposta | Sensor expirado ou observação individual vencida no ambiente operacional. |
-| Em manutenção | Sensor marcado como inativo. É uma consulta do estado, sem nova operação de manutenção nesta entrega. |
+| Em manutenção | Sensor inativo ou marcado em manutenção. O módulo de equipamentos permite abrir e concluir manutenção; essa operação foi acrescentada após o registro inicial de 15/10. |
 | Sem leitura confirmada | Ainda não há observação/estado confirmado suficiente. |
 | Sem sensor vinculado | A vaga não possui sensor cadastrado. |
 
@@ -53,7 +53,7 @@ Os horários e situações constituem uma fotografia de apresentação, preserva
 
 ## Apresentação dos textos
 
-A pedido do usuário, o Shopping Exemplo deixou de mostrar os selos e avisos de dados fictícios na interface, na análise compacta e nas exportações Excel/PDF. Títulos, códigos e nomes exibidos receberam redação neutra. O código interno, a marcação do shopping e esta documentação preservam a origem sintética para manter o isolamento e os testes. Não foi acrescentada alegação de transmissão ao vivo.
+Por decisão de produto, o Shopping Exemplo deixou de mostrar os selos e avisos de dados fictícios na interface, na análise compacta e nas exportações Excel/PDF. Títulos, códigos e nomes exibidos receberam redação neutra. O código interno, a marcação do shopping e esta documentação preservam a origem sintética para manter o isolamento e os testes. Não foi acrescentada alegação de transmissão ao vivo.
 
 Os avisos de ausência de medições e os estados de erro continuam existindo. A distinção de fontes das séries genéricas usadas quando outros shoppings não têm histórico não foi convertida em medição confirmada.
 

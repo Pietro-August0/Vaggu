@@ -1,3 +1,4 @@
+import { formatarMetrica } from "@/servicos/analise"
 /** Produz o PDF da análise com o período, a comparação e a origem de cada série. */
 import type { RelatorioAnalise } from "@/servicos/modelo-relatorio-analise"
 import { carregarLogoRelatorio } from "@/servicos/modelo-relatorio-analise"
@@ -80,6 +81,8 @@ export async function gerarPdfAnalise(relatorio: RelatorioAnalise): Promise<Blob
     pdf.text(`Filtro: ${relatorio.filtro.inicio} a ${relatorio.filtro.fim} (dias UTC inclusivos)`, 15, y)
     y += 7
   }
+  const recorte = pdf.splitTextToSize(`Recorte: ${relatorio.recorte}`, 175)
+  pdf.text(recorte, 15, y); y += recorte.length * 5 + 4
   const selo = relatorio.cenarioFicticio ? "HISTÓRICO DE OCUPAÇÃO + SITUAÇÃO ATUAL" : relatorio.historico ? "HISTÓRICO CONFIRMADO + SITUAÇÃO ATUAL" : "SITUAÇÃO ATUAL · SEM HISTÓRICO CONFIRMADO"
   pdf.setFillColor(AMARELO)
   pdf.roundedRect(15, y, 180, 10, 2, 2, "F")
@@ -146,18 +149,23 @@ export async function gerarPdfAnalise(relatorio: RelatorioAnalise): Promise<Blob
     pdf.setTextColor(CINZA)
     pdf.setFontSize(8)
     pdf.text(`Período UTC: ${relatorio.historico.periodo.inicioEm} a ${relatorio.historico.periodo.fimEm}`, 15, y)
+    y += 5
+    pdf.text("Cobertura estimada pela capacidade atual; alterações de cadastro limitam a comparação histórica.", 15, y)
     y += 8
     linhaTabela(["Ocupação", "Cobertura", "Entradas observadas"], [60, 60, 60], true)
     linhaTabela([
-      `${relatorio.historico.resumo.ocupacaoPercentual.toFixed(1)}%`,
-      `${relatorio.historico.resumo.coberturaPercentual.toFixed(1)}%`,
+      formatarMetrica(relatorio.historico.resumo.ocupacaoPercentual, "%"),
+      relatorio.historico.resumo.coberturaPercentual === null ? "Indisponível" : formatarMetrica(relatorio.historico.resumo.coberturaPercentual, "%"),
       String(relatorio.historico.resumo.entradasObservadas),
     ], [60, 60, 60])
+    y += 7
+    linhaTabela(["Saídas", "Ciclos completos", "Permanência média", "Rotatividade"], [45, 45, 45, 45], true)
+    linhaTabela([String(relatorio.historico.resumo.saidasObservadas), String(relatorio.historico.resumo.ciclosCompletos), formatarMetrica(relatorio.historico.resumo.permanenciaMediaMinutos, " min"), formatarMetrica(relatorio.historico.resumo.rotatividadeObservada)], [45, 45, 45, 45])
     y += 7
     linhaTabela(["Dia UTC", "Ocupação", "Cobertura", "Entradas"], [55, 42, 42, 41], true)
     for (const dia of relatorio.historico.porDia) linhaTabela([
       new Date(dia.inicioEm).toLocaleDateString("pt-BR", { timeZone: "UTC" }),
-      `${dia.ocupacaoPercentual.toFixed(1)}%`, `${dia.coberturaPercentual.toFixed(1)}%`, String(dia.entradasObservadas),
+      formatarMetrica(dia.ocupacaoPercentual, "%"), dia.coberturaPercentual === null ? "Indisponível" : formatarMetrica(dia.coberturaPercentual, "%"), String(dia.entradasObservadas),
     ], [55, 42, 42, 41])
   } else {
     titulo("Leitura do período")
@@ -178,7 +186,7 @@ export async function gerarPdfAnalise(relatorio: RelatorioAnalise): Promise<Blob
     linhaTabela(["Dia", "Ocupação", "Entradas", "Saídas"], [55, 42, 42, 41], true)
     for (const dia of relatorio.serieDiaria) linhaTabela([
       dia.origem !== "demonstração" ? new Date(dia.rotulo).toLocaleDateString("pt-BR", { timeZone: "UTC" }) : dia.rotulo,
-      `${dia.ocupacao.toFixed(1)}%`, String(dia.entradas), "saidas" in dia ? String(dia.saidas) : "Não apurado",
+      formatarMetrica(dia.ocupacao, "%"), String(dia.entradas), "saidas" in dia ? String(dia.saidas) : "Não apurado",
     ], [55, 42, 42, 41])
   }
 
@@ -192,7 +200,7 @@ export async function gerarPdfAnalise(relatorio: RelatorioAnalise): Promise<Blob
     const atual = relatorio.historico?.resumo
     const anterior = relatorio.comparacao.resumo
     for (const [nome, chave, unidade] of [["Ocupação", "ocupacaoPercentual", "%"], ["Cobertura", "coberturaPercentual", "%"], ["Entradas", "entradasObservadas", ""]] as const) {
-      linhaTabela([nome, atual ? `${atual[chave]}${unidade}` : "Sem medição", `${anterior[chave]}${unidade}`, atual ? `${Number((atual[chave] - anterior[chave]).toFixed(2))}${unidade}` : "Não apurado"], [60, 40, 40, 40])
+      linhaTabela([nome, formatarMetrica(atual?.[chave], unidade), formatarMetrica(anterior[chave], unidade), atual?.[chave] != null && anterior[chave] != null ? formatarMetrica(atual[chave]! - anterior[chave]!, unidade) : "Não apurado"], [60, 40, 40, 40])
     }
   }
 
@@ -218,7 +226,7 @@ export async function gerarPdfAnalise(relatorio: RelatorioAnalise): Promise<Blob
     titulo(relatorio.cenarioFicticio ? "Ocupação por setor · histórico de ocupação" : "Ocupação por setor · histórico confirmado")
     linhaTabela(["Setor", "Ocupação", "Cobertura", "Entradas"], [75, 35, 35, 35], true)
     for (const setor of relatorio.historico.porSetor) linhaTabela([
-      setor.setor, `${setor.ocupacaoPercentual.toFixed(1)}%`, `${setor.coberturaPercentual.toFixed(1)}%`, String(setor.entradasObservadas),
+      setor.setor, formatarMetrica(setor.ocupacaoPercentual, "%"), setor.coberturaPercentual === null ? "Indisponível" : formatarMetrica(setor.coberturaPercentual, "%"), String(setor.entradasObservadas),
     ], [75, 35, 35, 35])
   }
 

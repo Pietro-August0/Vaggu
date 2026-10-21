@@ -1,45 +1,28 @@
+import { TeloesAdmin } from "@/components/teloes-admin"
+import { EquipamentosAdmin } from "@/components/equipamentos-admin"
 /** Configurador do P04 para criar a hierarquia e salvar posições proporcionais no mapa. */
-import { useCallback, useEffect, useMemo, useState, type FormEvent } from "react"
+import { useMemo, useState, type FormEvent } from "react"
 import { useAppStore } from "@/app/app-store"
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
 import { EditorMapaVagas } from "@/components/editor-mapa-vagas"
-import { MapaAoVivo } from "@/components/mapa-ao-vivo"
-import { lerEstrutura } from "@/servicos/estrutura"
+import { VisualizacaoVagas } from "@/components/visualizacao-vagas"
+import { useEstruturaAtualizada } from "@/hooks/use-estrutura-atualizada"
 import { obterSituacaoImplantacao, situacoesImplantacao } from "@/servicos/situacao-implantacao"
-import type { EstruturaEstacionamento, PosicaoVaga, SituacaoImplantacao, TipoVaga } from "@/types/estrutura"
+import type { PosicaoVaga, SituacaoImplantacao, TipoVaga } from "@/types/estrutura"
 
 const situacoes: SituacaoImplantacao[] = ["NOVO_ATENDIMENTO", "EM_ANALISE", "DOCUMENTACAO_PENDENTE", "APROVADO", "EM_CONFIGURACAO", "AGUARDANDO_INSTALACAO", "ATIVO", "REJEITADO", "INATIVO"]
 
 /** Mantém formulários pequenos e atualiza a árvore sempre a partir da resposta do servidor. */
 export function EstruturaAdmin({ shoppingId, aoAlterar }: { shoppingId: string; aoAlterar?: () => void }) {
-  const { consultar } = useAppStore(); const [estrutura, setEstrutura] = useState<EstruturaEstacionamento | null>(null)
+  const { consultar } = useAppStore()
   const [erro, setErro] = useState(""); const [mensagem, setMensagem] = useState(""); const [ocupado, setOcupado] = useState(false)
   const [andarMapaId, setAndarMapaId] = useState(""); const [rascunho, setRascunho] = useState(false)
   const [aba, setAba] = useState<"configurar" | "mapa" | "posicoes">("configurar")
 
-  const carregar = useCallback(async () => {
-    const valor = lerEstrutura(await consultar(`/shoppings/${shoppingId}/estrutura`))
-    setEstrutura(valor)
-    // Preserva o andar selecionado se ele ainda existir após atualizar a estrutura.
-    setAndarMapaId(atual => valor.andares.some(andar => andar.id === atual) ? atual : valor.andares[0]?.id ?? "")
-  }, [consultar, shoppingId])
-  useEffect(() => {
-    let ativo = true
-    consultar(`/shoppings/${shoppingId}/estrutura`)
-      .then(lerEstrutura)
-      .then(valor => {
-        if (!ativo) return
-        setEstrutura(valor)
-        setAndarMapaId(valor.andares[0]?.id ?? "")
-      })
-      .catch(falha => {
-        if (ativo) setErro(falha instanceof Error ? falha.message : "Falha ao consultar a estrutura.")
-      })
-    return () => { ativo = false }
-  }, [consultar, shoppingId])
-  const andarMapa = estrutura?.andares.find(andar => andar.id === andarMapaId)
+  const { estrutura, atualizar: carregar, erro: erroConsulta, vencida, atualizando, consultadoEm } = useEstruturaAtualizada(`/shoppings/${shoppingId}/estrutura`, aba === "mapa" && !ocupado)
+  const andarMapa = estrutura?.andares.find(andar => andar.id === andarMapaId) ?? estrutura?.andares[0]
   const vagasMapa = useMemo(() => andarMapa?.setores.flatMap(setor => setor.vagas) ?? [], [andarMapa])
 
   async function executar(tarefa: () => Promise<void>, sucesso: string) {
@@ -64,7 +47,7 @@ export function EstruturaAdmin({ shoppingId, aoAlterar }: { shoppingId: string; 
   function salvarMapa(posicoes: Record<string, PosicaoVaga>) { if (!andarMapa) return; void executar(async () => { await consultar(`/andares/${andarMapa.id}/mapa`, { revisao: andarMapa.revisaoMapa, posicoes: vagasMapa.filter(vaga => posicoes[vaga.id]).map(vaga => ({ vagaId: vaga.id, ...posicoes[vaga.id] })) }, "PATCH"); await carregar(); setRascunho(false) }, "Mapa salvo.") }
   function mudarSituacao(valor: SituacaoImplantacao) { void executar(async () => { await consultar(`/shoppings/${shoppingId}/implantacao`, { situacao: valor }, "PATCH"); await carregar() }, "Situação atualizada.") }
 
-  if (!estrutura) return <div className="rounded-2xl bg-white p-6"><p role="status">Carregando estrutura...</p>{erro && <p role="alert" className="mt-2 text-red-700">{erro}</p>}</div>
+  if (!estrutura) return <div className="rounded-2xl bg-white p-6"><p role="status">Carregando estrutura...</p>{(erro || erroConsulta) && <p role="alert" className="mt-2 text-red-700">{erro || erroConsulta}</p>}</div>
   const setores = estrutura.andares.flatMap(andar => andar.setores.map(setor => ({ ...setor, andarNome: andar.nome })))
   const situacaoAtual = obterSituacaoImplantacao(estrutura.shopping.situacaoImplantacao)
   return <div className="grid min-w-0 grid-cols-[minmax(0,1fr)] gap-6">
@@ -77,8 +60,10 @@ export function EstruturaAdmin({ shoppingId, aoAlterar }: { shoppingId: string; 
       <form className="min-w-0 rounded-2xl bg-white p-5" onSubmit={criarSetor}><h3 className="font-semibold">Novo setor</h3><Label className="mt-4" htmlFor="setor-andar">Andar</Label><select id="setor-andar" name="andarId" className="w-full rounded-md border bg-white px-3 py-2" required>{estrutura.andares.map(a => <option key={a.id} value={a.id}>{a.nome}</option>)}</select><Label className="mt-3" htmlFor="setor-nome">Nome</Label><Input id="setor-nome" name="nome" required maxLength={120}/><Button className="mt-4" disabled={ocupado || !estrutura.andares.length}>Criar setor</Button></form>
       <form className="min-w-0 rounded-2xl bg-white p-5" onSubmit={criarVaga}><h3 className="font-semibold">Nova vaga</h3><Label className="mt-4" htmlFor="vaga-setor">Setor</Label><select id="vaga-setor" name="setorId" className="w-full rounded-md border bg-white px-3 py-2" required>{setores.map(s => <option key={s.id} value={s.id}>{s.andarNome} · {s.nome}</option>)}</select><div className="mt-3 flex gap-2"><div className="min-w-0"><Label htmlFor="vaga-codigo">Código</Label><Input id="vaga-codigo" name="codigo" required maxLength={40}/></div><div className="min-w-0"><Label htmlFor="vaga-tipo">Tipo</Label><select id="vaga-tipo" name="tipo" className="w-full rounded-md border bg-white px-3 py-2">{["COMUM","PCD","IDOSO","ELETRICA"].map(t => <option key={t}>{t}</option>)}</select></div></div><Button className="mt-4" disabled={ocupado || !setores.length}>Criar vaga</Button></form>
     </div>}
-    {aba === "mapa" && <div id="painel-estrutura-mapa"><h3 className="mb-4 text-xl font-semibold text-neutral-950 dark:text-white">Visualização 2D das vagas</h3><MapaAoVivo key={shoppingId} caminho={`/shoppings/${shoppingId}/estrutura`} modo="admin"/></div>}
-    {aba === "posicoes" && <div id="painel-estrutura-posicoes">{estrutura.andares.length > 0 ? <div className="rounded-2xl bg-white p-4 sm:p-6"><div className="flex flex-wrap items-end justify-between gap-4"><div className="grid w-full min-w-0 gap-2 sm:w-auto sm:grid-cols-[auto_minmax(10rem,1fr)] sm:items-center"><Label htmlFor="andar-mapa">Mapa do andar</Label><select id="andar-mapa" className="min-h-11 min-w-0 rounded-md border bg-white px-3 py-2" value={andarMapaId} disabled={ocupado} onChange={e => { if (!rascunho || window.confirm("Descartar as posições ainda não salvas?")) { setRascunho(false); setAndarMapaId(e.target.value) } }}>{estrutura.andares.map(a => <option key={a.id} value={a.id}>{a.nome}</option>)}</select></div></div>
+    {aba === "configurar" && <EquipamentosAdmin shoppingId={shoppingId} estrutura={estrutura} aoAlterar={carregar}/>}
+    {aba === "configurar" && <TeloesAdmin shoppingId={shoppingId} estrutura={estrutura}/>}
+    {aba === "mapa" && <div id="painel-estrutura-mapa"><div className="mb-4 flex flex-wrap items-center justify-between gap-3"><p role="status">{vencida ? "Leituras desatualizadas: disponibilidade temporariamente indisponível." : consultadoEm ? `Atualizado às ${new Date(consultadoEm).toLocaleTimeString("pt-BR")}` : "Aguardando atualização"}</p><Button variant="outline" disabled={atualizando} onClick={() => void carregar()}>{atualizando ? "Atualizando..." : "Atualizar agora"}</Button>{erroConsulta && <p role="alert" className="w-full text-red-700">{erroConsulta}</p>}</div><h3 className="mb-4 text-xl font-semibold text-neutral-950 dark:text-white">Visualização 2D das vagas</h3><VisualizacaoVagas key={`${shoppingId}-${estrutura.andares.length}-${vagasMapa.length}`} estrutura={estrutura} modo="admin"/></div>}
+    {aba === "posicoes" && <div id="painel-estrutura-posicoes">{estrutura.andares.length > 0 ? <div className="rounded-2xl bg-white p-4 sm:p-6"><div className="flex flex-wrap items-end justify-between gap-4"><div className="grid w-full min-w-0 gap-2 sm:w-auto sm:grid-cols-[auto_minmax(10rem,1fr)] sm:items-center"><Label htmlFor="andar-mapa">Mapa do andar</Label><select id="andar-mapa" className="min-h-11 min-w-0 rounded-md border bg-white px-3 py-2" value={andarMapa?.id ?? ""} disabled={ocupado} onChange={e => { if (!rascunho || window.confirm("Descartar as posições ainda não salvas?")) { setRascunho(false); setAndarMapaId(e.target.value) } }}>{estrutura.andares.map(a => <option key={a.id} value={a.id}>{a.nome}</option>)}</select></div></div>
       {andarMapa && <EditorMapaVagas key={`${andarMapa.id}-${andarMapa.revisaoMapa}`} andar={andarMapa} ocupado={ocupado} aoSalvar={salvarMapa} aoMudarRascunho={setRascunho}/>}
     </div> : <p className="rounded-2xl bg-white p-6 text-neutral-600">Crie um andar antes de editar as posições.</p>}</div>}
   </div>

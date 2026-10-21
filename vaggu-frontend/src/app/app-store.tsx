@@ -76,7 +76,8 @@ export function AppStoreProvider({ children }: { children: ReactNode }) {
   }, [limparSessao])
 
   const verificarSessao = useCallback(async () => {
-    const revisao = ++versao.current
+    // A verificação periódica não invalida consultas de vagas em curso.
+    const revisao = versao.current
     try {
       const resposta = await requisitarApi("/auth/me")
       const usuario = lerUsuario(resposta)

@@ -18,6 +18,8 @@ hardware/**/config.h
 *.db-journal
 *.db-shm
 *.db-wal
+*.dump
+*.backup
 
 # Arquivos gerados
 src/generated/

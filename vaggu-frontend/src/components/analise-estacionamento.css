@@ -96,3 +96,6 @@
 .analise-filtro input{width:100%;min-width:0}
 .analise-filtro small{flex-basis:auto;line-height:1.5;padding-bottom:.2rem}
 @media(max-width:680px){.analise-filtro{grid-template-columns:1fr;gap:.75rem}.analise-filtro small br{display:none}.analise-filtro-campos button{flex:1 1 auto}}
+
+/* Os recortes de setor e categoria seguem os controles de período. */
+.analise-filtro select{min-height:2.75rem;max-width:100%;min-width:0;padding:.4rem .6rem;border:1px solid var(--an-border);border-radius:.45rem;background:var(--an-inset);color:var(--an-text)}

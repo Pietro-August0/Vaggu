@@ -1,3 +1,5 @@
+import { createTeloesService } from './teloes/service.js';
+import { createEquipamentosService } from './equipamentos/service.js';
 // Ponto de entrada executável: lê a configuração, conecta os serviços e inicia o HTTP.
 // Também encerra a conexão com o banco quando o processo recebe um sinal de parada.
 import 'dotenv/config';
@@ -34,6 +36,8 @@ const app = createApp({
   importacao: createImportacaoService(prisma),
   telemetria: telemetriaService,
   analiticos: createAnaliticosService(prisma),
+  equipamentos: createEquipamentosService(prisma),
+  teloes: createTeloesService(prisma, config.telemetria.timeoutSensorMs),
 });
 
 // O job persiste a expiração; o mapa também aplica validade no momento da leitura.
