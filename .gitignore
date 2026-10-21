@@ -10,6 +10,7 @@ coverage/
 .env.*
 !.env.example
 *.local
+hardware/**/config.h
 
 # Logs e bancos locais
 *.log

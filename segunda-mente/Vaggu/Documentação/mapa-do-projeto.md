@@ -10,6 +10,13 @@ Conhecimento, documentos e regras ficam em `segunda-mente`. O planejamento canô
 
 ## Pastas principais
 
+| Arquivo de hardware | Responsabilidade |
+| --- | --- |
+| `hardware/esp32-3-vagas/README.md` | Parecer de viabilidade do demo, diagramas de ligação/arquitetura/posição, preparação da API, provisionamento, calibração e aceite físico. |
+| `hardware/esp32-3-vagas/teste_sensores_usb/teste_sensores_usb.ino` | Primeiro ensaio independente por USB/Serial, sem rede ou LEDs, para verificar distâncias dos três HC-SR04 com TRIG 25/26/27 e ECHO 32/33/34. |
+| `hardware/esp32-3-vagas/vaggu_3_vagas/vaggu_3_vagas.ino` | Firmware de bancada WROOM-32 para três HC-SR04, ECHO 32/33/34, LEDs de detecção local 13/14/23, autenticação Device, sequência por boot e leituras filtradas com omissão de sensores sem leitura válida. |
+| `hardware/esp32-3-vagas/vaggu_3_vagas/config.example.h` | Modelo sem segredos para gerar config.h local ignorado pelo Git. |
+
 | Pasta | Finalidade |
 | --- | --- |
 | `scripts/` | Reúne verificações do repositório que não pertencem ao frontend nem ao backend. |

@@ -88,3 +88,8 @@ A implementação foi validada localmente com dados fictícios. A homologação 
 - [API](./vaggu-backend/README.md): contratos, scripts e testes.
 - [Backup e restauração](./segunda-mente/Vaggu/Documenta%C3%A7%C3%A3o/backup-e-restauracao.md): procedimentos e proteções.
 - [Acordos de desenvolvimento](./AGENTS.md): regras do projeto e prints obrigatórios após alterações de design ou frontend.
+- [Protótipo físico com três vagas](./hardware/esp32-3-vagas/README.md): análise do demo ESP32, firmware compatível, diagramas elétricos e roteiro de bancada.
+- [Segunda mente VAGGU](./segunda-mente/Vaggu/Vaggu.md): índice de produto e documentação.
+- [Fluxo de telas](./segunda-mente/Vaggu/Documentação/fluxo-de-telas.md): jornadas de Admin, gerente e visitante.
+- [Tecnologias e arquitetura](./segunda-mente/Vaggu/Tecnologias/Tecnologias%20e%20arquitetura.md): decisões técnicas e integrações.
+- [README da API](./vaggu-backend/README.md): comandos, contratos e testes do backend.
