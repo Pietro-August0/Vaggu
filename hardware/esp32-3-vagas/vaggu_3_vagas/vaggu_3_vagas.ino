@@ -3,6 +3,7 @@
 #include <esp_system.h>
 #include "config.h"
 #include "transporte.h"
+#include "relogio_serial.h"
 
 // ESP32 clássico WROOM-32. Não usar esta pinagem em C3/S3 sem revisão.
 const uint8_t TRIG[3] = {27, 26, 25};
@@ -119,6 +120,7 @@ void setup() {
 }
 
 void loop() {
+  receberHorarioUsb();
   if (bloqueado) { apagarLeds(); delay(1000); return; }
   if (WiFi.status() != WL_CONNECTED) {
     apagarLeds();

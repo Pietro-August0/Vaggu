@@ -714,3 +714,11 @@ Refizemos os quatro slides em 1920×1080 para acompanhar a referência original 
 Revisamos a documentação e os READMEs para usar voz interna ou neutra, substituindo relatos externos por referências aos nossos materiais e decisões. Mantivemos datas, atribuições, histórico e limites das evidências. A busca final não encontrou os padrões de narrador externo pesquisados; o verificador documental passou com 330 arquivos cobertos e 52 documentos com links/âncoras válidos. `git diff --check` passou.
 
 Roteamento de responsabilidade: Ana para documentação, com revisão indicada de Elisa para UX e Juan para visual. Preservamos as alterações locais na branch `feat/landing-fotos-favicon-juan`, em `16383524`; não criamos branch, commit, push ou PR nesta revisão. A branch não possui referência homônima no `origin` localmente disponível; nenhum integrante recebeu autoria Git ou aprovação atribuída por esta revisão.
+
+## Piloto hospedado em 21/10/2026
+
+Admin autenticado autorizou uso do Shopping Exemplo. Criado setor `Piloto físico ESP32` no Piso G1, com vagas P01/P02/P03. A importação corrigiu o setor das três vagas e preservou as 80 anteriores. Placa `VAGGU_ESP32_PILOTO_01` cadastrada com chave individual, guardada somente em config.h ignorado; sensores S01/S02/S03 vinculados respectivamente a P01/P02/P03. Este shopping continua classificado como demonstração; não usar seus indicadores agregados como validação de operação real.
+
+Firmware HTTPS compilado e gravado na ESP32 em COM3, com validação de certificado e NTP obrigatório. A placa conecta ao hotspot, mas o relógio ainda não sincronizou: envio hospedado não validado. Não há contorno de TLS. Computador tem internet via rede local e Cloudflare WARP; compartilhamento do hotspot aguarda conferência pelo usuário.
+
+Verificação local após integrar origin/main: builds backend/frontend e lint aprovados; 19 testes de configuração, confirmação e contrato/rotas aprovados; 2 testes PostgreSQL descartáveis de telemetria e isolamento do piloto aprovados. Revisão visual responsiva do polling após integração ainda pendente. Nenhum push ou deploy foi executado.

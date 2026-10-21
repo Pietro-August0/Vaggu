@@ -285,3 +285,15 @@ Não retire fios energizados para simular falhas. Registre horário, vaga, dist�
 ## Verificação desta entrega
 
 Contrato conferido com `src/telemetria/contratos.ts`, rotas, serviço e script de provisionamento do backend. Build TypeScript, cinco testes existentes de contrato/rotas de telemetria e verificador documental aprovados. Os testes HTTP precisaram de execução com acesso a loopback fora da restrição inicial do ambiente. Não houve novo ensaio PostgreSQL nesta entrega. Não havia `arduino-cli` ou compilador Arduino disponível no ambiente: **compilação no core ESP32, upload e ensaio elétrico permanecem pendentes**. Não foram criados registros no banco nem alteradas credenciais reais durante esta preparação.
+
+## Piloto hospedado em 21/10/2026
+
+Admin autenticado autorizou uso do Shopping Exemplo. Criado setor `Piloto físico ESP32` no Piso G1, com vagas P01/P02/P03. A importação corrigiu o setor das três vagas e preservou as 80 anteriores. Placa `VAGGU_ESP32_PILOTO_01` cadastrada com chave individual, guardada somente em config.h ignorado; sensores S01/S02/S03 vinculados respectivamente a P01/P02/P03. Este shopping continua classificado como demonstração; não usar seus indicadores agregados como validação de operação real.
+
+Firmware HTTPS compilado e gravado na ESP32 em COM3, com validação de certificado e NTP obrigatório. A placa conecta ao hotspot, mas o relógio ainda não sincronizou: envio hospedado não validado. Não há contorno de TLS. Computador tem internet via rede local e Cloudflare WARP; compartilhamento do hotspot aguarda conferência pelo usuário.
+
+Verificação local após integrar origin/main: builds backend/frontend e lint aprovados; 19 testes de configuração, confirmação e contrato/rotas aprovados; 2 testes PostgreSQL descartáveis de telemetria e isolamento do piloto aprovados. Revisão visual responsiva do polling após integração ainda pendente. Nenhum push ou deploy foi executado.
+
+### Diagnóstico da conexão do piloto
+
+`diagnostico_rede/diagnostico_rede.ino` reutiliza o config.h privado da bancada, mas não envia Authorization nem leituras. Verifica DNS do Vaggu e NTP, TCP/443 do Vaggu e de IP público, TCP/3000 do gateway, resposta NTP por IPv4 direto e GET público de saúde somente com relógio válido e certificado verificado. Repete a cada 30 segundos. Ao gravá-lo, a telemetria fica temporariamente pausada; depois do diagnóstico, regravar vaggu_3_vagas. Não desabilita TLS nem modifica hotspot, firewall ou VPN.

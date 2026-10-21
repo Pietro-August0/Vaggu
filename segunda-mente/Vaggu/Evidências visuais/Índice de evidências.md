@@ -137,3 +137,12 @@ Quatro arquivos originais copiados das imagens originais do planejamento, preser
 | [Sprint 6](Planejamento/sprint-06-19-a-28-10-2026.jpeg) | WhatsApp Image 2026-10-19 at 16.04.49.jpeg | 19/10–28/10 |
 
 O contexto do conjunto é 2026; o ano está explícito na folha da Sprint 3. A transcrição completa, responsáveis e limites estão em [[Vaggu/Planejamento/Sprints do projeto]]. As Sprints 1–2 têm somente o registro de memória do projeto. As fotografias comprovam o planejamento registrado, não a entrega ou homologação dos componentes.
+
+## 21/10/2026 — piloto ESP32 no site publicado
+
+Rota `/admin/shoppings/d3a09b29-7e5a-4b7e-8c42-8f371d0a0001/estrutura`, perfil Admin, navegador integrado com viewport corrente. Origem: API e banco hospedados; Shopping Exemplo, cadastro de piloto sem leituras físicas recebidas ainda. Capturas comprovam cadastro, não operação dos sensores nem revisão responsiva.
+
+- [Importação confirmada: três atualizações e 80 vagas preservadas](2026-10-21%20-%20Piloto%20ESP32/importacao-publicada.png).
+- [Equipamento e vínculos cadastrados](2026-10-21%20-%20Piloto%20ESP32/equipamento-publicado.png).
+
+Nenhuma captura da emissão de chave foi feita. Revisão desktop/tablet/celular do frontend local integrado continua pendente.

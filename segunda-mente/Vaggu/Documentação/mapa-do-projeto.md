@@ -305,3 +305,5 @@ Regras, contratos, operação e limitações estão em [conclusao-software-2026-
 | `vaggu-frontend/src/hooks/use-estrutura-atualizada.ts` | Centraliza consulta periódica/manual, descarte de respostas antigas e invalidação por erro ou prazo. |
 | `vaggu-frontend/src/pages/telao-instalado-page.tsx` | Exibe agregados com chave própria por aba e oculta contagens quando a consulta perde validade. |
 | `vaggu-frontend/src/servicos/validade-estrutura.ts` | Produz estrutura com leituras indisponíveis quando a consulta vence, preservando indicação de manutenção. |
+| `hardware/esp32-3-vagas/piloto-estrutura.csv` | Importação das três vagas físicas no setor do piloto, preservando as demais vagas. |
+| `hardware/esp32-3-vagas/diagnostico_rede/diagnostico_rede.ino` | Diagnostica DNS, TCP por nome e IP, acesso local, UDP/NTP e HTTPS público sem enviar chave nem leituras. |
