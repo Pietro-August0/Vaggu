@@ -16,6 +16,23 @@ Registramos a Sprint 7 em **04/11–11/11/2026** e a Sprint 8, última, em **16/
 
 Os registros datados abaixo preservam a informação disponível em cada etapa; pendências antigas já corrigidas não redefinem o estado atual acima.
 
+Última atualização: **19/10/2026**, fuso **America/Sao_Paulo**. A revisão da landing e seu fechamento permanecem atribuídos a **09/09/2026**, conforme solicitado. Base de P01: `c127b5e`; registros das entregas na seção 7. Este documento registra evidências e orienta o trabalho diário; não substitui o [SSD](SSD-VAGGU.md) nem os [critérios de aceite](plano-e-aceite.md).
+
+### Preparação da bancada ESP32 com três vagas — 19/10
+
+- Usuário optou por iniciar sem LEDs e informou ter conferido as ligações. LEDs desativados por padrão no firmware de integração; acrescentado sketch independente de teste USB/Serial dos três sensores, sem credenciais ou backend. Guia atualizado com primeiro ensaio e diagnóstico. Compilação Arduino e leituras físicas permanecem pendentes; conferir documentação com o verificador do repositório.
+
+- LEDs solicitados: sketch preparado com saídas 13/14/23 para ocupação detectada localmente, inicialização desligada e apagamento em leitura inválida, bloqueio ou Wi-Fi desconectado. ECHO ajustado a 32/33/34 conforme combinado. Guia alinhado aos divisores disponíveis (1 kΩ + 180 Ω / 2,2 kΩ); dois resistores de 1 kΩ restantes permitem dois LEDs, faltando mais um para o terceiro. Sem compilador Arduino disponível; gravação e ensaio de LED ainda pendentes.
+
+- Montagem atual ajustada a pedido do usuário: alimentação somente pelo USB da DevKit V1, com VIN/5V para os sensores condicionado à conferência da tensão/esquema da variante; sem fonte externa ou suporte de pilhas. Diagrama e sequência de conferência atualizados; validação elétrica sob carga pendente.
+
+- Usuário confirmou ESP32 DevKit V1 e futura alimentação por quatro Ni-MH de 4700 mAh declarados. Guia complementado com pack em série, regulação buck-boost a 5 V, diagrama, separação de fontes e cálculo ilustrativo de autonomia; capacidade e consumo reais ainda não medidos. Firmware preservado.
+
+- Analisado o demo recebido em Downloads: servidor em memória, autenticação e payload incompatíveis com a API principal. Integração considerada viável mediante adaptação do firmware, aproveitando a telemetria persistente existente.
+- Entregues [guia de bancada e diagramas](../../../hardware/esp32-3-vagas/README.md), sketch para ESP32 clássico WROOM-32/HC-SR04 e configuração de exemplo. Firmware usa Device, inicialização/sequência, mediana e histerese; omite leituras inválidas e preserva expiração individual. Nenhuma mudança de API ou banco necessária.
+- Documentados HOST para rede local, provisionamento real, teste de contrato, divisores de ECHO, calibração, consulta manual do mapa e roteiro de falhas/recuperação. config.h local foi incluído no ignore para proteger credenciais.
+- Conferência: contratos, rotas, provisão, sequência, confirmação e timeouts lidos no código; build TypeScript, cinco testes existentes de contrato/rotas e verificador documental aprovados. Testes HTTP aprovados após liberar loopback bloqueado inicialmente pelo ambiente (EACCES); PostgreSQL não foi reexercitado nesta entrega. Compilação Arduino, gravação, circuito e ensaio físico pendentes por ausência de toolchain e hardware conectado. Nenhum provisionamento ou alteração em banco real executado.
+
 ### Retomada e revisão da última entrega — 15/10
 
 - Revisado o cenário fictício entregue em `294c1d0`. Corrigida a omissão de `cenario-apresentacao.test.ts` no comando `test:integracao`; o teste já era descoberto por `npm test`.
