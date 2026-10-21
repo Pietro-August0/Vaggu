@@ -13,17 +13,23 @@ export function MinhaConta() {
   const [mensagem, setMensagem] = useState("")
   const [erro, setErro] = useState("")
   const [ocupado, setOcupado] = useState(false)
+  const [edicao, setEdicao] = useState<{ nome: string; telefone: string } | null>(null)
 
   if (!currentUser) return null
+  const nome = edicao?.nome ?? currentUser.nome
+  const telefone = edicao?.telefone ?? currentUser.telefone ?? ""
+  const mudou = nome.trim() !== currentUser.nome.trim() || telefone.trim() !== (currentUser.telefone ?? "").trim()
 
   async function salvar(evento: FormEvent<HTMLFormElement>) {
     evento.preventDefault()
+    if (!mudou || ocupado) return
     setOcupado(true)
     setErro("")
     setMensagem("")
     const dados = new FormData(evento.currentTarget)
     try {
       await atualizarMinhaConta(String(dados.get("nome") ?? ""), String(dados.get("telefone") ?? ""))
+      setEdicao(null)
       setMensagem("Dados atualizados.")
     } catch (falha) {
       setErro(falha instanceof Error ? falha.message : "Não foi possível atualizar seus dados.")
@@ -45,10 +51,10 @@ export function MinhaConta() {
         </Dialog>
       </div>
       <form className="mt-6 grid gap-4 sm:grid-cols-2" onSubmit={salvar}>
-        <div className="grid gap-2"><Label htmlFor="conta-nome">Nome</Label><Input id="conta-nome" name="nome" defaultValue={currentUser.nome} required minLength={2} maxLength={120} /></div>
-        <div className="grid gap-2"><Label htmlFor="conta-telefone">Telefone</Label><Input id="conta-telefone" name="telefone" defaultValue={currentUser.telefone ?? ""} maxLength={40} /></div>
+        <div className="grid gap-2"><Label htmlFor="conta-nome">Nome</Label><Input id="conta-nome" name="nome" value={nome} onChange={evento => { setEdicao({ nome: evento.target.value, telefone }); setMensagem("") }} disabled={ocupado} required minLength={2} maxLength={120} /></div>
+        <div className="grid gap-2"><Label htmlFor="conta-telefone">Telefone</Label><Input id="conta-telefone" name="telefone" value={telefone} onChange={evento => { setEdicao({ nome, telefone: evento.target.value }); setMensagem("") }} disabled={ocupado} maxLength={40} /></div>
         <div className="grid gap-2 sm:col-span-2"><Label htmlFor="conta-email">E-mail</Label><Input id="conta-email" value={currentUser.email} readOnly aria-describedby="conta-email-ajuda" /><p id="conta-email-ajuda" className="text-xs text-neutral-500 dark:text-neutral-400">Somente leitura. Solicite à equipe VAGGU para alterar.</p></div>
-        <div className="flex flex-wrap items-center gap-3 sm:col-span-2">{erro ? <p role="alert" className="text-sm text-red-700 dark:text-red-300">{erro}</p> : null}{mensagem ? <p role="status" className="text-sm text-green-700 dark:text-green-300">{mensagem}</p> : null}<Button className="w-fit sm:ml-auto" disabled={ocupado}>{ocupado ? "Salvando..." : "Salvar dados"}</Button></div>
+        <div className="flex flex-wrap items-center gap-3 sm:col-span-2">{erro ? <p role="alert" className="text-sm text-red-700 dark:text-red-300">{erro}</p> : null}{mensagem ? <p role="status" className="text-sm text-green-700 dark:text-green-300">{mensagem}</p> : null}<Button className="w-fit sm:ml-auto" disabled={ocupado || !mudou}>{ocupado ? "Salvando..." : "Salvar dados"}</Button></div>
       </form>
     </section>
   </div>

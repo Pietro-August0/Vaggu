@@ -16,6 +16,7 @@ import { TrocarSenhaPage } from "@/pages/trocar-senha-page"
 import { LandingPage } from "@/pages/landing-page"
 import { LoginPage } from "@/pages/login-page"
 import { PaginaNaoEncontrada } from "@/pages/pagina-nao-encontrada"
+import { TeloesPage } from "@/pages/teloes-page"
 import { TelaoPage } from "@/pages/telao-page"
 
 /** Define as rotas públicas, a troca obrigatória e os destinos por perfil validados pela API. */
@@ -36,6 +37,7 @@ function App() {
       <Route element={<ProtectedRoute role="shopping"><AreaAutenticada /></ProtectedRoute>} path="/painel" />
       <Route element={<ProtectedRoute role="shopping"><AreaAutenticada /></ProtectedRoute>} path="/painel/analise" />
       <Route element={<ProtectedRoute role="shopping"><AreaAutenticada /></ProtectedRoute>} path="/painel/conta" />
+      <Route element={<ProtectedRoute role="shopping"><TeloesPage /></ProtectedRoute>} path="/painel/teloes" />
       <Route element={<ProtectedRoute role="shopping"><TelaoPage /></ProtectedRoute>} path="/painel/telao" />
       <Route element={<ProtectedRoute role="shopping"><TelaoPage /></ProtectedRoute>} path="/painel/telao/andares/:andarId" />
       <Route element={<PaginaNaoEncontrada />} path="*" />

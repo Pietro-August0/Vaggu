@@ -3,6 +3,25 @@ tags: [vaggu, evidencias, interface]
 ---
 # Evidências visuais da VAGGU
 
+## 21/10/2026 — telão para apresentação
+
+Capturas locais atuais do novo protótipo em `http://127.0.0.1:5184`, com Edge headless/Playwright (plugin Browser ausente), Express e PostgreSQL descartável reais. Somente dados fictícios do Shopping Exemplo; nenhuma API interceptada. Os prints de telão da revisão geral abaixo preservam o visual anterior. Ver [resultado, testes e limites](../Documentação/telao-apresentacao-2026-10-21.md).
+
+| Tela, rota e perfil | Viewport | Evidência |
+| --- | --- | --- |
+| Gestão `/painel/teloes` — Gerente | 1440×1000, página completa | [Claro](2026-10-21%20-%20Telao%20apresentacao/gestao-desktop.png) · [Escuro](2026-10-21%20-%20Telao%20apresentacao/gestao-escuro-desktop.png) |
+| Gestão — Gerente | 768×1024 / 390×844, página completa | [Tablet](2026-10-21%20-%20Telao%20apresentacao/gestao-tablet.png) · [Celular](2026-10-21%20-%20Telao%20apresentacao/gestao-mobile.png) |
+| Gestão após salvar/criar/revogar — Gerente | 1440×1000, página completa | [Persistência e acesso revogado](2026-10-21%20-%20Telao%20apresentacao/gestao-salva-revogado.png) |
+| Geral `/telao/:id` — Credencial própria | 1920×1080 / 1366×768 / 1024×600 | [Full HD](2026-10-21%20-%20Telao%20apresentacao/geral-1920.png) · [1366](2026-10-21%20-%20Telao%20apresentacao/geral-1366.png) · [1024](2026-10-21%20-%20Telao%20apresentacao/geral-1024.png) |
+| Geral — Credencial própria | 768×1024 / 390×844 / 320×568 / 844×390 | [Tablet](2026-10-21%20-%20Telao%20apresentacao/geral-tablet.png) · [Celular](2026-10-21%20-%20Telao%20apresentacao/geral-mobile.png) · [320](2026-10-21%20-%20Telao%20apresentacao/geral-320.png) · [Paisagem](2026-10-21%20-%20Telao%20apresentacao/geral-paisagem.png) |
+| Geral em tela cheia — Credencial própria | 1366×768 | [Fullscreen](2026-10-21%20-%20Telao%20apresentacao/geral-tela-cheia.png) |
+| Andar definido remotamente pelo gerente, mesma instalação/credencial | 1366×768 | [Mantém tela cheia](2026-10-21%20-%20Telao%20apresentacao/andar-tela-cheia.png) · [Após Esc](2026-10-21%20-%20Telao%20apresentacao/andar-apos-esc.png) |
+| Instalação — conexão offline | 1366×768 | [Contagens ocultas](2026-10-21%20-%20Telao%20apresentacao/andar-sem-conexao.png) |
+| Prévia `/painel/telao/andares/:andarId` — Gerente | 1366×768 | [Por setor](2026-10-21%20-%20Telao%20apresentacao/previa-andar.png) · [Andar inexistente](2026-10-21%20-%20Telao%20apresentacao/andar-inexistente.png) |
+| Geral com sete andares — Credencial própria | 1366×768 | [Página 1](2026-10-21%20-%20Telao%20apresentacao/muitos-andares-pagina-1.png) · [Página 2 após alternância automática](2026-10-21%20-%20Telao%20apresentacao/muitos-andares-pagina-2.png) |
+
+Todos os prints da apresentação são do viewport inteiro sem rolagem. O cadastro emite segredo apenas uma vez; esse momento não foi capturado. O fixture de sete andares acrescenta cinco pisos vazios exclusivamente para conferir paginação, sem inventar leituras. Os resultados não comprovam instalação física nem produção.
+
 ## 21/10/2026 — interface atual e revisão geral
 
 Capturas da aplicação local em `http://127.0.0.1:5183`, com API Express e PostgreSQL descartável reais. Usamos somente contas e dados fictícios do Shopping Exemplo; não interceptamos a API. Edge headless/Playwright foi utilizado porque o plugin Browser não está disponível. Os resultados, a limpeza e os limites estão na [revisão geral](../Documentação/revisao-geral-2026-10-21.md).
@@ -137,3 +156,16 @@ Quatro arquivos originais copiados das imagens originais do planejamento, preser
 | [Sprint 6](Planejamento/sprint-06-19-a-28-10-2026.jpeg) | WhatsApp Image 2026-10-19 at 16.04.49.jpeg | 19/10–28/10 |
 
 O contexto do conjunto é 2026; o ano está explícito na folha da Sprint 3. A transcrição completa, responsáveis e limites estão em [[Vaggu/Planejamento/Sprints do projeto]]. As Sprints 1–2 têm somente o registro de memória do projeto. As fotografias comprovam o planejamento registrado, não a entrega ou homologação dos componentes.
+
+
+## 21/10/2026 — ajustes dos cards, exclusão e conta
+
+Capturas locais com Edge/Playwright, API e PostgreSQL, Shopping Exemplo e conta temporária fictícia removida após a conferência. Browser plugin not available; usamos Playwright. Preservamos os cadastros já existentes.
+
+| Rota e perfil | Prints | Viewports e resultado |
+| --- | --- | --- |
+| `/painel/telao`, gerente | [Desktop](2026-10-21%20-%20Ajustes%20teloes%20e%20conta/cards-1920.png), [1366](2026-10-21%20-%20Ajustes%20teloes%20e%20conta/cards-1366.png), [tablet](2026-10-21%20-%20Ajustes%20teloes%20e%20conta/cards-tablet.png), [celular](2026-10-21%20-%20Ajustes%20teloes%20e%20conta/cards-mobile.png), [320](2026-10-21%20-%20Ajustes%20teloes%20e%20conta/cards-320.png), [horizontal](2026-10-21%20-%20Ajustes%20teloes%20e%20conta/cards-paisagem.png) | 1920×1080, 1366×768, 768×1024, 390×844, 320×568, 844×390; números ampliados e centralizados, sem rolagem. |
+| `/painel/teloes`, gerente | [Desktop](2026-10-21%20-%20Ajustes%20teloes%20e%20conta/excluir-teloes-desktop.png), [tablet](2026-10-21%20-%20Ajustes%20teloes%20e%20conta/excluir-teloes-tablet.png), [celular claro](2026-10-21%20-%20Ajustes%20teloes%20e%20conta/excluir-teloes-mobile.png), [celular escuro](2026-10-21%20-%20Ajustes%20teloes%20e%20conta/excluir-teloes-escuro-mobile.png) | 1440×1000, 768×1024, 390×844; excluir disponível para ativo e revogado. Cancelamento preserva cadastro; confirmação remove. |
+| `/painel/conta`, gerente | [Desktop](2026-10-21%20-%20Ajustes%20teloes%20e%20conta/conta-desktop.png), [tablet](2026-10-21%20-%20Ajustes%20teloes%20e%20conta/conta-tablet.png), [celular claro](2026-10-21%20-%20Ajustes%20teloes%20e%20conta/conta-mobile.png), [celular escuro](2026-10-21%20-%20Ajustes%20teloes%20e%20conta/conta-escuro-mobile.png) | 1440×1000, 768×1024, 390×844; salvar desabilitado sem diferença real, habilitado na edição e desabilitado após sucesso. |
+
+Nenhum transbordamento horizontal ou erro de página observado. A apresentação mantém tema próprio escuro. As capturas comprovam o ambiente local, sem homologação física dos televisores.

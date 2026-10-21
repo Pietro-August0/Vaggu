@@ -171,7 +171,7 @@ As cópias de imagens entre `segunda-mente/Vaggu/Identidade visual/Assets/` e `v
 | `vaggu-frontend/src/components/formulario-alterar-senha.tsx` | Compartilha a troca voluntária de senha com validação por campo, requisitos visíveis e confirmação da senha atual. |
 | `vaggu-frontend/src/components/formulario-shopping.tsx` | Compartilha cadastro e edição em três etapas; consulta CEP e mantém o endereço editável manualmente. |
 | `vaggu-frontend/src/components/mapa-estacionamento.tsx` | Busca a estrutura isolada do gerente, mostra aviso de implantação sem ocultá-la e delega o desenho ao componente compartilhado. |
-| `vaggu-frontend/src/components/minha-conta.tsx` | Compartilha dados pessoais em layout responsivo entre Admin e gerente; mantém vínculos protegidos e abre a troca de senha em diálogo sob demanda. |
+| `vaggu-frontend/src/components/minha-conta.tsx` | Compartilha dados pessoais em layout responsivo entre Admin e gerente; mantém vínculos protegidos, impede salvar sem alterações e abre a troca de senha em diálogo sob demanda. |
 | `vaggu-frontend/src/components/detalhes-vaga.tsx` | Exibe localização, situação do sensor, placa, horários independentes, estado confirmado e confirmação pendente. |
 | `vaggu-frontend/src/components/editor-mapa-vagas.tsx` | Edita posições por arraste, toque ou teclado, ajusta tamanho/rotação e mantém rascunho, desfazer, limites e prevenção de sobreposição. |
 | `vaggu-frontend/src/components/monitoramento-sensores.tsx` | Mostra contagens e cartões dos sensores, filtra situação e abre os detalhes no recorte de vagas autorizado. |
@@ -238,7 +238,7 @@ As cópias de imagens entre `segunda-mente/Vaggu/Identidade visual/Assets/` e `v
 
 | Arquivo | Responsabilidade |
 | --- | --- |
-| `vaggu-frontend/src/pages/telao-page.tsx` | Apresenta prévia autenticada de disponibilidade por andar/setor, consulta o escopo do gerente a cada 30 segundos, não possui controles interativos e oculta contagens quando as leituras não são confiáveis. |
+| `vaggu-frontend/src/pages/telao-page.tsx` | Apresenta prévia autenticada de disponibilidade por andar/setor, consulta o escopo do gerente a cada 15 segundos e usa a apresentação compartilhada com tela cheia/Esc, sem rolagem e sem ampliar um andar inválido para visão geral. |
 | `vaggu-frontend/src/pages/telao-page.css` | Define layout de alto contraste para telão, legibilidade a distância e adaptação a telas menores. |
 
 ### Visual do telão — 17/10/2026
@@ -276,14 +276,21 @@ Regras, contratos, operação e limitações estão em [conclusao-software-2026-
 | `vaggu-backend/src/equipamentos/ocorrencias.ts` | Deduplica falhas de comunicação e agrupa sensores quando a placa perde contato, preservando manutenção manual. |
 | `vaggu-backend/src/equipamentos/routes.ts` | Expõe operações administrativas de equipamentos/manutenção e consulta de ocorrências no shopping da sessão. |
 | `vaggu-backend/src/equipamentos/service.ts` | Valida vínculos, administra credenciais e manutenção, invalida leituras e exige nova confirmação no retorno. |
-| `vaggu-backend/src/teloes/routes.ts` | Expõe cadastro/revogação administrativa e consulta agregada autorizada por credencial do telão. |
+| `vaggu-backend/src/teloes/routes.ts` | Expõe cadastro, edição e revogação para Admin e gerente; o shopping do gerente deriva da sessão. Mantém a consulta agregada com credencial própria. |
 | `vaggu-backend/src/teloes/service.ts` | Valida recortes e credenciais; agrega somente capacidade ativa e leituras válidas sem expor detalhes administrativos. |
 | `vaggu-backend/test/analiticos-postgresql.test.ts` | Exercita snapshots históricos, ciclos e isolamento/filtros em PostgreSQL descartável. |
 | `vaggu-backend/test/equipamentos-postgresql.test.ts` | Exercita escopo, vínculo, manutenção, recuperação de comunicação, rotação de chave e autorização. |
 | `vaggu-backend/test/renovar-cenario-apresentacao.test.ts` | Verifica planejamento, prévia, proteção do exemplo e repetição da renovação. |
 | `vaggu-backend/test/teloes-postgresql.test.ts` | Verifica agregação, recorte, credenciais, revogação e isolamento de instalações com banco de teste. |
 | `vaggu-frontend/src/components/equipamentos-admin.tsx` | Oferece cadastro, vínculo e manutenção, consulta de ocorrências e exibição única de chaves no Admin. |
-| `vaggu-frontend/src/components/teloes-admin.tsx` | Configura nome/recorte da instalação, apresenta chave uma vez e permite revogação. |
+| `vaggu-frontend/src/components/teloes-admin.tsx` | Configura visão geral ou andar por instalação para Admin e gerente, salva explicitamente sem trocar credencial, emite a chave uma vez, permite revogação e exclusão definitiva com confirmação. |
 | `vaggu-frontend/src/hooks/use-estrutura-atualizada.ts` | Centraliza consulta periódica/manual, descarte de respostas antigas e invalidação por erro ou prazo. |
 | `vaggu-frontend/src/pages/telao-instalado-page.tsx` | Exibe agregados com chave própria por aba e oculta contagens quando a consulta perde validade. |
 | `vaggu-frontend/src/servicos/validade-estrutura.ts` | Produz estrutura com leituras indisponíveis quando a consulta vence, preservando indicação de manutenção. |
+
+### Telões para apresentação — 21/10/2026
+
+| `vaggu-frontend/src/components/telao-apresentacao.tsx` | Compartilha apresentação enxuta, contagens confirmadas, paginação automática de áreas e tela cheia com saída por Esc. |
+| `vaggu-frontend/src/pages/teloes-page.tsx` | Mantém a gestão de instalações e as prévias geral/por andar no painel do gerente em `/painel/teloes`. |
+
+O [protótipo e sua validação](telao-apresentacao-2026-10-21.md) substituem o visual de 17/10: não há avisos técnicos de dados parciais na apresentação. A página instalada mantém o mesmo elemento em tela cheia quando o gerente altera seu andar. As evidências atuais estão em `Evidências visuais/2026-10-21 - Telao apresentacao/`; as capturas anteriores permanecem históricas.

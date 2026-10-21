@@ -16,14 +16,14 @@ Cada gerente consulta somente seu shopping. Categorias de vaga — comum, PCD, i
 - **Monitoramento:** vínculo entre placas ESP32, sensores e vagas; confirmação de leituras, expiração, manutenção e ocorrências.
 - **Disponibilidade atualizada:** consultas automáticas a cada 15 segundos, atualização manual e invalidação dos dados antigos.
 - **Análises e relatórios:** período, setor e categoria; comparação, entradas, saídas, permanência, rotatividade e exportações Excel/PDF.
-- **Telões web autorizados:** credencial por instalação, recorte por andar/setor e contagens agregadas ocultadas quando a consulta perde validade.
+- **Telões web autorizados:** credencial por instalação, visão geral ou andar escolhida pelo gerente, tela cheia com Esc e apresentação sem rolagem. Contagens ficam ocultas quando a consulta perde validade.
 
 ## Interface
 
 <table>
   <tr>
     <td width="50%"><img src="./segunda-mente/Vaggu/Evid%C3%AAncias%20visuais/2026-10-21%20-%20Revisao%20geral/landing-desktop.png" alt="Página de apresentação da VAGGU com a identidade preta e amarela"></td>
-    <td width="50%"><img src="./segunda-mente/Vaggu/Evid%C3%AAncias%20visuais/2026-10-21%20-%20Revisao%20geral/telao-desktop.png" alt="Telão autorizado com contagens por andar e categorias especiais"></td>
+    <td width="50%"><img src="./segunda-mente/Vaggu/Evid%C3%AAncias%20visuais/2026-10-21%20-%20Ajustes%20teloes%20e%20conta/cards-1920.png" alt="Telão autorizado com contagens por andar e categorias especiais"></td>
   </tr>
   <tr>
     <td><strong>Apresentação.</strong> Proposta do serviço e contato para parceria.</td>

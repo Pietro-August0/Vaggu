@@ -180,6 +180,6 @@ A seção seguinte, `operacao-vaggu.tsx`, preserva a foto urbana e apresenta um 
 - [ ] Responsividade, foco e uso por teclado verificados.
 - [ ] Comparação visual registrada, sem afirmar extração que não ocorreu.
 
-### Visual do telão — 17/10/2026
+### Visual do telão — 21/10/2026
 
-Telão: seguir a referência visual de 17/10, com logo oficial, Poppins, fundo preto, total amarelo grande, blocos por andar/setor e categorias na base amarela. Sem gradientes, botões ou navegação. Cores operacionais acompanhadas de rótulo; dados parciais ficam neutros.
+Telão: preservar logo oficial, Poppins, fundo preto, total amarelo e categorias identificadas por ícones/texto. Mostrar somente shopping, visão geral/andar, vagas livres por área e categorias. Remover horários, avisos de dados parciais e explicações técnicas da apresentação; manter “—” quando a contagem não estiver confirmada. Layout na altura da janela, sem rolagem; áreas excedentes alternam em páginas automaticamente. Oferecer tela cheia com Esc, com controles discretos e foco visível. A gestão em `/painel/teloes` mantém configuração e mensagens operacionais fora da apresentação. Ver [evidências do protótipo](telao-apresentacao-2026-10-21.md).

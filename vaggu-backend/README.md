@@ -154,11 +154,11 @@ As migrations incrementais `20260914000100_previas_importacao` e `20260915000100
 
 requireAuth valida a sessão. requirePasswordReady bloqueia senha provisória fora das rotas necessárias à troca. requirePerfil('VAGGU') protege cadastro/listagem de shoppings, gerentes e estrutura. shoppingScope fornece res.locals.shoppingId a partir do usuário autenticado; a consulta do mapa do gerente usa esse filtro Prisma, nunca IDs enviados pelo cliente.
 
-Os testes complementam a demonstração de isolamento entre dois shoppings. Cadastro/listagem de shoppings e gerentes, configuração da estrutura, equipamentos, manutenção e instalações de telão estão expostos para Admin; o gerente consulta estrutura e análise do próprio shopping. As rotas analíticas aceitam `inicio` e `fim` juntos no formato `YYYY-MM-DD`, em dias UTC inclusivos, com intervalo máximo de 31 dias; sem parâmetros, consultam os últimos sete dias UTC. `setorId` e `tipo` restringem o histórico e a capacidade de referência. A interface compara períodos e gera Excel/PDF no navegador. A lista de ocorrências retorna todas as abertas e as 100 encerradas mais recentes. Telões web recebem apenas agregados e usam credencial própria em cabeçalho. Hardware físico e homologação publicada seguem pendentes; Power BI publicado é opcional e a conexão real do WhatsApp está adiada.
+Os testes complementam a demonstração de isolamento entre dois shoppings. Cadastro/listagem de shoppings e gerentes, configuração da estrutura, equipamentos, manutenção e instalações de telão estão expostos para Admin; o gerente consulta estrutura/análise e gerencia instalações de telão do próprio shopping. As rotas analíticas aceitam `inicio` e `fim` juntos no formato `YYYY-MM-DD`, em dias UTC inclusivos, com intervalo máximo de 31 dias; sem parâmetros, consultam os últimos sete dias UTC. `setorId` e `tipo` restringem o histórico e a capacidade de referência. A interface compara períodos e gera Excel/PDF no navegador. A lista de ocorrências retorna todas as abertas e as 100 encerradas mais recentes. Telões web recebem apenas agregados e usam credencial própria em cabeçalho. Hardware físico e homologação publicada seguem pendentes; Power BI publicado é opcional e a conexão real do WhatsApp está adiada.
 
 ## Equipamentos e telões web — contratos atuais
 
-As rotas abaixo usam o prefixo `/api/v1`. Operações por shopping exigem Admin VAGGU, exceto a consulta de ocorrências do gerente e a disponibilidade do telão, que possui credencial própria. Na interface, os controles administrativos ficam em **Configurar vagas**, dentro de `/admin/shoppings/:shoppingId/estrutura`.
+As rotas abaixo usam o prefixo `/api/v1`. Operações por shopping exigem Admin VAGGU, exceto as rotas de ocorrências e telões do gerente, que derivam o shopping da sessão, e a disponibilidade do telão, que possui credencial própria. Na interface, os controles administrativos ficam em **Configurar vagas**, dentro de `/admin/shoppings/:shoppingId/estrutura`.
 
 | Método | Rota | Finalidade |
 | --- | --- | --- |
@@ -170,7 +170,9 @@ As rotas abaixo usam o prefixo `/api/v1`. Operações por shopping exigem Admin 
 | POST | `/shoppings/:shoppingId/ocorrencias/:id/encerrar` | Encerrar manutenção e exigir novas leituras para confirmar disponibilidade. |
 | GET | `/estacionamento/ocorrencias` | Consultar ocorrências do shopping da sessão do gerente. |
 | GET / POST | `/shoppings/:shoppingId/teloes` | Listar ou criar instalação de telão. |
-| DELETE | `/shoppings/:shoppingId/teloes/:id` | Revogar a instalação. |
+| PATCH / DELETE | `/shoppings/:shoppingId/teloes/:id` | Editar a exibição preservando a credencial ou revogar a instalação. |
+| GET / POST | `/estacionamento/teloes` | Gerente: listar ou emitir instalação para seu shopping. |
+| PATCH / DELETE | `/estacionamento/teloes/:id` | Gerente: editar a exibição ou revogar instalação do shopping da sessão. |
 | GET | `/teloes/:id/disponibilidade` | Retornar apenas agregados, com `Authorization: Telao <chave>`. |
 
 ## Banco e configuração
@@ -237,3 +239,7 @@ npm.cmd run db:validate
 No Windows com Node compatível, `npm.cmd run typecheck`, o comando de validação acima e `npm.cmd test` passaram. Prisma fixado em 7.10.0. Revise `npm audit` antes de publicar; não execute `npm audit fix --force` automaticamente.
 
 P04 e as melhorias administrativas concluídas em 12–13/09/2026 estão entregues: migrations aplicadas, estrutura, mapa, exclusão reversível e política de senha definitiva integrados, 54 testes aprovados com PostgreSQL real e fluxos principais validados no navegador. O P05 foi concluído em 21/09/2026: prévias CSV/XLSX, confirmação atômica, interface administrativa e validação com PostgreSQL real e navegador autenticado estão entregues. Consulte o estado e os limites atuais no [planejamento](../segunda-mente/Vaggu/Documentação/planejamento-do-projeto.md).
+
+PATCH de telão aceita `nome`, `andarId` e `setorId`. `andarId: null` seleciona a visão geral; alterar andar sem setor limpa o filtro de setor anterior. A interface oferece geral/andar, preservando recortes legados até um salvamento explícito. O servidor rejeita instalação revogada e recortes de outro shopping/inativos. A disponibilidade inclui `escopo: {tipo, nome}`; a edição não troca a credencial, e a tela recebe a mudança na próxima consulta de 15 segundos.
+
+Exclusão definitiva de telão: `DELETE /estacionamento/teloes/:id/cadastro` (gerente do shopping) e `DELETE /shoppings/:shoppingId/teloes/:id/cadastro` (Admin VAGGU). Aceita cadastros ativos ou revogados e invalida a credencial ao remover o registro. A rota DELETE sem `/cadastro` continua apenas revogando o acesso.

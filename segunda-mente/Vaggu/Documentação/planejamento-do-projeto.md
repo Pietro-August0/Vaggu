@@ -2,6 +2,10 @@
 
 Última atualização: **21/10/2026**, fuso **America/Sao_Paulo**. A revisão da landing e seu fechamento permanecem atribuídos a **09/09/2026**, conforme o registro original. Base de P01: `c127b5e`; registros das entregas na seção 7. Este documento registra evidências e orienta o trabalho diário; não substitui o [SSD](SSD-VAGGU.md) nem os [critérios de aceite](plano-e-aceite.md).
 
+### Telão para apresentação — 21/10/2026
+
+Implementamos o [protótipo funcional e sua validação](telao-apresentacao-2026-10-21.md): apresentação enxuta sem rolagem, tela cheia/Esc, visões geral/andar e gestão por instalação para o gerente. A alteração salva mantém ID/credencial e chega ao telão no polling sem encerrar fullscreen. Mais áreas alternam em páginas; dados indisponíveis permanecem “—”. Backend build e quatro testes focados passaram com PostgreSQL; frontend build/lint e fluxo no navegador passaram, com 20 prints. README, fluxo, regras visuais e mapa atualizados. Branch local `codex/feat/telao-apresentacao-elisa`, base publicada `1b7ae6fb`, identidade Git preservada; sem commit/push desta nova entrega. A revisão geral abaixo precede este protótipo e registra a suíte completa anterior.
+
 ### Estado verificado na revisão geral — 21/10/2026
 
 Reconciliamos os resumos atuais com equipamentos/manutenção, polling, telões autorizados, filtros/métricas e snapshots implementados localmente. A suíte completa passou com **130 testes, zero falhas e zero ignorados**, incluindo PostgreSQL descartável e dump/restauração. Frontend build/lint passaram, com aviso conhecido de chunks. A revisão da análise no navegador agora cobre setor/categoria, período sem histórico, exportações, desktop/tablet/celular e tema escuro, com API e banco reais locais. O telão recebeu ajuste de grade/ícones e novos prints; a [revisão geral](revisao-geral-2026-10-21.md) concentra resultados, limites, arquivos removidos e a galeria atualizada. Homologação publicada e hardware físico continuam pendentes.
@@ -664,3 +668,8 @@ Refizemos os quatro slides em 1920×1080 para acompanhar a referência original 
 Revisamos a documentação e os READMEs para usar voz interna ou neutra, substituindo relatos externos por referências aos nossos materiais e decisões. Mantivemos datas, atribuições, histórico e limites das evidências. A busca final não encontrou os padrões de narrador externo pesquisados; o verificador documental passou com 330 arquivos cobertos e 52 documentos com links/âncoras válidos. `git diff --check` passou.
 
 Roteamento de responsabilidade: Ana para documentação, com revisão indicada de Elisa para UX e Juan para visual. Preservamos as alterações locais na branch `feat/landing-fotos-favicon-juan`, em `16383524`; não criamos branch, commit, push ou PR nesta revisão. A branch não possui referência homônima no `origin` localmente disponível; nenhum integrante recebeu autoria Git ou aprovação atribuída por esta revisão.
+
+
+### 21/10 — ajustes após uso local dos telões
+
+Ampliamos e centralizamos contagens por andar/setor, acrescentamos exclusão definitiva de telões ativos ou revogados com confirmação e corrigimos salvar conta sem mudanças. Conferência no navegador com PostgreSQL local, 14 prints, builds e lint aprovados; três testes focados passaram e um de banco descartável foi ignorado. Registro e limites em [Telão para apresentação](telao-apresentacao-2026-10-21.md). Mantivemos a branch local `codex/feat/telao-apresentacao-elisa`, base `1b7ae6fb`, identidade Elisa, sem commit/push. API 5185 e frontend 5173 permanecem disponíveis para teste.
