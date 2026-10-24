@@ -1,5 +1,11 @@
 # VAGGU — fluxo de telas
 
+Configuração atual da bancada em 21/10: mapa com consulta de **2 s**, backend local com confirmação de **5 s**, preservando 30 s como padrão dos demais ambientes. Três canais físicos confirmaram ocupado/livre e apareceram no mapa do gerente. A edição de posições permanece sem polling.
+
+Atualização de 21/10/2026: mapa do gerente e aba Visualizar mapa do Admin consultam estados a cada 5 s após cada resposta, com pausa em aba oculta e recuperação de falha. O editor de posições não recebe atualização periódica. Bancada local com shopping/gerente próprios: ESP32 conectada, leitura de S02 persistida e A02 Livre exibida no mapa. S01/S03 e ensaios das três vagas ainda precisam de validação física completa.
+
+Este documento registra a navegação encontrada na interface, com atualização de edição visual e monitoramento em 15/10/2026 e a compara com as páginas previstas no SSD. **Implementado** significa que existe rota e tela no código atual; não significa que sensores e Power BI estejam concluídos. **Parcial** indica que parte da experiência está pronta. **Ausente** indica que a página foi planejada, mas ainda não existe no site.
+
 Este documento registra a navegação encontrada na interface, com revisão do código em 21/10/2026 e a compara com as páginas previstas no SSD. **Implementado** significa que existe rota e tela no código atual; não significa que sensores e Power BI estejam concluídos. **Parcial** indica que parte da experiência está pronta. **Ausente** indica que a página foi planejada, mas ainda não existe no site.
 
 ## Perfis e regras comuns de navegação
@@ -86,3 +92,9 @@ Esta entrega é uma prévia operacional para apresentação e desenvolvimento. N
 ### Análises — cobertura por setor e centro da rosca — 17/10/2026
 
 O componente `analise-estacionamento.tsx` exibe cobertura histórica por setor à direita de Tipo de vaga, a partir de `porSetor.coberturaPercentual` da API, respeitando o período consultado (SSD §10.2). Sem histórico, mantém aviso de ausência de dados; Shopping Exemplo identifica histórico demonstrativo. Barras de 0–100% representam tempo conhecido, não disponibilidade de vagas. O CSS limita o texto central da rosca ao diâmetro interno e divide “ocupadas agora” em duas linhas. Build aprovado e composição conferida no navegador local a 1440 px.
+
+### Apresentação das análises — 23/10/2026
+
+A rota `/painel/analise` prioriza gráficos de ocupação diária, situação atual, movimentação, categorias e cobertura. A tabela de indicadores históricos por setor inicia recolhida em “Ver indicadores detalhados por setor”. Permanência aparece em horas e minutos; percentuais de destaque são arredondados só na interface. Os filtros UTC/setor/categoria, a comparação e a precisão das exportações permanecem. Dias sem observação preservam lacunas e não viram ocupação zero; situação atual e histórico têm rótulos separados. Capturas e limites estão no índice de evidências de 23/10.
+
+Complemento de 23/10: categorias do cadastro aparecem no topo, respeitando o recorte aplicado. A comparação com o período anterior carrega independentemente dos gráficos atuais. Ao atualizar ou falhar, a última consulta permanece identificada; Atualizar análise/Tentar novamente repetem o recorte aplicado. A primeira carga mostra placeholders e não interpreta espera como ausência de histórico. Exportações aguardam a comparação e carregam seus módulos sob demanda. Séries acima de dez dias permitem rolagem interna para preservar seleção por toque/teclado.

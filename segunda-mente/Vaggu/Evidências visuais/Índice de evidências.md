@@ -22,6 +22,57 @@ Capturas locais atuais do novo protótipo em `http://127.0.0.1:5184`, com Edge h
 
 Todos os prints da apresentação são do viewport inteiro sem rolagem. O cadastro emite segredo apenas uma vez; esse momento não foi capturado. O fixture de sete andares acrescenta cinco pisos vazios exclusivamente para conferir paginação, sem inventar leituras. Os resultados não comprovam instalação física nem produção.
 
+## 24/10/2026 — análises após integração da main
+
+Rota `/painel/analise`, perfil gerente fictício, frontend local `http://127.0.0.1:5173`. Edge headless/Playwright; Browser plugin ausente. Origem: respostas fictícias interceptadas, com atrasos e falhas controlados. Não valida API/banco reais, autorização do servidor, produção ou hardware. Conferência após integrar as mudanças remotas da main (telões/tema), sem alterar a aparência das análises. Roteiro completo e downloads aprovados; prints anteriores preservados.
+
+| Resultado observado | Viewport | Captura |
+| --- | --- | --- |
+| Categorias no topo, gráficos e filtros; sem overflow da página | 1440×1000 / 768×1024 / 390×844 | [Desktop claro](2026-10-24%20-%20Integracao%20main/desktop-light.png) · [Tablet claro](2026-10-24%20-%20Integracao%20main/tablet-light.png) · [Celular claro](2026-10-24%20-%20Integracao%20main/celular-light.png) |
+| Mesma organização no tema escuro | 1440×1000 / 768×1024 / 390×844 | [Desktop escuro](2026-10-24%20-%20Integracao%20main/desktop-dark.png) · [Tablet escuro](2026-10-24%20-%20Integracao%20main/tablet-dark.png) · [Celular escuro](2026-10-24%20-%20Integracao%20main/celular-dark.png) |
+| Primeira carga sem números inventados ou aviso prematuro de ausência de observação | 1440×1000 | [Placeholders](2026-10-24%20-%20Integracao%20main/carregamento-inicial.png) |
+| Comparação lenta sem bloquear gráficos do período atual | 1440×1000 | [Comparação pendente](2026-10-24%20-%20Integracao%20main/comparacao-lenta.png) |
+| Reconsulta mantém conteúdo e identifica a última consulta válida | 1440×1000 | [Atualização](2026-10-24%20-%20Integracao%20main/atualizando-sem-apagar.png) |
+| Recorte aplicado por setor A e PCD com quatro vagas dessa categoria | 1440×1000 | [Filtro PCD](2026-10-24%20-%20Integracao%20main/filtro-pcd.png) |
+| Erro ao atualizar preserva resultado anterior e oferece nova tentativa | 1440×1000 | [Erro na atualização](2026-10-24%20-%20Integracao%20main/erro-com-ultima-consulta.png) |
+| Falha inicial sem exibir contagens; recuperação exercitada sem reload | 1440×1000 | [Erro inicial](2026-10-24%20-%20Integracao%20main/erro-inicial.png) |
+| Falha isolada da comparação sem perder a análise principal | 1440×1000 | [Comparação indisponível](2026-10-24%20-%20Integracao%20main/comparacao-indisponivel.png) |
+| Ausência de histórico mantém contagens do cadastro e aviso próprio | 1440×1000 | [Sem observação](2026-10-24%20-%20Integracao%20main/sem-observacao.png) |
+| Seleção de ponto e expansão de tabela via teclado | 1440×1000 | [Teclado](2026-10-24%20-%20Integracao%20main/teclado-detalhes.png) |
+| Série de 31 dias: seleção do último ponto e rolagem só no gráfico | 390×844 | [31 dias no celular](2026-10-24%20-%20Integracao%20main/periodo-31-dias-celular.png) |
+
+## 23/10/2026 — categorias no topo e carregamento das análises
+
+Rota `/painel/analise`, perfil gerente fictício, frontend local `http://127.0.0.1:5173`. Edge headless/Playwright; Browser plugin ausente. Origem: respostas fictícias interceptadas, com atrasos e falhas controlados. Não valida API/banco reais, autorização do servidor, produção ou hardware. Revisão complementar à recuperação visual abaixo; prints anteriores preservados.
+
+| Resultado observado | Viewport | Captura |
+| --- | --- | --- |
+| Categorias no topo, gráficos e filtros; sem overflow da página | 1440×1000 / 768×1024 / 390×844 | [Desktop claro](2026-10-23%20-%20Categorias%20e%20carregamento/desktop-light.png) · [Tablet claro](2026-10-23%20-%20Categorias%20e%20carregamento/tablet-light.png) · [Celular claro](2026-10-23%20-%20Categorias%20e%20carregamento/celular-light.png) |
+| Mesma organização no tema escuro | 1440×1000 / 768×1024 / 390×844 | [Desktop escuro](2026-10-23%20-%20Categorias%20e%20carregamento/desktop-dark.png) · [Tablet escuro](2026-10-23%20-%20Categorias%20e%20carregamento/tablet-dark.png) · [Celular escuro](2026-10-23%20-%20Categorias%20e%20carregamento/celular-dark.png) |
+| Primeira carga sem números inventados ou aviso prematuro de ausência de observação | 1440×1000 | [Placeholders](2026-10-23%20-%20Categorias%20e%20carregamento/carregamento-inicial.png) |
+| Comparação lenta sem bloquear gráficos do período atual | 1440×1000 | [Comparação pendente](2026-10-23%20-%20Categorias%20e%20carregamento/comparacao-lenta.png) |
+| Reconsulta mantém conteúdo e identifica a última consulta válida | 1440×1000 | [Atualização](2026-10-23%20-%20Categorias%20e%20carregamento/atualizando-sem-apagar.png) |
+| Recorte aplicado por setor A e PCD com quatro vagas dessa categoria | 1440×1000 | [Filtro PCD](2026-10-23%20-%20Categorias%20e%20carregamento/filtro-pcd.png) |
+| Erro ao atualizar preserva resultado anterior e oferece nova tentativa | 1440×1000 | [Erro na atualização](2026-10-23%20-%20Categorias%20e%20carregamento/erro-com-ultima-consulta.png) |
+| Falha inicial sem exibir contagens; recuperação exercitada sem reload | 1440×1000 | [Erro inicial](2026-10-23%20-%20Categorias%20e%20carregamento/erro-inicial.png) |
+| Falha isolada da comparação sem perder a análise principal | 1440×1000 | [Comparação indisponível](2026-10-23%20-%20Categorias%20e%20carregamento/comparacao-indisponivel.png) |
+| Ausência de histórico mantém contagens do cadastro e aviso próprio | 1440×1000 | [Sem observação](2026-10-23%20-%20Categorias%20e%20carregamento/sem-observacao.png) |
+| Seleção de ponto e expansão de tabela via teclado | 1440×1000 | [Teclado](2026-10-23%20-%20Categorias%20e%20carregamento/teclado-detalhes.png) |
+| Série de 31 dias: seleção do último ponto e rolagem só no gráfico | 390×844 | [31 dias no celular](2026-10-23%20-%20Categorias%20e%20carregamento/periodo-31-dias-celular.png) |
+
+## 23/10/2026 — recuperação visual das análises
+
+Rota: `/painel/analise`, perfil gerente fictício, frontend local em `http://127.0.0.1:5173`. Origem: respostas sintéticas interceptadas pelo Playwright/Edge, sem banco ou conta real. Plugin Browser ausente. Não comprova produção, autorização do servidor ou hardware. Referência visual: composição registrada em 17/10; histórico de 21/10 preservado.
+
+| Estado observado | Viewport | Evidência |
+| --- | --- | --- |
+| Linha com lacuna, roscas e barras; tabela recolhida, tema claro | 1440×1000 / 768×1024 / 390×844 | [Desktop](2026-10-23%20-%20Analises%20graficas/desktop-light.png) · [Tablet](2026-10-23%20-%20Analises%20graficas/tablet-light.png) · [Celular](2026-10-23%20-%20Analises%20graficas/celular-light.png) |
+| Mesmos estados no tema escuro | 1440×1000 / 768×1024 / 390×844 | [Desktop escuro](2026-10-23%20-%20Analises%20graficas/desktop-dark.png) · [Tablet escuro](2026-10-23%20-%20Analises%20graficas/tablet-dark.png) · [Celular escuro](2026-10-23%20-%20Analises%20graficas/celular-dark.png) |
+| Seleção de ponto e tabela acionadas por teclado | 1440×1000 | [Detalhes](2026-10-23%20-%20Analises%20graficas/detalhes-e-teclado.png) |
+| Recorte por setor e categoria | 1440×1000 | [Filtros](2026-10-23%20-%20Analises%20graficas/filtros.png) |
+| Ausência de observações sem inferir estacionamento vazio | 1440×1000 | [Sem observação](2026-10-23%20-%20Analises%20graficas/sem-observacao.png) |
+| Falha de consulta identificada | 1440×1000 | [Erro](2026-10-23%20-%20Analises%20graficas/erro.png) |
+
 ## 21/10/2026 — interface atual e revisão geral
 
 Capturas da aplicação local em `http://127.0.0.1:5183`, com API Express e PostgreSQL descartável reais. Usamos somente contas e dados fictícios do Shopping Exemplo; não interceptamos a API. Edge headless/Playwright foi utilizado porque o plugin Browser não está disponível. Os resultados, a limpeza e os limites estão na [revisão geral](../Documentação/revisao-geral-2026-10-21.md).
@@ -169,3 +220,12 @@ Capturas locais com Edge/Playwright, API e PostgreSQL, Shopping Exemplo e conta 
 | `/painel/conta`, gerente | [Desktop](2026-10-21%20-%20Ajustes%20teloes%20e%20conta/conta-desktop.png), [tablet](2026-10-21%20-%20Ajustes%20teloes%20e%20conta/conta-tablet.png), [celular claro](2026-10-21%20-%20Ajustes%20teloes%20e%20conta/conta-mobile.png), [celular escuro](2026-10-21%20-%20Ajustes%20teloes%20e%20conta/conta-escuro-mobile.png) | 1440×1000, 768×1024, 390×844; salvar desabilitado sem diferença real, habilitado na edição e desabilitado após sucesso. |
 
 Nenhum transbordamento horizontal ou erro de página observado. A apresentação mantém tema próprio escuro. As capturas comprovam o ambiente local, sem homologação física dos televisores.
+
+## 21/10/2026 — piloto ESP32 no site publicado
+
+Rota `/admin/shoppings/d3a09b29-7e5a-4b7e-8c42-8f371d0a0001/estrutura`, perfil Admin, navegador integrado com viewport corrente. Origem: API e banco hospedados; Shopping Exemplo, cadastro de piloto sem leituras físicas recebidas ainda. Capturas comprovam cadastro, não operação dos sensores nem revisão responsiva.
+
+- [Importação confirmada: três atualizações e 80 vagas preservadas](2026-10-21%20-%20Piloto%20ESP32/importacao-publicada.png).
+- [Equipamento e vínculos cadastrados](2026-10-21%20-%20Piloto%20ESP32/equipamento-publicado.png).
+
+Nenhuma captura da emissão de chave foi feita. Revisão desktop/tablet/celular do frontend local integrado continua pendente.

@@ -13,6 +13,7 @@ import {
 } from './contratos.js';
 
 export type ConfiguracaoTelemetria = {
+  janelaConfirmacaoMs?: number;
   lacunaMaximaMs: number;
   timeoutSensorMs: number;
   timeoutPlacaMs: number;
@@ -228,6 +229,7 @@ export function createTelemetriaService(
             leituraAnteriorExpirada ? criarConfirmacaoEstado('DESCONHECIDA') : confirmacaoPersistida(sensor),
             { estado: leitura.estadoDetectado, recebidoEmMs: recebidoEm.getTime() },
             configuracao.lacunaMaximaMs,
+            configuracao.janelaConfirmacaoMs,
           );
           const candidato = observacao.proximo.candidato;
           const estadoConfirmado = observacao.situacao === 'CONFIRMADA'

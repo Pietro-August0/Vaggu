@@ -1,5 +1,41 @@
 # Protótipo físico VAGGU — três vagas
 
+**Resultado do firmware rápido:** gravado e iniciado na COM3; eventos físicos medidos em aproximadamente 1,1 s nos ciclos saudáveis (com variações de rede), S02 confirmou mudança em 2,232 s após a primeira leitura candidata e os três canais voltaram a registrar observações recentes no mesmo lote. Isso não transforma falha acústica ou elétrica em leitura válida. Mapa consulta a cada 500 ms; estabilidade dos três canais deve continuar sendo observada na bancada.
+
+**Atualização de velocidade e filtro:** mapa consulta a cada **500 ms** após a resposta anterior, sem sobrepor requisições. Firmware rápido removeu a espera de 3 s entre lotes e usa 100 ms, preservando os 65 ms entre pulsos dos ultrassônicos. A janela local do backend permanece 2 s. O ciclo real inclui nove medições e HTTP; não significa envio a cada 100 ms. Duas amostras válidas próximas podem substituir a mediana quando a terceira falhar; menos de duas, divergência excessiva ou duas leituras em lados opostos dos limiares continuam inválidas. Antes do ajuste, S01/S03 passavam dezenas de segundos sem observação e só S02 atualizava regularmente: polling mais rápido não cria leitura ausente. É necessário validar novamente os três sensores com superfícies adequadas.
+
+**Ajuste atual solicitado: confirmação local de 2 s** (`TELEMETRIA_CONFIRMACAO_MS=2000`) e mapa a cada 2 s. Lacuna de continuidade de 4,5 s preservada para suportar o ciclo atual da ESP32 (~4 s), mesmo sendo maior que a janela curta de bancada. Uma primeira leitura nunca confirma sozinha; uma nova leitura consistente após a janela confirma se não houve silêncio acima da lacuna. Tempo total inclui envio e consulta do mapa, não é garantido em 2 s. Padrão de outros ambientes permanece em 30 s.
+
+## Transição rápida da bancada — configuração atual
+
+A pedido do usuário, o backend local está com `TELEMETRIA_CONFIRMACAO_MS=5000` e `TELEMETRIA_LACUNA_MAXIMA_MS=4500`; o mapa consulta a cada **2 segundos**. O padrão do código e do .env.example continua em **30000 ms** para ambientes sem ajuste explícito. Reinicie a API após mudar o .env. Com o firmware enviando aproximadamente a cada 4 s, a transição completa tende a 8–12 s em condições estáveis; falhas de leitura, lacunas maiores que 4,5 s ou oscilação reiniciam a confirmação. Não há garantia de mudança em 5 s exatos nem indicação de livre quando falta eco.
+
+O histórico de eventos com inicialização física `esp32-...` confirmou OCUPADA e depois LIVRE nas três vagas A01/A02/A03. O mapa do gerente exibiu as três livres, com consultas automáticas e detalhes, em desktop e celular. A confirmação rápida foi ativada depois desse primeiro ensaio de três canais; padrão de 30 s e janela configurada de 5 s são cobertos pelos testes. As seções abaixo registram a preparação anterior com 30 s/5 s de polling e devem ser lidas com esta configuração atual em mente.
+
+## Teste integrado local — 21/10/2026
+
+**Resultado físico confirmado:** firmware compilado e gravado na COM3; hotspot Windows ativado após detectar que estava Off; Serial HTTP202, inicialização `esp32-...` persistida e S02 confirmou LIVRE. O mapa de gerente exibiu A02 Livre e atualizou automaticamente em desktop/celular. S01 sem leitura válida e S03 intermitente ainda precisam de posicionamento/ensaio: não considerar os três canais homologados. Compilação/upload não são mais pendências desta revisão; observações em contrário nas seções antigas descrevem a etapa inicial.
+
+Esta seção substitui instruções anteriores sobre pinagem, LEDs e consulta manual. Firmware atual: TRIG **27/26/25**, ECHO **32/33/34**, somente LED A01 em GPIO13 (`USAR_LEDS = true`, `QUANTIDADE_LEDS = 1`). O mapa mostra o estado confirmado após 30 s consistentes; distâncias ficam somente no Serial.
+
+`npm.cmd run telemetria:bancada` no backend prepara o shopping **Bancada ESP32 — 3 vagas**, A01/A02/A03, placa `VAGGU_ESP32_BANCADA_01`, sensores S01/S02/S03 e gerente. Repetições preservam os arquivos/chaves e não duplicam registros; configurações locais divergentes impedem sobrescrita. Não usa o Shopping Exemplo. Configure BANCADA_API_BASE antes da preparação em outra máquina.
+
+Os arquivos locais `vaggu_3_vagas/config.h` e `acesso.local` são ignorados pelo Git. O primeiro contém Wi-Fi/chave; o segundo, e-mail e senha provisória. Não compartilhe seus conteúdos. Abra `http://127.0.0.1:5173/login`, use o acesso de `acesso.local` e troque a senha no primeiro login. `/painel` mostra as três vagas.
+
+No hotspot Windows atual, API_BASE é `http://192.168.137.1:3000/api/v1/telemetria`. Confira ipconfig ao trocar de rede. ESP32 entra no hotspot 2,4 GHz; API usa HOST=0.0.0.0. Não abra PostgreSQL para a rede. Mantenha Firewall ativo; permita só TCP3000 na interface/sub-rede de bancada caso necessário. Uma consulta no próprio computador não comprova acesso da ESP32.
+
+Grave `vaggu_3_vagas/vaggu_3_vagas.ino`, não o sketch USB isolado. Serial a 115200 baud deve mostrar Wi-Fi conectado e HTTP 202/200. Mantenha o objeto até 15 cm ou fundo vazio a partir de 18 cm por pelo menos 40 s; entre eles há histerese. Sem eco válido, omite o sensor e aguarda expiração para indisponível. Não execute simulador e placa com a mesma identidade simultaneamente.
+
+Admin em **Visualizar mapa** e gerente em `/painel` agora consultam automaticamente a cada 5 s após a resposta anterior. Pausam com aba oculta e consultam ao retornar. Erro retira o mapa antigo e mostra recuperação automática. Filtros e seleção permanecem entre respostas válidas. O editor de posições não tem polling.
+
+Validação: build/lint frontend, build backend e seis testes de contrato/rotas/PostgreSQL aprovados. Edge/Playwright (Browser plugin not available) confirmou eventos HTTP sintéticos da bancada → PostgreSQL → atualização do mapa Admin, detalhes, falha/recuperação e viewport 390 px sem transbordamento ou erros inesperados de console. Isso não comprova envio físico; gravação e primeiro evento `esp32-...` serão registrados separadamente no planejamento.
+
+## Montagem atual do teste USB — 21/10/2026
+
+O [sketch de teste USB](teste_sensores_usb/teste_sensores_usb.ino) inclui um LED no GPIO13, com resistor de 1 kΩ em série até o anodo e catodo ao GND. Pares atuais: S01 TRIG27/ECHO32, S02 TRIG26/ECHO33, S03 TRIG25/ECHO34. O firmware de integração usa os mesmos pares.
+
+Ao ligar ou resetar, o LED pisca três vezes. Depois acende somente quando S01 mede entre 2 e 15 cm. Falha de leitura apaga o LED; apagado não comprova vaga livre. O Monitor Serial a 115200 baud identifica esta versão por TESTE USB + LED GPIO13 e imprime o comando LIGADO/DESLIGADO. Se não houver piscadas nem a identificação nova, conferir arquivo, porta e upload. Se houver LIGADO e o LED permanecer apagado, conferir a ligação com USB desligado. Compilação Arduino e validação física desta revisão pendentes.
+
 ## Parecer de viabilidade — 19/10/2026
 
 **Viável para bancada/maquete, com adaptação de firmware.** Foi analisada a pasta `C:\Users\pietr\Downloads\vaggu-esp32-demo (2)\vaggu-esp32-demo`. O demo tem servidor em memória e tela própria; não deve substituir a API e o mapa do projeto principal. O firmware nesta pasta envia diretamente para a API existente, preservando PostgreSQL, autenticação por placa e isolamento por shopping. Não exige migration ou mudança de contrato.
@@ -24,7 +60,7 @@ Use primeiro o sketch [teste_sensores_usb.ino](teste_sensores_usb/teste_sensores
 
 Pinagem: TRIG 25/26/27, ECHO após divisores 32/33/34. Aponte um objeto plano para cada sensor a cerca de 10 cm e depois 25–30 cm; a leitura do canal correspondente deve mudar de forma coerente, sem exigir precisão exata. Não interprete SEM LEITURA VALIDA como vaga livre. Confira vários ciclos, primeiro em cada canal separadamente e depois nos três, antes de seguir para a integração. Registre as distâncias vazia/ocupada para calibrar os limiares. Se houver falha, desligue o USB antes de mexer em fios. Se o upload falhar na conexão, tente BOOT durante Connecting, confirme cabo de dados e porta COM.
 
-Depois deste ensaio, grave o firmware `vaggu_3_vagas` seguindo as etapas de provisionamento e configuração abaixo. Ele está com `USAR_LEDS = false`, conforme decisão atual. A seção de LEDs é opcional e só deve ser ativada mudando essa constante para true após a montagem correspondente. A compilação Arduino e o teste físico dos dois sketches ainda não foram executados neste ambiente.
+Depois deste ensaio, grave o firmware `vaggu_3_vagas` seguindo as etapas de provisionamento e configuração abaixo. Ele está agora com `USAR_LEDS = true` e `QUANTIDADE_LEDS = 1`, apenas para GPIO13. A seção de LEDs é opcional e só deve ser ativada mudando essa constante para true após a montagem correspondente. A compilação Arduino e o teste físico dos dois sketches ainda não foram executados neste ambiente.
 
 Equipamento informado pelo usuário: **ESP32 DevKit V1**; alimentação futura com **quatro pilhas Ni-MH, capacidade declarada de 4700 mAh cada**. Confira a marcação WROOM-32 no módulo e os GPIOs impressos na placa antes de aplicar a pinagem abaixo; DevKit V1 tem variantes de fabricante.
 
@@ -43,9 +79,9 @@ O HC-SR04 usa 5 V e seu ECHO precisa de redução antes de entrar no GPIO do ESP
 
 | Sensor | Vaga exemplo | TRIG direto | ECHO através do divisor | Código provisionado |
 | --- | --- | --- | --- | --- |
-| 1 | A01 | GPIO25 | GPIO32 | VAGGU_ESP32_01-S01 |
+| 1 | A01 | GPIO27 | GPIO32 | VAGGU_ESP32_01-S01 |
 | 2 | A02 | GPIO26 | GPIO33 | VAGGU_ESP32_01-S02 |
-| 3 | A03 | GPIO27 | GPIO34 | VAGGU_ESP32_01-S03 |
+| 3 | A03 | GPIO25 | GPIO34 | VAGGU_ESP32_01-S03 |
 
 Os números são **GPIO**, não a posição física do conector. A pinagem foi alterada em relação ao demo para evitar GPIO5, que participa da configuração de boot do ESP32 clássico.
 
@@ -211,7 +247,7 @@ O firmware mede em sequência, com pausas de 65 ms entre disparos, usa mediana d
 
 Observe cada sensor vazio e ocupado pelo Serial Monitor. Ajuste separadamente `OCUPAR_CM` e `LIBERAR_CM`: o limiar de ocupação deve ser menor que o de liberação e ambos devem separar claramente as medidas reais. Padrões iniciais: ocupa em ≤15 cm, libera em ≥18 cm. Entre eles mantém o estado detectado; após boot/falha, a faixa intermediária é omitida até haver leitura conclusiva.
 
-Abra o frontend principal (`npm.cmd run dev` em `vaggu-frontend`, após instalar dependências) e entre como Admin ou gerente do shopping de teste. No mapa, selecione o andar e a vaga; acompanhe placa, observação e confirmação pendente. **Recarregue o mapa/página para buscar novas leituras**: o mapa administrativo/gerencial ainda não tem atualização automática periódica. A prévia de telão tem consulta periódica própria de 30 s.
+Abra o frontend principal (`npm.cmd run dev` em `vaggu-frontend`, após instalar dependências) e entre como Admin ou gerente do shopping de teste. No mapa, selecione o andar e a vaga; acompanhe placa, observação e confirmação pendente. Admin em Visualizar mapa e gerente consultam leituras automaticamente a cada 5 s após cada resposta. A prévia de telão tem consulta periódica própria de 30 s.
 
 O estado confirmado pode permanecer anterior durante a janela de mudança: não espere alteração instantânea. Mantenha a situação por pelo menos **40 s** em cada etapa e consulte novamente. Nas configurações padrão, o sensor silencioso vence após **120 s**; a persistência do job pode demorar mais **30 s**. A consulta do mapa também aplica validade individual.
 
@@ -249,3 +285,15 @@ Não retire fios energizados para simular falhas. Registre horário, vaga, dist�
 ## Verificação desta entrega
 
 Contrato conferido com `src/telemetria/contratos.ts`, rotas, serviço e script de provisionamento do backend. Build TypeScript, cinco testes existentes de contrato/rotas de telemetria e verificador documental aprovados. Os testes HTTP precisaram de execução com acesso a loopback fora da restrição inicial do ambiente. Não houve novo ensaio PostgreSQL nesta entrega. Não havia `arduino-cli` ou compilador Arduino disponível no ambiente: **compilação no core ESP32, upload e ensaio elétrico permanecem pendentes**. Não foram criados registros no banco nem alteradas credenciais reais durante esta preparação.
+
+## Piloto hospedado em 21/10/2026
+
+Admin autenticado autorizou uso do Shopping Exemplo. Criado setor `Piloto físico ESP32` no Piso G1, com vagas P01/P02/P03. A importação corrigiu o setor das três vagas e preservou as 80 anteriores. Placa `VAGGU_ESP32_PILOTO_01` cadastrada com chave individual, guardada somente em config.h ignorado; sensores S01/S02/S03 vinculados respectivamente a P01/P02/P03. Este shopping continua classificado como demonstração; não usar seus indicadores agregados como validação de operação real.
+
+Firmware HTTPS compilado e gravado na ESP32 em COM3, com validação de certificado e NTP obrigatório. A placa conecta ao hotspot, mas o relógio ainda não sincronizou: envio hospedado não validado. Não há contorno de TLS. Computador tem internet via rede local e Cloudflare WARP; compartilhamento do hotspot aguarda conferência pelo usuário.
+
+Verificação local após integrar origin/main: builds backend/frontend e lint aprovados; 19 testes de configuração, confirmação e contrato/rotas aprovados; 2 testes PostgreSQL descartáveis de telemetria e isolamento do piloto aprovados. Revisão visual responsiva do polling após integração ainda pendente. Nenhum push ou deploy foi executado.
+
+### Diagnóstico da conexão do piloto
+
+`diagnostico_rede/diagnostico_rede.ino` reutiliza o config.h privado da bancada, mas não envia Authorization nem leituras. Verifica DNS do Vaggu e NTP, TCP/443 do Vaggu e de IP público, TCP/3000 do gateway, resposta NTP por IPv4 direto e GET público de saúde somente com relógio válido e certificado verificado. Repete a cada 30 segundos. Ao gravá-lo, a telemetria fica temporariamente pausada; depois do diagnóstico, regravar vaggu_3_vagas. Não desabilita TLS nem modifica hotspot, firewall ou VPN.
