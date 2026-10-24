@@ -91,3 +91,9 @@ Esta entrega é uma prévia operacional para apresentação e desenvolvimento. N
 ### Análises — cobertura por setor e centro da rosca — 17/10/2026
 
 O componente `analise-estacionamento.tsx` exibe cobertura histórica por setor à direita de Tipo de vaga, a partir de `porSetor.coberturaPercentual` da API, respeitando o período consultado (SSD §10.2). Sem histórico, mantém aviso de ausência de dados; Shopping Exemplo identifica histórico demonstrativo. Barras de 0–100% representam tempo conhecido, não disponibilidade de vagas. O CSS limita o texto central da rosca ao diâmetro interno e divide “ocupadas agora” em duas linhas. Build aprovado e composição conferida no navegador local a 1440 px.
+
+### Apresentação das análises — 23/10/2026
+
+A rota `/painel/analise` prioriza gráficos de ocupação diária, situação atual, movimentação, categorias e cobertura. A tabela de indicadores históricos por setor inicia recolhida em “Ver indicadores detalhados por setor”. Permanência aparece em horas e minutos; percentuais de destaque são arredondados só na interface. Os filtros UTC/setor/categoria, a comparação e a precisão das exportações permanecem. Dias sem observação preservam lacunas e não viram ocupação zero; situação atual e histórico têm rótulos separados. Capturas e limites estão no índice de evidências de 23/10.
+
+Complemento de 23/10: categorias do cadastro aparecem no topo, respeitando o recorte aplicado. A comparação com o período anterior carrega independentemente dos gráficos atuais. Ao atualizar ou falhar, a última consulta permanece identificada; Atualizar análise/Tentar novamente repetem o recorte aplicado. A primeira carga mostra placeholders e não interpreta espera como ausência de histórico. Exportações aguardam a comparação e carregam seus módulos sob demanda. Séries acima de dez dias permitem rolagem interna para preservar seleção por toque/teclado.

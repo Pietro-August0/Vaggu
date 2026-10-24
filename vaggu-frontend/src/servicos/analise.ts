@@ -34,6 +34,14 @@ function metrica(dados: unknown): MetricasHistoricas {
 export function formatarMetrica(valor: number | null | undefined, unidade = "", casas = 1) {
   return valor == null ? "Sem observação" : `${valor.toLocaleString("pt-BR", { maximumFractionDigits: casas })}${unidade}`
 }
+/** Arredonda apenas a apresentação; a API e as exportações preservam os minutos originais. */
+export function formatarDuracao(minutos: number | null | undefined) {
+  if (minutos == null) return "Sem observação"
+  if (minutos > 0 && minutos < 1) return "< 1 min"
+  const total = Math.round(minutos)
+  const horas = Math.floor(total / 60), restante = total % 60
+  return horas ? `${horas} h${restante ? ` ${restante} min` : ""}` : `${total} min`
+}
 export function lerAnaliseHistorica(dados: unknown): AnaliseHistorica {
   if (!objeto(dados) || typeof dados.temHistorico !== "boolean" || !objeto(dados.periodo)
     || typeof dados.periodo.inicioEm !== "string" || typeof dados.periodo.fimEm !== "string"
