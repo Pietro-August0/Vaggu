@@ -759,3 +759,27 @@ Consolidados o resultado das duas etapas de análise, as 26 capturas e os limite
 ## Integração na main — 24/10/2026
 
 Merge autorizado de `codex/piloto-esp32-https` sobre a main atualizada (`688ce2a`), preservando telões/tema remotos e piloto/análises. Conflitos em mapa, planejamento e índice resolvidos mantendo ambas as documentações. Frontend build/lint aprovados; backend: 95 testes aprovados, 12 ignorados sem banco configurado, zero falhas. Roteiro Playwright da integração aprovado com 16 prints locais novos e exportações verificadas. Comandos: `git fetch origin`, `git checkout main`, `git merge --ff-only origin/main`, `git merge --no-ff --no-commit codex/piloto-esp32-https`, `npm test` no backend, `npm run build`/`npm run lint` no frontend, `node %TEMP%/vaggu-merge-main-qa.cjs`, verificador documental e diff check. Detalhes e limites no [diário de fechamento](../Diário/2026-10-24.md). Push para main autorizado; workflow do Render pode solicitar publicação, cuja conclusão não foi homologada nesta etapa.
+
+
+## Experimento de animações das análises — 25/10/2026
+
+Na branch local `codex/animacoes-analises`, implementadas contagens crescentes, linha por recorte SVG, barras por escala e roscas por escala/opacidade usando Motion existente. Entradas por viewport, valores acessíveis finais, largura reservada e interrupção em tempo real com preferência reduzida. Preservados ausência de observação, filtros, comparação independente, estados de erro e exportações. Experimento e comandos no [registro de testes](animacoes-analises-2026-10-25.md), com 23 PNGs e uma prévia GIF; provas locais fictícias, sem publicação ou aprovação atribuída. Build/lint, regressão do navegador, movimento normal/reduzido e verificadores documentais aprovados. Pendência: avaliar ritmo e homologar no ambiente de destino. Sem novas dependências, mudanças no backend, commit ou push.
+
+## Banco local atualizado — 25/10/2026
+
+Corrigida falha relatada como conexão no painel local. Frontend, API e SELECT 1 respondiam, mas `/estacionamento/estrutura` e `/estacionamento/analise` retornavam HTTP 500: o banco `vaggu_revisao_local` ainda não tinha as quatro migrações de 19/10 (erro P2022, coluna `sensores.em_manutencao` ausente). Login não era a causa.
+
+Antes de atualizar o esquema, criado backup completo com pg_dump em `ambiente.local/backups/antes-migracoes-20261025-1792971066073.dump`, ignorado pelo Git. Conferidos os SQLs e aplicado `npm run db:deploy` no backend, sem reset ou exclusão do banco. As quatro migrações foram concluídas. Consultas autenticadas de estrutura e análise passaram a HTTP 200; painel recuperado no navegador do usuário, com sua sessão preservada, e análises abertas para teste. Não foi alterado código de autenticação, permissões ou credenciais. API, frontend e PostgreSQL locais permanecem ligados.
+
+
+## Cores e leitura direta das análises — 25/10/2026
+
+Ajustado o topo conforme print recebido: categorias amarelo/azul/verde/verde-esmeralda, fundos discretos e ícones com cor; indicadores com acentos amarelo/azul/verde/roxo, maior padding e valor separado do título. Removidas repetições de cadastro e explicações longas dos cards; definições e limite da cobertura preservados em “Como ler os indicadores”, expansível por teclado. Permanência sem ciclos usa travessão e “Sem ciclos completos”, sem converter ausência em zero. Filtros ficam em uma linha no desktop e reorganizam no tablet/celular. As animações e consultas existentes foram preservadas.
+
+Verificações: `npm run build` e `npm run lint` no frontend aprovados (aviso conhecido de chunks grandes); `%TEMP%/vaggu-analises-cores-qa.cjs` aprovado com Playwright/Edge, dados fictícios interceptados, 17 capturas, temas claro/escuro e viewports 1440×1000, 768×1024 e 390×844. Teclado na ajuda/tabela/pontos, filtros, carga/comparação lenta, falhas, recuperação, resposta antiga, ausência de histórico, 31 dias e downloads Excel/PDF exercitados; sem overflow da página ou erro JavaScript inesperado. Dois seletores do roteiro foram delimitados após a inclusão do novo details. README, mapa, fluxo e índice atualizados; `node scripts/verificar-documentacao.mjs` e `git diff --check` executados. Sem novas dependências, commit, push ou publicação. Prints locais não comprovam produção.
+
+## Entrega da revisão das análises — 26/10/2026
+
+Commit e push autorizados para `origin/codex/animacoes-analises`, a partir da main `fad0851`. Consolidados animações de entrada, contagens acessíveis, cores por categoria/indicador, espaçamento, filtros compactos e ajuda expansível. Incluídos documentação, README, mapa e evidências de 25/10; preservados os registros da correção do banco local e o backup ignorado pelo Git. Nenhuma credencial, arquivo de ambiente ou cópia do banco integra a entrega.
+
+Código permanece na versão aprovada nos comandos de build/lint e testes locais dos registros anteriores; não houve mudança de código nesta rodada. No fechamento: `git fetch origin`, revisão de status/diffs/identidade configurada, `node scripts/verificar-documentacao.mjs`, `git diff --check`, commit e `git push -u origin codex/animacoes-analises`. Hash e confirmação remota ficam na mensagem de entrega. Este envio não inclui merge na main ou deploy; validação do ambiente publicado permanece pendente. A indisponibilidade da skill de roteamento permanece registrada, sem atribuição de coautoria ou aprovação a integrantes.

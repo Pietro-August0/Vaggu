@@ -98,3 +98,9 @@ O componente `analise-estacionamento.tsx` exibe cobertura histórica por setor �
 A rota `/painel/analise` prioriza gráficos de ocupação diária, situação atual, movimentação, categorias e cobertura. A tabela de indicadores históricos por setor inicia recolhida em “Ver indicadores detalhados por setor”. Permanência aparece em horas e minutos; percentuais de destaque são arredondados só na interface. Os filtros UTC/setor/categoria, a comparação e a precisão das exportações permanecem. Dias sem observação preservam lacunas e não viram ocupação zero; situação atual e histórico têm rótulos separados. Capturas e limites estão no índice de evidências de 23/10.
 
 Complemento de 23/10: categorias do cadastro aparecem no topo, respeitando o recorte aplicado. A comparação com o período anterior carrega independentemente dos gráficos atuais. Ao atualizar ou falhar, a última consulta permanece identificada; Atualizar análise/Tentar novamente repetem o recorte aplicado. A primeira carga mostra placeholders e não interpreta espera como ausência de histórico. Exportações aguardam a comparação e carregam seus módulos sob demanda. Séries acima de dez dias permitem rolagem interna para preservar seleção por toque/teclado.
+
+
+Experimento local de 25/10: indicadores e categorias contam até o valor confirmado; gráficos entram ao alcançar a viewport. A preferência de movimento reduzido remove as entradas e interrompe a contagem, inclusive se alterada com a página aberta. O número acessível e a exportação usam o valor final desde o início. Ver [testes das animações](animacoes-analises-2026-10-25.md).
+
+
+Revisão de leitura em 25/10: categorias e indicadores têm acentos de cor e mais espaço interno. Cards mostram título, valor e apoio curto; definições ficam em “Como ler os indicadores”. Ausência de permanência usa travessão com “Sem ciclos completos”. Filtros ficam em uma linha no desktop e se reorganizam em telas menores, sem alterar o recorte ou os contratos.
