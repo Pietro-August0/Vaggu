@@ -22,6 +22,44 @@ Capturas locais atuais do novo protótipo em `http://127.0.0.1:5184`, com Edge h
 
 Todos os prints da apresentação são do viewport inteiro sem rolagem. O cadastro emite segredo apenas uma vez; esse momento não foi capturado. O fixture de sete andares acrescenta cinco pisos vazios exclusivamente para conferir paginação, sem inventar leituras. Os resultados não comprovam instalação física nem produção.
 
+## 25/10/2026 — cores e leitura direta das análises
+
+Rota `/painel/analise`, perfil gerente fictício, frontend local `http://127.0.0.1:5173`. Origem: respostas fictícias interceptadas com Playwright/Edge, em movimento reduzido para conferir a composição final. Não comprova API/banco de produção ou hardware. Referência do ajuste: print local apresentado na conversa, com categorias sem diferenciação de cor, excesso de textos e permanência ausente muito grande. Fonte externa temporária não incorporada ao repositório.
+
+| Resultado observado | Viewport | Captura |
+| --- | --- | --- |
+| Categorias coloridas, filtros em uma linha, indicadores com apoio curto e ajuda recolhida | 1440×1000 | [Claro](2026-10-25%20-%20Analises%20cores%20e%20leitura/desktop-light.png) · [Escuro](2026-10-25%20-%20Analises%20cores%20e%20leitura/desktop-dark.png) |
+| Filtros e cards reorganizados sem overflow da página | 768×1024 | [Tablet claro](2026-10-25%20-%20Analises%20cores%20e%20leitura/tablet-light.png) · [Tablet escuro](2026-10-25%20-%20Analises%20cores%20e%20leitura/tablet-dark.png) |
+| Categorias em duas colunas; datas lado a lado, demais filtros em linhas | 390×844 | [Celular claro](2026-10-25%20-%20Analises%20cores%20e%20leitura/celular-light.png) · [Celular escuro](2026-10-25%20-%20Analises%20cores%20e%20leitura/celular-dark.png) |
+| Ausência de histórico: travessão e apoio curto, sem número inventado | 1440×1000 | [Sem observação](2026-10-25%20-%20Analises%20cores%20e%20leitura/sem-observacao.png) |
+| Detalhes das métricas acessíveis ao expandir por teclado | 1440×1000 | [Ajuda expandida](2026-10-25%20-%20Analises%20cores%20e%20leitura/ajuda-expandida.png) · [Tabela e ponto](2026-10-25%20-%20Analises%20cores%20e%20leitura/teclado-detalhes.png) |
+| Filtro PCD aplicado e atualização preservando o resultado anterior | 1440×1000 | [Filtro](2026-10-25%20-%20Analises%20cores%20e%20leitura/filtro-pcd.png) · [Atualização](2026-10-25%20-%20Analises%20cores%20e%20leitura/atualizando-sem-apagar.png) |
+| Primeira carga e comparação independente | 1440×1000 | [Carregamento](2026-10-25%20-%20Analises%20cores%20e%20leitura/carregamento-inicial.png) · [Comparação lenta](2026-10-25%20-%20Analises%20cores%20e%20leitura/comparacao-lenta.png) |
+| Erros inicial, de atualização e da comparação com recuperação exercitada | 1440×1000 | [Inicial](2026-10-25%20-%20Analises%20cores%20e%20leitura/erro-inicial.png) · [Atualização](2026-10-25%20-%20Analises%20cores%20e%20leitura/erro-com-ultima-consulta.png) · [Comparação](2026-10-25%20-%20Analises%20cores%20e%20leitura/comparacao-indisponivel.png) |
+| Série longa com rolagem interna e seleção do último ponto | 390×844 | [31 dias](2026-10-25%20-%20Analises%20cores%20e%20leitura/periodo-31-dias-celular.png) |
+
+## 25/10/2026 — animações das análises
+
+Rota `/painel/analise`, perfil gerente fictício, frontend local `http://127.0.0.1:5173`. Edge headless/Playwright; Browser plugin ausente. Origem: respostas fictícias interceptadas, com atrasos e falhas controlados. Não valida API/banco reais, autorização do servidor, produção ou hardware. Experimento de animações de contagem, linha, barras e roscas. A matriz responsiva abaixo usa movimento reduzido para conferir os valores finais; passos intermediários e preferência alterada em tempo real também foram conferidos. Ver [registro dos testes](../Documentação/animacoes-analises-2026-10-25.md). Prints anteriores preservados.
+
+| Resultado observado | Viewport | Captura |
+| --- | --- | --- |
+| Categorias no topo, gráficos e filtros; sem overflow da página | 1440×1000 / 768×1024 / 390×844 | [Desktop claro](2026-10-25%20-%20Animacoes%20analises/desktop-light.png) · [Tablet claro](2026-10-25%20-%20Animacoes%20analises/tablet-light.png) · [Celular claro](2026-10-25%20-%20Animacoes%20analises/celular-light.png) |
+| Mesma organização no tema escuro | 1440×1000 / 768×1024 / 390×844 | [Desktop escuro](2026-10-25%20-%20Animacoes%20analises/desktop-dark.png) · [Tablet escuro](2026-10-25%20-%20Animacoes%20analises/tablet-dark.png) · [Celular escuro](2026-10-25%20-%20Animacoes%20analises/celular-dark.png) |
+| Primeira carga sem números inventados ou aviso prematuro de ausência de observação | 1440×1000 | [Placeholders](2026-10-25%20-%20Animacoes%20analises/carregamento-inicial.png) |
+| Comparação lenta sem bloquear gráficos do período atual | 1440×1000 | [Comparação pendente](2026-10-25%20-%20Animacoes%20analises/comparacao-lenta.png) |
+| Reconsulta mantém conteúdo e identifica a última consulta válida | 1440×1000 | [Atualização](2026-10-25%20-%20Animacoes%20analises/atualizando-sem-apagar.png) |
+| Recorte aplicado por setor A e PCD com quatro vagas dessa categoria | 1440×1000 | [Filtro PCD](2026-10-25%20-%20Animacoes%20analises/filtro-pcd.png) |
+| Erro ao atualizar preserva resultado anterior e oferece nova tentativa | 1440×1000 | [Erro na atualização](2026-10-25%20-%20Animacoes%20analises/erro-com-ultima-consulta.png) |
+| Falha inicial sem exibir contagens; recuperação exercitada sem reload | 1440×1000 | [Erro inicial](2026-10-25%20-%20Animacoes%20analises/erro-inicial.png) |
+| Falha isolada da comparação sem perder a análise principal | 1440×1000 | [Comparação indisponível](2026-10-25%20-%20Animacoes%20analises/comparacao-indisponivel.png) |
+| Ausência de histórico mantém contagens do cadastro e aviso próprio | 1440×1000 | [Sem observação](2026-10-25%20-%20Animacoes%20analises/sem-observacao.png) |
+| Seleção de ponto e expansão de tabela via teclado | 1440×1000 | [Teclado](2026-10-25%20-%20Animacoes%20analises/teclado-detalhes.png) |
+| Série de 31 dias: seleção do último ponto e rolagem só no gráfico | 390×844 | [31 dias no celular](2026-10-25%20-%20Animacoes%20analises/periodo-31-dias-celular.png) |
+| Movimento normal: números, linha e barras em entrada | 1440×1000 | [Contagem](2026-10-25%20-%20Animacoes%20analises/numeros-em-contagem.png) · [Linha](2026-10-25%20-%20Animacoes%20analises/linha-em-entrada.png) · [Barras](2026-10-25%20-%20Animacoes%20analises/barras-em-entrada.png) |
+| Após entrada e preferência reduzida ativada em tempo real | 1440×1000 | [Após entrada](2026-10-25%20-%20Animacoes%20analises/graficos-apos-entrada.png) · [Preferência alterada](2026-10-25%20-%20Animacoes%20analises/movimento-reduzido-em-tempo-real.png) |
+| Quadros controlados e prévia em loop ilustrativo | Recorte 1160×950 da viewport 1440×1000 | [100 ms](2026-10-25%20-%20Animacoes%20analises/entrada-100ms.png) · [Final](2026-10-25%20-%20Animacoes%20analises/entrada-final.png) · [GIF](2026-10-25%20-%20Animacoes%20analises/previa-animacoes.gif) |
+
 ## 24/10/2026 — análises após integração da main
 
 Rota `/painel/analise`, perfil gerente fictício, frontend local `http://127.0.0.1:5173`. Edge headless/Playwright; Browser plugin ausente. Origem: respostas fictícias interceptadas, com atrasos e falhas controlados. Não valida API/banco reais, autorização do servidor, produção ou hardware. Conferência após integrar as mudanças remotas da main (telões/tema), sem alterar a aparência das análises. Roteiro completo e downloads aprovados; prints anteriores preservados.

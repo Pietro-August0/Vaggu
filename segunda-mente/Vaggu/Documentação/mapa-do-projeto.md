@@ -180,7 +180,7 @@ As cópias de imagens entre `segunda-mente/Vaggu/Identidade visual/Assets/` e `v
 | `vaggu-frontend/public/assets/vaggu-logo.svg` | Asset visual vaggu-logo.svg; reutilizado na identidade e composição da interface. |
 | `vaggu-frontend/src/app/app-store.tsx` | Restaura identidade via cookie e `/auth/me` antes de liberar rotas; gerencia expiração, logout, troca de senha e consultas. |
 | `vaggu-frontend/src/components/brand.tsx` | Reutiliza os arquivos de marca publicados em public/assets nos links para a página inicial. |
-| `vaggu-frontend/src/components/analise-estacionamento.css` | Define painel analítico responsivo, categorias no topo, placeholders iniciais, aviso de atualização e contraste nos dois temas; preserva foco, rolagem interna e redução de movimento. |
+| `vaggu-frontend/src/components/analise-estacionamento.css` | Define painel analítico responsivo, categorias e indicadores coloridos, espaçamento interno, filtros compactos, ajuda expansível e estados de consulta nos dois temas; preserva foco e redução de movimento. |
 | `vaggu-frontend/src/components/analise-estacionamento.tsx` | Filtra datas UTC/setor/categoria, apresenta contagens de categorias no topo e gráficos com lacunas; carrega a comparação separadamente, preserva a última consulta ao atualizar/falhar, permite tentar novamente e ignora respostas de consultas anteriores. Exportações Excel/PDF carregadas sob demanda; tabela setorial expansível e séries longas com rolagem interna. |
 | `vaggu-frontend/src/components/resumo-analitico-admin.tsx` | Resume ocupação, cobertura e tendência do shopping selecionado na ficha Admin, distinguindo histórico real de demonstração. |
 | `vaggu-frontend/src/components/dashboard-shell.tsx` | Compartilha cabeçalho e conteúdo centralizados, menu responsivo, cartão de conta no rodapé da sidebar, diálogo da conta, alternância claro/escuro e saída da sessão. |
@@ -317,3 +317,11 @@ O [protótipo e sua validação](telao-apresentacao-2026-10-21.md) substituem o 
 
 | `hardware/esp32-3-vagas/piloto-estrutura.csv` | Importação das três vagas físicas no setor do piloto, preservando as demais vagas. |
 | `hardware/esp32-3-vagas/diagnostico_rede/diagnostico_rede.ino` | Diagnostica DNS, TCP por nome e IP, acesso local, UDP/NTP e HTTPS público sem enviar chave nem leituras. |
+
+
+### Animações das análises — 25/10/2026
+
+| `vaggu-frontend/src/components/numero-animado.tsx` | Contagem visual por viewport e mudança de valor, com largura reservada, valor final acessível, formatação de percentuais/duração, cancelamento na desmontagem e respeito à redução de movimento. |
+| `vaggu-frontend/src/hooks/use-movimento-reduzido.ts` | Acompanha prefers-reduced-motion com useSyncExternalStore, inclusive alterações durante o uso; snapshot conservador no servidor. |
+
+O painel analítico usa Motion já instalado: linha e preenchimento revelados por recorte SVG, barras por escala e roscas por escala/opacidade. A apresentação não altera o histórico, a exportação ou os estados de consulta. Ver [experimento e testes](animacoes-analises-2026-10-25.md).

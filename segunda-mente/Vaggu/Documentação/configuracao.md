@@ -337,3 +337,7 @@ O administrador do repositório deve concluir uma única configuração:
 4. Abrir **Actions → Publicar main no Render → Run workflow** e conferir o resultado no GitHub e no Render. Com o segredo configurado, cada push na `main` solicita uma nova publicação; conferir também o resultado do build e da prontidão.
 
 O cadastro desse segredo exige permissão administrativa no repositório.
+
+### Painel local retorna erro apesar de banco conectado
+
+`/api/v1/health/ready` confirma conectividade, mas não comprova que o esquema está atualizado. Em 25/10/2026, o banco local antigo aceitava login e falhava ao consultar sensores/análises por quatro migrações pendentes. Conferir `npx prisma migrate status` em `vaggu-backend`, preservar o banco com backup e aplicar as migrações versionadas com `npm run db:deploy` antes de iniciar a API atualizada. Não usar reset para corrigir esse caso. O resultado esperado é consulta autenticada de estrutura/análise com HTTP 200, além do healthcheck.
