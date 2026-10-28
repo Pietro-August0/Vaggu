@@ -1,0 +1,43 @@
+# Planejamento de conclusão do WhatsApp — 28/10/2026
+
+## Continuidade — número confirmado
+
+O responsável informou o número público de atendimento em 28/10: `+55 (11) 99380-7892`. A constante compartilhada passou a usar `5511993807892` como padrão, preservando substituição por `VITE_WHATSAPP_NUMBER` no build. O destino resultante é `https://wa.me/5511993807892`, utilizado pelos CTAs da landing e pelo contato de suporte. Configuração explícita vazia ou inválida continua sem produzir URL; a padronização das guardas desse cenário permanece pendente. O número real foi autorizado para contato público; não é credencial Meta. Não houve publicação ou mensagem enviada. A primeira etapa de confirmação do número está concluída; disponibilidade da conta e bot real ainda exigem homologação.
+
+Revisão local na branch `main`, base `3e2841e`, inicialmente sem alterações pendentes. Escopo desta entrega: conferir código/configuração e planejar a conclusão solicitada, incluindo link na landing para o número salvo. Não houve alteração de frontend, publicação, envio de mensagens ou acesso ao painel Meta/Render.
+
+## Estado conferido
+
+| Área | Evidência local | O que ainda não está comprovado |
+| --- | --- | --- |
+| Número público | `src/lib/constants.ts` do frontend cria `https://wa.me/…` a partir de `VITE_WHATSAPP_NUMBER`, removendo caracteres não numéricos e aceitando 10–15 dígitos. Não encontramos arquivo `.env*` no frontend nem número público literal nos links pesquisados. | Qual é o número salvo destinado ao atendimento e se está configurado no ambiente de build remoto. |
+| Landing | Hero, chamada intermediária, rodapé, `sobre-vaggu.tsx` e `operacao-vaggu.tsx` usam a constante compartilhada. Somente o CTA do rodapé da landing tem guarda explícita pela URL. | Outros CTAs podem aparecer como links sem destino quando a configuração falta. |
+| Backend local | As seis variáveis de WhatsApp/Meta estão preenchidas no `.env` local; resposta automática está `true`. Valores privados não foram copiados. | Validade, permissões, expiração, vínculo entre token/número/app e configuração publicada. Preenchimento não equivale a configuração válida. |
+| Hospedagem versionada | `render.yaml` compila o frontend junto da API e define resposta automática como `false`; não declara o número público nem as demais variáveis Meta. | O painel Render pode conter valores manuais diferentes; não foi acessado. |
+| Menu | `payload.ts` responde a OI/OLÁ/MENU e às opções 1–5: apresentação, funcionalidades, demonstração, suporte e equipe. Texto livre e mídia não recebem resposta. | Sessão, coleta estruturada, registro de solicitação e encaminhamento humano real não estão implementados. |
+| Segurança e repetição | Webhook valida desafio/assinatura; serviço deduplica por ID. `ENVIANDO` abandonado e falhas de resultado incerto vão para `REVISAO`, sem reenvio automático. Falhas definitivas e processamento abandonado podem ser retomados. | Procedimento humano para revisar resultados incertos e homologação com o provedor. `PROCESSADO` não comprova entrega ao destinatário. |
+
+O `WHATSAPP_PHONE_NUMBER_ID` identifica um recurso da Meta: não é o telefone público e não deve ser utilizado no `wa.me`. Ter o contato salvo na agenda também não informa automaticamente esse número ao frontend.
+
+## Ordem de execução e aceite
+
+1. **Confirmar o número de destino.** Identificar o contato salvo autorizado para a VAGGU e conferir país, DDD e número completo. Usar formato internacional somente com dígitos no link. Confirmar no ambiente Meta se é o mesmo número associado ao bot, caso o objetivo seja abrir a conversa automatizada. Não substituir por número de teste nem inferir telefone a partir do ID. **Aceite:** destino confirmado pelo responsável, sem expor credenciais.
+2. **Concluir o link da landing.** Configurar `VITE_WHATSAPP_NUMBER` no ambiente local do frontend e no ambiente de build Render; executar novo build, pois Vite incorpora o valor na compilação. Centralizar todos os CTAs no destino compartilhado e aplicar comportamento consistente quando a URL estiver ausente/inválida. Se houver texto inicial, usar uma saudação reconhecida pelo menu ou ampliar o reconhecimento com teste; uma frase comercial arbitrária hoje não aciona resposta. **Aceite:** todos os pontos abrem a conversa com o destino confirmado; nenhum CTA fica sem destino. Abrir conversa não envia mensagem automaticamente.
+3. **Conferir a configuração publicada.** Validar privadamente `WHATSAPP_VERIFY_TOKEN`, `META_APP_SECRET`, `WHATSAPP_ACCESS_TOKEN`, `WHATSAPP_PHONE_NUMBER_ID` e `WHATSAPP_API_VERSION`. Conferir permissões, validade do token, situação do número/app e eventuais restrições diretamente na Meta. Aplicar a migration `20261019000400_whatsapp_envio_incerto` pelo processo normal de deploy. **Aceite:** aplicação inicia, schema corresponde ao serviço e valores privados não aparecem em frontend, logs ou evidências.
+4. **Homologar entrada e saída.** Conferir callback HTTPS `/api/v1/whatsapp/webhook`, desafio GET, assinatura POST, inscrição do campo `messages` e associação do app à conta WhatsApp Business. Depois de conferir as credenciais e o destinatário de teste autorizado, habilitar resposta automática no ambiente publicado. **Aceite:** mensagem real iniciada pelo participante chega ao webhook e a resposta chega à conversa; aprovação do callback isoladamente não basta. O envio real será executado somente em etapa autorizada.
+5. **Definir atendimento humano e completar os fluxos.** Confirmar onde a equipe recebe e acompanha pedidos, quem atende e como o bot evita interferir durante atendimento humano. Para concluir P10/CA02–CA03, implementar sessão mínima, coleta e registro de demonstração/suporte, retomada e deduplicação de solicitações, além da deduplicação técnica já existente. **Aceite:** demonstração/suporte geram registro rastreável uma única vez e chegam ao responsável. Menu textual funcionando não conclui esse pacote.
+6. **Validar falhas e operação.** Exercitar assinatura inválida, mensagem repetida, evento de status sem resposta, token inválido, resposta automática desligada, erro de envio e timeout. Definir consulta e decisão manual sobre `REVISAO`, sem reenvio cego. Conferir falhas de entrega; sucesso HTTP de envio não garante entrega. **Aceite:** nenhuma resposta duplicada nos cenários cobertos, falhas identificáveis e retomada documentada sem dados sensíveis.
+7. **Revisão visual e homologação final.** Após implementar o link, testar todos os CTAs na rota `/`, desktop/tablet/celular, teclado e foco, ausência de cortes/overflow e erros de console; conferir temas afetados. Guardar capturas atuais com dados fictícios/anonimizados em `Evidências visuais/<data> - WhatsApp landing/` e registrar rota, perfil visitante, viewport, origem dos dados e resultado no índice. Usar número fictício nas capturas locais; conferir o destino real separadamente sem capturar conversas privadas. Atualizar prints do README se a experiência exibida mudar. **Aceite:** navegação visual documentada e teste publicado/real registrado separadamente da simulação local.
+
+O link público pode ser concluído antes do bot. Para declarar **contato funcionando**, exigir destino correto e abertura real da conversa. Para declarar **bot funcionando**, exigir recebimento e resposta reais. Para declarar **P10 concluído**, exigir também os registros e atendimento humano definidos acima.
+
+## Referências e limites
+
+- [Guia local do webhook](whatsapp-webhook.md), [planejamento canônico](planejamento-do-projeto.md) e [critérios de aceite](plano-e-aceite.md).
+- [Coleção oficial da Meta para Cloud API](https://www.postman.com/meta/whatsapp-business-platform/documentation/wlk6lh4/whatsapp-cloud-api): referência para conferir registro de número, inscrição e envio no ambiente autorizado. Requisitos vigentes da conta devem ser conferidos antes da execução; não foi presumida migração ou exclusão de conta existente.
+- Skill de roteamento VAGGU não localizada no repositório ou catálogo local consultado. Este planejamento não atribui responsáveis, aprovação ou autoria Git; nenhuma identidade foi simulada. Localizar a skill antes de distribuir a implementação.
+- Sem acesso comprovado ao número salvo, Meta ou Render nesta revisão. Configuração remota, mensagens reais e entrega permanecem pendentes; nenhum segredo foi validado por chamada externa.
+
+## Verificação desta revisão
+
+Inspecionados status, branch, histórico, configuração, scripts reais dos dois `package.json`, constantes/CTAs, cliente, serviço, payload, testes e documentação. Comandos de verificação e resultados finais ficam registrados no planejamento canônico. Não há prints novos porque esta entrega altera somente documentação.

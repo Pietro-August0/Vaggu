@@ -15,6 +15,7 @@ import { AdminPage } from "@/pages/admin-page"
 import { TrocarSenhaPage } from "@/pages/trocar-senha-page"
 import { LandingPage } from "@/pages/landing-page"
 import { LoginPage } from "@/pages/login-page"
+import { PrivacidadePage } from "@/pages/privacidade-page"
 import { PaginaNaoEncontrada } from "@/pages/pagina-nao-encontrada"
 import { TelaoPage } from "@/pages/telao-page"
 
@@ -24,6 +25,8 @@ function App() {
     <Routes>
       <Route element={<TelaoInstaladoPage />} path="/telao/:telaoId" />
       <Route element={<LandingPage />} path="/" />
+      <Route element={<PrivacidadePage />} path="/privacidade" />
+      <Route element={<PrivacidadePage exclusao />} path="/exclusao-de-dados" />
       <Route element={<LoginPage />} path="/login" />
       <Route element={<TrocarSenhaPage />} path="/trocar-senha" />
       <Route element={<ProtectedRoute role="admin"><AdminPage /></ProtectedRoute>} path="/admin" />

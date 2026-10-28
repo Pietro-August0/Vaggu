@@ -22,4 +22,4 @@ services:
       - key: FRONTEND_DIST_PATH
         value: ../vaggu-frontend/dist
       - key: WHATSAPP_AUTO_REPLY_ENABLED
-        value: "false"
+        value: "true"

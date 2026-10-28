@@ -1,5 +1,11 @@
 # Mapa do projeto VAGGU
 
+**28/10/2026 — privacidade e ativação:** `vaggu-frontend/src/pages/privacidade-page.tsx` apresenta aviso público e instruções de exclusão em `/privacidade` e `/exclusao-de-dados`, registradas em `main.tsx` e vinculadas no rodapé da landing. Contato indicado pelo responsável: Elisa Gomes Teixeira, `elisagommes@outlook.com`. `render.yaml` passa a habilitar respostas automáticas; credenciais continuam privadas e a ativação real depende do ambiente e da publicação Meta. Capturas em `Evidências visuais/2026-10-28 - Privacidade e exclusao/`.
+
+**28/10/2026 — contato público:** `vaggu-frontend/src/lib/constants.ts` centraliza o número confirmado da VAGGU, `5511993807892`, como padrão para os links `wa.me`; `VITE_WHATSAPP_NUMBER` pode substituir o destino no build. A conexão real Meta não foi homologada.
+
+**28/10/2026 — WhatsApp:** [planejamento-whatsapp-2026-10-28.md](planejamento-whatsapp-2026-10-28.md) reúne revisão local, configuração do link da landing, homologação Meta/Render e critérios de conclusão do atendimento. O [guia do webhook](whatsapp-webhook.md) descreve a proteção atual de envios incertos com `ENVIANDO`/`REVISAO`.
+
 **Atualização de 21/10/2026:** `Especificações/Personas.md` reúne Carlos, Mariana e Rafael, separando material recebido de hipóteses. `Evidências visuais/Personas/` guarda duas páginas originais de Carlos, dois retratos gerados e quatro slides ilustrativos de Mariana e Rafael; `scripts/gerar-slides-personas.py` reproduz a diagramação desses quatro slides. A análise histórica distingue setores pelo andar e nome e deixa cobertura indisponível sem capacidade atual de referência.
 
 O frontend começa em main.tsx, monta o provedor de sessão e encaminha /login, /trocar-senha, /admin e /painel. O cliente HTTP chama /api/v1 pelo proxy local do Vite; o backend server.ts conecta os serviços e app.ts monta as rotas. Serviços validam permissões antes de acessar o Prisma/PostgreSQL. O cookie HttpOnly preserva a sessão no refresh; a identidade pública é restaurada da API.
@@ -212,6 +218,7 @@ As cópias de imagens entre `segunda-mente/Vaggu/Identidade visual/Assets/` e `v
 | `vaggu-frontend/src/pages/admin-page.tsx` | Implementa a visão geral administrativa, cadastro, lista e ficha do shopping; o resumo inclui análise compacta e estrutura/mapa e gerentes mantêm seus fluxos próprios. |
 | `vaggu-frontend/src/pages/area-autenticada.tsx` | Centraliza mapa e análise do gerente; a rota legada de conta mantém o painel ao fundo enquanto o diálogo compartilhado abre. |
 | `vaggu-frontend/src/pages/landing-page.tsx` | Compõe a landing pública, respeita movimento reduzido e mantém contato, temas e rodapé móvel legíveis. |
+| `vaggu-frontend/src/pages/privacidade-page.tsx` | Apresenta a Política de Privacidade e as instruções de exclusão por e-mail, com responsável informado, em duas rotas públicas e sem exigir login. |
 | `vaggu-frontend/src/pages/login-page.css` | Define composição responsiva do login, troca de senha e desenho animado do rabisco em “vagas”. |
 | `vaggu-frontend/src/pages/login-page.tsx` | Entrada única para Admin e gerente, sem solicitar preenchimento automático das credenciais ao abrir a página. |
 | `vaggu-frontend/src/pages/pagina-nao-encontrada.tsx` | Exibe a rota 404 pública, oferece retorno à landing e compõe a animação semântica da vaga liberada. |

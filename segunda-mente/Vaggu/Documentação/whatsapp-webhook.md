@@ -1,5 +1,15 @@
 # Integração com o WhatsApp
 
+## Publicação e operação — retomada de 28/10/2026
+
+Inspeção autenticada dos painéis: callback Meta salvo em `https://vaggu-tcc.onrender.com/api/v1/whatsapp/webhook`; campo `messages` assinado em v26.0. A interface informa que eventos de produção dependem de publicação do app. Tela de publicação estava bloqueada pela URL de privacidade ausente. Render iniciou sem migrations pendentes, com os cinco nomes de variáveis privadas presentes e `WHATSAPP_AUTO_REPLY_ENABLED=false`; valores privados não foram revelados. Presença não equivale a credencial válida.
+
+Com autorização para configurar/publicar/testar, adicionamos páginas públicas `/privacidade` e `/exclusao-de-dados`, com Elisa Gomes Teixeira e `elisagommes@outlook.com`, informados pelo usuário. Após deploy e conferência HTTP, cadastrar respectivamente `https://vaggu-tcc.onrender.com/privacidade` e `https://vaggu-tcc.onrender.com/exclusao-de-dados` em Configurações básicas da Meta. Exclusão é solicitação humana por e-mail; não existe callback automático de exclusão. O blueprint habilita resposta automática; conferir também o valor salvo no painel Render e aguardar deploy antes do teste real.
+
+Teste final: participante envia `Oi` do próprio WhatsApp para `+55 (11) 99380-7892`; conferir entrada e resposta sem duplicação, depois `MENU` e opções 1–5. Não gerar mensagem em nome do participante, não registrar corpo de conversa ou token nas evidências. Sucesso de webhook de teste não comprova a conversa real. Registrar resultado de publicação e envio real no planejamento; até esse registro, não considerar homologado.
+
+**Revisão de 28/10/2026:** retomada solicitada para concluir o contato da landing e a configuração real. O [planejamento de conclusão](planejamento-whatsapp-2026-10-28.md) registra configuração local, lacunas, sequência e critérios de aceite. Credenciais preenchidas localmente não comprovam funcionamento na Meta ou no ambiente publicado.
+
 Esta integração está parcial. O endereço abaixo recebe avisos e mensagens enviados pela Meta, ignora mensagens repetidas e sustenta um menu de demonstração. Os links públicos que abrem o WhatsApp não dependem dele. Número oficial, ambiente Meta e fluxos completos de demonstração e suporte ainda precisam ser configurados.
 
 ## Como o código se organiza
@@ -63,7 +73,9 @@ O erro 130497 é tratado como restrição de envio informada pela Meta. O códig
 
 ## Limites
 
-A deduplicação usa `meta_message_id` único no PostgreSQL. Se uma tentativa de envio falhar, o evento fica como `FALHOU` e uma nova entrega legítima do mesmo webhook pode tentar novamente. Um evento `PROCESSANDO` há mais de dois minutos também pode ser retomado por uma única reentrega; a tentativa antiga não pode sobrescrever o resultado da nova. Se o processo cair depois que a Meta recebeu o pedido de envio, o resultado é incerto e a retomada pode enviar a resposta novamente. A integração não promete entrega exatamente uma vez.
+A deduplicação usa `meta_message_id` único no PostgreSQL. Falhas definitivas ficam como `FALHOU` e podem ser retomadas por reentrega legítima. Um evento `PROCESSANDO` há mais de dois minutos também pode ser retomado por uma única reentrega; a tentativa antiga não pode sobrescrever a nova. Antes da chamada externa, o serviço marca `ENVIANDO`. Timeout ou resultado incerto levam a `REVISAO`; um `ENVIANDO` abandonado também vai para revisão na reentrega, sem repetir automaticamente o envio. É necessário procedimento de conferência humana. A integração não promete entrega exatamente uma vez e `PROCESSADO` não comprova entrega ao destinatário.
+
+O menu já responde às opções 1–5, além de OI/OLÁ/MENU. As instruções para demonstração, suporte e equipe são textuais: ainda não coletam etapas, persistem solicitações nem encaminham atendimento humano.
 
 
 ## Demonstração definida para a apresentação — 17/10/2026

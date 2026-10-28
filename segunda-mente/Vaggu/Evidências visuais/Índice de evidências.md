@@ -3,6 +3,30 @@ tags: [vaggu, evidencias, interface]
 ---
 # Evidências visuais da VAGGU
 
+## 28/10/2026 — privacidade e exclusão
+
+Perfil visitante, aplicação local em `http://127.0.0.1:5183`, conteúdo institucional e contato público autorizados pelo usuário; nenhuma conta real de shopping ou conversa privada. Navegador integrado via Computer Use (plugin Browser ausente do catálogo e Playwright indisponível). Páginas com identidade escura fixa; temas não alteram essas páginas. Sem overlay ou erros de console; somente aviso de movimento reduzido do dispositivo. Links de e-mail conferidos sem envio. Navegação política → exclusão com Enter, volta à landing e novos links do rodapé conferidos. Sem overflow horizontal nos três viewports; capturas completas não comprovam publicação ou funcionamento real do bot.
+
+| Rota | Viewport solicitado | Captura e resultado |
+| --- | --- | --- |
+| `/privacidade` | 1440×1000 / 768×1024 / 390×844 | [Desktop](2026-10-28%20-%20Privacidade%20e%20exclusao/privacidade-desktop.png) · [Tablet](2026-10-28%20-%20Privacidade%20e%20exclusao/privacidade-tablet.png) · [Celular](2026-10-28%20-%20Privacidade%20e%20exclusao/privacidade-celular.png). Texto e contato legíveis. |
+| `/exclusao-de-dados` | 1440×1000 / 768×1024 / 390×844 | [Desktop](2026-10-28%20-%20Privacidade%20e%20exclusao/exclusao-desktop.png) · [Tablet](2026-10-28%20-%20Privacidade%20e%20exclusao/exclusao-tablet.png) · [Celular](2026-10-28%20-%20Privacidade%20e%20exclusao/exclusao-celular.png). Instruções e foco visível. |
+| `/`, rodapé | 1440×1000 / 768×1024 / 390×844 | [Desktop](2026-10-28%20-%20Privacidade%20e%20exclusao/rodape-desktop.png) · [Tablet](2026-10-28%20-%20Privacidade%20e%20exclusao/rodape-tablet.png) · [Celular](2026-10-28%20-%20Privacidade%20e%20exclusao/rodape-celular.png). Retorno e links públicos disponíveis. |
+
+Base de orientação sobre direitos: [ANPD](https://www.gov.br/anpd/pt-br/assuntos/titular-de-dados/direito-dos-titulares). Não há alegação de auditoria jurídica ou aprovação da Meta. Prints do README mostram somente a abertura da landing, que não mudou; anteriores preservados.
+
+## 28/10/2026 — link WhatsApp da landing
+
+Rota `/`, perfil visitante, origem `http://127.0.0.1:5183`, conteúdo público estático e imagens ilustrativas, sem conta autenticada ou dados de clientes. Número público autorizado pelo responsável. Cinco links renderizados apontam para `https://wa.me/5511993807892`. Capturas locais não comprovam publicação, conta ativa ou bot real.
+
+| Viewport solicitado | Evidência | Resultado observado |
+| --- | --- | --- |
+| 1440×1000 | [Desktop](2026-10-28%20-%20WhatsApp%20landing/landing-desktop.png) | Página renderizada; cinco destinos iguais; sem overflow horizontal. |
+| 768×1024 | [Tablet](2026-10-28%20-%20WhatsApp%20landing/landing-tablet.png) | Conteúdo e CTA visíveis, sem overflow horizontal. |
+| 390×844 | [Celular](2026-10-28%20-%20WhatsApp%20landing/landing-celular.png) | Conteúdo e CTA visíveis, sem overflow horizontal. |
+
+Navegador integrado via Computer Use; plugin Browser não disponível no catálogo da sessão, importação Playwright falhou e a primeira navegação local expirou. Após iniciar o servidor fora do sandbox com autorização, acesso e capturas funcionaram. Tab avançou do CTA inicial ao CTA intermediário; Enter foi exercitado no CTA do rodapé, mas abertura externa da conversa não foi comprovada. Console sem erros; aviso de movimento reduzido do dispositivo. Landing com identidade própria fixa, sem alteração de tema. Imagens completas após percorrer a página para acionar as animações; largura útil pode descontar a barra de rolagem. README preservado: layout/textos exibidos não mudaram, somente destino dos links.
+
 ## 21/10/2026 — interface atual e revisão geral
 
 Capturas da aplicação local em `http://127.0.0.1:5183`, com API Express e PostgreSQL descartável reais. Usamos somente contas e dados fictícios do Shopping Exemplo; não interceptamos a API. Edge headless/Playwright foi utilizado porque o plugin Browser não está disponível. Os resultados, a limpeza e os limites estão na [revisão geral](../Documentação/revisao-geral-2026-10-21.md).

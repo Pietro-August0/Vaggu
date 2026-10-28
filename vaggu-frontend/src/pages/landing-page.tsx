@@ -204,7 +204,7 @@ export function LandingPage() {
           </div>
           <div className="mt-12 grid gap-6 border-t border-white/15 pt-7 text-sm sm:mt-16 sm:flex sm:items-center sm:justify-between sm:gap-8">
             <p className="max-w-xs leading-relaxed text-neutral-400">Gestão inteligente de estacionamentos para shoppings.</p>
-            <nav aria-label="Links do rodapé" className="flex flex-wrap gap-x-6 gap-y-3"><a className="underline-offset-4 hover:text-[#ffe100] hover:underline focus-visible:outline-2 focus-visible:outline-[#ffe100]" href="#sobre">Sobre a VAGGU</a><Link className="underline-offset-4 hover:text-[#ffe100] hover:underline focus-visible:outline-2 focus-visible:outline-[#ffe100]" to="/login">Área do cliente</Link></nav>
+            <nav aria-label="Links do rodapé" className="flex flex-wrap gap-x-6 gap-y-3"><a className="underline-offset-4 hover:text-[#ffe100] hover:underline focus-visible:outline-2 focus-visible:outline-[#ffe100]" href="#sobre">Sobre a VAGGU</a><Link className="underline-offset-4 hover:text-[#ffe100] hover:underline focus-visible:outline-2 focus-visible:outline-[#ffe100]" to="/login">Área do cliente</Link><Link className="underline-offset-4 hover:text-[#ffe100] hover:underline focus-visible:outline-2 focus-visible:outline-[#ffe100]" to="/privacidade">Privacidade</Link><Link className="underline-offset-4 hover:text-[#ffe100] hover:underline focus-visible:outline-2 focus-visible:outline-[#ffe100]" to="/exclusao-de-dados">Exclusão de dados</Link></nav>
             <span className="text-neutral-500 sm:shrink-0">© 2026 VAGGU</span>
           </div>
         </div>
