@@ -104,3 +104,7 @@ Experimento local de 25/10: indicadores e categorias contam até o valor confirm
 
 
 Revisão de leitura em 25/10: categorias e indicadores têm acentos de cor e mais espaço interno. Cards mostram título, valor e apoio curto; definições ficam em “Como ler os indicadores”. Ausência de permanência usa travessão com “Sem ciclos completos”. Filtros ficam em uma linha no desktop e se reorganizam em telas menores, sem alterar o recorte ou os contratos.
+
+### Equipamentos: orientação de uso — 28/10/2026
+
+Na configuração da estrutura, Equipamentos e manutenção explica placa ESP32, sensor e vaga em três passos. Os campos identificam os códigos usados no equipamento e “Vaga sem sensor” substitui “Vaga disponível”, sem sugerir disponibilidade para estacionar. A ajuda expansível explica manutenção de placa/sensor, renovação de chave e desativação. Os diálogos distinguem o alcance da intervenção. Cadastro não comprova comunicação ou leitura válida. Sem placa ativa ou vaga sem vínculo, a associação fica desabilitada com orientação. Contratos da API preservados.

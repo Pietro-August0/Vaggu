@@ -325,3 +325,7 @@ O [protótipo e sua validação](telao-apresentacao-2026-10-21.md) substituem o 
 | `vaggu-frontend/src/hooks/use-movimento-reduzido.ts` | Acompanha prefers-reduced-motion com useSyncExternalStore, inclusive alterações durante o uso; snapshot conservador no servidor. |
 
 O painel analítico usa Motion já instalado: linha e preenchimento revelados por recorte SVG, barras por escala e roscas por escala/opacidade. A apresentação não altera o histórico, a exportação ou os estados de consulta. Ver [experimento e testes](animacoes-analises-2026-10-25.md).
+
+### Clareza dos equipamentos — 28/10/2026
+
+O componente `vaggu-frontend/src/components/equipamentos-admin.tsx` orienta cadastro da placa ESP32, associação sensor/vaga e manutenção, com exemplos de códigos e estados sem placa/vaga elegível. Evidências locais em `Evidências visuais/2026-10-28 - Clareza equipamentos/`; fluxo e validação registrados no planejamento e no índice de evidências.

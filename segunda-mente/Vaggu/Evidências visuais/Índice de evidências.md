@@ -267,3 +267,15 @@ Rota `/admin/shoppings/d3a09b29-7e5a-4b7e-8c42-8f371d0a0001/estrutura`, perfil A
 - [Equipamento e vínculos cadastrados](2026-10-21%20-%20Piloto%20ESP32/equipamento-publicado.png).
 
 Nenhuma captura da emissão de chave foi feita. Revisão desktop/tablet/celular do frontend local integrado continua pendente.
+
+## 28/10/2026 — clareza de equipamentos e manutenção
+
+Rota `/admin/shoppings/qa/estrutura`, perfil Admin fictício, origem `http://127.0.0.1:5174`. API interceptada por Playwright com dados fictícios, sem banco, emissão de chaves ou equipamento físico. Browser plugin not available; fallback Playwright/Edge. Capturas de seção longa ocultam apenas cabeçalho fixo e atalho externo durante a captura para não cobrir o conteúdo; comportamento verificado com os elementos presentes.
+
+| Viewport | Claro | Escuro | Resultado |
+| --- | --- | --- | --- |
+| Desktop 1440×1000 | [Equipamentos](2026-10-28%20-%20Clareza%20equipamentos/desktop-light.png) | [Equipamentos](2026-10-28%20-%20Clareza%20equipamentos/desktop-dark.png) | Passos, exemplos e formulário em duas colunas; sem overflow |
+| Tablet 768×1024 | [Equipamentos](2026-10-28%20-%20Clareza%20equipamentos/tablet-light.png) | [Equipamentos](2026-10-28%20-%20Clareza%20equipamentos/tablet-dark.png) | Formulários empilhados; sem overflow |
+| Celular 390×844 | [Equipamentos](2026-10-28%20-%20Clareza%20equipamentos/celular-light.png) | [Equipamentos](2026-10-28%20-%20Clareza%20equipamentos/celular-dark.png) | Textos e ações com quebra; sem overflow |
+
+Na mesma pasta: `ajuda-{desktop,tablet,celular}-{light,dark}.png` registra a explicação expansível; `manutencao-placa-{light,dark}.png` e `manutencao-sensor-{light,dark}.png` mostram o alcance da intervenção; `sem-vagas-{light,dark}.png` e `sem-placas-{light,dark}.png` mostram a orientação com associação desabilitada. Total: 20 PNGs. Ajuda acionada por Enter, foco preservado; diálogos abertos e fechados por Escape; associação enviada com código e vaga corretos, lista atualizada. Sem overlay de framework, erros JavaScript ou mensagens de erro/aviso no console. Evidência local não comprova produção, integração real ou hardware.
