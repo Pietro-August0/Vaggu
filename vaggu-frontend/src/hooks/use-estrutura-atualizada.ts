@@ -5,7 +5,7 @@ import { lerEstrutura } from "@/servicos/estrutura"
 import { invalidarLeituras } from "@/servicos/validade-estrutura"
 import type { EstruturaEstacionamento } from "@/types/estrutura"
 
-const INTERVALO_MS = 15_000
+const INTERVALO_MS = 500
 const VALIDADE_MS = 30_000
 type Consulta = { caminho: string; estrutura: EstruturaEstacionamento; consultadoEm: number }
 

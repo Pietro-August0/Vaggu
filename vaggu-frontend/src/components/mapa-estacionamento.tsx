@@ -7,7 +7,7 @@ export function MapaEstacionamento() {
   const { estrutura, erro, vencida, atualizando, atualizar, consultadoEm } = useEstruturaAtualizada("/estacionamento/estrutura")
   return <div className="grid gap-4">
     <div className="flex flex-wrap items-center justify-between gap-3 rounded-2xl border bg-card p-4 text-card-foreground">
-      <p role="status" className="text-sm">{vencida ? "Leituras indisponíveis até a próxima atualização." : consultadoEm ? `Atualizado às ${new Date(consultadoEm).toLocaleTimeString("pt-BR")}. Atualização automática a cada 15 segundos.` : "Carregando estacionamento..."}</p>
+      <p role="status" className="text-sm">{vencida ? "Leituras indisponíveis até a próxima atualização." : consultadoEm ? `Atualizado às ${new Date(consultadoEm).toLocaleTimeString("pt-BR")}. Atualização automática a cada meio segundo.` : "Carregando estacionamento..."}</p>
       <Button variant="outline" disabled={atualizando} onClick={() => void atualizar()}>{atualizando ? "Atualizando..." : "Atualizar agora"}</Button>
       {erro && <p role="alert" className="w-full text-sm text-red-700 dark:text-red-300">{erro}</p>}
     </div>

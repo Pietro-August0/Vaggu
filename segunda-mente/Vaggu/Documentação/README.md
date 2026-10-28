@@ -8,6 +8,7 @@ Esta pasta reúne as decisões de produto, o desenho técnico, os padrões de c�
 
 | Arquivo | O que contém |
 | --- | --- |
+| [telao-apresentacao-2026-10-21.md](telao-apresentacao-2026-10-21.md) | Protótipo funcional do telão, gestão pelo gerente, tela cheia/Esc e verificação visual. |
 | [revisao-geral-2026-10-21.md](revisao-geral-2026-10-21.md) | Revisão atual: 130 testes, capturas reais locais, correção do telão, limpeza e regra de prints. |
 | [AGENTS.md](../../../AGENTS.md) | Nossos acordos para desenvolver, documentar, verificar e usar Git. |
 | [SSD-VAGGU.md](SSD-VAGGU.md) | Escopo, fluxos, permissões, dados, API proposta, telemetria, Power BI e decisões pendentes. |

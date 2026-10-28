@@ -10,6 +10,16 @@ test('configuração usa porta 3000 e host local por padrão', () => {
   const config = readEnv({ DATABASE_URL: databaseUrl });
   assert.equal(config.port, 3000);
   assert.equal(config.host, '127.0.0.1');
+  assert.equal(config.telemetria.janelaConfirmacaoMs, 30_000);
+});
+
+test('bancada pode reduzir confirmação sem aceitar lacuna maior que a janela', () => {
+  const config = readEnv({ DATABASE_URL: databaseUrl, TELEMETRIA_CONFIRMACAO_MS: '5000', TELEMETRIA_LACUNA_MAXIMA_MS: '4500' });
+  assert.equal(config.telemetria.janelaConfirmacaoMs, 5000);
+  assert.equal(config.telemetria.lacunaMaximaMs, 4500);
+  for (const valor of ['0', '999', 'abc']) assert.throws(() => readEnv({ DATABASE_URL: databaseUrl, TELEMETRIA_CONFIRMACAO_MS: valor }));
+  assert.equal(readEnv({ DATABASE_URL: databaseUrl, TELEMETRIA_CONFIRMACAO_MS: '2000', TELEMETRIA_LACUNA_MAXIMA_MS: '4500' }).telemetria.janelaConfirmacaoMs, 2000);
+  assert.throws(() => readEnv({ DATABASE_URL: databaseUrl, TELEMETRIA_CONFIRMACAO_MS: '2000', TELEMETRIA_LACUNA_MAXIMA_MS: '30000' }));
 });
 
 test('configuração exige PostgreSQL e recusa SQLite ou formato inválido', () => {

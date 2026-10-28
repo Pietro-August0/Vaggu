@@ -1,5 +1,11 @@
 # VAGGU — fluxo de telas
 
+Configuração atual da bancada em 21/10: mapa com consulta de **2 s**, backend local com confirmação de **5 s**, preservando 30 s como padrão dos demais ambientes. Três canais físicos confirmaram ocupado/livre e apareceram no mapa do gerente. A edição de posições permanece sem polling.
+
+Atualização de 21/10/2026: mapa do gerente e aba Visualizar mapa do Admin consultam estados a cada 5 s após cada resposta, com pausa em aba oculta e recuperação de falha. O editor de posições não recebe atualização periódica. Bancada local com shopping/gerente próprios: ESP32 conectada, leitura de S02 persistida e A02 Livre exibida no mapa. S01/S03 e ensaios das três vagas ainda precisam de validação física completa.
+
+Este documento registra a navegação encontrada na interface, com atualização de edição visual e monitoramento em 15/10/2026 e a compara com as páginas previstas no SSD. **Implementado** significa que existe rota e tela no código atual; não significa que sensores e Power BI estejam concluídos. **Parcial** indica que parte da experiência está pronta. **Ausente** indica que a página foi planejada, mas ainda não existe no site.
+
 Este documento registra a navegação encontrada na interface, com revisão do código em 21/10/2026 e a compara com as páginas previstas no SSD. **Implementado** significa que existe rota e tela no código atual; não significa que sensores e Power BI estejam concluídos. **Parcial** indica que parte da experiência está pronta. **Ausente** indica que a página foi planejada, mas ainda não existe no site.
 
 ## Perfis e regras comuns de navegação
@@ -8,7 +14,7 @@ Este documento registra a navegação encontrada na interface, com revisão do c
 | --- | --- |
 | Visitante | Landing e login. O contato comercial sai da aplicação e continua no WhatsApp quando o número oficial está configurado. |
 | Admin VAGGU | Visão geral consolidada, cadastro e listagem de shoppings; na ficha, navegação separada entre visão geral, estrutura/mapa e gerentes. A importação e exportação estrutural abrem janelas na área de estrutura. |
-| Gerente | Painel, mapa e análise do shopping vinculado; edição de nome e telefone em rota própria de conta. |
+| Gerente | Painel, mapa, análise e gestão dos telões do shopping vinculado; edição de nome e telefone em rota própria de conta. |
 
 As rotas administrativas e do gerente passam por proteção de sessão e perfil. Sem sessão, o usuário volta para `/login`; com troca de senha obrigatória, vai para `/trocar-senha`; com perfil incompatível, é redirecionado para `/admin` ou `/painel`. Endereços desconhecidos exibem a página 404, com ação de retorno para `/`.
 
@@ -31,7 +37,8 @@ A sessão persiste em cookie HttpOnly de mesma origem. Ao recarregar uma rota pr
 | `/painel/analise` — Análise | Gerente | Menu “Análise” | `/painel`, diálogo de conta; `/login` ao sair | Filtrar até 31 dias UTC, setor e categoria; comparar período anterior, consultar métricas/gráficos e exportar Excel ou PDF | O histórico confirmado alimenta ocupação, cobertura e entradas do recorte selecionado. Sem medições no filtro, a tela mostra estado vazio; os arquivos registram datas, comparação e origem dos dados. A situação atual das vagas fica separada do período | Implementado localmente: setor/categoria, entradas, saídas, permanência, rotatividade e cobertura; homologação publicada pendente |
 | `/painel/conta` — Minha conta | Gerente | Cartão de conta no rodapé da sidebar ou link direto legado | `/painel` ao fechar; `/login` ao sair | Editar nome e telefone; trocar a senha mediante confirmação da atual | Abre diálogo centralizado sobre o painel; não altera e-mail, perfil ou vínculo com shopping | Implementado |
 | `/admin/conta` — Minha conta | Admin | Cartão de conta no rodapé da sidebar ou link direto legado | `/admin` ao fechar; `/login` ao sair | Editar nome e telefone; trocar a senha mediante confirmação da atual | Abre o mesmo diálogo centralizado, sem permitir mudança de perfil | Implementado |
-| `/telao/:id` — Telão instalado | Instalação autorizada | Endereço gerado pelo Admin na configuração da estrutura | Própria exibição | Exibir agregados do recorte; atualizar a cada 15 segundos; ocultar leituras vencidas ou em falha | Usa credencial própria revogável e não exige sessão administrativa; o Admin configura o recorte em Equipamentos/Telões da estrutura | Implementado localmente; instalação física e homologação publicada pendentes |
+| `/painel/teloes` — Gestão dos telões | Gerente | Menu “Telões” | Prévias geral/andar e `/telao/:id` | Cadastrar instalação, escolher visão geral/andar, salvar exibição e revogar acesso | Shopping derivado da sessão; edição mantém a credencial; prévias abrem em nova aba | Protótipo funcional local validado |
+| `/telao/:id` — Telão instalado | Instalação autorizada | Endereço emitido na gestão do gerente ou na configuração administrativa | Própria exibição | Exibir agregados do recorte; atualizar a cada 15 segundos; ocultar leituras vencidas ou em falha | Usa credencial própria revogável e não exige sessão administrativa; gerente e Admin escolhem a exibição por instalação; tela cheia/Esc e grade sem rolagem | Implementado localmente; instalação física e homologação publicada pendentes |
 | `*` — Página não encontrada | Qualquer | URL não reconhecida | `/`; seção Sobre; WhatsApp quando configurado | Assistir à vaga ser liberada uma vez e retornar à tela inicial | Exibe uma 404 própria; o carro sai da vaga, o sensor muda de vermelho para verde e a animação reinicia somente ao recarregar a página | Implementado |
 
 ## Conteúdo real da ficha administrativa
@@ -48,8 +55,8 @@ O resumo não converte ausência de leitura em vaga livre. A ficha já mostra um
 | Atendimentos | Admin | Navegação administrativa | Consultar e encaminhar demonstrações e solicitações de suporte | Continuidade do contato no WhatsApp sem criar acesso automaticamente | Ausente; rota web não definida |
 | Análises e relatórios | Gerente | Navegação do painel | Consultar histórico por datas, comparar período anterior e exportar Excel/PDF | Indicadores e arquivos restritos ao shopping da sessão | Implementado em `/painel/analise`: datas, comparação, setor/categoria, entradas/saídas, permanência, rotatividade e cobertura |
 | Minha conta e troca voluntária de senha | Admin ou gerente | Cartão no rodapé da sidebar | Abrir conta em diálogo, editar dados permitidos e solicitar troca de senha | Conta atualizada sem mudar perfil ou vínculo com shopping; formulário de segurança aparece somente quando solicitado | Implementado; `/admin/conta` e `/painel/conta` continuam abrindo o diálogo por link direto |
-| Telão de entrada | Gerente autenticado (prévia) | `/painel/telao` | Exibir vagas livres confirmadas por andar e leitura atual | Categorias especiais em recortes separados, sem duplicar o total; aviso de dados parciais | Prévia autenticada implementada; instalação web `/telao/:id` usa credencial própria e recorte definido pelo Admin |
-| Telão de andar | Gerente autenticado (prévia) | `/painel/telao/andares/:andarId` | Exibir vagas livres confirmadas por setor | Leitura por setor, estado sem leitura e dados parciais explícitos | Prévia autenticada implementada; instalação web `/telao/:id` usa credencial própria e recorte definido pelo Admin |
+| Telão de entrada | Gerente autenticado (prévia) | `/painel/telao` | Exibir vagas livres confirmadas por andar e leitura atual | Categorias especiais sem duplicar o total; números indisponíveis mostrados como “—”, sem avisos técnicos de parcialidade | Prévia autenticada implementada; instalação web `/telao/:id` usa credencial própria e recorte definido pelo gerente ou Admin, com salvamento explícito |
+| Telão de andar | Gerente autenticado (prévia) | `/painel/telao/andares/:andarId` | Exibir vagas livres confirmadas por setor | Contagens por setor e categorias, tela cheia/Esc e números indisponíveis como “—” | Prévia autenticada implementada; instalação web `/telao/:id` usa credencial própria e recorte definido pelo gerente ou Admin, com salvamento explícito |
 
 O WhatsApp é um canal externo à navegação web. Landing e login apenas abrem o contato configurado; o menu automatizado e o atendimento humano não devem ser descritos como páginas do frontend.
 
@@ -85,3 +92,15 @@ Esta entrega é uma prévia operacional para apresentação e desenvolvimento. N
 ### Análises — cobertura por setor e centro da rosca — 17/10/2026
 
 O componente `analise-estacionamento.tsx` exibe cobertura histórica por setor à direita de Tipo de vaga, a partir de `porSetor.coberturaPercentual` da API, respeitando o período consultado (SSD §10.2). Sem histórico, mantém aviso de ausência de dados; Shopping Exemplo identifica histórico demonstrativo. Barras de 0–100% representam tempo conhecido, não disponibilidade de vagas. O CSS limita o texto central da rosca ao diâmetro interno e divide “ocupadas agora” em duas linhas. Build aprovado e composição conferida no navegador local a 1440 px.
+
+### Apresentação das análises — 23/10/2026
+
+A rota `/painel/analise` prioriza gráficos de ocupação diária, situação atual, movimentação, categorias e cobertura. A tabela de indicadores históricos por setor inicia recolhida em “Ver indicadores detalhados por setor”. Permanência aparece em horas e minutos; percentuais de destaque são arredondados só na interface. Os filtros UTC/setor/categoria, a comparação e a precisão das exportações permanecem. Dias sem observação preservam lacunas e não viram ocupação zero; situação atual e histórico têm rótulos separados. Capturas e limites estão no índice de evidências de 23/10.
+
+Complemento de 23/10: categorias do cadastro aparecem no topo, respeitando o recorte aplicado. A comparação com o período anterior carrega independentemente dos gráficos atuais. Ao atualizar ou falhar, a última consulta permanece identificada; Atualizar análise/Tentar novamente repetem o recorte aplicado. A primeira carga mostra placeholders e não interpreta espera como ausência de histórico. Exportações aguardam a comparação e carregam seus módulos sob demanda. Séries acima de dez dias permitem rolagem interna para preservar seleção por toque/teclado.
+
+
+Experimento local de 25/10: indicadores e categorias contam até o valor confirmado; gráficos entram ao alcançar a viewport. A preferência de movimento reduzido remove as entradas e interrompe a contagem, inclusive se alterada com a página aberta. O número acessível e a exportação usam o valor final desde o início. Ver [testes das animações](animacoes-analises-2026-10-25.md).
+
+
+Revisão de leitura em 25/10: categorias e indicadores têm acentos de cor e mais espaço interno. Cards mostram título, valor e apoio curto; definições ficam em “Como ler os indicadores”. Ausência de permanência usa travessão com “Sem ciclos completos”. Filtros ficam em uma linha no desktop e se reorganizam em telas menores, sem alterar o recorte ou os contratos.

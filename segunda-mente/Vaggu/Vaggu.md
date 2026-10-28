@@ -4,9 +4,13 @@ tags: [vaggu, indice]
 ---
 # VAGGU
 
+**Atualização de 21/10 — bancada física:** preparado shopping local de três vagas e consulta automática do mapa Admin/gerente a cada 5 s. ESP32 gravada e conectada ao hotspot; HTTP202 real, persistência e exibição de A02 Livre no mapa do gerente comprovadas. S01 sem leitura e S03 intermitente ainda precisam de posicionamento/ensaio; não equivale à homologação dos três canais ou do ambiente publicado. Ver [guia da bancada](../../hardware/esp32-3-vagas/README.md).
+
 Plataforma web responsiva para gestão de estacionamentos de shopping centers, desenvolvida como TCC.
 
 ![[Vaggu/Identidade visual/Assets/vaggu-logo-yellow.svg]]
+
+**Fechamento em 24/10/2026:** análises revisadas, categorias no topo e carregamento corrigido; evidências e validações locais registradas. Ver [[Vaggu/Diário/2026-10-24|fechamento do dia e continuidade]]. Homologação publicada permanece pendente.
 
 ## Comece aqui
 

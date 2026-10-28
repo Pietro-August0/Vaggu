@@ -16,11 +16,23 @@ Conhecimento, documentos e regras ficam em `segunda-mente`. O planejamento canô
 
 ## Pastas principais
 
+| Arquivo do piloto HTTPS | Responsabilidade |
+| --- | --- |
+| `hardware/esp32-3-vagas/vaggu_3_vagas/transporte.h` | Seleciona HTTPS com bundle oficial e relógio NTP; HTTP somente quando explicitamente habilitado para IPv4 privado de bancada. |
+| `vaggu-backend/src/telemetria/piloto.ts` | Cria transacionalmente shopping, três vagas e sensores, placa e gerente próprios de piloto, sem redefinir cadastros existentes. |
+| `vaggu-backend/scripts/preparar-piloto-esp32.ts` | Provisiona destino PostgreSQL explicitamente selecionado e grava configuração HTTPS/acesso somente em pasta local ignorada. |
+| `vaggu-backend/test/piloto-esp32-postgresql.test.ts` | Verifica isolamento, hashes, vínculo das três vagas, estado inicial e recusa de repetição em banco descartável. |
+
+| Arquivo da integração física | Responsabilidade |
+| --- | --- |
+| `vaggu-backend/scripts/preparar-bancada-esp32.ts` | Prepara shopping local de três vagas, sensores, placa e gerente; preserva execuções anteriores e grava credenciais somente em arquivos locais ignorados. |
+
 | Arquivo de hardware | Responsabilidade |
 | --- | --- |
 | `hardware/esp32-3-vagas/README.md` | Parecer de viabilidade do demo, diagramas de ligação/arquitetura/posição, preparação da API, provisionamento, calibração e aceite físico. |
-| `hardware/esp32-3-vagas/teste_sensores_usb/teste_sensores_usb.ino` | Primeiro ensaio independente por USB/Serial, sem rede ou LEDs, para verificar distâncias dos três HC-SR04 com TRIG 25/26/27 e ECHO 32/33/34. |
+| `hardware/esp32-3-vagas/teste_sensores_usb/teste_sensores_usb.ino` | Ensaio independente USB/Serial, sem rede, com TRIG 27/26/25, ECHO 32/33/34 e LED GPIO13 controlado pelo S01 até 15 cm; três piscadas iniciais e diagnóstico serial. |
 | `hardware/esp32-3-vagas/vaggu_3_vagas/vaggu_3_vagas.ino` | Firmware de bancada WROOM-32 para três HC-SR04, ECHO 32/33/34, LEDs de detecção local 13/14/23, autenticação Device, sequência por boot e leituras filtradas com omissão de sensores sem leitura válida. |
+| `hardware/esp32-3-vagas/vaggu_3_vagas/relogio_serial.h` | Ajuste temporário do relógio de bancada por comando TIME recebido via USB, com validação do intervalo e preservação do TLS. |
 | `hardware/esp32-3-vagas/vaggu_3_vagas/config.example.h` | Modelo sem segredos para gerar config.h local ignorado pelo Git. |
 
 | Pasta | Finalidade |
@@ -174,8 +186,8 @@ As cópias de imagens entre `segunda-mente/Vaggu/Identidade visual/Assets/` e `v
 | `vaggu-frontend/public/assets/vaggu-logo.svg` | Asset visual vaggu-logo.svg; reutilizado na identidade e composição da interface. |
 | `vaggu-frontend/src/app/app-store.tsx` | Restaura identidade via cookie e `/auth/me` antes de liberar rotas; gerencia expiração, logout, troca de senha e consultas. |
 | `vaggu-frontend/src/components/brand.tsx` | Reutiliza os arquivos de marca publicados em public/assets nos links para a página inicial. |
-| `vaggu-frontend/src/components/analise-estacionamento.css` | Define o painel analítico responsivo, com superfícies próprias nos temas claro/escuro, animações reduzíveis e estados interativos acessíveis. |
-| `vaggu-frontend/src/components/analise-estacionamento.tsx` | Filtra medições por datas UTC, compara com o período anterior, distingue situação atual e histórico, identifica a demonstração e permite exportar Excel e PDF. |
+| `vaggu-frontend/src/components/analise-estacionamento.css` | Define painel analítico responsivo, categorias e indicadores coloridos, espaçamento interno, filtros compactos, ajuda expansível e estados de consulta nos dois temas; preserva foco e redução de movimento. |
+| `vaggu-frontend/src/components/analise-estacionamento.tsx` | Filtra datas UTC/setor/categoria, apresenta contagens de categorias no topo e gráficos com lacunas; carrega a comparação separadamente, preserva a última consulta ao atualizar/falhar, permite tentar novamente e ignora respostas de consultas anteriores. Exportações Excel/PDF carregadas sob demanda; tabela setorial expansível e séries longas com rolagem interna. |
 | `vaggu-frontend/src/components/resumo-analitico-admin.tsx` | Resume ocupação, cobertura e tendência do shopping selecionado na ficha Admin, distinguindo histórico real de demonstração. |
 | `vaggu-frontend/src/components/dashboard-shell.tsx` | Compartilha cabeçalho e conteúdo centralizados, menu responsivo, cartão de conta no rodapé da sidebar, diálogo da conta, alternância claro/escuro e saída da sessão. |
 | `vaggu-frontend/src/components/estrutura-admin.tsx` | Permite criar a hierarquia, explica o estado real de implantação e alterna cadastro, mapa e posições com refetch após mutações. |
@@ -184,7 +196,7 @@ As cópias de imagens entre `segunda-mente/Vaggu/Identidade visual/Assets/` e `v
 | `vaggu-frontend/src/components/formulario-alterar-senha.tsx` | Compartilha a troca voluntária de senha com validação por campo, requisitos visíveis e confirmação da senha atual. |
 | `vaggu-frontend/src/components/formulario-shopping.tsx` | Compartilha cadastro e edição em três etapas; consulta CEP e mantém o endereço editável manualmente. |
 | `vaggu-frontend/src/components/mapa-estacionamento.tsx` | Busca a estrutura isolada do gerente, mostra aviso de implantação sem ocultá-la e delega o desenho ao componente compartilhado. |
-| `vaggu-frontend/src/components/minha-conta.tsx` | Compartilha dados pessoais em layout responsivo entre Admin e gerente; mantém vínculos protegidos e abre a troca de senha em diálogo sob demanda. |
+| `vaggu-frontend/src/components/minha-conta.tsx` | Compartilha dados pessoais em layout responsivo entre Admin e gerente; mantém vínculos protegidos, impede salvar sem alterações e abre a troca de senha em diálogo sob demanda. |
 | `vaggu-frontend/src/components/detalhes-vaga.tsx` | Exibe localização, situação do sensor, placa, horários independentes, estado confirmado e confirmação pendente. |
 | `vaggu-frontend/src/components/editor-mapa-vagas.tsx` | Edita posições por arraste, toque ou teclado, ajusta tamanho/rotação e mantém rascunho, desfazer, limites e prevenção de sobreposição. |
 | `vaggu-frontend/src/components/monitoramento-sensores.tsx` | Mostra contagens e cartões dos sensores, filtra situação e abre os detalhes no recorte de vagas autorizado. |
@@ -225,7 +237,7 @@ As cópias de imagens entre `segunda-mente/Vaggu/Identidade visual/Assets/` e `v
 | `vaggu-frontend/src/pages/pagina-nao-encontrada.css` | Define o layout responsivo e a sequência única em que o carro deixa o sensor vermelho, sai pela esquerda e libera o estado verde. |
 | `vaggu-frontend/src/pages/trocar-senha-page.tsx` | Exige uma senha definitiva e reaproveita na aba a senha provisória digitada no login. |
 | `vaggu-frontend/src/servicos/api.ts` | Cliente da API na mesma origem para JSON e corpos binários; envia cookie e cabeçalho ant-CSRF sem ler o token. |
-| `vaggu-frontend/src/servicos/analise.ts` | Valida ocupação, cobertura, entradas e séries históricas antes de substituir os gráficos demonstrativos. |
+| `vaggu-frontend/src/servicos/analise.ts` | Valida métricas e séries históricas, preserva null como ausência de observação e formata permanência em horas/minutos na interface, sem alterar os valores exportados. |
 | `vaggu-frontend/src/servicos/apresentacao-vaga.ts` | Centraliza os rótulos em português das categorias e estados usados no mapa, nas listas e no detalhe da vaga. |
 | `vaggu-frontend/src/servicos/cep.ts` | Consulta o ViaCEP com validação, prazo e erros distintos; devolve somente campos de endereço usados no formulário. |
 | `vaggu-frontend/src/servicos/situacao-implantacao.ts` | Centraliza rótulos, descrições e cores dos estados de implantação já definidos no backend. |
@@ -252,7 +264,7 @@ As cópias de imagens entre `segunda-mente/Vaggu/Identidade visual/Assets/` e `v
 
 | Arquivo | Responsabilidade |
 | --- | --- |
-| `vaggu-frontend/src/pages/telao-page.tsx` | Apresenta prévia autenticada de disponibilidade por andar/setor, consulta o escopo do gerente a cada 30 segundos, não possui controles interativos e oculta contagens quando as leituras não são confiáveis. |
+| `vaggu-frontend/src/pages/telao-page.tsx` | Apresenta prévia autenticada de disponibilidade por andar/setor, consulta o escopo do gerente a cada 15 segundos e usa a apresentação compartilhada com tela cheia/Esc, sem rolagem e sem ampliar um andar inválido para visão geral. |
 | `vaggu-frontend/src/pages/telao-page.css` | Define layout de alto contraste para telão, legibilidade a distância e adaptação a telas menores. |
 
 ### Visual do telão — 17/10/2026
@@ -290,14 +302,33 @@ Regras, contratos, operação e limitações estão em [conclusao-software-2026-
 | `vaggu-backend/src/equipamentos/ocorrencias.ts` | Deduplica falhas de comunicação e agrupa sensores quando a placa perde contato, preservando manutenção manual. |
 | `vaggu-backend/src/equipamentos/routes.ts` | Expõe operações administrativas de equipamentos/manutenção e consulta de ocorrências no shopping da sessão. |
 | `vaggu-backend/src/equipamentos/service.ts` | Valida vínculos, administra credenciais e manutenção, invalida leituras e exige nova confirmação no retorno. |
-| `vaggu-backend/src/teloes/routes.ts` | Expõe cadastro/revogação administrativa e consulta agregada autorizada por credencial do telão. |
+| `vaggu-backend/src/teloes/routes.ts` | Expõe cadastro, edição e revogação para Admin e gerente; o shopping do gerente deriva da sessão. Mantém a consulta agregada com credencial própria. |
 | `vaggu-backend/src/teloes/service.ts` | Valida recortes e credenciais; agrega somente capacidade ativa e leituras válidas sem expor detalhes administrativos. |
 | `vaggu-backend/test/analiticos-postgresql.test.ts` | Exercita snapshots históricos, ciclos e isolamento/filtros em PostgreSQL descartável. |
 | `vaggu-backend/test/equipamentos-postgresql.test.ts` | Exercita escopo, vínculo, manutenção, recuperação de comunicação, rotação de chave e autorização. |
 | `vaggu-backend/test/renovar-cenario-apresentacao.test.ts` | Verifica planejamento, prévia, proteção do exemplo e repetição da renovação. |
 | `vaggu-backend/test/teloes-postgresql.test.ts` | Verifica agregação, recorte, credenciais, revogação e isolamento de instalações com banco de teste. |
 | `vaggu-frontend/src/components/equipamentos-admin.tsx` | Oferece cadastro, vínculo e manutenção, consulta de ocorrências e exibição única de chaves no Admin. |
-| `vaggu-frontend/src/components/teloes-admin.tsx` | Configura nome/recorte da instalação, apresenta chave uma vez e permite revogação. |
+| `vaggu-frontend/src/components/teloes-admin.tsx` | Configura visão geral ou andar por instalação para Admin e gerente, salva explicitamente sem trocar credencial, emite a chave uma vez, permite revogação e exclusão definitiva com confirmação. |
 | `vaggu-frontend/src/hooks/use-estrutura-atualizada.ts` | Centraliza consulta periódica/manual, descarte de respostas antigas e invalidação por erro ou prazo. |
 | `vaggu-frontend/src/pages/telao-instalado-page.tsx` | Exibe agregados com chave própria por aba e oculta contagens quando a consulta perde validade. |
 | `vaggu-frontend/src/servicos/validade-estrutura.ts` | Produz estrutura com leituras indisponíveis quando a consulta vence, preservando indicação de manutenção. |
+
+### Telões para apresentação — 21/10/2026
+
+| `vaggu-frontend/src/components/apresentar-telao.tsx` | Aciona tela cheia diretamente no clique e navega para o recorte escolhido na mesma aba. |
+| `vaggu-frontend/src/components/telao-apresentacao.tsx` | Compartilha apresentação enxuta, contagens confirmadas, paginação automática de áreas e tela cheia com saída por Esc. |
+| `vaggu-frontend/src/pages/teloes-page.tsx` | Mantém a gestão de instalações e as prévias geral/por andar no painel do gerente em `/painel/teloes`. |
+
+O [protótipo e sua validação](telao-apresentacao-2026-10-21.md) substituem o visual de 17/10: não há avisos técnicos de dados parciais na apresentação. A página instalada mantém o mesmo elemento em tela cheia quando o gerente altera seu andar. As evidências atuais estão em `Evidências visuais/2026-10-21 - Telao apresentacao/`; as capturas anteriores permanecem históricas.
+
+| `hardware/esp32-3-vagas/piloto-estrutura.csv` | Importação das três vagas físicas no setor do piloto, preservando as demais vagas. |
+| `hardware/esp32-3-vagas/diagnostico_rede/diagnostico_rede.ino` | Diagnostica DNS, TCP por nome e IP, acesso local, UDP/NTP e HTTPS público sem enviar chave nem leituras. |
+
+
+### Animações das análises — 25/10/2026
+
+| `vaggu-frontend/src/components/numero-animado.tsx` | Contagem visual por viewport e mudança de valor, com largura reservada, valor final acessível, formatação de percentuais/duração, cancelamento na desmontagem e respeito à redução de movimento. |
+| `vaggu-frontend/src/hooks/use-movimento-reduzido.ts` | Acompanha prefers-reduced-motion com useSyncExternalStore, inclusive alterações durante o uso; snapshot conservador no servidor. |
+
+O painel analítico usa Motion já instalado: linha e preenchimento revelados por recorte SVG, barras por escala e roscas por escala/opacidade. A apresentação não altera o histórico, a exportação ou os estados de consulta. Ver [experimento e testes](animacoes-analises-2026-10-25.md).

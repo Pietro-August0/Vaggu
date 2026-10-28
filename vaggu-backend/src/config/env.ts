@@ -20,9 +20,11 @@ export function readEnv(env: NodeJS.ProcessEnv = process.env) {
   if (!/^\d+$/.test(rawPort) || !Number.isInteger(port) || port < 1 || port > 65535) {
     throw new Error('PORT deve ser um número inteiro entre 1 e 65535.');
   }
-  const lacunaMaximaMs = inteiroPositivo(env.TELEMETRIA_LACUNA_MAXIMA_MS, 15_000, 'TELEMETRIA_LACUNA_MAXIMA_MS');
-  if (lacunaMaximaMs >= 30_000) {
-    throw new Error('TELEMETRIA_LACUNA_MAXIMA_MS deve ser menor que a janela de confirmação de 30000 ms.');
+  const janelaConfirmacaoMs = inteiroPositivo(env.TELEMETRIA_CONFIRMACAO_MS, 30_000, 'TELEMETRIA_CONFIRMACAO_MS');
+  if (janelaConfirmacaoMs < 1000) throw new Error('TELEMETRIA_CONFIRMACAO_MS deve ser pelo menos 1000 ms.');
+  const lacunaMaximaMs = inteiroPositivo(env.TELEMETRIA_LACUNA_MAXIMA_MS, Math.min(15_000, janelaConfirmacaoMs - 1), 'TELEMETRIA_LACUNA_MAXIMA_MS');
+  if (lacunaMaximaMs >= Math.max(30_000, janelaConfirmacaoMs)) {
+    throw new Error('TELEMETRIA_LACUNA_MAXIMA_MS deve ser menor que o limite de continuidade (mínimo de referência: 30000 ms).');
   }
 
   return {
@@ -30,6 +32,7 @@ export function readEnv(env: NodeJS.ProcessEnv = process.env) {
     port,
     host: env.HOST || '127.0.0.1',
     telemetria: {
+      janelaConfirmacaoMs,
       lacunaMaximaMs,
       timeoutSensorMs: inteiroPositivo(env.TELEMETRIA_TIMEOUT_SENSOR_MS, 120_000, 'TELEMETRIA_TIMEOUT_SENSOR_MS'),
       timeoutPlacaMs: inteiroPositivo(env.TELEMETRIA_TIMEOUT_PLACA_MS, 120_000, 'TELEMETRIA_TIMEOUT_PLACA_MS'),

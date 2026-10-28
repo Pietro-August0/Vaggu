@@ -2,6 +2,8 @@
 
 **28/10/2026 — retomada solicitada do WhatsApp:** executar o [[Vaggu/Documentação/planejamento-whatsapp-2026-10-28|planejamento de conclusão]], começando pela confirmação do número salvo e configuração do link no build da landing. Homologação Meta/Render, respostas reais e atendimento humano continuam pendentes; os registros anteriores de adiamento são históricos.
 
+**Fechamento de 24/10/2026:** concluída a revisão visual e de carregamento das análises, com categorias no topo, estados de consulta, recuperação de falhas e novas evidências locais. Continuidade: homologação publicada com API/banco reais, conferência da integração com a main e validação de latências reais. O aviso de bundles grandes continua aberto. Ver [[Vaggu/Diário/2026-10-24|fechamento e verificações]].
+
 **Revisão local concluída em 21/10/2026:** 130 testes do backend aprovados; análise com filtros, estado sem observação, exportações e responsividade conferidos com API e PostgreSQL descartável reais, além de novas capturas de mapa, monitoramento, editor, administração e telão. Ver [[Vaggu/Documentação/revisao-geral-2026-10-21]]. A continuidade se concentra na homologação publicada, decisões operacionais de backup e validação com públicos/hardware, respeitando o adiamento do WhatsApp real. Sprint 7: 04/11–11/11/2026; Sprint 8, última: 16/11–26/11/2026, sem distribuição automática de tarefas.
 
 ## Atualização de 21/10/2026 — oportunidades das personas

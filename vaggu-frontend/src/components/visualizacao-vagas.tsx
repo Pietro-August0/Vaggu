@@ -275,7 +275,8 @@ export function VisualizacaoVagas({ estrutura, modo }: VisualizacaoVagasProps) {
             </ul>
 
             {semPosicao.length > 0 ? (
-              <div className="mt-3 rounded-xl border border-dashed border-neutral-400 bg-white/80 p-3">
+              <div className="mt-3 rounded-xl border border-dashed border-neutral-400 bg-white/80 p-3 dark:bg-neutral-950/85">
+         
                 <p className="text-sm font-semibold text-neutral-800">Sem posição no mapa</p>
                 <ul className="mt-2 hidden grid-cols-[repeat(auto-fit,minmax(min(100%,11rem),1fr))] gap-2 sm:grid">
                   {semPosicao.map((vaga) => (

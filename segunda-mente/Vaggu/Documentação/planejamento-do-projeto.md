@@ -18,7 +18,44 @@ Atendendo à solicitação de retomada, criamos o [planejamento de conclusão do
 
 Comandos: `git status --short`, `git branch --show-current`, `git diff --stat`, `git log`, pesquisas com `rg`, leitura dos scripts/configurações sem expor segredos, `npm.cmd run build --prefix vaggu-backend`, `node --test vaggu-backend/dist/test/whatsapp.test.js`, `node scripts/verificar-documentacao.mjs` e `git diff --check`. Build aprovado; 14 testes WhatsApp aprovados, sem falhas ou ignorados, com Meta/persistência simuladas. A primeira tentativa teve bloqueio de loopback `EACCES`; repetição fora do sandbox, autorizada, passou. Verificador documental aprovado com 355 arquivos cobertos e 55 documentos válidos; diff sem erros. Sem alteração funcional/frontend, publicação ou envio real. A skill de roteamento VAGGU não foi localizada; não houve atribuição de responsabilidade ou autoria.
 
+### Velocidade e sensores laterais — 21/10/2026
+
+- Upload rápido concluído e ESP32 reiniciada via RTS após BOOT liberado. Nova inicialização física esp32-c71d8480-e174198e-b8c9204e; Serial HTTP202. Intervalos saudáveis medidos em cerca de 1,1 s, com alguns atrasos de rede de até ~2,9 s no recorte. S02 confirmou ocupação de 16:27:15.205Z a 16:27:17.437Z (2,232 s); posteriormente os três sensores tiveram observação recente no mesmo lote às 16:27:28.358Z. Não garante estabilidade elétrica/acústica permanente; ausência de eco continua exigindo conferência física.
+
+- Usuário relatou apenas vaga central mudando. Banco confirmou S01/S03 sem observação por dezenas de segundos e S02 atual; problema não era só frontend. Mapa reduzido para 500 ms sem sobreposição; Edge/Playwright registrou 15 consultas durante o ensaio, sem erros em desktop/mobile. Build/lint aprovados.
+- Firmware compilado (935588 bytes; 48368 bytes RAM): espera final de 3 s reduzida para 100 ms, separação acústica de 65 ms preservada. Filtro aceita duas leituras próximas se terceira falhar, mas nunca sem eco ou par inconsistente; mediana mantida quando três válidas. Upload iniciado com BOOT manual; confirmar envio e intervalo real após gravação.
+
+### Janela local de dois segundos — 21/10/2026
+
+- A pedido do usuário, TELEMETRIA_CONFIRMACAO_MS local reduzida a 2000 ms e API reiniciada; polling permanece em 2 s. Lacuna de 4500 ms mantida para o firmware atual enviar aproximadamente a cada 4 s. Validação separa limite de continuidade (no mínimo referência 30 s) da janela curta para não reiniciar toda confirmação antes da próxima mensagem. Continua exigindo uma segunda observação válida; silêncio além da lacuna reinicia candidato. Padrão de 30 s preservado para ambientes sem ajuste.
+- Build e 15 testes de ambiente, confirmação e persistência PostgreSQL aprovados, incluindo janela de 2 s com envio a 4 s e silêncio a 5 s recusado. Firmware não regravado; tempo ponta a ponta depende dos ciclos de envio e consulta.
+
+### Aceite físico inicial e transição rápida — 21/10/2026
+
+- Após posicionamento, os três sensores físicos enviaram leituras e o histórico por evento esp32 confirmou OCUPADA → LIVRE em A01/A02/A03; mapa gerente mostrou as três livres. Não houve simulador concorrente. Isto comprova o fluxo local inicial, não uma homologação de estacionamento real ou da versão publicada.
+- Usuário pediu transição menor que 30 s: janela tornou-se configurável com padrão preservado de 30000 ms. Somente .env local configurado com 5000 ms e lacuna 4500 ms; API reiniciada. Mapa passou a consultar a cada 2 s e removeu texto fixo de 30 s. Com o firmware atual, expectativa de 8–12 s em leituras estáveis, podendo reiniciar diante de falha/lacuna/oscilação.
+- Build backend/frontend e lint aprovados. Testes de configuração e núcleo temporal ampliados para janela rápida sem alterar o padrão; integração PostgreSQL verifica confirmação de 5 s após leituras em 0/4/8 s. Edge/Playwright confirmou cinco consultas de mapa em aproximadamente 6 s com dados físicos, detalhes e ausência de erro/transbordamento em desktop/mobile. Sem alteração de senhas reais e sem publicar ou fazer push.
+
+### Integração da bancada local ao mapa — 21/10/2026
+
+- Resultado físico posterior: diagnóstico apontou NO_AP_FOUND (201). A API WinRT do Windows confirmou hotspot Vaggu em 2,4 GHz configurado, porém Off; ativado sem alterar senha e apareceu um cliente. Firmware diagnóstico compilado (935500 bytes/48368 bytes RAM) e gravado com BOOT manual. Serial mostrou HTTP202 e inicialização esp32-d9f9adf2-dcba5a09-73f370ba persistida; S02 confirmou LIVRE após 30 s. S01 ainda sem leitura válida e S03 com leitura intermitente, mantendo indisponibilidade quando não confirmado.
+- Verificação física no frontend: Edge/Playwright com gerente QA temporário em `/painel` mostrou A02 Livre, abriu detalhes e fez três consultas automáticas; desktop 1440×1000 e mobile 390×844 sem transbordamento/erros de console. Usuário QA e sessões removidos ao final; não foi alterada a senha do gerente da bancada. Evidências em Temp/vaggu-esp32-fisico-desktop.png e Temp/vaggu-esp32-fisico-mobile.png, fora do Git. Fluxo físico validado para S02; aceite dos três canais e mudanças livre/ocupada por objeto ainda requer posicionamento e ensaio.
+
+- PostgreSQL portátil existente reiniciado em 127.0.0.1:55432; API em 0.0.0.0:3000 e Vite em 127.0.0.1:5173. Criados shopping próprio Bancada ESP32 — 3 vagas (não demonstrativo), três vagas/sensores, placa individual e gerente com troca obrigatória. Segredos somente em config.h/acesso.local ignorados; preparação repetida preservou registros e chave. Corrigida rotação zero nas posições recém-criadas da bancada.
+- MapaAoVivo consulta estados a cada 5 s após resposta, pausa em aba oculta e oculta mapa antigo em falha; Admin usa somente na aba Visualizar mapa, gerente no mapa principal. Editor e rascunhos preservados. Aplicadas orientações de verificação de fluxo, React e componentes existentes.
+- Build/lint frontend e build backend aprovados, seis testes de contrato/rotas/PostgreSQL aprovados sem skips. Browser plugin not available: Edge/Playwright em 1440×1000 e 390×844 comprovou mensagens HTTP sintéticas → confirmação real PostgreSQL → mapa Admin atualizado, detalhes e recuperação de 503, sem erros inesperados/transbordamento. Usuário QA/sessão temporários removidos; eventos sintéticos ficam apenas na bancada.
+- Firmware alinhado a TRIG 27/26/25, ECHO 32/33/34, um LED GPIO13. Core ESP32 3.3.12 compilou (933692 bytes de programa; 48360 bytes de dados na revisão inicial). Upload COM3 bem-sucedido após BOOT manual; chip ESP32-D0WD-V3. API_BASE ajustada ao hotspot Windows 192.168.137.1 sem revelar Wi-Fi/chave.
+- Primeira observação física: Serial aguarda Wi-Fi e banco permanece na inicialização QA, sem evento físico. Usuário confirmou hotspot Vaggu ligado em 2,4 GHz. Acrescentado diagnóstico de scan/motivo de desconexão e tentativas espaçadas de 15 s, em compilação. Envio físico, confirmação dos três sensores e exibição ao vivo permanecem pendentes até resolver a conexão; sucesso sintético não foi tratado como sucesso físico.
+
+### Diagnóstico de LED no teste USB — 21/10/2026
+
+- Usuário relatou leitura nos três sensores e falha do LED no programa combinado. Sketch USB atualizado com controle integrado do LED GPIO13 pelo S01 (2–15 cm), três piscadas ao iniciar e saída serial explícita; TRIG corrigido para 27/26/25 conforme fiação informada e ECHO mantido em 32/33/34. Manual/mapa alinhados com a revisão. A causa no programa gravado pelo usuário ainda não foi comprovada; compilação Arduino e ensaio físico pendentes.
+
 Última atualização: **21/10/2026**, fuso **America/Sao_Paulo**. A revisão da landing e seu fechamento permanecem atribuídos a **09/09/2026**, conforme o registro original. Base de P01: `c127b5e`; registros das entregas na seção 7. Este documento registra evidências e orienta o trabalho diário; não substitui o [SSD](SSD-VAGGU.md) nem os [critérios de aceite](plano-e-aceite.md).
+
+### Telão para apresentação — 21/10/2026
+
+Implementamos o [protótipo funcional e sua validação](telao-apresentacao-2026-10-21.md): apresentação enxuta sem rolagem, tela cheia/Esc, visões geral/andar e gestão por instalação para o gerente. A alteração salva mantém ID/credencial e chega ao telão no polling sem encerrar fullscreen. Mais áreas alternam em páginas; dados indisponíveis permanecem “—”. Backend build e quatro testes focados passaram com PostgreSQL; frontend build/lint e fluxo no navegador passaram, com 20 prints. README, fluxo, regras visuais e mapa atualizados. Branch local `codex/feat/telao-apresentacao-elisa`, base publicada `1b7ae6fb`, identidade Git preservada; sem commit/push desta nova entrega. A revisão geral abaixo precede este protótipo e registra a suíte completa anterior.
 
 ### Estado verificado na revisão geral — 21/10/2026
 
@@ -699,3 +736,68 @@ Refizemos os quatro slides em 1920×1080 para acompanhar a referência original 
 Revisamos a documentação e os READMEs para usar voz interna ou neutra, substituindo relatos externos por referências aos nossos materiais e decisões. Mantivemos datas, atribuições, histórico e limites das evidências. A busca final não encontrou os padrões de narrador externo pesquisados; o verificador documental passou com 330 arquivos cobertos e 52 documentos com links/âncoras válidos. `git diff --check` passou.
 
 Roteamento de responsabilidade: Ana para documentação, com revisão indicada de Elisa para UX e Juan para visual. Preservamos as alterações locais na branch `feat/landing-fotos-favicon-juan`, em `16383524`; não criamos branch, commit, push ou PR nesta revisão. A branch não possui referência homônima no `origin` localmente disponível; nenhum integrante recebeu autoria Git ou aprovação atribuída por esta revisão.
+
+
+### 21/10 — ajustes após uso local dos telões
+
+Ampliamos e centralizamos contagens por andar/setor, acrescentamos exclusão definitiva de telões ativos ou revogados com confirmação e corrigimos salvar conta sem mudanças. Conferência no navegador com PostgreSQL local, 14 prints, builds e lint aprovados; três testes focados passaram e um de banco descartável foi ignorado. Registro e limites em [Telão para apresentação](telao-apresentacao-2026-10-21.md). Mantivemos a branch local `codex/feat/telao-apresentacao-elisa`, base `1b7ae6fb`, identidade Elisa, sem commit/push. API 5185 e frontend 5173 permanecem disponíveis para teste.
+
+## Piloto hospedado em 21/10/2026
+
+Admin autenticado autorizou uso do Shopping Exemplo. Criado setor `Piloto físico ESP32` no Piso G1, com vagas P01/P02/P03. A importação corrigiu o setor das três vagas e preservou as 80 anteriores. Placa `VAGGU_ESP32_PILOTO_01` cadastrada com chave individual, guardada somente em config.h ignorado; sensores S01/S02/S03 vinculados respectivamente a P01/P02/P03. Este shopping continua classificado como demonstração; não usar seus indicadores agregados como validação de operação real.
+
+Firmware HTTPS compilado e gravado na ESP32 em COM3, com validação de certificado e NTP obrigatório. A placa conecta ao hotspot, mas o relógio ainda não sincronizou: envio hospedado não validado. Não há contorno de TLS. Computador tem internet via rede local e Cloudflare WARP; compartilhamento do hotspot aguarda conferência pelo usuário.
+
+Verificação local após integrar origin/main: builds backend/frontend e lint aprovados; 19 testes de configuração, confirmação e contrato/rotas aprovados; 2 testes PostgreSQL descartáveis de telemetria e isolamento do piloto aprovados. Revisão visual responsiva do polling após integração ainda pendente. Nenhum push ou deploy foi executado.
+
+## Recuperação visual das análises — 23/10/2026
+
+Identificada a mudança de composição no commit `1b7ae6f`, comparado a `5d6e3e0`: remoção das roscas e barras, maior destaque à tabela e apresentação de permanência apenas em minutos. Recuperamos a hierarquia gráfica sem reintroduzir estimativas sintéticas ou alterar o contrato da API: linha com preenchimento e lacunas, roscas da situação atual/categorias, barras diárias de entradas/saídas e cobertura por setor. Tabela histórica recolhida em controle nativo de detalhes; permanência em horas/minutos e percentuais principais sem decimais. Exportações mantêm precisão e unidade originais. Responsabilidade visual/frontend permanece conforme os acordos do projeto; skill de roteamento não encontrada no repositório ou nas skills locais pesquisadas, sem atribuição de autoria ou aprovação a integrantes.
+
+Fluxo verificado: `/painel/analise` → consulta → seleção de ponto por teclado, abertura da tabela, aplicação de setor/categoria, ausência de observação e erro. Edge headless/Playwright, frontend em `127.0.0.1:5173`, dados inteiramente fictícios interceptados no navegador. Desktop 1440×1000, tablet 768×1024 e celular 390×844 em ambos os temas: sem overflow da página, cortes relevantes, tela vazia ou sobreposição de erro do framework; dez prints atuais no índice. Console sem erros inesperados; duas respostas 503 intencionais no cenário de falha. Não verifica banco, isolamento do servidor, produção, hardware ou downloads nesta rodada. Evidências históricas preservadas e referência de análise no README atualizada.
+
+Comandos: `git status --short`, `git branch --show-current`, `git log`, `git show`, `npm run dev -- --host 127.0.0.1`, `npm run build` e `npm run lint` no frontend; script temporário de Playwright em `%TEMP%/vaggu-analises-qa.cjs`; nove verificações da função de duração com TypeScript/Node (ausência, zero, subminuto, arredondamento e horas); `node scripts/verificar-documentacao.mjs` e `git diff --check`. Build/lint aprovados; aviso conhecido de bundle acima de 500 kB. Uma tentativa de build na raiz falhou por ausência de package.json e foi corrigida para o diretório do frontend. Ajustados dois seletores/expectativas do roteiro de QA antes da execução aprovada. O verificador apontou um arquivo de hardware já existente sem descrição; incluída somente sua linha no mapa, sem editar firmware. Nenhum commit, push ou deploy executado.
+
+### Categorias e carregamento das análises — complemento de 23/10/2026
+
+Recolocadas no topo as contagens de vagas convencionais, PCD, idosos e elétricas, vinculadas ao recorte aplicado e à estrutura ativa. As contagens representam cadastro, não disponibilidade; desconhecida continua separada de livre. Mantidos os gráficos de categoria, situação atual e histórico. Campos receberam rótulos associados explicitamente; setores/andares inativos não entram no seletor.
+
+Reproduzidos no navegador dois problemas anteriores: comparação lenta bloqueava todos os gráficos, e reaplicar filtros desmontava o conteúdo. Corrigidos com carga independente da comparação e preservação da última consulta válida enquanto atualiza ou após erro, com aviso próprio. A primeira carga tem placeholders na posição das categorias e dos gráficos; não informa mais “sem observação” antes da resposta. Botões Atualizar análise e Tentar novamente repetem o recorte aplicado; erros de exportação são limpos na próxima consulta. Respostas de consultas antigas são ignoradas. Exportações aguardam o término da comparação e seus módulos são importados somente no clique. Séries acima de dez dias ganham largura interna para evitar sobreposição dos alvos de toque.
+
+Verificação complementar: roteiro temporário `%TEMP%/vaggu-analises-carregamento-antes.cjs` reproduziu ambos os problemas antes da edição. `%TEMP%/vaggu-analises-carregamento-qa.cjs` exercita entrada, comparação lenta, refresh, filtros, resposta fora de ordem, falha inicial, falha da comparação, falha ao atualizar, recuperação, ausência de observação, 31 dias e exportações. Dados fictícios interceptados no navegador, sem banco ou servidor de API reais. Prints atuais (16) no índice, desktop/tablet/celular em claro/escuro; página sem overflow, teclado funcional, sem overlay do framework ou erros JavaScript inesperados. Os erros HTTP 503 do roteiro são intencionais. Excel e PDF verificados por download; planilha aberta com ExcelJS e conferidas abas de tipos e histórico. A referência de análise no README aponta para a captura mais recente. Histórico anterior preservado.
+
+Comandos finais: `npm run build` e `npm run lint` em `vaggu-frontend`, roteiros Node/Playwright acima, `node scripts/verificar-documentacao.mjs` e `git diff --check`. Build mantém aviso conhecido de chunks grandes. Corrigidos fechamentos JSX encontrados durante a edição; a tentativa de build na raiz sem package.json foi substituída pela execução no frontend. Nenhuma dependência, API, banco, autoria Git, publicação ou hardware foi alterado. A skill de roteamento permanece indisponível conforme busca já registrada; nenhuma aprovação foi atribuída. Validação do ambiente publicado e das latências reais permanece pendente.
+
+
+## Fechamento e entrega — 24/10/2026
+
+Consolidados o resultado das duas etapas de análise, as 26 capturas e os limites reais no [fechamento do dia](../Diário/2026-10-24.md). Atualizados índice principal e próximos passos. Código permanece na versão validada com build/lint e roteiro de navegador; nesta rodada documental foram conferidos branch, status, diffs e remoto com `git fetch origin`, além do verificador documental e `git diff --check`. Commit e push autorizados para `origin/codex/piloto-esp32-https`, preservando a identidade Git configurada. Não inclui merge na main ou publicação; a confirmação remota e o hash ficam na entrega.
+
+
+## Integração na main — 24/10/2026
+
+Merge autorizado de `codex/piloto-esp32-https` sobre a main atualizada (`688ce2a`), preservando telões/tema remotos e piloto/análises. Conflitos em mapa, planejamento e índice resolvidos mantendo ambas as documentações. Frontend build/lint aprovados; backend: 95 testes aprovados, 12 ignorados sem banco configurado, zero falhas. Roteiro Playwright da integração aprovado com 16 prints locais novos e exportações verificadas. Comandos: `git fetch origin`, `git checkout main`, `git merge --ff-only origin/main`, `git merge --no-ff --no-commit codex/piloto-esp32-https`, `npm test` no backend, `npm run build`/`npm run lint` no frontend, `node %TEMP%/vaggu-merge-main-qa.cjs`, verificador documental e diff check. Detalhes e limites no [diário de fechamento](../Diário/2026-10-24.md). Push para main autorizado; workflow do Render pode solicitar publicação, cuja conclusão não foi homologada nesta etapa.
+
+
+## Experimento de animações das análises — 25/10/2026
+
+Na branch local `codex/animacoes-analises`, implementadas contagens crescentes, linha por recorte SVG, barras por escala e roscas por escala/opacidade usando Motion existente. Entradas por viewport, valores acessíveis finais, largura reservada e interrupção em tempo real com preferência reduzida. Preservados ausência de observação, filtros, comparação independente, estados de erro e exportações. Experimento e comandos no [registro de testes](animacoes-analises-2026-10-25.md), com 23 PNGs e uma prévia GIF; provas locais fictícias, sem publicação ou aprovação atribuída. Build/lint, regressão do navegador, movimento normal/reduzido e verificadores documentais aprovados. Pendência: avaliar ritmo e homologar no ambiente de destino. Sem novas dependências, mudanças no backend, commit ou push.
+
+## Banco local atualizado — 25/10/2026
+
+Corrigida falha relatada como conexão no painel local. Frontend, API e SELECT 1 respondiam, mas `/estacionamento/estrutura` e `/estacionamento/analise` retornavam HTTP 500: o banco `vaggu_revisao_local` ainda não tinha as quatro migrações de 19/10 (erro P2022, coluna `sensores.em_manutencao` ausente). Login não era a causa.
+
+Antes de atualizar o esquema, criado backup completo com pg_dump em `ambiente.local/backups/antes-migracoes-20261025-1792971066073.dump`, ignorado pelo Git. Conferidos os SQLs e aplicado `npm run db:deploy` no backend, sem reset ou exclusão do banco. As quatro migrações foram concluídas. Consultas autenticadas de estrutura e análise passaram a HTTP 200; painel recuperado no navegador do usuário, com sua sessão preservada, e análises abertas para teste. Não foi alterado código de autenticação, permissões ou credenciais. API, frontend e PostgreSQL locais permanecem ligados.
+
+
+## Cores e leitura direta das análises — 25/10/2026
+
+Ajustado o topo conforme print recebido: categorias amarelo/azul/verde/verde-esmeralda, fundos discretos e ícones com cor; indicadores com acentos amarelo/azul/verde/roxo, maior padding e valor separado do título. Removidas repetições de cadastro e explicações longas dos cards; definições e limite da cobertura preservados em “Como ler os indicadores”, expansível por teclado. Permanência sem ciclos usa travessão e “Sem ciclos completos”, sem converter ausência em zero. Filtros ficam em uma linha no desktop e reorganizam no tablet/celular. As animações e consultas existentes foram preservadas.
+
+Verificações: `npm run build` e `npm run lint` no frontend aprovados (aviso conhecido de chunks grandes); `%TEMP%/vaggu-analises-cores-qa.cjs` aprovado com Playwright/Edge, dados fictícios interceptados, 17 capturas, temas claro/escuro e viewports 1440×1000, 768×1024 e 390×844. Teclado na ajuda/tabela/pontos, filtros, carga/comparação lenta, falhas, recuperação, resposta antiga, ausência de histórico, 31 dias e downloads Excel/PDF exercitados; sem overflow da página ou erro JavaScript inesperado. Dois seletores do roteiro foram delimitados após a inclusão do novo details. README, mapa, fluxo e índice atualizados; `node scripts/verificar-documentacao.mjs` e `git diff --check` executados. Sem novas dependências, commit, push ou publicação. Prints locais não comprovam produção.
+
+## Entrega da revisão das análises — 26/10/2026
+
+Commit e push autorizados para `origin/codex/animacoes-analises`, a partir da main `fad0851`. Consolidados animações de entrada, contagens acessíveis, cores por categoria/indicador, espaçamento, filtros compactos e ajuda expansível. Incluídos documentação, README, mapa e evidências de 25/10; preservados os registros da correção do banco local e o backup ignorado pelo Git. Nenhuma credencial, arquivo de ambiente ou cópia do banco integra a entrega.
+
+Código permanece na versão aprovada nos comandos de build/lint e testes locais dos registros anteriores; não houve mudança de código nesta rodada. No fechamento: `git fetch origin`, revisão de status/diffs/identidade configurada, `node scripts/verificar-documentacao.mjs`, `git diff --check`, commit e `git push -u origin codex/animacoes-analises`. Hash e confirmação remota ficam na mensagem de entrega. Este envio não inclui merge na main ou deploy; validação do ambiente publicado permanece pendente. A indisponibilidade da skill de roteamento permanece registrada, sem atribuição de coautoria ou aprovação a integrantes.
