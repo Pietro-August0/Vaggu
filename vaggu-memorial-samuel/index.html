@@ -1,0 +1,262 @@
+<!DOCTYPE html><!-- Página pública do memorial da equipe VAGGU. --><html lang="pt-BR"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="theme-color" content="#0b0b0b"><meta name="description" content="Conheça o sistema VAGGU de organização de estacionamentos e a história da equipe que o criou no SENAI Cotia.">
+<title>VAGGU — Sistema de estacionamento e história da equipe</title>
+<link rel="stylesheet" href="./src/estilos.css"></head><body>
+<a class="atalho-conteudo" href="#conteudo">Pular para o conteúdo</a>
+<div class="site-top"><div class="nav"><a class="logo" href="#inicio" aria-label="VAGGU - voltar ao início"><img src="/assets/logotipo-vaggu-amarelo.svg" alt="" aria-hidden="true"></a>
+<button class="menu-toggle" id="menuBtn" aria-label="Abrir menu" aria-expanded="false" aria-controls="navlinks">☰</button>
+<nav class="navlinks" id="navlinks" aria-label="Navegação principal"><a href="#sistema">Como funciona</a><a href="#historia">Nossa história</a><a href="#equipe">Nossa equipe</a><a href="#projeto">Como nasceu</a><a href="#acervo">Memórias</a><a class="navlast" href="#final">Nosso legado ↗</a></nav></div><div class="progress" id="progress"></div></div>
+<main id="conteudo">
+<section class="hero" id="inicio" aria-label="Apresentação da VAGGU">
+<div class="wrap hero-layout"><div class="hero-copy"><span class="eyebrow">SENAI COTIA <span style="color:#fff">·</span> DESENVOLVIMENTO DE SISTEMAS <span style="color:#fff">·</span> 2025—2026</span>
+<h1>Um jeito mais claro de <span class="yellow">organizar estacionamentos.</span></h1>
+<p class="lead">A VAGGU é um sistema web para a equipe de um shopping organizar as vagas e consultar o mapa por andar. A seguir, explicamos como a ideia funciona e, depois, contamos a história das pessoas que a criaram.</p>
+<div class="hero-actions"><a class="btn btn-yellow" href="#sistema">Entenda o sistema <span>↘</span></a><a class="btn btn-outline" href="#historia">Conheça nossa história ↗</a></div>
+</div><div class="hero-prototypes" aria-label="Protótipos desenvolvidos pela equipe"><figure class="hero-prototype-main"><img data-foto="5" alt="Modelo tridimensional de um estacionamento com vagas, veículos e sinalização amarela" loading="eager" decoding="async"><figcaption><span>PROTÓTIPO DIGITAL</span>Modelo do estacionamento</figcaption></figure><figure class="hero-prototype-detail"><img data-foto="10" alt="Circuito experimental montado em uma protoboard com sensor ultrassônico" loading="eager" decoding="async"><figcaption><span>PROTÓTIPO ELETRÔNICO</span>Teste de sensor de presença</figcaption></figure><div class="hero-prototype-note"><span aria-hidden="true">✳</span> Ideia, circuito e sistema<br>construídos pela equipe</div></div></div>
+<div class="wrap hero-bottom"><a href="#sistema"><span class="pulse-dot"></span> ROLE PARA VER COMO FUNCIONA ↓</a><span>UM SISTEMA FEITO POR SEIS ESTUDANTES</span></div></section>
+<section class="system section-pad" id="sistema" aria-labelledby="system-title"><div class="wrap"><div class="system-heading reveal"><div><div class="section-label">01 / O SISTEMA VAGGU <span class="tinyline"></span> EXPLICADO SEM COMPLICAÇÃO</div><h2 id="system-title">Primeiro, vamos falar do <span class="yellow">estacionamento.</span></h2></div><p>A VAGGU foi pensada para ajudar a equipe de um shopping a organizar as vagas e entender o que acontece em cada parte do estacionamento. O sistema funciona no navegador do computador, tablet ou celular.</p></div>
+<div class="system-overview reveal"><div class="system-overview-mark" aria-hidden="true">V.</div><div><span class="system-kicker">A IDEIA EM POUCAS PALAVRAS</span><h3>Um mapa digital para encontrar informação com mais facilidade.</h3><p>Imagine a planta do estacionamento na tela: você escolhe um andar, vê os setores e encontra cada vaga no mapa. Em vez de procurar em várias listas ou plantas diferentes, a equipe consulta a estrutura em um só lugar.</p><div class="system-stack" aria-label="Tecnologias usadas para construir o sistema"><span><b>O que aparece na tela</b> React + TypeScript</span><span><b>O serviço que recebe os pedidos</b> Node.js + Express</span><span><b>Onde os dados ficam guardados</b> PostgreSQL</span></div></div></div>
+<div class="system-grid"><article class="system-card reveal"><span class="system-step">01 / PREPARAR</span><h3>A equipe monta o estacionamento</h3><p>Um perfil de administração, chamado Admin, é usado pela equipe VAGGU para cadastrar o shopping e organizar andares, setores e vagas. Também é possível importar uma planilha e conferir uma prévia antes de confirmar os dados.</p></article><article class="system-card reveal"><span class="system-step">02 / ENTRAR</span><h3>Cada gerente recebe seu acesso</h3><p>Depois que a parceria é feita, a equipe cria uma conta para cada gerente do shopping, que acompanha a operação. Cada pessoa usa seu próprio login e vê somente os dados do shopping associado à conta.</p></article><article class="system-card reveal"><span class="system-step">03 / CONSULTAR</span><h3>O gerente usa o mapa</h3><p>No mapa, o gerente escolhe um andar, percorre os setores, filtra tipos de vaga e localiza uma vaga. Ele pode consultar a estrutura, mas não altera a organização do estacionamento.</p></article><article class="system-card reveal"><span class="system-step">04 / AUTOMATIZAR · ETAPA FUTURA</span><h3>Sensores poderão atualizar as vagas</h3><p>O plano é instalar um sensor em cada vaga para perceber se há um veículo. Um pequeno controlador eletrônico, o ESP32, enviaria essas leituras ao sistema. Depois de processadas, elas poderiam atualizar o mapa e formar um histórico. Essa integração ainda está em desenvolvimento.</p></article></div>
+<div class="system-types reveal"><h3>Uma vaga tem duas informações diferentes</h3><p>O <b>tipo</b> explica para quem ou para que a vaga é destinada. A <b>situação</b> informa se ela pode ser usada. As situações serão atualizadas automaticamente depois que a integração com os sensores ficar pronta.</p><div class="system-type-groups"><div><span class="system-type-heading">TIPOS DE VAGA</span><ul><li>Comum</li><li>Para pessoa com deficiência (PCD)</li><li>Para pessoa idosa</li><li>Com ponto de recarga elétrica</li></ul></div><div><span class="system-type-heading">SITUAÇÕES PREVISTAS</span><ul><li>Livre</li><li>Ocupada</li><li>Indisponível</li></ul></div></div><p class="system-example"><b>Exemplo:</b> uma vaga PCD pode estar livre ou ocupada. “PCD” é o tipo; “livre” ou “ocupada” é a situação.</p></div>
+<div class="system-status-grid"><div class="system-status system-status-done"><span class="status-dot" aria-hidden="true"></span><div><b>O que já foi construído</b><p>A aplicação já tem login, contas individuais, configuração de shoppings e vagas, importação com prévia e mapa para navegar entre andares. Essas partes foram verificadas no projeto.</p></div></div><div class="system-status system-status-next"><span class="status-dot" aria-hidden="true"></span><div><b>O que ainda falta desenvolver</b><p>A leitura automática dos sensores, a atualização confiável da ocupação, o histórico, os painéis de contagem e um relatório interativo no Power BI, ferramenta de análise de dados, dependem de etapas futuras. O sistema ainda não está liberado para uso por clientes.</p></div></div></div>
+<p class="system-footnote">Segurança da informação: se a leitura do sensor ficar antiga ou não chegar, o sistema não deve tratar a vaga como livre. A placa estar conectada também não garante, sozinha, que todos os sensores estejam funcionando.</p></div></section>
+<section class="intro section-pad" id="historia"><div class="wrap intro-grid"><div class="intro-copy reveal">
+<div class="section-label">02 / AS PESSOAS POR TRÁS DO SISTEMA <span class="tinyline"></span> NOSSA HISTÓRIA</div>
+<h2 style="margin:18px 0">Antes de sermos a <span class="yellow">VAGGU</span>, éramos nós.</h2>
+<div class="large-quote">O começo dessa história não foi um código.<br><span class="yellow">Foi um encontro.</span></div>
+<p>Foram dois anos em que aprendemos muito sobre tecnologia, mas também sobre convivência, responsabilidade, mudanças e parceria. Entre atividades difíceis, conversas, brincadeiras e novos desafios, construímos laços que continuam além da sala de aula.</p>
+<p>Este memorial é uma forma de guardar as pessoas por trás do projeto — e tudo aquilo que aconteceu enquanto ele era construído.</p></div>
+<div class="intro-stack reveal"><img data-foto="19" alt="Os seis integrantes da VAGGU reunidos e rindo" class="photo-large" loading="lazy" decoding="async"><img data-foto="33" alt="Momento de descontração da equipe" class="photo-small" loading="lazy" decoding="async"><div class="photo-note">REGISTROS REAIS DA NOSSA EQUIPE</div></div></div></section>
+<section class="group-feature" aria-label="A equipe completa"><img data-foto="32" alt="Os seis integrantes da VAGGU na fotografia coletiva" class="group-bg" loading="lazy" decoding="async">
+<div class="wrap reveal"><span class="eyebrow">SEIS PESSOAS. UMA HISTÓRIA.</span><h2>Não era só sobre <span class="yellow">entregar um TCC.</span></h2>
+<p>O grupo que queríamos formar se tornou realidade. E a VAGGU, que quase ficou pelo caminho em meio a tantas ideias e dificuldades, acabou se transformando em uma parte importante do nosso encerramento no SENAI.</p></div></section>
+<section class="project section-pad" id="projeto"><div class="wrap"><div class="chapter-head reveal">
+<div class="section-label">03 / COMO A IDEIA NASCEU <span class="tinyline"></span> DA IDEIA AO REAL</div><h2>Um projeto com <span class="yellow">um pouco de cada um.</span></h2>
+<p>Antes de existir uma VAGGU pronta para ser apresentada, existiram ideias, desenhos, protótipos, circuitos, reuniões e recomeços. Esses registros fazem parte do caminho — sem esconder as dificuldades nem esquecer de quem esteve junto.</p></div>
+<div class="project-grid"><div class="project-col">
+<figure class="photo-tile" style="margin:0"><img data-foto="5" alt="Modelagem tridimensional de um estacionamento do projeto" class="" loading="lazy" decoding="async"><span>01 — Imaginar o possível</span></figure>
+<figure class="photo-tile" style="margin:0"><img data-foto="10" alt="Montagem do circuito com sensor ultrassônico" class="" loading="lazy" decoding="async"><span>02 — Construir e testar</span></figure></div>
+<div class="project-right"><figure class="photo-tile" style="margin:0"><img data-foto="18" alt="Tarefas da sprint do projeto anotadas em papel" class="" loading="lazy" decoding="async"><span>03 — Organizar o trabalho</span></figure>
+<figure class="photo-tile" style="margin:0"><img data-foto="13" alt="Tela do site VAGGU exibida em um computador" class="" loading="lazy" decoding="async"><span>04 — Ver a ideia ganhar forma</span></figure></div></div>
+<div class="info-strip reveal"><div><b>Da primeira ideia ao protótipo</b><p>Sensores, componentes e experimentos reais.</p></div><div><b>Do quadro ao código</b><p>Planejamento, documentação, telas e integrações.</p></div><div><b>Mais do que resultados</b><p>Aprendizado, parceria e maturidade em cada etapa.</p></div></div></div></section>
+<section class="voices section-pad" id="equipe"><div class="wrap"><div class="voice-heading reveal"><div><div class="section-label">04 / AS SEIS VOZES</div><h2 style="margin:14px 0 0">Por trás da <span class="yellow">VAGGU.</span></h2></div><p>Uma fotografia, seis histórias. Cada pessoa tem seu próprio jeito de contar o que esses dois anos significaram.</p></div>
+<div class="members"><a href="#voz-samuel" class="member-card" aria-label="Ler a história de Samuel">
+        <div class="member-photo"><img data-foto="24" alt="Retrato de Samuel" class="" loading="lazy" decoding="async"></div>
+        <div class="member-shade"></div>
+        <div class="member-top">01 <span> / 06</span></div>
+        <div class="member-caption"><div class="member-name">Samuel</div><span class="member-cta">Conheça minha história <span>↗</span></span></div>
+    </a><a href="#voz-pietro" class="member-card" aria-label="Ler a história de Pietro">
+        <div class="member-photo"><img data-foto="23" alt="Retrato de Pietro" class="" loading="lazy" decoding="async"></div>
+        <div class="member-shade"></div>
+        <div class="member-top">02 <span> / 06</span></div>
+        <div class="member-caption"><div class="member-name">Pietro</div><span class="member-cta">Conheça minha história <span>↗</span></span></div>
+    </a><a href="#voz-juan" class="member-card" aria-label="Ler a história de Juan">
+        <div class="member-photo"><img data-foto="juan" alt="Retrato de Juan" class="" loading="lazy" decoding="async"></div>
+        <div class="member-shade"></div>
+        <div class="member-top">03 <span> / 06</span></div>
+        <div class="member-caption"><div class="member-name">Juan</div><span class="member-cta">Conheça minha história <span>↗</span></span></div>
+    </a><a href="#voz-elisa" class="member-card" aria-label="Ler a história de Elisa">
+        <div class="member-photo"><img data-foto="22" alt="Retrato de Elisa" class="" loading="lazy" decoding="async"></div>
+        <div class="member-shade"></div>
+        <div class="member-top">04 <span> / 06</span></div>
+        <div class="member-caption"><div class="member-name">Elisa</div><span class="member-cta">Conheça minha história <span>↗</span></span></div>
+    </a><a href="#voz-ana" class="member-card" aria-label="Ler a história de Ana Carvalho">
+        <div class="member-photo"><img data-foto="3" alt="Retrato de Ana Carvalho" class="" loading="lazy" decoding="async"></div>
+        <div class="member-shade"></div>
+        <div class="member-top">05 <span> / 06</span></div>
+        <div class="member-caption"><div class="member-name">Ana Carvalho</div><span class="member-cta">Conheça minha história <span>↗</span></span></div>
+    </a><a href="#voz-kamilly" class="member-card" aria-label="Ler a história de Kamilly">
+        <div class="member-photo"><img data-foto="kamilly" alt="Retrato de Kamilly" class="" loading="lazy" decoding="async"></div>
+        <div class="member-shade"></div>
+        <div class="member-top">06 <span> / 06</span></div>
+        <div class="member-caption"><div class="member-name">Kamilly</div><span class="member-cta">Conheça minha história <span>↗</span></span></div>
+    </a></div><p class="small-note" style="margin-top:20px">Os depoimentos de Samuel, Ana, Juan e Elisa foram enviados pela equipe. Os relatos de Pietro e Kamilly ainda aparecem como conteúdo demonstrativo.</p></div></section>
+<section id="voz-samuel" class="testimony section-pad" aria-labelledby="titulo-samuel">
+     <div class="wrap testimony-wrap">
+      <div class="testimony-portrait reveal"><img data-foto="24" alt="Retrato de Samuel" class="" loading="lazy" decoding="async">
+        <div class="testimony-photo-label">VAGGU <span>· 01/06</span></div></div>
+      <div class="testimony-content reveal">
+        <div class="section-label">VOZ 01 / 06 <span class="tinyline"></span> Samuel</div>
+        <h2 id="titulo-samuel">Samuel</h2>
+        <blockquote class="hero-quote">“A VAGGU jamais será somente um trabalho de conclusão de curso.”</blockquote>
+        <p class="testimony-status">Depoimento revisado a partir do relato de Samuel</p>
+        <div class="testimony-text"><p>Durante dois anos no SENAI, aprendi não só sobre tecnologia, mas também a lidar com pessoas, desafios e mudanças. Fui do básico no computador ao desenvolvimento de um sistema com banco de dados, e cada etapa contribuiu para minha formação.</p>
+<p>Entre atividades, cansaço e muitos momentos de alegria, amadureci e criei laços mais fortes com amigos que já faziam parte da minha vida. Também me aproximei de pessoas com quem não imaginava construir uma conexão tão especial.</p>
+<p>Formar a VAGGU foi um sonho compartilhado. Escolher o projeto não foi fácil e quase mudamos de caminho, mas continuar nos fez crescer junto com ele. Sou grato por encerrar essa etapa do SENAI ao lado de pessoas que admiro.</p>
+<p>Para mim, a VAGGU é mais do que um trabalho de conclusão: representa amizade, parceria e pertencimento. Ela faz parte da minha história e de um ciclo que vou levar comigo. Sinto-me privilegiado por ter vivido essa jornada com esse grupo.</p></div>
+        <a class="next-person" href="#voz-pietro">Próxima história <span>↗</span></a>
+      </div>
+     </div>
+    </section><section id="voz-pietro" class="testimony section-pad" aria-labelledby="titulo-pietro">
+     <div class="wrap testimony-wrap">
+      <div class="testimony-portrait reveal"><img data-foto="23" alt="Retrato de Pietro" class="" loading="lazy" decoding="async">
+        <div class="testimony-photo-label">VAGGU <span>· 02/06</span></div></div>
+      <div class="testimony-content reveal">
+        <div class="section-label">VOZ 02 / 06 <span class="tinyline"></span> Pietro</div>
+        <h2 id="titulo-pietro">Pietro</h2>
+        <blockquote class="hero-quote">“A Vaggu com certeza foi a melhor forma de finalizar esse ciclo com chave de ouro.”</blockquote>
+        <p class="testimony-status">Depoimento original — texto integral, sem alterações</p>
+        <div class="testimony-text"><p>A Vaggu com certeza foi a melhor forma de finalizar esse ciclo com chave de ouro.</p>
+<p>Após dois anos aprendendo ao lado de colegas tão focados e competentes, após tantos projetos bem concluídos, atividades que transformaram nossas dúvidas em trabalho feito, eu evolui ao lado de grandes amigos que hoje tenho orgulho de dividir um projeto tão importante quanto o de conclusão de curso.</p>
+<p>Não tenho duvidas de que estou me formando e trabalhando com a melhor equipe formada da sala, conseguimos conciliar todos os quesitos para um time bom, com dedicação, inteligência, proatividade, profissionalismo, pontualidade e qualidade.</p>
+<p>No início dessa jornada todos estávamos aflitos por estar conhecendo um mundo novo, com oportunidades e dificuldades novas, agora chegando ao final tenho certeza que cada um de nós lá atrás teria orgulho do que nos tornamos nesses últimos anos, mesmo cada um seguindo uma carreira diferente, as vezes divergente ou não do curso, acredito que conseguimos uma bagagem gigantesca sobre problemas que aconteceriam em qualquer profissão, e isso não tem preço.</p>
+<p>Chegando ao final do projeto só tenho a agradecer aos meus colegas, não tinha como ter sido melhor essa ultima experiência com vocês, todos deram seu melhor para fazer isso acontecer.</p>
+<p>Aos professores e coordenadores também que nos guiaram até a tão esperada conclusão de curso, que nos preparou para um futuro prospero e nos proporcionou lembranças que vão ficar no coração pra sempre.</p></div>
+        <a class="next-person" href="#voz-juan">Próxima história <span>↗</span></a>
+      </div>
+     </div>
+    </section><section id="voz-juan" class="testimony section-pad" aria-labelledby="titulo-juan">
+     <div class="wrap testimony-wrap">
+      <div class="testimony-portrait reveal"><img data-foto="juan" alt="Retrato de Juan" class="" loading="lazy" decoding="async">
+        <div class="testimony-photo-label">VAGGU <span>· 03/06</span></div></div>
+      <div class="testimony-content reveal">
+        <div class="section-label">VOZ 03 / 06 <span class="tinyline"></span> Juan</div>
+        <h2 id="titulo-juan">Juan</h2>
+        <blockquote class="hero-quote">“Foi maravilhoso ser parte da Vaggu, amadurecer e criar vínculos que duram a vida toda!”</blockquote>
+        <p class="testimony-status">Depoimento enviado por Juan — texto integral</p>
+        <div class="testimony-text"><p>Eu fiquei muito empolgado com o projeto da Vaggu, feliz em fazer com meus amigos e aprendi muito durante todo o processo. Aprendi não somente conteúdos do curso e que foram aplicados no projeto, mas também valores de amizade, respeito e companheirismo. Tem sido uma honra e muito divertido fazer parte desse projeto e pôr parte da minha identidade e esforço.</p>
+<p>Foi maravilhoso ser parte da Vaggu, amadurecer e criar vínculos que duram a vida toda! 💛</p></div>
+        <a class="next-person" href="#voz-elisa">Próxima história <span>↗</span></a>
+      </div>
+     </div>
+    </section><section id="voz-elisa" class="testimony section-pad" aria-labelledby="titulo-elisa">
+     <div class="wrap testimony-wrap">
+      <div class="testimony-portrait reveal"><img data-foto="22" alt="Retrato de Elisa" class="" loading="lazy" decoding="async">
+        <div class="testimony-photo-label">VAGGU <span>· 04/06</span></div></div>
+      <div class="testimony-content reveal">
+        <div class="section-label">VOZ 04 / 06 <span class="tinyline"></span> Elisa</div>
+        <h2 id="titulo-elisa">Elisa</h2>
+        <blockquote class="hero-quote">“A VAGGU foi muito mais do que um projeto, uma marca, uma empresa ou um trabalho a ser apresentado.”</blockquote>
+        <p class="testimony-status">Depoimento enviado por Elisa — texto integral</p>
+        <div class="testimony-text"><p>O que é a VAGGU pra mim?</p>
+<p>Bom, acho que essa não é uma pergunta tão simples, porque a VAGGU vai muito além de um trabalho de conclusão de curso. Ela conseguiu unir ainda mais seus integrantes, não apenas pela afinidade, mas também pela vontade de finalizar o curso técnico com honra, alegria e gratidão.</p>
+<p>A nossa equipe é completamente capacitada e esforçada, e cada integrante da VAGGU tem um olhar determinado e um jeito único de tornar tudo mais especial. Essa é uma das coisas que eu mais amo: a individualidade de cada um.</p>
+<p>No começo do curso, confesso que estava um pouco assustada, cheia de incertezas e medos. Mas, em todos os momentos, tive pessoas ao meu lado que fizeram com que as coisas ficassem mais leves. E, coincidentemente, hoje essas mesmas pessoas fazem parte do meu tão sonhado grupo de TCC.</p>
+<p>Esse projeto foi uma virada de chave para mim. Além de me dar um “estalo” sobre responsabilidade e disciplina, também me ensinou que o trabalho em equipe não é construído apenas dentro de uma sala de aula, mas também por meio dos laços que carregamos no coração.</p>
+<p>Sinto-me lisonjeada por fazer parte de uma equipe tão maravilhosa como essa. Ao final de tudo, pude perceber que a VAGGU foi muito mais do que um projeto, uma marca, uma empresa ou um trabalho a ser apresentado: ela foi um dos maiores ensinamentos que tive ao longo desses dois anos de curso.</p>
+<p>Poder encerrar um ciclo tão lindo da minha vida ao lado de pessoas especiais, por quem tenho um carinho imenso, foi uma experiência excepcional.</p>
+<p>Deixo aqui meu texto de agradecimento à VAGGU. Obrigada por tudo!</p></div>
+        <a class="next-person" href="#voz-ana">Próxima história <span>↗</span></a>
+      </div>
+     </div>
+    </section><section id="voz-ana" class="testimony section-pad" aria-labelledby="titulo-ana">
+     <div class="wrap testimony-wrap">
+      <div class="testimony-portrait reveal"><img data-foto="3" alt="Retrato de Ana Carvalho" class="" loading="lazy" decoding="async">
+        <div class="testimony-photo-label">VAGGU <span>· 05/06</span></div></div>
+      <div class="testimony-content reveal">
+        <div class="section-label">VOZ 05 / 06 <span class="tinyline"></span> Ana Carvalho</div>
+        <h2 id="titulo-ana">Ana Carvalho</h2>
+        <blockquote class="hero-quote">“A Ana que entrou e a Ana que está saindo agora são pessoas completamente diferentes.”</blockquote>
+        <p class="testimony-status">Depoimento original — texto integral, sem alterações</p>
+        <div class="testimony-text"><p>Pra mim, a VAGGU é muito mais do que um projeto. É também o convívio com pessoas excelentes e competentes, que todos os dias se dedicam para que possamos concluir com sucesso essa jornada.</p>
+<p>Eu amo não só as pessoas, mas também o nosso cotidiano, a nossa organização, o nosso relacionamento e a nossa conexão. O “flow” aqui é diferente e, pra mim, uma das melhores coisas é me sentir parte de tudo isso, entendendo que cada um tem seu papel e que, juntos, fazemos as coisas acontecerem. Além disso, nossos momentos de descontração também são essenciais e têm um papel muito importante em tudo isso. São esses momentos que tornam a rotina mais leve, nos aproximam cada vez mais e fortalecem o nosso vínculo como equipe. Afinal, não são só as responsabilidades e os objetivos em comum que nos unem, mas também as risadas, as conversas e os momentos que compartilhamos ao longo dessa jornada.</p>
+<p>Esse projeto também foi muito importante pra eu ter uma noção do que é um TCC na prática, de como é desenvolver uma ideia do zero e chegar ao ponto de apresentá-la para uma banca. É muito interessante pensar que nós, como equipe, criamos tudo isso do zero e que, em breve, teremos algo ainda maior para apresentar na próxima jornada das nossas vidas.</p>
+<p>Mesmo não sendo o curso que eu quero seguir, foram muitos os aprendizados que tive aqui dentro do SENAI. A Ana que entrou e a Ana que está saindo agora são pessoas completamente diferentes. Hoje, me sinto com mais maturidade, conhecimento, paciência e capacidade de me relacionar com pessoas diferentes. Aprendi muito sobre trabalho em equipe, responsabilidades e sobre como cada pessoa pode contribuir de uma maneira.</p>
+<p>É muito bonito e gratificante fazer parte de tudo isso, principalmente quando lembro que, ainda no nosso primeiro semestre, já tínhamos o nosso grupo dos sonhos para o TCC. E hoje, ver isso se concretizando, torna tudo ainda mais especial.</p>
+<p>No fim, acho que o mais importante é perceber que a VAGGU vai muito além do resultado que vamos apresentar. Ela representa tudo o que vivemos, construímos e aprendemos juntos. E poder encerrar essa etapa ao lado de uma equipe tão especial faz com que essa experiência tenha um significado ainda maior pra mim.</p></div>
+        <a class="next-person" href="#voz-kamilly">Próxima história <span>↗</span></a>
+      </div>
+     </div>
+    </section><section id="voz-kamilly" class="testimony section-pad" aria-labelledby="titulo-kamilly">
+     <div class="wrap testimony-wrap">
+      <div class="testimony-portrait reveal"><img data-foto="kamilly" alt="Retrato de Kamilly" class="" loading="lazy" decoding="async">
+        <div class="testimony-photo-label">VAGGU <span>· 06/06</span></div></div>
+      <div class="testimony-content reveal">
+        <div class="section-label">VOZ 06 / 06 <span class="tinyline"></span> Kamilly</div>
+        <h2 id="titulo-kamilly">Kamilly</h2>
+        <blockquote class="hero-quote">“O que fica depois do último projeto?”</blockquote>
+        <p class="testimony-status">Texto de demonstração — depoimento pendente <span class="prov-chip">PRÉVIA • TEXTO TEMPORÁRIO</span></p>
+        <div class="testimony-text"><p>Este capítulo está reservado para a Kamilly contar o que a VAGGU e os dois anos de SENAI significaram para ela.</p>
+<p>Receita temporária para ninguém confundir este espaço com um texto final: prepare seu miojo favorito, sirva em um prato e aproveite enquanto escrevemos o próximo capítulo.</p></div>
+        <a class="next-person" href="#acervo">Explorar nossas memórias <span>↗</span></a>
+      </div>
+     </div>
+    </section>
+<section class="archive section-pad" id="acervo"><div class="wrap">
+<div class="archive-head"><div class="chapter-head"><div class="section-label">05 / O QUE NÃO CABE NO CÓDIGO</div><h2>O nosso <span class="yellow">acervo de memórias.</span></h2><p>O trabalho aconteceu diante de computadores e sensores, mas também nas conversas, nos retratos improvisados e nos momentos mais leves. Aqui estão os registros que vocês realmente enviaram.</p></div><div class="archive-count">35 FOTOS + 2 VÍDEOS • ARQUIVOS ENVIADOS</div></div>
+<div class="filters" aria-label="Filtrar fotografias"><button class="filter" type="button" data-filter="todos" aria-pressed="true">Todas as fotos</button><button class="filter" type="button" data-filter="pessoas" aria-pressed="false">Nós e o cotidiano</button><button class="filter" type="button" data-filter="projeto" aria-pressed="false">A construção da VAGGU</button></div>
+<div class="archive-grid" id="gallery"><button type="button" class="gal-item" data-cat="pessoas" data-img-id="0" aria-label="Ampliar imagem: Uma conversa entre nós">
+    <img data-foto="0" alt="Uma conversa entre nós" class="gal-img" loading="lazy" decoding="async">
+    <span class="gal-hover"><span>Uma conversa entre nós</span><span class="gal-plus">↗</span></span></button><button type="button" class="gal-item" data-cat="pessoas" data-img-id="1" aria-label="Ampliar imagem: Um retrato do grupo">
+    <img data-foto="1" alt="Um retrato do grupo" class="gal-img" loading="lazy" decoding="async">
+    <span class="gal-hover"><span>Um retrato do grupo</span><span class="gal-plus">↗</span></span></button><button type="button" class="gal-item" data-cat="pessoas" data-img-id="2" aria-label="Ampliar imagem: Retrato espontâneo">
+    <img data-foto="2" alt="Retrato espontâneo" class="gal-img" loading="lazy" decoding="async">
+    <span class="gal-hover"><span>Retrato espontâneo</span><span class="gal-plus">↗</span></span></button><button type="button" class="gal-item" data-cat="pessoas" data-img-id="3" aria-label="Ampliar imagem: Retrato da Ana">
+    <img data-foto="3" alt="Retrato da Ana" class="gal-img" loading="lazy" decoding="async">
+    <span class="gal-hover"><span>Retrato da Ana</span><span class="gal-plus">↗</span></span></button><button type="button" class="gal-item" data-cat="projeto" data-img-id="4" aria-label="Ampliar imagem: Experimentos de cor">
+    <img data-foto="4" alt="Experimentos de cor" class="gal-img" loading="lazy" decoding="async">
+    <span class="gal-hover"><span>Experimentos de cor</span><span class="gal-plus">↗</span></span></button><button type="button" class="gal-item" data-cat="projeto" data-img-id="5" aria-label="Ampliar imagem: Uma ideia em 3D">
+    <img data-foto="5" alt="Uma ideia em 3D" class="gal-img" loading="lazy" decoding="async">
+    <span class="gal-hover"><span>Uma ideia em 3D</span><span class="gal-plus">↗</span></span></button><button type="button" class="gal-item" data-cat="projeto" data-img-id="6" aria-label="Ampliar imagem: Materiais do protótipo">
+    <img data-foto="6" alt="Materiais do protótipo" class="gal-img" loading="lazy" decoding="async">
+    <span class="gal-hover"><span>Materiais do protótipo</span><span class="gal-plus">↗</span></span></button><button type="button" class="gal-item" data-cat="pessoas" data-img-id="7" aria-label="Ampliar imagem: Os intervalos também contam">
+    <img data-foto="7" alt="Os intervalos também contam" class="gal-img" loading="lazy" decoding="async">
+    <span class="gal-hover"><span>Os intervalos também contam</span><span class="gal-plus">↗</span></span></button><button type="button" class="gal-item" data-cat="projeto" data-img-id="8" aria-label="Ampliar imagem: VAGGU nos primeiros registros">
+    <img data-foto="8" alt="VAGGU nos primeiros registros" class="gal-img" loading="lazy" decoding="async">
+    <span class="gal-hover"><span>VAGGU nos primeiros registros</span><span class="gal-plus">↗</span></span></button><button type="button" class="gal-item" data-cat="projeto" data-img-id="9" aria-label="Ampliar imagem: O planejamento técnico">
+    <img data-foto="9" alt="O planejamento técnico" class="gal-img" loading="lazy" decoding="async">
+    <span class="gal-hover"><span>O planejamento técnico</span><span class="gal-plus">↗</span></span></button><button type="button" class="gal-item" data-cat="projeto" data-img-id="10" aria-label="Ampliar imagem: Os primeiros circuitos">
+    <img data-foto="10" alt="Os primeiros circuitos" class="gal-img" loading="lazy" decoding="async">
+    <span class="gal-hover"><span>Os primeiros circuitos</span><span class="gal-plus">↗</span></span></button><button type="button" class="gal-item" data-cat="pessoas" data-img-id="11" aria-label="Ampliar imagem: Um registro do cotidiano">
+    <img data-foto="11" alt="Um registro do cotidiano" class="gal-img" loading="lazy" decoding="async">
+    <span class="gal-hover"><span>Um registro do cotidiano</span><span class="gal-plus">↗</span></span></button><button type="button" class="gal-item" data-cat="projeto" data-img-id="12" aria-label="Ampliar imagem: Materiais de conexão">
+    <img data-foto="12" alt="Materiais de conexão" class="gal-img" loading="lazy" decoding="async">
+    <span class="gal-hover"><span>Materiais de conexão</span><span class="gal-plus">↗</span></span></button><button type="button" class="gal-item" data-cat="projeto" data-img-id="13" aria-label="Ampliar imagem: Uma tela ganhando forma">
+    <img data-foto="13" alt="Uma tela ganhando forma" class="gal-img" loading="lazy" decoding="async">
+    <span class="gal-hover"><span>Uma tela ganhando forma</span><span class="gal-plus">↗</span></span></button><button type="button" class="gal-item" data-cat="pessoas" data-img-id="14" aria-label="Ampliar imagem: Um momento descontraído">
+    <img data-foto="14" alt="Um momento descontraído" class="gal-img" loading="lazy" decoding="async">
+    <span class="gal-hover"><span>Um momento descontraído</span><span class="gal-plus">↗</span></span></button><button type="button" class="gal-item" data-cat="projeto" data-img-id="15" aria-label="Ampliar imagem: Referência do universo VAGGU">
+    <img data-foto="15" alt="Referência do universo VAGGU" class="gal-img" loading="lazy" decoding="async">
+    <span class="gal-hover"><span>Referência do universo VAGGU</span><span class="gal-plus">↗</span></span></button><button type="button" class="gal-item" data-cat="projeto" data-img-id="16" aria-label="Ampliar imagem: Testes de identidade visual">
+    <img data-foto="16" alt="Testes de identidade visual" class="gal-img" loading="lazy" decoding="async">
+    <span class="gal-hover"><span>Testes de identidade visual</span><span class="gal-plus">↗</span></span></button><button type="button" class="gal-item" data-cat="projeto" data-img-id="17" aria-label="Ampliar imagem: Uma inspiração para o projeto">
+    <img data-foto="17" alt="Uma inspiração para o projeto" class="gal-img" loading="lazy" decoding="async">
+    <span class="gal-hover"><span>Uma inspiração para o projeto</span><span class="gal-plus">↗</span></span></button><button type="button" class="gal-item" data-cat="projeto" data-img-id="18" aria-label="Ampliar imagem: Uma sprint registrada à mão">
+    <img data-foto="18" alt="Uma sprint registrada à mão" class="gal-img" loading="lazy" decoding="async">
+    <span class="gal-hover"><span>Uma sprint registrada à mão</span><span class="gal-plus">↗</span></span></button><button type="button" class="gal-item" data-cat="pessoas" data-img-id="19" aria-label="Ampliar imagem: Todo mundo junto">
+    <img data-foto="19" alt="Todo mundo junto" class="gal-img" loading="lazy" decoding="async">
+    <span class="gal-hover"><span>Todo mundo junto</span><span class="gal-plus">↗</span></span></button><button type="button" class="gal-item" data-cat="pessoas" data-img-id="20" aria-label="Ampliar imagem: Uma mensagem que chamou a atenção">
+    <img data-foto="20" alt="Uma mensagem que chamou a atenção" class="gal-img" loading="lazy" decoding="async">
+    <span class="gal-hover"><span>Uma mensagem que chamou a atenção</span><span class="gal-plus">↗</span></span></button><button type="button" class="gal-item" data-cat="pessoas" data-img-id="21" aria-label="Ampliar imagem: Retrato da Elisa">
+    <img data-foto="21" alt="Retrato da Elisa" class="gal-img" loading="lazy" decoding="async">
+    <span class="gal-hover"><span>Retrato da Elisa</span><span class="gal-plus">↗</span></span></button><button type="button" class="gal-item" data-cat="pessoas" data-img-id="22" aria-label="Ampliar imagem: Elisa em retrato">
+    <img data-foto="22" alt="Elisa em retrato" class="gal-img" loading="lazy" decoding="async">
+    <span class="gal-hover"><span>Elisa em retrato</span><span class="gal-plus">↗</span></span></button><button type="button" class="gal-item" data-cat="pessoas" data-img-id="23" aria-label="Ampliar imagem: Pietro em retrato">
+    <img data-foto="23" alt="Pietro em retrato" class="gal-img" loading="lazy" decoding="async">
+    <span class="gal-hover"><span>Pietro em retrato</span><span class="gal-plus">↗</span></span></button><button type="button" class="gal-item" data-cat="pessoas" data-img-id="24" aria-label="Ampliar imagem: Samuel em retrato">
+    <img data-foto="24" alt="Samuel em retrato" class="gal-img" loading="lazy" decoding="async">
+    <span class="gal-hover"><span>Samuel em retrato</span><span class="gal-plus">↗</span></span></button><button type="button" class="gal-item" data-cat="pessoas" data-img-id="25" aria-label="Ampliar imagem: Samuel trabalhando">
+    <img data-foto="25" alt="Samuel trabalhando" class="gal-img" loading="lazy" decoding="async">
+    <span class="gal-hover"><span>Samuel trabalhando</span><span class="gal-plus">↗</span></span></button><button type="button" class="gal-item" data-cat="projeto" data-img-id="26" aria-label="Ampliar imagem: Aprendendo sobre pessoas">
+    <img data-foto="26" alt="Aprendendo sobre pessoas" class="gal-img" loading="lazy" decoding="async">
+    <span class="gal-hover"><span>Aprendendo sobre pessoas</span><span class="gal-plus">↗</span></span></button><button type="button" class="gal-item" data-cat="pessoas" data-img-id="27" aria-label="Ampliar imagem: Um dia no SENAI">
+    <img data-foto="27" alt="Um dia no SENAI" class="gal-img" loading="lazy" decoding="async">
+    <span class="gal-hover"><span>Um dia no SENAI</span><span class="gal-plus">↗</span></span></button><button type="button" class="gal-item" data-cat="projeto" data-img-id="28" aria-label="Ampliar imagem: A marca tomando forma">
+    <img data-foto="28" alt="A marca tomando forma" class="gal-img" loading="lazy" decoding="async">
+    <span class="gal-hover"><span>A marca tomando forma</span><span class="gal-plus">↗</span></span></button><button type="button" class="gal-item" data-cat="pessoas" data-img-id="29" aria-label="Ampliar imagem: Pietro em outro olhar">
+    <img data-foto="29" alt="Pietro em outro olhar" class="gal-img" loading="lazy" decoding="async">
+    <span class="gal-hover"><span>Pietro em outro olhar</span><span class="gal-plus">↗</span></span></button><button type="button" class="gal-item" data-cat="pessoas" data-img-id="30" aria-label="Ampliar imagem: Nem todo retrato é sério">
+    <img data-foto="30" alt="Nem todo retrato é sério" class="gal-img" loading="lazy" decoding="async">
+    <span class="gal-hover"><span>Nem todo retrato é sério</span><span class="gal-plus">↗</span></span></button><button type="button" class="gal-item" data-cat="pessoas" data-img-id="31" aria-label="Ampliar imagem: Pietro em um momento de pausa">
+    <img data-foto="31" alt="Pietro em um momento de pausa" class="gal-img" loading="lazy" decoding="async">
+    <span class="gal-hover"><span>Pietro em um momento de pausa</span><span class="gal-plus">↗</span></span></button><button type="button" class="gal-item" data-cat="pessoas" data-img-id="32" aria-label="Ampliar imagem: A nossa equipe completa">
+    <img data-foto="32" alt="A nossa equipe completa" class="gal-img" loading="lazy" decoding="async">
+    <span class="gal-hover"><span>A nossa equipe completa</span><span class="gal-plus">↗</span></span></button><button type="button" class="gal-item" data-cat="pessoas" data-img-id="33" aria-label="Ampliar imagem: As risadas fazem parte">
+    <img data-foto="33" alt="As risadas fazem parte" class="gal-img" loading="lazy" decoding="async">
+    <span class="gal-hover"><span>As risadas fazem parte</span><span class="gal-plus">↗</span></span></button><button type="button" class="gal-item" data-cat="pessoas" data-img-id="34" aria-label="Ampliar imagem: Nossa fotografia oficial">
+    <img data-foto="34" alt="Nossa fotografia oficial" class="gal-img" loading="lazy" decoding="async">
+    <span class="gal-hover"><span>Nossa fotografia oficial</span><span class="gal-plus">↗</span></span></button></div>
+<button type="button" id="showAll" class="archive-more" hidden>Ver todas as fotografias ↓</button>
+<div class="videos"><div class="video-heading"><div><div class="section-label">06 / VÍDEOS DO ACERVO</div><h3 style="margin:12px 0 0">Momentos em movimento.</h3></div></div><div class="video-grid">
+<div class="video-card"><div class="video-frame"><video id="video0" controls preload="none" playsinline data-poster="video0" aria-label="Primeiro vídeo enviado pela equipe"></video></div><h4>Um registro em vídeo</h4><p>Arquivo enviado pela equipe, preservado no acervo. Toque em reproduzir para assistir.</p></div>
+<div class="video-card"><div class="video-frame"><video id="video1" controls preload="none" playsinline data-poster="video1" aria-label="Vídeo com animação da identidade VAGGU"></video></div><h4>A VAGGU em movimento</h4><p>Animação da marca, parte da identidade visual desenvolvida para o projeto.</p></div>
+</div><p class="small-note">As fotografias e os dois vídeos ficam dentro deste único arquivo HTML, inclusive para visualização sem internet. Algumas fotos de referência visual são mostradas como registros de processo, não como fotos da equipe.</p></div></div></section>
+<div class="final-photo"><img data-foto="34" alt="Os seis amigos da equipe VAGGU juntos na foto oficial" class="" loading="lazy" decoding="async"></div>
+<section class="epilogue" id="final"><div class="wrap"><div class="section-label" style="justify-content:center">EPÍLOGO / O QUE PERMANECE</div>
+<h2>O último código pode ser escrito.<br><span class="yellow">A nossa história continua.</span></h2>
+<p>Um dia, a apresentação termina, a rotina muda e cada um segue seu caminho. Mas tudo o que aprendemos e vivemos juntos permanece conosco.</p>
+<p class="closer">Porque a VAGGU nunca foi apenas sobre vagas.<br>Foi sobre encontrar nosso lugar.</p>
+<div class="credits">SAMUEL · PIETRO · JUAN · ELISA · ANA · KAMILLY<br><strong>VAGGU • SENAI COTIA • 2025—2026</strong></div></div></section>
+</main><footer class="footer"><div class="wrap">MEMORIAL DE EQUIPE · PRÉVIA PARA REVISÃO INTERNA · DEPOIMENTOS PENDENTES SÃO DEMONSTRATIVOS</div></footer>
+<div id="lightbox" class="lightbox" hidden role="dialog" aria-modal="true" aria-label="Visualização da fotografia"><button type="button" class="light-close" id="lightClose" aria-label="Fechar fotografia">×</button><button type="button" class="light-arrow light-prev" id="lightPrev" aria-label="Foto anterior">‹</button><img id="lightImage" alt=""><button type="button" class="light-arrow light-next" id="lightNext" aria-label="Próxima foto">›</button><div id="lightCaption" class="light-caption"></div></div>
+<script type="module" src="./src/main.js"></script></body></html>

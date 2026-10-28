@@ -33,6 +33,7 @@ Conhecimento, documentos e regras ficam em `segunda-mente`. O planejamento canô
 | --- | --- |
 | `scripts/` | Reúne verificações do repositório que não pertencem ao frontend nem ao backend. |
 | `segunda-mente/` | Mantém o cofre Obsidian canônico, suas fontes, evidências e registros históricos. |
+| `vaggu-memorial-samuel/` | Mantém o site independente de memorial da equipe e apresentação do sistema, separado da landing comercial e da aplicação operacional. |
 | `vaggu-backend/` | Contém API, regras de domínio, persistência, integrações e testes do servidor. |
 | `vaggu-frontend/` | Contém a aplicação React, componentes, páginas, contratos e assets publicados. |
 
@@ -325,3 +326,68 @@ O [protótipo e sua validação](telao-apresentacao-2026-10-21.md) substituem o 
 | `vaggu-frontend/src/hooks/use-movimento-reduzido.ts` | Acompanha prefers-reduced-motion com useSyncExternalStore, inclusive alterações durante o uso; snapshot conservador no servidor. |
 
 O painel analítico usa Motion já instalado: linha e preenchimento revelados por recorte SVG, barras por escala e roscas por escala/opacidade. A apresentação não altera o histórico, a exportação ou os estados de consulta. Ver [experimento e testes](animacoes-analises-2026-10-25.md).
+
+### Site independente de memorial — 28/10/2026
+
+| Caminho | Responsabilidade |
+| --- | --- |
+| `vaggu-memorial-samuel/.gitignore` | Exclui dependências, artefatos e configurações locais do site independente do memorial. |
+| `vaggu-memorial-samuel/index.html` | Estrutura a página pública de apresentação do sistema e memorial da equipe VAGGU. |
+| `vaggu-memorial-samuel/package.json` | Declara o comando de desenvolvimento do site sem dependências externas. |
+| `vaggu-memorial-samuel/README.md` | Explica o propósito, a execução local, a estrutura e os limites editoriais do memorial. |
+| `vaggu-memorial-samuel/public/assets/logotipo-vaggu-amarelo.svg` | Publica a marca amarela reutilizada na apresentação do memorial. |
+| `vaggu-memorial-samuel/public/assets/fontes/LICENCA-Poppins.txt` | Registra a licença SIL Open Font License das fontes Poppins distribuídas com a página. |
+| `vaggu-memorial-samuel/public/assets/fontes/poppins-latin-300.woff2` | Publica a fonte Poppins Latin no peso 300 usada pela página. |
+| `vaggu-memorial-samuel/public/assets/fontes/poppins-latin-400.woff2` | Publica a fonte Poppins Latin no peso 400 usada pela página. |
+| `vaggu-memorial-samuel/public/assets/fontes/poppins-latin-500.woff2` | Publica a fonte Poppins Latin no peso 500 usada pela página. |
+| `vaggu-memorial-samuel/public/assets/fontes/poppins-latin-600.woff2` | Publica a fonte Poppins Latin no peso 600 usada pela página. |
+| `vaggu-memorial-samuel/public/assets/fontes/poppins-latin-700.woff2` | Publica a fonte Poppins Latin no peso 700 usada pela página. |
+| `vaggu-memorial-samuel/public/assets/fotos/capa-video-1.webp` | Fornece a imagem de capa do primeiro vídeo no acervo do memorial. |
+| `vaggu-memorial-samuel/public/assets/fotos/capa-video-2.webp` | Fornece a imagem de capa do segundo vídeo no acervo do memorial. |
+| `vaggu-memorial-samuel/public/assets/fotos/registro-00.webp` | Publica a fotografia identificada como registro 00 no acervo do memorial. |
+| `vaggu-memorial-samuel/public/assets/fotos/registro-01.webp` | Publica a fotografia identificada como registro 01 no acervo do memorial. |
+| `vaggu-memorial-samuel/public/assets/fotos/registro-02.webp` | Publica a fotografia identificada como registro 02 no acervo do memorial. |
+| `vaggu-memorial-samuel/public/assets/fotos/registro-03.webp` | Publica a fotografia identificada como registro 03 no acervo do memorial. |
+| `vaggu-memorial-samuel/public/assets/fotos/registro-04.webp` | Publica a fotografia identificada como registro 04 no acervo do memorial. |
+| `vaggu-memorial-samuel/public/assets/fotos/registro-05.webp` | Publica a fotografia identificada como registro 05 no acervo do memorial. |
+| `vaggu-memorial-samuel/public/assets/fotos/registro-06.webp` | Publica a fotografia identificada como registro 06 no acervo do memorial. |
+| `vaggu-memorial-samuel/public/assets/fotos/registro-07.webp` | Publica a fotografia identificada como registro 07 no acervo do memorial. |
+| `vaggu-memorial-samuel/public/assets/fotos/registro-08.webp` | Publica a fotografia identificada como registro 08 no acervo do memorial. |
+| `vaggu-memorial-samuel/public/assets/fotos/registro-09.webp` | Publica a fotografia identificada como registro 09 no acervo do memorial. |
+| `vaggu-memorial-samuel/public/assets/fotos/registro-10.webp` | Publica a fotografia identificada como registro 10 no acervo do memorial. |
+| `vaggu-memorial-samuel/public/assets/fotos/registro-11.webp` | Publica a fotografia identificada como registro 11 no acervo do memorial. |
+| `vaggu-memorial-samuel/public/assets/fotos/registro-12.webp` | Publica a fotografia identificada como registro 12 no acervo do memorial. |
+| `vaggu-memorial-samuel/public/assets/fotos/registro-13.webp` | Publica a fotografia identificada como registro 13 no acervo do memorial. |
+| `vaggu-memorial-samuel/public/assets/fotos/registro-14.webp` | Publica a fotografia identificada como registro 14 no acervo do memorial. |
+| `vaggu-memorial-samuel/public/assets/fotos/registro-15.webp` | Publica a fotografia identificada como registro 15 no acervo do memorial. |
+| `vaggu-memorial-samuel/public/assets/fotos/registro-16.webp` | Publica a fotografia identificada como registro 16 no acervo do memorial. |
+| `vaggu-memorial-samuel/public/assets/fotos/registro-17.webp` | Publica a fotografia identificada como registro 17 no acervo do memorial. |
+| `vaggu-memorial-samuel/public/assets/fotos/registro-18.webp` | Publica a fotografia identificada como registro 18 no acervo do memorial. |
+| `vaggu-memorial-samuel/public/assets/fotos/registro-19.webp` | Publica a fotografia identificada como registro 19 no acervo do memorial. |
+| `vaggu-memorial-samuel/public/assets/fotos/registro-20.webp` | Publica a fotografia identificada como registro 20 no acervo do memorial. |
+| `vaggu-memorial-samuel/public/assets/fotos/registro-21.webp` | Publica a fotografia identificada como registro 21 no acervo do memorial. |
+| `vaggu-memorial-samuel/public/assets/fotos/registro-22.webp` | Publica a fotografia identificada como registro 22 no acervo do memorial. |
+| `vaggu-memorial-samuel/public/assets/fotos/registro-23.webp` | Publica a fotografia identificada como registro 23 no acervo do memorial. |
+| `vaggu-memorial-samuel/public/assets/fotos/registro-24.webp` | Publica a fotografia identificada como registro 24 no acervo do memorial. |
+| `vaggu-memorial-samuel/public/assets/fotos/registro-25.webp` | Publica a fotografia identificada como registro 25 no acervo do memorial. |
+| `vaggu-memorial-samuel/public/assets/fotos/registro-26.webp` | Publica a fotografia identificada como registro 26 no acervo do memorial. |
+| `vaggu-memorial-samuel/public/assets/fotos/registro-27.webp` | Publica a fotografia identificada como registro 27 no acervo do memorial. |
+| `vaggu-memorial-samuel/public/assets/fotos/registro-28.webp` | Publica a fotografia identificada como registro 28 no acervo do memorial. |
+| `vaggu-memorial-samuel/public/assets/fotos/registro-29.webp` | Publica a fotografia identificada como registro 29 no acervo do memorial. |
+| `vaggu-memorial-samuel/public/assets/fotos/registro-30.webp` | Publica a fotografia identificada como registro 30 no acervo do memorial. |
+| `vaggu-memorial-samuel/public/assets/fotos/registro-31.webp` | Publica a fotografia identificada como registro 31 no acervo do memorial. |
+| `vaggu-memorial-samuel/public/assets/fotos/registro-32.webp` | Publica a fotografia identificada como registro 32 no acervo do memorial. |
+| `vaggu-memorial-samuel/public/assets/fotos/registro-33.webp` | Publica a fotografia identificada como registro 33 no acervo do memorial. |
+| `vaggu-memorial-samuel/public/assets/fotos/registro-34.webp` | Publica a fotografia identificada como registro 34 no acervo do memorial. |
+| `vaggu-memorial-samuel/public/assets/fotos/retrato-juan.webp` | Publica o retrato identificado como Juan no acervo do memorial. |
+| `vaggu-memorial-samuel/public/assets/fotos/retrato-kamilly.webp` | Publica o retrato identificado como Kamilly no acervo do memorial. |
+| `vaggu-memorial-samuel/public/assets/videos/marca-em-movimento.mp4` | Fornece o vídeo da marca animada exibido na seção de memória da página. |
+| `vaggu-memorial-samuel/public/assets/videos/memoria-01.mp4` | Fornece o primeiro vídeo do acervo audiovisual do memorial. |
+| `vaggu-memorial-samuel/scripts/servidor.mjs` | Serve localmente os arquivos do memorial sem dependências ou acesso à rede externa. |
+| `vaggu-memorial-samuel/src/estilos.css` | Define a identidade visual, os layouts responsivos e o movimento reduzido do memorial. |
+| `vaggu-memorial-samuel/src/main.js` | Inicializa navegação, movimento, vídeos e galeria da página independente. |
+| `vaggu-memorial-samuel/src/dados/acervo.js` | Mapeia fotografias e vídeos do memorial para os arquivos publicados. |
+| `vaggu-memorial-samuel/src/interacoes/galeria.js` | Implementa a navegação e os controles da galeria de memórias. |
+| `vaggu-memorial-samuel/src/interacoes/movimento.js` | Inicializa animações e efeitos de entrada da página. |
+| `vaggu-memorial-samuel/src/interacoes/navegacao.js` | Controla menu, navegação por seções e progresso de leitura. |
+| `vaggu-memorial-samuel/src/interacoes/videos.js` | Gerencia reprodução e controles dos vídeos do memorial. |
