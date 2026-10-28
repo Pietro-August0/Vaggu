@@ -1,5 +1,15 @@
 # Planejamento de conclusão do WhatsApp — 28/10/2026
 
+## Implementação e publicação autorizadas
+
+Em continuidade, usuário autorizou configurar, documentar, atualizar o sistema e testar antes de enviar `Oi` pessoalmente. Informou responsável Elisa Gomes Teixeira, contato público `elisagommes@outlook.com` e autoria Git `elisagommes <elisagommes@outlook.com>`. Páginas `/privacidade` e `/exclusao-de-dados` implementadas, vinculadas na landing e validadas localmente nas três larguras. Blueprint atualizado para respostas automáticas habilitadas.
+
+Código registrado em `90c92a0`. O primeiro push foi recusado porque a main remota avançou; `git fetch origin main` e merge preservaram análises, telões, firmware e registros do outro trabalho. Conflitos apenas documentais resolvidos mantendo os dois conteúdos. Merge `d815547` enviado à main, sem force-push. Builds/lint e os 14 testes WhatsApp passaram novamente após integração; verificador cobre 512 arquivos/58 documentos, sem erros de links ou diff. Capturas e comandos detalhados estão no planejamento canônico.
+
+Render: flag `WHATSAPP_AUTO_REPLY_ENABLED` alterada de `false` para `true` no painel e salva com rebuild/deploy. O primeiro deploy de configuração usou `a87c3e1`; o push iniciou novo deploy `d815547`. URLs da Meta preenchidas, aguardando confirmação pública das páginas antes de salvar e concluir a publicação. Não registrar como entrega real antes de conferir o resultado final e o teste do participante.
+
+**Resultado posterior confirmado:** Render exibiu `Deploy succeeded|Live` para `d815547` (deploy `dep-dbh2tj4s728c73ao0gvg`). Ambas as páginas foram abertas no domínio público, sem login, e o e-mail foi conferido. URLs salvas na Meta e reconferidas após recarregar a página. Tela de publicação passou a informar todos os requisitos concluídos; publicação autorizada executada e status `Publicado` observado. Saúde pública respondeu HTTP 200 com banco conectado; POST sem assinatura ao webhook respondeu HTTP 401 `ASSINATURA_INVALIDA`, sem processamento de mensagem. Capturas públicas indexadas. Essas verificações não validam o token de envio nem comprovam recebimento/resposta reais: o próximo passo é o participante enviar `Oi` do celular e confirmar a resposta, acompanhando erros no Render.
+
 ## Continuidade — número confirmado
 
 O responsável informou o número público de atendimento em 28/10: `+55 (11) 99380-7892`. A constante compartilhada passou a usar `5511993807892` como padrão, preservando substituição por `VITE_WHATSAPP_NUMBER` no build. O destino resultante é `https://wa.me/5511993807892`, utilizado pelos CTAs da landing e pelo contato de suporte. Configuração explícita vazia ou inválida continua sem produzir URL; a padronização das guardas desse cenário permanece pendente. O número real foi autorizado para contato público; não é credencial Meta. Não houve publicação ou mensagem enviada. A primeira etapa de confirmação do número está concluída; disponibilidade da conta e bot real ainda exigem homologação.

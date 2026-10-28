@@ -15,6 +15,8 @@ Perfil visitante, aplicação local em `http://127.0.0.1:5183`, conteúdo instit
 
 Base de orientação sobre direitos: [ANPD](https://www.gov.br/anpd/pt-br/assuntos/titular-de-dados/direito-dos-titulares). Não há alegação de auditoria jurídica ou aprovação da Meta. Prints do README mostram somente a abertura da landing, que não mudou; anteriores preservados.
 
+**Conferência publicada em 28/10/2026:** perfil visitante, 1440×1000, origem `https://vaggu-tcc.onrender.com`, conteúdo institucional autorizado: [Política publicada](2026-10-28%20-%20Privacidade%20e%20exclusao/privacidade-publicada.png) e [Exclusão publicada](2026-10-28%20-%20Privacidade%20e%20exclusao/exclusao-publicada.png). As duas páginas e seus links renderizaram sem login. Capturas não incluem painel de credenciais, mensagens ou dados de shopping real. A publicação do app Meta foi confirmada textualmente no painel; conversa real continua pendente de teste pelo participante.
+
 ## 28/10/2026 — link WhatsApp da landing
 
 Rota `/`, perfil visitante, origem `http://127.0.0.1:5183`, conteúdo público estático e imagens ilustrativas, sem conta autenticada ou dados de clientes. Número público autorizado pelo responsável. Cinco links renderizados apontam para `https://wa.me/5511993807892`. Capturas locais não comprovam publicação, conta ativa ou bot real.
