@@ -5,7 +5,20 @@ import request from 'supertest';
 import { createApp } from '../src/app.js';
 import { createWhatsappService } from '../src/whatsapp/service.js';
 import { signMetaPayload } from '../src/whatsapp/signature.js';
-import { testMenuText, respostaAtendimento } from '../src/whatsapp/payload.js';
+import { testMenuText, respostaAtendimento, extractWhatsappEvents, summarizeWhatsappEvents } from '../src/whatsapp/payload.js';
+
+test('diagnóstico preserva código de mensagem não suportada sem expor conversa ou contato', () => {
+  const events = extractWhatsappEvents({ entry: [{ changes: [{ value: { messages: [{
+    id: 'id-ficticio-privado', from: '5511999990000', type: 'unsupported',
+    text: { body: 'conteudo-ficticio-privado' }, errors: [{ code: 131051, message: 'detalhe-privado' }],
+  }] } }] }] });
+  const summary = summarizeWhatsappEvents(events);
+  assert.deepEqual(summary.errosMeta, ['131051']);
+  assert.deepEqual(summary.tipos, ['unsupported']);
+  assert.equal(summary.mensagens, 1);
+  assert.doesNotMatch(JSON.stringify(summary), /5511999990000|id-ficticio-privado|conteudo-ficticio-privado|detalhe-privado/);
+  assert.equal(respostaAtendimento(events.messages[0]), null);
+});
 
 test('opções do atendimento possuem orientação e mídia não dispara resposta', () => {
   for (const text of ['1', '2', '3', '4', '5']) {

@@ -17,6 +17,7 @@ export function extractWhatsappEvents(payload) {
               from: typeof message.from === 'string' ? message.from : '',
               type: typeof message.type === 'string' ? message.type : 'unsupported',
               text: typeof message.text?.body === 'string' ? message.text.body : '',
+              errorCode: firstStatusErrorCode(message),
             });
           }
         }
@@ -41,7 +42,19 @@ export function extractWhatsappEvents(payload) {
 function firstStatusErrorCode(status) {
   const error = Array.isArray(status.errors) ? status.errors[0] : null;
   const code = error?.code;
-  return code === undefined || code === null ? '' : String(code);
+  return code === undefined || code === null ? '' : String(code).replace(/[^0-9]/g, '').slice(0, 24);
+}
+
+/** Diagnóstico sem corpo, contato, identificador de mensagem ou credencial. */
+export function summarizeWhatsappEvents(events) {
+  return {
+    mensagens: events.messages.length,
+    status: events.statuses.length,
+    tipos: [...new Set(events.messages.map((message) => message.type.replace(/[^a-z_]/gi, '').slice(0, 24)))],
+    comTexto: events.messages.filter((message) => message.text.length > 0).length,
+    comRemetente: events.messages.filter((message) => message.from.length > 0).length,
+    errosMeta: [...new Set(events.messages.map((message) => message.errorCode).filter(Boolean))],
+  };
 }
 
 /** Reconhece saudações e MENU sem diferenciar acentos ou maiúsculas; ignora mídia. */

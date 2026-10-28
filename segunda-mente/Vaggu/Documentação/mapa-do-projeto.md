@@ -149,8 +149,8 @@ As cópias de imagens entre `segunda-mente/Vaggu/Identidade visual/Assets/` e `v
 | `vaggu-backend/src/telemetria/routes.ts` | Expõe heartbeat e estados do ESP32 sem reutilizar cookies ou sessões humanas. |
 | `vaggu-backend/src/telemetria/service.ts` | Autentica placa, serializa eventos, deduplica sequência, persiste candidatos e confirma estados/histórico atomicamente. |
 | `vaggu-backend/src/whatsapp/client.ts` | Cliente de envio de texto pela API da Meta; recebe configuração privada e transporte substituível em testes. |
-| `vaggu-backend/src/whatsapp/payload.ts` | Interpreta o formato externo do webhook e mantém os textos do menu demonstrativo. |
-| `vaggu-backend/src/whatsapp/routes.ts` | Recebe o desafio de configuração e os eventos da Meta, validando sua origem antes de processá-los. |
+| `vaggu-backend/src/whatsapp/payload.ts` | Interpreta eventos, extrai códigos de erro numéricos e resume tipos/contagens sem conteúdo ou contatos para diagnóstico; mantém os textos do menu. |
+| `vaggu-backend/src/whatsapp/routes.ts` | Valida desafio e assinatura dos eventos da Meta; registra rejeição de assinatura ou resumo seguro do lote antes de processar. |
 | `vaggu-backend/src/whatsapp/service.ts` | Coordena mensagens recebidas, deduplicação persistente, retomada de eventos abandonados e respostas do menu demonstrativo. |
 | `vaggu-backend/src/whatsapp/signature.ts` | Calcula e verifica assinaturas HMAC para confirmar que o corpo recebido veio de quem possui o segredo Meta. |
 | `vaggu-backend/test-support/admin-cases.ts` | Verifica acessos administrativos, credencial não reversível, bloqueio, exclusão, prazo para desfazer e reutilização segura do e-mail. |

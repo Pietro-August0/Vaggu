@@ -1,7 +1,7 @@
 // Recebe o desafio de configuração e os eventos da Meta, validando sua origem antes de processá-los.
 import { Router } from 'express';
 import { validateMetaSignature } from './signature.js';
-import { extractWhatsappEvents } from './payload.js';
+import { extractWhatsappEvents, summarizeWhatsappEvents } from './payload.js';
 
 /** Monta o webhook; o POST depende de express.raw para preservar os bytes assinados pela Meta. */
 export function whatsappRoutes({ config, service }) {
@@ -45,6 +45,7 @@ export function whatsappRoutes({ config, service }) {
       const rawBody = req.body;
       const signature = req.get('x-hub-signature-256');
       if (!validateMetaSignature(rawBody, signature, config.appSecret)) {
+        console.warn('Webhook WhatsApp rejeitado', { codigo: 'ASSINATURA_INVALIDA' });
         return res.status(401).json({
           erro: { codigo: 'ASSINATURA_INVALIDA', mensagem: 'Assinatura do webhook inválida.' },
         });
@@ -60,6 +61,7 @@ export function whatsappRoutes({ config, service }) {
       }
 
       const events = extractWhatsappEvents(payload);
+      console.info('Webhook WhatsApp recebido', summarizeWhatsappEvents(events));
       for (const status of events.statuses) service.handleStatus(status);
       for (const message of events.messages) await service.handleMessage(message);
 
