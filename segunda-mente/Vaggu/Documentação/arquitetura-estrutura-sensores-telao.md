@@ -1,5 +1,9 @@
 # Estrutura, sensores e telões da VAGGU
 
+**Aceite atualizado em 04/11:** homologação completa do site confirmada pelo usuário; não é nova execução do agente em produção. Hardware mantém aceite próprio. Dados e WhatsApp seguem o recorte demonstrativo em [operação do TCC](operacao-dados-tcc.md); requisitos de atendimento comercial foram retirados desta entrega.
+
+**Revisão documental — 04/11/2026:** [revisão consolidada de 04/11](revisao-documental-2026-11-04.md) reúne a etapa atual e os aceites abertos. Bancada física inicial já registrada; produção e estabilidade sustentada não são presumidas.
+
 ## Configuração do estacionamento
 
 O Admin configura a hierarquia `Shopping → Andar → Setor → Vaga`. Um shopping aceita vários andares; cada andar aceita vários setores; cada setor aceita várias vagas. A vaga possui código único no shopping e tipo `COMUM`, `PCD`, `IDOSO` ou `ELETRICA`. O tipo não representa ocupação.
@@ -12,11 +16,11 @@ Cada andar possui uma revisão do mapa. A posição da vaga usa `x`, `y`, largur
 
 ## Sensores e estado
 
-Na base atual do P06, cada sensor é ligado a uma vaga já cadastrada. A placa ESP32 se identifica e envia a leitura de cada sensor em uma ordem controlada. O servidor confere se tudo pertence ao mesmo shopping, ignora mensagens repetidas ou antigas, espera leituras consistentes antes de mudar o estado e guarda o histórico. Se um sensor parar de responder, a vaga fica indisponível; ela nunca é mostrada como livre por falta de informação. Essa parte já foi testada com PostgreSQL. A consulta visual de monitoramento e o detalhe por vaga já existem. Cadastro/vínculo e manutenção/ocorrências estão implementados; faltam ESP32 real, tempos definitivos e homologação publicada.
+Na base atual do P06, cada sensor é ligado a uma vaga já cadastrada. A placa ESP32 se identifica e envia a leitura de cada sensor em uma ordem controlada. O servidor confere se tudo pertence ao mesmo shopping, ignora mensagens repetidas ou antigas, espera leituras consistentes antes de mudar o estado e guarda o histórico. Se um sensor parar de responder, a vaga fica indisponível; ela nunca é mostrada como livre por falta de informação. Essa parte já foi testada com PostgreSQL. A consulta visual de monitoramento e o detalhe por vaga já existem. Cadastro/vínculo e manutenção/ocorrências estão implementados; houve ensaio físico inicial dos três canais; faltam estabilidade, tempos definitivos e homologação publicada.
 
 ## Mapa operacional e telões
 
-O mapa consulta o estado e a validade individual com atualização a cada 15 segundos, pausa durante a edição e invalidação após 30 segundos ou falha de conexão. Os 30 segundos de app-store verificam a sessão e são independentes da atualização operacional. PCD, idoso e elétrica fazem parte do total e aparecem como recortes sem soma duplicada. A instalação web de telão usa credencial própria revogável e retorna apenas agregados autorizados, sem sessões administrativas ou dados pessoais.
+O mapa consulta o estado e a validade individual com tentativas automáticas a cada 500 ms, sem renovação automática durante consulta pendente e com pausa em aba oculta. O editor não tem polling; a validade visual é de 30 segundos, com invalidação em falha de conexão. Os 30 segundos de app-store verificam a sessão e são independentes da atualização operacional. PCD, idoso e elétrica fazem parte do total e aparecem como recortes sem soma duplicada. A instalação web de telão usa credencial própria revogável e retorna apenas agregados autorizados, sem sessões administrativas ou dados pessoais.
 
 O gerente gerencia seus telões em `/painel/teloes`, com prévia geral e por andar. `GET/POST /api/v1/estacionamento/teloes` e `PATCH/DELETE /api/v1/estacionamento/teloes/:id` derivam o shopping da sessão no servidor. A edição muda nome/recorte, preservando ID e credencial; recortes de outro shopping ou inativos são recusados. O Admin configura equipamentos e telões em `/admin/shoppings/:shoppingId/estrutura`, na área de configuração. A página instalada `/telao/:id` consulta `GET /api/v1/teloes/:id/disponibilidade` com autorização própria a cada 15 segundos. O hash da chave fica persistido; a chave original é emitida na criação. A homologação publicada e a instalação física seguem pendentes. O banco continua sendo a referência e ausência de conexão nunca mantém um número como disponibilidade atual.
 

@@ -1,5 +1,9 @@
 # Planejamento de conclusão do WhatsApp — 28/10/2026
 
+**Decisão de escopo e aceite — 04/11/2026:** o usuário confirmou a homologação completa do site. O aceite web está encerrado por essa confirmação, sem nova execução em produção pelo agente nem hash de deploy adicional informado. O WhatsApp será demonstrativo: atendimento humano real, coleta comercial e protocolos deixam de ser requisitos desta entrega. Procedimentos de dados definidos em [operação do TCC](operacao-dados-tcc.md); hardware físico mantém aceite próprio.
+
+**Leitura vigente em 04/11/2026:** número, publicação Meta/Render, conexão real, menu e apresentação foram confirmados posteriormente. O plano de 28/10 abaixo preserva o diagnóstico daquela data. Pendências atuais: caminhos restantes, captura anonimizada, guardas dos CTAs para número inválido, coleta estruturada, retenção e atendimento humano. Ver [processo e operação](whatsapp-processo-e-operacao.md) e [revisão consolidada de 04/11](revisao-documental-2026-11-04.md).
+
 ## Implementação e publicação autorizadas
 
 Em continuidade, usuário autorizou configurar, documentar, atualizar o sistema e testar antes de enviar `Oi` pessoalmente. Informou responsável Elisa Gomes Teixeira, contato público `elisagommes@outlook.com` e autoria Git `elisagommes <elisagommes@outlook.com>`. Páginas `/privacidade` e `/exclusao-de-dados` implementadas, vinculadas na landing e validadas localmente nas três larguras. Blueprint atualizado para respostas automáticas habilitadas.

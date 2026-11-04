@@ -1,5 +1,9 @@
 # Próximos passos
 
+**Aceite e escopo atualizados em 04/11/2026:** site completamente homologado conforme confirmação do usuário; foco em evidências e preparação da apresentação. WhatsApp demonstrativo, sem exigência de atendimento humano, coleta comercial ou protocolo. Procedimentos de dados definidos em [[Vaggu/Documentação/operacao-dados-tcc|operação dos dados do TCC]]. O aceite físico sustentado dos sensores continua separado. Os registros anteriores abaixo preservam o diagnóstico antes desta confirmação.
+
+**Ordem da revisão inicial, substituída pelo aceite acima — 04/11/2026:** homologação integrada (P11/E6), estabilidade dos três sensores e piloto publicado, operação de backup/retenção, fechamento de P10 e ensaio do TCC. Ver [[Vaggu/Documentação/revisao-documental-2026-11-04|pendências priorizadas e critérios de conclusão]]. Registros datados abaixo preservam a sequência histórica.
+
 **Estado em 04/11/2026:** conexão real e menu clicável confirmados pelo participante. Apresentação com imagem/site e contato empresarial publicada em 7356e12; imagem, link e continuidade confirmados pelo participante em teste real; o histórico de implantação e as pendências reais estão no [processo e operação do WhatsApp](../Documentação/whatsapp-processo-e-operacao.md). Registros datados de adiamento abaixo são históricos.
 
 
@@ -48,11 +52,11 @@ O D01 e o C01 foram concluídos com documentação e contratos reconciliados. A 
 
 A ficha administrativa foi reconciliada com os contratos reais: exclusão lógica de gerente, desfazer por sete segundos e exclusão lógica de shopping. Frontend e integração PostgreSQL foram aprovados; as capturas autenticadas de editor, mapa, monitoramento e análise estão na galeria de 15/10. Exclusões, importação e outros fluxos mantêm evidências históricas e precisam de nova captura específica.
 
-## Trabalho atual: concluir o P06
+## P06 — fechamento do aceite físico e publicado
 
 A base que recebe as leituras dos sensores já foi criada e testada com PostgreSQL. Ela reconhece a placa, mantém a ordem das mensagens, evita repetições, espera leituras consistentes e torna indisponível a vaga cujo sensor parou de responder.
 
-Para concluir o pacote, precisamos testar com o ESP32 real, definir os tempos finais e homologar o fluxo no ambiente publicado. Cadastro/vínculo operacional de equipamentos, manutenção/ocorrências e atualização periódica das leituras já existem no software. A validade por sensor já é aplicada quando a estrutura é consultada; o monitoramento individual e o editor visual estão entregues. Uma leitura isolada ou o simples contato da placa não podem tornar uma vaga livre.
+Para concluir o pacote, precisamos consolidar o ensaio inicial já registrado com o ESP32 real, definir os tempos finais e homologar o fluxo no ambiente publicado. Cadastro/vínculo operacional de equipamentos, manutenção/ocorrências e atualização periódica das leituras já existem no software. A validade por sensor já é aplicada quando a estrutura é consultada; o monitoramento individual e o editor visual estão entregues. Uma leitura isolada ou o simples contato da placa não podem tornar uma vaga livre.
 
 Os cenários completos continuam em CA15–CA24. A parte de PostgreSQL foi aprovada; o hardware e a homologação publicada do fluxo operacional ainda precisam de evidência.
 
@@ -74,7 +78,7 @@ O histórico confirmado e a análise por período de até 31 dias UTC estão imp
 | P07 | Operação, manutenção/ocorrências e telões com credencial própria implementados localmente; homologação pendente |
 | P08 | Histórico, período/comparação, setor/categoria, métricas, cobertura e Excel/PDF implementados; fotografia nos novos eventos e limites legados identificados; homologação pendente |
 | P09 | Dados preparados; relatório/publicação Power BI como evolução opcional |
-| P10 | Conexão e menu reais confirmados; falta validar a nova apresentação e definir fluxos estruturados, retenção e operação humana |
+| P10 | Conexão e menu reais confirmados; apresentação real confirmada; faltam caminhos restantes, captura anonimizada, fluxos estruturados, retenção e operação humana |
 | P11 | Revisão integrada para o TCC |
 
 O estado diário técnico permanece em [[Vaggu/Documentação/planejamento-do-projeto|planejamento do projeto]], dentro da segunda mente. P04 e as melhorias de interação, gerentes e senha foram concluídos e validados com PostgreSQL real, frontend e navegador. O dia iniciado em 12/09 foi encerrado após a virada para 13/09.

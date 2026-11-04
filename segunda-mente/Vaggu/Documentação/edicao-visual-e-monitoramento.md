@@ -1,5 +1,7 @@
 # Edição visual e monitoramento dos sensores
 
+**Referência vigente em 04/11/2026:** mapa Admin/gerente usa tentativa automática de 500 ms, com guarda de renovação pendente e pausa em aba oculta; editor sem polling e validade visual de 30 s. Os intervalos e capturas datados abaixo preservam as versões anteriores. Ensaio físico inicial não encerra estabilidade ou homologação publicada; ver [etapa e pendências](revisao-documental-2026-11-04.md).
+
 Último ajuste de velocidade: polling do mapa em **500 ms** após cada resposta, sem sobreposição. Confirmação local em 2 s; ausência de leitura individual continua impedindo mudança para livre. Firmware rápido também reduz espera entre lotes.
 
 Configuração mais recente da bancada, a pedido do usuário: mapa consulta a cada **2 s**; janela do backend local em **5 s** com lacuna máxima 4,5 s. Sem configuração explícita, backend preserva 30 s. Tempo real de transição inclui ciclos de envio da ESP32 e consulta do mapa. Leituras físicas já confirmaram ocupado/livre nos três canais da bancada local.

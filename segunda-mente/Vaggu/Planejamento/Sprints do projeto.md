@@ -1,5 +1,9 @@
 # Sprints do projeto VAGGU
 
+**Aceite e escopo atualizados em 04/11/2026:** site completamente homologado conforme confirmação do usuário; foco em evidências e preparação da apresentação. WhatsApp demonstrativo, sem exigência de atendimento humano, coleta comercial ou protocolo. Procedimentos de dados definidos em [[Vaggu/Documentação/operacao-dados-tcc|operação dos dados do TCC]]. O aceite físico sustentado dos sensores continua separado. Os registros anteriores abaixo preservam o diagnóstico antes desta confirmação.
+
+**Posição em 04/11/2026:** início previsto da Sprint 7 (04–11/11); Sprint 8 final prevista para 16–26/11. Não há nova distribuição aprovada neste registro. Como proposta de trabalho, priorizar homologação e fechamento dos aceites descritos na [[Vaggu/Documentação/revisao-documental-2026-11-04|revisão consolidada]]. Datas não comprovam execução ou conclusão.
+
 Atualizado em 21/10/2026 com as quatro fotografias do planejamento, a nossa memória das Sprints 1 e 2 e as datas previstas para as Sprints 7 e 8.
 
 ## Regra de registro das sprints

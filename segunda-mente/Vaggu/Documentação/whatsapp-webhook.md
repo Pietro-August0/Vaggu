@@ -1,5 +1,9 @@
 # Integração com o WhatsApp
 
+**Decisão de escopo e aceite — 04/11/2026:** o usuário confirmou a homologação completa do site. O aceite web está encerrado por essa confirmação, sem nova execução em produção pelo agente nem hash de deploy adicional informado. O WhatsApp será demonstrativo: atendimento humano real, coleta comercial e protocolos deixam de ser requisitos desta entrega. Procedimentos de dados definidos em [operação do TCC](operacao-dados-tcc.md); hardware físico mantém aceite próprio.
+
+**Referência atual — 04/11/2026:** o [processo e operação](whatsapp-processo-e-operacao.md) consolida publicação 7356e12 e confirmação do participante para imagem/site/recursos/retorno. As seções datadas abaixo são histórico de implantação; demais caminhos, captura anonimizada e operação humana permanecem abertos.
+
 **Confirmação do participante — 04/11/2026:** em resposta ao teste solicitado, participante confirmou o percurso Oi → Ver opções → Conhecer a VAGGU, com imagem e link do site, seguido de Ver recursos e Voltar ao menu. Validação funcional da nova apresentação concluída para esse percurso na versão 7356e12. Não comprova os demais caminhos individualmente nem substitui captura anonimizada da interface.
 
 ## Revisão de apresentação e contatos — 04/11/2026

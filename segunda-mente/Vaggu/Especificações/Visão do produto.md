@@ -1,9 +1,13 @@
 # Visão do produto
 
+**Aceite e escopo atualizados em 04/11/2026:** site completamente homologado conforme confirmação do usuário; foco em evidências e preparação da apresentação. WhatsApp demonstrativo, sem exigência de atendimento humano, coleta comercial ou protocolo. Procedimentos de dados definidos em [[Vaggu/Documentação/operacao-dados-tcc|operação dos dados do TCC]]. O aceite físico sustentado dos sensores continua separado. Os registros anteriores abaixo preservam o diagnóstico antes desta confirmação.
+
+**Revisão documental — 04/11/2026:** [[Vaggu/Documentação/revisao-documental-2026-11-04|etapa atual, lacunas e prioridades]]. O foco é homologação integrada e preparação da entrega; a confirmação parcial do WhatsApp e o ensaio físico inicial não encerram o projeto.
+
 **Estado em 04/11/2026:** conexão real e menu clicável confirmados pelo participante. Apresentação com imagem/site e contato empresarial publicada em 7356e12; imagem, link e continuidade confirmados pelo participante em teste real; o histórico de implantação e as pendências reais estão no [processo e operação do WhatsApp](../Documentação/whatsapp-processo-e-operacao.md). Registros datados de adiamento abaixo são históricos.
 
 
-> **Atualização de 21/10/2026:** as três [[Vaggu/Especificações/Personas|personas documentadas]] são Carlos (fonte original), Mariana e Rafael (hipóteses). Equipamentos, telão instalado, atualização periódica e filtros analíticos foram implementados localmente. Conexão física e homologação publicada seguem pendentes. Power BI publicado é evolução opcional; a conexão real e o menu do WhatsApp foram confirmados em 04/11/2026. Os registros históricos estão identificados pelas respectivas datas.
+> **Atualização de 21/10/2026:** as três [[Vaggu/Especificações/Personas|personas documentadas]] são Carlos (fonte original), Mariana e Rafael (hipóteses). Equipamentos, telão instalado, atualização periódica e filtros analíticos foram implementados localmente. Ensaio físico inicial registrado; estabilidade e homologação publicada seguem pendentes. Power BI publicado é evolução opcional; a conexão real e o menu do WhatsApp foram confirmados em 04/11/2026. Os registros históricos estão identificados pelas respectivas datas.
 
 **Atualização:** 21/10/2026 · **Produto:** VAGGU — plataforma web responsiva para gestão de estacionamentos de shopping centers.
 
@@ -59,7 +63,7 @@ Para atingir esse objetivo, o produto deve:
 6. A base de sensores já recebe e confirma leituras em ambiente de teste. A validade individual já chega ao mapa na consulta; atualização periódica implementada; falta ligação ao ESP32 real.
 7. Indicadores e Excel/PDF já consomem o histórico e a situação atual; telões já exibem agregados autorizados sem duplicar categorias especiais; Power BI publicado é opcional.
 
-Os passos 1 a 5 estão implementados em P01–P05. O código atual inclui confirmação/expiração dos sensores, cadastro e vínculo de equipamentos, manutenção e ocorrências, mapa com atualização a cada 15 segundos e telões com credencial própria revogável. A análise oferece até 31 dias UTC, comparação, setor/categoria, entradas, saídas, permanência, rotatividade, cobertura e Excel/PDF. Os novos eventos preservam a classificação histórica; eventos legados sem fotografia confirmada continuam sinalizados. Hardware físico e homologação publicada seguem pendentes. Power BI publicado é opcional e a conexão real e o menu do WhatsApp foram confirmados em 04/11/2026.
+Os passos 1 a 5 estão implementados em P01–P05. O código atual inclui confirmação/expiração dos sensores, cadastro e vínculo de equipamentos, manutenção e ocorrências, mapa com atualização automática de 500 ms no código atual e telões com credencial própria revogável. A análise oferece até 31 dias UTC, comparação, setor/categoria, entradas, saídas, permanência, rotatividade, cobertura e Excel/PDF. Os novos eventos preservam a classificação histórica; eventos legados sem fotografia confirmada continuam sinalizados. Há ensaio físico inicial dos três canais registrado; estabilidade e homologação publicada seguem pendentes. Power BI publicado é opcional e a conexão real e o menu do WhatsApp foram confirmados em 04/11/2026.
 
 ## Metas verificáveis
 
@@ -71,7 +75,7 @@ Não há metas comerciais de aquisição, latência ou volume aprovadas. O suces
 | Controlar acessos com segurança | Dois gerentes do mesmo shopping usam logins próprios e um gerente não acessa outro shopping. | Implementado em P02–P03. |
 | Configurar a estrutura sem perder identidade | Importação mostra prévia e erros, confirma uma vez, preserva IDs/histórico e não apaga vaga ausente silenciosamente. | P05 concluído em 21/09/2026. |
 | Consultar o estacionamento em diferentes telas | Admin e gerente navegam por andares, filtros, busca e seleção sem transbordamento horizontal. | Base do mapa concluída em P04 e refinada em P05. |
-| Confiar no estado da vaga | Mudança exige 30 segundos de leituras consistentes; mensagens repetidas ou antigas não alteram o resultado; sensor sem resposta deixa a vaga indisponível. | Base implementada e testada com PostgreSQL; validade na consulta e monitoramento implementados; atualização periódica implementada; hardware real pendente. |
+| Confiar no estado da vaga | Mudança exige 30 segundos de leituras consistentes; mensagens repetidas ou antigas não alteram o resultado; sensor sem resposta deixa a vaga indisponível. | Base implementada e testada com PostgreSQL; validade na consulta e monitoramento implementados; atualização periódica e ensaio físico inicial registrados; estabilidade e homologação publicada pendentes. |
 | Exibir contagens reconciliadas | Mapa, API e telão usam a mesma validade; PCD, idoso e elétrica integram o total sem duplicação. | Implementado localmente; instalação física e homologação pendentes. |
 | Preservar histórico e análises | O sistema guarda mudanças confirmadas e calcula ocupação, cobertura e entradas dos últimos sete dias sem misturar shoppings. | Período, comparação, setor/categoria, entradas/saídas, permanência, rotatividade, cobertura e Excel/PDF implementados; novos eventos preservam classificação histórica e registros legados sem fotografia confirmada continuam sinalizados. |
 | Demonstrar análise funcional | Primeiro relatório Power BI atualiza com números iguais aos dados controlados e sem exposição entre shoppings. | Dados preparados; relatório/publicação Power BI é evolução opcional e não representa integração já entregue. |
@@ -91,7 +95,7 @@ O MVP-alvo do TCC inclui:
 - telões web com agregados por andar ou setor;
 - preparação de dados históricos para evolução opcional no Power BI.
 
-P01–P05 e C01 estão concluídos. O código atual inclui confirmação/expiração dos sensores, cadastro e vínculo de equipamentos, manutenção e ocorrências, mapa com atualização a cada 15 segundos e telões com credencial própria revogável. A análise oferece até 31 dias UTC, comparação, setor/categoria, entradas, saídas, permanência, rotatividade, cobertura e Excel/PDF. Os novos eventos preservam a classificação histórica; eventos legados sem fotografia confirmada continuam sinalizados. Hardware físico e homologação publicada seguem pendentes. Power BI publicado é opcional e a conexão real e o menu do WhatsApp foram confirmados em 04/11/2026.
+P01–P05 e C01 estão concluídos. O código atual inclui confirmação/expiração dos sensores, cadastro e vínculo de equipamentos, manutenção e ocorrências, mapa com atualização automática de 500 ms no código atual e telões com credencial própria revogável. A análise oferece até 31 dias UTC, comparação, setor/categoria, entradas, saídas, permanência, rotatividade, cobertura e Excel/PDF. Os novos eventos preservam a classificação histórica; eventos legados sem fotografia confirmada continuam sinalizados. Há ensaio físico inicial dos três canais registrado; estabilidade e homologação publicada seguem pendentes. Power BI publicado é opcional e a conexão real e o menu do WhatsApp foram confirmados em 04/11/2026.
 
 ## Posterior ao MVP
 

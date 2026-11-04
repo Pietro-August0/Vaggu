@@ -1,21 +1,19 @@
 # VAGGU — fluxo de telas
 
+**Decisão de escopo e aceite — 04/11/2026:** o usuário confirmou a homologação completa do site. O aceite web está encerrado por essa confirmação, sem nova execução em produção pelo agente nem hash de deploy adicional informado. O WhatsApp será demonstrativo: atendimento humano real, coleta comercial e protocolos deixam de ser requisitos desta entrega. Procedimentos de dados definidos em [operação do TCC](operacao-dados-tcc.md); hardware físico mantém aceite próprio.
+
 **Estado em 04/11/2026:** conexão real e menu clicável confirmados pelo participante. Apresentação com imagem/site e contato empresarial publicada em 7356e12; imagem, link e continuidade confirmados pelo participante em teste real; o histórico de implantação e as pendências reais estão no [processo e operação do WhatsApp](whatsapp-processo-e-operacao.md). Registros datados de adiamento abaixo são históricos.
 
 
-Configuração atual da bancada em 21/10: mapa com consulta de **2 s**, backend local com confirmação de **5 s**, preservando 30 s como padrão dos demais ambientes. Três canais físicos confirmaram ocupado/livre e apareceram no mapa do gerente. A edição de posições permanece sem polling.
+**Revisão documental de 04/11/2026:** o mapa do gerente e a visualização do Admin usam o hook useEstruturaAtualizada: tentativa automática a cada **500 ms**, sem renovar automaticamente enquanto houver consulta pendente e com pausa em aba oculta. Validade visual de 30 s; o editor não tem polling. O telão instalado mantém 15 s. A confirmação de 30 s é padrão do servidor; ajustes de bancada de 5 s e depois 2 s são registros históricos, sem garantia de latência.
 
-Atualização de 21/10/2026: mapa do gerente e aba Visualizar mapa do Admin consultam estados a cada 5 s após cada resposta, com pausa em aba oculta e recuperação de falha. O editor de posições não recebe atualização periódica. Bancada local com shopping/gerente próprios: ESP32 conectada, leitura de S02 persistida e A02 Livre exibida no mapa. S01/S03 e ensaios das três vagas ainda precisam de validação física completa.
-
-Este documento registra a navegação encontrada na interface, com atualização de edição visual e monitoramento em 15/10/2026 e a compara com as páginas previstas no SSD. **Implementado** significa que existe rota e tela no código atual; não significa que sensores e Power BI estejam concluídos. **Parcial** indica que parte da experiência está pronta. **Ausente** indica que a página foi planejada, mas ainda não existe no site.
-
-Este documento registra a navegação encontrada na interface, com revisão do código em 21/10/2026 e a compara com as páginas previstas no SSD. **Implementado** significa que existe rota e tela no código atual; não significa que sensores e Power BI estejam concluídos. **Parcial** indica que parte da experiência está pronta. **Ausente** indica que a página foi planejada, mas ainda não existe no site.
+Houve transições físicas ocupado/livre nos três canais em 21/10; estabilidade sustentada e piloto HTTPS publicado ainda precisam de aceite. Este documento descreve rotas e telas presentes no código, sem declarar homologação externa. Para a etapa atual e as lacunas, consultar a [revisão consolidada de 04/11](revisao-documental-2026-11-04.md).
 
 ## Perfis e regras comuns de navegação
 
 | Perfil | Escopo na interface atual |
 | --- | --- |
-| Visitante | Landing e login. O contato comercial sai da aplicação e continua no WhatsApp quando o número oficial está configurado. |
+| Visitante | Landing, login, privacidade e exclusão de dados. O contato comercial sai da aplicação e continua no WhatsApp quando o número oficial está configurado. |
 | Admin VAGGU | Visão geral consolidada, cadastro e listagem de shoppings; na ficha, navegação separada entre visão geral, estrutura/mapa e gerentes. A importação e exportação estrutural abrem janelas na área de estrutura. |
 | Gerente | Painel, mapa, análise e gestão dos telões do shopping vinculado; edição de nome e telefone em rota própria de conta. |
 

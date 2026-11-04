@@ -2,9 +2,15 @@
 
 **04/11 — texto demonstrativo do bot:** payload.ts mantém menu e retorno; opções 3–5 anunciam contato de uma atendente em alguns instantes, sem pedido de e-mail ou acionamento real. whatsapp.test.ts confere os mesmos textos para clique e número digitado; nenhuma nova dependência, migration ou rota.
 
+**Decisão de escopo e aceite — 04/11/2026:** o usuário confirmou a homologação completa do site. O aceite web está encerrado por essa confirmação, sem nova execução em produção pelo agente nem hash de deploy adicional informado. O WhatsApp será demonstrativo: atendimento humano real, coleta comercial e protocolos deixam de ser requisitos desta entrega. Procedimentos de dados definidos em [operação do TCC](operacao-dados-tcc.md); hardware físico mantém aceite próprio.
+
+**Situação consolidada em 04/11/2026, após confirmação do usuário:** site completamente homologado; procedimentos de dados definidos para o TCC e WhatsApp demonstrativo sem atendimento humano obrigatório. Foco em evidências e apresentação; sensores mantêm aceite físico próprio. Ver [etapa atual, lacunas e prioridades](revisao-documental-2026-11-04.md).
+
+A revisão de 04/11 é a fonte do diagnóstico atual; notas de implantação abaixo preservam o estado nas respectivas datas.
+
 **28/10/2026 — privacidade e ativação:** `vaggu-frontend/src/pages/privacidade-page.tsx` apresenta aviso público e instruções de exclusão em `/privacidade` e `/exclusao-de-dados`, registradas em `main.tsx` e vinculadas no rodapé da landing. Responsável: Elisa Gomes Teixeira; contato público atualizado em 04/11 para `vagguempresarial@outlook.com`. `render.yaml` passa a habilitar respostas automáticas; credenciais continuam privadas e a ativação real depende do ambiente e da publicação Meta. Capturas em `Evidências visuais/2026-10-28 - Privacidade e exclusao/`.
 
-**28/10/2026 — contato público:** `vaggu-frontend/src/lib/constants.ts` centraliza o número confirmado da VAGGU, `5511993807892`, como padrão para os links `wa.me`; `VITE_WHATSAPP_NUMBER` pode substituir o destino no build. A conexão real Meta não foi homologada.
+**28/10/2026 — contato público:** `vaggu-frontend/src/lib/constants.ts` centraliza o número confirmado da VAGGU, `5511993807892`, como padrão para os links `wa.me`; `VITE_WHATSAPP_NUMBER` pode substituir o destino no build. Naquela data, a conexão real Meta ainda não estava homologada; o percurso real foi confirmado em 04/11.
 
 **28/10/2026 — WhatsApp:** [planejamento-whatsapp-2026-10-28.md](planejamento-whatsapp-2026-10-28.md) reúne revisão local, configuração do link da landing, homologação Meta/Render e critérios de conclusão do atendimento. O [guia do webhook](whatsapp-webhook.md) descreve a proteção atual de envios incertos com `ENVIANDO`/`REVISAO`.
 
@@ -33,7 +39,7 @@ Conhecimento, documentos e regras ficam em `segunda-mente`. O planejamento canô
 | --- | --- |
 | `hardware/esp32-3-vagas/README.md` | Parecer de viabilidade do demo, diagramas de ligação/arquitetura/posição, preparação da API, provisionamento, calibração e aceite físico. |
 | `hardware/esp32-3-vagas/teste_sensores_usb/teste_sensores_usb.ino` | Ensaio independente USB/Serial, sem rede, com TRIG 27/26/25, ECHO 32/33/34 e LED GPIO13 controlado pelo S01 até 15 cm; três piscadas iniciais e diagnóstico serial. |
-| `hardware/esp32-3-vagas/vaggu_3_vagas/vaggu_3_vagas.ino` | Firmware de bancada WROOM-32 para três HC-SR04, ECHO 32/33/34, LEDs de detecção local 13/14/23, autenticação Device, sequência por boot e leituras filtradas com omissão de sensores sem leitura válida. |
+| `hardware/esp32-3-vagas/vaggu_3_vagas/vaggu_3_vagas.ino` | Firmware de bancada WROOM-32 para três HC-SR04, ECHO 32/33/34, saídas previstas 13/14/23 com somente um LED habilitado no GPIO13, autenticação Device, sequência por boot e leituras filtradas com omissão de sensores sem leitura válida. |
 | `hardware/esp32-3-vagas/vaggu_3_vagas/relogio_serial.h` | Ajuste temporário do relógio de bancada por comando TIME recebido via USB, com validação do intervalo e preservação do TLS. |
 | `hardware/esp32-3-vagas/vaggu_3_vagas/config.example.h` | Modelo sem segredos para gerar config.h local ignorado pelo Git. |
 
@@ -41,7 +47,6 @@ Conhecimento, documentos e regras ficam em `segunda-mente`. O planejamento canô
 | --- | --- |
 | `scripts/` | Reúne verificações do repositório que não pertencem ao frontend nem ao backend. |
 | `segunda-mente/` | Mantém o cofre Obsidian canônico, suas fontes, evidências e registros históricos. |
-| `skills/` | Versiona rotinas operacionais usadas pelos agentes e pela equipe. |
 | `vaggu-memorial-samuel/` | Mantém o site independente de memorial da equipe e apresentação do sistema, separado da landing comercial e da aplicação operacional; reutiliza a paleta, tipografia e marca publicadas pelo frontend principal. |
 | `vaggu-backend/` | Contém API, regras de domínio, persistência, integrações e testes do servidor. |
 | `vaggu-frontend/` | Contém a aplicação React, componentes, páginas, contratos e assets publicados. |
@@ -52,6 +57,8 @@ As cópias de imagens entre `segunda-mente/Vaggu/Identidade visual/Assets/` e `v
 
 | Caminho | Responsabilidade |
 | --- | --- |
+| `segunda-mente/Vaggu/Documentação/operacao-dados-tcc.md` | Define retenção de arquivos privados, descarte restrito e contingência do TCC; registra dispensa de backup pelo usuário e preserva referência técnica opcional. |
+| `segunda-mente/Vaggu/Documentação/revisao-documental-2026-11-04.md` | Consolida etapa P11/E6, estado P01–P11, lacunas priorizadas, evidências e limites da revisão de 04/11, sem encerrar aceites externos. |
 | `segunda-mente/Vaggu/Documentação/fluxo-de-telas.md` | Registra rotas, jornadas por perfil, páginas planejadas e divergências atuais entre frontend, backend e evidências históricas. |
 | `segunda-mente/Vaggu/Documentação/modelo-de-dados.md` | Explica o schema Prisma/PostgreSQL implementado, suas restrições e os limites que ainda precisam ser resolvidos no P06. |
 | `segunda-mente/Vaggu/Documentação/cenario-de-apresentacao.md` | Explica a aplicação controlada do shopping fictício no ambiente escolhido e a entrega privada das três senhas. |
@@ -328,7 +335,7 @@ As cópias de imagens entre `segunda-mente/Vaggu/Identidade visual/Assets/` e `v
 
 | Arquivo | Responsabilidade |
 | --- | --- |
-| `vaggu-frontend/src/pages/telao-page.tsx` | Apresenta prévia autenticada de disponibilidade por andar/setor, consulta o escopo do gerente a cada 15 segundos e usa a apresentação compartilhada com tela cheia/Esc, sem rolagem e sem ampliar um andar inválido para visão geral. |
+| `vaggu-frontend/src/pages/telao-page.tsx` | Apresenta prévia autenticada de disponibilidade por andar/setor, consulta o escopo do gerente pelo hook operacional de 500 ms e usa a apresentação compartilhada com tela cheia/Esc, sem rolagem e sem ampliar um andar inválido para visão geral. |
 | `vaggu-frontend/src/pages/telao-page.css` | Define layout de alto contraste para telão, legibilidade a distância e adaptação a telas menores. |
 
 ### Visual do telão — 17/10/2026
@@ -374,7 +381,7 @@ Regras, contratos, operação e limitações estão em [conclusao-software-2026-
 | `vaggu-backend/test/teloes-postgresql.test.ts` | Verifica agregação, recorte, credenciais, revogação e isolamento de instalações com banco de teste. |
 | `vaggu-frontend/src/components/equipamentos-admin.tsx` | Oferece cadastro, vínculo e manutenção, consulta de ocorrências e exibição única de chaves no Admin. |
 | `vaggu-frontend/src/components/teloes-admin.tsx` | Configura visão geral ou andar por instalação para Admin e gerente, salva explicitamente sem trocar credencial, emite a chave uma vez, permite revogação e exclusão definitiva com confirmação. |
-| `vaggu-frontend/src/hooks/use-estrutura-atualizada.ts` | Centraliza consulta periódica/manual, descarte de respostas antigas e invalidação por erro ou prazo. |
+| `vaggu-frontend/src/hooks/use-estrutura-atualizada.ts` | Centraliza consulta periódica de 500 ms/manual, guarda da renovação automática enquanto há consulta pendente, pausa em aba oculta, descarte de respostas antigas e invalidação por erro ou prazo de 30 s. |
 | `vaggu-frontend/src/pages/telao-instalado-page.tsx` | Exibe agregados com chave própria por aba e oculta contagens quando a consulta perde validade. |
 | `vaggu-frontend/src/servicos/validade-estrutura.ts` | Produz estrutura com leituras indisponíveis quando a consulta vence, preservando indicação de manutenção. |
 

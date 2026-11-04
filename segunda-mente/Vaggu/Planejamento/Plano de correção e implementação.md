@@ -1,5 +1,9 @@
 # Plano de correção e implementação
 
+**Aceite e escopo atualizados em 04/11/2026:** site completamente homologado conforme confirmação do usuário; foco em evidências e preparação da apresentação. WhatsApp demonstrativo, sem exigência de atendimento humano, coleta comercial ou protocolo. Procedimentos de dados definidos em [[Vaggu/Documentação/operacao-dados-tcc|operação dos dados do TCC]]. O aceite físico sustentado dos sensores continua separado. Os registros anteriores abaixo preservam o diagnóstico antes desta confirmação.
+
+**Diagnóstico da revisão inicial, substituído pelo aceite acima — 04/11/2026:** foco em homologação integrada e entrega (P11/E6); P06–P08 implementados com aceites externos abertos, três canais com ensaio físico inicial e WhatsApp real/apresentação confirmados. Consulte [[Vaggu/Documentação/revisao-documental-2026-11-04|lacunas, prioridades e critérios atuais]]. As divisões e achados datados abaixo preservam a referência histórica; não atribuem tarefas da Sprint 7.
+
 Atualizado em 21/10/2026. Este plano começou com os problemas encontrados na auditoria de 23/09 e mantém os pacotes P01–P11 como referência. Os registros concluídos foram preservados como histórico; o resumo abaixo mostra o estado atual.
 
 ## Objetivo
@@ -29,7 +33,7 @@ Os estados abaixo descrevem o conjunto depois da consolidação D01. Quando a do
 | Evidências atuais da interface | Parcial | Editor, monitoramento e análise têm oito capturas autenticadas locais de 15/10. Faltam renovar as capturas específicas de exclusões, importação/erros e validar o site publicado. |
 | Sprints históricas | Consolidado com limites | Fotos recebidas em 19/10 confirmam datas e responsáveis das Sprints 3–6. Sprint 1: brainstorming no começo de agosto; Sprint 2: ideia no Figma até a Sprint 3. Datas exatas e divisão individual das Sprints 1–2 não foram informadas. Não retrocalcular. |
 | Personas | Documentadas com limites | Carlos tem fonte original; Mariana e Rafael são hipóteses de uso coerentes com o produto. Validação com pessoas continua pendente. |
-| WhatsApp comercial | Parcial | Conexão real adiada; retomar quando houver número e ambiente Meta disponíveis. |
+| WhatsApp comercial | Parcial | Conexão/menu/apresentação confirmados em 04/11; faltam caminhos restantes, coleta estruturada, evidência anonimizada e operação humana. |
 
 ### 3. O que estava desatualizado
 
@@ -41,8 +45,8 @@ Os estados abaixo descrevem o conjunto depois da consolidação D01. Quando a do
 ### 4. O que ainda falta no estado atual
 
 - A consulta de monitoramento por sensor e seus detalhes já existe. Cadastro/vínculo de equipamentos, manutenção/ocorrências e telões estão implementados localmente. Atendimentos estruturados continuam fora da entrega atual.
-- A visão geral administrativa, as exclusões, Minha conta e a área de análises já existem. A análise usa histórico real quando disponível e mostra uma demonstração identificada quando não há dados.
-- A base de sensores, confirmação, expiração e histórico já funciona em testes com PostgreSQL. Atualização periódica já existe; faltam ESP32 real, tempos definitivos e conferência no ambiente publicado; a validade individual já é aplicada na consulta do mapa.
+- A visão geral administrativa, as exclusões, Minha conta e a área de análises já existem. A análise usa histórico confirmado; sem observações exibe estado vazio. O Shopping Exemplo usa dados sintéticos identificados.
+- A base de sensores, confirmação, expiração e histórico já funciona em testes com PostgreSQL. Atualização periódica já existe; há ensaio físico inicial registrado; faltam estabilidade, tempos definitivos e conferência no ambiente publicado; a validade individual já é aplicada na consulta do mapa.
 - Histórico, filtro de período, comparação e exportações Excel/PDF foram entregues. Setor/categoria, entradas/saídas, permanência, rotatividade, cobertura zero e classificação dos novos eventos estão implementados; registros legados continuam identificados. O aceite de exportação foi alinhado ao SSD: PDF e planilha XLSX; CSV é opcional. No Power BI existem preparação de dados e registro histórico de protótipo externo, sem artefato final versionado ou acesso integrado.
 - Decisões ainda pendentes: contrato final de firmware, retenção operacional e forma de distribuição de uma futura evolução opcional Power BI.
 
@@ -65,7 +69,7 @@ Não foi criada uma pasta `docs/` paralela. A segunda mente já era a fonte can�
 2. C01 — reconciliar as exclusões da interface administrativa: concluído em 23/09.
 3. P06 — ensaiar hardware e fechar tempos finais; cadastro/vínculo, manutenção e atualização periódica já existem.
 4. P07–P09 — homologar operação, telões e análise histórica implementados; Power BI publicado é evolução opcional.
-5. P10–P11 — manter conexão real WhatsApp adiada e preparar a apresentação integrada conforme dependências.
+5. P10–P11 — fechar os aceites remanescentes do WhatsApp já conectado e preparar a apresentação integrada conforme dependências.
 
 ### 7. Divisão inicial da próxima sprint
 
@@ -153,13 +157,13 @@ A recepção e a confirmação das leituras já foram criadas e testadas com Pos
 
 O aceite permanece CA15–CA24. Uma leitura isolada ou heartbeat não pode tornar uma vaga livre.
 
-## Mais tarde
+## Pacotes seguintes — implementação e aceite separados
 
 | Ordem | Entrega | Dependência principal |
 | --- | --- | --- |
-| P07 | Operação, manutenção, contagens e telões | P06 |
-| P08 | Histórico, métricas e exportações | P06/P07 |
-| P09 | Primeiro relatório funcional Power BI | P08 |
+| P07 | Operação, manutenção, contagens e telões implementados; homologação pendente | P06 |
+| P08 | Histórico, métricas e exportações implementados; homologação pendente | P06/P07 |
+| P09 | Relatório/publicação Power BI opcionais | P08 |
 | P10 | Fluxos comerciais WhatsApp | Número oficial e ambiente Meta; pode avançar em paralelo |
 | P11 | Integração e apresentação do TCC | Entregas usadas na demonstração |
 

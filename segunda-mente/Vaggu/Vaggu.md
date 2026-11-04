@@ -4,11 +4,15 @@ tags: [vaggu, indice]
 ---
 # VAGGU
 
+**Aceite e escopo atualizados em 04/11/2026:** site completamente homologado conforme confirmação do usuário; foco em evidências e preparação da apresentação. WhatsApp demonstrativo, sem exigência de atendimento humano, coleta comercial ou protocolo. Procedimentos de dados definidos em [[Vaggu/Documentação/operacao-dados-tcc|operação dos dados do TCC]]. O aceite físico sustentado dos sensores continua separado. Os registros anteriores abaixo preservam o diagnóstico antes desta confirmação.
+
+**Diagnóstico anterior à confirmação do usuário — 04/11/2026:** homologação integrada e preparação da entrega do TCC (P11/E6), no início previsto da Sprint 7. Consulte a [[Vaggu/Documentação/revisao-documental-2026-11-04|revisão consolidada: o que temos, o que falta e prioridades]]. P06–P08 aguardam aceites publicados/físicos; P10 tem percurso real confirmado e pendências de atendimento/operação; Power BI publicado é opcional.
+
 **Revisão de 04/11/2026:** apresentação do bot com site/imagem e linguagem sem emojis; atendimento e privacidade usam `vagguempresarial@outlook.com`. Ver [processo completo e pendências reais](Documentação/whatsapp-processo-e-operacao.md).
 
 **WhatsApp — 04/11/2026:** conexão e menu clicável publicados e confirmados pelo participante após corrigir a atribuição da conta real ao usuário técnico na Meta. Lista Ver opções com cinco escolhas, retorno ao menu e números digitados como alternativa; 18 testes locais aprovados. Fluxos estruturados de demonstração/suporte ainda parciais; captura anonimizada do WhatsApp pendente. Ver [guia do WhatsApp](Documentação/whatsapp-webhook.md) e [planejamento](Documentação/planejamento-do-projeto.md). Registros anteriores de adiamento permanecem históricos.
 
-**Atualização de 21/10 — bancada física:** preparado shopping local de três vagas e consulta automática do mapa Admin/gerente a cada 5 s. ESP32 gravada e conectada ao hotspot; HTTP202 real, persistência e exibição de A02 Livre no mapa do gerente comprovadas. S01 sem leitura e S03 intermitente ainda precisam de posicionamento/ensaio; não equivale à homologação dos três canais ou do ambiente publicado. Ver [guia da bancada](../../hardware/esp32-3-vagas/README.md).
+**Registro inicial de 21/10 — bancada física (superado por ensaio posterior no mesmo dia):** preparado shopping local de três vagas e consulta automática do mapa Admin/gerente a cada 5 s. ESP32 gravada e conectada ao hotspot; HTTP202 real, persistência e exibição de A02 Livre no mapa do gerente comprovadas. S01 sem leitura e S03 intermitente ainda precisam de posicionamento/ensaio; não equivale à homologação dos três canais ou do ambiente publicado. Ver [guia da bancada](../../hardware/esp32-3-vagas/README.md).
 
 Plataforma web responsiva para gestão de estacionamentos de shopping centers, desenvolvida como TCC.
 
@@ -47,7 +51,7 @@ Plataforma web responsiva para gestão de estacionamentos de shopping centers, d
 
 O próprio cofre está versionado na pasta `segunda-mente/` do repositório VAGGU.
 
-**Estado local em 21/10/2026:** P01–P05, D01 e C01 estão concluídos. O código atual inclui confirmação/expiração dos sensores, cadastro e vínculo de equipamentos, manutenção e ocorrências, mapa com atualização a cada 15 segundos e telões com credencial própria revogável. A análise oferece até 31 dias UTC, comparação, setor/categoria, entradas, saídas, permanência, rotatividade, cobertura e Excel/PDF. Os novos eventos preservam a classificação histórica; eventos legados sem fotografia confirmada continuam sinalizados. Hardware físico e homologação publicada seguem pendentes. Power BI publicado é opcional e a conexão real do WhatsApp foi adiada. Ver [[Vaggu/Documentação/conclusao-software-2026-10-19|conclusão do software]] e [[Vaggu/Documentação/planejamento-do-projeto|planejamento]].
+**Estado local em 21/10/2026:** P01–P05, D01 e C01 estão concluídos. O código atual inclui confirmação/expiração dos sensores, cadastro e vínculo de equipamentos, manutenção e ocorrências, mapa com atualização automática (500 ms no código atual) e telões com credencial própria revogável. A análise oferece até 31 dias UTC, comparação, setor/categoria, entradas, saídas, permanência, rotatividade, cobertura e Excel/PDF. Os novos eventos preservam a classificação histórica; eventos legados sem fotografia confirmada continuam sinalizados. Ensaio físico inicial dos três canais registrado em 21/10; estabilidade e homologação publicada seguem pendentes. Power BI publicado é opcional; conexão real e apresentação WhatsApp confirmadas em 04/11, com P10 ainda parcial. Ver [[Vaggu/Documentação/conclusao-software-2026-10-19|conclusão do software]] e [[Vaggu/Documentação/planejamento-do-projeto|planejamento]].
 
 **Hospedagem registrada em 23/09:** frontend e API são entregues pelo mesmo serviço Render, conectado ao PostgreSQL no Neon. Consulte [[Vaggu/Documentação/configuracao|configuração]] e [[Vaggu/Tecnologias/Tecnologias e arquitetura|arquitetura]] para o funcionamento versionado; endereço público e resultado das publicações devem ser conferidos no Render/GitHub.
 

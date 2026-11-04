@@ -2,10 +2,12 @@
 
 **Atualização de 04/11/2026 — atendimento demonstrativo:** por solicitação do usuário, opções 3 (demonstração), 4 (suporte) e 5 (equipe) deixam de pedir envio de e-mail e informam “Uma atendente entrará em contato com você em alguns instantes”. Trata-se de simulação para o TCC: não há fila, notificação ou atendimento real acionado. Botões de retorno, números digitados e proteção contra repetição permanecem. Contatos públicos de privacidade/exclusão não mudam. Versões e relatos anteriores abaixo preservam o comportamento anterior.
 
+**Decisão de escopo e aceite — 04/11/2026:** o usuário confirmou a homologação completa do site. O aceite web está encerrado por essa confirmação, sem nova execução em produção pelo agente nem hash de deploy adicional informado. O WhatsApp será demonstrativo: atendimento humano real, coleta comercial e protocolos deixam de ser requisitos desta entrega. Procedimentos de dados definidos em [operação do TCC](operacao-dados-tcc.md); hardware físico mantém aceite próprio.
+
 **Estado em 04/11/2026:** conexão real e menu clicável confirmados pelo participante. Apresentação com imagem/site e contato empresarial publicada em 7356e12; imagem, link e continuidade confirmados pelo participante em teste real; o histórico de implantação e as pendências reais estão no [processo e operação do WhatsApp](whatsapp-processo-e-operacao.md). Registros datados de adiamento abaixo são históricos.
 
 
-**Versão:** 1.3 • **Revisão:** 21/10/2026 • **Idioma:** português brasileiro.
+**Versão:** 1.4 • **Revisão documental:** 04/11/2026 • **Idioma:** português brasileiro.
 
 **Objetivo:** reunir as regras, os limites e o resultado esperado da VAGGU em um único lugar. Este documento explica o produto; o planejamento mostra o que já foi entregue e o que ainda falta. A [auditoria de 15/10](auditoria-documental-2026-10-15.md) preserva os achados daquela data; o [registro de conclusão](conclusao-software-2026-10-19.md) reúne a implementação posterior e as verificações datadas.
 
@@ -54,7 +56,7 @@ Este pacote não atesta revisão completa do código no GitHub nem dos cartões 
 
 Em conflito, decisão recente explícita prevalece sobre documentação antiga. Figma define identidade, mas não restaura recursos retirados. Registrar mudanças relevantes com data e impacto; não modificar silenciosamente escopo para facilitar implementação.
 
-**Revisão de escopo — 21/10/2026:** a DEC07 registra a intenção de 09/09. No escopo atual, os gráficos e relatórios do site são renderizados pela aplicação; publicação/incorporação de Power BI é evolução opcional. A conexão real do WhatsApp está adiada. Hardware físico e homologação publicada continuam etapas próprias.
+**Revisão de escopo — 21/10, reconciliada em 04/11/2026:** a DEC07 registra a intenção de 09/09. No escopo atual, os gráficos e relatórios do site são renderizados pela aplicação; publicação/incorporação de Power BI é evolução opcional. A conexão real e a apresentação do WhatsApp foram confirmadas em 04/11. Ensaio físico inicial registrado em 21/10; estabilidade e homologação publicada continuam etapas próprias.
 
 ## 2. Escopo e decisões atuais
 
@@ -72,7 +74,7 @@ Em conflito, decisão recente explícita prevalece sobre documentação antiga. 
 
 ### 2.1 Entrega funcional planejada
 
-Landing, login, troca de senha, bot de WhatsApp, administração de shoppings e acessos, estrutura/importação, mapa por andar, placas/sensores, ingestão, estados atuais, histórico, ocorrências, indicadores, exportação de resumos, páginas de telão e preparação histórica para evolução opcional no Power BI. A conexão real e o menu do WhatsApp foram confirmados em 04/11/2026; hardware físico e homologação publicada permanecem pendentes.
+Landing, login, troca de senha, bot de WhatsApp, administração de shoppings e acessos, estrutura/importação, mapa por andar, placas/sensores, ingestão, estados atuais, histórico, ocorrências, indicadores, exportação de resumos, páginas de telão e preparação histórica para evolução opcional no Power BI. A conexão real e o menu do WhatsApp foram confirmados em 04/11/2026; estabilidade física e homologação integrada publicada permanecem pendentes; ensaio inicial dos três sensores já foi registrado.
 
 ### 2.2 Fora do escopo
 
@@ -117,7 +119,7 @@ Telão não recebe sessão administrativa nem dados pessoais. Credencial de equi
 
 ## 4. Jornada comercial e WhatsApp
 
-Fluxo confirmado: **landing → WhatsApp → apresentação e reunião → fechamento da parceria → cadastro do shopping e acessos pelo Admin → configuração → operação**.
+Fluxo demonstrado no TCC: **landing → WhatsApp → apresentação da solução**. Cadastro de shopping, acessos e operação são demonstrados pelo Admin com dados fictícios. Reunião, parceria e atendimento comercial real não são necessários nesta entrega.
 
 ### 4.1 Menu do bot preservado
 
@@ -125,17 +127,17 @@ Fluxo confirmado: **landing → WhatsApp → apresentação e reunião → fecha
 | --- | --- |
 | Conhecer a VAGGU | Explica o serviço e permite seguir para funcionalidades ou demonstração. |
 | Ver funcionalidades | Apresenta mapa, ocupação por andar/setor, categorias, indicadores, histórico e telões. |
-| Solicitar demonstração | Coleta nome, shopping, cargo, e-mail e telefone; registra solicitação e encaminha. |
-| Solicitar suporte | Coleta categoria, descrição inicial e local afetado; gera protocolo e encaminha. |
-| Falar com a equipe | Organiza o assunto e encaminha ao atendimento humano. |
+| Solicitar demonstração | Informa que uma atendente entrará em contato em alguns instantes; simulação sem pedido estruturado ou atendimento real. |
+| Solicitar suporte | Informa contato de uma atendente em alguns instantes e orienta não enviar senhas/chaves; simulação sem chamado real. |
+| Falar com a equipe | Informa que uma atendente entrará em contato em alguns instantes, como parte da demonstração. |
 
 Suporte deve contemplar painel, dados incorretos, sensor/placa, telão, acesso e outros. Opção inválida explica como voltar. Horário de atendimento só deve ser informado a partir da configuração real; não inventar disponibilidade humana.
 
-Guardar sessão mínima do menu, contato, etapa, datas, demonstração ou chamado. Não é requisito copiar todas as conversas para a VAGGU. A conversa humana e a negociação permanecem no WhatsApp. Não criar chat comercial interno.
+Persistir somente o processamento técnico necessário ao webhook e à deduplicação. Sessão comercial, pedido de demonstração e chamado de suporte não são requisitos do TCC após a decisão de 04/11. Não copiar conversas para evidências.
 
 **Proposta técnica:** deduplicar mensagens pelo identificador do provedor; separar mensagens recebidas de eventos de entrega/falha. Mensagens de status não devem iniciar conversa nem duplicar cadastro. Assinatura, confirmação e envio devem seguir a API e a versão efetivamente configuradas no ambiente.
 
-O Admin trata pedidos de demonstração e suporte no painel, mas credenciais não são emitidas automaticamente apenas porque alguém preencheu o menu. A parceria e a validação continuam sendo etapas humanas.
+Não há fila de atendimento comercial no painel. O Admin demonstra o cadastro e a emissão autorizada de acessos; o menu do WhatsApp não emite credenciais.
 
 ## 5. Implantação, estrutura e importações
 
@@ -195,7 +197,7 @@ Interface precisa tratar carregamento, ausência de registros, ausência de obse
 
 ### 7.1 Mapa
 
-Mapa é funcionalidade obrigatória e compartilha a mesma representação visual entre Admin e gerente. Selecionar andar carrega sua base e vagas, com código, setor, categoria e estado. Clicar em uma vaga posicionada, em um card móvel ou em uma vaga sem posição abre o mesmo diálogo de detalhes, que informa localização, categoria, cadastro e situação do monitoramento. A consulta do mapa já aplica a validade individual e retorna monitoramento com situação, placa, horários e confirmação pendente, sem credenciais. A tela consulta novas leituras a cada 15 segundos, pausa durante a edição e invalida dados após 30 segundos ou falha de conexão. O Admin edita posições por arraste, toque e teclado, com prévia e salvamento da revisão. A interface não pode inventar um sensor saudável apenas porque a vaga está cadastrada ou a placa enviou um sinal geral. Busca por um código exato de outro andar navega ao recorte correto e abre o detalhe da vaga. Filtros por setor, tipo e estado devem ter comportamento visível; não misturar total do shopping com total filtrado sem rótulo. No Admin, mudanças de estrutura atualizam o que aparece sem exigir recarga manual da página.
+Mapa é funcionalidade obrigatória e compartilha a mesma representação visual entre Admin e gerente. Selecionar andar carrega sua base e vagas, com código, setor, categoria e estado. Clicar em uma vaga posicionada, em um card móvel ou em uma vaga sem posição abre o mesmo diálogo de detalhes, que informa localização, categoria, cadastro e situação do monitoramento. A consulta do mapa já aplica a validade individual e retorna monitoramento com situação, placa, horários e confirmação pendente, sem credenciais. O mapa tenta atualizar a cada 500 ms, sem renovação automática enquanto houver consulta pendente e com pausa em aba oculta; o editor de posições não tem polling. Dados são invalidados após 30 segundos ou falha de conexão. O Admin edita posições por arraste, toque e teclado, com prévia e salvamento da revisão. A interface não pode inventar um sensor saudável apenas porque a vaga está cadastrada ou a placa enviou um sinal geral. Busca por um código exato de outro andar navega ao recorte correto e abre o detalhe da vaga. Filtros por setor, tipo e estado devem ter comportamento visível; não misturar total do shopping com total filtrado sem rótulo. No Admin, mudanças de estrutura atualizam o que aparece sem exigir recarga manual da página.
 
 **Proposta técnica do MVP:** representação 2D simples por andar, base visual e coordenadas normalizadas. Posição usa `x`/`y` do canto superior esquerdo e largura/altura em relação às dimensões da base; rotação em graus, com âncora documentada. Definir validação de limites, inclusive elemento rotacionado. A proposta evita depender de coordenadas absolutas de um único monitor.
 
@@ -247,7 +249,7 @@ Retorno de contato encerra a falha de comunicação correspondente, mas o histó
 
 Esta seção é **proposta técnica** de contrato e algoritmo. Deve ser conciliada com o firmware existente e implementada com testes de tempo, concorrência e reinicialização.
 
-**Estado local atualizado em 21/10/2026:** a base já controla a ordem das mensagens, usa o horário do servidor, rejeita um grupo inteiro quando há leitura inválida e exige uma credencial própria da placa. A integração com PostgreSQL foi executada com sucesso. Os tempos usados ainda são provisórios e precisam ser comparados com o ESP32 real. Cadastro/vínculo de equipamentos, manutenção/ocorrências e atualização periódica das telas estão implementados. O P06 ainda depende do ensaio físico e da conferência no ambiente publicado.
+**Estado local de 21/10, reconciliado documentalmente em 04/11/2026:** a base já controla a ordem das mensagens, usa o horário do servidor, rejeita um grupo inteiro quando há leitura inválida e exige uma credencial própria da placa. A integração com PostgreSQL foi executada com sucesso. Os tempos definitivos ainda dependem de ensaio sustentado; houve teste físico inicial dos três canais em 21/10. Cadastro/vínculo de equipamentos, manutenção/ocorrências e atualização periódica das telas estão implementados. O P06 ainda depende da estabilidade física, do fechamento dos tempos e da conferência no ambiente publicado.
 
 ### 9.1 Parâmetros
 
@@ -402,7 +404,7 @@ Se um relatório reúne vários shoppings, definir RLS e identidade autorizada n
 | Firmware ESP32 | Leitura local, envio autenticado e recuperação de comunicação. |
 | Views + Power BI | Análise histórica, sem depender do relatório para operar o estacionamento. |
 
-A implantação registrada em 23/09 usa um serviço Render que entrega API e frontend na mesma origem e uma conexão PostgreSQL no Neon; a [configuração](configuracao.md#hospedagem-no-render) descreve o manifesto e suas verificações pendentes. **Atualização implementada:** polling a cada 15 segundos, invalidação após 30 segundos ou falha de conexão e pausa durante edição do mapa; Socket.IO não está instalado. Mutações administrativas já devem atualizar por estado local ou refetch, sem recarga manual. Não colocar uma rotina crítica apenas em timer de função efêmera.
+A implantação registrada em 23/09 usa um serviço Render que entrega API e frontend na mesma origem e uma conexão PostgreSQL no Neon; a [configuração](configuracao.md#hospedagem-no-render) descreve o manifesto e suas verificações pendentes. **Atualização implementada:** polling do mapa a cada 500 ms (sem renovação automática pendente e com pausa em aba oculta), telão instalado a cada 15 s, invalidação visual após 30 segundos ou falha de conexão e editor de posições sem polling; Socket.IO não está instalado. Mutações administrativas já devem atualizar por estado local ou refetch, sem recarga manual. Não colocar uma rotina crítica apenas em timer de função efêmera.
 
 Separar consulta operacional de análise. Falha do Power BI não interrompe leitura das vagas. Organizar módulos conforme [regras-de-codigo.md](regras-de-codigo.md), conciliando com o repositório existente.
 
@@ -584,7 +586,7 @@ Usar `400` para entrada inválida, `401` para ausência/sessão inválida, `403`
 | ID | Requisito |
 | --- | --- |
 | RF01 | Landing apresenta serviço e encaminha ao WhatsApp. |
-| RF02 | Bot executa menu e registra demonstração/suporte com encaminhamento humano. |
+| RF02 | Bot demonstra menu, apresentação, recursos e orientações de contato, sem atendimento humano ou pedidos estruturados obrigatórios. |
 | RF03 | Admin cadastra shopping, etapa e estrutura. Documentos e plantas são tratados pelo atendimento no WhatsApp nesta entrega. |
 | RF04 | Admin cria vários gerentes com logins individuais por shopping. |
 | RF05 | Autenticação por perfil, troca provisória, bloqueio e redefinição. |
@@ -612,6 +614,8 @@ Para engenharia e comentários, seguir [regras-de-codigo.md](regras-de-codigo.md
 
 ## 15. Decisões pendentes e controle de mudanças
 
+A [revisão consolidada de 04/11](revisao-documental-2026-11-04.md) organiza prioridades e critérios atuais. RF02 foi recortado expressamente em 04/11 para demonstração do menu; atendimento real e pedidos estruturados foram retirados do aceite do TCC. A conexão e o percurso real conhecidos permanecem registrados.
+
 | Pendência | Evidência necessária | Não impede |
 | --- | --- | --- |
 | Cores, fontes, espaçamentos e assets exatos | Leitura do Figma/tokens do repositório | Especificar comportamentos e manter estilos existentes. |
@@ -621,7 +625,9 @@ Para engenharia e comentários, seguir [regras-de-codigo.md](regras-de-codigo.md
 | API, rotina de expiração e atualização web | Hospedagem e capacidade verificadas | Separar contratos do transporte. |
 | Formato e edição do mapa | Planta/base por andar e interação aprovada | Manter IDs e posições como entidades. |
 | Publicação/licenciamento Power BI | Conta, conectividade e forma de acesso | Criar relatório Desktop com dados de teste. |
-| Instalação física e homologação dos telões | Testes da credencial própria, revogação, recorte e perda de conexão no ambiente publicado | Usar a instalação web já implementada com agregados sem dados pessoais. |
+| Instalação física dos telões | Aceite físico quando utilizado na apresentação; homologação web completa confirmada pelo usuário | Usar a instalação web implementada com agregados sem dados pessoais. |
+| WhatsApp demonstrativo — decisão encerrada em 04/11 | Atendimento real e coleta/protocolo retirados do escopo pelo usuário | Manter apresentação/menu e contato institucional. |
+| Backup — dispensado no TCC em 04/11 | Decisão expressa do usuário; procedimento e ensaios preservados como referência opcional | Concluir a entrega demonstrativa sem criar ou agendar backup. |
 | Volumes, retenção e arquivos | Requisitos reais de implantação | Desenvolver MVP com limites documentados. |
 
 Riscos principais: perda de comunicação interpretada como vaga livre; isolamento apenas visual; duplicação de eventos; histórico reclassificado incorretamente após edição cadastral; mapa dessincronizado do andar; integração Power BI apenas aparente; tokens visuais inventados; refatoração ampla que dificulta a manutenção.

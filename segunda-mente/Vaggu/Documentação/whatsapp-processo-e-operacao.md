@@ -4,6 +4,8 @@
 
 **Atualização de 04/11/2026 — atendimento demonstrativo:** por solicitação do usuário, opções 3 (demonstração), 4 (suporte) e 5 (equipe) deixam de pedir envio de e-mail e informam “Uma atendente entrará em contato com você em alguns instantes”. Trata-se de simulação para o TCC: não há fila, notificação ou atendimento real acionado. Botões de retorno, números digitados e proteção contra repetição permanecem. Contatos públicos de privacidade/exclusão não mudam. Versões e relatos anteriores abaixo preservam o comportamento anterior.
 
+**Decisão de escopo e aceite — 04/11/2026:** o usuário confirmou a homologação completa do site. O aceite web está encerrado por essa confirmação, sem nova execução em produção pelo agente nem hash de deploy adicional informado. O WhatsApp será demonstrativo: atendimento humano real, coleta comercial e protocolos deixam de ser requisitos desta entrega. Procedimentos de dados definidos em [operação do TCC](operacao-dados-tcc.md); hardware físico mantém aceite próprio.
+
 **Confirmação do participante — 04/11/2026:** em resposta ao teste solicitado, participante confirmou o percurso Oi → Ver opções → Conhecer a VAGGU, com imagem e link do site, seguido de Ver recursos e Voltar ao menu. Validação funcional da nova apresentação concluída para esse percurso na versão 7356e12. Não comprova os demais caminhos individualmente nem substitui captura anonimizada da interface.
 
 Atualizado em 04/11/2026. Este documento consolida o resultado atual; os registros datados do planejamento preservam as tentativas e evidências anteriores.
@@ -26,11 +28,11 @@ Atualizado em 04/11/2026. Este documento consolida o resultado atual; os registr
 7. Com autorização explícita do responsável para a opção ampla “Tudo” oferecida pela Meta, atribuímos a conta real ao usuário técnico. Não geramos outro token. O envio passou de erro para aceitação pela API; o participante confirmou o recebimento e o funcionamento do bot.
 8. Substituímos o menu textual por lista nativa de cinco opções, mantendo os números digitados. As respostas passaram a oferecer retorno clicável. Foram aprovados 18 testes locais, incluindo deduplicação e contrato HTTP. Após duas falhas internas de push durante incidente do GitHub, a terceira tentativa foi aceita; o Render publicou `0c63291`, contendo a implementação `317075a`.
 9. O participante confirmou o percurso real “Oi → Ver opções → Conhecer a VAGGU → Voltar ao menu”. Isso comprova esse percurso; não equivale a testar individualmente todas as opções em produção.
-10. Na revisão atual, removemos o emoji da saudação, apresentamos o site na opção 1, adicionamos uma imagem ilustrativa da marca e botões de continuidade. Os contatos de demonstração, suporte, atendimento e privacidade passaram a usar o e-mail empresarial autorizado. A publicação e os testes desta revisão devem ser registrados no planejamento antes de considerar a nova versão homologada.
+10. Na revisão atual, removemos o emoji da saudação, apresentamos o site na opção 1, adicionamos uma imagem ilustrativa da marca e botões de continuidade. Os contatos de demonstração, suporte, atendimento e privacidade passaram a usar o e-mail empresarial autorizado. Publicação em 7356e12 e teste real de imagem, link, Ver recursos e retorno foram registrados no planejamento em 04/11; demais caminhos e operação seguem pendentes.
 
 ## Comportamento atual do código
 
-`Oi`, `Olá` e `MENU` abrem “Ver opções”. Há cinco caminhos: conhecer a VAGGU, funcionalidades, demonstração, suporte e equipe. Números 1–5 e IDs nativos de seleção usam a mesma resposta. A opção 1 inclui o site e um cabeçalho JPEG, com “Ver recursos”, “Pedir demonstração” e “Voltar ao menu”. As demais mantêm retorno ao menu. Textos livres não abrem solicitações automaticamente; IDs desconhecidos e mídia são ignorados. Não existe promessa de atendimento imediato.
+`Oi`, `Olá` e `MENU` abrem “Ver opções”. Há cinco caminhos: conhecer a VAGGU, funcionalidades, demonstração, suporte e equipe. Números 1–5 e IDs nativos de seleção usam a mesma resposta. A opção 1 inclui o site e um cabeçalho JPEG, com “Ver recursos”, “Pedir demonstração” e “Voltar ao menu”. As demais mantêm retorno ao menu. Textos livres não abrem solicitações automaticamente; IDs desconhecidos e mídia são ignorados. O texto de contato em instantes faz parte da simulação demonstrativa, sem atendimento real.
 
 A lista principal tem cabeçalho textual. A imagem fica em uma mensagem de botões, enviada como única resposta daquela entrada. Não acrescentamos um segundo envio que tornasse ambígua a recuperação após timeout. O serviço preserva deduplicação por identificador e revisão manual dos envios de resultado incerto; não há garantia universal de entrega exatamente uma vez.
 
@@ -54,11 +56,11 @@ Credenciais ficam no Render. Arquivos temporários de diagnóstico devem ser ign
 | Menu nativo e retorno | Percurso real confirmado pelo participante |
 | Nova imagem, textos e e-mail empresarial | Publicados em 7356e12; JPEG e contatos públicos verificados. Imagem, link, Ver recursos e retorno confirmados pelo participante em 04/11 |
 | Captura anonimizada da interface WhatsApp | Pendente: não há sessão controlável disponível; confirmação funcional não substitui captura |
-| Sessão guiada, coleta estruturada, protocolo de demonstração/suporte | Não implementados; os caminhos atuais orientam contato por e-mail |
-| Operação da caixa empresarial, responsáveis e prazo de atendimento | Acordo operacional pendente; nenhum envio de e-mail foi realizado neste trabalho |
-| Política operacional de retenção e rotina de exclusão | Definir e validar; a página não promete eliminação automática |
+| Sessão guiada, coleta estruturada e protocolo | Fora do escopo demonstrativo por decisão expressa do usuário em 04/11; caminhos orientam contato por e-mail |
+| Operação da caixa empresarial e prazo de atendimento | Não exigidos no TCC demonstrativo; não há promessa de resposta humana |
+| Retenção e exclusão | Procedimento definido em operação-dados-tcc.md; sem eliminação automática |
 
-Não encerrar P10 integralmente com base no menu. Hardware físico, Power BI publicado e demais pacotes não são homologados por este teste.
+O aceite de P10 passa a considerar o recorte demonstrativo autorizado em 04/11; a coleta estruturada e a operação humana não são mais bloqueadores. Hardware físico, Power BI publicado e demais pacotes não são homologados por este teste.
 
 ## Resultado da revisão
 

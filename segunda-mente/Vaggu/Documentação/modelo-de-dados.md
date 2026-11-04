@@ -5,6 +5,10 @@ tags: [vaggu, banco-de-dados, postgresql, prisma]
 
 # Modelo de dados atual
 
+**Aceite atualizado em 04/11:** homologação completa do site confirmada pelo usuário; não é nova execução do agente em produção. Hardware mantém aceite próprio. Dados e WhatsApp seguem o recorte demonstrativo em [operação do TCC](operacao-dados-tcc.md); requisitos de atendimento comercial foram retirados desta entrega.
+
+**Revisão documental em 04/11/2026:** contratos e limites confrontados com o schema e código versionados; não houve mudança de banco ou migrations. Ver [revisão consolidada de 04/11](revisao-documental-2026-11-04.md). WhatsappEvento é registro técnico, sem substituir sessão comercial, pedido ou chamado estruturado.
+
 Este documento explica o banco que existe no repositório em 21/10/2026. A fonte principal é o [`schema.prisma`](../../../vaggu-backend/prisma/schema.prisma); as atualizações SQL acrescentam regras que o Prisma não representa, e os serviços do servidor mostram onde cada registro é usado.
 
 O documento não afirma que uma entidade planejada já foi implementada. Também não substitui as migrations: qualquer alteração do banco deve ser incremental e compatível com os dados existentes.
@@ -187,7 +191,7 @@ Representa uma instalação web com nome, shopping, andar/setor opcionais, `chav
 
 A API agora recebe `/telemetria/heartbeat` e `/telemetria/estados`, rejeita o lote inteiro quando um sensor não pertence à placa, usa o relógio do servidor, confirma somente após 30 segundos consistentes, deduplica por placa/inicialização/sequência e expira cada sensor por sua própria observação. Heartbeat nunca renova sensor.
 
-Continuam pendentes: ensaio com o firmware real; valores definitivos de frequência, lacuna e timeout; retenção dos marcadores de replay e homologação no ambiente compartilhado. Cadastro/vínculo, ocorrência/manutenção e atualização periódica já estão implementados. A consulta do mapa já aplica validade individual e retorna monitoramento sem credenciais. As integrações PostgreSQL foram executadas localmente com `TEST_DATABASE_URL`, mas P06 permanece em andamento até as validações de hardware e operação.
+Houve ensaio físico inicial dos três canais em 21/10. Continuam pendentes: estabilidade sustentada do firmware real; valores definitivos de frequência, lacuna e timeout; retenção dos marcadores de replay e homologação no ambiente compartilhado. Cadastro/vínculo, ocorrência/manutenção e atualização periódica já estão implementados. A consulta do mapa já aplica validade individual e retorna monitoramento sem credenciais. As integrações PostgreSQL foram executadas localmente com `TEST_DATABASE_URL`, mas P06 permanece em andamento até as validações de hardware e operação.
 
 ### View analítica inicial
 
@@ -201,7 +205,7 @@ A lista abaixo separa o recorte persistido das evoluções ainda necessárias.
 
 | Proposta | Necessidade prevista | Relação com o modelo atual |
 | --- | --- | --- |
-| `Placa` e `Sensor` | Separar o controlador ESP32 de cada canal físico, autenticar a placa e acompanhar observação/expiração por sensor. | Implementado como evolução compatível de `Dispositivo` mais a entidade `Sensor`; consulta visual implementada; cadastro/vínculo e manutenção implementados; faltam hardware real e homologação. |
+| `Placa` e `Sensor` | Separar o controlador ESP32 de cada canal físico, autenticar a placa e acompanhar observação/expiração por sensor. | Implementado como evolução compatível de `Dispositivo` mais a entidade `Sensor`; consulta visual implementada; cadastro/vínculo e manutenção implementados; ensaio físico inicial registrado; estabilidade e homologação publicada pendentes. |
 | `EventoOcupacao` | Guardar transições confirmadas com estados anterior/novo, instantes efetivo e recebido, origem e motivo. | Implementado no `HistoricoVaga` sem recriar IDs das vagas; consultas próprias de P08 incluem setor/categoria, entradas, saídas, permanência, rotatividade e cobertura. |
 | `ControleEventoRecebido` | Deduplicar telemetria por placa, inicialização e sequência e registrar seu resultado. | Implementado por `InicializacaoPlaca` e `EventoTelemetriaRecebido`; retenção definitiva depende do firmware. |
 | `EventoEquipamento` e `OcorrenciaTecnica` | Preservar falhas, retornos e manutenções de placa/sensor sem ocorrências repetidas. | Implementado como `OcorrenciaEquipamento`, com comunicação e manutenção, placa obrigatória e sensor opcional conforme o tipo de ocorrência. |

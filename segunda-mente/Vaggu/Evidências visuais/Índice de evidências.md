@@ -3,6 +3,18 @@ tags: [vaggu, evidencias, interface]
 ---
 # Evidências visuais da VAGGU
 
+## 04/11/2026 — texto demonstrativo de atendente: captura pendente
+
+Opções 3–5 do bot agora anunciam contato de uma atendente em alguns instantes, sem solicitar e-mail. Alteração local de textos e descrição do menu; números e cliques mantêm retorno. Captura da interface real não realizada por ausência de sessão controlável de WhatsApp, conforme inventário desta sessão. Testes de texto/contrato não substituem print; revisão visual pendente, sem imagem simulada apresentada como mensageiro real. Sem publicação nesta etapa.
+
+## 04/11/2026 — complementação de importação e exclusões
+
+**66 capturas locais**, perfil Admin fictício, desktop 1440×1000, tablet 768×1024 e celular 390×844, temas claro/escuro. Rotas administrativas de estrutura/importação, gerentes e listagem de shoppings; origem: Vite local com API interceptada e fixtures fictícias. Carregamento, prévias válida/inválida, confirmação, sucesso/falha, exclusão, cancelamento e desfazer exercitados. Sem overflow da página ou erros JavaScript inesperados; HTTP 503 intencional no cenário de falha.
+
+[Galeria por estado, viewport e tema](2026-11-04%20-%20Fechamento%20documental/README.md) · [Resultados por captura](2026-11-04%20-%20Fechamento%20documental/resultados.json). As imagens de diálogos respeitam a rolagem interna; tabelas extensas mantêm rolagem própria. Sem dados reais ou credenciais, sem alterações em produção. Homologação completa do site aceita conforme confirmação do usuário; estas capturas são complementares. Captura real do WhatsApp indisponível por ausência de sessão controlável; não se declara revisão visual do mensageiro concluída.
+
+**Registro da revisão inicial — 04/11/2026, anterior à complementação acima:** naquela etapa nenhuma tela foi alterada ou recapturada. As capturas abaixo conservam datas, ambientes e limites originais. O participante confirmou também imagem, site, Ver recursos e retorno da apresentação publicada em 7356e12; captura anonimizada da interface WhatsApp continua pendente. Lacunas específicas de importação/exclusões e homologação publicada estão na [[Vaggu/Documentação/revisao-documental-2026-11-04|revisão consolidada]].
+
 ## 04/11/2026 — menu interativo WhatsApp, captura pendente
 
 Confirmação funcional posterior: participante confirmou Oi → Ver opções → Conhecer a VAGGU → Voltar ao menu. Logs de produção registraram entrada interativa. Essa confirmação não substitui a captura anonimizada nem conclui a revisão visual documental.
