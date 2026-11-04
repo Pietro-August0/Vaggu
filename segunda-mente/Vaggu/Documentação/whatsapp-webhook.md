@@ -2,6 +2,8 @@
 
 ## Menu interativo — 04/11/2026
 
+**Estado de entrega:** código local `317075a`, build/18 testes aprovados. Publicação ainda não realizada: GitHub rejeitou duas tentativas com erro interno durante incidente oficial de operações Git, e a main remota foi conferida em `e1eecf9`. O menu textual publicado continua funcional. Validar a lista real somente após concluir push/deploy; captura da interface WhatsApp pendente por ausência de sessão controlável.
+
 O atendimento passa a usar mensagens nativas interativas da Meta. `Oi`, `Olá` e `MENU` abrem lista com botão **Ver opções**, cinco escolhas e descrições. As respostas incluem **Voltar ao menu**, sem exigir digitação. Números de 1 a 5 continuam sendo aceitos. O webhook extrai o ID de `interactive.list_reply` ou `interactive.button_reply`; títulos externos não determinam a ação. Mídia e IDs não reconhecidos continuam ignorados. Não há coleta automática estruturada ou confirmação de atendimento humano.
 
 `client.ts` compartilha configuração privada, timeout de oito segundos e tratamento de falhas entre `sendText` e `sendInteractive`. `service.ts` envia uma única mensagem interativa por entrada, mantendo `ENVIANDO`/`REVISAO` e a deduplicação. Sem nova tabela ou credencial. [Referência oficial da Meta](https://www.postman.com/meta/whatsapp-business-platform/request/r3ufenw/send-list-message). Build e 18 testes locais aprovados; conferência visual e clique real dependem de teste do participante no WhatsApp, sem registrar mensagens ou números pessoais em prints.

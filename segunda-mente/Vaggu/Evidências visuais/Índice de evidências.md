@@ -3,6 +3,10 @@ tags: [vaggu, evidencias, interface]
 ---
 # Evidências visuais da VAGGU
 
+## 04/11/2026 — menu interativo WhatsApp, captura pendente
+
+Lista nativa com Ver opções e cinco escolhas, seguida de Voltar ao menu, implementada no backend e coberta por 18 testes locais de contrato/fluxo. Ainda sem publicação devido a erro interno do GitHub, confirmado em seu status oficial. Nesta conexão não há app/janela ou aba controlável do WhatsApp para capturar uma conversa com dados fictícios/anonimizados; nenhuma conversa privada ou credencial foi fotografada. Pendência: após push/deploy, conferir lista aberta, cada escolha e retorno no WhatsApp, capturar resultado sem dados pessoais e registrar plataforma/viewport real. Revisão visual não concluída. O funcionamento do menu textual anterior foi confirmado pelo participante, mas não substitui essa evidência.
+
 ## 28/10/2026 — privacidade e exclusão
 
 Perfil visitante, aplicação local em `http://127.0.0.1:5183`, conteúdo institucional e contato público autorizados pelo usuário; nenhuma conta real de shopping ou conversa privada. Navegador integrado via Computer Use (plugin Browser ausente do catálogo e Playwright indisponível). Páginas com identidade escura fixa; temas não alteram essas páginas. Sem overlay ou erros de console; somente aviso de movimento reduzido do dispositivo. Links de e-mail conferidos sem envio. Navegação política → exclusão com Enter, volta à landing e novos links do rodapé conferidos. Sem overflow horizontal nos três viewports; capturas completas não comprovam publicação ou funcionamento real do bot.
