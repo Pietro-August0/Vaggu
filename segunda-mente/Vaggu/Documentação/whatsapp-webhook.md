@@ -1,5 +1,19 @@
 # Integração com o WhatsApp
 
+## Menu interativo — 04/11/2026
+
+O atendimento passa a usar mensagens nativas interativas da Meta. `Oi`, `Olá` e `MENU` abrem lista com botão **Ver opções**, cinco escolhas e descrições. As respostas incluem **Voltar ao menu**, sem exigir digitação. Números de 1 a 5 continuam sendo aceitos. O webhook extrai o ID de `interactive.list_reply` ou `interactive.button_reply`; títulos externos não determinam a ação. Mídia e IDs não reconhecidos continuam ignorados. Não há coleta automática estruturada ou confirmação de atendimento humano.
+
+`client.ts` compartilha configuração privada, timeout de oito segundos e tratamento de falhas entre `sendText` e `sendInteractive`. `service.ts` envia uma única mensagem interativa por entrada, mantendo `ENVIANDO`/`REVISAO` e a deduplicação. Sem nova tabela ou credencial. [Referência oficial da Meta](https://www.postman.com/meta/whatsapp-business-platform/request/r3ufenw/send-list-message). Build e 18 testes locais aprovados; conferência visual e clique real dependem de teste do participante no WhatsApp, sem registrar mensagens ou números pessoais em prints.
+
+## Diagnóstico de autorização de envio — 04/11/2026
+
+**Resultado:** usuário autorizou a atribuição ampla descrita abaixo, Meta confirmou o ativo atribuído e o teste de envio ao destinatário autorizado passou a HTTP 200. Participante confirmou funcionamento da conversa real. Token mantido, sem nova credencial ou exposição em relatório. Logs confirmaram entradas de texto e eventos de status. Sem essa atribuição, declarar as permissões no token não autorizava o envio pela conta real.
+
+Com diagnóstico seguro já publicado, mensagem real chegou como texto e o envio falhou com código 100. Consulta direta de envio ao destinatário indicado pelo participante confirmou `Authorization Error` (HTTP 400). Token válido e com `whatsapp_business_messaging` não bastava: o usuário de sistema Employee estava atribuído somente à conta de teste, além do app. A conta real Vaggu estava ausente dos ativos atribuídos. Preenchimento de variáveis e GET do recurso do telefone não substituem essa autorização.
+
+Atribuição da conta real preparada em Configurações do portfólio → Usuários do sistema → Employee → Atribuir ativos → Contas vinculadas → Vaggu. Nesse painel, apenas Tudo inclui envio; alcance informado e explicitamente autorizado pelo responsável antes de salvar. Confirmar o ativo na lista e repetir envio técnico e conversa real. Não recriar token ou enfraquecer validação de assinatura para contornar falta de atribuição. Guardar somente códigos/estados e resultados anonimizados; não documentar telefone pessoal, token ou texto da conversa.
+
 ## Publicação e operação — retomada de 28/10/2026
 
 **Diagnóstico após primeiro `Oi` sem resposta:** nenhum erro de envio encontrado nos logs recentes; consulta somente de metadados no banco configurado retornou zero eventos, sem ler mensagens ou telefones. Na etapa de registro do número, a conta `Vaggu` estava com o switch **Assinar webhooks** desligado, embora o campo `messages` já estivesse assinado na configuração do app. São duas inscrições distintas. Ativada a inscrição da conta no app e conferido `[checked]` após recarregar a página. Número público corresponde ao informado e o `WHATSAPP_PHONE_NUMBER_ID` do Render corresponde ao recurso exibido pela Meta; valores privados não foram registrados. A configuração local desse ID diverge da produção e não foi usada para enviar mensagens. Teste real deve ser repetido após a correção; não presumir reentrega do `Oi` anterior.
@@ -18,7 +32,7 @@ Teste final: participante envia `Oi` do próprio WhatsApp para `+55 (11) 99380-7
 
 **Revisão de 28/10/2026:** retomada solicitada para concluir o contato da landing e a configuração real. O [planejamento de conclusão](planejamento-whatsapp-2026-10-28.md) registra configuração local, lacunas, sequência e critérios de aceite. Credenciais preenchidas localmente não comprovam funcionamento na Meta ou no ambiente publicado.
 
-Esta integração está parcial. O endereço abaixo recebe avisos e mensagens enviados pela Meta, ignora mensagens repetidas e sustenta um menu de demonstração. Os links públicos que abrem o WhatsApp não dependem dele. Número oficial, ambiente Meta e fluxos completos de demonstração e suporte ainda precisam ser configurados.
+A conexão real e o menu textual foram confirmados pelo participante em 04/11/2026. A evolução para menu clicável é descrita acima e tem validação própria. Os links públicos que abrem o WhatsApp não dependem do webhook. Fluxos estruturados de demonstração/suporte e encaminhamento humano completo continuam parciais.
 
 ## Como o código se organiza
 

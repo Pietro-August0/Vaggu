@@ -1,5 +1,5 @@
-// Coordena mensagens recebidas, deduplicação persistente e respostas do menu demonstrativo.
-import { respostaAtendimento } from './payload.js';
+// Coordena mensagens recebidas, deduplicação persistente e respostas do menu interativo.
+import { mensagemInterativaAtendimento } from './payload.js';
 
 // A chamada à Meta expira em oito segundos; a margem cobre atrasos de banco e do processo.
 const TEMPO_LIMITE_PROCESSAMENTO_MS = 2 * 60 * 1000;
@@ -20,13 +20,13 @@ export function createWhatsappService(prisma, client, config) {
 
       let envioIniciado = false;
       try {
-        const resposta = config.autoReplyEnabled && message.from ? respostaAtendimento(message) : null;
+        const resposta = config.autoReplyEnabled && message.from ? mensagemInterativaAtendimento(message) : null;
         if (resposta) {
           // Um envio de resultado incerto não será repetido automaticamente.
           const marcado = await prisma.whatsappEvento.updateMany({ where: { id: claim.eventId, status: envioIniciado ? 'ENVIANDO' : 'PROCESSANDO', atualizadoEm: claim.claimedAt }, data: { status: 'ENVIANDO', atualizadoEm: claim.claimedAt } });
           if (!marcado.count) return { duplicate: true };
           envioIniciado = true;
-          await client.sendText(message.from, resposta);
+          await client.sendInteractive(message.from, resposta);
         }
         await prisma.whatsappEvento.updateMany({
           where: { id: claim.eventId, status: envioIniciado ? 'ENVIANDO' : 'PROCESSANDO', atualizadoEm: claim.claimedAt },
