@@ -3,17 +3,206 @@ tags: [vaggu, evidencias, interface]
 ---
 # Evidências visuais da VAGGU
 
-Capturas geradas durante validações locais da interface e referências fornecidas pela equipe. Elas documentam o estado observado ou planejado na data de origem; não comprovam sensores, serviços externos, produção nem a interface atual sem nova validação.
+## 04/11/2026 — menu interativo WhatsApp, captura pendente
+
+Confirmação funcional posterior: participante confirmou Oi → Ver opções → Conhecer a VAGGU → Voltar ao menu. Logs de produção registraram entrada interativa. Essa confirmação não substitui a captura anonimizada nem conclui a revisão visual documental.
+
+Lista nativa com Ver opções e cinco escolhas, seguida de Voltar ao menu, implementada no backend e coberta por 18 testes locais de contrato/fluxo. Publicação confirmada no Render, `0c63291` Live, após terceira tentativa de push superar erro interno do GitHub. Nesta conexão não há app/janela ou aba controlável do WhatsApp para capturar uma conversa com dados fictícios/anonimizados; nenhuma conversa privada ou credencial foi fotografada. Pendência: conferir lista aberta, cada escolha e retorno no WhatsApp, capturar resultado sem dados pessoais e registrar plataforma/viewport real. Revisão visual não concluída. O funcionamento do menu textual anterior foi confirmado pelo participante, mas não substitui essa evidência.
+
+## 28/10/2026 — privacidade e exclusão
+
+Perfil visitante, aplicação local em `http://127.0.0.1:5183`, conteúdo institucional e contato público autorizados pelo usuário; nenhuma conta real de shopping ou conversa privada. Navegador integrado via Computer Use (plugin Browser ausente do catálogo e Playwright indisponível). Páginas com identidade escura fixa; temas não alteram essas páginas. Sem overlay ou erros de console; somente aviso de movimento reduzido do dispositivo. Links de e-mail conferidos sem envio. Navegação política → exclusão com Enter, volta à landing e novos links do rodapé conferidos. Sem overflow horizontal nos três viewports; capturas completas não comprovam publicação ou funcionamento real do bot.
+
+| Rota | Viewport solicitado | Captura e resultado |
+| --- | --- | --- |
+| `/privacidade` | 1440×1000 / 768×1024 / 390×844 | [Desktop](2026-10-28%20-%20Privacidade%20e%20exclusao/privacidade-desktop.png) · [Tablet](2026-10-28%20-%20Privacidade%20e%20exclusao/privacidade-tablet.png) · [Celular](2026-10-28%20-%20Privacidade%20e%20exclusao/privacidade-celular.png). Texto e contato legíveis. |
+| `/exclusao-de-dados` | 1440×1000 / 768×1024 / 390×844 | [Desktop](2026-10-28%20-%20Privacidade%20e%20exclusao/exclusao-desktop.png) · [Tablet](2026-10-28%20-%20Privacidade%20e%20exclusao/exclusao-tablet.png) · [Celular](2026-10-28%20-%20Privacidade%20e%20exclusao/exclusao-celular.png). Instruções e foco visível. |
+| `/`, rodapé | 1440×1000 / 768×1024 / 390×844 | [Desktop](2026-10-28%20-%20Privacidade%20e%20exclusao/rodape-desktop.png) · [Tablet](2026-10-28%20-%20Privacidade%20e%20exclusao/rodape-tablet.png) · [Celular](2026-10-28%20-%20Privacidade%20e%20exclusao/rodape-celular.png). Retorno e links públicos disponíveis. |
+
+Base de orientação sobre direitos: [ANPD](https://www.gov.br/anpd/pt-br/assuntos/titular-de-dados/direito-dos-titulares). Não há alegação de auditoria jurídica ou aprovação da Meta. Prints do README mostram somente a abertura da landing, que não mudou; anteriores preservados.
+
+**Conferência publicada em 28/10/2026:** perfil visitante, 1440×1000, origem `https://vaggu-tcc.onrender.com`, conteúdo institucional autorizado: [Política publicada](2026-10-28%20-%20Privacidade%20e%20exclusao/privacidade-publicada.png) e [Exclusão publicada](2026-10-28%20-%20Privacidade%20e%20exclusao/exclusao-publicada.png). As duas páginas e seus links renderizaram sem login. Capturas não incluem painel de credenciais, mensagens ou dados de shopping real. A publicação do app Meta foi confirmada textualmente no painel; conversa real continua pendente de teste pelo participante.
+
+## 28/10/2026 — link WhatsApp da landing
+
+Rota `/`, perfil visitante, origem `http://127.0.0.1:5183`, conteúdo público estático e imagens ilustrativas, sem conta autenticada ou dados de clientes. Número público autorizado pelo responsável. Cinco links renderizados apontam para `https://wa.me/5511993807892`. Capturas locais não comprovam publicação, conta ativa ou bot real.
+
+| Viewport solicitado | Evidência | Resultado observado |
+| --- | --- | --- |
+| 1440×1000 | [Desktop](2026-10-28%20-%20WhatsApp%20landing/landing-desktop.png) | Página renderizada; cinco destinos iguais; sem overflow horizontal. |
+| 768×1024 | [Tablet](2026-10-28%20-%20WhatsApp%20landing/landing-tablet.png) | Conteúdo e CTA visíveis, sem overflow horizontal. |
+| 390×844 | [Celular](2026-10-28%20-%20WhatsApp%20landing/landing-celular.png) | Conteúdo e CTA visíveis, sem overflow horizontal. |
+
+Navegador integrado via Computer Use; plugin Browser não disponível no catálogo da sessão, importação Playwright falhou e a primeira navegação local expirou. Após iniciar o servidor fora do sandbox com autorização, acesso e capturas funcionaram. Tab avançou do CTA inicial ao CTA intermediário; Enter foi exercitado no CTA do rodapé, mas abertura externa da conversa não foi comprovada. Console sem erros; aviso de movimento reduzido do dispositivo. Landing com identidade própria fixa, sem alteração de tema. Imagens completas após percorrer a página para acionar as animações; largura útil pode descontar a barra de rolagem. README preservado: layout/textos exibidos não mudaram, somente destino dos links.
+
+## 21/10/2026 — telão para apresentação
+
+Capturas locais atuais do novo protótipo em `http://127.0.0.1:5184`, com Edge headless/Playwright (plugin Browser ausente), Express e PostgreSQL descartável reais. Somente dados fictícios do Shopping Exemplo; nenhuma API interceptada. Os prints de telão da revisão geral abaixo preservam o visual anterior. Ver [resultado, testes e limites](../Documentação/telao-apresentacao-2026-10-21.md).
+
+| Tela, rota e perfil | Viewport | Evidência |
+| --- | --- | --- |
+| Gestão `/painel/teloes` — Gerente | 1440×1000, página completa | [Claro](2026-10-21%20-%20Telao%20apresentacao/gestao-desktop.png) · [Escuro](2026-10-21%20-%20Telao%20apresentacao/gestao-escuro-desktop.png) |
+| Gestão — Gerente | 768×1024 / 390×844, página completa | [Tablet](2026-10-21%20-%20Telao%20apresentacao/gestao-tablet.png) · [Celular](2026-10-21%20-%20Telao%20apresentacao/gestao-mobile.png) |
+| Gestão após salvar/criar/revogar — Gerente | 1440×1000, página completa | [Persistência e acesso revogado](2026-10-21%20-%20Telao%20apresentacao/gestao-salva-revogado.png) |
+| Geral `/telao/:id` — Credencial própria | 1920×1080 / 1366×768 / 1024×600 | [Full HD](2026-10-21%20-%20Telao%20apresentacao/geral-1920.png) · [1366](2026-10-21%20-%20Telao%20apresentacao/geral-1366.png) · [1024](2026-10-21%20-%20Telao%20apresentacao/geral-1024.png) |
+| Geral — Credencial própria | 768×1024 / 390×844 / 320×568 / 844×390 | [Tablet](2026-10-21%20-%20Telao%20apresentacao/geral-tablet.png) · [Celular](2026-10-21%20-%20Telao%20apresentacao/geral-mobile.png) · [320](2026-10-21%20-%20Telao%20apresentacao/geral-320.png) · [Paisagem](2026-10-21%20-%20Telao%20apresentacao/geral-paisagem.png) |
+| Geral em tela cheia — Credencial própria | 1366×768 | [Fullscreen](2026-10-21%20-%20Telao%20apresentacao/geral-tela-cheia.png) |
+| Andar definido remotamente pelo gerente, mesma instalação/credencial | 1366×768 | [Mantém tela cheia](2026-10-21%20-%20Telao%20apresentacao/andar-tela-cheia.png) · [Após Esc](2026-10-21%20-%20Telao%20apresentacao/andar-apos-esc.png) |
+| Instalação — conexão offline | 1366×768 | [Contagens ocultas](2026-10-21%20-%20Telao%20apresentacao/andar-sem-conexao.png) |
+| Prévia `/painel/telao/andares/:andarId` — Gerente | 1366×768 | [Por setor](2026-10-21%20-%20Telao%20apresentacao/previa-andar.png) · [Andar inexistente](2026-10-21%20-%20Telao%20apresentacao/andar-inexistente.png) |
+| Geral com sete andares — Credencial própria | 1366×768 | [Página 1](2026-10-21%20-%20Telao%20apresentacao/muitos-andares-pagina-1.png) · [Página 2 após alternância automática](2026-10-21%20-%20Telao%20apresentacao/muitos-andares-pagina-2.png) |
+
+Todos os prints da apresentação são do viewport inteiro sem rolagem. O cadastro emite segredo apenas uma vez; esse momento não foi capturado. O fixture de sete andares acrescenta cinco pisos vazios exclusivamente para conferir paginação, sem inventar leituras. Os resultados não comprovam instalação física nem produção.
+
+## 25/10/2026 — cores e leitura direta das análises
+
+Rota `/painel/analise`, perfil gerente fictício, frontend local `http://127.0.0.1:5173`. Origem: respostas fictícias interceptadas com Playwright/Edge, em movimento reduzido para conferir a composição final. Não comprova API/banco de produção ou hardware. Referência do ajuste: print local apresentado na conversa, com categorias sem diferenciação de cor, excesso de textos e permanência ausente muito grande. Fonte externa temporária não incorporada ao repositório.
+
+| Resultado observado | Viewport | Captura |
+| --- | --- | --- |
+| Categorias coloridas, filtros em uma linha, indicadores com apoio curto e ajuda recolhida | 1440×1000 | [Claro](2026-10-25%20-%20Analises%20cores%20e%20leitura/desktop-light.png) · [Escuro](2026-10-25%20-%20Analises%20cores%20e%20leitura/desktop-dark.png) |
+| Filtros e cards reorganizados sem overflow da página | 768×1024 | [Tablet claro](2026-10-25%20-%20Analises%20cores%20e%20leitura/tablet-light.png) · [Tablet escuro](2026-10-25%20-%20Analises%20cores%20e%20leitura/tablet-dark.png) |
+| Categorias em duas colunas; datas lado a lado, demais filtros em linhas | 390×844 | [Celular claro](2026-10-25%20-%20Analises%20cores%20e%20leitura/celular-light.png) · [Celular escuro](2026-10-25%20-%20Analises%20cores%20e%20leitura/celular-dark.png) |
+| Ausência de histórico: travessão e apoio curto, sem número inventado | 1440×1000 | [Sem observação](2026-10-25%20-%20Analises%20cores%20e%20leitura/sem-observacao.png) |
+| Detalhes das métricas acessíveis ao expandir por teclado | 1440×1000 | [Ajuda expandida](2026-10-25%20-%20Analises%20cores%20e%20leitura/ajuda-expandida.png) · [Tabela e ponto](2026-10-25%20-%20Analises%20cores%20e%20leitura/teclado-detalhes.png) |
+| Filtro PCD aplicado e atualização preservando o resultado anterior | 1440×1000 | [Filtro](2026-10-25%20-%20Analises%20cores%20e%20leitura/filtro-pcd.png) · [Atualização](2026-10-25%20-%20Analises%20cores%20e%20leitura/atualizando-sem-apagar.png) |
+| Primeira carga e comparação independente | 1440×1000 | [Carregamento](2026-10-25%20-%20Analises%20cores%20e%20leitura/carregamento-inicial.png) · [Comparação lenta](2026-10-25%20-%20Analises%20cores%20e%20leitura/comparacao-lenta.png) |
+| Erros inicial, de atualização e da comparação com recuperação exercitada | 1440×1000 | [Inicial](2026-10-25%20-%20Analises%20cores%20e%20leitura/erro-inicial.png) · [Atualização](2026-10-25%20-%20Analises%20cores%20e%20leitura/erro-com-ultima-consulta.png) · [Comparação](2026-10-25%20-%20Analises%20cores%20e%20leitura/comparacao-indisponivel.png) |
+| Série longa com rolagem interna e seleção do último ponto | 390×844 | [31 dias](2026-10-25%20-%20Analises%20cores%20e%20leitura/periodo-31-dias-celular.png) |
+
+## 25/10/2026 — animações das análises
+
+Rota `/painel/analise`, perfil gerente fictício, frontend local `http://127.0.0.1:5173`. Edge headless/Playwright; Browser plugin ausente. Origem: respostas fictícias interceptadas, com atrasos e falhas controlados. Não valida API/banco reais, autorização do servidor, produção ou hardware. Experimento de animações de contagem, linha, barras e roscas. A matriz responsiva abaixo usa movimento reduzido para conferir os valores finais; passos intermediários e preferência alterada em tempo real também foram conferidos. Ver [registro dos testes](../Documentação/animacoes-analises-2026-10-25.md). Prints anteriores preservados.
+
+| Resultado observado | Viewport | Captura |
+| --- | --- | --- |
+| Categorias no topo, gráficos e filtros; sem overflow da página | 1440×1000 / 768×1024 / 390×844 | [Desktop claro](2026-10-25%20-%20Animacoes%20analises/desktop-light.png) · [Tablet claro](2026-10-25%20-%20Animacoes%20analises/tablet-light.png) · [Celular claro](2026-10-25%20-%20Animacoes%20analises/celular-light.png) |
+| Mesma organização no tema escuro | 1440×1000 / 768×1024 / 390×844 | [Desktop escuro](2026-10-25%20-%20Animacoes%20analises/desktop-dark.png) · [Tablet escuro](2026-10-25%20-%20Animacoes%20analises/tablet-dark.png) · [Celular escuro](2026-10-25%20-%20Animacoes%20analises/celular-dark.png) |
+| Primeira carga sem números inventados ou aviso prematuro de ausência de observação | 1440×1000 | [Placeholders](2026-10-25%20-%20Animacoes%20analises/carregamento-inicial.png) |
+| Comparação lenta sem bloquear gráficos do período atual | 1440×1000 | [Comparação pendente](2026-10-25%20-%20Animacoes%20analises/comparacao-lenta.png) |
+| Reconsulta mantém conteúdo e identifica a última consulta válida | 1440×1000 | [Atualização](2026-10-25%20-%20Animacoes%20analises/atualizando-sem-apagar.png) |
+| Recorte aplicado por setor A e PCD com quatro vagas dessa categoria | 1440×1000 | [Filtro PCD](2026-10-25%20-%20Animacoes%20analises/filtro-pcd.png) |
+| Erro ao atualizar preserva resultado anterior e oferece nova tentativa | 1440×1000 | [Erro na atualização](2026-10-25%20-%20Animacoes%20analises/erro-com-ultima-consulta.png) |
+| Falha inicial sem exibir contagens; recuperação exercitada sem reload | 1440×1000 | [Erro inicial](2026-10-25%20-%20Animacoes%20analises/erro-inicial.png) |
+| Falha isolada da comparação sem perder a análise principal | 1440×1000 | [Comparação indisponível](2026-10-25%20-%20Animacoes%20analises/comparacao-indisponivel.png) |
+| Ausência de histórico mantém contagens do cadastro e aviso próprio | 1440×1000 | [Sem observação](2026-10-25%20-%20Animacoes%20analises/sem-observacao.png) |
+| Seleção de ponto e expansão de tabela via teclado | 1440×1000 | [Teclado](2026-10-25%20-%20Animacoes%20analises/teclado-detalhes.png) |
+| Série de 31 dias: seleção do último ponto e rolagem só no gráfico | 390×844 | [31 dias no celular](2026-10-25%20-%20Animacoes%20analises/periodo-31-dias-celular.png) |
+| Movimento normal: números, linha e barras em entrada | 1440×1000 | [Contagem](2026-10-25%20-%20Animacoes%20analises/numeros-em-contagem.png) · [Linha](2026-10-25%20-%20Animacoes%20analises/linha-em-entrada.png) · [Barras](2026-10-25%20-%20Animacoes%20analises/barras-em-entrada.png) |
+| Após entrada e preferência reduzida ativada em tempo real | 1440×1000 | [Após entrada](2026-10-25%20-%20Animacoes%20analises/graficos-apos-entrada.png) · [Preferência alterada](2026-10-25%20-%20Animacoes%20analises/movimento-reduzido-em-tempo-real.png) |
+| Quadros controlados e prévia em loop ilustrativo | Recorte 1160×950 da viewport 1440×1000 | [100 ms](2026-10-25%20-%20Animacoes%20analises/entrada-100ms.png) · [Final](2026-10-25%20-%20Animacoes%20analises/entrada-final.png) · [GIF](2026-10-25%20-%20Animacoes%20analises/previa-animacoes.gif) |
+
+## 24/10/2026 — análises após integração da main
+
+Rota `/painel/analise`, perfil gerente fictício, frontend local `http://127.0.0.1:5173`. Edge headless/Playwright; Browser plugin ausente. Origem: respostas fictícias interceptadas, com atrasos e falhas controlados. Não valida API/banco reais, autorização do servidor, produção ou hardware. Conferência após integrar as mudanças remotas da main (telões/tema), sem alterar a aparência das análises. Roteiro completo e downloads aprovados; prints anteriores preservados.
+
+| Resultado observado | Viewport | Captura |
+| --- | --- | --- |
+| Categorias no topo, gráficos e filtros; sem overflow da página | 1440×1000 / 768×1024 / 390×844 | [Desktop claro](2026-10-24%20-%20Integracao%20main/desktop-light.png) · [Tablet claro](2026-10-24%20-%20Integracao%20main/tablet-light.png) · [Celular claro](2026-10-24%20-%20Integracao%20main/celular-light.png) |
+| Mesma organização no tema escuro | 1440×1000 / 768×1024 / 390×844 | [Desktop escuro](2026-10-24%20-%20Integracao%20main/desktop-dark.png) · [Tablet escuro](2026-10-24%20-%20Integracao%20main/tablet-dark.png) · [Celular escuro](2026-10-24%20-%20Integracao%20main/celular-dark.png) |
+| Primeira carga sem números inventados ou aviso prematuro de ausência de observação | 1440×1000 | [Placeholders](2026-10-24%20-%20Integracao%20main/carregamento-inicial.png) |
+| Comparação lenta sem bloquear gráficos do período atual | 1440×1000 | [Comparação pendente](2026-10-24%20-%20Integracao%20main/comparacao-lenta.png) |
+| Reconsulta mantém conteúdo e identifica a última consulta válida | 1440×1000 | [Atualização](2026-10-24%20-%20Integracao%20main/atualizando-sem-apagar.png) |
+| Recorte aplicado por setor A e PCD com quatro vagas dessa categoria | 1440×1000 | [Filtro PCD](2026-10-24%20-%20Integracao%20main/filtro-pcd.png) |
+| Erro ao atualizar preserva resultado anterior e oferece nova tentativa | 1440×1000 | [Erro na atualização](2026-10-24%20-%20Integracao%20main/erro-com-ultima-consulta.png) |
+| Falha inicial sem exibir contagens; recuperação exercitada sem reload | 1440×1000 | [Erro inicial](2026-10-24%20-%20Integracao%20main/erro-inicial.png) |
+| Falha isolada da comparação sem perder a análise principal | 1440×1000 | [Comparação indisponível](2026-10-24%20-%20Integracao%20main/comparacao-indisponivel.png) |
+| Ausência de histórico mantém contagens do cadastro e aviso próprio | 1440×1000 | [Sem observação](2026-10-24%20-%20Integracao%20main/sem-observacao.png) |
+| Seleção de ponto e expansão de tabela via teclado | 1440×1000 | [Teclado](2026-10-24%20-%20Integracao%20main/teclado-detalhes.png) |
+| Série de 31 dias: seleção do último ponto e rolagem só no gráfico | 390×844 | [31 dias no celular](2026-10-24%20-%20Integracao%20main/periodo-31-dias-celular.png) |
+
+## 23/10/2026 — categorias no topo e carregamento das análises
+
+Rota `/painel/analise`, perfil gerente fictício, frontend local `http://127.0.0.1:5173`. Edge headless/Playwright; Browser plugin ausente. Origem: respostas fictícias interceptadas, com atrasos e falhas controlados. Não valida API/banco reais, autorização do servidor, produção ou hardware. Revisão complementar à recuperação visual abaixo; prints anteriores preservados.
+
+| Resultado observado | Viewport | Captura |
+| --- | --- | --- |
+| Categorias no topo, gráficos e filtros; sem overflow da página | 1440×1000 / 768×1024 / 390×844 | [Desktop claro](2026-10-23%20-%20Categorias%20e%20carregamento/desktop-light.png) · [Tablet claro](2026-10-23%20-%20Categorias%20e%20carregamento/tablet-light.png) · [Celular claro](2026-10-23%20-%20Categorias%20e%20carregamento/celular-light.png) |
+| Mesma organização no tema escuro | 1440×1000 / 768×1024 / 390×844 | [Desktop escuro](2026-10-23%20-%20Categorias%20e%20carregamento/desktop-dark.png) · [Tablet escuro](2026-10-23%20-%20Categorias%20e%20carregamento/tablet-dark.png) · [Celular escuro](2026-10-23%20-%20Categorias%20e%20carregamento/celular-dark.png) |
+| Primeira carga sem números inventados ou aviso prematuro de ausência de observação | 1440×1000 | [Placeholders](2026-10-23%20-%20Categorias%20e%20carregamento/carregamento-inicial.png) |
+| Comparação lenta sem bloquear gráficos do período atual | 1440×1000 | [Comparação pendente](2026-10-23%20-%20Categorias%20e%20carregamento/comparacao-lenta.png) |
+| Reconsulta mantém conteúdo e identifica a última consulta válida | 1440×1000 | [Atualização](2026-10-23%20-%20Categorias%20e%20carregamento/atualizando-sem-apagar.png) |
+| Recorte aplicado por setor A e PCD com quatro vagas dessa categoria | 1440×1000 | [Filtro PCD](2026-10-23%20-%20Categorias%20e%20carregamento/filtro-pcd.png) |
+| Erro ao atualizar preserva resultado anterior e oferece nova tentativa | 1440×1000 | [Erro na atualização](2026-10-23%20-%20Categorias%20e%20carregamento/erro-com-ultima-consulta.png) |
+| Falha inicial sem exibir contagens; recuperação exercitada sem reload | 1440×1000 | [Erro inicial](2026-10-23%20-%20Categorias%20e%20carregamento/erro-inicial.png) |
+| Falha isolada da comparação sem perder a análise principal | 1440×1000 | [Comparação indisponível](2026-10-23%20-%20Categorias%20e%20carregamento/comparacao-indisponivel.png) |
+| Ausência de histórico mantém contagens do cadastro e aviso próprio | 1440×1000 | [Sem observação](2026-10-23%20-%20Categorias%20e%20carregamento/sem-observacao.png) |
+| Seleção de ponto e expansão de tabela via teclado | 1440×1000 | [Teclado](2026-10-23%20-%20Categorias%20e%20carregamento/teclado-detalhes.png) |
+| Série de 31 dias: seleção do último ponto e rolagem só no gráfico | 390×844 | [31 dias no celular](2026-10-23%20-%20Categorias%20e%20carregamento/periodo-31-dias-celular.png) |
+
+## 23/10/2026 — recuperação visual das análises
+
+Rota: `/painel/analise`, perfil gerente fictício, frontend local em `http://127.0.0.1:5173`. Origem: respostas sintéticas interceptadas pelo Playwright/Edge, sem banco ou conta real. Plugin Browser ausente. Não comprova produção, autorização do servidor ou hardware. Referência visual: composição registrada em 17/10; histórico de 21/10 preservado.
+
+| Estado observado | Viewport | Evidência |
+| --- | --- | --- |
+| Linha com lacuna, roscas e barras; tabela recolhida, tema claro | 1440×1000 / 768×1024 / 390×844 | [Desktop](2026-10-23%20-%20Analises%20graficas/desktop-light.png) · [Tablet](2026-10-23%20-%20Analises%20graficas/tablet-light.png) · [Celular](2026-10-23%20-%20Analises%20graficas/celular-light.png) |
+| Mesmos estados no tema escuro | 1440×1000 / 768×1024 / 390×844 | [Desktop escuro](2026-10-23%20-%20Analises%20graficas/desktop-dark.png) · [Tablet escuro](2026-10-23%20-%20Analises%20graficas/tablet-dark.png) · [Celular escuro](2026-10-23%20-%20Analises%20graficas/celular-dark.png) |
+| Seleção de ponto e tabela acionadas por teclado | 1440×1000 | [Detalhes](2026-10-23%20-%20Analises%20graficas/detalhes-e-teclado.png) |
+| Recorte por setor e categoria | 1440×1000 | [Filtros](2026-10-23%20-%20Analises%20graficas/filtros.png) |
+| Ausência de observações sem inferir estacionamento vazio | 1440×1000 | [Sem observação](2026-10-23%20-%20Analises%20graficas/sem-observacao.png) |
+| Falha de consulta identificada | 1440×1000 | [Erro](2026-10-23%20-%20Analises%20graficas/erro.png) |
+
+## 21/10/2026 — interface atual e revisão geral
+
+Capturas da aplicação local em `http://127.0.0.1:5183`, com API Express e PostgreSQL descartável reais. Usamos somente contas e dados fictícios do Shopping Exemplo; não interceptamos a API. Edge headless/Playwright foi utilizado porque o plugin Browser não está disponível. Os resultados, a limpeza e os limites estão na [revisão geral](../Documentação/revisao-geral-2026-10-21.md).
+
+| Tela e perfil | Viewport | Captura |
+| --- | --- | --- |
+| Landing — público | 1440×1000 | [Abertura](2026-10-21%20-%20Revisao%20geral/landing-desktop.png) · [Página completa](2026-10-21%20-%20Revisao%20geral/landing-completa-desktop.png) |
+| Landing — público | 390×844 | [Celular, página completa](2026-10-21%20-%20Revisao%20geral/landing-mobile.png) |
+| Login — público | 1440×1000 / 390×844 | [Desktop](2026-10-21%20-%20Revisao%20geral/login-desktop.png) · [Celular](2026-10-21%20-%20Revisao%20geral/login-mobile.png) |
+| Mapa `/painel` — Gerente | 1440×1000 / 390×844 | [Desktop](2026-10-21%20-%20Revisao%20geral/mapa-desktop.png) · [Celular](2026-10-21%20-%20Revisao%20geral/mapa-mobile.png) |
+| Monitoramento `/painel` — Gerente | 1440×1000 | [Busca de sensor/vaga](2026-10-21%20-%20Revisao%20geral/monitoramento-desktop.png) |
+| Análise `/painel/analise` — Gerente | 1440×1000 / 768×1024 / 390×844 | [Desktop](2026-10-21%20-%20Revisao%20geral/analise-desktop.png) · [Tablet](2026-10-21%20-%20Revisao%20geral/analise-tablet.png) · [Celular](2026-10-21%20-%20Revisao%20geral/analise-mobile.png) |
+| Análise — Gerente, tema escuro | 1440×1000 | [Tema escuro](2026-10-21%20-%20Revisao%20geral/analise-escuro-desktop.png) |
+| Análise — Gerente, setor e PCD | 1440×1000 | [Filtros aplicados](2026-10-21%20-%20Revisao%20geral/analise-filtros-desktop.png) |
+| Análise — Gerente, período sem histórico | 1440×1000 | [Ausência de observação](2026-10-21%20-%20Revisao%20geral/analise-sem-observacao.png) |
+| Shoppings `/admin/shoppings` — Admin | 1440×1000 | [Lista administrativa](2026-10-21%20-%20Revisao%20geral/admin-shoppings-desktop.png) |
+| Estrutura `/admin/shoppings/:id/estrutura` — Admin | 1440×1000 | [Equipamentos](2026-10-21%20-%20Revisao%20geral/equipamentos-desktop.png) · [Instalações de telão](2026-10-21%20-%20Revisao%20geral/teloes-admin-desktop.png) |
+| Editor na estrutura — Admin | 1440×1000 / 390×844 | [Desktop](2026-10-21%20-%20Revisao%20geral/editor-desktop.png) · [Celular](2026-10-21%20-%20Revisao%20geral/editor-mobile.png) |
+| Telão `/telao/:id` — credencial própria | 1920×1080 / 1366×768 | [Full HD](2026-10-21%20-%20Revisao%20geral/telao-desktop.png) · [1366×768](2026-10-21%20-%20Revisao%20geral/telao-desktop-1366.png) |
+| Telão — credencial própria | 768×1024 / 390×844 | [Tablet](2026-10-21%20-%20Revisao%20geral/telao-tablet.png) · [Celular](2026-10-21%20-%20Revisao%20geral/telao-mobile.png) |
+| Telão — evento offline | 390×844 | [Contagens ocultadas](2026-10-21%20-%20Revisao%20geral/telao-offline-mobile.png) |
+
+As imagens de análise, landing móvel e telão móvel/tablet incluem a página completa; o viewport indica a largura e altura de navegação usadas. A regra de manter prints após alterações de design/frontend está no [AGENTS.md](../../../AGENTS.md). As capturas abaixo de datas anteriores permanecem como histórico e não substituem esta rodada.
+
+## Personas — material recebido e retratos ilustrativos (21/10/2026)
+
+| Persona | Arquivo | Origem |
+| --- | --- | --- |
+| Carlos | [Perfil original](Personas/carlos-perfil-original.jpg) e [necessidades originais](Personas/carlos-necessidades-original.jpg) | Páginas `5.jpg` e `6.jpg` originais do projeto; mantidas integralmente. |
+| Mariana | [Perfil](Personas/mariana-perfil-slide.png), [necessidades](Personas/mariana-necessidades-slide.png) e [retrato ilustrativo](Personas/mariana-retrato-ilustrativo.png) | Retrato gerado com ferramenta de imagem; slides diagramados a partir de hipóteses, sem representar usuária entrevistada. |
+| Rafael | [Perfil](Personas/rafael-perfil-slide.png), [necessidades](Personas/rafael-necessidades-slide.png) e [retrato ilustrativo](Personas/rafael-retrato-ilustrativo.png) | Retrato gerado com ferramenta de imagem; slides diagramados a partir de hipóteses, sem representar operador entrevistado. |
+
+Ver [[Vaggu/Especificações/Personas]] para fatos, hipóteses e questões de validação. Os retratos anteriores citados no documento de 16/10 não foram localizados.
+
+Revisamos os quatro slides em 21/10 para acompanhar a referência original de Carlos: Poppins, retratos recortados, textura, retículas e destaques amarelos. A [visão geral dos seis slides](Personas/personas-visao-geral.png) permite comparar os conjuntos. O [registro dos assets](Personas/README.md) documenta origens, prompts de preparação e reprodução local.
+
+Capturas geradas durante validações locais da interface e referências visuais do projeto. Elas documentam o estado observado ou planejado na data de origem; não comprovam sensores, serviços externos, produção nem a interface atual sem nova validação.
 
 > [!important] Estado histórico
-> As capturas existentes de P02, P03, P04 e “Melhorias — interações e gerentes” são registros históricos de versões anteriores. O código atual pode divergir delas. Em especial, a exclusão de gerente e o aviso de desfazer mostrados nas imagens antigas não estão disponíveis no frontend atual.
+> As capturas de P02, P03, P04 e “Melhorias — interações e gerentes” são registros históricos de versões anteriores. O código atual pode divergir delas. A exclusão reversível de gerente está novamente implementada na ficha atual, mas os prints antigos não comprovam seu visual de hoje.
+
+## 24/09/2026 — capturas públicas históricas
+
+Capturadas no frontend local com Chromium/Playwright após aguardar as animações. A largura móvel foi 390 px e a desktop, 1440 px. Não havia sessão autenticada, banco ou deploy sob teste; portanto estas imagens **não** validam Admin, gerente, mapa ou produção.
+
+| Área | Captura | O que mostra |
+| --- | --- | --- |
+| Landing móvel | ![[Vaggu/Evidências visuais/landing-mobile-2026-09-24.png]] | Hero e acesso ao login em 390 px. |
+| Rodapé móvel | ![[Vaggu/Evidências visuais/rodape-mobile-2026-09-24.png]] | Marca, chamada e links, sem a imagem de celulares. |
+| Rodapé desktop | ![[Vaggu/Evidências visuais/rodape-desktop-2026-09-24.png]] | Imagem de celulares preservada em 1440 px. |
+| Login móvel | ![[Vaggu/Evidências visuais/login-mobile-2026-09-24.png]] | Formulário de entrada em 390 px, sem credenciais. |
+
+No ensaio, o documento não apresentou transbordamento horizontal nas duas larguras e o navegador não registrou erros de página. A ausência de número oficial explica por que o rodapé não mostra botão de WhatsApp; outras chamadas da landing ainda precisam da mesma guarda.
 
 ## P02 — Login — histórico
 
 Exemplo principal: ![[Vaggu/Evidências visuais/P02 - Login/login-desktop-final.png]]
 
 - `login-desktop.png` e `login-mobile.png`: composição inicial validada.
-- `login-desktop-com-assets.png` e `login-mobile-com-assets.png`: aplicação dos assets entregues pela equipe.
+- `login-desktop-com-assets.png` e `login-mobile-com-assets.png`: aplicação dos assets de referência do projeto.
 - `login-desktop-final.png` e `login-mobile-final.png`: resultado final usado na validação do P02.
 
 ## P03 — Administração — histórico
@@ -41,17 +230,94 @@ As capturas foram copiadas de pastas temporárias de validação em 12/09/2026. 
 Exemplo principal: ![[Vaggu/Evidências visuais/Melhorias - interações e gerentes/confirmacao-excluir-gerente.png]]
 
 - `login-rabisco-animado.png`: resultado final do contorno SVG desenhado em torno de “vagas”.
-- `confirmacao-excluir-gerente.png`: modal existente em uma versão anterior, antes de qualquer alteração no acesso; não representa a ficha atual.
-- `aviso-desfazer-exclusao.png`: versão anterior com gerente oculto e ação “Desfazer” durante sete segundos; o frontend atual não oferece esse fluxo.
+- `confirmacao-excluir-gerente.png`: modal de uma versão anterior; não representa necessariamente a ficha atual.
+- `aviso-desfazer-exclusao.png`: aparência anterior da ação “Desfazer” durante sete segundos. O comportamento existe novamente, mas precisa de print atual para comparação visual.
 
-## Planejamento e identidade — material fornecido pela equipe
+## Planejamento e identidade — material de referência do projeto
 
 Pasta de destino: `Vaggu/Evidências visuais/Planejamento/`.
 
 - `sprint-03-planejamento-09-09-2026.jpeg`: quadro da Sprint 3, com período de 09/09 a 16/09, divisão inicial de tarefas para API/banco, Arduino, login e landing page e resumo do planejamento.
 - `sprint-04-divisao-equipe.jpeg`: folha da Sprint 4 com divisão de documentação, cronogramas, prototipação de Arduino, pesquisa de Power BI, banco de dados e preparação de novo pitch.
-- `guia-identidade-visual-vaggu.png`: guia fornecido pela equipe com logotipo, Poppins e paleta `#ffe100`, `#ffeb54`, `#fff49d`, `#343231`, `#171717`, `#000000` e `#ffffff`. É referência da equipe, não extração do Figma.
+- `guia-identidade-visual-vaggu.png`: guia de referência do projeto com logotipo, Poppins e paleta `#ffe100`, `#ffeb54`, `#fff49d`, `#343231`, `#171717`, `#000000` e `#ffffff`. É referência visual do projeto; não foi extraída do Figma.
 
 Esses três arquivos registram planejamento e direção visual; não comprovam a conclusão das tarefas citadas nem fidelidade das telas ao Figma.
 
 Ver [[Vaggu/Diário/2026-09-12]] e [[Vaggu/Vaggu]].
+
+## 15/10/2026 — editor visual e monitoramento
+
+Capturas locais com Edge/Playwright, API e PostgreSQL reais exclusivos de QA. Usam contas de ensaio e o Shopping Exemplo; não são capturas da publicação remota nem evidência de ESP32 físico. Decidimos preservar as capturas no repositório. O [registro da entrega](../Documenta%C3%A7%C3%A3o/edicao-visual-e-monitoramento.md) descreve contratos, testes e limites.
+
+| Captura | O que comprova |
+| --- | --- |
+| [Editor desktop](2026-10-15%20-%20Editor%20e%20sensores/editor-desktop.png) | Seleção direta, controles de tamanho/rotação, mapa e salvamento sem tabela de X/Y. |
+| [Editor escuro](2026-10-15%20-%20Editor%20e%20sensores/editor-escuro.png) | Mesmos controles no tema escuro. |
+| [Editor mobile](2026-10-15%20-%20Editor%20e%20sensores/editor-mobile.png) | Controles adaptados à largura de 390 px, mapa navegável internamente. |
+| [Monitoramento desktop](2026-10-15%20-%20Editor%20e%20sensores/monitoramento-desktop.png) | Contagens por situação, filtros e cartões de sensores/placas. |
+| [Monitoramento mobile](2026-10-15%20-%20Editor%20e%20sensores/monitoramento-mobile.png) | Organização do monitoramento em tela pequena. |
+| [Confirmação pendente](2026-10-15%20-%20Editor%20e%20sensores/sensor-confirmacao.png) | Sensor, placa, horários e transição pendente no detalhe de N-03. |
+| [Sensor sem resposta](2026-10-15%20-%20Editor%20e%20sensores/sensor-sem-resposta.png) | Falha individual com o registro de contato da placa preservado. |
+| [Análise para apresentação](2026-10-15%20-%20Editor%20e%20sensores/analise-apresentacao.png) | Indicadores do exemplo sem os antigos selos de origem sintética, conforme solicitado. |
+
+## Telões e análises — 17/10/2026
+
+O [registro da entrega](../Documentação/entrega-teloes-analises-2026-10-17.md) reúne os oito prints atuais, resoluções, origem local, mudanças, verificações e limites. Inclui telão de entrada/setores, rosca corrigida, cobertura por setor e filtro responsivo nos temas claro e escuro.
+
+
+## Planejamento — fotografias recebidas em 19/10/2026
+
+Quatro arquivos originais copiados das imagens originais do planejamento, preservados sem edição. As cópias antigas acima continuam como histórico. Os horários nos nomes de origem identificam os anexos, não a realização das sprints.
+
+| Arquivo em Planejamento/ | Anexo de origem | Período escrito na folha |
+| --- | --- | --- |
+| [Sprint 3](Planejamento/sprint-03-09-a-16-09-2026.jpeg) | WhatsApp Image 2026-10-19 at 15.59.19.jpeg | 09/09–16/09/2026 |
+| [Sprint 4](Planejamento/sprint-04-23-a-30-09-2026.jpeg) | WhatsApp Image 2026-10-19 at 15.59.31.jpeg | 23/09–30/09 |
+| [Sprint 5](Planejamento/sprint-05-05-a-19-10-2026.jpeg) | WhatsApp Image 2026-10-19 at 16.04.39.jpeg | 05/10–19/10 |
+| [Sprint 6](Planejamento/sprint-06-19-a-28-10-2026.jpeg) | WhatsApp Image 2026-10-19 at 16.04.49.jpeg | 19/10–28/10 |
+
+O contexto do conjunto é 2026; o ano está explícito na folha da Sprint 3. A transcrição completa, responsáveis e limites estão em [[Vaggu/Planejamento/Sprints do projeto]]. As Sprints 1–2 têm somente o registro de memória do projeto. As fotografias comprovam o planejamento registrado, não a entrega ou homologação dos componentes.
+
+
+## 21/10/2026 — ajustes dos cards, exclusão e conta
+
+Capturas locais com Edge/Playwright, API e PostgreSQL, Shopping Exemplo e conta temporária fictícia removida após a conferência. Browser plugin not available; usamos Playwright. Preservamos os cadastros já existentes.
+
+| Rota e perfil | Prints | Viewports e resultado |
+| --- | --- | --- |
+| `/painel/telao`, gerente | [Desktop](2026-10-21%20-%20Ajustes%20teloes%20e%20conta/cards-1920.png), [1366](2026-10-21%20-%20Ajustes%20teloes%20e%20conta/cards-1366.png), [tablet](2026-10-21%20-%20Ajustes%20teloes%20e%20conta/cards-tablet.png), [celular](2026-10-21%20-%20Ajustes%20teloes%20e%20conta/cards-mobile.png), [320](2026-10-21%20-%20Ajustes%20teloes%20e%20conta/cards-320.png), [horizontal](2026-10-21%20-%20Ajustes%20teloes%20e%20conta/cards-paisagem.png) | 1920×1080, 1366×768, 768×1024, 390×844, 320×568, 844×390; números ampliados e centralizados, sem rolagem. |
+| `/painel/teloes`, gerente | [Desktop](2026-10-21%20-%20Ajustes%20teloes%20e%20conta/excluir-teloes-desktop.png), [tablet](2026-10-21%20-%20Ajustes%20teloes%20e%20conta/excluir-teloes-tablet.png), [celular claro](2026-10-21%20-%20Ajustes%20teloes%20e%20conta/excluir-teloes-mobile.png), [celular escuro](2026-10-21%20-%20Ajustes%20teloes%20e%20conta/excluir-teloes-escuro-mobile.png) | 1440×1000, 768×1024, 390×844; excluir disponível para ativo e revogado. Cancelamento preserva cadastro; confirmação remove. |
+| `/painel/conta`, gerente | [Desktop](2026-10-21%20-%20Ajustes%20teloes%20e%20conta/conta-desktop.png), [tablet](2026-10-21%20-%20Ajustes%20teloes%20e%20conta/conta-tablet.png), [celular claro](2026-10-21%20-%20Ajustes%20teloes%20e%20conta/conta-mobile.png), [celular escuro](2026-10-21%20-%20Ajustes%20teloes%20e%20conta/conta-escuro-mobile.png) | 1440×1000, 768×1024, 390×844; salvar desabilitado sem diferença real, habilitado na edição e desabilitado após sucesso. |
+
+Nenhum transbordamento horizontal ou erro de página observado. A apresentação mantém tema próprio escuro. As capturas comprovam o ambiente local, sem homologação física dos televisores.
+
+## 21/10/2026 — piloto ESP32 no site publicado
+
+Rota `/admin/shoppings/d3a09b29-7e5a-4b7e-8c42-8f371d0a0001/estrutura`, perfil Admin, navegador integrado com viewport corrente. Origem: API e banco hospedados; Shopping Exemplo, cadastro de piloto sem leituras físicas recebidas ainda. Capturas comprovam cadastro, não operação dos sensores nem revisão responsiva.
+
+- [Importação confirmada: três atualizações e 80 vagas preservadas](2026-10-21%20-%20Piloto%20ESP32/importacao-publicada.png).
+- [Equipamento e vínculos cadastrados](2026-10-21%20-%20Piloto%20ESP32/equipamento-publicado.png).
+
+Nenhuma captura da emissão de chave foi feita. Revisão desktop/tablet/celular do frontend local integrado continua pendente.
+
+## 28/10/2026 — clareza de equipamentos e manutenção
+
+Rota `/admin/shoppings/qa/estrutura`, perfil Admin fictício, origem `http://127.0.0.1:5174`. API interceptada por Playwright com dados fictícios, sem banco, emissão de chaves ou equipamento físico. Browser plugin not available; fallback Playwright/Edge. Capturas de seção longa ocultam apenas cabeçalho fixo e atalho externo durante a captura para não cobrir o conteúdo; comportamento verificado com os elementos presentes.
+
+| Viewport | Claro | Escuro | Resultado |
+| --- | --- | --- | --- |
+| Desktop 1440×1000 | [Equipamentos](2026-10-28%20-%20Clareza%20equipamentos/desktop-light.png) | [Equipamentos](2026-10-28%20-%20Clareza%20equipamentos/desktop-dark.png) | Passos, exemplos e formulário em duas colunas; sem overflow |
+| Tablet 768×1024 | [Equipamentos](2026-10-28%20-%20Clareza%20equipamentos/tablet-light.png) | [Equipamentos](2026-10-28%20-%20Clareza%20equipamentos/tablet-dark.png) | Formulários empilhados; sem overflow |
+| Celular 390×844 | [Equipamentos](2026-10-28%20-%20Clareza%20equipamentos/celular-light.png) | [Equipamentos](2026-10-28%20-%20Clareza%20equipamentos/celular-dark.png) | Textos e ações com quebra; sem overflow |
+
+Na mesma pasta: `ajuda-{desktop,tablet,celular}-{light,dark}.png` registra a explicação expansível; `manutencao-placa-{light,dark}.png` e `manutencao-sensor-{light,dark}.png` mostram o alcance da intervenção; `sem-vagas-{light,dark}.png` e `sem-placas-{light,dark}.png` mostram a orientação com associação desabilitada. Total: 20 PNGs. Ajuda acionada por Enter, foco preservado; diálogos abertos e fechados por Escape; associação enviada com código e vaga corretos, lista atualizada. Sem overlay de framework, erros JavaScript ou mensagens de erro/aviso no console. Evidência local não comprova produção, integração real ou hardware.
+
+## 04/11/2026 — Apresentação e contato empresarial
+
+Pasta: `2026-11-04 - Apresentacao WhatsApp/`. Arte final JPEG 1200×675 revisada com foto ilustrativa e marca existentes, sem dados operacionais. Páginas `/privacidade` e `/exclusao-de-dados`, perfil visitante, origem frontend local `127.0.0.1:5174`, desktop 1440×1000, tablet 768×1024 e celular 390×844: seis capturas, contato empresarial visível, sem overflow ou erro de página. Tema escuro próprio dessas páginas; não há variante clara. Navegação por Tab exercitada. Browser plugin not available: Playwright com Edge headless; Chromium empacotado ausente. Primeira tentativa de acesso entre contextos isolados expirou; servidor e navegador no mesmo contexto resolveram. Capturas locais não comprovam produção. Interface real WhatsApp ainda sem captura por ausência de sessão controlável; arte final não é print de conversa.
+
+Verificação complementar: foco por teclado visível (outline sólido), navegação Privacidade → Exclusão → Início aprovada. Ao conferir o console, identificamos HTTP 502 em `/api/v1/auth/me` no frontend local sem API disponível; as páginas públicas renderizaram normalmente, sem erro JavaScript. Não declarar console integralmente sem avisos de rede.
+
+Produção: `exclusao-producao-desktop.png`, rota `https://vaggu-tcc.onrender.com/exclusao-de-dados`, visitante, 1440×1000, dados públicos da versão 7356e12. Contato empresarial conferido também em `/privacidade`. Imagem pública HTTP 200/image/jpeg, 121.573 bytes; isso comprova acesso ao arquivo, não renderização dentro do WhatsApp.
+
+**04/11 — confirmação funcional posterior:** participante confirmou imagem, link do site, Ver recursos e Voltar ao menu no WhatsApp da versão 7356e12. Evidência por relato do participante; nenhuma captura da conversa foi recebida ou produzida. A pendência funcional desse percurso está encerrada; a captura anonimizada permanece aberta.

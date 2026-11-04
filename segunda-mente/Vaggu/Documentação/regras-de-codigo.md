@@ -4,9 +4,9 @@ Versão 1.0 • 09/09/2026 • Aplicação: novas implementações e alteraçõe
 
 ## 1. Princípios
 
-Código deve ser legível pela equipe, previsível, testável e proporcional ao TCC. Reutilizar o que já funciona. Uma estrutura organizada separa responsabilidades sem exigir uma grande quantidade de camadas vazias. A mudança deve resolver o problema solicitado e preservar comportamento não relacionado.
+Código deve ser legível por todos os integrantes, previsível, testável e proporcional ao TCC. Reutilizar o que já funciona. Uma estrutura organizada separa responsabilidades sem exigir uma grande quantidade de camadas vazias. A mudança deve resolver o problema solicitado e preservar comportamento não relacionado.
 
-A stack definida é React, TypeScript, Tailwind, Node.js, Express, Prisma e PostgreSQL. Vite consta da base do projeto. Verificar versões e organização reais antes de alterar configurações. Não migrar para Next.js, outro ORM, outro banco, microserviços ou outra biblioteca visual por preferência do agente.
+A base definida é React, TypeScript, Tailwind, Node.js, Express, Prisma e PostgreSQL. Vite consta do projeto. Verificar versões e organização reais antes de alterar configurações. Não migrar para Next.js, outro ORM, outro banco, microserviços ou outra biblioteca visual apenas por preferência pessoal.
 
 ### Clareza da documentação
 
@@ -63,7 +63,7 @@ Comentários devem acompanhar a alteração do código. Remover comentários que
 
 O [mapa do projeto](mapa-do-projeto.md) explica cada arquivo versionável, inclusive os formatos sem comentários e os componentes de origem gerada. Em toda alteração, revisar o comentário e a linha do arquivo no mapa; atualizar finalidade, relações ou caminho quando mudarem. Adições e remoções devem aparecer no mapa na mesma entrega. O estado diário continua somente no planejamento, sem criar diários por módulo.
 
-Execute `node scripts/verificar-documentacao.mjs` na raiz para detectar arquivos sem explicação, entradas removidas e duplicações. Esse comando não comprova a qualidade das descrições: revisar se uma pessoa da equipe entende o papel, a origem dos dados, os efeitos e os limites do arquivo.
+Execute `node scripts/verificar-documentacao.mjs` na raiz para detectar arquivos sem explicação, entradas removidas e duplicações. Esse comando não comprova a qualidade das descrições: revisar se qualquer integrante entende o papel, a origem dos dados, os efeitos e os limites do arquivo.
 
 Exemplo ilustrativo, sem obrigar a criação deste arquivo:
 
@@ -98,7 +98,7 @@ Esta é uma **proposta para adaptação**, não uma ordem de mover todo o reposi
 
 | Caminho proposto | Responsabilidade |
 | --- | --- |
-| `AGENTS.md` | Regras de trabalho e referências. |
+| `AGENTS.md` | Acordos de trabalho e referências. |
 | `segunda-mente/Vaggu/Documentação/` | Especificação, decisões, contratos, operação e identidade visual canônicos. |
 | `frontend/src/aplicacao/` | Composição, rotas, provedores e inicialização. |
 | `frontend/src/modulos/autenticacao/` | Login, sessão e troca de senha. |
@@ -120,9 +120,9 @@ Esta é uma **proposta para adaptação**, não uma ordem de mover todo o reposi
 | `backend/src/integracoes/` | WhatsApp e demais provedores externos. |
 | `backend/src/tarefas/` | Expiração de comunicação e processamentos periódicos. |
 | `backend/prisma/` | Schema, migrations e dados de desenvolvimento identificados. |
-| `analises/power-bi/` | Documentação de medidas e artefatos analíticos conforme o fluxo da equipe. |
+| `analises/power-bi/` | Documentação de medidas e artefatos analíticos conforme nosso fluxo. |
 | `analises/sql/` | Views e consultas analíticas versionadas. |
-| `hardware/` | Firmware e protocolo, se a equipe mantiver aqui o código das placas. |
+| `hardware/` | Firmware e protocolo, se mantivermos aqui o código das placas. |
 | `testes/` | Cenários integrados/e2e quando não estiverem junto dos módulos. |
 
 Dentro de um módulo backend, criar apenas arquivos necessários: `rotas.ts`, `validacao.ts`, `controlador.ts`, `servico.ts`, `repositorio.ts` e testes. Um controlador adapta HTTP; o serviço implementa regras; o repositório encapsula consultas. Não colocar Prisma em componentes React nem toda a regra de negócio na rota.
@@ -177,12 +177,12 @@ No frontend, co-localizar componentes e hooks usados somente pelo módulo. Promo
 - PostgreSQL é a fonte persistente; Prisma organiza schema e migrations. Não usar memória do processo como única fonte de eventos confirmados.
 - Identificadores estáveis. Imports conciliam por chave de domínio, sem recriar vagas existentes.
 - Restrições: e-mail único; código de vaga único por shopping; sensor ativo não pode ocupar duas vagas e vaga não pode ter dois sensores ativos.
-- Remover unicidade indevida de `shoppingId` no gerente para permitir vários logins no mesmo shopping.
+- Nunca tornar `shoppingId` único nos gerentes: vários logins podem pertencer ao mesmo shopping.
 - Validar vínculos cruzados em transações; usar constraints/índices quando suportados pela modelagem. Se uma regra exigir índice parcial SQL, documentá-lo na migration.
 - Atualizar estado e inserir evento de transição na mesma transação.
 - Concorrência precisa impedir dois processadores de confirmar o mesmo evento ou duas importações de sobrescreverem revisões sem controle.
 - Preservar histórico em desativação. Não usar cascata destrutiva para apagar eventos junto com vaga/placa/andar.
-- Guardar UTC e exibir no fuso cadastrado do shopping; para Cotia, usar `America/Sao_Paulo`, não deslocamento fixo embutido em todas as consultas.
+- Guardar horários em UTC e informar qual fuso é usado na exibição. Como o cadastro atual não possui fuso por shopping, não presumir essa informação em consultas ou relatórios.
 - Mudanças de categoria, andar, setor e sensor precisam de vigência ou fotografia histórica para análises passadas.
 - Validar a migration sobre dados de teste representativos e conferir preservação dos vínculos. Nunca usar reset de banco real como solução de migração.
 
@@ -192,7 +192,7 @@ Manter `.env.example` com nomes e descrições, sem segredos. Exemplos de config
 
 Validar variáveis na inicialização. Não espalhar números mágicos. Explicar unidades no nome ou no contrato. Não enviar variáveis privadas ao bundle do frontend.
 
-Frontend pode ficar na Vercel. A API e a rotina de expiração precisam de execução compatível com o mecanismo escolhido. Não depender de um `setInterval` em função efêmera para um serviço que exige continuidade. Confirmar capacidade real de conexões persistentes antes de adotar Socket.IO.
+A interface e a API são publicadas juntas no Render na configuração atual. A rotina que identifica sensores sem resposta precisa de execução contínua; não pode depender de um processo que seja encerrado entre chamadas. Confirmar o suporte da hospedagem antes de adotar conexões persistentes.
 
 Logs devem permitir correlacionar evento, equipamento, shopping e falha sem registrar conteúdo sensível. Monitorar erros de ingestão, atrasos de expiração e falhas de atualização analítica. Documentar inicialização, recuperação e verificação dos serviços.
 
@@ -206,7 +206,7 @@ Logs devem permitir correlacionar evento, equipamento, shopping e falha sem regi
 - Mensagem: `feat(gerentes): permitir logins individuais no mesmo shopping`.
 - PR: problema, mudança de comportamento, validação, migrations e limitações relevantes.
 - Não comitar artefatos de build, dependências, segredos, dumps reais ou resultados temporários.
-- Para Power BI, revisar dados incluídos no PBIX antes de qualquer compartilhamento; ele pode conter dados importados. Seguir a forma de versionamento escolhida pela equipe, sem prometer diffs úteis para um binário.
+- Para Power BI, revisar dados incluídos no PBIX antes de qualquer compartilhamento; ele pode conter dados importados. Seguir a forma de versionamento definida no projeto, sem prometer diffs úteis para um binário.
 
 ## 11. Checklist rápido de revisão
 

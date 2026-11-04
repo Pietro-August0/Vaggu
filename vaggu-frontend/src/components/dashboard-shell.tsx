@@ -8,13 +8,24 @@ import {
   LogOut,
   Menu,
   MessageCircle,
+  Moon,
+  Sun,
+  Map,
+  ChartNoAxesCombined,
+  ChevronDown,
+  UsersRound,
+  UserRound,
+  Monitor,
 } from "lucide-react"
-import { useState, type ReactNode } from "react"
+import { useTheme } from "next-themes"
+import { useEffect, useRef, useState, type ReactNode } from "react"
 import { Link, useLocation, useNavigate } from "react-router-dom"
 
 import { useAppStore } from "@/app/app-store"
 import { Brand } from "@/components/brand"
+import { MinhaConta } from "@/components/minha-conta"
 import { Button } from "@/components/ui/button"
+import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle } from "@/components/ui/dialog"
 import {
   Sheet,
   SheetContent,
@@ -33,14 +44,14 @@ interface NavItem {
 }
 
 /** Exibe os atalhos recebidos e destaca aquele cujo endereço coincide com a rota atual. */
-function Navigation({ items, admin = false }: { items: NavItem[]; admin?: boolean }) {
+function Navigation({ items, admin = false, aoNavegar }: { items: NavItem[]; admin?: boolean; aoNavegar: () => void }) {
   const { pathname } = useLocation()
 
   return (
     <nav aria-label="Navegação do painel" className="grid gap-1">
       {items.map((item) => {
         const Icon = item.icon
-        const active = item.href === "/admin/shoppings" ? pathname.startsWith(item.href) : pathname === item.href
+        const active = pathname === item.href || (item.href === "/painel/teloes" && pathname.startsWith("/painel/telao"))
 
         return (
           <Button
@@ -48,13 +59,13 @@ function Navigation({ items, admin = false }: { items: NavItem[]; admin?: boolea
             className={cn(
               "h-11 justify-start gap-3 rounded-xl px-3",
               active
-                ? admin ? "bg-neutral-950 text-[#ffe100] hover:bg-neutral-900" : "bg-[#ffe100] text-black hover:bg-[#ffe100]/90"
+                ? admin ? "bg-neutral-950 text-[#ffe100] hover:bg-neutral-900 hover:text-[#ffe100]" : "bg-[#ffe100] text-black hover:bg-[#ffe100]/90 hover:text-black"
                 : admin ? "text-neutral-950 hover:bg-black/10 hover:text-black" : "text-neutral-400 hover:bg-neutral-900 hover:text-white",
             )}
             key={item.href}
             variant="ghost"
           >
-            <Link to={item.href}>
+            <Link to={item.href} onClick={aoNavegar} aria-current={active ? "page" : undefined}>
               <Icon className="size-4" aria-hidden="true" />
               {item.label}
             </Link>
@@ -69,20 +80,51 @@ function Navigation({ items, admin = false }: { items: NavItem[]; admin?: boolea
 export function DashboardShell({
   title,
   eyebrow,
+  shoppingId,
   children,
 }: {
   title: string
   eyebrow: string
+  shoppingId?: string
   children: ReactNode
 }) {
   const { currentUser, logout } = useAppStore()
+  const { pathname } = useLocation()
+  const { resolvedTheme, setTheme } = useTheme()
   const navigate = useNavigate()
+  const [menuAberto, setMenuAberto] = useState(false)
+  const [contaAberta, setContaAberta] = useState(false)
   const [saindo, setSaindo] = useState(false)
   const [erroSaida, setErroSaida] = useState("")
+  const tituloRef = useRef<HTMLHeadingElement>(null)
+  const rotaInicial = useRef(pathname)
   const isAdmin = currentUser?.role === "admin"
   const navItems: NavItem[] = isAdmin
-    ? [{ label: "Cadastrar", href: "/admin", icon: FilePlus2 }, { label: "Shoppings", href: "/admin/shoppings", icon: Building2 }]
-    : [{ label: "Visão geral", href: "/painel", icon: LayoutDashboard }]
+    ? [
+      { label: "Visão geral", href: "/admin", icon: LayoutDashboard },
+      { label: "Cadastrar shopping", href: "/admin/cadastrar", icon: FilePlus2 },
+      { label: "Shoppings", href: "/admin/shoppings", icon: Building2 },
+    ]
+    : [{ label: "Estacionamento", href: "/painel", icon: LayoutDashboard }, { label: "Análise", href: "/painel/analise", icon: ChartNoAxesCombined }, { label: "Telões", href: "/painel/teloes", icon: Monitor }]
+  const shoppingItems: NavItem[] = shoppingId ? [
+    { label: "Visão geral", href: `/admin/shoppings/${shoppingId}`, icon: LayoutDashboard },
+    { label: "Estrutura e mapa", href: `/admin/shoppings/${shoppingId}/estrutura`, icon: Map },
+    { label: "Gerentes", href: `/admin/shoppings/${shoppingId}/gerentes`, icon: UsersRound },
+  ] : []
+  const escuro = resolvedTheme === "dark"
+  const rotaConta = pathname === (isAdmin ? "/admin/conta" : "/painel/conta")
+  const contaVisivel = contaAberta || rotaConta
+
+  function fecharConta() {
+    setContaAberta(false)
+    if (rotaConta) navigate(isAdmin ? "/admin" : "/painel", { replace: true })
+  }
+
+  /** Move o foco para o título após navegação interna para anunciar a nova tela. */
+  useEffect(() => {
+    if (pathname === rotaInicial.current) return
+    tituloRef.current?.focus()
+  }, [pathname])
 
   /** Limpa a sessão na API e substitui a rota atual pela tela de entrada. */
   async function handleLogout() {
@@ -103,12 +145,18 @@ export function DashboardShell({
     <>
       <div className="mb-10">
         <Brand inverted={!isAdmin} />
-        <p className="mt-3 text-xs font-medium uppercase tracking-[0.2em] text-neutral-500">
-          {isAdmin ? "Administração" : "Painel do shopping"}
-        </p>
       </div>
-      <Navigation items={navItems} admin={isAdmin} />
-      <div className="mt-auto grid gap-2 pt-8">
+      <p className={cn("mb-2 text-xs font-bold uppercase tracking-[0.18em]", isAdmin ? "text-neutral-800/70" : "text-neutral-500")}>{isAdmin ? "Administração" : "Shopping"}</p>
+      <Navigation items={navItems} admin={isAdmin} aoNavegar={() => { setMenuAberto(false); setContaAberta(false) }} />
+      {shoppingItems.length > 0 && <div className="mt-6 border-t border-black/15 pt-5">
+        <p className="mb-2 text-xs font-bold uppercase tracking-[0.18em] text-neutral-800/70">Shopping atual</p>
+        <Navigation items={shoppingItems} admin aoNavegar={() => { setMenuAberto(false); setContaAberta(false) }} />
+      </div>}
+      <div className="mt-auto grid w-full min-w-0 gap-2 pt-8">
+        <Button type="button" variant="ghost" className={isAdmin ? "justify-start gap-3 text-neutral-950 hover:bg-black/10" : "justify-start gap-3 text-neutral-300 hover:bg-neutral-900 hover:text-white"} onClick={() => setTheme(escuro ? "light" : "dark")} aria-label={escuro ? "Ativar modo claro" : "Ativar modo escuro"}>
+          {escuro ? <Sun className="size-4" aria-hidden="true" /> : <Moon className="size-4" aria-hidden="true" />}
+          {escuro ? "Modo claro" : "Modo escuro"}
+        </Button>
         {!isAdmin && WHATSAPP_URL && (
           <Button asChild className="justify-start gap-3" variant="outline">
             <a href={WHATSAPP_URL} rel="noreferrer" target="_blank">
@@ -118,8 +166,29 @@ export function DashboardShell({
             </a>
           </Button>
         )}
+        <button
+          type="button"
+          className={cn(
+            "mt-3 flex min-h-14 w-full min-w-0 max-w-full items-center gap-2 overflow-hidden rounded-full p-1 text-left outline-none transition-colors focus-visible:ring-2 focus-visible:ring-offset-2",
+            isAdmin ? "bg-neutral-950 text-white hover:bg-neutral-800 focus-visible:ring-neutral-950 focus-visible:ring-offset-[#ffe100]" : "bg-[#ffe100] text-neutral-950 hover:bg-yellow-300 focus-visible:ring-[#ffe100] focus-visible:ring-offset-neutral-950",
+          )}
+          aria-haspopup="dialog"
+          aria-expanded={contaVisivel}
+          aria-label={`Abrir minha conta de ${currentUser?.nome ?? "usuário"}`}
+          data-conta-trigger=""
+          onClick={() => { setMenuAberto(false); setContaAberta(true) }}
+        >
+          <span className={cn("grid size-11 shrink-0 place-items-center rounded-full font-heading text-xl font-bold", isAdmin ? "bg-[#ffe100] text-neutral-950" : "bg-neutral-950 text-[#ffe100]")} aria-hidden="true">
+            {currentUser?.nome.trim().charAt(0).toLocaleUpperCase("pt-BR") || <UserRound className="size-5" />}
+          </span>
+          <span className="min-w-0 flex-1 overflow-hidden">
+            <span className="block truncate text-sm font-medium leading-tight">{currentUser?.nome}</span>
+            <span className={cn("block truncate text-xs font-medium leading-tight", isAdmin ? "text-white" : "text-neutral-900")}>{currentUser?.email}</span>
+          </span>
+          <ChevronDown className="mr-2 size-4 shrink-0" aria-hidden="true" />
+        </button>
         <Button
-          className={isAdmin ? "justify-start gap-3 text-neutral-950 hover:bg-black/10 hover:text-black" : "justify-start gap-3 text-neutral-400 hover:bg-neutral-900 hover:text-white"}
+          className={isAdmin ? "justify-center gap-2 text-neutral-950 hover:bg-black/10 hover:text-black" : "justify-center gap-2 text-neutral-300 hover:bg-neutral-900 hover:text-white"}
           disabled={saindo}
           onClick={() => void handleLogout()}
           variant="ghost"
@@ -132,17 +201,20 @@ export function DashboardShell({
   )
 
   return (
-    <div className={isAdmin ? "min-h-screen bg-[#171717] text-neutral-950" : "min-h-screen bg-[#f5f5f3] text-neutral-950"}>
+    <div className="painel-vaggu min-h-screen bg-[#f5f5f3] text-neutral-950 dark:bg-[#171717] dark:text-neutral-100">
+      <a href="#conteudo-principal" className="fixed left-4 top-3 z-[100] -translate-y-20 rounded-lg bg-neutral-950 px-4 py-2 font-semibold text-white shadow-lg transition-transform focus:translate-y-0 focus:outline-none focus:ring-2 focus:ring-[#ffe100]">
+        Ir para o conteúdo principal
+      </a>
       <aside className={isAdmin ? "fixed inset-y-0 left-0 hidden w-64 flex-col bg-[#ffe100] p-6 lg:flex" : "fixed inset-y-0 left-0 hidden w-64 flex-col bg-neutral-950 p-6 lg:flex"}>
         {sideContent}
       </aside>
 
       <div className="min-w-0 max-w-full lg:pl-64">
-        <header className={isAdmin ? "sticky top-0 z-30 border-b border-white/10 bg-[#171717]/90 text-white backdrop-blur-xl" : "sticky top-0 z-30 border-b border-black/5 bg-[#f5f5f3]/90 backdrop-blur-xl"}>
-          <div className="flex min-h-20 items-center gap-4 px-4 sm:px-6 lg:px-10">
-            <Sheet>
+        <header className="sticky top-0 z-30 border-b border-black/10 bg-[#f5f5f3]/90 backdrop-blur-xl dark:border-white/10 dark:bg-[#171717]/90">
+          <div className="mx-auto flex min-h-20 w-full max-w-6xl items-center gap-4 px-4 sm:px-6 lg:px-10">
+            <Sheet open={menuAberto} onOpenChange={setMenuAberto}>
               <SheetTrigger asChild>
-                <Button aria-label="Abrir navegação" className={isAdmin ? "border-white/20 bg-white/10 text-white hover:bg-white/20 lg:hidden" : "lg:hidden"} size="icon" variant="outline">
+                <Button aria-label="Abrir navegação" className="border-black/15 bg-white/80 text-neutral-950 hover:bg-white lg:hidden dark:border-white/20 dark:bg-white/10 dark:text-white dark:hover:bg-white/20" size="icon" variant="outline">
                   <Menu aria-hidden="true" />
                 </Button>
               </SheetTrigger>
@@ -156,16 +228,32 @@ export function DashboardShell({
             </Sheet>
             <div className="min-w-0">
               <p className="text-xs font-bold uppercase tracking-[0.18em] text-neutral-500">{eyebrow}</p>
-              <h1 className="break-words font-heading text-xl font-black tracking-tight sm:text-2xl">{title}</h1>
+              <h1 ref={tituloRef} tabIndex={-1} className="break-words rounded-sm font-heading text-xl font-black tracking-tight outline-none focus-visible:ring-2 focus-visible:ring-[#ffe100] sm:text-2xl">{title}</h1>
             </div>
-            <div className={isAdmin ? "ml-auto hidden items-center gap-2 rounded-full border border-white/15 bg-white/5 px-3 py-2 text-xs font-medium text-neutral-300 sm:flex" : "ml-auto hidden items-center gap-2 rounded-full border border-black/10 bg-white px-3 py-2 text-xs font-medium text-neutral-600 sm:flex"}>
+            <div className="ml-auto hidden items-center gap-2 rounded-full border border-black/10 bg-white px-3 py-2 text-xs font-medium text-neutral-600 sm:flex dark:border-white/15 dark:bg-white/5 dark:text-neutral-300">
               <span className="size-2 rounded-full bg-[#ffe100]" aria-hidden="true" />
               Acesso autenticado
             </div>
           </div>
         </header>
-        <main className={isAdmin ? "min-w-0 max-w-full overflow-x-hidden px-0 py-0" : "min-w-0 max-w-full overflow-x-hidden px-4 py-8 sm:px-6 lg:px-10 lg:py-10"}>{erroSaida && <p role="alert" className="m-5 text-red-700">{erroSaida}</p>}{children}</main>
+        <main id="conteudo-principal" tabIndex={-1} className={isAdmin ? "min-w-0 max-w-full overflow-x-hidden px-0 py-0" : "min-w-0 max-w-full overflow-x-hidden px-4 py-8 sm:px-6 lg:px-10 lg:py-10"}>{erroSaida && <p role="alert" className="m-5 text-red-700">{erroSaida}</p>}{children}</main>
       </div>
+      <Dialog open={contaVisivel} onOpenChange={(aberto) => { if (!aberto) fecharConta() }}>
+        <DialogContent
+          className="max-h-[calc(100dvh-2rem)] overflow-y-auto p-5 sm:max-w-2xl sm:p-7"
+          onCloseAutoFocus={(evento) => {
+            const gatilhos = document.querySelectorAll<HTMLButtonElement>("[data-conta-trigger]")
+            const visivel = [...gatilhos].find((gatilho) => gatilho.getClientRects().length > 0)
+            if (visivel) { evento.preventDefault(); visivel.focus() }
+          }}
+        >
+          <DialogHeader className="pr-9">
+            <DialogTitle className="font-heading text-2xl">Minha conta</DialogTitle>
+            <DialogDescription>Atualize seus dados pessoais e gerencie sua senha.</DialogDescription>
+          </DialogHeader>
+          <MinhaConta />
+        </DialogContent>
+      </Dialog>
     </div>
   )
 }

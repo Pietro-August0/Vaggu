@@ -18,7 +18,7 @@
   content: "";
   position: absolute;
   inset: 0;
-  background: linear-gradient(90deg, #00000010 15%, #00000045 43%, #000000e8 67%, #000000f5 100%);
+  background: linear-gradient(90deg, #000000df 0%, #000000bd 30%, #00000035 60%, #00000008 85%);
   pointer-events: none;
 }
 
@@ -26,7 +26,7 @@
   position: relative;
   z-index: 1;
   display: flex;
-  justify-content: flex-end;
+  justify-content: flex-start;
   max-width: 1264px;
   margin: auto;
   padding: 72px 32px;
@@ -132,7 +132,7 @@
   }
 
   .operacao-vaggu::after {
-    background: linear-gradient(90deg, #00000010, #000000b3 45%, #000000f5 75%);
+    background: linear-gradient(90deg, #000000f5, #000000b3 55%, #00000010 90%);
   }
 }
 
@@ -141,7 +141,7 @@
     position: relative;
     display: block;
     height: 280px;
-    object-position: 42% center;
+    object-position: 66% center;
   }
 
   .operacao-vaggu::after {

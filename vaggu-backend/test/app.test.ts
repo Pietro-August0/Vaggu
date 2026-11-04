@@ -1,3 +1,4 @@
+// Exercita as rotas e proteções HTTP da aplicação sem depender de serviços externos.
 import test from 'node:test';
 import assert from 'node:assert/strict';
 import request from 'supertest';
@@ -12,6 +13,15 @@ test('health responde sem consultar o banco', async () => {
   assert.deepEqual(response.body, { status: 'ok', servico: 'vaggu-api' });
   assert.equal(called, false);
   assert.equal(response.headers['x-powered-by'], undefined);
+});
+
+test('política de segurança permite somente a API externa de CEP nas conexões', async () => {
+  const response = await request(app).get('/api/v1/health').expect(200);
+  const politica = response.headers['content-security-policy'];
+  assert.match(politica, /connect-src 'self' https:\/\/viacep\.com\.br/);
+  assert.doesNotMatch(politica, /connect-src[^;]*\*/);
+  assert.match(politica, /img-src 'self' data: blob:/);
+  assert.doesNotMatch(politica, /img-src[^;]*\*/);
 });
 
 test('readiness confirma a consulta ao banco', async () => {

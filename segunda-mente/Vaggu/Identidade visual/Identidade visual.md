@@ -1,12 +1,16 @@
 # Identidade visual
 
+## Aprovação do site — 16/10/2026
+
+Em 16/10/2026, aprovamos o site como evolução do escopo criado no Figma. O visual atual do site é a referência vigente; o Figma documenta a proposta inicial e sua evolução, sem obrigação de reproduzir exatamente suas medidas ou componentes. A pendência de aprovação visual foi encerrada. Essa decisão não comprova testes de acessibilidade, funcionamento de integrações ou aprovação automática de alterações futuras.
+
 ## Direção confirmada
 
 Marca VAGGU, amarelo em destaque, preto e cinzas, textos claros, interface minimalista e legível. Manter proporções dos assets, consistência dos ícones e responsividade web.
 
-## Guia fornecido pela equipe em 23/09/2026
+## Guia de referência do projeto em 23/09/2026
 
-A equipe forneceu uma imagem de referência com a marca, a família Poppins e a paleta abaixo. Estes valores são **evidência entregue pela equipe**, não extração do Figma nem confirmação de medidas, espaçamentos ou componentes do arquivo de design.
+Registramos uma imagem de referência com a marca, a família Poppins e a paleta abaixo. Estes valores são **evidência interna do projeto**, não extração do Figma nem confirmação de medidas, espaçamentos ou componentes do arquivo de design.
 
 | Papel no guia | Valor |
 | --- | --- |
@@ -19,7 +23,7 @@ A equipe forneceu uma imagem de referência com a marca, a família Poppins e a 
 | Branco | `#ffffff` |
 | Família tipográfica | Poppins |
 
-Referência visual versionada pela equipe: ![[Vaggu/Evidências visuais/Planejamento/guia-identidade-visual-vaggu.png]]
+Referência visual versionada: ![[Vaggu/Evidências visuais/Planejamento/guia-identidade-visual-vaggu.png]]
 
 Os papéis semânticos de cada tom na interface ainda devem ser conciliados com contraste, tokens reais do código e contexto da tela. Não substituir automaticamente cores de estado, foco ou feedback pelos amarelos da marca.
 
@@ -28,7 +32,7 @@ Os papéis semânticos de cada tom na interface ainda devem ser conciliados com 
 - [Figma principal — página Web](https://www.figma.com/design/xKI9wjoiZ5CoXC3DXIJNmq/Vaggu?node-id=2022-2)
 - [Estudos responsivos citados no histórico](https://www.figma.com/design/QhXkyaGwnHo3zJ4yijDLAu/Sem-t%C3%ADtulo?node-id=73-1103)
 
-O segundo arquivo é uma referência histórica; não substitui automaticamente o principal. A consulta de variáveis ao Figma em 11/09 retornou erro de ausência de camada selecionada. Não foi feita extração completa nem comparação visual atual.
+Ambos os arquivos são referências do processo de design; o site aprovado prevalece para o visual atual. A consulta de variáveis ao Figma em 11/09 retornou erro de ausência de camada selecionada. Não foi feita extração completa nem comparação visual atual.
 
 ## Tokens encontrados no código
 
@@ -46,9 +50,9 @@ Fonte: vaggu-frontend/src/index.css, 11/09/2026.
 | Fonte sans geral | Geist Variable |
 | Raio base | 0.625rem |
 
-O amarelo `#FFE100`, o carvão `#171717`, o preto e o branco coincidem com valores do guia fornecido pela equipe. Essa coincidência não comprova fidelidade ao Figma. Os tons `#ffeb54`, `#fff49d` e `#343231` ainda precisam ser conciliados com os usos reais antes de virar novos tokens executáveis.
+O amarelo `#FFE100`, o carvão `#171717`, o preto e o branco coincidem com valores do guia de referência do projeto. Essa coincidência não comprova fidelidade ao Figma. Os tons `#ffeb54`, `#fff49d` e `#343231` ainda precisam ser conciliados com os usos reais antes de virar novos tokens executáveis.
 
-**Pendência:** o tema `.dark` sobrescreve a primária com cinza e a primária da sidebar com outro valor. Isso é uma observação estática do código, não uma aprovação da paleta nem comprovação de qual tema está ativo.
+O tema escuro atual mantém o amarelo principal `#FFE100`. Essa observação registra o código; a aprovação atual não depende de comparação completa com o Figma.
 
 ## Assets preservados
 

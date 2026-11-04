@@ -5,27 +5,14 @@ import { Navigate } from "react-router-dom"
 import { useAppStore } from "@/app/app-store"
 import { Brand } from "@/components/brand"
 import { ErroApi } from "@/servicos/api"
+import { codigosNovaSenha, requisitosSenha, validarTrocaDeSenha } from "@/servicos/politica-senha"
 import "./login-page.css"
 
 type CampoSenha = "senhaAtual" | "novaSenha" | "confirmacao"
 type ErrosSenha = Partial<Record<CampoSenha, string>>
 
-const requisitosSenha = [
-  { id: "tamanho", texto: "Entre 12 e 128 caracteres", testar: (senha: string) => senha.length >= 12 && senha.length <= 128 },
-  { id: "minuscula", texto: "Uma letra minúscula", testar: (senha: string) => /\p{Ll}/u.test(senha) },
-  { id: "maiuscula", texto: "Uma letra maiúscula", testar: (senha: string) => /\p{Lu}/u.test(senha) },
-  { id: "numero", texto: "Um número", testar: (senha: string) => /\p{N}/u.test(senha) },
-  { id: "simbolo", texto: "Um símbolo, como !, @ ou #", testar: (senha: string) => /[^\p{L}\p{N}\s]/u.test(senha) },
-  { id: "espaco", texto: "Sem espaços", testar: (senha: string) => senha.length > 0 && !/\s/u.test(senha) },
-] as const
-
-const codigosNovaSenha = new Set([
-  "SENHA_CURTA", "SENHA_LONGA", "SENHA_COM_ESPACO", "SENHA_SEM_MINUSCULA",
-  "SENHA_SEM_MAIUSCULA", "SENHA_SEM_NUMERO", "SENHA_SEM_SIMBOLO", "SENHA_REPETIDA",
-])
-
 export function TrocarSenhaPage() {
-  const { currentUser, trocarSenha, logout, senhaProvisoriaPendente } = useAppStore()
+  const { ready, currentUser, trocarSenha, logout, senhaProvisoriaPendente } = useAppStore()
   const [senhaAtual, setSenhaAtual] = useState(senhaProvisoriaPendente)
   const [novaSenha, setNovaSenha] = useState("")
   const [confirmacao, setConfirmacao] = useState("")
@@ -34,6 +21,7 @@ export function TrocarSenhaPage() {
   const [erroGeral, setErroGeral] = useState("")
   const [enviando, setEnviando] = useState(false)
   const trava = useRef(false)
+  if (!ready) return <main className="grid min-h-screen place-items-center" role="status">Verificando seu acesso...</main>
   if (!currentUser) return <Navigate to="/login" replace />
   if (!currentUser.trocarSenhaObrigatoria) return <Navigate to={currentUser.role === "admin" ? "/admin" : "/painel"} replace />
 
@@ -47,14 +35,11 @@ export function TrocarSenhaPage() {
   }
 
   function validarFormulario() {
-    const proximosErros: ErrosSenha = {}
-    if (!senhaAtual) proximosErros.senhaAtual = "Digite a senha provisória recebida."
-    const requisitosPendentes = requisitosSenha.filter(requisito => !requisito.testar(novaSenha))
-    if (!novaSenha) proximosErros.novaSenha = "Crie uma nova senha."
-    else if (novaSenha === senhaAtual) proximosErros.novaSenha = "A nova senha deve ser diferente da senha provisória."
-    else if (requisitosPendentes.length) proximosErros.novaSenha = "Atenda a todos os requisitos indicados abaixo."
-    if (!confirmacao) proximosErros.confirmacao = "Digite novamente a nova senha."
-    else if (novaSenha !== confirmacao) proximosErros.confirmacao = "A confirmação não coincide com a nova senha."
+    const proximosErros: ErrosSenha = validarTrocaDeSenha(senhaAtual, novaSenha, confirmacao)
+    if (proximosErros.senhaAtual) proximosErros.senhaAtual = "Digite a senha provisória recebida."
+    if (proximosErros.novaSenha === "A nova senha deve ser diferente da senha atual.") {
+      proximosErros.novaSenha = "A nova senha deve ser diferente da senha provisória."
+    }
     setErros(proximosErros)
     return Object.keys(proximosErros).length === 0
   }

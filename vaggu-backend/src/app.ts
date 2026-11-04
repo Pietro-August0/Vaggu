@@ -1,3 +1,5 @@
+import { teloesRoutes } from './teloes/routes.js';
+import { equipamentosRoutes } from './equipamentos/routes.js';
 // Monta a API Express, suas rotas e respostas de erro, sem abrir uma porta de rede.
 // Os serviços são recebidos do servidor ou substituídos por simuladores nos testes.
 import express, { type ErrorRequestHandler } from 'express';
@@ -10,6 +12,9 @@ import { gerentesRoutes, shoppingsRoutes } from './shoppings/routes.js';
 import { contaRoutes } from './conta/routes.js';
 import { estruturaAdminRoutes, estruturaGerenteRoutes } from './estrutura/routes.js';
 import { importacaoRoutes } from './importacao/routes.js';
+import { telemetriaRoutes } from './telemetria/routes.js';
+import type { TelemetriaHttpService } from './telemetria/routes.js';
+import { analiticosAdminRoutes, analiticosGerenteRoutes } from './analiticos/routes.js';
 
 type AppServices = {
   checkDatabase: () => Promise<unknown> | unknown;
@@ -20,13 +25,22 @@ type AppServices = {
   conta?: any;
   estrutura?: any;
   importacao?: any;
+  telemetria?: TelemetriaHttpService;
+  analiticos?: any;
+  teloes?: ReturnType<typeof import("./teloes/service.js").createTeloesService>;
+  equipamentos?: ReturnType<typeof import("./equipamentos/service.js").createEquipamentosService>;
 };
 
 // Injeção da consulta facilita testar HTTP sem um banco real.
-export function createApp({ checkDatabase, frontendDistPath, auth, whatsapp, shoppings, conta, estrutura, importacao }: AppServices) {
+export function createApp({ checkDatabase, frontendDistPath, auth, whatsapp, shoppings, conta, estrutura, importacao, telemetria, analiticos, equipamentos, teloes }: AppServices) {
   const app = express();
   app.disable('x-powered-by');
-  app.use(helmet());
+  // O cadastro consulta o ViaCEP no navegador; as demais conexões continuam restritas à origem da API.
+  app.use(helmet({ contentSecurityPolicy: { directives: {
+    connectSrc: ["'self'", 'https://viacep.com.br'],
+    // Os gráficos são rasterizados localmente para compor as exportações.
+    imgSrc: ["'self'", 'data:', 'blob:'],
+  } } }));
   // A assinatura da Meta depende dos bytes originais, antes da conversão para JSON.
   if (whatsapp) {
     app.use('/api/v1/whatsapp/webhook', express.raw({ type: 'application/json', limit: '64kb' }), whatsappRoutes(whatsapp));
@@ -64,6 +78,13 @@ export function createApp({ checkDatabase, frontendDistPath, auth, whatsapp, sho
     app.use('/api/v1', estruturaAdminRoutes(auth, estrutura));
   }
   if (auth && importacao) app.use('/api/v1', importacaoRoutes(auth, importacao));
+  if (auth && analiticos) {
+    app.use('/api/v1/estacionamento/analise', analiticosGerenteRoutes(auth, analiticos));
+    app.use('/api/v1', analiticosAdminRoutes(auth, analiticos));
+  }
+  if (auth && teloes) app.use('/api/v1', teloesRoutes(auth, teloes));
+  if (auth && equipamentos) app.use('/api/v1', equipamentosRoutes(auth, equipamentos));
+  if (telemetria) app.use('/api/v1/telemetria', telemetriaRoutes(telemetria));
 
   // Na hospedagem, entrega o build React pelo mesmo domínio da API. Assim, login e
   // chamadas autenticadas mantêm a política de mesma origem sem liberar CORS amplo.

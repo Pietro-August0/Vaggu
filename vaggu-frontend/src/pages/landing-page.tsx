@@ -21,7 +21,7 @@ export function LandingPage() {
   useScrollReveal()
 
   return (
-    <MotionConfig reducedMotion="never">
+    <MotionConfig reducedMotion="user">
       <div className="overflow-hidden bg-white font-landing font-light text-neutral-950">
       <header className="landing-header absolute inset-x-0 top-0 z-30">
         <div className="mx-auto flex max-w-[1440px] items-center justify-between px-5 py-6 sm:px-8 lg:px-12">
@@ -43,12 +43,14 @@ export function LandingPage() {
       <main>
         <section className="relative min-h-[760px] bg-neutral-950 text-white lg:min-h-[850px]">
           <img
-            alt="Pessoa observando o movimento urbano diante de um trem amarelo"
-            className="landing-hero-media absolute inset-0 h-full w-full object-cover object-[68%_center] sm:object-[62%_center]"
+            alt="Imagem ilustrativa de estacionamento coberto com pilares amarelos"
+            className="landing-hero-media absolute inset-0 h-full w-full object-cover object-[72%_center] sm:object-center"
             fetchPriority="high"
-            src="/assets/hero-vaggu.png"
+            width="1672"
+            height="941"
+            src="/assets/estacionamento-hero-vaggu.webp"
           />
-          <div className="absolute inset-0 bg-[linear-gradient(90deg,rgba(0,0,0,.92)_0%,rgba(0,0,0,.58)_42%,rgba(0,0,0,.08)_75%),linear-gradient(0deg,rgba(0,0,0,.5)_0%,transparent_45%)]" />
+          <div className="absolute inset-0 bg-[linear-gradient(0deg,rgba(0,0,0,.78)_0%,rgba(0,0,0,.35)_35%,transparent_72%),linear-gradient(90deg,rgba(0,0,0,.3),transparent_60%)]" />
           <div className="relative mx-auto flex min-h-[760px] max-w-[1440px] flex-col justify-end px-5 pb-14 pt-32 sm:px-8 lg:min-h-[850px] lg:px-12 lg:pb-20">
             <div className="grid min-w-0 items-end gap-12 lg:grid-cols-[1.15fr_.85fr]">
               <motion.div
@@ -136,7 +138,7 @@ export function LandingPage() {
               transition={{ duration: 0.6, delay: 0.2 }}
               viewport={{ once: true, margin: "-100px" }}
             >
-              <Card className="mx-auto mt-10 max-w-2xl overflow-hidden rounded-[2rem] border-[#ffe100] bg-[#fffdf2] text-left shadow-xl shadow-black/8 sm:mt-12">
+              <Card className="mx-auto mt-10 max-w-2xl overflow-hidden rounded-[2rem] border-[#ffe100] bg-[#fffdf2] text-left text-neutral-950 shadow-xl shadow-black/8 sm:mt-12">
                 <CardContent className="grid gap-7 p-7 sm:grid-cols-[auto_1fr] sm:p-9">
                   <div className="grid size-16 place-items-center rounded-2xl bg-[#ffe100] text-black">
                     <IconeWhatsApp className="size-8" />
@@ -164,55 +166,46 @@ export function LandingPage() {
         <OperacaoVaggu />
       </main>
 
-      <footer className="relative overflow-hidden bg-black px-5 py-16 text-white sm:px-8 lg:py-20">
-        <div className="absolute inset-y-0 right-0 hidden w-1/2 lg:block">
-          <motion.img
-            alt="Celulares amarelos com a identidade VAGGU"
-            className="h-full w-full object-contain object-right-bottom opacity-85"
-            loading="lazy"
-            src="/assets/phones-vaggu.png"
-            initial={{ opacity: 0, x: 40 }}
-            whileInView={{ opacity: 0.85, x: 0 }}
-            transition={{ duration: 0.8 }}
-            viewport={{ once: true, margin: "-100px" }}
-          />
-        </div>
-        <div className="relative mx-auto grid max-w-7xl gap-14 lg:grid-cols-2">
-          <motion.div
-            className="max-w-xl"
-            initial={{ opacity: 0, y: 20 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.6 }}
-            viewport={{ once: true, margin: "-100px" }}
-          >
-            <Brand inverted className="h-12" />
-            <p className="mt-8 text-xs font-medium uppercase tracking-[0.24em] text-[#ffe100]">Fale conosco</p>
-            <h2 className="mt-4 font-landing text-4xl font-semibold tracking-[-0.04em] sm:text-5xl">
-              Seu estacionamento começa por uma conversa.
-            </h2>
-            <Button asChild className="mt-8 h-12 rounded-full bg-[#ffe100] px-6 font-medium text-black hover:bg-[#f2d500]">
-              <a aria-label="Chamar a VAGGU no WhatsApp (abre em nova aba)" href={WHATSAPP_URL} rel="noreferrer" target="_blank">
-                <IconeWhatsApp className="size-5" />
-                Chamar no WhatsApp
-              </a>
-            </Button>
-            <div className="mt-12 flex flex-wrap items-center gap-x-5 gap-y-3 text-sm text-neutral-500">
-              <span>© 2026 VAGGU</span>
-              <Link className="underline-offset-4 hover:text-white hover:underline" to="/login">Área do cliente</Link>
-              <span>Gestão inteligente de estacionamentos</span>
-            </div>
-          </motion.div>
-          <div className="grid place-items-center lg:hidden">
-            <motion.img
-              alt="Celulares amarelos com a identidade VAGGU"
-              className="max-h-72 w-full object-contain"
-              loading="lazy"
-              src="/assets/phones-vaggu.png"
-              initial={{ opacity: 0, scale: 0.95 }}
-              whileInView={{ opacity: 1, scale: 1 }}
+      <footer className="bg-black px-5 pb-8 pt-14 text-white sm:px-8 lg:pt-20">
+        <div className="mx-auto max-w-7xl">
+          <div className="grid gap-8 lg:grid-cols-2 lg:items-center">
+            <motion.div
+              className="max-w-xl"
+              initial={{ opacity: 0, y: 20 }}
+              whileInView={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.6 }}
               viewport={{ once: true, margin: "-100px" }}
+            >
+              <Brand inverted className="h-10 sm:h-12" />
+              <p className="mt-9 text-xs font-medium uppercase tracking-[0.24em] text-[#ffe100] sm:mt-8">Fale conosco</p>
+              <h2 className="mt-3 font-landing text-3xl font-semibold tracking-[-0.04em] sm:mt-4 sm:text-5xl">
+                Seu estacionamento começa por uma conversa.
+              </h2>
+              {WHATSAPP_URL && <Button asChild className="mt-7 h-12 w-full rounded-full bg-[#ffe100] px-6 font-medium text-black hover:bg-[#f2d500] sm:mt-8 sm:w-auto">
+                <a aria-label="Chamar a VAGGU no WhatsApp (abre em nova aba)" href={WHATSAPP_URL} rel="noreferrer" target="_blank">
+                  <IconeWhatsApp className="size-5" />
+                  Chamar no WhatsApp
+                </a>
+              </Button>}
+            </motion.div>
+            <motion.img
+              alt="Celulares amarelos com a identidade VAGGU"
+              className="hidden w-full max-h-[420px] object-contain lg:block"
+              loading="lazy"
+              src="/assets/phones-vaggu.webp"
+              decoding="async"
+              width="1470"
+              height="1070"
+              initial={{ opacity: 0, x: 40 }}
+              whileInView={{ opacity: 0.85, x: 0 }}
+              transition={{ duration: 0.8 }}
+              viewport={{ once: true, margin: "-100px" }}
             />
+          </div>
+          <div className="mt-12 grid gap-6 border-t border-white/15 pt-7 text-sm sm:mt-16 sm:flex sm:items-center sm:justify-between sm:gap-8">
+            <p className="max-w-xs leading-relaxed text-neutral-400">Gestão inteligente de estacionamentos para shoppings.</p>
+            <nav aria-label="Links do rodapé" className="flex flex-wrap gap-x-6 gap-y-3"><a className="underline-offset-4 hover:text-[#ffe100] hover:underline focus-visible:outline-2 focus-visible:outline-[#ffe100]" href="#sobre">Sobre a VAGGU</a><Link className="underline-offset-4 hover:text-[#ffe100] hover:underline focus-visible:outline-2 focus-visible:outline-[#ffe100]" to="/login">Área do cliente</Link><Link className="underline-offset-4 hover:text-[#ffe100] hover:underline focus-visible:outline-2 focus-visible:outline-[#ffe100]" to="/privacidade">Privacidade</Link><Link className="underline-offset-4 hover:text-[#ffe100] hover:underline focus-visible:outline-2 focus-visible:outline-[#ffe100]" to="/exclusao-de-dados">Exclusão de dados</Link></nav>
+            <span className="text-neutral-500 sm:shrink-0">© 2026 VAGGU</span>
           </div>
         </div>
       </footer>

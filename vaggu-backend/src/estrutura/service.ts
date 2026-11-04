@@ -30,20 +30,35 @@ function proporcao(valor: unknown, campo: string, permiteZero = true): number {
 }
 
 /** Converte Decimals do Prisma em números adequados ao contrato JSON do mapa. */
-function vagaPublica(vaga: Record<string, unknown>) {
+function vagaPublica(vaga: Record<string, unknown>, timeoutSensorMs?: number, referencia = new Date(), demonstracao = false) {
   const numero = (valor: unknown) => valor === null || valor === undefined ? null : Number(valor);
-  return { id: vaga.id, codigo: vaga.codigo, tipo: vaga.tipo, estadoAtual: vaga.estadoAtual,
+  const sensor = vaga.sensor as { codigo: string; ativo: boolean; emManutencao: boolean; estadoConfirmado: string; estadoCandidato: string | null; candidatoIniciadoEm: Date | null; ultimaObservacaoEm: Date | null; expiradoEm: Date | null; dispositivo: { ativo: boolean; emManutencao: boolean; codigo: string | null; nome: string; ultimoContatoEm: Date | null } } | null | undefined;
+  const manutencao = !!sensor && (!sensor.ativo || sensor.emManutencao || !sensor.dispositivo.ativo || sensor.dispositivo.emManutencao)
+  const leituraValida = !manutencao && sensor?.ativo && sensor.expiradoEm === null && sensor.ultimaObservacaoEm !== null
+    && timeoutSensorMs !== undefined && referencia.getTime() - sensor.ultimaObservacaoEm.getTime() < timeoutSensorMs;
+  const estadoAtual = manutencao ? 'INDISPONIVEL' : demonstracao ? sensor && (!sensor.ativo || sensor.expiradoEm) ? 'INDISPONIVEL' : vaga.estadoAtual : sensor
+    ? leituraValida && ['LIVRE', 'OCUPADA'].includes(sensor.estadoConfirmado) ? sensor.estadoConfirmado : 'INDISPONIVEL'
+    : 'DESCONHECIDA';
+  const situacao = !sensor ? 'SEM_LEITURA' : manutencao ? 'MANUTENCAO' : sensor.expiradoEm || (!demonstracao && !leituraValida && sensor.ultimaObservacaoEm)
+    ? 'SEM_RESPOSTA' : !sensor.ultimaObservacaoEm || !['LIVRE', 'OCUPADA'].includes(sensor.estadoConfirmado)
+      ? 'SEM_LEITURA' : sensor.estadoCandidato ? 'CONFIRMANDO' : 'OPERANDO';
+  const monitoramento = sensor ? { sensorCodigo: sensor.codigo, placaCodigo: sensor.dispositivo?.codigo ?? null,
+    placaNome: sensor.dispositivo?.nome ?? null, ultimoContatoPlacaEm: sensor.dispositivo?.ultimoContatoEm ?? null,
+    ultimaObservacaoEm: sensor.ultimaObservacaoEm, estadoConfirmado: sensor.estadoConfirmado,
+    estadoCandidato: sensor.estadoCandidato, candidatoIniciadoEm: sensor.candidatoIniciadoEm,
+    situacao, demonstracao } : null;
+  return { id: vaga.id, codigo: vaga.codigo, tipo: vaga.tipo, estadoAtual, monitoramento,
     ativo: vaga.ativo, posicao: numero(vaga.posicaoX) === null ? null : { x: numero(vaga.posicaoX), y: numero(vaga.posicaoY),
       largura: numero(vaga.largura), altura: numero(vaga.altura), rotacao: numero(vaga.rotacao) } };
 }
 
 /** Mantém o formato de leitura igual para Admin e gerente, sem incluir credenciais de sensores. */
-function estruturaPublica(shopping: Record<string, unknown> & { andares: Array<Record<string, unknown> & { setores: Array<Record<string, unknown> & { vagas: Array<Record<string, unknown>> }> }> }) {
-  return { shopping: { id: shopping.id, nome: shopping.nome, situacaoImplantacao: shopping.situacaoImplantacao },
+function estruturaPublica(shopping: Record<string, unknown> & { andares: Array<Record<string, unknown> & { setores: Array<Record<string, unknown> & { vagas: Array<Record<string, unknown>> }> }> }, timeoutSensorMs: number, referencia: Date) {
+  return { shopping: { id: shopping.id, nome: shopping.nome, situacaoImplantacao: shopping.situacaoImplantacao, demonstracao: shopping.demonstracao },
     andares: shopping.andares.map(andar => ({ id: andar.id, nome: andar.nome, ordem: andar.ordem,
       imagemMapa: andar.imagemMapa, revisaoMapa: andar.revisaoMapa, ativo: andar.ativo,
       setores: andar.setores.map(setor => ({ id: setor.id, nome: setor.nome, ativo: setor.ativo,
-        vagas: setor.vagas.map(vagaPublica) })) })) };
+        vagas: setor.vagas.map(vaga => vagaPublica(vaga, timeoutSensorMs, referencia, shopping.demonstracao === true)) })) })) };
 }
 
 /** Traduz conflitos estruturais para mensagens de domínio sem expor detalhes do PostgreSQL. */
@@ -55,12 +70,12 @@ function conflito(error: unknown): never {
 }
 
 /** Implementa configuração e leitura da estrutura com isolamento por shopping. */
-export function createEstruturaService(prisma: PrismaClient) {
+export function createEstruturaService(prisma: PrismaClient, timeoutSensorMs: number) {
   const obter = async (shoppingId: string) => {
     const shopping = await prisma.shopping.findUnique({ where: { id: idValido(shoppingId, 'shoppingId') },
-      include: { andares: { orderBy: { ordem: 'asc' }, include: { setores: { orderBy: { nome: 'asc' }, include: { vagas: { orderBy: { codigo: 'asc' } } } } } } } });
+      include: { andares: { orderBy: { ordem: 'asc' }, include: { setores: { orderBy: { nome: 'asc' }, include: { vagas: { orderBy: { codigo: 'asc' }, include: { sensor: { include: { dispositivo: { select: { codigo: true, nome: true, ultimoContatoEm: true, ativo: true, emManutencao: true } } } } } } } } } } } });
     if (!shopping) throw new ApiError(404, 'SHOPPING_NAO_ENCONTRADO', 'Shopping não encontrado.');
-    return estruturaPublica(shopping as unknown as Parameters<typeof estruturaPublica>[0]);
+    return estruturaPublica(shopping as unknown as Parameters<typeof estruturaPublica>[0], timeoutSensorMs, new Date());
   };
   return {
     buscarEstrutura: obter,

@@ -12,10 +12,19 @@ Cada andar possui uma revisão do mapa. A posição da vaga usa `x`, `y`, largur
 
 ## Sensores e estado
 
-No P06, cada canal de sensor será associado a uma vaga já cadastrada. A placa ESP32 se autentica e envia identidade de inicialização, sequência, sensor, estado medido e instante. O backend deriva o shopping pela credencial, valida pertencimento, ordem e idempotência, aplica a confirmação consistente e registra histórico. Evento duplicado não cria nova observação; evento antigo não regride estado; silêncio expira o sensor e nunca transforma dado vencido em vaga livre.
+Na base atual do P06, cada sensor é ligado a uma vaga já cadastrada. A placa ESP32 se identifica e envia a leitura de cada sensor em uma ordem controlada. O servidor confere se tudo pertence ao mesmo shopping, ignora mensagens repetidas ou antigas, espera leituras consistentes antes de mudar o estado e guarda o histórico. Se um sensor parar de responder, a vaga fica indisponível; ela nunca é mostrada como livre por falta de informação. Essa parte já foi testada com PostgreSQL. A consulta visual de monitoramento e o detalhe por vaga já existem. Cadastro/vínculo e manutenção/ocorrências estão implementados; faltam ESP32 real, tempos definitivos e homologação publicada.
 
 ## Mapa operacional e telões
 
-O mapa consulta o estado atual por vaga e recebe atualizações sem recarga manual. O P07 produzirá contagens agregadas por shopping, andar e setor para os telões. PCD, idoso e elétrica fazem parte do total geral e aparecem como recortes, sem soma duplicada. O telão recebe apenas agregados autorizados e validade dos dados, sem sessões administrativas ou dados pessoais.
+O mapa consulta o estado e a validade individual com atualização a cada 15 segundos, pausa durante a edição e invalidação após 30 segundos ou falha de conexão. Os 30 segundos de app-store verificam a sessão e são independentes da atualização operacional. PCD, idoso e elétrica fazem parte do total e aparecem como recortes sem soma duplicada. A instalação web de telão usa credencial própria revogável e retorna apenas agregados autorizados, sem sessões administrativas ou dados pessoais.
 
-O transporte em tempo real será validado na infraestrutura. A proposta inicial é Server-Sent Events ou WebSocket, com nova consulta ao reconectar. O banco permanece a referência para recompor o estado; o canal em tempo real não substitui persistência nem isolamento.
+O gerente gerencia seus telões em `/painel/teloes`, com prévia geral e por andar. `GET/POST /api/v1/estacionamento/teloes` e `PATCH/DELETE /api/v1/estacionamento/teloes/:id` derivam o shopping da sessão no servidor. A edição muda nome/recorte, preservando ID e credencial; recortes de outro shopping ou inativos são recusados. O Admin configura equipamentos e telões em `/admin/shoppings/:shoppingId/estrutura`, na área de configuração. A página instalada `/telao/:id` consulta `GET /api/v1/teloes/:id/disponibilidade` com autorização própria a cada 15 segundos. O hash da chave fica persistido; a chave original é emitida na criação. A homologação publicada e a instalação física seguem pendentes. O banco continua sendo a referência e ausência de conexão nunca mantém um número como disponibilidade atual.
+
+
+A apresentação compartilha o mesmo componente entre prévia e instalação, usa a altura atual da janela e oferece tela cheia com saída por Esc. Mais áreas do que cabem na grade alternam automaticamente a cada oito segundos, sem rolagem. Total, andar/setor e categorias permanecem visíveis; detalhes de cobertura/parcialidade ficam na gestão e no monitoramento. Ausência de leitura válida mostra “—”, sem anunciar lotação ou disponibilidade inventada. Ver [protótipo e validação](telao-apresentacao-2026-10-21.md).
+
+### Registro histórico — prévia autenticada em 17/10/2026
+
+Na entrega de 17/10, a interface do gerente passou a incluir uma prévia por andar e setor. Ela consulta `GET /api/v1/estacionamento/estrutura` no escopo do cookie de sessão, a cada 30 segundos, e soma somente vagas com leitura válida (`OPERANDO` ou `CONFIRMANDO`) e estado confirmado livre/ocupado. Vagas sem sensor, desconhecidas ou indisponíveis ficam fora da contagem de livres e geram aviso. Falha de consulta oculta os números até a próxima resposta válida. Dados do Shopping Exemplo ficam identificados como demonstração.
+
+Esse era o limite da prévia em 17/10. A instalação autorizada e o recorte configurável foram implementados posteriormente, como descrito acima; atualização por evento não é necessária ao transporte atual por polling.

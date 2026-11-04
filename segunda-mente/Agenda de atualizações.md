@@ -6,5 +6,4 @@
 - **Ao encerrar VAGGU:** registrar resultado, testes, limitações e primeira ação da retomada.
 - **Artigos:** ainda não há títulos, fontes nem periodicidade definidos.
 
-Consulta em 11/09/2026: não foram encontrados arquivos de automação local em `C:/Users/CASA/.codex/automations`. Nenhum agendamento em segundo plano foi criado nesta organização. A rotina acima é executada nas sessões de trabalho.
-
+A rotina acima é feita durante as sessões de trabalho; ela não depende de um caminho ou computador específico.

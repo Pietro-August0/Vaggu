@@ -11,7 +11,7 @@ import { hashPassword } from '../src/auth/password.js';
 
 /** Verifica CA08–CA12 sem depender de telemetria ainda inexistente. */
 export async function runEstruturaCases(t: TestContext, prisma: PrismaClient, shoppingA: Shopping, shoppingB: Shopping, senhaAdmin: string) {
-  const auth = createAuthService(prisma); const estrutura = createEstruturaService(prisma);
+  const auth = createAuthService(prisma); const estrutura = createEstruturaService(prisma, 120_000);
   const app = createApp({ checkDatabase: () => prisma.$queryRaw`SELECT 1`, auth, estrutura, shoppings: createShoppingsService(prisma) });
   const admin = await request(app).post('/api/v1/auth/login').send({ email: 'vaggu@example.com', senha: senhaAdmin }).expect(200);
   const adminHeader = { Authorization: `Bearer ${admin.body.token}` };

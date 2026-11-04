@@ -1,3 +1,5 @@
+import { createTeloesService } from './teloes/service.js';
+import { createEquipamentosService } from './equipamentos/service.js';
 // Ponto de entrada executável: lê a configuração, conecta os serviços e inicia o HTTP.
 // Também encerra a conexão com o banco quando o processo recebe um sinal de parada.
 import 'dotenv/config';
@@ -11,25 +13,40 @@ import { createShoppingsService } from './shoppings/service.js';
 import { createContaService } from './conta/service.js';
 import { createEstruturaService } from './estrutura/service.js';
 import { createImportacaoService } from './importacao/service.js';
-import { criarArmazenamentoFotosBlob } from './shoppings/armazenamento-fotos.js';
+import { createTelemetriaService } from './telemetria/service.js';
+import { expirarSensores } from './telemetria/expiracao.js';
+import { createAnaliticosService } from './analiticos/service.js';
+import { garantirCenarioApresentacao } from '../scripts/criar-cenario-apresentacao.js';
 
 const config = readEnv();
 const prisma = createPrisma(config.databaseUrl);
+// O ambiente publicado usa sua própria conexão; os dados fictícios ficam isolados no exemplo.
+if (process.env.NODE_ENV === 'production') await garantirCenarioApresentacao(prisma);
 const whatsappClient = createWhatsappClient(config.whatsapp);
 const whatsappService = createWhatsappService(prisma, whatsappClient, config.whatsapp);
-const armazenamentoFotos = config.blobReadWriteToken
-  ? criarArmazenamentoFotosBlob(config.blobReadWriteToken)
-  : undefined;
+const telemetriaService = createTelemetriaService(prisma, config.telemetria);
 const app = createApp({
   checkDatabase: () => prisma.$queryRaw`SELECT 1`,
   frontendDistPath: process.env.FRONTEND_DIST_PATH,
   auth: createAuthService(prisma),
   whatsapp: { config: config.whatsapp, service: whatsappService },
-  shoppings: createShoppingsService(prisma, { armazenamentoFotos }),
+  shoppings: createShoppingsService(prisma),
   conta: createContaService(prisma),
-  estrutura: createEstruturaService(prisma),
+  estrutura: createEstruturaService(prisma, config.telemetria.timeoutSensorMs),
   importacao: createImportacaoService(prisma),
+  telemetria: telemetriaService,
+  analiticos: createAnaliticosService(prisma),
+  equipamentos: createEquipamentosService(prisma),
+  teloes: createTeloesService(prisma, config.telemetria.timeoutSensorMs),
 });
+
+// O job persiste a expiração; o mapa também aplica validade no momento da leitura.
+const tarefaExpiracao = setInterval(() => {
+  expirarSensores(prisma, config.telemetria).catch(() => {
+    console.error('Não foi possível executar a expiração de sensores.');
+  });
+}, config.telemetria.intervaloExpiracaoMs);
+tarefaExpiracao.unref();
 
 const server = app.listen(config.port, config.host, () => {
   console.log(`Vaggu API: http://${config.host}:${config.port}/api/v1/health`);
@@ -49,6 +66,7 @@ let closing = false;
 async function shutdown() {
   if (closing) return;
   closing = true;
+  clearInterval(tarefaExpiracao);
   const timeout = setTimeout(() => process.exit(1), 5000);
   timeout.unref();
   server.close(async () => {

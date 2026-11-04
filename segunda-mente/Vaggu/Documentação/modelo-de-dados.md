@@ -5,7 +5,7 @@ tags: [vaggu, banco-de-dados, postgresql, prisma]
 
 # Modelo de dados atual
 
-Este documento explica o banco que existe no repositório em 23/09/2026. A fonte principal é o [`schema.prisma`](../../../vaggu-backend/prisma/schema.prisma); as migrations SQL acrescentam as restrições que o Prisma não representa, e os serviços do backend mostram onde cada registro é usado.
+Este documento explica o banco que existe no repositório em 21/10/2026. A fonte principal é o [`schema.prisma`](../../../vaggu-backend/prisma/schema.prisma); as atualizações SQL acrescentam regras que o Prisma não representa, e os serviços do servidor mostram onde cada registro é usado.
 
 O documento não afirma que uma entidade planejada já foi implementada. Também não substitui as migrations: qualquer alteração do banco deve ser incremental e compatível com os dados existentes.
 
@@ -17,12 +17,21 @@ erDiagram
     SHOPPING ||--o{ SETOR : isola
     SHOPPING ||--o{ VAGA : isola
     SHOPPING ||--o{ DISPOSITIVO : possui
+    SHOPPING ||--o{ SENSOR : isola
+    SHOPPING ||--o{ TELAO : autoriza
+    SHOPPING ||--o{ OCORRENCIA_EQUIPAMENTO : registra
+    DISPOSITIVO ||--o{ OCORRENCIA_EQUIPAMENTO : afeta
+    SENSOR o|--o{ OCORRENCIA_EQUIPAMENTO : detalha
     SHOPPING ||--o{ IMPORTACAO_ESTRUTURA : recebe
     SHOPPING o|--o{ USUARIO : vincula_gerentes
     ANDAR ||--o{ SETOR : contem
     ANDAR o|--o{ VAGA : localiza
     SETOR o|--o{ VAGA : agrupa
     DISPOSITIVO o|--o{ VAGA : fornece_canal
+    DISPOSITIVO ||--o{ SENSOR : controla
+    VAGA ||--o| SENSOR : possui
+    DISPOSITIVO ||--o{ INICIALIZACAO_PLACA : inicia
+    DISPOSITIVO ||--o{ EVENTO_TELEMETRIA_RECEBIDO : recebe
     VAGA ||--o{ HISTORICO_VAGA : registra
     USUARIO ||--o{ SESSAO : autentica
 
@@ -40,9 +49,11 @@ erDiagram
 | --- | --- | --- |
 | `Perfil` | `VAGGU`, `SHOPPING` | Distingue o Admin VAGGU do gerente vinculado a um shopping. |
 | `TipoVaga` | `COMUM`, `PCD`, `IDOSO`, `ELETRICA` | Classifica a finalidade da vaga; não representa ocupação. |
-| `EstadoVaga` | `LIVRE`, `OCUPADA`, `DESCONHECIDA` | Guarda o estado operacional atual e o histórico legado. Ainda não cobre o contrato planejado de indisponibilidade do P06. |
+| `EstadoVaga` | `LIVRE`, `OCUPADA`, `INDISPONIVEL`, `DESCONHECIDA` | Separa ocupação confirmada de ausência de dado válido; `DESCONHECIDA` permanece para compatibilidade legada. |
+| `TipoEventoTelemetria` | `HEARTBEAT`, `ESTADOS` | Distingue contato da placa de observações individuais dos sensores. |
+| `ResultadoEventoTelemetria` | `PROCESSADO`, `REJEITADO_ORDEM` | Registra o resultado persistente usado na deduplicação e na proteção contra mensagens antigas. |
 | `SituacaoImplantacao` | `NOVO_ATENDIMENTO`, `EM_ANALISE`, `DOCUMENTACAO_PENDENTE`, `APROVADO`, `EM_CONFIGURACAO`, `AGUARDANDO_INSTALACAO`, `ATIVO`, `REJEITADO`, `INATIVO` | Acompanha a implantação sem substituir o bloqueio institucional do shopping. |
-| `WhatsappEventStatus` | `PROCESSANDO`, `PROCESSADO`, `FALHOU` | Controla o processamento idempotente de mensagens recebidas da Meta. |
+| `WhatsappEventStatus` | `ENVIANDO`, `REVISAO`, `PROCESSANDO`, `PROCESSADO`, `FALHOU` | Controla o processamento idempotente de mensagens recebidas da Meta. |
 
 ## Entidades implementadas
 
@@ -50,11 +61,13 @@ erDiagram
 
 **Finalidade:** representa cada shopping atendido e forma a raiz de isolamento dos dados administrativos e operacionais.
 
-**Campos principais:** `id: UUID`; `nome: String`; dados institucionais, contato e endereço opcionais; `horarioAbertura` e `horarioFechamento: String(5)?`; `imagemUrl: String?`; `ativo: Boolean`; `situacaoImplantacao: SituacaoImplantacao`; `criadoEm: DateTime`; `excluidoEm: DateTime?`. A coluna legada `fuso_horario` permanece nullable no schema para compatibilidade, mas não é mais exposta no formulário nem no contrato administrativo atual.
+**Campos principais:** `id: UUID`; `nome: String`; dados institucionais, contato e endereço opcionais; `horarioAbertura` e `horarioFechamento: String(5)?`; `ativo: Boolean`; `demonstracao: Boolean` (padrão falso); `situacaoImplantacao: SituacaoImplantacao`; `criadoEm: DateTime`; `excluidoEm: DateTime?`. A coluna legada `fuso_horario` permanece nullable no schema para compatibilidade, mas não é mais exposta no formulário nem no contrato administrativo atual.
 
 **Relações e restrições:** possui usuários, dispositivos, vagas, andares, setores e importações. As relações usam exclusão restrita para preservar os registros. A exclusão feita pela API é lógica. Migrations validam formato da UF e dos horários.
 
-**Uso atual:** cadastro, ficha, foto externa, etapa de implantação, gerentes, estrutura e importação no painel administrativo. O PostgreSQL guarda apenas a URL da foto.
+**Uso atual:** cadastro, ficha, etapa de implantação, gerentes, estrutura e importação no painel administrativo.
+
+`demonstracao=true` identifica o Shopping Exemplo internamente: seus sensores são uma fotografia sintética e ficam fora da expiração operacional. O provisionamento é idempotente na inicialização de produção; detalhes e limites estão em [cenário de apresentação](cenario-de-apresentacao.md). Essa marcação não concede permissões adicionais aos gerentes.
 
 ### `Usuario` → tabela `usuarios`
 
@@ -74,7 +87,7 @@ erDiagram
 
 **Relações e restrições:** `tokenHash` é único; a sessão pertence a um usuário e é apagada em cascata se o usuário for removido fisicamente. Há índices por usuário e expiração.
 
-**Uso atual:** autenticação `Bearer`, validade de oito horas e logout. Bloqueio de gerente, redefinição de senha e exclusão lógica do shopping removem as sessões afetadas.
+**Uso atual:** sessão opaca com validade de oito horas, entregue ao navegador por cookie HttpOnly e ainda aceita como `Bearer` para clientes existentes. Logout, bloqueio de gerente, redefinição de senha e exclusão lógica do shopping removem as sessões afetadas.
 
 ### `Andar` → tabela `andares`
 
@@ -108,23 +121,47 @@ erDiagram
 
 ### `Dispositivo` → tabela `dispositivos`
 
-**Finalidade atual:** base legada para um controlador ligado diretamente a canais armazenados nas vagas.
+**Finalidade atual:** representa a placa ESP32 autenticada que envia heartbeat e lotes de sensores.
 
-**Campos principais:** `id: UUID`; `shoppingId: UUID`; `nome: String`; `chaveApiHash: String`; `ultimoContatoEm: DateTime?`; `ativo: Boolean`.
+**Campos principais:** `id: UUID`; `shoppingId: UUID`; `codigo: String?`; `nome: String`; `chaveApiHash: String`; `ultimoContatoEm: DateTime?`; `inicializacaoAtualId: String?`; `ultimaSequencia: Int?`; `ativo: Boolean`; `emManutencao: Boolean`.
 
 **Relações e restrições:** pertence a um shopping e pode aparecer em várias vagas. A relação composta `dispositivoId + shoppingId` impede vincular a vaga a um dispositivo de outro shopping.
 
-**Uso atual:** existe no schema e nas migrations, mas ainda não possui serviço ou endpoint operacional de telemetria. Não deve ser apresentado como monitoramento P06 concluído.
+**Uso atual:** a credencial `Device` autentica a placa; o código identifica o equipamento e a inicialização/sequência globais impedem regressão. Registros legados podem permanecer sem código até serem provisionados.
 
 ### `HistoricoVaga` → tabela `historico_vagas`
 
-**Finalidade atual:** estrutura legada para registrar um estado associado a uma vaga.
+**Finalidade atual:** registra transições confirmadas e expirações associadas a uma vaga, preservando isolamento analítico.
 
-**Campos principais:** `id: UUID`; `vagaId: UUID`; `eventoId: String`; `estado: EstadoVaga`; `registradoEm: DateTime`.
+**Campos principais:** `id: UUID`; `shoppingId: UUID`; `vagaId: UUID`; `eventoId: String`; `estadoAnterior: EstadoVaga?`; `estado: EstadoVaga`; `efetivoEm`, `recebidoEm` e `registradoEm: DateTime`; `origem` e `motivo: String`; fotografia opcional de IDs/nomes de andar e setor, código e tipo da vaga; `classificacaoConfirmada: Boolean`.
 
 **Relações e restrições:** pertence a uma vaga; `eventoId` é único e evita duplicar esse identificador. A exclusão da vaga é restrita para preservar o histórico.
 
-**Uso atual:** o schema preserva a base histórica, mas o fluxo P06 que produzirá eventos confiáveis ainda não foi implementado.
+**Uso atual:** confirmação e expiração gravam o estado atual da vaga e seu evento na mesma transação. O backfill conserva eventos anteriores como origem/motivo `LEGADO`. Novas transições preservam a classificação no momento do evento; ausência de fotografia histórica confirmada fica explícita e não autoriza reclassificar o passado pelo cadastro atual.
+
+### `Sensor` → tabela `sensores`
+
+**Finalidade:** representa cada canal físico separadamente da comunicação geral da placa.
+
+**Campos principais:** `id`, `shoppingId`, `dispositivoId` e `vagaId: UUID`; `codigo: String`; `ativo: Boolean`; `estadoConfirmado: EstadoVaga`; `estadoCandidato: EstadoVaga?`; `candidatoIniciadoEm`, `ultimaObservacaoEm`, `expiradoEm: DateTime?`; `criadoEm: DateTime`; `emManutencao: Boolean`.
+
+**Relações e restrições:** cada vaga possui no máximo um sensor; código é único dentro da placa; chaves compostas impedem vínculo cruzado entre shoppings.
+
+**Uso atual:** confirmação/expiração individual e consulta de monitoramento no mapa e nos detalhes. A API expõe somente código, situação, estado/candidato e horários próprios/da placa, sem retornar hashes. A manutenção possui marcação própria em `emManutencao`, além da compatibilidade com registros inativos; o módulo de equipamentos registra abertura e conclusão de ocorrências.
+
+### `OcorrenciaEquipamento` → tabela `ocorrencias_equipamento`
+
+Registra comunicação e manutenção de uma placa ou sensor, no mesmo shopping. Guarda tipo, motivo, conclusão, autor, responsável pelo encerramento e datas. `chaveAtiva` única impede ocorrências equivalentes abertas em duplicidade; ela é liberada ao encerrar. Perda de comunicação da placa agrupa os sensores afetados; manutenção pode ser aberta e concluída pelo Admin. A listagem conserva todas as abertas e até 100 encerradas recentes.
+
+### `Telao` → tabela `teloes`
+
+Representa uma instalação web com nome, shopping, andar/setor opcionais, `chaveHash`, `ativo` e data de criação. Chaves compostas mantêm o recorte no mesmo shopping e andar. O Admin cria e revoga a instalação; a chave original é emitida na criação e a consulta autorizada retorna somente agregados, sem sessão humana.
+
+### `InicializacaoPlaca` e `EventoTelemetriaRecebido`
+
+**Finalidade:** registrar inicializações conhecidas e deduplicar persistentemente a sequência global de heartbeat/estados.
+
+**Campos e restrições:** `InicializacaoPlaca` contém shopping, dispositivo, identificador de inicialização, `iniciadaEm` e `encerradaEm`; a combinação dispositivo + inicialização é única. `EventoTelemetriaRecebido` acrescenta sequência, tipo, `payloadHash`, resultado e `recebidoEm`; dispositivo + inicialização + sequência formam a chave única do evento. O hash distingue reenvio idêntico de reutilização conflitante da sequência; evento rejeitado por ordem não renova contato nem sensores.
 
 ### `ImportacaoEstrutura` → tabela `importacoes_estrutura`
 
@@ -146,44 +183,41 @@ erDiagram
 
 **Uso atual:** idempotência técnica do webhook e registro de falha/processamento; não equivale a uma conversa comercial completa.
 
-## Limites do modelo atual para o P06
+## Estado e limites do primeiro recorte operacional do P06
 
-Os campos de `Dispositivo`, `Vaga` e `HistoricoVaga` são uma base antiga, mas não implementam a telemetria confiável especificada para o P06:
+A API agora recebe `/telemetria/heartbeat` e `/telemetria/estados`, rejeita o lote inteiro quando um sensor não pertence à placa, usa o relógio do servidor, confirma somente após 30 segundos consistentes, deduplica por placa/inicialização/sequência e expira cada sensor por sua própria observação. Heartbeat nunca renova sensor.
 
-- não existe uma entidade `Sensor`; o canal está embutido na vaga;
-- não há identidade de inicialização do ESP32, sequência nem controle persistente completo de eventos recebidos;
-- não há estado candidato, início/continuidade da confirmação de 30 segundos nem observação por sensor;
-- `ultimoContatoEm` do dispositivo não comprova que todos os sensores vinculados funcionam;
-- o enum atual usa `DESCONHECIDA` e ainda não representa de forma final a indisponibilidade causada por dado expirado;
-- o histórico não separa instante efetivo, instante de recebimento, estado anterior, origem e motivo;
-- não existem ocorrências de equipamento/manutenção nem rotina persistente de expiração;
-- não existem serviços ou endpoints de placa, sensor ou ingestão no backend atual.
+Continuam pendentes: ensaio com o firmware real; valores definitivos de frequência, lacuna e timeout; retenção dos marcadores de replay e homologação no ambiente compartilhado. Cadastro/vínculo, ocorrência/manutenção e atualização periódica já estão implementados. A consulta do mapa já aplica validade individual e retorna monitoramento sem credenciais. As integrações PostgreSQL foram executadas localmente com `TEST_DATABASE_URL`, mas P06 permanece em andamento até as validações de hardware e operação.
 
-Portanto, os campos existentes não autorizam tratar heartbeat como leitura de sensor, dado expirado como vaga livre ou `HistoricoVaga` como histórico operacional completo.
+### View analítica inicial
 
-## Entidades planejadas, ainda não implementadas
+`power_bi_intervalos_ocupacao` deriva intervalos semiabertos `[inicio_em, fim_em)` dos eventos confirmados com `LEAD`, sem contar eventos como se fossem duração. O contrato inicial preserva as 11 colunas do conjunto sintético: cenário, origem, shopping, andar, setor, vaga, tipo, estado, início, fim e entrada observada. A evolução de 19/10 acrescenta IDs de andar/setor, `classificacao_confirmada` e `saida_observada`. `entrada_observada` é verdadeira apenas na transição confirmada de `LIVRE` para `OCUPADA`; uma ocupação inicial não é tratada como entrada. O último intervalo termina no instante da consulta, e a expiração do sensor produz um evento `INDISPONIVEL`, impedindo que silêncio seja prolongado como vaga livre.
 
-A lista abaixo resume propostas do SSD. Os nomes e a separação em tabelas ainda precisam ser conciliados com firmware, retenção, migrations e testes; nenhuma delas aparece hoje como modelo Prisma independente.
+O identificador exposto em `shopping_codigo` é o UUID estável do shopping. A view usa as fotografias de classificação histórica dos eventos confirmados; eventos legados com fotografia não confirmada permanecem identificados, sem inventar classificação retrospectiva. A conexão do Power BI Service com o PostgreSQL local exige gateway ou banco cloud e usuário de leitura restrito à view.
+
+## Entidades planejadas ou parcialmente implementadas
+
+A lista abaixo separa o recorte persistido das evoluções ainda necessárias.
 
 | Proposta | Necessidade prevista | Relação com o modelo atual |
 | --- | --- | --- |
-| `Placa` e `Sensor` | Separar o controlador ESP32 de cada canal físico, autenticar a placa e acompanhar observação/expiração por sensor. | Deve substituir ou evoluir `Dispositivo` e os campos de canal embutidos em `Vaga`, sem perder vínculos. |
-| `EventoOcupacao` | Guardar transições confirmadas com estados anterior/novo, instantes efetivo e recebido, origem e motivo. | Evolução proposta de `HistoricoVaga`; não deve recriar IDs das vagas. |
-| `ControleEventoRecebido` | Deduplicar telemetria por placa, inicialização e sequência e registrar seu resultado. | `eventoId` único no histórico atual não cobre sozinho todo o processamento. |
-| `EventoEquipamento` e `OcorrenciaTecnica` | Preservar falhas, retornos e manutenções de placa/sensor sem ocorrências repetidas. | Ausentes no schema atual. |
+| `Placa` e `Sensor` | Separar o controlador ESP32 de cada canal físico, autenticar a placa e acompanhar observação/expiração por sensor. | Implementado como evolução compatível de `Dispositivo` mais a entidade `Sensor`; consulta visual implementada; cadastro/vínculo e manutenção implementados; faltam hardware real e homologação. |
+| `EventoOcupacao` | Guardar transições confirmadas com estados anterior/novo, instantes efetivo e recebido, origem e motivo. | Implementado no `HistoricoVaga` sem recriar IDs das vagas; consultas próprias de P08 incluem setor/categoria, entradas, saídas, permanência, rotatividade e cobertura. |
+| `ControleEventoRecebido` | Deduplicar telemetria por placa, inicialização e sequência e registrar seu resultado. | Implementado por `InicializacaoPlaca` e `EventoTelemetriaRecebido`; retenção definitiva depende do firmware. |
+| `EventoEquipamento` e `OcorrenciaTecnica` | Preservar falhas, retornos e manutenções de placa/sensor sem ocorrências repetidas. | Implementado como `OcorrenciaEquipamento`, com comunicação e manutenção, placa obrigatória e sensor opcional conforme o tipo de ocorrência. |
 | `MapaAndar` e `PosicaoVaga` | Separar mapas/revisões e posições caso o produto precise preservar versões. | Hoje `imagemMapa`/`revisaoMapa` ficam em `Andar` e as coordenadas ficam em `Vaga`. Uma migração só é necessária se essa separação for confirmada. |
-| `DocumentoShopping` | Referenciar documentos privados e seu estado. | Não existe; `imagemUrl` é somente a foto pública representativa. |
+| `DocumentoShopping` | Referenciar documentos privados e seu estado. | Não existe no escopo atual. |
 | `Importacao` e `ErroImportacao` | Representar arquivo, processamento e erros estruturados separadamente. | O P05 atual usa `ImportacaoEstrutura` com prévia e erros dentro de JSONB. Não criar tabelas novas sem uma necessidade de consulta demonstrada. |
 | `SessaoWhatsApp`, `PedidoDemonstracao` e `ChamadoSuporte` | Estruturar jornada comercial e suporte além da deduplicação do webhook. | `WhatsappEvento` registra processamento técnico, não esses fluxos de negócio. |
 | `LogAcao` | Registrar ações administrativas relevantes sem segredos. | Ausente no schema atual. |
 
-Telão, alerta e relatório não possuem entidade implementada. A forma de autorização do telão e as views analíticas devem ser definidas pelos pacotes P07–P09 antes de criar tabelas ou contratos.
+`Telao` é uma entidade implementada, com recorte por shopping/andar/setor e hash de chave revogável. Relatórios são consultas e arquivos; não exigem tabela própria. Novos alertas só devem criar entidades se houver necessidade demonstrada de persistência.
 
 ## Regras para evoluir o banco
 
 1. Preservar o isolamento por `shoppingId` com chaves compostas ou validação equivalente no banco e no backend.
 2. Manter os IDs de vagas ao importar, reposicionar ou trocar sensores.
 3. Criar migrations incrementais; nunca resetar um banco real para acomodar o P06.
-4. Definir backfill e compatibilidade antes de separar `Dispositivo`, `Sensor` e `HistoricoVaga`.
+4. A separação entre `Dispositivo`, `Sensor` e `HistoricoVaga` já foi feita preservando registros anteriores como `LEGADO`. Futuras alterações devem manter essa compatibilidade.
 5. Não enviar `senhaHash`, `chaveApiHash`, token de sessão ou conexão do banco ao frontend, relatórios ou exportações.
 6. Validar o modelo novo pelos cenários CA15–CA24 do [plano e critérios de aceite](plano-e-aceite.md) antes de declarar P06 concluído.

@@ -1,9 +1,8 @@
-// Cliente de envio de texto pela API da Meta; recebe configuração privada e transporte substituível em testes.
+// Cliente de texto e mensagens interativas da Meta, com transporte substituível em testes.
 /** Cria o adaptador HTTP utilizado pelo serviço de mensagens. */
 export function createWhatsappClient(config, { fetchImpl = globalThis.fetch } = {}) {
-  return {
-    /** Envia uma mensagem ao contato recebido do serviço e interrompe a espera após oito segundos. */
-    async sendText(to, body) {
+    /** Compartilha timeout e tratamento de falha entre texto e interação, sem reenvio automático. */
+    async function send(to, content) {
       if (!config.accessToken || !config.phoneNumberId || !config.apiVersion) {
         throw new Error('WHATSAPP_ENVIO_NAO_CONFIGURADO');
       }
@@ -24,8 +23,7 @@ export function createWhatsappClient(config, { fetchImpl = globalThis.fetch } = 
               messaging_product: 'whatsapp',
               recipient_type: 'individual',
               to,
-              type: 'text',
-              text: { preview_url: false, body },
+              ...content,
             }),
             signal: controller.signal,
           },
@@ -37,7 +35,7 @@ export function createWhatsappClient(config, { fetchImpl = globalThis.fetch } = 
             const data: any = await response.json();
             if (data?.error?.code) metaCode = String(data.error.code);
           } catch {
-            // Mantem o codigo HTTP quando a Meta nao retorna JSON parseavel.
+            // Mantém o código HTTP quando a Meta não retorna JSON legível.
           }
           throw new Error(`META_ENVIO_FALHOU:${metaCode}`);
         }
@@ -48,6 +46,9 @@ export function createWhatsappClient(config, { fetchImpl = globalThis.fetch } = 
       } finally {
         clearTimeout(timeout);
       }
-    },
+    }
+  return {
+    sendText(to, body) { return send(to, { type: 'text', text: { preview_url: false, body } }); },
+    sendInteractive(to, interactive) { return send(to, { type: 'interactive', interactive }); },
   };
 }

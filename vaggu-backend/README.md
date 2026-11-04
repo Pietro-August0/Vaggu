@@ -1,25 +1,21 @@
 # Vaggu Backend — 0.5.0
 
-TypeScript + Node.js + Express + Prisma 7 + PostgreSQL. A base inclui autenticação, administração de shoppings e gerentes, estrutura do estacionamento, prévia de importação CSV/XLSX e webhook do WhatsApp.
+TypeScript + Node.js + Express + Prisma 7 + PostgreSQL. A API reúne autenticação, administração de shoppings e gerentes, estrutura/importação, telemetria, equipamentos/manutenção, histórico analítico, telões autorizados e webhook do WhatsApp.
 
-## Atualizar a pasta atual
+## Instalar ou atualizar localmente
 
-1. Pare a API com Ctrl+C e feche o Prisma Studio.
-2. Com a API parada, copie sua pasta como backup.
-3. Extraia o ZIP separadamente e copie TODO o conteúdo para a pasta atual, onde está package.json. Aceite substituir arquivos e mesclar pastas. Não apague a pasta prisma.
-4. Preserve seu `.env`. O ZIP não contém banco, credenciais, `node_modules` ou build. Preserve alterações próprias antes de substituir arquivos.
-5. Execute os comandos abaixo, um por vez:
+1. Confira branch, status e alterações locais antes de atualizar o código. Preserve o trabalho existente e pare a API com `Ctrl+C`.
+2. Na primeira instalação, configure `.env` a partir de `.env.example` com seu PostgreSQL; nas atualizações, preserve o arquivo existente.
+3. Na pasta `vaggu-backend`, instale dependências, gere o cliente e aplique as migrations autorizadas no banco local:
 
 ~~~sh
 npm ci
 npm run db:setup
 npm run build
-npm test
-npm run admin:create
 npm run dev
 ~~~
 
-O cabeçalho deve mostrar vaggu-backend@0.5.0. Node 24.14.0 é compatível. No PowerShell com bloqueio de npm.ps1, use npm.cmd, sem alterar a política de segurança.
+Use Node.js `>=22.12.0 <25`. No PowerShell com bloqueio de `npm.ps1`, use `npm.cmd`. Crie o primeiro Admin somente se ele ainda não existir, conforme abaixo. As instruções completas estão no [guia de configuração](../segunda-mente/Vaggu/Documenta%C3%A7%C3%A3o/configuracao.md); os testes de integração exigem a conexão exclusiva de teste descrita neste README.
 
 db:setup gera o cliente e aplica migrations pendentes no PostgreSQL configurado em `DATABASE_URL`. Não use reset em banco real.
 
@@ -44,9 +40,9 @@ Base: http://127.0.0.1:3000/api/v1
 
 | Método | Rota | Entrada | Resultado |
 | --- | --- | --- | --- |
-| POST | /auth/login | JSON com email e senha | 200: token, validade e usuário. |
+| POST | /auth/login | JSON com email e senha | 200: sessão em cookie, validade e usuário. Com `X-VAGGU-Request: 1`, o token não aparece no JSON; o cliente Bearer legado recebe o contrato anterior. |
 | GET | /auth/me | Header Authorization: Bearer TOKEN | 200: usuário da sessão. |
-| POST | /auth/change-password | Header Authorization e JSON com senhaAtual/novaSenha | 200: usuário com troca concluída. |
+| POST | /auth/change-password | Sessão por cookie + `X-VAGGU-Request: 1`, ou Bearer legado; JSON com senhaAtual/novaSenha | 200: usuário com troca concluída. |
 | POST | /auth/logout | Mesmo header, sem corpo | 204 sem corpo: sessão revogada. |
 
 ## Minha conta
@@ -69,7 +65,7 @@ No Postman ou outro cliente de API, crie uma requisição POST para /auth/login,
 
 Esses valores são placeholders, não credenciais válidas. A resposta contém token, tipo (Bearer), expiraEm (data ISO) e usuario (id, nome, email, perfil e shoppingId).
 
-Copie o token apenas para o campo Bearer Token da requisição GET /auth/me. Depois faça POST /auth/logout com o mesmo token; repetir /auth/me deve retornar 401. Não coloque token na URL nem compartilhe coleções contendo credenciais reais. Acessar /auth/me pela barra do navegador retorna 401 porque não envia o header.
+Em clientes de API, copie o token apenas para o campo Bearer Token da requisição GET /auth/me. Depois faça POST /auth/logout com o mesmo token; repetir /auth/me deve retornar 401. Não coloque token na URL nem compartilhe coleções contendo credenciais reais. O navegador autenticado usa o cookie HttpOnly; abrir /auth/me sem cookie ou Bearer válido retorna 401.
 
 Respostas: 400 para entrada inválida, 401 para credenciais/sessão inválidas, 429 para excesso de tentativas e 500 genérico para falha interna. Os middlewares de perfil usam 403 para conta autenticada sem permissão.
 
@@ -100,10 +96,27 @@ Todas as rotas abaixo exigem `Authorization: Bearer TOKEN`, perfil `VAGGU` e sen
 | POST | /shoppings/:shoppingId/importacoes/:importacaoId/confirmar | Sem corpo | Aplica a prévia uma única vez, criando/atualizando estrutura sem apagar histórico. |
 | PATCH | /andares/:andarId/mapa | revisão esperada e posições das vagas | Salva o mapa de forma atômica; revisão desatualizada retorna 409. |
 | PATCH | /shoppings/:shoppingId/implantacao | situação | Atualiza a etapa de implantação do shopping. |
-| POST | /shoppings/:shoppingId/foto | Imagem JPEG, PNG ou WebP, até 2 MB | Armazena a imagem no Vercel Blob e salva somente sua URL no shopping. |
-| DELETE | /shoppings/:shoppingId/foto | Sem corpo | Remove a referência da foto e tenta excluir o arquivo externo. |
 
 O gerente não cria sua própria conta e não escolhe `shoppingId`; o vínculo vem da rota administrativa validada.
+
+## Telemetria do ESP32
+
+As rotas de equipamento não usam sessão humana. A placa envia `Authorization: Device CHAVE` e o backend deriva o shopping pelo dispositivo autenticado.
+
+| Método | Rota | Entrada | Resultado |
+| --- | --- | --- | --- |
+| POST | `/telemetria/heartbeat` | placa, inicialização, sequência e horário opcional | Atualiza somente a comunicação da placa. |
+| POST | `/telemetria/estados` | mesma identidade e lote de sensor/estado | Atualiza observações individuais e confirma mudanças após 30 segundos consistentes. |
+
+A sequência é global entre as duas rotas dentro de uma inicialização. Reenvio idêntico retorna `DUPLICADO`; reutilizar a sequência com outro conteúdo ou enviar inicialização antiga retorna 409. Sensor desconhecido ou de outra placa rejeita o lote inteiro. `capturadoEm` é apenas metadado: confirmação, contato e expiração usam o relógio do servidor.
+
+O job local marca o sensor como `INDISPONIVEL` após seu próprio timeout e grava o instante efetivo. Heartbeat não renova sensores. Os padrões de 15 segundos para lacuna e 120 segundos para timeout são provisórios e configuráveis até o ensaio do firmware.
+
+Para provisionar uma placa, configure `PLACA_SHOPPING_ID`, `PLACA_CODIGO`, `PLACA_NOME` e `PLACA_VAGAS_CODIGOS`, execute `npm run telemetria:provisionar` e copie a chave exibida uma única vez. Para o cenário sintético, use `SIMULADOR_PLACA_CODIGO`, `SIMULADOR_PLACA_CHAVE` e `SIMULADOR_SENSORES_CODIGOS` com `npm run telemetria:simular`. O simulador atravessa a API; não insere fixtures diretamente no banco.
+
+A view `power_bi_intervalos_ocupacao` converte o histórico confirmado em intervalos semiabertos e mantém o mesmo contrato de 11 colunas do conjunto sintético. O campo `shopping_codigo` usa o UUID estável do shopping para permitir recorte sem depender de nome mutável. A view não contém senhas, documentos pessoais nem credenciais de placas. O Power BI Service não alcança um PostgreSQL em `127.0.0.1`: atualização automática exige um gateway configurado ou um banco cloud com usuário de leitura restrito à view.
+
+Para ensaios sem hardware, `npm run power-bi:gerar-fixtures` recria o conjunto controlado de seis intervalos e a demonstração ampliada de 784 intervalos em `test/fixtures/power-bi`. A demonstração ampliada cobre sete dias, dois andares, quatro setores, dezesseis vagas e os tipos `COMUM`, `PCD`, `IDOSO` e `ELETRICA`. Todos os registros usam origem `SINTETICO`; esses arquivos não devem ser carregados no banco de produção.
 
 ## Estrutura consultada pelo gerente
 
@@ -119,7 +132,7 @@ Essas rotas persistem a prévia na tabela PostgreSQL `importacoes_estrutura`, se
 
 A confirmação por `POST /shoppings/:shoppingId/importacoes/:importacaoId/confirmar` exige `podeConfirmar=true`, reavalia a estrutura dentro de uma transação e registra `confirmadoEm` com um resumo da aplicação. Um advisory lock transacional serializa confirmações do mesmo shopping, inclusive requisições simultâneas. A operação cria andares e setores ausentes, cria vagas novas e atualiza o andar, setor e tipo de vagas existentes pelo código do shopping, preservando o ID e o histórico. Vagas que não aparecem na planilha não são removidas nem desativadas. Repetir a confirmação da mesma prévia devolve o resultado já gravado com `idempotente=true`.
 
-As migrations incrementais `20260914000100_previas_importacao` e `20260915000100_confirmacao_importacao` devem ser aplicadas pelo fluxo `db:deploy` ao banco configurado pela equipe. Identificação de vagas e persistência usam transações consistentes. O XLSX usa a primeira planilha, até 10.000 registros e 50 colunas, por meio de `read-excel-file`.
+As migrations incrementais `20260914000100_previas_importacao` e `20260915000100_confirmacao_importacao` devem ser aplicadas pelo fluxo `db:deploy` ao banco configurado no ambiente. Identificação de vagas e persistência usam transações consistentes. O XLSX usa a primeira planilha, até 10.000 registros e 50 colunas, por meio de `read-excel-file`.
 
 ## Segurança e frontend
 
@@ -127,20 +140,40 @@ As migrations incrementais `20260914000100_previas_importacao` e `20260915000100
 - Senha provisória: o banco mantém somente seu hash. O valor em texto é retornado ao Admin apenas na resposta imediata de criação ou redefinição e não reaparece em listagens posteriores.
 - Senha definitiva: de 12 a 128 caracteres, com letra minúscula, letra maiúscula, número, símbolo e sem espaços. A API devolve um código e uma mensagem próprios para cada requisito não atendido; a nova senha também precisa ser diferente da atual.
 - Sessões: tokens opacos aleatórios de 256 bits; somente SHA-256 do token no banco. Não é JWT e não exige JWT_SECRET.
+- Placas: chave aleatória protegida com scrypt; o hash não sai do backend e a chave aparece apenas no provisionamento.
 - Primeiro acesso: gerentes criados ou redefinidos pelo Admin recebem `trocarSenhaObrigatoria=true`; rotas protegidas por `requirePasswordReady` recusam acesso até a troca.
 - Validade fixa de 8 horas. Logout apaga apenas a sessão atual. Sessões expiradas são recusadas imediatamente e removidas no próximo login bem-sucedido.
 - Perfil, vínculo e status ativo são lidos do banco em cada requisição autenticada, nunca dos campos enviados pelo cliente.
 - Usuário ou shopping desativado não faz login nem usa sessão existente. O bloqueio de gerente e a exclusão lógica de shopping apagam as sessões vinculadas. Reativar um gerente com `PATCH /gerentes/:gerenteId` e `ativo=true` não recupera os tokens apagados: ele precisa fazer um novo login. A API atual não expõe reativação de shopping excluído.
 - Limite de 10 chamadas de login por IP a cada 15 minutos, incluindo sucessos e corpos inválidos. Máximo de quatro verificações de senha simultâneas. Proteção local em memória, reiniciada com o processo.
-- Frontend: mantenha token em memória nesta etapa, envie no header Authorization e descarte no logout. Recarregar a página exigirá novo login. Não grave tokens/senhas em código ou URLs.
-- Não usa cookies de autenticação e não implementa refresh token. CORS entre origens ainda não foi configurado: cliente desktop de API funciona, mas frontend em outra porta precisará de configuração explícita.
-- Para publicar: HTTPS obrigatório, origens permitidas, proxies confiáveis, limites compartilhados, recuperação de conta e revisão de segurança. Não habilite trust proxy indiscriminadamente. API escuta em 127.0.0.1 por padrão.
+- Frontend: a sessão usa cookie `HttpOnly`, `SameSite=Strict`, limitado a `/api/v1` e `Secure` em produção. O navegador restaura a identidade por `/auth/me` após recarregar a página; logout revoga a sessão e remove o cookie. Não grave tokens ou senhas no código, em URLs ou no `localStorage`.
+- O contrato Bearer permanece para clientes antigos e testes; a interface usa cookie e envia `X-VAGGU-Request` nas escritas autenticadas. Não há refresh token. No desenvolvimento, o proxy do Vite encaminha `/api` ao backend local. Na hospedagem registrada, Express serve o build React e `/api/v1` na mesma origem; não há CORS amplo configurado para um frontend em outro domínio.
+- A configuração versionada de publicação usa HTTPS do Render, `HOST=0.0.0.0` e `FRONTEND_DIST_PATH` para entregar a interface. A API local escuta em `127.0.0.1` por padrão. Origem separada, proxies confiáveis, limites compartilhados e recuperação de conta precisam de revisão própria antes de mudar essa topologia; não habilite `trust proxy` indiscriminadamente.
 
 ## Perfis e isolamento
 
 requireAuth valida a sessão. requirePasswordReady bloqueia senha provisória fora das rotas necessárias à troca. requirePerfil('VAGGU') protege cadastro/listagem de shoppings, gerentes e estrutura. shoppingScope fornece res.locals.shoppingId a partir do usuário autenticado; a consulta do mapa do gerente usa esse filtro Prisma, nunca IDs enviados pelo cliente.
 
-Os testes montam rotas exclusivas para complementar a demonstração de isolamento entre dois shoppings. Cadastro/listagem de shoppings e gerentes e configuração da estrutura estão expostos para Admin; a consulta do mapa está exposta para o gerente. Telemetria, telões, exportações e Power BI ainda não estão implementados.
+Os testes complementam a demonstração de isolamento entre dois shoppings. Cadastro/listagem de shoppings e gerentes, configuração da estrutura, equipamentos, manutenção e instalações de telão estão expostos para Admin; o gerente consulta estrutura/análise e gerencia instalações de telão do próprio shopping. As rotas analíticas aceitam `inicio` e `fim` juntos no formato `YYYY-MM-DD`, em dias UTC inclusivos, com intervalo máximo de 31 dias; sem parâmetros, consultam os últimos sete dias UTC. `setorId` e `tipo` restringem o histórico e a capacidade de referência. A interface compara períodos e gera Excel/PDF no navegador. A lista de ocorrências retorna todas as abertas e as 100 encerradas mais recentes. Telões web recebem apenas agregados e usam credencial própria em cabeçalho. Hardware físico e homologação publicada seguem pendentes; Power BI publicado é opcional e a conexão real do WhatsApp está adiada.
+
+## Equipamentos e telões web — contratos atuais
+
+As rotas abaixo usam o prefixo `/api/v1`. Operações por shopping exigem Admin VAGGU, exceto as rotas de ocorrências e telões do gerente, que derivam o shopping da sessão, e a disponibilidade do telão, que possui credencial própria. Na interface, os controles administrativos ficam em **Configurar vagas**, dentro de `/admin/shoppings/:shoppingId/estrutura`.
+
+| Método | Rota | Finalidade |
+| --- | --- | --- |
+| GET / POST | `/shoppings/:shoppingId/equipamentos` | Listar equipamentos/ocorrências ou cadastrar placa. |
+| PATCH | `/shoppings/:shoppingId/equipamentos/:id` | Editar ou ativar/desativar placa. |
+| POST | `/shoppings/:shoppingId/equipamentos/:id/chave` | Rotacionar chave; original exibido somente na emissão. |
+| POST | `/shoppings/:shoppingId/equipamentos/:id/sensores` | Vincular sensor à vaga. |
+| POST | `/shoppings/:shoppingId/equipamentos/:id/manutencao` | Abrir manutenção. |
+| POST | `/shoppings/:shoppingId/ocorrencias/:id/encerrar` | Encerrar manutenção e exigir novas leituras para confirmar disponibilidade. |
+| GET | `/estacionamento/ocorrencias` | Consultar ocorrências do shopping da sessão do gerente. |
+| GET / POST | `/shoppings/:shoppingId/teloes` | Listar ou criar instalação de telão. |
+| PATCH / DELETE | `/shoppings/:shoppingId/teloes/:id` | Editar a exibição preservando a credencial ou revogar a instalação. |
+| GET / POST | `/estacionamento/teloes` | Gerente: listar ou emitir instalação para seu shopping. |
+| PATCH / DELETE | `/estacionamento/teloes/:id` | Gerente: editar a exibição ou revogar instalação do shopping da sessão. |
+| GET | `/teloes/:id/disponibilidade` | Retornar apenas agregados, com `Authorization: Telao <chave>`. |
 
 ## Banco e configuração
 
@@ -151,12 +184,19 @@ DATABASE_URL="postgresql://vaggu:vaggu@localhost:5432/vaggu"
 PORT=3000
 HOST=127.0.0.1
 NODE_ENV=development
-BLOB_READ_WRITE_TOKEN="vercel_blob_rw_..."
+TELEMETRIA_LACUNA_MAXIMA_MS=15000
+TELEMETRIA_TIMEOUT_SENSOR_MS=120000
+TELEMETRIA_TIMEOUT_PLACA_MS=120000
+TELEMETRIA_INTERVALO_EXPIRACAO_MS=30000
 ~~~
 
-Configure `DATABASE_URL` com um PostgreSQL acessível pelo backend. `BLOB_READ_WRITE_TOKEN` habilita fotos públicas representativas dos shoppings no Vercel Blob; sem ele, a API mantém cadastro e edição textual funcionando, mas devolve `503 ARMAZENAMENTO_NAO_CONFIGURADO` ao tentar gravar ou remover uma foto. O PostgreSQL guarda somente `imagem_url`, nunca os bytes. `npm run db:studio` permite inspecionar tabelas; não preencha `senha_hash` manualmente. Faça backup antes de migrations em ambiente compartilhado.
+Configure `DATABASE_URL` com um PostgreSQL acessível pelo backend. `npm run db:studio` permite inspecionar tabelas; não preencha `senha_hash` manualmente. Faça backup antes de migrations em ambiente compartilhado.
 
-Modelos persistidos atuais: Shopping, Andar, Setor, Vaga, Usuario, Dispositivo, HistoricoVaga e ImportacaoEstrutura. Sessao e WhatsappEvento são tabelas técnicas. Usuario guarda telefone, troca obrigatória de senha e os campos da exclusão lógica reversível. Permanecem restrições de perfis, estados, vínculo do dispositivo com shopping, código/canal únicos, hierarquia interna e histórico de eventos. CHECKs estão no SQL e devem ser preservados em futuras migrations. O [modelo de dados atual](../segunda-mente/Vaggu/Documentação/modelo-de-dados.md) separa essas tabelas das entidades ainda planejadas para telemetria e operação.
+O Shopping Exemplo é criado automaticamente na inicialização de produção, com 80 vagas e 15 dias de histórico fictício, na conexão já usada pelo site. Não há botão para criá-lo. Os acessos são emitidos pela redefinição de senha existente na ficha dos gerentes. Consulte [cenário de apresentação](../segunda-mente/Vaggu/Documentação/cenario-de-apresentacao.md). O comando alternativo `demo:create` usa somente `DEMO_DATABASE_URL` e grava as senhas em arquivo local ignorado pelo Git.
+
+A inicialização também acrescenta quatro placas e 80 sensores ao exemplo de forma idempotente. A leitura da estrutura devolve `monitoramento` por vaga com código do sensor, placa, situação, observação individual, contato da placa e candidato pendente; não inclui chaves ou hashes. O job de expiração operacional exclui shoppings marcados como demonstração. Contratos, apresentação e limites estão no [guia de edição e monitoramento](../segunda-mente/Vaggu/Documentação/edicao-visual-e-monitoramento.md).
+
+Modelos persistidos atuais incluem Shopping, Andar, Setor, Vaga, Usuario, Dispositivo, Sensor, InicializacaoPlaca, EventoTelemetriaRecebido, HistoricoVaga e ImportacaoEstrutura. Sessao e WhatsappEvento são tabelas técnicas. Chaves compostas preservam o shopping em sensor, placa e histórico; sequência e payload possuem deduplicação persistente. CHECKs estão no SQL e devem ser preservados em futuras migrations.
 
 ## Organização
 
@@ -167,10 +207,13 @@ Modelos persistidos atuais: Shopping, Andar, Setor, Vaga, Usuario, Dispositivo, 
 | src/auth/middleware.ts | Autenticação, senha provisória, perfis, escopo e limite. |
 | src/auth/routes.ts | Rotas HTTP de autenticação. |
 | src/auth/bootstrap.ts | Criação do primeiro administrador. |
-| src/shoppings/ | Shoppings, foto externa, gerentes, senha provisória e redefinição administrativa. |
+| src/shoppings/ | Shoppings, gerentes, senha provisória e redefinição administrativa. |
 | src/estrutura/ | Hierarquia do estacionamento, mapa, revisão concorrente e escopo do gerente. |
 | src/importacao/ | Contratos, leitores CSV/XLSX, validação tabular, identificação de IDs, prévia e confirmação atômica. |
+| src/telemetria/ | Contratos ESP32, confirmação, ingestão persistente, rotas e expiração por sensor. |
 | scripts/create-admin.ts | Comando interativo do administrador. |
+| scripts/criar-cenario-apresentacao.ts | Seed isolado e identificado de shopping, gerentes, vagas e histórico fictício. |
+| scripts/provisionar-placa.ts e scripts/simular-telemetria.ts | Provisionamento com chave de exibição única e cenário sintético pela API. |
 | src/app.ts e src/server.ts | Express e inicialização. |
 | src/config/ e src/lib/ | Configuração e Prisma. |
 | prisma/ | Schema e migrations versionadas. |
@@ -178,7 +221,7 @@ Modelos persistidos atuais: Shopping, Andar, Setor, Vaga, Usuario, Dispositivo, 
 
 ## Verificação e limites
 
-`npm test` compila o TypeScript e executa os testes HTTP/configuração/schema e o runner de autenticação/gerentes. Sem `TEST_DATABASE_URL`, a integração aparece explicitamente como **PENDENTE/skip**; isso não comprova CA04–CA07. Gere o cliente antes do primeiro build com `npm run db:generate`, usando uma `DATABASE_URL` de desenvolvimento configurada (a geração não conecta ao banco).
+`npm test` compila o TypeScript e executa os testes HTTP/configuração/schema, autenticação e telemetria. Sem `TEST_DATABASE_URL`, as integrações aparecem explicitamente como **PENDENTE/skip**; isso não comprova a persistência P05/P06 nem CA15–CA24. Gere o cliente antes do primeiro build com `npm run db:generate` (a geração não conecta ao banco).
 
 Para integração local, crie `.env.teste.local` (ignorado pelo Git) contendo `TEST_DATABASE_URL` e execute `npm run test:integracao`. Esse comando falha se o arquivo não existir. Em CI, configure `TEST_DATABASE_URL` no ambiente e use `npm test`. Uma URL presente mas inválida ou inacessível falha, sem converter o erro em skip.
 
@@ -196,3 +239,7 @@ npm.cmd run db:validate
 No Windows com Node compatível, `npm.cmd run typecheck`, o comando de validação acima e `npm.cmd test` passaram. Prisma fixado em 7.10.0. Revise `npm audit` antes de publicar; não execute `npm audit fix --force` automaticamente.
 
 P04 e as melhorias administrativas concluídas em 12–13/09/2026 estão entregues: migrations aplicadas, estrutura, mapa, exclusão reversível e política de senha definitiva integrados, 54 testes aprovados com PostgreSQL real e fluxos principais validados no navegador. O P05 foi concluído em 21/09/2026: prévias CSV/XLSX, confirmação atômica, interface administrativa e validação com PostgreSQL real e navegador autenticado estão entregues. Consulte o estado e os limites atuais no [planejamento](../segunda-mente/Vaggu/Documentação/planejamento-do-projeto.md).
+
+PATCH de telão aceita `nome`, `andarId` e `setorId`. `andarId: null` seleciona a visão geral; alterar andar sem setor limpa o filtro de setor anterior. A interface oferece geral/andar, preservando recortes legados até um salvamento explícito. O servidor rejeita instalação revogada e recortes de outro shopping/inativos. A disponibilidade inclui `escopo: {tipo, nome}`; a edição não troca a credencial, e a tela recebe a mudança na próxima consulta de 15 segundos.
+
+Exclusão definitiva de telão: `DELETE /estacionamento/teloes/:id/cadastro` (gerente do shopping) e `DELETE /shoppings/:shoppingId/teloes/:id/cadastro` (Admin VAGGU). Aceita cadastros ativos ou revogados e invalida a credencial ao remover o registro. A rota DELETE sem `/cadastro` continua apenas revogando o acesso.

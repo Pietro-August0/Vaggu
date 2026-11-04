@@ -71,22 +71,22 @@ export function ImportacaoEstrutura({ shoppingId, aoConfirmar }: { shoppingId: s
   }
 
   const registrosVisiveis = previa?.registros.slice(0, LIMITE_LINHAS_VISIVEIS) ?? []
-  return <section className="rounded-2xl bg-white p-6" aria-labelledby="titulo-importacao">
+  return <section className="rounded-2xl bg-card p-6 text-card-foreground" aria-labelledby="titulo-importacao">
     <div className="flex flex-col gap-5 lg:flex-row lg:items-end lg:justify-between">
       <div>
         <h2 id="titulo-importacao" className="text-xl font-semibold">Importar estrutura</h2>
-        <p className="mt-1 max-w-2xl text-sm text-neutral-600">Envie uma planilha com as colunas código, andar, setor e tipo. A estrutura só muda depois da confirmação.</p>
+        <p className="mt-1 max-w-2xl text-sm text-neutral-600 dark:text-neutral-300">Envie uma planilha com as colunas código, andar, setor e tipo. A estrutura só muda depois da confirmação.</p>
       </div>
       <Button type="button" variant="outline" className="w-full sm:w-fit" onClick={baixarModeloCsv}>
         <Download aria-hidden="true" />Baixar modelo CSV
       </Button>
     </div>
-    <div className="mt-5 flex w-full flex-col gap-3 border-t border-neutral-200 pt-5 sm:flex-row sm:items-end sm:justify-end">
+    <div className="mt-5 flex w-full flex-col gap-3 border-t border-neutral-200 pt-5 sm:flex-row sm:items-end sm:justify-start">
         <div className="grid min-w-0 gap-1.5 sm:min-w-72">
           <Label htmlFor={`arquivo-importacao-${shoppingId}`}>Arquivo CSV ou XLSX</Label>
           <Input id={`arquivo-importacao-${shoppingId}`} type="file" accept=".csv,.xlsx,text/csv,application/vnd.openxmlformats-officedocument.spreadsheetml.sheet"
             disabled={ocupado} onChange={evento => { setArquivo(evento.target.files?.[0] ?? null); setPrevia(null); setConfirmacao(null); setErro("") }} />
-          <p className="text-xs text-neutral-500">CSV até 1 MB · XLSX até 2 MB</p>
+          <p className="text-xs text-neutral-500 dark:text-neutral-300">CSV até 1 MB · XLSX até 2 MB</p>
         </div>
         <Button type="button" className="sm:self-end" disabled={ocupado || !arquivo} onClick={() => void gerarPrevia()}>
           <Upload aria-hidden="true" />{ocupado ? "Processando..." : "Gerar prévia"}

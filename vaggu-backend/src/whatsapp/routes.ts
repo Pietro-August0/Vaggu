@@ -1,7 +1,7 @@
 // Recebe o desafio de configuração e os eventos da Meta, validando sua origem antes de processá-los.
 import { Router } from 'express';
 import { validateMetaSignature } from './signature.js';
-import { extractWhatsappEvents } from './payload.js';
+import { extractWhatsappEvents, summarizeWhatsappEvents } from './payload.js';
 
 /** Monta o webhook; o POST depende de express.raw para preservar os bytes assinados pela Meta. */
 export function whatsappRoutes({ config, service }) {
@@ -14,22 +14,22 @@ export function whatsappRoutes({ config, service }) {
 
     if (!config.verifyToken) {
       return res.status(503).json({
-        erro: { codigo: 'WHATSAPP_VERIFY_TOKEN_AUSENTE', mensagem: 'Webhook nao configurado.' },
+        erro: { codigo: 'WHATSAPP_VERIFY_TOKEN_AUSENTE', mensagem: 'Webhook não configurado.' },
       });
     }
     if (typeof mode !== 'string' || typeof token !== 'string' || typeof challenge !== 'string') {
       return res.status(400).json({
-        erro: { codigo: 'PARAMETROS_INVALIDOS', mensagem: 'Parametros de verificacao invalidos.' },
+        erro: { codigo: 'PARAMETROS_INVALIDOS', mensagem: 'Parâmetros de verificação inválidos.' },
       });
     }
     if (mode !== 'subscribe') {
       return res.status(400).json({
-        erro: { codigo: 'MODO_INVALIDO', mensagem: 'Modo de verificacao invalido.' },
+        erro: { codigo: 'MODO_INVALIDO', mensagem: 'Modo de verificação inválido.' },
       });
     }
     if (token !== config.verifyToken) {
       return res.status(403).json({
-        erro: { codigo: 'TOKEN_INVALIDO', mensagem: 'Token de verificacao invalido.' },
+        erro: { codigo: 'TOKEN_INVALIDO', mensagem: 'Token de verificação inválido.' },
       });
     }
     return res.status(200).type('text/plain').send(challenge);
@@ -39,14 +39,15 @@ export function whatsappRoutes({ config, service }) {
     try {
       if (!config.appSecret) {
         return res.status(503).json({
-          erro: { codigo: 'META_APP_SECRET_AUSENTE', mensagem: 'Webhook nao configurado.' },
+          erro: { codigo: 'META_APP_SECRET_AUSENTE', mensagem: 'Webhook não configurado.' },
         });
       }
       const rawBody = req.body;
       const signature = req.get('x-hub-signature-256');
       if (!validateMetaSignature(rawBody, signature, config.appSecret)) {
+        console.warn('Webhook WhatsApp rejeitado', { codigo: 'ASSINATURA_INVALIDA' });
         return res.status(401).json({
-          erro: { codigo: 'ASSINATURA_INVALIDA', mensagem: 'Assinatura do webhook invalida.' },
+          erro: { codigo: 'ASSINATURA_INVALIDA', mensagem: 'Assinatura do webhook inválida.' },
         });
       }
 
@@ -55,11 +56,12 @@ export function whatsappRoutes({ config, service }) {
         payload = JSON.parse(rawBody.toString('utf8'));
       } catch {
         return res.status(400).json({
-          erro: { codigo: 'JSON_INVALIDO', mensagem: 'O corpo deve ser um JSON valido.' },
+          erro: { codigo: 'JSON_INVALIDO', mensagem: 'O corpo deve ser um JSON válido.' },
         });
       }
 
       const events = extractWhatsappEvents(payload);
+      console.info('Webhook WhatsApp recebido', summarizeWhatsappEvents(events));
       for (const status of events.statuses) service.handleStatus(status);
       for (const message of events.messages) await service.handleMessage(message);
 

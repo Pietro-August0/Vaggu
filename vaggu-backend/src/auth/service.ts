@@ -118,7 +118,7 @@ export function createAuthService(prisma, { now = () => new Date() } = {}) {
         include: { usuario: { include: { shopping: true } } },
       });
       if (!session || session.expiraEm <= now() || !allowedUser(session.usuario)) throw unauthorized();
-      return { sessionId: session.id, usuario: publicUser(session.usuario) };
+      return { sessionId: session.id, usuario: publicUser(session.usuario), expiraEm: session.expiraEm };
     },
 
     /** Exige a senha atual, grava um novo hash e libera a troca obrigatória da conta. */

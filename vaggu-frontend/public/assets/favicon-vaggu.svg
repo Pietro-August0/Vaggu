@@ -1,0 +1,6 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 128 128" role="img" aria-label="VAGGU">
+  <g transform="translate(64 64) scale(1.15) translate(-64 -64)">
+    <circle cx="64" cy="64" r="48" fill="#080808" stroke="#ffe100" stroke-width="5"/>
+    <path d="M395.25 559L425.5 459.5H471L421.5 599H368.75L319.25 459.5H365L395.25 559Z" transform="translate(-38 -72) scale(.26)" fill="#fff"/>
+  </g>
+</svg>

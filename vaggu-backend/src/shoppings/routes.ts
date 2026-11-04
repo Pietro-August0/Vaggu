@@ -1,6 +1,6 @@
 // Rotas HTTP administrativas de shoppings e gerentes. Todas exigem Admin VAGGU
 // com senha definitiva antes de executar as regras do serviço.
-import { Router, raw } from 'express';
+import { Router } from 'express';
 import { requireAuth, requirePasswordReady, requirePerfil } from '../auth/middleware.js';
 
 /** Expõe cadastro/listagem de shoppings e criação/listagem de seus gerentes para o administrador. */
@@ -14,14 +14,6 @@ export function shoppingsRoutes(auth, shoppings) {
 
   router.post('/', async (req, res) => {
     res.status(201).json(await shoppings.criarShopping(req.body));
-  });
-
-  router.post('/:shoppingId/foto', raw({ type: ['image/jpeg', 'image/png', 'image/webp'], limit: '2mb' }), async (req, res) => {
-    res.json(await shoppings.salvarFotoShopping(req.params.shoppingId, req.body, req.headers['content-type']));
-  });
-
-  router.delete('/:shoppingId/foto', async (req, res) => {
-    res.json(await shoppings.removerFotoShopping(req.params.shoppingId));
   });
 
   router.get('/:shoppingId', async (req, res) => {

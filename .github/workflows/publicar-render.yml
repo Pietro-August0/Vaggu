@@ -1,4 +1,4 @@
-# Dispara a publicação do serviço sempre que a branch principal recebe um commit.
+# Da deploy no Render sempre que alguém commita algo novo na main
 name: Publicar main no Render
 
 on:

@@ -35,7 +35,7 @@ Não altere a política de execução do PowerShell. Neste guia usamos `npm.cmd`
 | `vaggu_local` | Uso normal da API durante o desenvolvimento | Não |
 | `vaggu_teste` | Controle dos testes automatizados | Não; o runner apaga somente bancos temporários criados por ele |
 
-Nenhum deles é produção. Atualmente o projeto não possui banco de produção provisionado.
+Nenhum deles é produção. O registro de 23/09 descreve um PostgreSQL no Neon para o serviço hospedado; as instruções abaixo continuam criando somente bancos locais independentes.
 
 ## Primeira configuração
 
@@ -60,7 +60,7 @@ Se o serviço já estiver com o estado **Em execução**, siga para a próxima e
 3. Selecione o banco `postgres`.
 4. Abra **Tools → Query Tool**.
 5. Troque as duas senhas de exemplo abaixo por senhas locais próprias.
-6. Execute o SQL:
+6. Mantenha o autocommit ativo e execute **uma instrução SQL por vez**, selecionando cada bloco até seu ponto e vírgula. `CREATE DATABASE` não pode rodar dentro de `BEGIN` nem de um lote tratado como uma única transação:
 
 ```sql
 CREATE ROLE vaggu_local_usuario
@@ -99,7 +99,6 @@ Abra `vaggu-backend/.env` em um editor e ajuste:
 
 ```dotenv
 DATABASE_URL="postgresql://vaggu_local_usuario:SUA_SENHA_LOCAL@127.0.0.1:5432/vaggu_local"
-BLOB_READ_WRITE_TOKEN="vercel_blob_rw_TOKEN_DO_PROJETO"
 HOST="127.0.0.1"
 PORT="3000"
 NODE_ENV="development"
@@ -107,7 +106,9 @@ NODE_ENV="development"
 
 Use a senha definida na etapa anterior. Se o PostgreSQL estiver em outra porta, substitua `5432` pela porta correta.
 
-`BLOB_READ_WRITE_TOKEN` é necessário somente para salvar ou remover a foto representativa de um shopping. Obtenha-o no armazenamento Blob vinculado ao projeto Vercel e mantenha-o apenas no ambiente do backend. Sem essa variável, o restante do cadastro funciona e a tentativa de alterar a foto falha explicitamente; não use pasta local como substituto em produção. A imagem fica no Vercel Blob e o PostgreSQL guarda somente sua URL HTTPS.
+O login da interface usa um cookie de sessão `HttpOnly`, `SameSite=Strict` e `Secure` em produção, limitado a `/api/v1`; o backend valida a sessão no PostgreSQL a cada chamada. O navegador restaura a identidade via `/auth/me` após atualizar a página. Logout revoga a sessão e remove o cookie. Não copie tokens para `localStorage`; o contrato Bearer permanece apenas para clientes antigos e testes. Em escrita autenticada por cookie, a API exige o cabeçalho `X-VAGGU-Request`.
+
+O formulário administrativo consulta [ViaCEP](https://viacep.com.br/) após oito dígitos e preenche logradouro, bairro, cidade e UF. Número e complemento continuam manuais e todos os campos permanecem editáveis. A política de segurança do Express permite a conexão somente com esse domínio externo; sem essa exceção, o navegador bloqueia a consulta na versão hospedada, embora ela funcione no servidor local do frontend. Se o serviço estiver indisponível, o endereço pode ser preenchido manualmente. A API oficial Busca CEP dos Correios não é usada: [exige contrato comercial e token](https://www.correios.com.br/atendimento/developers/manuais/manual-api-busca-cep).
 
 Não compartilhe nem envie `.env` ao Git. Se a senha possuir `@`, `:`, `/`, `?`, `#` ou `%`, esses caracteres precisam ser codificados para URL. Para um ambiente local, uma senha alfanumérica longa evita esse problema.
 
@@ -263,40 +264,6 @@ npm.cmd test
 - Prisma Studio: pressione `Ctrl+C` no terminal correspondente.
 - PostgreSQL instalado como serviço pode continuar ligado. Se desejar pará-lo, use **Serviços** do Windows.
 
-## Ambiente portátil usado nesta máquina da equipe
-
-Esta máquina possui uma instalação portátil e ignorada pelo Git em `ambiente.local`. Ela não acompanha o repositório e não deve ser copiada como requisito para parceiros.
-
-Em 21/09/2026, a validação local usou:
-
-- PostgreSQL `17.11`;
-- banco `vaggu_p05_local`;
-- endereço `127.0.0.1:55432`;
-- API em `127.0.0.1:3000`;
-- 9 migrations aplicadas, sem pendências;
-- `/health` e `/health/ready` com resposta `ok`.
-
-Nesta máquina específica, o PostgreSQL portátil é iniciado, a partir da raiz, com:
-
-```powershell
-.\ambiente.local\postgresql\pgsql\bin\pg_ctl.exe start `
-  -D ".\ambiente.local\dados" `
-  -l ".\ambiente.local\postgresql.log" `
-  -o "-p 55432" `
-  -w
-```
-
-Para encerrá-lo de forma segura:
-
-```powershell
-.\ambiente.local\postgresql\pgsql\bin\pg_ctl.exe stop `
-  -D ".\ambiente.local\dados" `
-  -m fast `
-  -w
-```
-
-Parceiros devem seguir a instalação normal deste guia e usar a porta `5432`, salvo se a própria instalação do PostgreSQL informar outra porta.
-
 ## Problemas comuns
 
 ### `ECONNREFUSED` ou conexão recusada
@@ -350,21 +317,31 @@ ALTER ROLE vaggu_teste_runner CREATEDB;
 
 ## Hospedagem no Render
 
-O `render.yaml` da raiz publica a API e o build React no mesmo endereço HTTPS. O serviço usa o plano gratuito do Render e o PostgreSQL permanece no Neon. As credenciais ficam apenas nas variáveis secretas do provedor e não devem ser registradas no Git.
+O [registro de hospedagem](planejamento-do-projeto.md) documenta a instalação do PostgreSQL no Neon e a publicação da VAGGU no serviço `vaggu-tcc` do Render. O `render.yaml` versionado descreve um único serviço web no plano gratuito: ele instala as dependências, gera o cliente Prisma, compila backend e frontend, aplica migrations com `db:deploy` e inicia a API. O endereço público exato e o painel do provedor não estão no repositório; esta revisão não realizou uma requisição ao serviço hospedado.
 
-O Render usa `HOST=0.0.0.0`, aplica as migrations antes de iniciar a API e consulta `/api/v1/health/ready` para validar a conexão. `FRONTEND_DIST_PATH` faz o Express entregar o build React na mesma origem das rotas `/api/v1`, sem exigir CORS amplo.
+O manifesto define `HOST=0.0.0.0`, `NODE_ENV=production` e `FRONTEND_DIST_PATH=../vaggu-frontend/dist`. O Express entrega o build React e as rotas `/api/v1` na mesma origem, sem CORS amplo; o cliente usa caminhos relativos. A plataforma usa `/api/v1/health/ready` como verificação de prontidão, incluindo a conexão ao banco. `DATABASE_URL` é solicitado como segredo do serviço, sem valor no Git. Não executar o banco de testes contra a conexão do Neon.
 
-No plano gratuito, o serviço pode suspender após um período sem acesso. A primeira abertura seguinte pode demorar enquanto a instância reinicia; os dados continuam persistidos no Neon.
+O manifesto ainda gera `CREDENTIAL_ENCRYPTION_KEY`, embora o código atual não a leia após remover a cópia reversível da senha provisória. É uma configuração sem uso a limpar em uma revisão de infraestrutura; não reutilizá-la para guardar credenciais.
+
+O plano gratuito pode suspender a instância após inatividade; a primeira abertura seguinte pode demorar. O banco do Neon é externo ao processo web. Antes de afirmar que uma nova versão está no ar, conferir o deploy correspondente no Render e abrir a aplicação e `/api/v1/health/ready` no endereço fornecido pelo painel.
 
 ### Publicação automática pela `main`
 
-O serviço foi criado a partir da URL pública do repositório. Nessa modalidade, o Render não recebe os eventos de push do GitHub mesmo quando `autoDeploy` está ativado. O workflow `.github/workflows/publicar-render.yml` resolve isso pelo Deploy Hook oficial do Render.
+Nosso histórico registra que o serviço foi criado a partir da URL pública do repositório e não recebia os eventos de push do GitHub. O workflow `.github/workflows/publicar-render.yml` está commitado e solicita o deploy pelo hook quando recebe push na `main` ou disparo manual. Ele falha explicitamente se `RENDER_DEPLOY_HOOK_URL` não existir; o commit do workflow não comprova que o segredo já foi cadastrado ou que cada publicação terminou com sucesso.
 
 O administrador do repositório deve concluir uma única configuração:
 
 1. No serviço `vaggu-tcc` do Render, abrir **Settings**, localizar **Deploy Hook** e copiar a URL secreta.
 2. No GitHub, abrir **Settings → Secrets and variables → Actions → New repository secret**.
 3. Criar o segredo `RENDER_DEPLOY_HOOK_URL` com a URL copiada. Não registrar essa URL em arquivos, mensagens ou capturas.
-4. Abrir **Actions → Publicar main no Render → Run workflow** para testar. Depois disso, cada push na `main` dispara uma nova publicação.
+4. Abrir **Actions → Publicar main no Render → Run workflow** e conferir o resultado no GitHub e no Render. Com o segredo configurado, cada push na `main` solicita uma nova publicação; conferir também o resultado do build e da prontidão.
 
-Somente administradores de `Pietro-August0/Vaggu` podem cadastrar esse segredo. A conta de Samuel possui permissão de escrita, mas não de administração do repositório.
+O cadastro desse segredo exige permissão administrativa no repositório.
+
+### Painel local retorna erro apesar de banco conectado
+
+`/api/v1/health/ready` confirma conectividade, mas não comprova que o esquema está atualizado. Em 25/10/2026, o banco local antigo aceitava login e falhava ao consultar sensores/análises por quatro migrações pendentes. Conferir `npx prisma migrate status` em `vaggu-backend`, preservar o banco com backup e aplicar as migrações versionadas com `npm run db:deploy` antes de iniciar a API atualizada. Não usar reset para corrigir esse caso. O resultado esperado é consulta autenticada de estrutura/análise com HTTP 200, além do healthcheck.
+
+## WhatsApp publicado
+
+A landing usa o número público +55 (11) 99380-7892 como padrão, com override por `VITE_WHATSAPP_NUMBER` no build. No backend, `WHATSAPP_VERIFY_TOKEN` valida o desafio; `META_APP_SECRET` valida a assinatura; `WHATSAPP_ACCESS_TOKEN`, `WHATSAPP_PHONE_NUMBER_ID` e `WHATSAPP_API_VERSION` configuram envio. `WHATSAPP_AUTO_REPLY_ENABLED=true` habilita respostas. Valores privados são mantidos no Render e não devem entrar em documentação ou capturas. O banco local pode diferir do publicado. A atribuição da conta real ao usuário técnico é necessária além dos escopos do token. Ver [processo e operação](whatsapp-processo-e-operacao.md) e [guia do webhook](whatsapp-webhook.md).

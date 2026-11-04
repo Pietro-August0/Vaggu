@@ -1,3 +1,4 @@
+// Verifica contratos do schema e das migrations com PostgreSQL quando o banco de teste está disponível.
 import test from 'node:test';
 import assert from 'node:assert/strict';
 import { readFileSync } from 'node:fs';
@@ -52,10 +53,39 @@ test('migration cadastral amplia a ficha sem invalidar shoppings existentes', ()
   assert.doesNotMatch(sql, /DROP\s+(TABLE|COLUMN)/i);
 });
 
-test('migration final da foto mantém somente URL e hash de senha no PostgreSQL', () => {
+test('migration histórica da foto remove binário e senha provisória reversível', () => {
   const sql = readFileSync(join(projectRoot, 'prisma/migrations/20260921000200_referencia_foto_shopping/migration.sql'), 'utf8');
   assert.match(sql, /ADD COLUMN "imagem_url" TEXT/);
   assert.match(sql, /DROP TABLE "fotos_shopping"/);
   assert.match(sql, /DROP COLUMN "senha_provisoria_protegida"/);
   assert.doesNotMatch(sql, /BYTEA/);
+});
+
+test('migration de remoção retira a foto do cadastro de shopping', () => {
+  const sql = readFileSync(join(projectRoot, 'prisma/migrations/20260925000100_remover_foto_shopping/migration.sql'), 'utf8');
+  assert.match(sql, /DROP COLUMN "imagem_url"/);
+});
+
+test('migration P06 separa sensor, deduplica sequência e preserva instante efetivo', () => {
+  const enumSql = readFileSync(join(projectRoot, 'prisma/migrations/20260928000100_telemetria_p06/migration.sql'), 'utf8');
+  const sql = readFileSync(join(projectRoot, 'prisma/migrations/20260928000200_persistencia_telemetria_p06/migration.sql'), 'utf8');
+  assert.match(enumSql, /ALTER TYPE "EstadoVaga" ADD VALUE IF NOT EXISTS 'INDISPONIVEL'/);
+  assert.match(sql, /CREATE TABLE "sensores"/);
+  assert.match(sql, /eventos_telemetria_dispositivo_inicializacao_sequencia_key/);
+  assert.match(sql, /FOREIGN KEY \("vaga_id", "shopping_id"\)/);
+  assert.match(sql, /"efetivo_em" TIMESTAMP\(3\)/);
+  assert.match(sql, /"payload_hash" CHAR\(64\)/);
+});
+
+test('view do Power BI transforma eventos confirmados em intervalos semiabertos', () => {
+  const sql = readFileSync(
+    join(projectRoot, 'prisma/migrations/20260930000100_visao_power_bi_historico/migration.sql'),
+    'utf8',
+  );
+  assert.match(sql, /CREATE VIEW "power_bi_intervalos_ocupacao"/);
+  assert.match(sql, /LEAD\("efetivo_em"\) OVER/);
+  assert.match(sql, /PARTITION BY "vaga_id"/);
+  assert.match(sql, /"shopping_id"::text AS "shopping_codigo"/);
+  assert.match(sql, /"estado_anterior" = 'LIVRE'::"EstadoVaga"/);
+  assert.doesNotMatch(sql, /CREATE MATERIALIZED VIEW/);
 });

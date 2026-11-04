@@ -39,8 +39,10 @@ export function createContaService(prisma) {
     },
 
     /** Copia somente nome e telefone para a gravação, ignorando campos de privilégio enviados no corpo. */
-    async atualizarMinhaConta(usuarioId, body: Record<string, any> = {}) {
-      const dados = body ?? {};
+    async atualizarMinhaConta(usuarioId, body: unknown = {}) {
+      const dados = typeof body === 'object' && body !== null && !Array.isArray(body)
+        ? body as Record<string, unknown>
+        : {};
       const data: Record<string, unknown> = {};
       if ('nome' in dados) data.nome = validarTextoOpcional(dados.nome, 'nome');
       if ('telefone' in dados) data.telefone = validarTelefone(dados.telefone);

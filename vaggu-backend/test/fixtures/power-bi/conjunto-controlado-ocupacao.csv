@@ -1,0 +1,7 @@
+cenario_id,origem,shopping_codigo,andar,setor,vaga_codigo,tipo_vaga,estado,inicio_em,fim_em,entrada_observada
+power-bi-duas-vagas-uma-hora,SINTETICO,SHOPPING-DEMONSTRACAO,Piso demonstração,Setor A,A,COMUM,LIVRE,2026-01-01T00:00:00.000Z,2026-01-01T00:15:00.000Z,false
+power-bi-duas-vagas-uma-hora,SINTETICO,SHOPPING-DEMONSTRACAO,Piso demonstração,Setor A,A,COMUM,OCUPADA,2026-01-01T00:15:00.000Z,2026-01-01T00:45:00.000Z,true
+power-bi-duas-vagas-uma-hora,SINTETICO,SHOPPING-DEMONSTRACAO,Piso demonstração,Setor A,A,COMUM,LIVRE,2026-01-01T00:45:00.000Z,2026-01-01T01:00:00.000Z,false
+power-bi-duas-vagas-uma-hora,SINTETICO,SHOPPING-DEMONSTRACAO,Piso demonstração,Setor A,B,PCD,OCUPADA,2026-01-01T00:00:00.000Z,2026-01-01T00:30:00.000Z,false
+power-bi-duas-vagas-uma-hora,SINTETICO,SHOPPING-DEMONSTRACAO,Piso demonstração,Setor A,B,PCD,INDISPONIVEL,2026-01-01T00:30:00.000Z,2026-01-01T00:50:00.000Z,false
+power-bi-duas-vagas-uma-hora,SINTETICO,SHOPPING-DEMONSTRACAO,Piso demonstração,Setor A,B,PCD,LIVRE,2026-01-01T00:50:00.000Z,2026-01-01T01:00:00.000Z,false

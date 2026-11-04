@@ -9,7 +9,7 @@ import "./login-page.css"
 
 /** Não exibe nem preenche contas de demonstração; erros de rede não concedem acesso. */
 export function LoginPage() {
-  const { currentUser, login, mensagemSessao } = useAppStore()
+  const { ready, currentUser, login, mensagemSessao } = useAppStore()
   const [email, setEmail] = useState("")
   const [senha, setSenha] = useState("")
   const [mostrarSenha, setMostrarSenha] = useState(false)
@@ -17,6 +17,7 @@ export function LoginPage() {
   const [enviando, setEnviando] = useState(false)
   const [ajuda, setAjuda] = useState(false)
   const envioAtivo = useRef(false)
+  if (!ready) return <main className="grid min-h-screen place-items-center" role="status">Verificando seu acesso...</main>
   if (currentUser) return <Navigate replace to={currentUser.trocarSenhaObrigatoria ? "/trocar-senha" : currentUser.role === "admin" ? "/admin" : "/painel"} />
 
   async function entrar(evento: FormEvent<HTMLFormElement>) {
@@ -56,7 +57,7 @@ export function LoginPage() {
       </footer>
     </section>
     <aside className="login-apresentacao" aria-label="Sobre a VAGGU">
-      <img className="login-foto" src="/assets/vaggu-foto-homem-login-sem-fundo.png" alt="" aria-hidden="true" />
+      <img className="login-foto" src="/assets/vaggu-foto-homem-login-sem-fundo.webp" alt="" aria-hidden="true" />
       <p className="login-manifesto">Não é sobre<br /><strong>ter mais <span className="login-vagas">vagas<svg className="login-vagas-rabisco" viewBox="0 0 180 72" preserveAspectRatio="none" aria-hidden="true"><path pathLength="1" d="M13 39C17 12 148 3 169 31C187 56 36 75 9 49C-1 39 8 24 32 15"/><path pathLength="1" d="M22 57C56 72 153 63 173 39"/></svg></span>,</strong> é sobre gerenciar cada espaço com inteligência e segurança.</p>
       <div className="login-parceria"><span>Acesso enviado pelo WhatsApp</span><p>O shopping é tratado com nosso<br />time pelo WhatsApp.</p></div>
     </aside>
