@@ -1,5 +1,14 @@
 # VAGGU — planejamento e continuidade do projeto
 
+## Memorial direto para o QR code — 04/11/2026
+
+Revisada a página sem descartar o trabalho local da main. Hero com uma única foto grande dos seis integrantes, conceito em três passos, carrossel manual com 18 imagens do projeto, grade única com um retrato de cada integrante e seis fotos em conjunto. Depoimentos originais preservados e recolhidos. Encerramento agradece SESI, SENAI, Matheus Zacaria, Giovanni Ribeiro, Edmar e Alex. Mantido Juan conforme identificação do acervo existente. Nenhum asset original removido.
+
+Validação: `npm.cmd run build` e `npm.cmd run lint` no frontend; `node %TEMP%/vaggu-memorial-direto-qa.cjs`; `node scripts/verificar-documentacao.mjs`; `git diff --check`. Playwright/Edge em http://127.0.0.1:4173/memorial/, desktop 1440×1000, tablet 768×1024 e celular 390×844, tema escuro próprio do memorial e movimento reduzido. Carrossel por clique/setas, ampliação, Escape, ciclo de Tab e retorno de foco, depoimentos por teclado, carregamento das imagens e ausência de overflow aprovados. Corrigido erro 403 do favicon com referência à marca existente; rodada final sem erros de console. Build mantém aviso de chunks grandes. Quinze capturas anonimizadas no índice; fotografias reais verificadas quanto ao carregamento e proporções, sem capturar identidades. Evidências locais não comprovam produção nem hardware.
+
+Browser plugin not available: usado Playwright instalado, sem novas dependências. Skill de roteamento VAGGU ausente no catálogo e nos caminhos locais consultados, como já registrado anteriormente; responsabilidade de produto Samuel preservada, sem simular autoria, revisão ou aprovação. Sem commit, push ou publicação. Publicação e conferência do QR code no ambiente de destino permanecem fora desta rodada.
+
+
 ## Responsividade dos canais oficiais — 04/11/2026
 
 Removido o subtítulo “Links do projeto”; “Canais oficiais” ficou como único título da seção. Os nomes dos canais e o e-mail permanecem em uma linha. A grade mantém uma coluna até a largura XL e só então passa a duas colunas, preservando espaço para os rótulos.
@@ -11,6 +20,42 @@ Validação local no Edge em 1440×1000, 1280×900, 1024×900, 768×1024, 390×8
 Removido o botão de WhatsApp redundante no lado esquerdo do rodapé; o WhatsApp permanece como canal oficial na grade à direita. Instagram e GitHub agora usam símbolos próprios, mantendo WhatsApp e e-mail com seus ícones correspondentes. Removidos os indicadores de link externo da grade.
 
 Validação: build e lint do frontend aprovados; `git diff --check` e verificador documental aprovados. Capturas locais com Edge em desktop 1440×1000, tablet 768×1024 e celular 390×844; links e ícones conferidos, somente um destino wa.me no rodapé, nenhum indicador externo ou overflow horizontal, foco visível testado por teclado e sem erros de console ou respostas HTTP malsucedidas. Dados de visitante fictícios; sem publicação ou envio de mensagens. Ver capturas no [índice de evidências visuais](../Evidências%20visuais/Índice%20de%20evidências.md).
+
+## Galeria por integrante — 04/11/2026
+
+O filtro Equipe exibe todos os registros selecionados, com retratos lado a lado por integrante, duas fotos do trio dos meninos e quatro registros coletivos. Faltam originais em resolução adequada para completar Ana, Juan, Pietro, Kamilly e o trio das meninas. Validação local em três larguras e navegação por teclado. Executados build, lint, verificador documental e git diff --check.
+
+## Abertura do projeto no memorial — 04/11/2026
+
+A grade da abertura reúne a foto oficial dos seis integrantes, o logotipo e o mapa de vagas demonstrativo. O cartão do mapa leva à seção Da vaga ao painel. Validação local em três larguras com dados fictícios e navegação por teclado. Verificações com build, lint, verificador documental e git diff --check.
+
+## Seleção da equipe no memorial — 04/11/2026
+
+A abertura mostra a foto oficial em quadro único. A foto oficial aparece uma vez na galeria, junto a registros distintos da equipe. Cada integrante aparece em pelo menos duas fotos, contando retratos e registros coletivos. A miniatura do trio foi retirada da página por baixa resolução. Verificação local em três larguras e navegação por teclado. Executados build, lint, verificador documental e git diff --check.
+
+## Montagem e sprints no memorial — 04/11/2026
+
+A abertura reúne a foto oficial dos seis integrantes e a miniatura recebida do trio. O trio também aparece no filtro Equipe. O avatar do Juan usa o retrato individual centralizado. O filtro Projeto reúne as quatro sprints com evidência fotográfica vinculada ao planejamento, em ordem de 3 a 6. Capturas locais com dados fictícios em desktop, tablet e celular. Verificações com build, lint, verificador documental e git diff --check.
+
+## Retratos no memorial — 04/11/2026
+
+O retrato de perfil do Juan em resolução maior entrou no acervo. Um retrato individual da Kamilly substituiu o recorte do grupo nos relatos. As demais imagens coladas chegaram em tamanho de miniatura. Conferência local do acervo por teclado e capturas com dados fictícios. Verificações com build, lint, verificador documental e git diff --check.
+
+## Projeto em destaque no memorial — 04/11/2026
+
+A abertura leva ao projeto. Antes dos depoimentos, o memorial apresenta o fluxo do sensor ao painel, as tecnologias, três telas de demonstração, os ícones de categoria e o guia visual. A animação foi refeita em SVG e CSS, com duração de 3,2 segundos e respeito ao movimento reduzido. As evidências locais mostram desktop, tablet e celular. Verificações executadas com build, lint, verificador documental e git diff --check.
+
+## Curadoria do memorial — 04/11/2026
+
+Retirados os registros marcados, imagens sem vínculo claro com o TCC e o vídeo no carro. Adicionados mapa e telão de demonstração a partir das evidências de 21/10 e 17/10. A animação da marca ocupa o fundo do encerramento e pausa fora da tela. Capturas locais nos três tamanhos e pausa por teclado verificadas. Comandos executados: build e lint do frontend, verificador documental e git diff --check. Conferência em navegador local.
+
+## Memorial para apresentação — 04/11/2026
+
+Revisamos `/memorial` para a leitura pelo QR code da apresentação. A abertura mostra uma foto da equipe e um link para o acervo. O resumo do projeto cabe em dois parágrafos, os depoimentos abrem por nome e a galeria começa com oito miniaturas. As animações usam opacidade e deslocamento curto, com suporte à preferência por movimento reduzido. O texto demonstrativo de Kamilly deu lugar à indicação de depoimento pendente.
+
+Build e lint aprovados com `npm.cmd run build --prefix vaggu-frontend` e `npm.cmd run lint --prefix vaggu-frontend`. Permanece o aviso conhecido do Vite sobre chunks acima de 500 kB. A conferência em `npm.cmd run dev --prefix vaggu-frontend -- --host 127.0.0.1 --port 5178 --strictPort` cobriu navegação por teclado, filtros, ampliação, retorno de foco e reprodução da animação da marca. Sem erros de console no fluxo verificado. Capturas com dados fictícios registradas no [índice de evidências visuais](../Evidências%20visuais/Índice%20de%20evidências.md). A validação foi local, com dimensões emuladas. O QR impresso e o endereço publicado ficam para a conferência da apresentação.
+
+`node scripts/verificar-documentacao.mjs` aprovou 700 arquivos e 63 documentos Markdown. `git diff --check` passou.
 
 ## Landing e rota do memorial — 04/11/2026
 
@@ -969,3 +1014,33 @@ Validação: `npm run build` e `npm run lint` no frontend; `node ambiente.local/
 Limites: Browser plugin ausente; Edge no isolamento falhou ao iniciar e a primeira URL não era acessível fora do isolamento. Vite iniciado fora do isolamento em 5174 (5173 ocupada); QA executado com permissão de execução. Caminho temporário por processo não persistiu, e o roteiro foi recriado em ambiente.local, ignorado pelo Git. Uma tentativa de atualização documental por Node falhou por aspas; substituída por escrita literal PowerShell antes dos verificadores finais. Prints longos ocultam somente o cabeçalho/atalho externos à seção durante a captura. README não apresenta esta seção, portanto suas imagens foram preservadas. Sem banco, equipamento físico ou ambiente publicado envolvidos; teste com pessoas usuárias permanece pendente.
 
 **Conferência pós-deploy de 04/11:** `/api/v1/health` e `/api/v1/health/ready` responderam HTTP 200, sem alteração de dados. O teste de funcionamento real da versão anterior continua válido para aquele percurso; a nova apresentação foi confirmada posteriormente pelo participante no percurso registrado no início deste documento.
+
+## Ajustes comentados do memorial — 04/11/2026
+
+Abertura centralizada com texto e botão alinhados à foto; título usa o SVG oficial com texto alternativo VAGGU. Quinta foto coletiva substituída pelo trio das meninas, sem remover originais. Retrato de Kamilly usa `retrato-kamilly.webp`, mais nítido que a miniatura anterior. A foto `trio-equipe.jpg` disponível tem apenas 72×54 px: substituição feita conforme pedido, mas a qualidade depende do original em maior resolução. Não foi inventado detalhe por IA.
+
+Verificação local com `node %TEMP%/vaggu-memorial-comentarios-qa.cjs`, Playwright/Edge (Browser plugin ausente), em 1440×1000, 768×1024 e 390×844. Logo, centralização, fontes das fotos, carregamento, carrossel, teclado, foco e ausência de overflow conferidos. Capturas anonimizadas em `2026-11-04 - Ajustes comentados memorial`; tema escuro próprio. `node scripts/verificar-documentacao.mjs` e `git diff --check`. Mudança restrita a HTML/CSS e caminhos de imagens; sem dependências ou mudança de lógica. Sem publicação.
+
+## Fotos originais do memorial — 04/11/2026
+
+Recebidas e copiadas sem edição as fotos originais das três integrantes (1280×960) e de Kamilly (960×1280). `src/dados/acervo.js` aponta para `trio-original.jpg` e `kamilly-original.jpg`; arquivos anteriores preservados. A pendência de resolução das miniaturas está resolvida por estes arquivos fornecidos pelo usuário.
+
+Rota http://127.0.0.1:4173/memorial/, visitante público, tema escuro. Playwright/Edge local, Browser plugin ausente. Roteiro `node %TEMP%/vaggu-memorial-originais-qa.cjs`: desktop 1440×1000, tablet 768×1024 e celular 390×844; carregamento, fontes de imagem, galeria, carrossel, ampliação, teclado e overflow. Evidências anonimizadas em `2026-11-04 - Fotos originais memorial/`: arquivos `desktop`, `tablet` e `celular`, cada qual com sufixos `-hero.png`, `-completo.png`, `-carrossel.png`, `-ampliacao.png` e `-depoimento.png`. Fonte das imagens reais: anexos autorizados; capturas usam substitutos fictícios. Sem publicação ou alteração de lógica. Verificadores: `node scripts/verificar-documentacao.mjs` e `git diff --check`.
+
+## Tutores do memorial — 04/11/2026
+
+A lista final foi atualizada conforme os nomes fornecidos pelo usuário: Alex Augusto de Mello Junior, Matheus da Costa Zacarias, Giovanni Ribeiro Pinto e Arthur Rosa Alves Andrade, identificados como nossos tutores. Instituições SESI e SENAI mantidas. Esta lista substitui a redação anterior com nomes abreviados.
+
+Validação local: `node %TEMP%/vaggu-memorial-tutores-qa.cjs`, Playwright/Edge, rota `/memorial/`, visitante público, tema escuro, desktop 1440×1000, tablet 768×1024 e celular 390×844. Evidências anonimizadas em `2026-11-04 - Tutores memorial/`, arquivos por viewport com sufixos `-completo.png`, `-hero.png`, `-carrossel.png`, `-ampliacao.png` e `-depoimento.png`; nomes e fotos substituídos somente nas capturas. `node scripts/verificar-documentacao.mjs` e `git diff --check`. Alteração textual, sem mudança de lógica ou publicação.
+
+## Lista de tutores — 04/11/2026
+
+Os quatro nomes dos tutores agora aparecem em lista semântica, um por tópico, com espaçamento e marcadores amarelos. Conteúdo dos nomes preservado. Alterados `index.html` e `src/estilos.css` do memorial.
+
+Validação: `node %TEMP%/vaggu-memorial-lista-qa.cjs`, Playwright/Edge local, visitante público em `/memorial/`, tema escuro, viewports desktop 1440×1000, tablet 768×1024 e celular 390×844. Evidências em `2026-11-04 - Lista de tutores/` com nomes/fotos fictícios somente nas capturas; `desktop-completo.png`, `tablet-completo.png` e `celular-completo.png` registram os agradecimentos. Carrossel, teclado, foco, carregamento e overflow verificados; sem publicação. Comandos finais: `node scripts/verificar-documentacao.mjs` e `git diff --check`.
+
+## Edimar e título do memorial — 04/11/2026
+
+`index.html`: Edimar Dantas da Silva Duarte incluído como quinto tutor; título da aba atualizado para Memorial Vaggu. Playwright/Edge (`node %TEMP%/vaggu-edimar-qa.cjs`): visitante público em `/memorial/`, tema escuro, 1440×1000, 768×1024 e 390×844. Capturas completas anonimizadas em `2026-11-04 - Edimar e titulo/`; título, carregamento, teclado e ausência de overflow conferidos. Validação local, sem publicação. Verificadores: `node scripts/verificar-documentacao.mjs` e `git diff --check`.
+
+Em 04/11/2026, o memorial recebeu o depoimento completo da Kamilly. Revisão local em /memorial/ com Playwright/Edge (1440×1000, 768×1024 e 390×844), com abertura por teclado e capturas fictícias em 2026-11-04 - Depoimento Kamilly. Verificações: build e lint do frontend, node scripts/verificar-documentacao.mjs e git diff --check.

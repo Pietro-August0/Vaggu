@@ -4,6 +4,8 @@ tags: [vaggu, indice]
 ---
 # VAGGU
 
+**Memorial para apresentação — 04/11/2026:** a rota `/memorial` tem foto única na abertura, conceito breve, carrossel do projeto, retratos e fotos em conjunto, relatos recolhidos e agradecimentos. Ver [evidências da revisão](Evidências%20visuais/Índice%20de%20evidências.md).
+
 **Aceite e escopo atualizados em 04/11/2026:** site completamente homologado conforme confirmação do usuário; foco em evidências e preparação da apresentação. WhatsApp demonstrativo, sem exigência de atendimento humano, coleta comercial ou protocolo. Procedimentos de dados definidos em [[Vaggu/Documentação/operacao-dados-tcc|operação dos dados do TCC]]. O aceite físico sustentado dos sensores continua separado. Os registros anteriores abaixo preservam o diagnóstico antes desta confirmação.
 
 **Diagnóstico anterior à confirmação do usuário — 04/11/2026:** homologação integrada e preparação da entrega do TCC (P11/E6), no início previsto da Sprint 7. Consulte a [[Vaggu/Documentação/revisao-documental-2026-11-04|revisão consolidada: o que temos, o que falta e prioridades]]. P06–P08 aguardam aceites publicados/físicos; P10 tem percurso real confirmado e pendências de atendimento/operação; Power BI publicado é opcional.

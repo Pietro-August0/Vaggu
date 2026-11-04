@@ -36,12 +36,15 @@ export const fotos = Object.freeze({
   "33": "/memorial/assets/fotos/registro-33.webp",
   "34": "/memorial/assets/fotos/registro-34.webp",
   "juan": "/memorial/assets/fotos/retrato-juan.webp",
-  "kamilly": "/memorial/assets/fotos/retrato-kamilly.webp",
-  "video0": "/memorial/assets/fotos/capa-video-1.webp",
-  "video1": "/memorial/assets/fotos/capa-video-2.webp"
+  "kamilly": "/memorial/assets/fotos/kamilly-original.jpg",
+  "trio": "/memorial/assets/fotos/trio-original.jpg",
+  "sprint-03": "/memorial/assets/fotos/sprint-03.jpeg",
+  "sprint-04": "/memorial/assets/fotos/sprint-04.jpeg",
+  "sprint-05": "/memorial/assets/fotos/sprint-05.jpeg",
+  "sprint-06": "/memorial/assets/fotos/sprint-06.jpeg",
+  "juan-ensaio": "/memorial/assets/fotos/juan-ensaio.jpg",
+  "mapa-demo": "/memorial/assets/fotos/mapa-demo.png",
+  "telao-demo": "/memorial/assets/fotos/telao-demo.png",
+  "guia-visual": "/memorial/assets/fotos/guia-visual.png",
+  "analise-demo": "/memorial/assets/fotos/analise-demo.png"
 })
-
-export const videos = Object.freeze([
-  "/memorial/assets/videos/memoria-01.mp4",
-  "/memorial/assets/videos/marca-em-movimento.mp4"
-])

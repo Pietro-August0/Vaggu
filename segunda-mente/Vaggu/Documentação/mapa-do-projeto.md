@@ -273,7 +273,7 @@ As cópias de imagens entre `segunda-mente/Vaggu/Identidade visual/Assets/` e `v
 | `vaggu-frontend/tsconfig.node.json` | Configura compilação TypeScript e limites dos arquivos incluídos neste projeto. |
 | `vaggu-frontend/vite.config.ts` | Configura React, Tailwind, aliases e proxy local de /api para o backend. |
 | `vaggu-memorial-samuel/.gitignore` | Exclui dependências, artefatos e configurações locais do site independente do memorial. |
-| `vaggu-memorial-samuel/index.html` | Estrutura a página pública de apresentação do sistema e memorial da equipe VAGGU. |
+| `vaggu-memorial-samuel/index.html` | Estrutura o memorial para acesso por QR code, com grade de abertura, atalho pelo mapa, funcionamento, identidade visual, depoimentos e acervo. |
 | `vaggu-memorial-samuel/package.json` | Declara o comando de desenvolvimento do site sem dependências externas. |
 | `vaggu-memorial-samuel/README.md` | Explica o propósito, a execução local, a estrutura e os limites editoriais do memorial. |
 | `vaggu-memorial-samuel/public/assets/logotipo-vaggu-amarelo.svg` | Publica a marca amarela reutilizada na apresentação do memorial. |
@@ -283,6 +283,10 @@ As cópias de imagens entre `segunda-mente/Vaggu/Identidade visual/Assets/` e `v
 | `vaggu-memorial-samuel/public/assets/fontes/poppins-latin-500.woff2` | Publica a fonte Poppins Latin no peso 500 usada pela página. |
 | `vaggu-memorial-samuel/public/assets/fontes/poppins-latin-600.woff2` | Publica a fonte Poppins Latin no peso 600 usada pela página. |
 | `vaggu-memorial-samuel/public/assets/fontes/poppins-latin-700.woff2` | Publica a fonte Poppins Latin no peso 700 usada pela página. |
+| `vaggu-memorial-samuel/public/assets/fotos/guia-visual.png` | Guia de paleta e tipografia reproduzido da documentação de planejamento. |
+| `vaggu-memorial-samuel/public/assets/fotos/analise-demo.png` | Painel de análise com dados fictícios reproduzido da revisão de 25/10. |
+| `vaggu-memorial-samuel/public/assets/fotos/mapa-demo.png` | Reprodução do mapa com dados fictícios, da revisão geral de 21/10. |
+| `vaggu-memorial-samuel/public/assets/fotos/telao-demo.png` | Reprodução do telão de entrada em demonstração, das evidências de 17/10. |
 | `vaggu-memorial-samuel/public/assets/fotos/capa-video-1.webp` | Fornece a imagem de capa do primeiro vídeo no acervo do memorial. |
 | `vaggu-memorial-samuel/public/assets/fotos/capa-video-2.webp` | Fornece a imagem de capa do segundo vídeo no acervo do memorial. |
 | `vaggu-memorial-samuel/public/assets/fotos/registro-00.webp` | Publica a fotografia identificada como registro 00 no acervo do memorial. |
@@ -321,17 +325,23 @@ As cópias de imagens entre `segunda-mente/Vaggu/Identidade visual/Assets/` e `v
 | `vaggu-memorial-samuel/public/assets/fotos/registro-33.webp` | Publica a fotografia identificada como registro 33 no acervo do memorial. |
 | `vaggu-memorial-samuel/public/assets/fotos/registro-34.webp` | Publica a fotografia identificada como registro 34 no acervo do memorial. |
 | `vaggu-memorial-samuel/public/assets/fotos/retrato-juan.webp` | Publica o retrato identificado como Juan no acervo do memorial. |
-| `vaggu-memorial-samuel/public/assets/fotos/retrato-kamilly.webp` | Publica o retrato identificado como Kamilly no acervo do memorial. |
+| `vaggu-memorial-samuel/public/assets/fotos/retrato-kamilly.webp` | Retrato nítido da Kamilly usado na galeria e no depoimento. |
+| `vaggu-memorial-samuel/public/assets/fotos/kamilly-perfil.jpg` | Preserva a miniatura anterior da Kamilly, substituída no memorial por retrato-kamilly.webp. |
+| `vaggu-memorial-samuel/public/assets/fotos/trio-equipe.jpg` | Miniatura das três integrantes exibida por solicitação na quinta posição coletiva; original de maior resolução pendente. |
+| `vaggu-memorial-samuel/public/assets/fotos/sprint-03.jpeg` | Cópia da evidência fotográfica da Sprint 3 usada no acervo. |
+| `vaggu-memorial-samuel/public/assets/fotos/sprint-04.jpeg` | Cópia da evidência fotográfica da Sprint 4 usada no acervo. |
+| `vaggu-memorial-samuel/public/assets/fotos/sprint-05.jpeg` | Cópia da evidência fotográfica da Sprint 5 usada no acervo. |
+| `vaggu-memorial-samuel/public/assets/fotos/sprint-06.jpeg` | Cópia da evidência fotográfica da Sprint 6 usada no acervo. |
+| `vaggu-memorial-samuel/public/assets/fotos/juan-ensaio.jpg` | Retrato de perfil do Juan exibido no acervo e no avatar dos relatos. |
 | `vaggu-memorial-samuel/public/assets/videos/marca-em-movimento.mp4` | Fornece o vídeo da marca animada exibido na seção de memória da página. |
 | `vaggu-memorial-samuel/public/assets/videos/memoria-01.mp4` | Fornece o primeiro vídeo do acervo audiovisual do memorial. |
 | `vaggu-memorial-samuel/scripts/servidor.mjs` | Serve localmente os arquivos do memorial sem dependências ou acesso à rede externa. |
-| `vaggu-memorial-samuel/src/estilos.css` | Define a identidade visual, os layouts responsivos e o movimento reduzido do memorial. |
-| `vaggu-memorial-samuel/src/main.js` | Inicializa navegação, movimento, vídeos e galeria da página independente. |
+| `vaggu-memorial-samuel/src/estilos.css` | Define o layout responsivo e a animação curta da marca em SVG, com suporte a movimento reduzido. |
+| `vaggu-memorial-samuel/src/main.js` | Inicializa navegação, movimento, carrossel e galeria da página independente. |
 | `vaggu-memorial-samuel/src/dados/acervo.js` | Mapeia fotografias e vídeos do memorial para os arquivos publicados. |
-| `vaggu-memorial-samuel/src/interacoes/galeria.js` | Implementa a navegação e os controles da galeria de memórias. |
-| `vaggu-memorial-samuel/src/interacoes/movimento.js` | Inicializa animações e efeitos de entrada da página. |
-| `vaggu-memorial-samuel/src/interacoes/navegacao.js` | Controla menu, navegação por seções e progresso de leitura. |
-| `vaggu-memorial-samuel/src/interacoes/videos.js` | Gerencia reprodução e controles dos vídeos do memorial. |
+| `vaggu-memorial-samuel/src/interacoes/galeria.js` | Controla o carrossel manual do projeto e a ampliação das fotos por categoria, com teclado e retorno de foco. |
+| `vaggu-memorial-samuel/src/interacoes/movimento.js` | Dispara as entradas das seções quando entram na área visível. |
+| `vaggu-memorial-samuel/src/interacoes/navegacao.js` | Abre o depoimento correspondente quando o fragmento do endereço aponta para um integrante. |
 
 
 ## Prévia dos telões — atualização de 17/10/2026
@@ -414,3 +424,14 @@ O componente `vaggu-frontend/src/components/equipamentos-admin.tsx` orienta cada
 
 | `scripts/gerar-apresentacao-whatsapp.mjs` | Exporta a arte JPEG do WhatsApp com marca, foto e fonte locais; Sharp usado somente na autoria. |
 | `vaggu-frontend/public/assets/apresentacao-whatsapp-vaggu.jpg` | Apresentação ilustrativa pública usada no cabeçalho da opção Conhecer a VAGGU. |
+
+Memorial em 04/11/2026: `index.html` organiza hero único, conceito breve, carrossel, retratos, fotos em conjunto, relatos e agradecimentos; `src/estilos.css` define suas grades responsivas.
+
+| `vaggu-memorial-samuel/public/assets/fotos/trio-original.jpg` | Foto original das três integrantes enviada pelo usuário em 04/11, usada na galeria. |
+| `vaggu-memorial-samuel/public/assets/fotos/kamilly-original.jpg` | Retrato original da Kamilly enviado pelo usuário em 04/11, usado na galeria e no depoimento. |
+
+`vaggu-memorial-samuel/index.html`: agradecimentos finais identificam os quatro tutores pelos nomes completos fornecidos em 04/11/2026.
+
+Memorial: `index.html` usa lista semântica para os tutores; `src/estilos.css` define espaçamento e marcadores da `.lista-tutores`.
+`vaggu-memorial-samuel/index.html`: título Memorial Vaggu e cinco tutores na lista de agradecimentos.
+`vaggu-memorial-samuel/index.html`: inclui o depoimento completo da Kamilly na seção da equipe.

@@ -3,6 +3,52 @@ tags: [vaggu, evidencias, interface]
 ---
 # Evidências visuais da VAGGU
 
+## 04/11/2026 — galeria por integrante
+
+Memorial local, perfil visitante e retratos fictícios nas capturas. Filtro Equipe em [desktop 1440×1000](2026-11-04%20-%20Galeria%20por%20integrante/equipe-desktop.jpg), [tablet 768×1024](2026-11-04%20-%20Galeria%20por%20integrante/equipe-tablet.jpg) e [celular 390×844](2026-11-04%20-%20Galeria%20por%20integrante/equipe-celular.jpg), sem rolagem horizontal. Navegação por teclado confirmou a sequência do par. Console sem erros no fluxo.
+
+## 04/11/2026 — abertura do projeto
+
+Memorial local, perfil visitante, com imagem fictícia no quadro da equipe e mapa de demonstração. A grade arredondada aparece em [desktop 1440×1000](2026-11-04%20-%20Abertura%20do%20projeto/abertura-desktop.jpg), [tablet 768×1024](2026-11-04%20-%20Abertura%20do%20projeto/abertura-tablet.jpg) e [celular 390×844](2026-11-04%20-%20Abertura%20do%20projeto/abertura-celular.jpg), sem rolagem horizontal. O atalho do mapa abriu a seção de funcionamento por Enter. Console sem erros no fluxo.
+
+## 04/11/2026 — seleção da equipe
+
+Visitante no memorial local com imagens fictícias. A abertura usa um quadro único em [desktop 1440×1000](2026-11-04%20-%20Sele%C3%A7%C3%A3o%20da%20equipe/abertura-desktop.jpg), [tablet 768×1024](2026-11-04%20-%20Sele%C3%A7%C3%A3o%20da%20equipe/abertura-tablet.jpg) e [celular 390×844](2026-11-04%20-%20Sele%C3%A7%C3%A3o%20da%20equipe/abertura-celular.jpg), sem rolagem horizontal. No [filtro Equipe no celular](2026-11-04%20-%20Sele%C3%A7%C3%A3o%20da%20equipe/equipe-celular.jpg), a foto oficial aparece uma vez. A ampliação abre por Enter e devolve o foco à miniatura ao fechar com Esc. Console sem erros no fluxo.
+
+## 04/11/2026 — montagem e sprints no memorial
+
+Memorial local, perfil visitante, com imagens e relatos fictícios nas capturas. Abertura em [desktop 1440×1000](2026-11-04%20-%20Montagem%20e%20sprints/abertura-desktop.jpg), [tablet 768×1024](2026-11-04%20-%20Montagem%20e%20sprints/abertura-tablet.jpg) e [celular 390×844](2026-11-04%20-%20Montagem%20e%20sprints/abertura-celular.jpg). Sem rolagem horizontal. No celular, o [relato]( 2026-11-04%20-%20Montagem%20e%20sprints/relato-celular.jpg) abriu por Espaço e o [acervo de sprints]( 2026-11-04%20-%20Montagem%20e%20sprints/sprints-celular.jpg) mostrou as Sprints 3 a 6 consecutivas. A ampliação avançou da Sprint 3 para a 4 pelo teclado, sem erros no console.
+
+## 04/11/2026 — retratos no memorial
+
+Perfil visitante no memorial local. Retratos e relatos fictícios nas capturas. Relato aberto em [desktop 1440×1000](2026-11-04%20-%20Retratos%20no%20memorial/relatos-desktop.jpg), [tablet 768×1024](2026-11-04%20-%20Retratos%20no%20memorial/relatos-tablet.jpg) e [celular 390×844](2026-11-04%20-%20Retratos%20no%20memorial/relatos-celular.jpg). O [acervo ampliado no celular](2026-11-04%20-%20Retratos%20no%20memorial/acervo-celular.jpg) abriu por Enter e devolveu o foco à miniatura após Esc, sem erros de console no fluxo.
+
+## 04/11/2026 — projeto no memorial
+
+Visitante no memorial local, com fotos pessoais e relatos substituídos por dados fictícios. Telas do sistema usam dados de demonstração. Desktop 1440×1000, tablet 768×1024 e celular 390×844 sem rolagem horizontal. A abertura prioriza o projeto. As telas vêm depois do fluxo de leitura e a marca animada aparece junto ao guia visual.
+
+| Tela | Evidências |
+| --- | --- |
+| Abertura | [Desktop](2026-11-04%20-%20Projeto%20no%20memorial/abertura-desktop.jpg) · [Tablet](2026-11-04%20-%20Projeto%20no%20memorial/abertura-tablet.jpg) · [Celular](2026-11-04%20-%20Projeto%20no%20memorial/abertura-celular.jpg) |
+| Da vaga ao painel | [Desktop](2026-11-04%20-%20Projeto%20no%20memorial/funcionamento-desktop.jpg) · [Tablet](2026-11-04%20-%20Projeto%20no%20memorial/funcionamento-tablet.jpg) · [Celular](2026-11-04%20-%20Projeto%20no%20memorial/funcionamento-celular.jpg) |
+| Identidade visual | [Desktop](2026-11-04%20-%20Projeto%20no%20memorial/identidade-desktop.jpg) · [Tablet](2026-11-04%20-%20Projeto%20no%20memorial/identidade-tablet.jpg) · [Celular](2026-11-04%20-%20Projeto%20no%20memorial/identidade-celular.jpg) |
+
+## 04/11/2026 — curadoria do memorial
+
+Visitante em `/memorial` no Vite local, com fotos pessoais e relatos substituídos por dados fictícios. Acervo sem overflow horizontal em [desktop 1440×1000](2026-11-04%20-%20Curadoria%20do%20memorial/acervo-desktop.jpg), [tablet 768×1024](2026-11-04%20-%20Curadoria%20do%20memorial/acervo-tablet.jpg) e [celular 390×844](2026-11-04%20-%20Curadoria%20do%20memorial/acervo-celular.jpg). A [faixa de encerramento](2026-11-04%20-%20Curadoria%20do%20memorial/marca-celular.jpg) usa a animação institucional original. Reproduziu sem som e pausou por Enter, sem erros de console.
+
+## 04/11/2026 — memorial para apresentação
+
+Rota `/memorial`, perfil visitante, Vite local e navegador integrado. As capturas usam uma cópia local servida com nomes, depoimentos e imagens de pessoas substituídos por dados fictícios. A foto da protoboard faz parte do acervo do projeto.
+
+| Tela e viewport | Evidência | Resultado observado |
+| --- | --- | --- |
+| Abertura em 1440×1000, 768×1024 e 390×844 | [Desktop](2026-11-04%20-%20Memorial%20para%20apresenta%C3%A7%C3%A3o/abertura-desktop.jpg) · [Tablet](2026-11-04%20-%20Memorial%20para%20apresenta%C3%A7%C3%A3o/abertura-tablet.jpg) · [Celular](2026-11-04%20-%20Memorial%20para%20apresenta%C3%A7%C3%A3o/abertura-celular.jpg) | Título, navegação e acesso ao acervo visíveis na primeira tela. |
+| Projeto e equipe em 390×844 | [Projeto](2026-11-04%20-%20Memorial%20para%20apresenta%C3%A7%C3%A3o/celular-projeto.jpg) · [Depoimento aberto](2026-11-04%20-%20Memorial%20para%20apresenta%C3%A7%C3%A3o/celular-depoimento.jpg) | Âncoras com espaço abaixo do cabeçalho. O depoimento abre por Espaço e mantém foco visível. |
+| Acervo em 390×844 | [Filtro Projeto](2026-11-04%20-%20Memorial%20para%20apresenta%C3%A7%C3%A3o/celular-acervo.jpg) · [Foto ampliada](2026-11-04%20-%20Memorial%20para%20apresenta%C3%A7%C3%A3o/celular-foto-ampliada.jpg) · [Vídeos](2026-11-04%20-%20Memorial%20para%20apresenta%C3%A7%C3%A3o/celular-videos.jpg) | Filtro ativo, ampliação com navegação e fechamento por Esc, além de controles nativos de vídeo. |
+
+Sem overflow horizontal nos três viewports capturados e em 320×740. Na rota local com o acervo real, o botão da galeria alternou entre 8 e 35 fotos, a ampliação devolveu o foco à miniatura e o vídeo da marca reproduziu. Console sem erros no fluxo testado. Validação local em tamanhos emulados.
+
 ## 04/11/2026 — canais oficiais responsivos
 
 Rota `/`, perfil visitante, Vite local em `http://127.0.0.1:5173`, Edge/DevTools e sessão de API simulada com visitante fictício (`example.invalid`). Viewports desktop 1440×1000 e 1280×900, notebook 1024×900, tablet 768×1024, celular 390×844 e celular estreito 320×720. Nenhuma mensagem foi enviada; os destinos públicos foram apenas conferidos.
@@ -369,3 +415,45 @@ Verificação complementar: foco por teclado visível (outline sólido), navega�
 Produção: `exclusao-producao-desktop.png`, rota `https://vaggu-tcc.onrender.com/exclusao-de-dados`, visitante, 1440×1000, dados públicos da versão 7356e12. Contato empresarial conferido também em `/privacidade`. Imagem pública HTTP 200/image/jpeg, 121.573 bytes; isso comprova acesso ao arquivo, não renderização dentro do WhatsApp.
 
 **04/11 — confirmação funcional posterior:** participante confirmou imagem, link do site, Ver recursos e Voltar ao menu no WhatsApp da versão 7356e12. Evidência por relato do participante; nenhuma captura da conversa foi recebida ou produzida. A pendência funcional desse percurso está encerrada; a captura anonimizada permanece aberta.
+
+## 04/11/2026 — Memorial direto
+
+Rota local `http://127.0.0.1:4173/memorial/`; perfil visitante público; tema escuro; origem: acervo existente e telas demonstrativas, com nomes, relatos e fotografias pessoais substituídos por fixtures somente nas capturas. Nenhum dado de produção. Browser plugin ausente; Playwright/Edge local. Carrossel, teclado, ampliação e retorno de foco aprovados; console sem erros e sem overflow.
+
+| Viewport | Evidências (pasta `2026-11-04 - Memorial direto/`) | Resultado |
+| --- | --- | --- |
+| Desktop 1440×1000 | `desktop-hero.png`, `desktop-completo.png`, `desktop-carrossel.png`, `desktop-ampliacao.png`, `desktop-depoimento.png` | Abertura única, grades e estados legíveis. |
+| Tablet 768×1024 | `tablet-hero.png`, `tablet-completo.png`, `tablet-carrossel.png`, `tablet-ampliacao.png`, `tablet-depoimento.png` | Grade responsiva e controles sem cortes. |
+| Celular 390×844 | `celular-hero.png`, `celular-completo.png`, `celular-carrossel.png`, `celular-ampliacao.png`, `celular-depoimento.png` | Duas colunas de retratos, fluxo e teclado funcionais. |
+
+Capturas anteriores preservadas. Prints locais e anonimizados não comprovam produção ou hardware físico.
+
+## Ajustes comentados do memorial — 04/11/2026
+
+Abertura centralizada com texto e botão alinhados à foto; título usa o SVG oficial com texto alternativo VAGGU. Quinta foto coletiva substituída pelo trio das meninas, sem remover originais. Retrato de Kamilly usa `retrato-kamilly.webp`, mais nítido que a miniatura anterior. A foto `trio-equipe.jpg` disponível tem apenas 72×54 px: substituição feita conforme pedido, mas a qualidade depende do original em maior resolução. Não foi inventado detalhe por IA.
+
+Verificação local com `node %TEMP%/vaggu-memorial-comentarios-qa.cjs`, Playwright/Edge (Browser plugin ausente), em 1440×1000, 768×1024 e 390×844. Logo, centralização, fontes das fotos, carregamento, carrossel, teclado, foco e ausência de overflow conferidos. Capturas anonimizadas em `2026-11-04 - Ajustes comentados memorial`; tema escuro próprio. `node scripts/verificar-documentacao.mjs` e `git diff --check`. Mudança restrita a HTML/CSS e caminhos de imagens; sem dependências ou mudança de lógica. Sem publicação.
+
+## Fotos originais do memorial — 04/11/2026
+
+Recebidas e copiadas sem edição as fotos originais das três integrantes (1280×960) e de Kamilly (960×1280). `src/dados/acervo.js` aponta para `trio-original.jpg` e `kamilly-original.jpg`; arquivos anteriores preservados. A pendência de resolução das miniaturas está resolvida por estes arquivos fornecidos pelo usuário.
+
+Rota http://127.0.0.1:4173/memorial/, visitante público, tema escuro. Playwright/Edge local, Browser plugin ausente. Roteiro `node %TEMP%/vaggu-memorial-originais-qa.cjs`: desktop 1440×1000, tablet 768×1024 e celular 390×844; carregamento, fontes de imagem, galeria, carrossel, ampliação, teclado e overflow. Evidências anonimizadas em `2026-11-04 - Fotos originais memorial/`: arquivos `desktop`, `tablet` e `celular`, cada qual com sufixos `-hero.png`, `-completo.png`, `-carrossel.png`, `-ampliacao.png` e `-depoimento.png`. Fonte das imagens reais: anexos autorizados; capturas usam substitutos fictícios. Sem publicação ou alteração de lógica. Verificadores: `node scripts/verificar-documentacao.mjs` e `git diff --check`.
+
+## Tutores do memorial — 04/11/2026
+
+A lista final foi atualizada conforme os nomes fornecidos pelo usuário: Alex Augusto de Mello Junior, Matheus da Costa Zacarias, Giovanni Ribeiro Pinto e Arthur Rosa Alves Andrade, identificados como nossos tutores. Instituições SESI e SENAI mantidas. Esta lista substitui a redação anterior com nomes abreviados.
+
+Validação local: `node %TEMP%/vaggu-memorial-tutores-qa.cjs`, Playwright/Edge, rota `/memorial/`, visitante público, tema escuro, desktop 1440×1000, tablet 768×1024 e celular 390×844. Evidências anonimizadas em `2026-11-04 - Tutores memorial/`, arquivos por viewport com sufixos `-completo.png`, `-hero.png`, `-carrossel.png`, `-ampliacao.png` e `-depoimento.png`; nomes e fotos substituídos somente nas capturas. `node scripts/verificar-documentacao.mjs` e `git diff --check`. Alteração textual, sem mudança de lógica ou publicação.
+
+## Lista de tutores — 04/11/2026
+
+Os quatro nomes dos tutores agora aparecem em lista semântica, um por tópico, com espaçamento e marcadores amarelos. Conteúdo dos nomes preservado. Alterados `index.html` e `src/estilos.css` do memorial.
+
+Validação: `node %TEMP%/vaggu-memorial-lista-qa.cjs`, Playwright/Edge local, visitante público em `/memorial/`, tema escuro, viewports desktop 1440×1000, tablet 768×1024 e celular 390×844. Evidências em `2026-11-04 - Lista de tutores/` com nomes/fotos fictícios somente nas capturas; `desktop-completo.png`, `tablet-completo.png` e `celular-completo.png` registram os agradecimentos. Carrossel, teclado, foco, carregamento e overflow verificados; sem publicação. Comandos finais: `node scripts/verificar-documentacao.mjs` e `git diff --check`.
+
+## Edimar e título do memorial — 04/11/2026
+
+`index.html`: Edimar Dantas da Silva Duarte incluído como quinto tutor; título da aba atualizado para Memorial Vaggu. Playwright/Edge (`node %TEMP%/vaggu-edimar-qa.cjs`): visitante público em `/memorial/`, tema escuro, 1440×1000, 768×1024 e 390×844. Capturas completas anonimizadas em `2026-11-04 - Edimar e titulo/`; título, carregamento, teclado e ausência de overflow conferidos. Validação local, sem publicação. Verificadores: `node scripts/verificar-documentacao.mjs` e `git diff --check`.
+
+Em 04/11/2026, o memorial recebeu o depoimento completo da Kamilly. Revisão local em /memorial/ com Playwright/Edge (1440×1000, 768×1024 e 390×844), com abertura por teclado e capturas fictícias em 2026-11-04 - Depoimento Kamilly. Verificações: build e lint do frontend, node scripts/verificar-documentacao.mjs e git diff --check. Visitante público, tema escuro, depoimento aberto sem overflow.

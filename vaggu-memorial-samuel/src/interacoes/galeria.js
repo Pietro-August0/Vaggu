@@ -1,9 +1,8 @@
 import { fotos } from "../dados/acervo.js"
 
-/** Coordena filtros, expansão do acervo e visualização acessível das fotografias. */
+/** Coordena o carrossel do projeto e a ampliação acessível das fotos. */
 export function iniciarGaleria() {
   const fotografias = [...document.querySelectorAll(".gal-item")]
-  const botaoMais = document.getElementById("showAll")
   const janela = document.getElementById("lightbox")
   const imagemAmpliada = document.getElementById("lightImage")
   const legenda = document.getElementById("lightCaption")
@@ -12,13 +11,11 @@ export function iniciarGaleria() {
   const botaoProxima = document.getElementById("lightNext")
 
   if (
-    !botaoMais || !janela || !(imagemAmpliada instanceof HTMLImageElement) ||
+    !janela || !(imagemAmpliada instanceof HTMLImageElement) ||
     !legenda || !botaoFechar || !botaoAnterior || !botaoProxima
   ) return
 
-  let filtroAtual = "todos"
-  let mostrarTodas = false
-  let fotografiasFiltradas = []
+  let fotografiasFiltradas = fotografias
   let indiceAtual = 0
   let ultimoFoco = null
 
@@ -28,35 +25,36 @@ export function iniciarGaleria() {
     if (fonte) imagem.src = fonte
   })
 
-  function atualizarGaleria() {
-    fotografiasFiltradas = fotografias.filter(
-      (item) => filtroAtual === "todos" || item.dataset.cat === filtroAtual,
-    )
-
-    fotografias.forEach((item) => {
-      const posicao = fotografiasFiltradas.indexOf(item)
-      item.hidden = posicao < 0 || (!mostrarTodas && posicao >= 12)
-    })
-
-    botaoMais.hidden = fotografiasFiltradas.length <= 12
-    botaoMais.setAttribute("aria-expanded", String(mostrarTodas))
-    botaoMais.textContent = mostrarTodas
-      ? "Mostrar menos ↑"
-      : `Ver todas as ${fotografiasFiltradas.length} fotografias ↓`
+  const slides = [...document.querySelectorAll(".projeto-slide")]
+  let slideAtual = 0
+  function mostrarSlide(direcao) {
+    slideAtual = (slideAtual + direcao + slides.length) % slides.length
+    slides.forEach((slide, indice) => { slide.hidden = indice !== slideAtual })
+    document.getElementById("projeto-contagem").textContent = `${slideAtual + 1} / ${slides.length}`
   }
+  document.getElementById("projeto-anterior")?.addEventListener("click", () => mostrarSlide(-1))
+  document.getElementById("projeto-proximo")?.addEventListener("click", () => mostrarSlide(1))
+  document.querySelector(".carrossel")?.addEventListener("keydown", (evento) => {
+    if (evento.key === "ArrowLeft" || evento.key === "ArrowRight") {
+      evento.preventDefault()
+      mostrarSlide(evento.key === "ArrowRight" ? 1 : -1)
+    }
+  })
+  mostrarSlide(0)
 
   function abrirFotografia(indice) {
     const item = fotografiasFiltradas[indice]
     if (!item) return
 
-    if (janela.hidden) ultimoFoco = document.activeElement
+    const estavaFechada = janela.hidden
+    if (estavaFechada) ultimoFoco = document.activeElement
     indiceAtual = indice
     imagemAmpliada.src = fotos[item.dataset.imgId ?? ""] ?? ""
     imagemAmpliada.alt = item.getAttribute("aria-label")?.replace("Ampliar imagem: ", "") ?? "Fotografia do acervo"
     legenda.textContent = `${imagemAmpliada.alt} · ${indiceAtual + 1} de ${fotografiasFiltradas.length}`
     janela.hidden = false
     document.body.classList.add("lightbox-aberto")
-    botaoFechar.focus()
+    if (estavaFechada) botaoFechar.focus()
   }
 
   function fecharFotografia() {
@@ -68,27 +66,11 @@ export function iniciarGaleria() {
   function moverFotografia(direcao) {
     indiceAtual = (indiceAtual + direcao + fotografiasFiltradas.length) % fotografiasFiltradas.length
     abrirFotografia(indiceAtual)
-    botaoFechar.focus()
   }
-
-  document.querySelectorAll(".filter").forEach((botao) => {
-    botao.addEventListener("click", () => {
-      filtroAtual = botao.dataset.filter ?? "todos"
-      mostrarTodas = false
-      document.querySelectorAll(".filter").forEach((outroBotao) => {
-        outroBotao.setAttribute("aria-pressed", String(outroBotao === botao))
-      })
-      atualizarGaleria()
-    })
-  })
-
-  botaoMais.addEventListener("click", () => {
-    mostrarTodas = !mostrarTodas
-    atualizarGaleria()
-  })
 
   fotografias.forEach((item) => {
     item.addEventListener("click", () => {
+      fotografiasFiltradas = fotografias.filter((foto) => foto.dataset.cat === item.dataset.cat)
       const indice = fotografiasFiltradas.indexOf(item)
       if (indice >= 0) abrirFotografia(indice)
     })
@@ -121,5 +103,5 @@ export function iniciarGaleria() {
     }
   })
 
-  atualizarGaleria()
+
 }
