@@ -1,5 +1,12 @@
 # Conclusão do software
 
+**Aceite e escopo atualizados em 04/11/2026:** site completamente homologado conforme confirmação do usuário; foco em evidências e preparação da apresentação. WhatsApp demonstrativo, sem exigência de atendimento humano, coleta comercial ou protocolo. Procedimentos de dados definidos em [[Vaggu/Documentação/operacao-dados-tcc|operação dos dados do TCC]]. O aceite físico sustentado dos sensores continua separado. Os registros anteriores abaixo preservam o diagnóstico antes desta confirmação.
+
+**Registro anterior à confirmação do usuário — 04/11:** etapa P11/E6, com homologação publicada e aceite físico sustentado em aberto. A [[Vaggu/Documentação/revisao-documental-2026-11-04|matriz atual de entregas e pendências]] substitui resumos anteriores de WhatsApp adiado e hardware ainda não ensaiado; as verificações antigas permanecem datadas.
+
+**Estado em 04/11/2026:** conexão real e menu clicável confirmados pelo participante. Apresentação com imagem/site e contato empresarial publicada em 7356e12; imagem, link e continuidade confirmados pelo participante em teste real; o histórico de implantação e as pendências reais estão no [processo e operação do WhatsApp](../Documentação/whatsapp-processo-e-operacao.md). Registros datados de adiamento abaixo são históricos.
+
+
 > **Fechamento de 21/10/2026:** a suíte completa aprovou **130 testes**, zero falhas e zero ignorados, com PostgreSQL descartável e dump/restauração. Build e lint do frontend passaram. A rodada no navegador com API e banco reais locais conferiu filtros, estados sem observação, exportações, análise em desktop/tablet/celular, monitoramento e telão. O corte das categorias no telão foi corrigido e documentado com novos prints. A implementação está integrada em `origin/main`; isso não representa homologação publicada ou física. Os resultados 127/129 abaixo são históricos. Power BI publicado permanece opcional; WhatsApp real e hardware físico seguem etapas próprias. Ver [[Vaggu/Documentação/revisao-geral-2026-10-21]].
 
 Iniciado em 19/10/2026, por solicitação de concluir as pendências sem a conexão física do hardware, em etapas das menores para as maiores.
@@ -22,7 +29,7 @@ Iniciado em 19/10/2026, por solicitação de concluir as pendências sem a conex
 | 5 | Preservação histórica | Alterações futuras do cadastro não reclassificam eventos anteriores; limites dos registros legados explícitos | Validado localmente; suíte completa aprovada |
 | 6 | Equipamentos e manutenção | Cadastro, vínculo, chave protegida, ocorrência e fechamento com isolamento por shopping | Validado localmente; suíte completa aprovada |
 | 7 | Telões instalados | Recorte administrativo e credencial própria; somente agregados públicos autorizados | Concluído e validado localmente com API/PostgreSQL reais, testes de autorização e capturas responsivas |
-| 8 | Power BI e WhatsApp | Artefatos/fluxos reproduzíveis; configuração externa e homologação comprovadas | WhatsApp local implementado; conexão real pendente. Publicação do Power BI opcional; homologações externas não realizadas |
+| 8 | Power BI e WhatsApp | Artefatos/fluxos reproduzíveis; configuração externa e homologação comprovadas | WhatsApp publicado em 7356e12, com imagem/site/recursos/retorno confirmados pelo participante; P10 parcial por fluxos estruturados/operação/evidência visual. Publicação Power BI opcional |
 | 9 | Entrega integrada | Testes, navegador, documentação e validação autenticada do ambiente publicado | Integração local aprovada; 130 testes, build e lint aprovados; implementação em `origin/main`. Produção e hardware físico não homologados |
 
 ## Consolidação documental e limpeza — 21/10/2026

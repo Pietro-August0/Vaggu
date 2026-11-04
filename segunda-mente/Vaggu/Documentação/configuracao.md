@@ -1,5 +1,9 @@
 # Como executar a VAGGU localmente
 
+**Decisão de escopo e aceite — 04/11/2026:** o usuário confirmou a homologação completa do site. O aceite web está encerrado por essa confirmação, sem nova execução em produção pelo agente nem hash de deploy adicional informado. O WhatsApp será demonstrativo: atendimento humano real, coleta comercial e protocolos deixam de ser requisitos desta entrega. Procedimentos de dados definidos em [operação do TCC](operacao-dados-tcc.md); hardware físico mantém aceite próprio.
+
+**Conferência documental — 04/11/2026:** scripts dos dois package.json e instruções locais revisados; builds e lint aprovados nesta revisão. Sem alteração ou nova validação de ambientes externos. O WhatsApp real tem percurso confirmado em registro anterior de 04/11; operação humana, retenção, backup e homologação integrada seguem os limites da [revisão consolidada](revisao-documental-2026-11-04.md).
+
 Este guia é para integrantes e parceiros que precisam testar o sistema em um computador próprio. Os comandos abaixo foram escritos para Windows e PowerShell.
 
 Ao terminar, você terá:
@@ -341,3 +345,7 @@ O cadastro desse segredo exige permissão administrativa no repositório.
 ### Painel local retorna erro apesar de banco conectado
 
 `/api/v1/health/ready` confirma conectividade, mas não comprova que o esquema está atualizado. Em 25/10/2026, o banco local antigo aceitava login e falhava ao consultar sensores/análises por quatro migrações pendentes. Conferir `npx prisma migrate status` em `vaggu-backend`, preservar o banco com backup e aplicar as migrações versionadas com `npm run db:deploy` antes de iniciar a API atualizada. Não usar reset para corrigir esse caso. O resultado esperado é consulta autenticada de estrutura/análise com HTTP 200, além do healthcheck.
+
+## WhatsApp publicado
+
+A landing usa o número público +55 (11) 99380-7892 como padrão, com override por `VITE_WHATSAPP_NUMBER` no build. No backend, `WHATSAPP_VERIFY_TOKEN` valida o desafio; `META_APP_SECRET` valida a assinatura; `WHATSAPP_ACCESS_TOKEN`, `WHATSAPP_PHONE_NUMBER_ID` e `WHATSAPP_API_VERSION` configuram envio. `WHATSAPP_AUTO_REPLY_ENABLED=true` habilita respostas. Valores privados são mantidos no Render e não devem entrar em documentação ou capturas. O banco local pode diferir do publicado. A atribuição da conta real ao usuário técnico é necessária além dos escopos do token. Ver [processo e operação](whatsapp-processo-e-operacao.md) e [guia do webhook](whatsapp-webhook.md).

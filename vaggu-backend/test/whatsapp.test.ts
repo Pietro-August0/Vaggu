@@ -4,8 +4,67 @@ import assert from 'node:assert/strict';
 import request from 'supertest';
 import { createApp } from '../src/app.js';
 import { createWhatsappService } from '../src/whatsapp/service.js';
+import { createWhatsappClient } from '../src/whatsapp/client.js';
 import { signMetaPayload } from '../src/whatsapp/signature.js';
-import { testMenuText, respostaAtendimento } from '../src/whatsapp/payload.js';
+import { testMenuText, respostaAtendimento, extractWhatsappEvents, summarizeWhatsappEvents, menuAtendimento, mensagemInterativaAtendimento } from '../src/whatsapp/payload.js';
+
+test('apresentação inclui imagem, site e continuidade; atendimento anuncia contato demonstrativo sem e-mail ou emojis', () => {
+  const presentation = mensagemInterativaAtendimento({ type: 'text', text: '1' });
+  assert.ok(presentation && 'image' in presentation.header && 'buttons' in presentation.action);
+  assert.equal(presentation.header.type, 'image');
+  assert.match(presentation.header.image.link, /^https:\/\/vaggu-tcc\.onrender\.com\/assets\/.+\.jpg$/);
+  assert.match(presentation.body.text, /https:\/\/vaggu-tcc\.onrender\.com/);
+  assert.deepEqual(presentation.action.buttons.map(button => button.reply.id), ['2', '3', 'menu']);
+  assert.equal(menuAtendimento.header.type, 'text');
+  for (const id of ['1', '2', '3', '4', '5']) {
+    const message = mensagemInterativaAtendimento({ type: 'interactive', text: '', selectionId: id });
+    assert.ok(message && 'buttons' in message.action);
+    assert.ok(message.action.buttons.length <= 3);
+    assert.ok(message.action.buttons.every(button => button.reply.title.length <= 20));
+    assert.doesNotMatch(message.body.text, /\p{Extended_Pictographic}/u);
+    if (['3', '4', '5'].includes(id)) {
+      assert.match(message.body.text, /Uma atendente entrará em contato com você em alguns instantes/);
+      assert.doesNotMatch(message.body.text, /@|e-mail|email/i);
+      assert.equal(respostaAtendimento({ type: 'text', text: id }), message.body.text);
+    }
+    if (id !== '1') assert.equal(message.header, undefined);
+  }
+  assert.doesNotMatch(testMenuText, /\p{Extended_Pictographic}/u);
+});
+
+test('cliente envia lista nativa no contrato Meta e mantém alternativa de texto', async () => {
+  const payloads = [];
+  const client = createWhatsappClient({ accessToken: 'token-ficticio', phoneNumberId: 'numero-id-ficticio', apiVersion: 'v23.0' }, {
+    fetchImpl: async (url, options) => {
+      assert.equal(url, 'https://graph.facebook.com/v23.0/numero-id-ficticio/messages');
+      payloads.push(JSON.parse(String(options.body)));
+      return Response.json({ messages: [{ id: 'id-ficticio' }] });
+    },
+  });
+  await client.sendInteractive('5511999990000', menuAtendimento);
+  await client.sendText('5511999990000', 'Alternativa de texto');
+  assert.equal(payloads[0].type, 'interactive');
+  assert.equal(payloads[0].interactive.type, 'list');
+  assert.equal(payloads[0].interactive.action.button, 'Ver opções');
+  const rows = payloads[0].interactive.action.sections.flatMap(section => section.rows);
+  assert.deepEqual(rows.map(row => row.id), ['1', '2', '3', '4', '5']);
+  assert.ok(rows.every(row => row.title.length <= 24 && row.description.length <= 72));
+  assert.equal(payloads[1].type, 'text');
+  assert.equal(payloads[1].text.body, 'Alternativa de texto');
+});
+
+test('diagnóstico preserva código de mensagem não suportada sem expor conversa ou contato', () => {
+  const events = extractWhatsappEvents({ entry: [{ changes: [{ value: { messages: [{
+    id: 'id-ficticio-privado', from: '5511999990000', type: 'unsupported',
+    text: { body: 'conteudo-ficticio-privado' }, errors: [{ code: 131051, message: 'detalhe-privado' }],
+  }] } }] }] });
+  const summary = summarizeWhatsappEvents(events);
+  assert.deepEqual(summary.errosMeta, ['131051']);
+  assert.deepEqual(summary.tipos, ['unsupported']);
+  assert.equal(summary.mensagens, 1);
+  assert.doesNotMatch(JSON.stringify(summary), /5511999990000|id-ficticio-privado|conteudo-ficticio-privado|detalhe-privado/);
+  assert.equal(respostaAtendimento(events.messages[0]), null);
+});
 
 test('opções do atendimento possuem orientação e mídia não dispara resposta', () => {
   for (const text of ['1', '2', '3', '4', '5']) {
@@ -106,9 +165,12 @@ function createFakePrisma() {
 function createWhatsappApp({ autoReplyEnabled = false, sendText }: { autoReplyEnabled?: boolean; sendText?: any } = {}) {
   const prisma = createFakePrisma();
   const sent = [];
+  const interactiveSent = [];
   const client = {
-    async sendText(to, body) {
+    async sendInteractive(to, interactive) {
+      const body = interactive.body.text;
       sent.push({ to, body });
+      interactiveSent.push({ to, interactive });
       if (sendText) return sendText(to, body);
       return { messages: [{ id: 'wamid.sent' }] };
     },
@@ -122,6 +184,7 @@ function createWhatsappApp({ autoReplyEnabled = false, sendText }: { autoReplyEn
     }),
     prisma,
     sent,
+    interactiveSent,
   };
 }
 
@@ -145,7 +208,7 @@ test('GET rejeita token incorreto, parâmetros ausentes e configuração ausente
     .query({ 'hub.mode': 'subscribe', 'hub.verify_token': verifyToken })
     .expect(400);
 
-  const service = createWhatsappService(createFakePrisma(), { sendText: async () => ({}) }, {});
+  const service = createWhatsappService(createFakePrisma(), { sendInteractive: async () => ({}) }, {});
   const misconfigured = createApp({
     checkDatabase: async () => 1,
     whatsapp: { config: { verifyToken: '', appSecret: secret }, service },
@@ -263,7 +326,7 @@ test('envio antigo incerto exige revisão sem repetir mensagem', async () => {
   const prisma = createFakePrisma();
   let sends = 0;
   const service = createWhatsappService(prisma, {
-    async sendText() {
+    async sendInteractive() {
       sends += 1;
       if (sends === 1) {
         firstStarted();
@@ -297,6 +360,40 @@ test('flag desativada impede envio e OI/MENU gera menu quando habilitado', async
     { id: 'wamid.on', from: '5511999990007', type: 'text', text: { body: 'menu' } },
   ])).expect(200);
   assert.deepEqual(enabled.sent, [{ to: '5511999990007', body: testMenuText }]);
+  assert.equal(enabled.interactiveSent[0].interactive.type, 'list');
+});
+
+test('cliques das cinco opções respondem como números e repetição não duplica a resposta', async () => {
+  const current = createWhatsappApp({ autoReplyEnabled: true });
+  for (const id of ['1', '2', '3', '4', '5']) {
+    const payload = messagePayload([{ id: `clique-${id}`, from: '5511999990000', type: 'interactive',
+      interactive: { type: 'list_reply', list_reply: { id, title: 'Título externo não define a opção' } },
+    }]);
+    await signedPost(current.app, payload).expect(200);
+    await signedPost(current.app, payload).expect(200);
+    assert.equal(current.sent.at(-1).body, respostaAtendimento({ type: 'text', text: id }));
+    assert.equal(current.interactiveSent.at(-1).interactive.type, 'button');
+    assert.ok(current.interactiveSent.at(-1).interactive.action.buttons.some(button => button.reply.id === 'menu'));
+  }
+  assert.equal(current.sent.length, 5);
+});
+
+test('retorno clicável reabre menu e ID desconhecido não escolhe opção pelo título', async () => {
+  const current = createWhatsappApp({ autoReplyEnabled: true });
+  await signedPost(current.app, messagePayload([{ id: 'voltar-menu', from: '5511999990000', type: 'interactive',
+    interactive: { type: 'button_reply', button_reply: { id: 'menu', title: 'Voltar ao menu' } },
+  }])).expect(200);
+  assert.equal(current.interactiveSent[0].interactive.type, 'list');
+  for (const interactive of [
+    { type: 'list_reply', list_reply: { id: 'opcao-inexistente', title: 'Solicitar suporte' } },
+    { type: 'list_reply', list_reply: { id: 'constructor', title: '1' } },
+    { type: 'list_reply', list_reply: { title: '1' } },
+    { type: 'outro', list_reply: { id: '1' } },
+  ]) {
+    await signedPost(current.app, messagePayload([{ id: `invalido-${JSON.stringify(interactive)}`, from: '5511999990000', type: 'interactive', interactive }])).expect(200);
+  }
+  assert.equal(current.sent.length, 1);
+  assert.equal(respostaAtendimento({ type: 'text', text: 'constructor' }), null);
 });
 
 test('falha da Meta e prazo esgotado são tratados sem expor credenciais', async () => {

@@ -14,7 +14,7 @@ Cada gerente consulta somente seu shopping. Categorias de vaga — comum, PCD, i
 - **Acessos por shopping:** logins individuais, troca de senha provisória e isolamento dos dados.
 - **Estrutura e mapa:** andares, setores, vagas, importação CSV/XLSX com prévia e editor de posições por arraste, toque ou teclado.
 - **Monitoramento:** vínculo entre placas ESP32, sensores e vagas; confirmação de leituras, expiração, manutenção e ocorrências.
-- **Disponibilidade atualizada:** consultas automáticas a cada 15 segundos, atualização manual e invalidação dos dados antigos.
+- **Disponibilidade atualizada:** consultas automáticas do mapa a cada 500 ms e do telão instalado a cada 15 segundos, atualização manual e invalidação dos dados antigos.
 - **Análises e relatórios:** período, setor e categoria; comparação, entradas, saídas, permanência, rotatividade e exportações Excel/PDF.
 - **Telões web autorizados:** credencial por instalação, visão geral ou andar escolhida pelo gerente, tela cheia com Esc e apresentação sem rolagem. Contagens ficam ocultas quando a consulta perde validade.
 
@@ -79,9 +79,13 @@ Abra o endereço informado pelo Vite. O proxy encaminha `/api` à API local em `
 
 Em 21/10/2026, a suíte do backend aprovou **130 testes**, incluindo PostgreSQL descartável e ensaio de dump/restauração. A revisão no navegador exercitou filtros, estado sem observação, exportações, monitoramento e telão, com capturas em computador, tablet e celular. Os [resultados e limites](./segunda-mente/Vaggu/Documenta%C3%A7%C3%A3o/revisao-geral-2026-10-21.md) estão documentados.
 
-A implementação foi validada localmente com dados fictícios. A homologação da versão publicada e a integração com hardware físico seguem pendentes; a conexão real do WhatsApp está adiada e Power BI publicado é uma evolução opcional.
+A implementação foi validada localmente com dados fictícios. Há registro de ensaio físico inicial com três sensores; estabilidade física permanece em etapa própria. Em 04/11/2026, o usuário confirmou a homologação completa do site publicado.
+
+O participante confirmou conexão real, menu clicável e apresentação do WhatsApp com imagem/site em 04/11/2026, no percurso documentado. O WhatsApp tem escopo demonstrativo, sem exigência de coleta estruturada ou operação humana. Capturas da interface real dependem de sessão disponível. Power BI publicado é uma evolução opcional.
 
 ## Documentação
+
+- [Situação atual e pendências — 04/11/2026](./segunda-mente/Vaggu/Documentação/revisao-documental-2026-11-04.md): etapa de homologação, entregas verificadas e prioridades para concluir.
 
 - [Índice do projeto](./segunda-mente/Vaggu/Vaggu.md): produto, arquitetura e continuidade.
 - [Configuração](./segunda-mente/Vaggu/Documenta%C3%A7%C3%A3o/configuracao.md): instalação e execução completas.

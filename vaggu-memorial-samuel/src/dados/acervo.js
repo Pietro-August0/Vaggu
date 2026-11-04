@@ -1,0 +1,47 @@
+/** Mapeia as fotografias e os vídeos do memorial para arquivos publicados. */
+export const fotos = Object.freeze({
+  "0": "/memorial/assets/fotos/registro-00.webp",
+  "1": "/memorial/assets/fotos/registro-01.webp",
+  "2": "/memorial/assets/fotos/registro-02.webp",
+  "3": "/memorial/assets/fotos/registro-03.webp",
+  "4": "/memorial/assets/fotos/registro-04.webp",
+  "5": "/memorial/assets/fotos/registro-05.webp",
+  "6": "/memorial/assets/fotos/registro-06.webp",
+  "7": "/memorial/assets/fotos/registro-07.webp",
+  "8": "/memorial/assets/fotos/registro-08.webp",
+  "9": "/memorial/assets/fotos/registro-09.webp",
+  "10": "/memorial/assets/fotos/registro-10.webp",
+  "11": "/memorial/assets/fotos/registro-11.webp",
+  "12": "/memorial/assets/fotos/registro-12.webp",
+  "13": "/memorial/assets/fotos/registro-13.webp",
+  "14": "/memorial/assets/fotos/registro-14.webp",
+  "15": "/memorial/assets/fotos/registro-15.webp",
+  "16": "/memorial/assets/fotos/registro-16.webp",
+  "17": "/memorial/assets/fotos/registro-17.webp",
+  "18": "/memorial/assets/fotos/registro-18.webp",
+  "19": "/memorial/assets/fotos/registro-19.webp",
+  "20": "/memorial/assets/fotos/registro-20.webp",
+  "21": "/memorial/assets/fotos/registro-21.webp",
+  "22": "/memorial/assets/fotos/registro-22.webp",
+  "23": "/memorial/assets/fotos/registro-23.webp",
+  "24": "/memorial/assets/fotos/registro-24.webp",
+  "25": "/memorial/assets/fotos/registro-25.webp",
+  "26": "/memorial/assets/fotos/registro-26.webp",
+  "27": "/memorial/assets/fotos/registro-27.webp",
+  "28": "/memorial/assets/fotos/registro-28.webp",
+  "29": "/memorial/assets/fotos/registro-29.webp",
+  "30": "/memorial/assets/fotos/registro-30.webp",
+  "31": "/memorial/assets/fotos/registro-31.webp",
+  "32": "/memorial/assets/fotos/registro-32.webp",
+  "33": "/memorial/assets/fotos/registro-33.webp",
+  "34": "/memorial/assets/fotos/registro-34.webp",
+  "juan": "/memorial/assets/fotos/retrato-juan.webp",
+  "kamilly": "/memorial/assets/fotos/retrato-kamilly.webp",
+  "video0": "/memorial/assets/fotos/capa-video-1.webp",
+  "video1": "/memorial/assets/fotos/capa-video-2.webp"
+})
+
+export const videos = Object.freeze([
+  "/memorial/assets/videos/memoria-01.mp4",
+  "/memorial/assets/videos/marca-em-movimento.mp4"
+])

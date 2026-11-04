@@ -17,6 +17,11 @@ export function extractWhatsappEvents(payload) {
               from: typeof message.from === 'string' ? message.from : '',
               type: typeof message.type === 'string' ? message.type : 'unsupported',
               text: typeof message.text?.body === 'string' ? message.text.body : '',
+              errorCode: firstStatusErrorCode(message),
+              selectionId: message.interactive?.type === 'list_reply' && typeof message.interactive.list_reply?.id === 'string'
+                ? message.interactive.list_reply.id
+                : message.interactive?.type === 'button_reply' && typeof message.interactive.button_reply?.id === 'string'
+                  ? message.interactive.button_reply.id : '',
             });
           }
         }
@@ -41,35 +46,78 @@ export function extractWhatsappEvents(payload) {
 function firstStatusErrorCode(status) {
   const error = Array.isArray(status.errors) ? status.errors[0] : null;
   const code = error?.code;
-  return code === undefined || code === null ? '' : String(code);
+  return code === undefined || code === null ? '' : String(code).replace(/[^0-9]/g, '').slice(0, 24);
 }
 
-/** Reconhece saudações e MENU sem diferenciar acentos ou maiúsculas; ignora mídia. */
+/** Diagnóstico sem corpo, contato, identificador de mensagem ou credencial. */
+export function summarizeWhatsappEvents(events) {
+  return {
+    mensagens: events.messages.length,
+    status: events.statuses.length,
+    tipos: [...new Set(events.messages.map((message) => message.type.replace(/[^a-z_]/gi, '').slice(0, 24)))],
+    comTexto: events.messages.filter((message) => message.text.length > 0).length,
+    comRemetente: events.messages.filter((message) => message.from.length > 0).length,
+    errosMeta: [...new Set(events.messages.map((message) => message.errorCode).filter(Boolean))],
+  };
+}
+
+/** Reconhece saudações, MENU e retorno clicável; ignora mídia. */
 export function shouldSendTestMenu(message) {
+  if (message.type === 'interactive') return message.selectionId === 'menu';
   if (message.type !== 'text') return false;
   const normalized = message.text.trim().normalize('NFD').replace(/\p{Diacritic}/gu, '').toUpperCase();
   return ['OI', 'OLA', 'MENU'].includes(normalized);
 }
 
 // Menu de orientação; demonstração e suporte são tratados na conversa comercial.
-export const testMenuText = 'Olá! 👋 Bem-vindo à VAGGU.\n\n'
-  + 'Como podemos ajudar?\n\n'
-  + '1 — Conhecer a VAGGU\n'
-  + '2 — Ver funcionalidades\n'
-  + '3 — Solicitar uma demonstração\n'
-  + '4 — Solicitar suporte\n'
-  + '5 — Falar com a equipe';
+export const testMenuText = 'Olá, seja bem-vindo à VAGGU.\n\nConheça nossa solução para a gestão de estacionamentos ou encontre o atendimento que precisa. Toque em “Ver opções” para começar.';
 
-/** Respostas úteis sem prometer preços, prazos ou disponibilidade humana não configurados. */
-export function respostaAtendimento(message: { type: string; text: string }) {
+export const menuAtendimento = {
+  type: 'list',
+  header: { type: 'text', text: 'Atendimento VAGGU' },
+  body: { text: testMenuText },
+  footer: { text: 'Você também pode digitar de 1 a 5.' },
+  action: {
+    button: 'Ver opções',
+    sections: [{ title: 'Como podemos ajudar?', rows: [
+      { id: '1', title: 'Conhecer a VAGGU', description: 'Entenda nossa solução para estacionamentos.' },
+      { id: '2', title: 'Ver funcionalidades', description: 'Mapa de vagas, monitoramento e análises.' },
+      { id: '3', title: 'Pedir demonstração', description: 'Converse sobre uma apresentação para seu shopping.' },
+      { id: '4', title: 'Solicitar suporte', description: 'Conte à equipe o que precisa de atenção.' },
+      { id: '5', title: 'Falar com a equipe', description: 'Converse com uma atendente da VAGGU.' },
+    ] }],
+  },
+};
+
+/** Menu nativo e retorno clicável; não envia uma segunda mensagem para a mesma entrada. */
+export function mensagemInterativaAtendimento(message) {
+  if (shouldSendTestMenu(message)) return menuAtendimento;
+  const text = respostaAtendimento(message);
+  const option = message.type === 'interactive' ? message.selectionId : message.text.trim();
+  return text ? {
+    type: 'button', body: { text },
+    ...(option === '1' ? { header: { type: 'image', image: { link: 'https://vaggu-tcc.onrender.com/assets/apresentacao-whatsapp-vaggu.jpg' } } } : {}),
+    action: { buttons: [
+      ...(option === '1' ? [
+        { type: 'reply', reply: { id: '2', title: 'Ver recursos' } },
+        { type: 'reply', reply: { id: '3', title: 'Pedir demonstração' } },
+      ] : []),
+      { type: 'reply', reply: { id: 'menu', title: 'Voltar ao menu' } },
+    ] },
+  } : null;
+}
+
+/** Textos demonstrativos; o aviso de atendente não cria fila nem aciona atendimento real. */
+export function respostaAtendimento(message: { type: string; text: string; selectionId?: string }) {
   if (shouldSendTestMenu(message)) return testMenuText;
-  if (message.type !== 'text') return null;
+  if (!['text', 'interactive'].includes(message.type)) return null;
   const respostas: Record<string, string> = {
-    '1': 'A VAGGU organiza estacionamentos de shoppings com mapa de vagas, acompanhamento de ocupação e acessos separados por unidade. Digite 2 para conhecer as funcionalidades ou 3 para solicitar uma demonstração.',
+    '1': 'A VAGGU reúne mapa de vagas, monitoramento e análises para ajudar na gestão do estacionamento do seu shopping. Cada unidade tem seu próprio acesso.\n\nConheça o projeto no nosso site:\nhttps://vaggu-tcc.onrender.com\n\nVeja os recursos ou saiba como pedir uma demonstração nas opções abaixo.',
     '2': 'Você pode acompanhar vagas por andar, setor e categoria; consultar o monitoramento; analisar períodos e exportar relatórios. A disponibilidade depende de leituras confirmadas. Digite MENU para voltar.',
-    '3': 'Para solicitar uma demonstração, envie nesta conversa o nome do shopping, a cidade e seu nome. A equipe poderá combinar os detalhes por aqui. Não envie senhas ou dados de documentos. Digite MENU para voltar.',
-    '4': 'Descreva o problema, o shopping e o código da vaga ou equipamento, se houver. Informe quando começou. Nunca envie sua senha ou chave de equipamento. Para redefinir acesso, procure o Admin VAGGU. Digite MENU para voltar.',
-    '5': 'Escreva sua solicitação nesta conversa para o atendimento da equipe. Este menu automático não confirma horário nem prazo de resposta. Digite MENU para voltar.',
+    '3': 'Que bom que você quer conhecer a VAGGU na prática! Uma atendente entrará em contato com você em alguns instantes para combinar os detalhes da demonstração.',
+    '4': 'Uma atendente entrará em contato com você em alguns instantes para ajudar com sua solicitação de suporte. Nunca envie senhas ou chaves de equipamentos.',
+    '5': 'Uma atendente entrará em contato com você em alguns instantes. Agradecemos por falar com a VAGGU!',
   };
-  return respostas[message.text.trim()] ?? null;
+  const option = message.type === 'interactive' ? message.selectionId : message.text.trim();
+  return Object.hasOwn(respostas, option) ? respostas[option] : null;
 }

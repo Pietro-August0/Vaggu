@@ -1,5 +1,21 @@
 # Mapa do projeto VAGGU
 
+**04/11/2026 — rota pública do memorial e contatos:** `vaggu-frontend/src/main.tsx` registra `/memorial`; `src/pages/memorial-page.tsx` incorpora a página estática. `vite.config.ts` serve o diretório-fonte sob `/memorial/` no desenvolvimento e publica HTML, scripts, estilos e mídias em `dist/memorial/` no build. `vaggu-memorial-samuel/` continua sendo a fonte do acervo; caminhos de assets usam o prefixo `/memorial/assets/`. A landing substitui o mockup de celulares por links oficiais de WhatsApp, e-mail, Instagram `@vagguempresarial` e GitHub. No rodapé, “Canais oficiais” é o único título; os nomes dos canais e o e-mail permanecem em uma linha, e os cartões mudam para duas colunas somente no breakpoint XL.
+
+**04/11 — texto demonstrativo do bot:** payload.ts mantém menu e retorno; opções 3–5 anunciam contato de uma atendente em alguns instantes, sem pedido de e-mail ou acionamento real. whatsapp.test.ts confere os mesmos textos para clique e número digitado; nenhuma nova dependência, migration ou rota.
+
+**Decisão de escopo e aceite — 04/11/2026:** o usuário confirmou a homologação completa do site. O aceite web está encerrado por essa confirmação, sem nova execução em produção pelo agente nem hash de deploy adicional informado. O WhatsApp será demonstrativo: atendimento humano real, coleta comercial e protocolos deixam de ser requisitos desta entrega. Procedimentos de dados definidos em [operação do TCC](operacao-dados-tcc.md); hardware físico mantém aceite próprio.
+
+**Situação consolidada em 04/11/2026, após confirmação do usuário:** site completamente homologado; procedimentos de dados definidos para o TCC e WhatsApp demonstrativo sem atendimento humano obrigatório. Foco em evidências e apresentação; sensores mantêm aceite físico próprio. Ver [etapa atual, lacunas e prioridades](revisao-documental-2026-11-04.md).
+
+A revisão de 04/11 é a fonte do diagnóstico atual; notas de implantação abaixo preservam o estado nas respectivas datas.
+
+**28/10/2026 — privacidade e ativação:** `vaggu-frontend/src/pages/privacidade-page.tsx` apresenta aviso público e instruções de exclusão em `/privacidade` e `/exclusao-de-dados`, registradas em `main.tsx` e vinculadas no rodapé da landing. Responsável: Elisa Gomes Teixeira; contato público atualizado em 04/11 para `vagguempresarial@outlook.com`. `render.yaml` passa a habilitar respostas automáticas; credenciais continuam privadas e a ativação real depende do ambiente e da publicação Meta. Capturas em `Evidências visuais/2026-10-28 - Privacidade e exclusao/`.
+
+**28/10/2026 — contato público:** `vaggu-frontend/src/lib/constants.ts` centraliza o número confirmado da VAGGU, `5511993807892`, como padrão para os links `wa.me`; `VITE_WHATSAPP_NUMBER` pode substituir o destino no build. Naquela data, a conexão real Meta ainda não estava homologada; o percurso real foi confirmado em 04/11.
+
+**28/10/2026 — WhatsApp:** [planejamento-whatsapp-2026-10-28.md](planejamento-whatsapp-2026-10-28.md) reúne revisão local, configuração do link da landing, homologação Meta/Render e critérios de conclusão do atendimento. O [guia do webhook](whatsapp-webhook.md) descreve a proteção atual de envios incertos com `ENVIANDO`/`REVISAO`.
+
 **Atualização de 21/10/2026:** `Especificações/Personas.md` reúne Carlos, Mariana e Rafael, separando material recebido de hipóteses. `Evidências visuais/Personas/` guarda duas páginas originais de Carlos, dois retratos gerados e quatro slides ilustrativos de Mariana e Rafael; `scripts/gerar-slides-personas.py` reproduz a diagramação desses quatro slides. A análise histórica distingue setores pelo andar e nome e deixa cobertura indisponível sem capacidade atual de referência.
 
 O frontend começa em main.tsx, monta o provedor de sessão e encaminha /login, /trocar-senha, /admin e /painel. O cliente HTTP chama /api/v1 pelo proxy local do Vite; o backend server.ts conecta os serviços e app.ts monta as rotas. Serviços validam permissões antes de acessar o Prisma/PostgreSQL. O cookie HttpOnly preserva a sessão no refresh; a identidade pública é restaurada da API.
@@ -25,7 +41,7 @@ Conhecimento, documentos e regras ficam em `segunda-mente`. O planejamento canô
 | --- | --- |
 | `hardware/esp32-3-vagas/README.md` | Parecer de viabilidade do demo, diagramas de ligação/arquitetura/posição, preparação da API, provisionamento, calibração e aceite físico. |
 | `hardware/esp32-3-vagas/teste_sensores_usb/teste_sensores_usb.ino` | Ensaio independente USB/Serial, sem rede, com TRIG 27/26/25, ECHO 32/33/34 e LED GPIO13 controlado pelo S01 até 15 cm; três piscadas iniciais e diagnóstico serial. |
-| `hardware/esp32-3-vagas/vaggu_3_vagas/vaggu_3_vagas.ino` | Firmware de bancada WROOM-32 para três HC-SR04, ECHO 32/33/34, LEDs de detecção local 13/14/23, autenticação Device, sequência por boot e leituras filtradas com omissão de sensores sem leitura válida. |
+| `hardware/esp32-3-vagas/vaggu_3_vagas/vaggu_3_vagas.ino` | Firmware de bancada WROOM-32 para três HC-SR04, ECHO 32/33/34, saídas previstas 13/14/23 com somente um LED habilitado no GPIO13, autenticação Device, sequência por boot e leituras filtradas com omissão de sensores sem leitura válida. |
 | `hardware/esp32-3-vagas/vaggu_3_vagas/relogio_serial.h` | Ajuste temporário do relógio de bancada por comando TIME recebido via USB, com validação do intervalo e preservação do TLS. |
 | `hardware/esp32-3-vagas/vaggu_3_vagas/config.example.h` | Modelo sem segredos para gerar config.h local ignorado pelo Git. |
 
@@ -33,8 +49,10 @@ Conhecimento, documentos e regras ficam em `segunda-mente`. O planejamento canô
 | --- | --- |
 | `scripts/` | Reúne verificações do repositório que não pertencem ao frontend nem ao backend. |
 | `segunda-mente/` | Mantém o cofre Obsidian canônico, suas fontes, evidências e registros históricos. |
+| `vaggu-memorial-samuel/` | Mantém o site independente de memorial da equipe e apresentação do sistema, separado da landing comercial e da aplicação operacional; reutiliza a paleta, tipografia e marca publicadas pelo frontend principal. |
 | `vaggu-backend/` | Contém API, regras de domínio, persistência, integrações e testes do servidor. |
 | `vaggu-frontend/` | Contém a aplicação React, componentes, páginas, contratos e assets publicados. |
+| `vaggu-frontend/src/pages/memorial-page.tsx` | Expõe `/memorial` e incorpora o HTML independente publicado pelo plugin memorial de `vite.config.ts`. |
 
 As cópias de imagens entre `segunda-mente/Vaggu/Identidade visual/Assets/` e `vaggu-frontend/public/assets/` são intencionais: o cofre precisa mostrar a referência visual sem depender do arquivo gerado do site, enquanto a aplicação precisa publicar seus próprios arquivos.
 
@@ -42,6 +60,8 @@ As cópias de imagens entre `segunda-mente/Vaggu/Identidade visual/Assets/` e `v
 
 | Caminho | Responsabilidade |
 | --- | --- |
+| `segunda-mente/Vaggu/Documentação/operacao-dados-tcc.md` | Define retenção de arquivos privados, descarte restrito e contingência do TCC; registra dispensa de backup pelo usuário e preserva referência técnica opcional. |
+| `segunda-mente/Vaggu/Documentação/revisao-documental-2026-11-04.md` | Consolida etapa P11/E6, estado P01–P11, lacunas priorizadas, evidências e limites da revisão de 04/11, sem encerrar aceites externos. |
 | `segunda-mente/Vaggu/Documentação/fluxo-de-telas.md` | Registra rotas, jornadas por perfil, páginas planejadas e divergências atuais entre frontend, backend e evidências históricas. |
 | `segunda-mente/Vaggu/Documentação/modelo-de-dados.md` | Explica o schema Prisma/PostgreSQL implementado, suas restrições e os limites que ainda precisam ser resolvidos no P06. |
 | `segunda-mente/Vaggu/Documentação/cenario-de-apresentacao.md` | Explica a aplicação controlada do shopping fictício no ambiente escolhido e a entrega privada das três senhas. |
@@ -142,9 +162,9 @@ As cópias de imagens entre `segunda-mente/Vaggu/Identidade visual/Assets/` e `v
 | `vaggu-backend/src/telemetria/expiracao.ts` | Marca sensores operacionais silenciosos como indisponíveis uma única vez; exclui shoppings de demonstração para preservar a fotografia de apresentação. |
 | `vaggu-backend/src/telemetria/routes.ts` | Expõe heartbeat e estados do ESP32 sem reutilizar cookies ou sessões humanas. |
 | `vaggu-backend/src/telemetria/service.ts` | Autentica placa, serializa eventos, deduplica sequência, persiste candidatos e confirma estados/histórico atomicamente. |
-| `vaggu-backend/src/whatsapp/client.ts` | Cliente de envio de texto pela API da Meta; recebe configuração privada e transporte substituível em testes. |
-| `vaggu-backend/src/whatsapp/payload.ts` | Interpreta o formato externo do webhook e mantém os textos do menu demonstrativo. |
-| `vaggu-backend/src/whatsapp/routes.ts` | Recebe o desafio de configuração e os eventos da Meta, validando sua origem antes de processá-los. |
+| `vaggu-backend/src/whatsapp/client.ts` | Envia texto e mensagens interativas pela API Meta com configuração privada, timeout compartilhado e transporte substituível em testes. |
+| `vaggu-backend/src/whatsapp/payload.ts` | Interpreta texto, IDs de lista/botão e códigos de erro; resume tipos/contagens sem conteúdo ou contato; define menu clicável, retorno e respostas do atendimento. |
+| `vaggu-backend/src/whatsapp/routes.ts` | Valida desafio e assinatura dos eventos da Meta; registra rejeição de assinatura ou resumo seguro do lote antes de processar. |
 | `vaggu-backend/src/whatsapp/service.ts` | Coordena mensagens recebidas, deduplicação persistente, retomada de eventos abandonados e respostas do menu demonstrativo. |
 | `vaggu-backend/src/whatsapp/signature.ts` | Calcula e verifica assinaturas HMAC para confirmar que o corpo recebido veio de quem possui o segredo Meta. |
 | `vaggu-backend/test-support/admin-cases.ts` | Verifica acessos administrativos, credencial não reversível, bloqueio, exclusão, prazo para desfazer e reutilização segura do e-mail. |
@@ -224,6 +244,7 @@ As cópias de imagens entre `segunda-mente/Vaggu/Identidade visual/Assets/` e `v
 | `vaggu-frontend/src/pages/admin-page.tsx` | Implementa a visão geral administrativa, cadastro, lista e ficha do shopping; o resumo inclui análise compacta e estrutura/mapa e gerentes mantêm seus fluxos próprios. |
 | `vaggu-frontend/src/pages/area-autenticada.tsx` | Centraliza mapa e análise do gerente; a rota legada de conta mantém o painel ao fundo enquanto o diálogo compartilhado abre. |
 | `vaggu-frontend/src/pages/landing-page.tsx` | Compõe a landing pública, respeita movimento reduzido e mantém contato, temas e rodapé móvel legíveis. |
+| `vaggu-frontend/src/pages/privacidade-page.tsx` | Apresenta a Política de Privacidade e as instruções de exclusão por e-mail, com responsável informado, em duas rotas públicas e sem exigir login. |
 | `vaggu-frontend/src/pages/login-page.css` | Define composição responsiva do login, troca de senha e desenho animado do rabisco em “vagas”. |
 | `vaggu-frontend/src/pages/login-page.tsx` | Entrada única para Admin e gerente, sem solicitar preenchimento automático das credenciais ao abrir a página. |
 | `vaggu-frontend/src/pages/pagina-nao-encontrada.tsx` | Exibe a rota 404 pública, oferece retorno à landing e compõe a animação semântica da vaga liberada. |
@@ -251,13 +272,73 @@ As cópias de imagens entre `segunda-mente/Vaggu/Identidade visual/Assets/` e `v
 | `vaggu-frontend/tsconfig.json` | Configura compilação TypeScript e limites dos arquivos incluídos neste projeto. |
 | `vaggu-frontend/tsconfig.node.json` | Configura compilação TypeScript e limites dos arquivos incluídos neste projeto. |
 | `vaggu-frontend/vite.config.ts` | Configura React, Tailwind, aliases e proxy local de /api para o backend. |
+| `vaggu-memorial-samuel/.gitignore` | Exclui dependências, artefatos e configurações locais do site independente do memorial. |
+| `vaggu-memorial-samuel/index.html` | Estrutura a página pública de apresentação do sistema e memorial da equipe VAGGU. |
+| `vaggu-memorial-samuel/package.json` | Declara o comando de desenvolvimento do site sem dependências externas. |
+| `vaggu-memorial-samuel/README.md` | Explica o propósito, a execução local, a estrutura e os limites editoriais do memorial. |
+| `vaggu-memorial-samuel/public/assets/logotipo-vaggu-amarelo.svg` | Publica a marca amarela reutilizada na apresentação do memorial. |
+| `vaggu-memorial-samuel/public/assets/fontes/LICENCA-Poppins.txt` | Registra a licença SIL Open Font License das fontes Poppins distribuídas com a página. |
+| `vaggu-memorial-samuel/public/assets/fontes/poppins-latin-300.woff2` | Publica a fonte Poppins Latin no peso 300 usada pela página. |
+| `vaggu-memorial-samuel/public/assets/fontes/poppins-latin-400.woff2` | Publica a fonte Poppins Latin no peso 400 usada pela página. |
+| `vaggu-memorial-samuel/public/assets/fontes/poppins-latin-500.woff2` | Publica a fonte Poppins Latin no peso 500 usada pela página. |
+| `vaggu-memorial-samuel/public/assets/fontes/poppins-latin-600.woff2` | Publica a fonte Poppins Latin no peso 600 usada pela página. |
+| `vaggu-memorial-samuel/public/assets/fontes/poppins-latin-700.woff2` | Publica a fonte Poppins Latin no peso 700 usada pela página. |
+| `vaggu-memorial-samuel/public/assets/fotos/capa-video-1.webp` | Fornece a imagem de capa do primeiro vídeo no acervo do memorial. |
+| `vaggu-memorial-samuel/public/assets/fotos/capa-video-2.webp` | Fornece a imagem de capa do segundo vídeo no acervo do memorial. |
+| `vaggu-memorial-samuel/public/assets/fotos/registro-00.webp` | Publica a fotografia identificada como registro 00 no acervo do memorial. |
+| `vaggu-memorial-samuel/public/assets/fotos/registro-01.webp` | Publica a fotografia identificada como registro 01 no acervo do memorial. |
+| `vaggu-memorial-samuel/public/assets/fotos/registro-02.webp` | Publica a fotografia identificada como registro 02 no acervo do memorial. |
+| `vaggu-memorial-samuel/public/assets/fotos/registro-03.webp` | Publica a fotografia identificada como registro 03 no acervo do memorial. |
+| `vaggu-memorial-samuel/public/assets/fotos/registro-04.webp` | Publica a fotografia identificada como registro 04 no acervo do memorial. |
+| `vaggu-memorial-samuel/public/assets/fotos/registro-05.webp` | Publica a fotografia identificada como registro 05 no acervo do memorial. |
+| `vaggu-memorial-samuel/public/assets/fotos/registro-06.webp` | Publica a fotografia identificada como registro 06 no acervo do memorial. |
+| `vaggu-memorial-samuel/public/assets/fotos/registro-07.webp` | Publica a fotografia identificada como registro 07 no acervo do memorial. |
+| `vaggu-memorial-samuel/public/assets/fotos/registro-08.webp` | Publica a fotografia identificada como registro 08 no acervo do memorial. |
+| `vaggu-memorial-samuel/public/assets/fotos/registro-09.webp` | Publica a fotografia identificada como registro 09 no acervo do memorial. |
+| `vaggu-memorial-samuel/public/assets/fotos/registro-10.webp` | Publica a fotografia identificada como registro 10 no acervo do memorial. |
+| `vaggu-memorial-samuel/public/assets/fotos/registro-11.webp` | Publica a fotografia identificada como registro 11 no acervo do memorial. |
+| `vaggu-memorial-samuel/public/assets/fotos/registro-12.webp` | Publica a fotografia identificada como registro 12 no acervo do memorial. |
+| `vaggu-memorial-samuel/public/assets/fotos/registro-13.webp` | Publica a fotografia identificada como registro 13 no acervo do memorial. |
+| `vaggu-memorial-samuel/public/assets/fotos/registro-14.webp` | Publica a fotografia identificada como registro 14 no acervo do memorial. |
+| `vaggu-memorial-samuel/public/assets/fotos/registro-15.webp` | Publica a fotografia identificada como registro 15 no acervo do memorial. |
+| `vaggu-memorial-samuel/public/assets/fotos/registro-16.webp` | Publica a fotografia identificada como registro 16 no acervo do memorial. |
+| `vaggu-memorial-samuel/public/assets/fotos/registro-17.webp` | Publica a fotografia identificada como registro 17 no acervo do memorial. |
+| `vaggu-memorial-samuel/public/assets/fotos/registro-18.webp` | Publica a fotografia identificada como registro 18 no acervo do memorial. |
+| `vaggu-memorial-samuel/public/assets/fotos/registro-19.webp` | Publica a fotografia identificada como registro 19 no acervo do memorial. |
+| `vaggu-memorial-samuel/public/assets/fotos/registro-20.webp` | Publica a fotografia identificada como registro 20 no acervo do memorial. |
+| `vaggu-memorial-samuel/public/assets/fotos/registro-21.webp` | Publica a fotografia identificada como registro 21 no acervo do memorial. |
+| `vaggu-memorial-samuel/public/assets/fotos/registro-22.webp` | Publica a fotografia identificada como registro 22 no acervo do memorial. |
+| `vaggu-memorial-samuel/public/assets/fotos/registro-23.webp` | Publica a fotografia identificada como registro 23 no acervo do memorial. |
+| `vaggu-memorial-samuel/public/assets/fotos/registro-24.webp` | Publica a fotografia identificada como registro 24 no acervo do memorial. |
+| `vaggu-memorial-samuel/public/assets/fotos/registro-25.webp` | Publica a fotografia identificada como registro 25 no acervo do memorial. |
+| `vaggu-memorial-samuel/public/assets/fotos/registro-26.webp` | Publica a fotografia identificada como registro 26 no acervo do memorial. |
+| `vaggu-memorial-samuel/public/assets/fotos/registro-27.webp` | Publica a fotografia identificada como registro 27 no acervo do memorial. |
+| `vaggu-memorial-samuel/public/assets/fotos/registro-28.webp` | Publica a fotografia identificada como registro 28 no acervo do memorial. |
+| `vaggu-memorial-samuel/public/assets/fotos/registro-29.webp` | Publica a fotografia identificada como registro 29 no acervo do memorial. |
+| `vaggu-memorial-samuel/public/assets/fotos/registro-30.webp` | Publica a fotografia identificada como registro 30 no acervo do memorial. |
+| `vaggu-memorial-samuel/public/assets/fotos/registro-31.webp` | Publica a fotografia identificada como registro 31 no acervo do memorial. |
+| `vaggu-memorial-samuel/public/assets/fotos/registro-32.webp` | Publica a fotografia identificada como registro 32 no acervo do memorial. |
+| `vaggu-memorial-samuel/public/assets/fotos/registro-33.webp` | Publica a fotografia identificada como registro 33 no acervo do memorial. |
+| `vaggu-memorial-samuel/public/assets/fotos/registro-34.webp` | Publica a fotografia identificada como registro 34 no acervo do memorial. |
+| `vaggu-memorial-samuel/public/assets/fotos/retrato-juan.webp` | Publica o retrato identificado como Juan no acervo do memorial. |
+| `vaggu-memorial-samuel/public/assets/fotos/retrato-kamilly.webp` | Publica o retrato identificado como Kamilly no acervo do memorial. |
+| `vaggu-memorial-samuel/public/assets/videos/marca-em-movimento.mp4` | Fornece o vídeo da marca animada exibido na seção de memória da página. |
+| `vaggu-memorial-samuel/public/assets/videos/memoria-01.mp4` | Fornece o primeiro vídeo do acervo audiovisual do memorial. |
+| `vaggu-memorial-samuel/scripts/servidor.mjs` | Serve localmente os arquivos do memorial sem dependências ou acesso à rede externa. |
+| `vaggu-memorial-samuel/src/estilos.css` | Define a identidade visual, os layouts responsivos e o movimento reduzido do memorial. |
+| `vaggu-memorial-samuel/src/main.js` | Inicializa navegação, movimento, vídeos e galeria da página independente. |
+| `vaggu-memorial-samuel/src/dados/acervo.js` | Mapeia fotografias e vídeos do memorial para os arquivos publicados. |
+| `vaggu-memorial-samuel/src/interacoes/galeria.js` | Implementa a navegação e os controles da galeria de memórias. |
+| `vaggu-memorial-samuel/src/interacoes/movimento.js` | Inicializa animações e efeitos de entrada da página. |
+| `vaggu-memorial-samuel/src/interacoes/navegacao.js` | Controla menu, navegação por seções e progresso de leitura. |
+| `vaggu-memorial-samuel/src/interacoes/videos.js` | Gerencia reprodução e controles dos vídeos do memorial. |
 
 
 ## Prévia dos telões — atualização de 17/10/2026
 
 | Arquivo | Responsabilidade |
 | --- | --- |
-| `vaggu-frontend/src/pages/telao-page.tsx` | Apresenta prévia autenticada de disponibilidade por andar/setor, consulta o escopo do gerente a cada 15 segundos e usa a apresentação compartilhada com tela cheia/Esc, sem rolagem e sem ampliar um andar inválido para visão geral. |
+| `vaggu-frontend/src/pages/telao-page.tsx` | Apresenta prévia autenticada de disponibilidade por andar/setor, consulta o escopo do gerente pelo hook operacional de 500 ms e usa a apresentação compartilhada com tela cheia/Esc, sem rolagem e sem ampliar um andar inválido para visão geral. |
 | `vaggu-frontend/src/pages/telao-page.css` | Define layout de alto contraste para telão, legibilidade a distância e adaptação a telas menores. |
 
 ### Visual do telão — 17/10/2026
@@ -303,7 +384,7 @@ Regras, contratos, operação e limitações estão em [conclusao-software-2026-
 | `vaggu-backend/test/teloes-postgresql.test.ts` | Verifica agregação, recorte, credenciais, revogação e isolamento de instalações com banco de teste. |
 | `vaggu-frontend/src/components/equipamentos-admin.tsx` | Oferece cadastro, vínculo e manutenção, consulta de ocorrências e exibição única de chaves no Admin. |
 | `vaggu-frontend/src/components/teloes-admin.tsx` | Configura visão geral ou andar por instalação para Admin e gerente, salva explicitamente sem trocar credencial, emite a chave uma vez, permite revogação e exclusão definitiva com confirmação. |
-| `vaggu-frontend/src/hooks/use-estrutura-atualizada.ts` | Centraliza consulta periódica/manual, descarte de respostas antigas e invalidação por erro ou prazo. |
+| `vaggu-frontend/src/hooks/use-estrutura-atualizada.ts` | Centraliza consulta periódica de 500 ms/manual, guarda da renovação automática enquanto há consulta pendente, pausa em aba oculta, descarte de respostas antigas e invalidação por erro ou prazo de 30 s. |
 | `vaggu-frontend/src/pages/telao-instalado-page.tsx` | Exibe agregados com chave própria por aba e oculta contagens quando a consulta perde validade. |
 | `vaggu-frontend/src/servicos/validade-estrutura.ts` | Produz estrutura com leituras indisponíveis quando a consulta vence, preservando indicação de manutenção. |
 
@@ -326,3 +407,10 @@ O [protótipo e sua validação](telao-apresentacao-2026-10-21.md) substituem o 
 
 O painel analítico usa Motion já instalado: linha e preenchimento revelados por recorte SVG, barras por escala e roscas por escala/opacidade. A apresentação não altera o histórico, a exportação ou os estados de consulta. Ver [experimento e testes](animacoes-analises-2026-10-25.md).
 | `hardware/esp32-3-vagas/sincronizar-relogio-usb.ps1` | Envia horário UTC do computador por USB e acompanha o retorno serial, sem ler credenciais nem reiniciar a placa. |
+
+### Clareza dos equipamentos — 28/10/2026
+
+O componente `vaggu-frontend/src/components/equipamentos-admin.tsx` orienta cadastro da placa ESP32, associação sensor/vaga e manutenção, com exemplos de códigos e estados sem placa/vaga elegível. Evidências locais em `Evidências visuais/2026-10-28 - Clareza equipamentos/`; fluxo e validação registrados no planejamento e no índice de evidências.
+
+| `scripts/gerar-apresentacao-whatsapp.mjs` | Exporta a arte JPEG do WhatsApp com marca, foto e fonte locais; Sharp usado somente na autoria. |
+| `vaggu-frontend/public/assets/apresentacao-whatsapp-vaggu.jpg` | Apresentação ilustrativa pública usada no cabeçalho da opção Conhecer a VAGGU. |

@@ -1,18 +1,19 @@
 # VAGGU — fluxo de telas
 
-Configuração atual da bancada em 21/10: mapa com consulta de **2 s**, backend local com confirmação de **5 s**, preservando 30 s como padrão dos demais ambientes. Três canais físicos confirmaram ocupado/livre e apareceram no mapa do gerente. A edição de posições permanece sem polling.
+**Decisão de escopo e aceite — 04/11/2026:** o usuário confirmou a homologação completa do site. O aceite web está encerrado por essa confirmação, sem nova execução em produção pelo agente nem hash de deploy adicional informado. O WhatsApp será demonstrativo: atendimento humano real, coleta comercial e protocolos deixam de ser requisitos desta entrega. Procedimentos de dados definidos em [operação do TCC](operacao-dados-tcc.md); hardware físico mantém aceite próprio.
 
-Atualização de 21/10/2026: mapa do gerente e aba Visualizar mapa do Admin consultam estados a cada 5 s após cada resposta, com pausa em aba oculta e recuperação de falha. O editor de posições não recebe atualização periódica. Bancada local com shopping/gerente próprios: ESP32 conectada, leitura de S02 persistida e A02 Livre exibida no mapa. S01/S03 e ensaios das três vagas ainda precisam de validação física completa.
+**Estado em 04/11/2026:** conexão real e menu clicável confirmados pelo participante. Apresentação com imagem/site e contato empresarial publicada em 7356e12; imagem, link e continuidade confirmados pelo participante em teste real; o histórico de implantação e as pendências reais estão no [processo e operação do WhatsApp](whatsapp-processo-e-operacao.md). Registros datados de adiamento abaixo são históricos.
 
-Este documento registra a navegação encontrada na interface, com atualização de edição visual e monitoramento em 15/10/2026 e a compara com as páginas previstas no SSD. **Implementado** significa que existe rota e tela no código atual; não significa que sensores e Power BI estejam concluídos. **Parcial** indica que parte da experiência está pronta. **Ausente** indica que a página foi planejada, mas ainda não existe no site.
 
-Este documento registra a navegação encontrada na interface, com revisão do código em 21/10/2026 e a compara com as páginas previstas no SSD. **Implementado** significa que existe rota e tela no código atual; não significa que sensores e Power BI estejam concluídos. **Parcial** indica que parte da experiência está pronta. **Ausente** indica que a página foi planejada, mas ainda não existe no site.
+**Revisão documental de 04/11/2026:** o mapa do gerente e a visualização do Admin usam o hook useEstruturaAtualizada: tentativa automática a cada **500 ms**, sem renovar automaticamente enquanto houver consulta pendente e com pausa em aba oculta. Validade visual de 30 s; o editor não tem polling. O telão instalado mantém 15 s. A confirmação de 30 s é padrão do servidor; ajustes de bancada de 5 s e depois 2 s são registros históricos, sem garantia de latência.
+
+Houve transições físicas ocupado/livre nos três canais em 21/10; estabilidade sustentada e piloto HTTPS publicado ainda precisam de aceite. Este documento descreve rotas e telas presentes no código, sem declarar homologação externa. Para a etapa atual e as lacunas, consultar a [revisão consolidada de 04/11](revisao-documental-2026-11-04.md).
 
 ## Perfis e regras comuns de navegação
 
 | Perfil | Escopo na interface atual |
 | --- | --- |
-| Visitante | Landing e login. O contato comercial sai da aplicação e continua no WhatsApp quando o número oficial está configurado. |
+| Visitante | Landing, memorial, login, privacidade e exclusão de dados. O contato comercial sai da aplicação e continua no WhatsApp quando o número oficial está configurado. |
 | Admin VAGGU | Visão geral consolidada, cadastro e listagem de shoppings; na ficha, navegação separada entre visão geral, estrutura/mapa e gerentes. A importação e exportação estrutural abrem janelas na área de estrutura. |
 | Gerente | Painel, mapa, análise e gestão dos telões do shopping vinculado; edição de nome e telefone em rota própria de conta. |
 
@@ -24,7 +25,8 @@ A sessão persiste em cookie HttpOnly de mesma origem. Ao recarregar uma rota pr
 
 | Rota/tela | Perfil | Origem | Destino | Ações principais | Resultado observado no código | Estado |
 | --- | --- | --- | --- | --- | --- | --- |
-| `/` — Landing | Visitante | Acesso direto; retorno pelo logotipo ou pelo link “Voltar para o site” | `/login`; WhatsApp externo | Conhecer a solução, percorrer as seções da apresentação, abrir contato comercial e acessar o login | O rodapé móvel reúne marca, chamada comercial e links existentes, sem repetir a imagem de celulares. Seu CTA do WhatsApp depende do número oficial configurado; outros CTAs da landing ainda precisam dessa mesma proteção | Implementado, com a ressalva indicada |
+| `/` — Landing | Visitante | Acesso direto; retorno pelo logotipo ou pelo link “Voltar para o site” | `/login`, `/memorial`; WhatsApp, e-mail e Instagram externos; repositório GitHub | Conhecer a solução, percorrer as seções da apresentação, abrir os canais oficiais, consultar o memorial da equipe e acessar o login | O rodapé reúne marca e contatos oficiais do projeto sob o único título “Canais oficiais”, no lugar do mockup de celulares, além dos links institucionais. Os rótulos dos contatos permanecem em uma linha; os cartões mudam para duas colunas somente em telas XL. O WhatsApp depende do número válido configurado; o e-mail é compartilhado com o aviso de privacidade | Implementado |
+| `/memorial` — Memorial da equipe | Visitante | Link “Memorial da equipe” no rodapé da landing | Âncoras do próprio memorial; voltar pelo histórico do navegador | Consultar a história, equipe, fotografias e vídeos do acervo | A rota React apresenta a página independente, publicada sob `/memorial/` com CSS, scripts e mídias isolados dos recursos da landing | Implementado |
 | `/login` — Entrada única | Visitante, Admin e gerente | Landing; tentativa de abrir rota protegida; logout; sessão expirada | `/trocar-senha`, `/admin` ou `/painel`; WhatsApp de suporte externo quando configurado | Informar e-mail e senha, mostrar/ocultar senha e solicitar orientação em “Esqueci minha senha” | A API valida a credencial; primeiro acesso segue para troca obrigatória e os demais seguem pelo perfil | Implementado |
 | `/trocar-senha` — Troca obrigatória | Admin ou gerente autenticado com senha provisória | Login; redirecionamento das rotas protegidas | `/admin` ou `/painel`; `/login` ao sair | Informar senha provisória, nova senha e confirmação; acompanhar requisitos; mostrar/ocultar cada campo; sair | Substitui a senha provisória antes de liberar a área operacional | Implementado para o primeiro acesso; a troca posterior fica em Minha conta |
 | `/admin` — Visão geral administrativa | Admin | Login; menu “Visão geral”; redirecionamento por perfil | `/admin/cadastrar`, `/admin/shoppings` e fichas individuais | Consultar totais de shoppings, operações ativas, implantações, acessos e lacunas cadastrais verificáveis | Usa somente a listagem administrativa persistida; não apresenta comunicação ou saúde de sensores como disponíveis | Implementado |
@@ -104,3 +106,7 @@ Experimento local de 25/10: indicadores e categorias contam até o valor confirm
 
 
 Revisão de leitura em 25/10: categorias e indicadores têm acentos de cor e mais espaço interno. Cards mostram título, valor e apoio curto; definições ficam em “Como ler os indicadores”. Ausência de permanência usa travessão com “Sem ciclos completos”. Filtros ficam em uma linha no desktop e se reorganizam em telas menores, sem alterar o recorte ou os contratos.
+
+### Equipamentos: orientação de uso — 28/10/2026
+
+Na configuração da estrutura, Equipamentos e manutenção explica placa ESP32, sensor e vaga em três passos. Os campos identificam os códigos usados no equipamento e “Vaga sem sensor” substitui “Vaga disponível”, sem sugerir disponibilidade para estacionar. A ajuda expansível explica manutenção de placa/sensor, renovação de chave e desativação. Os diálogos distinguem o alcance da intervenção. Cadastro não comprova comunicação ou leitura válida. Sem placa ativa ou vaga sem vínculo, a associação fica desabilitada com orientação. Contratos da API preservados.

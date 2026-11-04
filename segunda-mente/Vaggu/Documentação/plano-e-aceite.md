@@ -1,6 +1,11 @@
 # VAGGU — plano de implementação e critérios de aceite
 
-Versão 1.2 • revisão de 21/10/2026 (origem em 09/09/2026)
+**Decisão de escopo e aceite — 04/11/2026:** o usuário confirmou a homologação completa do site. O aceite web está encerrado por essa confirmação, sem nova execução em produção pelo agente nem hash de deploy adicional informado. O WhatsApp será demonstrativo: atendimento humano real, coleta comercial e protocolos deixam de ser requisitos desta entrega. Procedimentos de dados definidos em [operação do TCC](operacao-dados-tcc.md); hardware físico mantém aceite próprio.
+
+**Estado em 04/11/2026:** conexão real e menu clicável confirmados pelo participante. Apresentação com imagem/site e contato empresarial publicada em 7356e12; imagem, link e continuidade confirmados pelo participante em teste real; o histórico de implantação e as pendências reais estão no [processo e operação do WhatsApp](whatsapp-processo-e-operacao.md). Registros datados de adiamento abaixo são históricos.
+
+
+Versão 1.3 • revisão documental de 04/11/2026 (origem em 09/09/2026)
 
 Este plano organiza dependências e evidências. Não é um registro de funcionalidades já concluídas. Cada etapa deve ser conciliada com o código existente; não recriar o que estiver implementado e validado.
 
@@ -28,17 +33,19 @@ Não usar “concluído” porque uma tela existe no Figma ou um cartão está m
 | E3 — Equipamentos | Placa, sensor, recebimento das leituras, expiração, ocorrências e manutenção | E1/E2 e acordo com o firmware | Maquete ou simulador identificado demonstra estados, falhas e retorno. |
 | E4 — Operação e histórico | Indicadores, telões, filtros, eventos, comparações e exportação | E2/E3 | Contagens reconciliadas e histórico com indisponibilidade explícita. |
 | E5 — Power BI (opcional) | Views, medidas, relatório e atualização | E4 | Se adotado, relatório funcional com números iguais ao conjunto controlado. |
-| E6 — Integração | Fluxo completo, responsividade, permissões e preparação de apresentação | E1–E4; conexão real WhatsApp adiada | Roteiro completo reproduzível e limitações declaradas. |
+| E6 — Integração | Fluxo completo, responsividade, permissões e preparação de apresentação | E1–E4; WhatsApp real confirmado parcialmente, fechamento de P10 conforme recorte | Roteiro completo reproduzível e limitações declaradas. |
 
 O fluxo comercial pode ser testado com atendimento demonstrativo. Dados simulados devem estar identificados. Quando houver hardware real, conferir ingestão e interrupção física de comunicação; não chamar um simulador de integração física.
 
 ## 3. Critérios de aceite rastreáveis
 
+Estado consolidado na [revisão consolidada de 04/11](revisao-documental-2026-11-04.md). CA01–CA03 passam a avaliar o menu demonstrativo e a deduplicação técnica, sem exigir pedido comercial ou atendimento humano. A homologação completa do site foi confirmada pelo usuário em 04/11; não é nova rodada executada pelo agente. CA15–CA24 têm ensaio inicial físico e testes locais, ainda sem aceite sustentado/publicado. CA25–CA31 possuem validações locais; o aceite do site publicado foi encerrado pela confirmação completa do usuário, com origem da evidência explicitada. CA32–CA33 são opcionais se o Power BI publicado não for adotado.
+
 | ID | Requisito | Cenário | Resultado esperado |
 | --- | --- | --- | --- |
 | CA01 | RF01 | Visitante aciona CTA da landing | Abre o contato WhatsApp configurado, com contexto correto; não solicita cadastro no site. |
 | CA02 | RF02 | Menu recebe opção inválida e depois válida | Orienta retorno e segue o fluxo correto sem perder estado indevidamente. |
-| CA03 | RF02 | Mesma mensagem de demonstração reenviada | Não duplica pedido; evento de status não é tratado como texto do cliente. |
+| CA03 | RF02 | Mesma mensagem do menu demonstrativo reenviada | Não duplica resposta nos cenários cobertos; evento de status não é tratado como texto do cliente. |
 | CA04 | RF03/RF04 | Admin cria shopping e dois gerentes | Contas distintas, e-mails únicos, mesmo shopping e senhas individuais. |
 | CA05 | RF05 | Gerente entra com senha provisória | Backend permite apenas ações necessárias à troca antes do painel operacional. |
 | CA05A | RF04/RF05 | Admin cria ou redefine um gerente e depois recarrega a ficha | A resposta imediata exibe a senha provisória com ação de copiar; a listagem posterior não a revela e nunca expõe hash ou senha definitiva. |
@@ -82,10 +89,10 @@ Esta matriz conecta o motivo da funcionalidade ao trabalho técnico. `Planejado`
 
 | Problema ou necessidade | Requisitos e aceite | Tela ou fluxo | API e dados | Implementação principal | Responsáveis de referência | Pacote e estado |
 | --- | --- | --- | --- | --- | --- | --- |
-| Apresentar a solução e iniciar o atendimento | RF01–RF02; CA01–CA03 | Landing → WhatsApp → atendimento humano | Webhook WhatsApp; `WhatsappEvento` | `landing-page.tsx`; `src/whatsapp/*` | Elisa/Ana no fluxo; Kamilly no backend; Pietro na integração | P10 — parcial/planejado |
+| Apresentar a solução e iniciar o atendimento | RF01–RF02; CA01–CA03 | Landing → WhatsApp → atendimento humano | Webhook WhatsApp; `WhatsappEvento` | `landing-page.tsx`; `src/whatsapp/*` | Elisa/Ana no fluxo; Kamilly no backend; Pietro na integração | P10 — entrega demonstrativa; conexão/menu/apresentação reais confirmados; coleta e operação comercial fora do recorte |
 | Criar acessos individuais e proteger cada shopping | RF04–RF05/RF17; CA04–CA07 | Login → troca obrigatória → Admin ou painel | `/auth/*`, `/shoppings/*`, `/gerentes/*`, `/minha-conta`; `Usuario`, `Sessao`, `Shopping` | `app-store.tsx`, páginas de acesso e módulos `auth`, `shoppings`, `conta` | Pietro, Ana e Samuel | P02–P03 — implementado, com correções de interface em C01 |
 | Configurar e consultar o estacionamento | RF03/RF06–RF08; CA08–CA14 | Ficha Admin → estrutura/importação/mapa; gerente → mapa | Rotas de estrutura e importação; `Andar`, `Setor`, `Vaga`, `ImportacaoEstrutura` | `estrutura-admin.tsx`, `visualizacao-vagas.tsx`, módulos `estrutura` e `importacao` | Samuel nos dados; Juan/Elisa na interface; Pietro na integração | P04–P05 — implementado |
-| Receber estados confiáveis dos sensores | RF09–RF13; CA15–CA24 | Equipamentos e estado operacional | Recepção, placa, sensor, ordem, confirmação e expiração implementadas; validade na consulta e monitoramento individual implementados; cadastro operacional, ocorrências, manutenção e atualização periódica implementados; hardware e homologação pendentes | Testes locais e integração PostgreSQL aprovados; ESP32 real ainda pendente | Kamilly, Samuel e Pietro | P06 — em andamento |
+| Receber estados confiáveis dos sensores | RF09–RF13; CA15–CA24 | Equipamentos e estado operacional | Recepção, placa, sensor, ordem, confirmação e expiração implementadas; validade na consulta e monitoramento individual implementados; cadastro operacional, ocorrências, manutenção e atualização periódica implementados; hardware e homologação pendentes | Testes locais/PostgreSQL e ensaio físico inicial dos três canais registrados; estabilidade e piloto publicado pendentes | Kamilly, Samuel e Pietro | P06 — em andamento |
 | Exibir contagens sem duplicar categorias | RF14; CA25–CA26 | Mapa operacional e telões | Consultas agregadas e autorização própria revogável implementadas | Prévia do gerente e instalação web; configuração administrativa na estrutura do shopping | Juan/Elisa na apresentação; Kamilly/Samuel nos dados | P07 — implementado localmente; homologação e instalação física pendentes |
 | Explicar o uso no tempo e exportar resultados | RF13/RF15; CA27–CA31 | Histórico, comparação e relatórios | Histórico confirmado, filtro por até 31 dias UTC, comparação com período anterior e exportações Excel/PDF implementados; setor/categoria, entradas/saídas, permanência, rotatividade, cobertura e fotografia de classificação implementados; eventos legados permanecem identificados | API e painéis distinguem medições confirmadas, ausência de histórico e situação atual; arquivos incluem séries dos gráficos e recorte aplicado | Samuel nos dados; Ana/Elisa na interface; Pietro na integração | P08 — implementado localmente; homologação publicada pendente |
 | Produzir análise externa com os mesmos números | RF16–RF17; CA32–CA33 | Relatório Power BI | A preparação dos intervalos históricos existe no banco | Conjunto de conferência e testes existem; nenhum relatório funcional versionado foi encontrado | Samuel e Pietro, com validação de Elisa | P09 — dados preparados; relatório/publicação opcional |

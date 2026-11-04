@@ -1,6 +1,13 @@
 # Documentação da VAGGU
 
-Estrutura inicial de 09/09/2026 • revisão geral em 21/10/2026 • Português brasileiro
+**Decisão de escopo e aceite — 04/11/2026:** o usuário confirmou a homologação completa do site. O aceite web está encerrado por essa confirmação, sem nova execução em produção pelo agente nem hash de deploy adicional informado. O WhatsApp será demonstrativo: atendimento humano real, coleta comercial e protocolos deixam de ser requisitos desta entrega. Procedimentos de dados definidos em [operação do TCC](operacao-dados-tcc.md); hardware físico mantém aceite próprio.
+
+**Situação consolidada em 04/11/2026, após confirmação do usuário:** site completamente homologado; procedimentos de dados definidos para o TCC e WhatsApp demonstrativo sem atendimento humano obrigatório. Foco em evidências e apresentação; sensores mantêm aceite físico próprio. Ver [etapa atual, lacunas e prioridades](revisao-documental-2026-11-04.md).
+
+**Estado em 04/11/2026:** conexão real e menu clicável confirmados pelo participante. Apresentação com imagem/site e contato empresarial publicada em 7356e12; imagem, link e continuidade confirmados pelo participante em teste real; o histórico de implantação e as pendências reais estão no [processo e operação do WhatsApp](whatsapp-processo-e-operacao.md). Registros datados de adiamento abaixo são históricos.
+
+
+Estrutura inicial de 09/09/2026 • revisão documental integrada em 04/11/2026 • Português brasileiro
 
 Esta pasta reúne as decisões de produto, o desenho técnico, os padrões de código e os critérios de aceite do projeto. “SSD” é o nome adotado para a especificação principal; a documentação descreve tanto o que já existe quanto o destino planejado da plataforma.
 
@@ -8,8 +15,11 @@ Esta pasta reúne as decisões de produto, o desenho técnico, os padrões de c�
 
 | Arquivo | O que contém |
 | --- | --- |
+| [operacao-dados-tcc.md](operacao-dados-tcc.md) | Retenção, exclusão e contingência do TCC; backup dispensado pelo usuário. |
+| [revisao-documental-2026-11-04.md](revisao-documental-2026-11-04.md) | Etapa atual, matriz por pacote, pendências priorizadas, critérios e limites da revisão. |
+| [whatsapp-processo-e-operacao.md](whatsapp-processo-e-operacao.md) | Implantação confirmada e pendências de atendimento, retenção e evidência visual. |
 | [telao-apresentacao-2026-10-21.md](telao-apresentacao-2026-10-21.md) | Protótipo funcional do telão, gestão pelo gerente, tela cheia/Esc e verificação visual. |
-| [revisao-geral-2026-10-21.md](revisao-geral-2026-10-21.md) | Revisão atual: 130 testes, capturas reais locais, correção do telão, limpeza e regra de prints. |
+| [revisao-geral-2026-10-21.md](revisao-geral-2026-10-21.md) | Revisão histórica de 21/10: 130 testes, capturas reais locais, correção do telão, limpeza e regra de prints. |
 | [AGENTS.md](../../../AGENTS.md) | Nossos acordos para desenvolver, documentar, verificar e usar Git. |
 | [SSD-VAGGU.md](SSD-VAGGU.md) | Escopo, fluxos, permissões, dados, API proposta, telemetria, Power BI e decisões pendentes. |
 | [regras-de-codigo.md](regras-de-codigo.md) | Português brasileiro, comentários, nomes, arquitetura, pastas, segurança e qualidade. |
@@ -44,7 +54,7 @@ O `AGENTS.md` é o ponto de entrada para os acordos de trabalho. O SSD reúne as
 - O escopo considera as decisões de Pietro e o documento mestre revisado em 09/09/2026.
 - Nossas regras de código e organização orientam as novas entregas.
 - Modelos de dados, rotas e detalhes de infraestrutura marcados como **proposta** devem ser conciliados com o repositório.
-- P01–P05 e C01 estão concluídos. O código atual inclui confirmação/expiração dos sensores, cadastro e vínculo de equipamentos, manutenção e ocorrências, mapa com atualização a cada 15 segundos e telões com credencial própria revogável. A análise oferece até 31 dias UTC, comparação, setor/categoria, entradas, saídas, permanência, rotatividade, cobertura e Excel/PDF. Os novos eventos preservam a classificação histórica; eventos legados sem fotografia confirmada continuam sinalizados. Hardware físico e homologação publicada seguem pendentes. Power BI publicado é opcional e a conexão real do WhatsApp foi adiada. O estado local e as verificações datadas estão na [conclusão do software](conclusao-software-2026-10-19.md).
+- P01–P05 e C01 estão concluídos. O código atual inclui confirmação/expiração dos sensores, cadastro e vínculo de equipamentos, manutenção e ocorrências, mapa com atualização automática de 500 ms no código atual e telões com credencial própria revogável. A análise oferece até 31 dias UTC, comparação, setor/categoria, entradas, saídas, permanência, rotatividade, cobertura e Excel/PDF. Os novos eventos preservam a classificação histórica; eventos legados sem fotografia confirmada continuam sinalizados. Há ensaio físico inicial dos três canais registrado; estabilidade e homologação publicada seguem pendentes. Power BI publicado é opcional e a conexão real e o menu do WhatsApp foram confirmados em 04/11/2026. O estado local e as verificações datadas estão na [conclusão do software](conclusao-software-2026-10-19.md).
 
 - A referência visual é o [Figma VAGGU](https://www.figma.com/design/xKI9wjoiZ5CoXC3DXIJNmq/Vaggu?node-id=2022-2); esta revisão confere o repositório e não extrai novos tokens do Figma.
 - Mudanças no Figma, Trello, produção ou repositório remoto só são registradas como realizadas quando houver evidência específica.

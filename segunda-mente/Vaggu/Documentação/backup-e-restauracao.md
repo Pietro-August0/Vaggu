@@ -1,5 +1,7 @@
 # Backup e restauração do PostgreSQL
 
+**Situação em 04/11/2026:** backup dispensado expressamente pelo usuário para o TCC. Este guia e os ensaios existentes são referências opcionais, sem pendência de implementação ou execução. Nenhuma cópia existente foi apagada.
+
 Implementado e ensaiado localmente em 21/10/2026. Não representa configuração de backup automático do banco publicado.
 
 ## Criar uma cópia
@@ -29,6 +31,6 @@ O teste `backup-postgresql.test.ts` cria bancos isolados, aplica todas as migrat
 
 Executado em 21/10 com utilitários oficiais e PostgreSQL local na porta 55439: ensaio de dump/restauração aprovado. Não foi acessado o banco de produção.
 
-## Operação a definir antes de produção
+## Referência opcional e limite comercial
 
-Precisamos definir frequência, retenção, local protegido da cópia externa, responsável e prazo de recuperação. Confirmar backup oferecido pela hospedagem e repetir o ensaio periodicamente. A existência deste script não comprova cópia externa, agendamento ou recuperação do ambiente publicado. Sessões restauradas podem precisar de revogação antes de liberar uma instância recuperada.
+Não há rotina obrigatória de backup no TCC, por decisão do usuário em 04/11. Uma futura operação comercial exigirá planejamento próprio; este guia não certifica cópia externa, agendamento ou recuperação do ambiente publicado.

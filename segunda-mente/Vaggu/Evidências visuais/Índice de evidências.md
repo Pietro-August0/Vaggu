@@ -3,6 +3,81 @@ tags: [vaggu, evidencias, interface]
 ---
 # Evidências visuais da VAGGU
 
+## 04/11/2026 — canais oficiais responsivos
+
+Rota `/`, perfil visitante, Vite local em `http://127.0.0.1:5173`, Edge/DevTools e sessão de API simulada com visitante fictício (`example.invalid`). Viewports desktop 1440×1000 e 1280×900, notebook 1024×900, tablet 768×1024, celular 390×844 e celular estreito 320×720. Nenhuma mensagem foi enviada; os destinos públicos foram apenas conferidos.
+
+| Tela | Evidência | Resultado observado |
+| --- | --- | --- |
+| Rodapé e canais oficiais | [Desktop 1440](2026-11-04%20-%20Contatos%20responsivos/contatos-desktop.png) · [Desktop 1280](2026-11-04%20-%20Contatos%20responsivos/contatos-desktop-compacto.png) · [Notebook](2026-11-04%20-%20Contatos%20responsivos/contatos-notebook.png) · [Tablet](2026-11-04%20-%20Contatos%20responsivos/contatos-tablet.png) · [Celular](2026-11-04%20-%20Contatos%20responsivos/contatos-celular.png) · [Celular estreito](2026-11-04%20-%20Contatos%20responsivos/contatos-celular-estreito.png) | “Canais oficiais” é o único título; rótulos e e-mail em uma linha. Os cartões passam a duas colunas somente em XL. Sem overflow horizontal. |
+
+Foco de teclado visível; console sem erros e sem respostas HTTP malsucedidas. Capturas locais não comprovam publicação em produção ou envio bem-sucedido de mensagens.
+
+## 04/11/2026 — ajuste dos contatos da landing
+
+Rota `/`, perfil visitante, Vite local em `http://127.0.0.1:5173`, Edge/DevTools e sessão de API simulada com visitante fictício (`example.invalid`). Viewports desktop 1440×1000, tablet 768×1024 e celular 390×844. Nenhuma mensagem foi enviada; os destinos públicos foram apenas conferidos.
+
+| Tela | Evidência | Resultado observado |
+| --- | --- | --- |
+| Rodapé e canais oficiais | [Desktop](2026-11-04%20-%20Ajuste%20de%20contatos/contatos-desktop.png) · [Tablet](2026-11-04%20-%20Ajuste%20de%20contatos/contatos-tablet.png) · [Celular](2026-11-04%20-%20Ajuste%20de%20contatos/contatos-celular.png) | Um link de WhatsApp na grade, e-mail, Instagram e GitHub com ícones próprios; sem botão duplicado ou indicador de link externo à direita. Sem overflow horizontal. |
+
+Tab avançou ao link de e-mail com foco visível. Console sem erros e sem respostas HTTP malsucedidas. Capturas locais não comprovam publicação em produção ou envio bem-sucedido de mensagens.
+
+## 04/11/2026 — landing e memorial
+
+Landing e rota pública `/memorial`, origem `http://127.0.0.1:5173`, Vite local. Capturas feitas no Edge com viewports desktop 1440×1000, tablet 768×1024 e celular 390×844; a captura adicional mostra o menu do memorial aberto no celular. A landing usa conteúdo institucional e canais públicos; a chamada de sessão foi interceptada com visitante fictício (`example.invalid`). Nenhuma conta real, mensagem, publicação ou hardware foi usado.
+
+| Tela | Evidência | Resultado observado |
+| --- | --- | --- |
+| `/`, rodapé e contatos | [Desktop](2026-11-04%20-%20Memorial%20e%20contatos/landing-rodape-desktop.png) · [Tablet](2026-11-04%20-%20Memorial%20e%20contatos/landing-rodape-tablet.png) · [Celular](2026-11-04%20-%20Memorial%20e%20contatos/landing-rodape-celular.png) | Canais WhatsApp, e-mail, Instagram e GitHub; link do memorial no rodapé; sem mockup de celular ou overflow horizontal. |
+| `/memorial` | [Desktop](2026-11-04%20-%20Memorial%20e%20contatos/memorial-desktop.png) · [Tablet](2026-11-04%20-%20Memorial%20e%20contatos/memorial-tablet.png) · [Celular](2026-11-04%20-%20Memorial%20e%20contatos/memorial-celular.png) · [Menu aberto no celular](2026-11-04%20-%20Memorial%20e%20contatos/memorial-celular-menu-aberto.png) | Página e acervo renderizados; menu móvel aberto com `aria-expanded=true`; sem overflow horizontal. |
+
+O link do rodapé foi acionado por teclado e apresentou foco visível; destinos dos contatos conferidos. Console sem erros e nenhuma resposta HTTP malsucedida nas páginas capturadas. As verificações são locais e não comprovam a publicação em produção ou o funcionamento de equipamento físico.
+
+## 04/11/2026 — texto demonstrativo de atendente: captura pendente
+
+Opções 3–5 do bot agora anunciam contato de uma atendente em alguns instantes, sem solicitar e-mail. Alteração local de textos e descrição do menu; números e cliques mantêm retorno. Captura da interface real não realizada por ausência de sessão controlável de WhatsApp, conforme inventário desta sessão. Testes de texto/contrato não substituem print; revisão visual pendente, sem imagem simulada apresentada como mensageiro real. Sem publicação nesta etapa.
+
+## 04/11/2026 — complementação de importação e exclusões
+
+**66 capturas locais**, perfil Admin fictício, desktop 1440×1000, tablet 768×1024 e celular 390×844, temas claro/escuro. Rotas administrativas de estrutura/importação, gerentes e listagem de shoppings; origem: Vite local com API interceptada e fixtures fictícias. Carregamento, prévias válida/inválida, confirmação, sucesso/falha, exclusão, cancelamento e desfazer exercitados. Sem overflow da página ou erros JavaScript inesperados; HTTP 503 intencional no cenário de falha.
+
+[Galeria por estado, viewport e tema](2026-11-04%20-%20Fechamento%20documental/README.md) · [Resultados por captura](2026-11-04%20-%20Fechamento%20documental/resultados.json). As imagens de diálogos respeitam a rolagem interna; tabelas extensas mantêm rolagem própria. Sem dados reais ou credenciais, sem alterações em produção. Homologação completa do site aceita conforme confirmação do usuário; estas capturas são complementares. Captura real do WhatsApp indisponível por ausência de sessão controlável; não se declara revisão visual do mensageiro concluída.
+
+**Registro da revisão inicial — 04/11/2026, anterior à complementação acima:** naquela etapa nenhuma tela foi alterada ou recapturada. As capturas abaixo conservam datas, ambientes e limites originais. O participante confirmou também imagem, site, Ver recursos e retorno da apresentação publicada em 7356e12; captura anonimizada da interface WhatsApp continua pendente. Lacunas específicas de importação/exclusões e homologação publicada estão na [[Vaggu/Documentação/revisao-documental-2026-11-04|revisão consolidada]].
+
+## 04/11/2026 — menu interativo WhatsApp, captura pendente
+
+Confirmação funcional posterior: participante confirmou Oi → Ver opções → Conhecer a VAGGU → Voltar ao menu. Logs de produção registraram entrada interativa. Essa confirmação não substitui a captura anonimizada nem conclui a revisão visual documental.
+
+Lista nativa com Ver opções e cinco escolhas, seguida de Voltar ao menu, implementada no backend e coberta por 18 testes locais de contrato/fluxo. Publicação confirmada no Render, `0c63291` Live, após terceira tentativa de push superar erro interno do GitHub. Nesta conexão não há app/janela ou aba controlável do WhatsApp para capturar uma conversa com dados fictícios/anonimizados; nenhuma conversa privada ou credencial foi fotografada. Pendência: conferir lista aberta, cada escolha e retorno no WhatsApp, capturar resultado sem dados pessoais e registrar plataforma/viewport real. Revisão visual não concluída. O funcionamento do menu textual anterior foi confirmado pelo participante, mas não substitui essa evidência.
+
+## 28/10/2026 — privacidade e exclusão
+
+Perfil visitante, aplicação local em `http://127.0.0.1:5183`, conteúdo institucional e contato público autorizados pelo usuário; nenhuma conta real de shopping ou conversa privada. Navegador integrado via Computer Use (plugin Browser ausente do catálogo e Playwright indisponível). Páginas com identidade escura fixa; temas não alteram essas páginas. Sem overlay ou erros de console; somente aviso de movimento reduzido do dispositivo. Links de e-mail conferidos sem envio. Navegação política → exclusão com Enter, volta à landing e novos links do rodapé conferidos. Sem overflow horizontal nos três viewports; capturas completas não comprovam publicação ou funcionamento real do bot.
+
+| Rota | Viewport solicitado | Captura e resultado |
+| --- | --- | --- |
+| `/privacidade` | 1440×1000 / 768×1024 / 390×844 | [Desktop](2026-10-28%20-%20Privacidade%20e%20exclusao/privacidade-desktop.png) · [Tablet](2026-10-28%20-%20Privacidade%20e%20exclusao/privacidade-tablet.png) · [Celular](2026-10-28%20-%20Privacidade%20e%20exclusao/privacidade-celular.png). Texto e contato legíveis. |
+| `/exclusao-de-dados` | 1440×1000 / 768×1024 / 390×844 | [Desktop](2026-10-28%20-%20Privacidade%20e%20exclusao/exclusao-desktop.png) · [Tablet](2026-10-28%20-%20Privacidade%20e%20exclusao/exclusao-tablet.png) · [Celular](2026-10-28%20-%20Privacidade%20e%20exclusao/exclusao-celular.png). Instruções e foco visível. |
+| `/`, rodapé | 1440×1000 / 768×1024 / 390×844 | [Desktop](2026-10-28%20-%20Privacidade%20e%20exclusao/rodape-desktop.png) · [Tablet](2026-10-28%20-%20Privacidade%20e%20exclusao/rodape-tablet.png) · [Celular](2026-10-28%20-%20Privacidade%20e%20exclusao/rodape-celular.png). Retorno e links públicos disponíveis. |
+
+Base de orientação sobre direitos: [ANPD](https://www.gov.br/anpd/pt-br/assuntos/titular-de-dados/direito-dos-titulares). Não há alegação de auditoria jurídica ou aprovação da Meta. Prints do README mostram somente a abertura da landing, que não mudou; anteriores preservados.
+
+**Conferência publicada em 28/10/2026:** perfil visitante, 1440×1000, origem `https://vaggu-tcc.onrender.com`, conteúdo institucional autorizado: [Política publicada](2026-10-28%20-%20Privacidade%20e%20exclusao/privacidade-publicada.png) e [Exclusão publicada](2026-10-28%20-%20Privacidade%20e%20exclusao/exclusao-publicada.png). As duas páginas e seus links renderizaram sem login. Capturas não incluem painel de credenciais, mensagens ou dados de shopping real. A publicação do app Meta foi confirmada textualmente no painel; conversa real continua pendente de teste pelo participante.
+
+## 28/10/2026 — link WhatsApp da landing
+
+Rota `/`, perfil visitante, origem `http://127.0.0.1:5183`, conteúdo público estático e imagens ilustrativas, sem conta autenticada ou dados de clientes. Número público autorizado pelo responsável. Cinco links renderizados apontam para `https://wa.me/5511993807892`. Capturas locais não comprovam publicação, conta ativa ou bot real.
+
+| Viewport solicitado | Evidência | Resultado observado |
+| --- | --- | --- |
+| 1440×1000 | [Desktop](2026-10-28%20-%20WhatsApp%20landing/landing-desktop.png) | Página renderizada; cinco destinos iguais; sem overflow horizontal. |
+| 768×1024 | [Tablet](2026-10-28%20-%20WhatsApp%20landing/landing-tablet.png) | Conteúdo e CTA visíveis, sem overflow horizontal. |
+| 390×844 | [Celular](2026-10-28%20-%20WhatsApp%20landing/landing-celular.png) | Conteúdo e CTA visíveis, sem overflow horizontal. |
+
+Navegador integrado via Computer Use; plugin Browser não disponível no catálogo da sessão, importação Playwright falhou e a primeira navegação local expirou. Após iniciar o servidor fora do sandbox com autorização, acesso e capturas funcionaram. Tab avançou do CTA inicial ao CTA intermediário; Enter foi exercitado no CTA do rodapé, mas abertura externa da conversa não foi comprovada. Console sem erros; aviso de movimento reduzido do dispositivo. Landing com identidade própria fixa, sem alteração de tema. Imagens completas após percorrer a página para acionar as animações; largura útil pode descontar a barra de rolagem. README preservado: layout/textos exibidos não mudaram, somente destino dos links.
+
 ## 21/10/2026 — telão para apresentação
 
 Capturas locais atuais do novo protótipo em `http://127.0.0.1:5184`, com Edge headless/Playwright (plugin Browser ausente), Express e PostgreSQL descartável reais. Somente dados fictícios do Shopping Exemplo; nenhuma API interceptada. Os prints de telão da revisão geral abaixo preservam o visual anterior. Ver [resultado, testes e limites](../Documentação/telao-apresentacao-2026-10-21.md).
@@ -273,3 +348,24 @@ Nenhuma captura da emissão de chave foi feita. Revisão desktop/tablet/celular 
 Admin, rota `/admin/shoppings/d3a09b29-7e5a-4b7e-8c42-8f371d0a0001/estrutura`, Piso G1, setor Piloto físico ESP32. [Mapa salvo](2026-10-28%20-%20Piloto%20ESP32/mapa-publicado-posicoes.png), viewport corrente 771×655 no navegador integrado, tema escuro. Fonte: API hospedada e dados do protótipo. P01/P02/P03 posicionadas em uma faixa livre central, sem sobreposição; demais posições conferidas e preservadas. Site confirmou “Mapa salvo”, e a captura mostra P01 em vermelho e P02/P03 em verde. Não equivale a ensaio de estabilidade dos sensores ou revisão responsiva do frontend; nenhum código de frontend foi alterado.
 
 - 28/10/2026, Render/Admin do serviço, viewport 771×655: [Deploy da confirmação rápida](2026-10-28%20-%20Piloto%20ESP32/render-confirmacao-rapida-deploy.png). Página do deploy dep-dbh38md9el5s73alk9u0 mostra sucesso e Environment updated. Comprova publicação da configuração; não mede resposta física dos sensores.
+## 28/10/2026 — clareza de equipamentos e manutenção
+
+Rota `/admin/shoppings/qa/estrutura`, perfil Admin fictício, origem `http://127.0.0.1:5174`. API interceptada por Playwright com dados fictícios, sem banco, emissão de chaves ou equipamento físico. Browser plugin not available; fallback Playwright/Edge. Capturas de seção longa ocultam apenas cabeçalho fixo e atalho externo durante a captura para não cobrir o conteúdo; comportamento verificado com os elementos presentes.
+
+| Viewport | Claro | Escuro | Resultado |
+| --- | --- | --- | --- |
+| Desktop 1440×1000 | [Equipamentos](2026-10-28%20-%20Clareza%20equipamentos/desktop-light.png) | [Equipamentos](2026-10-28%20-%20Clareza%20equipamentos/desktop-dark.png) | Passos, exemplos e formulário em duas colunas; sem overflow |
+| Tablet 768×1024 | [Equipamentos](2026-10-28%20-%20Clareza%20equipamentos/tablet-light.png) | [Equipamentos](2026-10-28%20-%20Clareza%20equipamentos/tablet-dark.png) | Formulários empilhados; sem overflow |
+| Celular 390×844 | [Equipamentos](2026-10-28%20-%20Clareza%20equipamentos/celular-light.png) | [Equipamentos](2026-10-28%20-%20Clareza%20equipamentos/celular-dark.png) | Textos e ações com quebra; sem overflow |
+
+Na mesma pasta: `ajuda-{desktop,tablet,celular}-{light,dark}.png` registra a explicação expansível; `manutencao-placa-{light,dark}.png` e `manutencao-sensor-{light,dark}.png` mostram o alcance da intervenção; `sem-vagas-{light,dark}.png` e `sem-placas-{light,dark}.png` mostram a orientação com associação desabilitada. Total: 20 PNGs. Ajuda acionada por Enter, foco preservado; diálogos abertos e fechados por Escape; associação enviada com código e vaga corretos, lista atualizada. Sem overlay de framework, erros JavaScript ou mensagens de erro/aviso no console. Evidência local não comprova produção, integração real ou hardware.
+
+## 04/11/2026 — Apresentação e contato empresarial
+
+Pasta: `2026-11-04 - Apresentacao WhatsApp/`. Arte final JPEG 1200×675 revisada com foto ilustrativa e marca existentes, sem dados operacionais. Páginas `/privacidade` e `/exclusao-de-dados`, perfil visitante, origem frontend local `127.0.0.1:5174`, desktop 1440×1000, tablet 768×1024 e celular 390×844: seis capturas, contato empresarial visível, sem overflow ou erro de página. Tema escuro próprio dessas páginas; não há variante clara. Navegação por Tab exercitada. Browser plugin not available: Playwright com Edge headless; Chromium empacotado ausente. Primeira tentativa de acesso entre contextos isolados expirou; servidor e navegador no mesmo contexto resolveram. Capturas locais não comprovam produção. Interface real WhatsApp ainda sem captura por ausência de sessão controlável; arte final não é print de conversa.
+
+Verificação complementar: foco por teclado visível (outline sólido), navegação Privacidade → Exclusão → Início aprovada. Ao conferir o console, identificamos HTTP 502 em `/api/v1/auth/me` no frontend local sem API disponível; as páginas públicas renderizaram normalmente, sem erro JavaScript. Não declarar console integralmente sem avisos de rede.
+
+Produção: `exclusao-producao-desktop.png`, rota `https://vaggu-tcc.onrender.com/exclusao-de-dados`, visitante, 1440×1000, dados públicos da versão 7356e12. Contato empresarial conferido também em `/privacidade`. Imagem pública HTTP 200/image/jpeg, 121.573 bytes; isso comprova acesso ao arquivo, não renderização dentro do WhatsApp.
+
+**04/11 — confirmação funcional posterior:** participante confirmou imagem, link do site, Ver recursos e Voltar ao menu no WhatsApp da versão 7356e12. Evidência por relato do participante; nenhuma captura da conversa foi recebida ou produzida. A pendência funcional desse percurso está encerrada; a captura anonimizada permanece aberta.
