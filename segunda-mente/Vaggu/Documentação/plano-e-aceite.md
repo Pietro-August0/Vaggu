@@ -1,6 +1,6 @@
 # VAGGU — plano de implementação e critérios de aceite
 
-**Estado em 04/11/2026:** conexão real e menu clicável confirmados pelo participante. Apresentação com imagem/site e contato empresarial publicada em 7356e12; recebimento da nova apresentação aguarda teste real; o histórico de implantação e as pendências reais estão no [processo e operação do WhatsApp](whatsapp-processo-e-operacao.md). Registros datados de adiamento abaixo são históricos.
+**Estado em 04/11/2026:** conexão real e menu clicável confirmados pelo participante. Apresentação com imagem/site e contato empresarial publicada em 7356e12; imagem, link e continuidade confirmados pelo participante em teste real; o histórico de implantação e as pendências reais estão no [processo e operação do WhatsApp](whatsapp-processo-e-operacao.md). Registros datados de adiamento abaixo são históricos.
 
 
 Versão 1.2 • revisão de 21/10/2026 (origem em 09/09/2026)

@@ -1,6 +1,6 @@
 # Próximos passos
 
-**Estado em 04/11/2026:** conexão real e menu clicável confirmados pelo participante. Apresentação com imagem/site e contato empresarial publicada em 7356e12; recebimento da nova apresentação aguarda teste real; o histórico de implantação e as pendências reais estão no [processo e operação do WhatsApp](../Documentação/whatsapp-processo-e-operacao.md). Registros datados de adiamento abaixo são históricos.
+**Estado em 04/11/2026:** conexão real e menu clicável confirmados pelo participante. Apresentação com imagem/site e contato empresarial publicada em 7356e12; imagem, link e continuidade confirmados pelo participante em teste real; o histórico de implantação e as pendências reais estão no [processo e operação do WhatsApp](../Documentação/whatsapp-processo-e-operacao.md). Registros datados de adiamento abaixo são históricos.
 
 
 **28/10/2026 — retomada solicitada do WhatsApp:** executar o [[Vaggu/Documentação/planejamento-whatsapp-2026-10-28|planejamento de conclusão]], começando pela confirmação do número salvo e configuração do link no build da landing. Homologação Meta/Render, respostas reais e atendimento humano continuam pendentes; os registros anteriores de adiamento são históricos.

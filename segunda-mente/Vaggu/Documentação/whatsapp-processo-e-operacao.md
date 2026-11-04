@@ -1,5 +1,7 @@
 # WhatsApp — processo de implantação e operação
 
+**Confirmação do participante — 04/11/2026:** em resposta ao teste solicitado, participante confirmou o percurso Oi → Ver opções → Conhecer a VAGGU, com imagem e link do site, seguido de Ver recursos e Voltar ao menu. Validação funcional da nova apresentação concluída para esse percurso na versão 7356e12. Não comprova os demais caminhos individualmente nem substitui captura anonimizada da interface.
+
 Atualizado em 04/11/2026. Este documento consolida o resultado atual; os registros datados do planejamento preservam as tentativas e evidências anteriores.
 
 ## Canais e responsabilidade
@@ -46,7 +48,7 @@ Credenciais ficam no Render. Arquivos temporários de diagnóstico devem ser ign
 | --- | --- |
 | Número na landing, publicação Meta, assinatura da conta e autorização de envio | Concluídos e confirmados na implantação anterior |
 | Menu nativo e retorno | Percurso real confirmado pelo participante |
-| Nova imagem, textos e e-mail empresarial | Publicados em 7356e12; JPEG e contatos públicos verificados. Recebimento real da nova apresentação aguarda participante |
+| Nova imagem, textos e e-mail empresarial | Publicados em 7356e12; JPEG e contatos públicos verificados. Imagem, link, Ver recursos e retorno confirmados pelo participante em 04/11 |
 | Captura anonimizada da interface WhatsApp | Pendente: não há sessão controlável disponível; confirmação funcional não substitui captura |
 | Sessão guiada, coleta estruturada, protocolo de demonstração/suporte | Não implementados; os caminhos atuais orientam contato por e-mail |
 | Operação da caixa empresarial, responsáveis e prazo de atendimento | Acordo operacional pendente; nenhum envio de e-mail foi realizado neste trabalho |
@@ -56,4 +58,4 @@ Não encerrar P10 integralmente com base no menu. Hardware físico, Power BI pub
 
 ## Resultado da revisão
 
-Builds backend/frontend, lint frontend e 19 testes WhatsApp aprovados. Verificador documental e diff sem falhas. Render Live para `7356e12` em 2m7s. JPEG público HTTP 200/image/jpeg, 121.573 bytes; contato empresarial conferido no navegador em privacidade e exclusão. Seis capturas locais responsivas e uma de produção preservadas no índice de evidências. O frontend local sem API apresentou 502 somente em `/api/v1/auth/me`; não houve erro de página ou overflow nas rotas conferidas. Confirmação real da nova imagem e botões continua pendente.
+Builds backend/frontend, lint frontend e 19 testes WhatsApp aprovados. Verificador documental e diff sem falhas. Render Live para `7356e12` em 2m7s. JPEG público HTTP 200/image/jpeg, 121.573 bytes; contato empresarial conferido no navegador em privacidade e exclusão. Seis capturas locais responsivas e uma de produção preservadas no índice de evidências. O frontend local sem API apresentou 502 somente em `/api/v1/auth/me`; não houve erro de página ou overflow nas rotas conferidas. Confirmação funcional da nova imagem, link e botões recebida do participante em 04/11. Captura anonimizada continua pendente.

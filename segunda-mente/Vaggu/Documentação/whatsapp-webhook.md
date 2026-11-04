@@ -1,5 +1,7 @@
 # Integração com o WhatsApp
 
+**Confirmação do participante — 04/11/2026:** em resposta ao teste solicitado, participante confirmou o percurso Oi → Ver opções → Conhecer a VAGGU, com imagem e link do site, seguido de Ver recursos e Voltar ao menu. Validação funcional da nova apresentação concluída para esse percurso na versão 7356e12. Não comprova os demais caminhos individualmente nem substitui captura anonimizada da interface.
+
 ## Revisão de apresentação e contatos — 04/11/2026
 
 Menu sem emojis, apresentação com site e imagem na opção 1, botões de continuidade e contato empresarial `vagguempresarial@outlook.com`. O mesmo e-mail substitui o contato pessoal nas páginas públicas de privacidade/exclusão, por autorização expressa; responsável e autoria Git permanecem os já autorizados. Ver [processo e operação](whatsapp-processo-e-operacao.md), que consolida o diagnóstico, correções, limites e pendências. O histórico abaixo não substitui esse estado atual.

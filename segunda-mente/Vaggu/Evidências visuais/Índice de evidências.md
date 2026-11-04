@@ -319,3 +319,5 @@ Pasta: `2026-11-04 - Apresentacao WhatsApp/`. Arte final JPEG 1200×675 revisada
 Verificação complementar: foco por teclado visível (outline sólido), navegação Privacidade → Exclusão → Início aprovada. Ao conferir o console, identificamos HTTP 502 em `/api/v1/auth/me` no frontend local sem API disponível; as páginas públicas renderizaram normalmente, sem erro JavaScript. Não declarar console integralmente sem avisos de rede.
 
 Produção: `exclusao-producao-desktop.png`, rota `https://vaggu-tcc.onrender.com/exclusao-de-dados`, visitante, 1440×1000, dados públicos da versão 7356e12. Contato empresarial conferido também em `/privacidade`. Imagem pública HTTP 200/image/jpeg, 121.573 bytes; isso comprova acesso ao arquivo, não renderização dentro do WhatsApp.
+
+**04/11 — confirmação funcional posterior:** participante confirmou imagem, link do site, Ver recursos e Voltar ao menu no WhatsApp da versão 7356e12. Evidência por relato do participante; nenhuma captura da conversa foi recebida ou produzida. A pendência funcional desse percurso está encerrada; a captura anonimizada permanece aberta.
