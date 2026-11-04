@@ -343,6 +343,11 @@ Rota `/admin/shoppings/d3a09b29-7e5a-4b7e-8c42-8f371d0a0001/estrutura`, perfil A
 
 Nenhuma captura da emissão de chave foi feita. Revisão desktop/tablet/celular do frontend local integrado continua pendente.
 
+## 28/10/2026 — posições do piloto no site hospedado
+
+Admin, rota `/admin/shoppings/d3a09b29-7e5a-4b7e-8c42-8f371d0a0001/estrutura`, Piso G1, setor Piloto físico ESP32. [Mapa salvo](2026-10-28%20-%20Piloto%20ESP32/mapa-publicado-posicoes.png), viewport corrente 771×655 no navegador integrado, tema escuro. Fonte: API hospedada e dados do protótipo. P01/P02/P03 posicionadas em uma faixa livre central, sem sobreposição; demais posições conferidas e preservadas. Site confirmou “Mapa salvo”, e a captura mostra P01 em vermelho e P02/P03 em verde. Não equivale a ensaio de estabilidade dos sensores ou revisão responsiva do frontend; nenhum código de frontend foi alterado.
+
+- 28/10/2026, Render/Admin do serviço, viewport 771×655: [Deploy da confirmação rápida](2026-10-28%20-%20Piloto%20ESP32/render-confirmacao-rapida-deploy.png). Página do deploy dep-dbh38md9el5s73alk9u0 mostra sucesso e Environment updated. Comprova publicação da configuração; não mede resposta física dos sensores.
 ## 28/10/2026 — clareza de equipamentos e manutenção
 
 Rota `/admin/shoppings/qa/estrutura`, perfil Admin fictício, origem `http://127.0.0.1:5174`. API interceptada por Playwright com dados fictícios, sem banco, emissão de chaves ou equipamento físico. Browser plugin not available; fallback Playwright/Edge. Capturas de seção longa ocultam apenas cabeçalho fixo e atalho externo durante a captura para não cobrir o conteúdo; comportamento verificado com os elementos presentes.

@@ -406,6 +406,7 @@ O [protótipo e sua validação](telao-apresentacao-2026-10-21.md) substituem o 
 | `vaggu-frontend/src/hooks/use-movimento-reduzido.ts` | Acompanha prefers-reduced-motion com useSyncExternalStore, inclusive alterações durante o uso; snapshot conservador no servidor. |
 
 O painel analítico usa Motion já instalado: linha e preenchimento revelados por recorte SVG, barras por escala e roscas por escala/opacidade. A apresentação não altera o histórico, a exportação ou os estados de consulta. Ver [experimento e testes](animacoes-analises-2026-10-25.md).
+| `hardware/esp32-3-vagas/sincronizar-relogio-usb.ps1` | Envia horário UTC do computador por USB e acompanha o retorno serial, sem ler credenciais nem reiniciar a placa. |
 
 ### Clareza dos equipamentos — 28/10/2026
 

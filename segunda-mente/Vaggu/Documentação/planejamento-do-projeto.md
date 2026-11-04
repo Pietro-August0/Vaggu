@@ -937,6 +937,27 @@ Commit e push autorizados para `origin/codex/animacoes-analises`, a partir da ma
 
 Código permanece na versão aprovada nos comandos de build/lint e testes locais dos registros anteriores; não houve mudança de código nesta rodada. No fechamento: `git fetch origin`, revisão de status/diffs/identidade configurada, `node scripts/verificar-documentacao.mjs`, `git diff --check`, commit e `git push -u origin codex/animacoes-analises`. Hash e confirmação remota ficam na mensagem de entrega. Este envio não inclui merge na main ou deploy; validação do ambiente publicado permanece pendente. A indisponibilidade da skill de roteamento permanece registrada, sem atribuição de coautoria ou aprovação a integrantes.
 
+## Retomada física no site hospedado — 28/10/2026
+
+Firmware vaggu_3_vagas compilado com core ESP32 3.3.12 e gravado em COM3 com BOOT confirmado pelo usuário. Relógio ajustado via USB com sincronizar-relogio-usb.ps1; validação TLS preservada. ESP32 conectou ao hotspot e recebeu HTTP 202 PROCESSADO em https://vaggu-tcc.onrender.com/api/v1/telemetria: sequência 0 em 2026-10-28T16:34:18.814Z e sequências 1/2 posteriores. Os três sensores retornaram -1 cm nos ciclos iniciais: somente heartbeat, leituras vazias. Isto comprova transporte HTTPS autenticado e recebimento, não confirma estados das três vagas nem atualização do mapa. Conferência da montagem/alimentação solicitada ao usuário. Operação autônoma após reset permanece pendente quando NTP não responde.
+
+Adicionado script de ajuste UTC por porta serial física, sem leitura de config.h, envio de chave ou reset da placa. Compilação aprovada: 1.100.332 bytes de programa, 48.936 bytes globais. Site /api/v1/health/ready respondeu status ok e banco conectado. Documentação e mapa atualizados; nenhuma mudança de frontend, publicação, commit ou push nesta retomada.
+
+### Posições do piloto publicadas — 28/10/2026
+
+A pedido do usuário, salvas pelo editor do site as posições P01/P02/P03 no Piso G1, setor Piloto físico ESP32. Organizadas lado a lado na faixa entre as alas existentes, com tamanho reduzido para evitar sobreposição. Rascunho conferido com as 40 vagas anteriores preservadas; site confirmou “Mapa salvo” e visualização foi conferida no recorte do piloto. Evidência no índice visual. Operação somente de configuração do mapa, sem alteração de código frontend ou deploy.
+
+### Aceleração da telemetria hospedada — preparação em 28/10/2026
+
+Medido intervalo de aproximadamente seis segundos entre HTTP 202 (sequências 181/182); mapa já consulta a cada 500 ms. Implementados HTTPClient e clientes persistentes com setReuse(true), fechamento de sockets em erro, Wi-Fi sem sleep para USB e duração de POST no log. Preservados TLS, sequência/idempotência, leituras novas, filtro e separação acústica. Compilação ESP32 aprovada (1.101.760 bytes, RAM global 49.344). Testes existentes de configuração/confirmacão: 14 aprovados. Upload solicitado ao usuário, ainda pendente; ganho real não medido. Render aberto no login; usuário informou poder entrar. Ajuste proposto de ambiente 2000 ms / lacuna 4500 ms ainda não aplicado. Nenhum deploy, commit ou push.
+
+### Confirmação rápida aplicada no Render — 28/10/2026
+
+Usuário autenticou no Render e autorizou ajuste solicitado. Adicionadas TELEMETRIA_CONFIRMACAO_MS=2000 e TELEMETRIA_LACUNA_MAXIMA_MS=4500 no serviço vaggu-tcc (srv-daq23d59fdbs73ek4u1g), preservadas as outras variáveis. Save and deploy reutilizou a versão já publicada ee779c9; deploy dep-dbh38md9el5s73alk9u0 confirmou Deploy succeeded | Live, gatilho Environment updated, duração 40,3 s. Não houve leitura/exposição de segredos. Ainda falta gravar firmware persistente HTTPS e validar latência física; placa perdeu Wi-Fi com motivos 201/36 durante conferência. Solicitados hotspot e BOOT ao usuário. Janela de dois segundos não garante transição total nesse prazo e exige amostras consistentes; não houve confirmação de ganho físico nesta etapa.
+
+## Sincronização do Git — 04/11/2026
+
+Trabalho local do piloto separado na branch de origem, codex/animacoes-analises. Conferidos status, diffs, scripts, identidade Git configurada e capturas do piloto. Validação com git fetch origin --prune, node scripts/verificar-documentacao.mjs e git diff --check. A skill de roteamento não foi localizada e a autoria segue a identidade Git configurada. As verificações físicas e de latência seguem conforme os registros de 28/10. Atualização da main local por git pull --ff-only.
 ## Clareza de equipamentos e manutenção — 28/10/2026
 
 A área explica o que é uma placa ESP32 e sua relação com sensores/vagas; oferece exemplos nos campos, orienta correspondência dos códigos ao equipamento e substitui “Vaga disponível” por “Vaga sem sensor”. Ajuda expansível diferencia manutenção da placa e do sensor, renovação de credencial e desativação; diálogos explicitam uma vaga ou todas as vagas da placa. Ausência de placa ativa ou vaga elegível bloqueia associação com orientação. Cadastro não representa leitura válida nem funcionamento de todos os sensores. API e regras operacionais preservadas.
