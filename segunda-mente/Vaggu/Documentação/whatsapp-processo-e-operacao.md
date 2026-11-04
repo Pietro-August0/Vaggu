@@ -46,10 +46,14 @@ Credenciais ficam no Render. Arquivos temporários de diagnóstico devem ser ign
 | --- | --- |
 | Número na landing, publicação Meta, assinatura da conta e autorização de envio | Concluídos e confirmados na implantação anterior |
 | Menu nativo e retorno | Percurso real confirmado pelo participante |
-| Nova imagem, textos e e-mail empresarial | Implementados nesta revisão; validar publicação e recebimento real |
+| Nova imagem, textos e e-mail empresarial | Publicados em 7356e12; JPEG e contatos públicos verificados. Recebimento real da nova apresentação aguarda participante |
 | Captura anonimizada da interface WhatsApp | Pendente: não há sessão controlável disponível; confirmação funcional não substitui captura |
 | Sessão guiada, coleta estruturada, protocolo de demonstração/suporte | Não implementados; os caminhos atuais orientam contato por e-mail |
 | Operação da caixa empresarial, responsáveis e prazo de atendimento | Acordo operacional pendente; nenhum envio de e-mail foi realizado neste trabalho |
 | Política operacional de retenção e rotina de exclusão | Definir e validar; a página não promete eliminação automática |
 
 Não encerrar P10 integralmente com base no menu. Hardware físico, Power BI publicado e demais pacotes não são homologados por este teste.
+
+## Resultado da revisão
+
+Builds backend/frontend, lint frontend e 19 testes WhatsApp aprovados. Verificador documental e diff sem falhas. Render Live para `7356e12` em 2m7s. JPEG público HTTP 200/image/jpeg, 121.573 bytes; contato empresarial conferido no navegador em privacidade e exclusão. Seis capturas locais responsivas e uma de produção preservadas no índice de evidências. O frontend local sem API apresentou 502 somente em `/api/v1/auth/me`; não houve erro de página ou overflow nas rotas conferidas. Confirmação real da nova imagem e botões continua pendente.

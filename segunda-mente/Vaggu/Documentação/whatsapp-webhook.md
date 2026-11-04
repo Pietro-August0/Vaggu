@@ -5,6 +5,9 @@
 Menu sem emojis, apresentação com site e imagem na opção 1, botões de continuidade e contato empresarial `vagguempresarial@outlook.com`. O mesmo e-mail substitui o contato pessoal nas páginas públicas de privacidade/exclusão, por autorização expressa; responsável e autoria Git permanecem os já autorizados. Ver [processo e operação](whatsapp-processo-e-operacao.md), que consolida o diagnóstico, correções, limites e pendências. O histórico abaixo não substitui esse estado atual.
 
 
+
+**Publicação desta revisão:** `7356e12` enviado à main; Render confirmou `Deploy succeeded|Live` em 2m7s. JPEG público validado com HTTP 200, `image/jpeg`, assinatura JPEG e 121.573 bytes. Navegador confirmou contato empresarial nas duas páginas publicadas; captura de exclusão em produção registrada. Teste real da nova imagem, link e botões solicitado ao participante; aguarda confirmação. Avisos existentes de bundle e compatibilidade SSL do driver PostgreSQL não impediram o deploy.
+
 ## Menu interativo — 04/11/2026
 
 **Validação funcional real:** participante confirmou o percurso Oi → Ver opções → Conhecer a VAGGU → Voltar ao menu no próprio WhatsApp. Logs registraram resposta de tipo `interactive` e eventos de status sem novo erro de envio no recorte observado. Cinco opções cobertas por testes automatizados; não confundir com exercício individual de todas em produção. Captura anonimizada permanece pendente.

@@ -1,6 +1,6 @@
 # Visão do produto
 
-**Estado em 04/11/2026:** conexão real e menu clicável confirmados pelo participante. Apresentação com imagem/site e contato empresarial em atualização; o histórico de implantação e as pendências reais estão no [processo e operação do WhatsApp](../Documentação/whatsapp-processo-e-operacao.md). Registros datados de adiamento abaixo são históricos.
+**Estado em 04/11/2026:** conexão real e menu clicável confirmados pelo participante. Apresentação com imagem/site e contato empresarial publicada em 7356e12; recebimento da nova apresentação aguarda teste real; o histórico de implantação e as pendências reais estão no [processo e operação do WhatsApp](../Documentação/whatsapp-processo-e-operacao.md). Registros datados de adiamento abaixo são históricos.
 
 
 > **Atualização de 21/10/2026:** as três [[Vaggu/Especificações/Personas|personas documentadas]] são Carlos (fonte original), Mariana e Rafael (hipóteses). Equipamentos, telão instalado, atualização periódica e filtros analíticos foram implementados localmente. Conexão física e homologação publicada seguem pendentes. Power BI publicado é evolução opcional; a conexão real e o menu do WhatsApp foram confirmados em 04/11/2026. Os registros históricos estão identificados pelas respectivas datas.

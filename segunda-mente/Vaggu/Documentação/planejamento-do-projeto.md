@@ -133,6 +133,9 @@ Os registros datados abaixo preservam a informação disponível em cada etapa; 
 - Navegador: Edge headless com Playwright (plugin Browser ausente), API e PostgreSQL reais em `http://127.0.0.1:3102`. Login Admin, lista do exemplo e ausência do botão confirmados; login gerente e análise conferidos em 1440, 768 e 390 px sem transbordamento horizontal. Excel gerado e relido, PDF com assinatura válida; zero erros inesperados de console ou HTTP. Os 401 de `/auth/me` antes do login são esperados. Corrigida a política de imagens para permitir os gráficos locais `blob:` nos relatórios. Evidências e arquivos de QA ficaram fora do repositório.
 - Publicação: autorizamos o push na `main` e registramos a atualização automática do site. A verificação autenticada no endereço publicado e o hardware ainda não foram executados.
 
+
+**Publicação desta revisão:** `7356e12` enviado à main; Render confirmou `Deploy succeeded|Live` em 2m7s. JPEG público validado com HTTP 200, `image/jpeg`, assinatura JPEG e 121.573 bytes. Navegador confirmou contato empresarial nas duas páginas publicadas; captura de exclusão em produção registrada. Teste real da nova imagem, link e botões solicitado ao participante; aguarda confirmação. Avisos existentes de bundle e compatibilidade SSL do driver PostgreSQL não impediram o deploy.
+
 ## 1. Situação atual
 
 ### Auditoria documental e pendências — 15/10
@@ -852,3 +855,5 @@ Roteamento: Elisa (usabilidade), Juan como revisão indicada, sem atribuir parti
 Validação: `npm run build` e `npm run lint` no frontend; `node ambiente.local/equipamentos-clareza-qa.cjs` com Edge/Playwright e fixtures; `node scripts/verificar-documentacao.mjs` e `git diff --check`. Desktop 1440×1000, tablet 768×1024 e celular 390×844 nos dois temas; ajuda por teclado, diálogos, associação e estados sem placa/vaga elegível. Capturas no índice. Build mantém aviso conhecido de chunks acima de 500 kB.
 
 Limites: Browser plugin ausente; Edge no isolamento falhou ao iniciar e a primeira URL não era acessível fora do isolamento. Vite iniciado fora do isolamento em 5174 (5173 ocupada); QA executado com permissão de execução. Caminho temporário por processo não persistiu, e o roteiro foi recriado em ambiente.local, ignorado pelo Git. Uma tentativa de atualização documental por Node falhou por aspas; substituída por escrita literal PowerShell antes dos verificadores finais. Prints longos ocultam somente o cabeçalho/atalho externos à seção durante a captura. README não apresenta esta seção, portanto suas imagens foram preservadas. Sem banco, equipamento físico ou ambiente publicado envolvidos; teste com pessoas usuárias permanece pendente.
+
+**Conferência pós-deploy de 04/11:** `/api/v1/health` e `/api/v1/health/ready` responderam HTTP 200, sem alteração de dados. O teste de funcionamento real da versão anterior continua válido para aquele percurso; a nova apresentação aguarda confirmação específica.
