@@ -19,6 +19,7 @@ import { PrivacidadePage } from "@/pages/privacidade-page"
 import { PaginaNaoEncontrada } from "@/pages/pagina-nao-encontrada"
 import { TeloesPage } from "@/pages/teloes-page"
 import { TelaoPage } from "@/pages/telao-page"
+import { MemorialPage } from "@/pages/memorial-page"
 
 /** Define as rotas públicas, a troca obrigatória e os destinos por perfil validados pela API. */
 function App() {
@@ -26,6 +27,7 @@ function App() {
     <Routes>
       <Route element={<TelaoInstaladoPage />} path="/telao/:telaoId" />
       <Route element={<LandingPage />} path="/" />
+      <Route element={<MemorialPage />} path="/memorial" />
       <Route element={<PrivacidadePage />} path="/privacidade" />
       <Route element={<PrivacidadePage exclusao />} path="/exclusao-de-dados" />
       <Route element={<LoginPage />} path="/login" />

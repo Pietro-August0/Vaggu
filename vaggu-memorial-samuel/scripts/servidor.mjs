@@ -19,7 +19,7 @@ const tiposConteudo = new Map([
 ])
 
 function localizarArquivo(caminhoUrl) {
-  const caminhoDecodificado = decodeURIComponent(caminhoUrl)
+  const caminhoDecodificado = decodeURIComponent(caminhoUrl).replace(/^\/memorial(?=\/|$)/, "") || "/"
   if (caminhoDecodificado === "/") return resolve(pastaProjeto, "index.html")
 
   const caminhoRelativo = caminhoDecodificado.replace(/^\/+/, "")

@@ -1,7 +1,7 @@
 import { Link } from "react-router-dom"
 import { Brand } from "@/components/brand"
+import { EMAIL_CONTATO } from "@/lib/constants"
 
-const contato = "vagguempresarial@outlook.com"
 const linkClass = "text-yellow-300 underline underline-offset-4 focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-yellow-300"
 
 /** Aviso público e instruções de direitos, sem exigir autenticação ou abrir conversa no bot. */
@@ -19,7 +19,7 @@ export function PrivacidadePage({ exclusao = false }: { exclusao?: boolean }) {
           <section aria-labelledby="responsavel">
             <h2 id="responsavel">Responsável e contato</h2>
             <p>A VAGGU é um projeto acadêmico de gestão de estacionamentos de shoppings. A responsável informada pelo projeto para este aviso e para solicitações sobre dados pessoais é Elisa Gomes Teixeira.</p>
-            <p>Entre em contato por <a className={linkClass} href={`mailto:${contato}`}>{contato}</a>. Você não precisa ter conta na VAGGU ou conversar com o bot para fazer uma solicitação.</p>
+            <p>Entre em contato por <a className={linkClass} href={`mailto:${EMAIL_CONTATO}`}>{EMAIL_CONTATO}</a>. Você não precisa ter conta na VAGGU ou conversar com o bot para fazer uma solicitação.</p>
           </section>
           {exclusao ? <>
             <section aria-labelledby="solicitar">

@@ -3,6 +3,37 @@ tags: [vaggu, evidencias, interface]
 ---
 # Evidências visuais da VAGGU
 
+## 04/11/2026 — canais oficiais responsivos
+
+Rota `/`, perfil visitante, Vite local em `http://127.0.0.1:5173`, Edge/DevTools e sessão de API simulada com visitante fictício (`example.invalid`). Viewports desktop 1440×1000 e 1280×900, notebook 1024×900, tablet 768×1024, celular 390×844 e celular estreito 320×720. Nenhuma mensagem foi enviada; os destinos públicos foram apenas conferidos.
+
+| Tela | Evidência | Resultado observado |
+| --- | --- | --- |
+| Rodapé e canais oficiais | [Desktop 1440](2026-11-04%20-%20Contatos%20responsivos/contatos-desktop.png) · [Desktop 1280](2026-11-04%20-%20Contatos%20responsivos/contatos-desktop-compacto.png) · [Notebook](2026-11-04%20-%20Contatos%20responsivos/contatos-notebook.png) · [Tablet](2026-11-04%20-%20Contatos%20responsivos/contatos-tablet.png) · [Celular](2026-11-04%20-%20Contatos%20responsivos/contatos-celular.png) · [Celular estreito](2026-11-04%20-%20Contatos%20responsivos/contatos-celular-estreito.png) | “Canais oficiais” é o único título; rótulos e e-mail em uma linha. Os cartões passam a duas colunas somente em XL. Sem overflow horizontal. |
+
+Foco de teclado visível; console sem erros e sem respostas HTTP malsucedidas. Capturas locais não comprovam publicação em produção ou envio bem-sucedido de mensagens.
+
+## 04/11/2026 — ajuste dos contatos da landing
+
+Rota `/`, perfil visitante, Vite local em `http://127.0.0.1:5173`, Edge/DevTools e sessão de API simulada com visitante fictício (`example.invalid`). Viewports desktop 1440×1000, tablet 768×1024 e celular 390×844. Nenhuma mensagem foi enviada; os destinos públicos foram apenas conferidos.
+
+| Tela | Evidência | Resultado observado |
+| --- | --- | --- |
+| Rodapé e canais oficiais | [Desktop](2026-11-04%20-%20Ajuste%20de%20contatos/contatos-desktop.png) · [Tablet](2026-11-04%20-%20Ajuste%20de%20contatos/contatos-tablet.png) · [Celular](2026-11-04%20-%20Ajuste%20de%20contatos/contatos-celular.png) | Um link de WhatsApp na grade, e-mail, Instagram e GitHub com ícones próprios; sem botão duplicado ou indicador de link externo à direita. Sem overflow horizontal. |
+
+Tab avançou ao link de e-mail com foco visível. Console sem erros e sem respostas HTTP malsucedidas. Capturas locais não comprovam publicação em produção ou envio bem-sucedido de mensagens.
+
+## 04/11/2026 — landing e memorial
+
+Landing e rota pública `/memorial`, origem `http://127.0.0.1:5173`, Vite local. Capturas feitas no Edge com viewports desktop 1440×1000, tablet 768×1024 e celular 390×844; a captura adicional mostra o menu do memorial aberto no celular. A landing usa conteúdo institucional e canais públicos; a chamada de sessão foi interceptada com visitante fictício (`example.invalid`). Nenhuma conta real, mensagem, publicação ou hardware foi usado.
+
+| Tela | Evidência | Resultado observado |
+| --- | --- | --- |
+| `/`, rodapé e contatos | [Desktop](2026-11-04%20-%20Memorial%20e%20contatos/landing-rodape-desktop.png) · [Tablet](2026-11-04%20-%20Memorial%20e%20contatos/landing-rodape-tablet.png) · [Celular](2026-11-04%20-%20Memorial%20e%20contatos/landing-rodape-celular.png) | Canais WhatsApp, e-mail, Instagram e GitHub; link do memorial no rodapé; sem mockup de celular ou overflow horizontal. |
+| `/memorial` | [Desktop](2026-11-04%20-%20Memorial%20e%20contatos/memorial-desktop.png) · [Tablet](2026-11-04%20-%20Memorial%20e%20contatos/memorial-tablet.png) · [Celular](2026-11-04%20-%20Memorial%20e%20contatos/memorial-celular.png) · [Menu aberto no celular](2026-11-04%20-%20Memorial%20e%20contatos/memorial-celular-menu-aberto.png) | Página e acervo renderizados; menu móvel aberto com `aria-expanded=true`; sem overflow horizontal. |
+
+O link do rodapé foi acionado por teclado e apresentou foco visível; destinos dos contatos conferidos. Console sem erros e nenhuma resposta HTTP malsucedida nas páginas capturadas. As verificações são locais e não comprovam a publicação em produção ou o funcionamento de equipamento físico.
+
 ## 04/11/2026 — texto demonstrativo de atendente: captura pendente
 
 Opções 3–5 do bot agora anunciam contato de uma atendente em alguns instantes, sem solicitar e-mail. Alteração local de textos e descrição do menu; números e cliques mantêm retorno. Captura da interface real não realizada por ausência de sessão controlável de WhatsApp, conforme inventário desta sessão. Testes de texto/contrato não substituem print; revisão visual pendente, sem imagem simulada apresentada como mensageiro real. Sem publicação nesta etapa.

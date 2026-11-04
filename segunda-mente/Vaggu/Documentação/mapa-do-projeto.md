@@ -1,5 +1,7 @@
 # Mapa do projeto VAGGU
 
+**04/11/2026 — rota pública do memorial e contatos:** `vaggu-frontend/src/main.tsx` registra `/memorial`; `src/pages/memorial-page.tsx` incorpora a página estática. `vite.config.ts` serve o diretório-fonte sob `/memorial/` no desenvolvimento e publica HTML, scripts, estilos e mídias em `dist/memorial/` no build. `vaggu-memorial-samuel/` continua sendo a fonte do acervo; caminhos de assets usam o prefixo `/memorial/assets/`. A landing substitui o mockup de celulares por links oficiais de WhatsApp, e-mail, Instagram `@vagguempresarial` e GitHub. No rodapé, “Canais oficiais” é o único título; os nomes dos canais e o e-mail permanecem em uma linha, e os cartões mudam para duas colunas somente no breakpoint XL.
+
 **04/11 — texto demonstrativo do bot:** payload.ts mantém menu e retorno; opções 3–5 anunciam contato de uma atendente em alguns instantes, sem pedido de e-mail ou acionamento real. whatsapp.test.ts confere os mesmos textos para clique e número digitado; nenhuma nova dependência, migration ou rota.
 
 **Decisão de escopo e aceite — 04/11/2026:** o usuário confirmou a homologação completa do site. O aceite web está encerrado por essa confirmação, sem nova execução em produção pelo agente nem hash de deploy adicional informado. O WhatsApp será demonstrativo: atendimento humano real, coleta comercial e protocolos deixam de ser requisitos desta entrega. Procedimentos de dados definidos em [operação do TCC](operacao-dados-tcc.md); hardware físico mantém aceite próprio.
@@ -50,6 +52,7 @@ Conhecimento, documentos e regras ficam em `segunda-mente`. O planejamento canô
 | `vaggu-memorial-samuel/` | Mantém o site independente de memorial da equipe e apresentação do sistema, separado da landing comercial e da aplicação operacional; reutiliza a paleta, tipografia e marca publicadas pelo frontend principal. |
 | `vaggu-backend/` | Contém API, regras de domínio, persistência, integrações e testes do servidor. |
 | `vaggu-frontend/` | Contém a aplicação React, componentes, páginas, contratos e assets publicados. |
+| `vaggu-frontend/src/pages/memorial-page.tsx` | Expõe `/memorial` e incorpora o HTML independente publicado pelo plugin memorial de `vite.config.ts`. |
 
 As cópias de imagens entre `segunda-mente/Vaggu/Identidade visual/Assets/` e `vaggu-frontend/public/assets/` são intencionais: o cofre precisa mostrar a referência visual sem depender do arquivo gerado do site, enquanto a aplicação precisa publicar seus próprios arquivos.
 

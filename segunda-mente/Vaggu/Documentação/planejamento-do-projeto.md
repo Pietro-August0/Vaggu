@@ -1,5 +1,25 @@
 # VAGGU — planejamento e continuidade do projeto
 
+## Responsividade dos canais oficiais — 04/11/2026
+
+Removido o subtítulo “Links do projeto”; “Canais oficiais” ficou como único título da seção. Os nomes dos canais e o e-mail permanecem em uma linha. A grade mantém uma coluna até a largura XL e só então passa a duas colunas, preservando espaço para os rótulos.
+
+Validação local no Edge em 1440×1000, 1280×900, 1024×900, 768×1024, 390×844 e 320×720: título único conferido, nenhum rótulo ou e-mail quebrou ou excedeu o cartão, sem overflow horizontal da página, foco de teclado visível, console sem erros e nenhuma resposta HTTP malsucedida. Visitante fictício; sem envio de mensagens ou publicação. Capturas no [índice de evidências visuais](../Evidências%20visuais/Índice%20de%20evidências.md).
+
+## Ajuste dos contatos da landing — 04/11/2026
+
+Removido o botão de WhatsApp redundante no lado esquerdo do rodapé; o WhatsApp permanece como canal oficial na grade à direita. Instagram e GitHub agora usam símbolos próprios, mantendo WhatsApp e e-mail com seus ícones correspondentes. Removidos os indicadores de link externo da grade.
+
+Validação: build e lint do frontend aprovados; `git diff --check` e verificador documental aprovados. Capturas locais com Edge em desktop 1440×1000, tablet 768×1024 e celular 390×844; links e ícones conferidos, somente um destino wa.me no rodapé, nenhum indicador externo ou overflow horizontal, foco visível testado por teclado e sem erros de console ou respostas HTTP malsucedidas. Dados de visitante fictícios; sem publicação ou envio de mensagens. Ver capturas no [índice de evidências visuais](../Evidências%20visuais/Índice%20de%20evidências.md).
+
+## Landing e rota do memorial — 04/11/2026
+
+Implementada a rota pública `/memorial`, que apresenta a página de equipe existente sem duplicar sua fonte ou acervo. O Vite serve a página e suas mídias sob `/memorial/` no desenvolvimento e copia somente HTML, scripts, estilos e assets para `dist/memorial/` no build. A landing removeu o mockup de celulares e passou a exibir links oficiais de WhatsApp, e-mail, Instagram `@vagguempresarial` e GitHub. O contato por e-mail usa a constante compartilhada com a página de privacidade. O memorial independente mantém execução própria.
+
+Verificações concluídas em 04/11/2026: `npm.cmd run build --prefix vaggu-frontend` (TypeScript e Vite) e `npm.cmd run lint --prefix vaggu-frontend` passaram; o build publicou os arquivos do memorial em `dist/memorial/`. Build ainda emite o aviso já conhecido de chunks acima de 500 kB. O pacote do frontend não define script de testes. `node scripts/verificar-documentacao.mjs` aprovou 683 arquivos e 63 documentos Markdown; `git diff --check` passou.
+
+Conferência local com Edge/DevTools e visitante fictício: landing e `/memorial` em 1440×1000, 768×1024 e 390×844; sete capturas incluem rodapé/contatos e menu móvel aberto. As larguras de rolagem coincidiram com as larguras úteis em todos os viewports, sem erros de console ou respostas HTTP malsucedidas. Link do memorial testado por teclado com foco visível, destinos de contato conferidos e menu móvel aberto. Evidências e limites no [índice de evidências visuais](../Evidências%20visuais/Índice%20de%20evidências.md). Sem validação em produção, envio de mensagens ou teste de hardware.
+
 ## Envio da revisão documental à main — 04/11/2026
 
 Usuário solicitou expressamente commit e push das alterações pendentes à main e confirmou autoria elisagommes <elisagommes@outlook.com> para este commit. Entrega restrita à documentação, planejamento e 66 capturas locais com dados fictícios, acompanhadas de índice e resultados; nenhum código do produto alterado. git fetch origin executado; verificador documental aprovado (615 arquivos cobertos, 62 Markdown) e git diff --check sem falhas. Build backend e 19 testes WhatsApp aprovados na atualização imediatamente anterior. Stash de preservação mantido. Durante o preparo, origin/main avançou até bc85be4 com o memorial independente; commit local reaplicado por rebase sem conflitos. A validação detectou uma entrada skills/ sem arquivo correspondente, recebida do remoto; removida somente essa linha obsoleta do mapa. Commit documental usa marcadores de dispensa de CI/Render; não se declara novo deploy ou homologação nesta operação.

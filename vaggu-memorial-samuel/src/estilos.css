@@ -3,7 +3,7 @@
   font-style:normal;
   font-weight:300;
   font-display:swap;
-  src:url("/assets/fontes/poppins-latin-300.woff2") format("woff2")
+  src:url("/memorial/assets/fontes/poppins-latin-300.woff2") format("woff2")
 }
 
 @font-face {
@@ -11,7 +11,7 @@
   font-style:normal;
   font-weight:400;
   font-display:swap;
-  src:url("/assets/fontes/poppins-latin-400.woff2") format("woff2")
+  src:url("/memorial/assets/fontes/poppins-latin-400.woff2") format("woff2")
 }
 
 @font-face {
@@ -19,7 +19,7 @@
   font-style:normal;
   font-weight:500;
   font-display:swap;
-  src:url("/assets/fontes/poppins-latin-500.woff2") format("woff2")
+  src:url("/memorial/assets/fontes/poppins-latin-500.woff2") format("woff2")
 }
 
 @font-face {
@@ -27,7 +27,7 @@
   font-style:normal;
   font-weight:600;
   font-display:swap;
-  src:url("/assets/fontes/poppins-latin-600.woff2") format("woff2")
+  src:url("/memorial/assets/fontes/poppins-latin-600.woff2") format("woff2")
 }
 
 @font-face {
@@ -35,7 +35,7 @@
   font-style:normal;
   font-weight:700;
   font-display:swap;
-  src:url("/assets/fontes/poppins-latin-700.woff2") format("woff2")
+  src:url("/memorial/assets/fontes/poppins-latin-700.woff2") format("woff2")
 }
 
 :root {
@@ -1941,7 +1941,7 @@ body.lightbox-aberto {
 
 .hero-layout {
   display:grid;
-  grid-template-columns:1.02fr .98fr;
+  grid-template-columns:minmax(0,1.02fr) minmax(0,.98fr);
   gap:42px;
   align-items:center
 }
@@ -1965,6 +1965,7 @@ body.lightbox-aberto {
 
 .hero-prototypes {
   position:relative;
+  min-width:0;
   min-height:490px;
   isolation:isolate
 }
@@ -2062,7 +2063,7 @@ body.lightbox-aberto {
 
 @media(max-width:900px) and (min-width:721px) {
   .hero-layout {
-    grid-template-columns:1fr .9fr;
+    grid-template-columns:minmax(0,1fr) minmax(0,.9fr);
     gap:22px
   }
 
@@ -2091,7 +2092,7 @@ body.lightbox-aberto {
 
   .hero .hero-layout {
     display:grid;
-    grid-template-columns:1fr;
+    grid-template-columns:minmax(0,1fr);
     gap:26px;
     width:calc(100% - 36px);
     padding:0
@@ -2103,7 +2104,7 @@ body.lightbox-aberto {
 
   .hero-copy h1 {
     max-width:600px;
-    font-size:clamp(3.1rem,11vw,5rem);
+    font-size:clamp(2.1rem,10vw,5rem);
     line-height:.98
   }
 
@@ -2137,6 +2138,10 @@ body.lightbox-aberto {
 }
 
 @media(max-width:380px) {
+  .hero-copy h1 {
+    font-size:clamp(1.75rem,10vw,2.35rem)
+  }
+
   .hero-prototypes {
     min-height:295px
   }

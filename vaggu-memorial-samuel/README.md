@@ -1,6 +1,6 @@
 # Memorial VAGGU — Samuel
 
-Site independente que combina duas partes: o memorial da equipe VAGGU, com sua história, fotografias e depoimentos, e uma apresentação informativa do sistema de gestão de estacionamentos. Ele fica separado da landing comercial e da aplicação operacional.
+Site independente que combina duas partes: o memorial da equipe VAGGU, com sua história, fotografias e depoimentos, e uma apresentação informativa do sistema de gestão de estacionamentos. No frontend principal, ele está disponível pela rota `/memorial`; sua fonte e seus recursos continuam organizados neste projeto separado da landing comercial e da aplicação operacional.
 
 ## Executar localmente
 
@@ -25,5 +25,7 @@ Em outros terminais, `npm run dev` também inicia o servidor. Abra `http://127.0
 As fotos e os dois vídeos vieram do HTML recebido. Os relatos marcados no conteúdo como demonstrativos ainda precisam ser confirmados pelos respectivos integrantes antes de uma publicação final.
 
 A tipografia Poppins e a logo amarela foram reutilizadas dos recursos já usados no frontend VAGGU. Os arquivos da fonte vieram do pacote `@fontsource/poppins` instalado no projeto e acompanham sua licença SIL Open Font License. A página independente usa esses arquivos localmente, sem depender do build React do frontend.
+
+No build principal, o Vite publica `index.html`, `src/` e `public/assets/` em `dist/memorial/`. Em desenvolvimento, os mesmos arquivos são servidos sob `/memorial/`. Os caminhos de fotos, vídeos, fontes e logo usam esse prefixo para não colidir com os recursos da landing.
 
 Responsável de produto indicado pela equipe: Samuel. A autoria de commits deve refletir a conta e a pessoa que realmente os realizar.

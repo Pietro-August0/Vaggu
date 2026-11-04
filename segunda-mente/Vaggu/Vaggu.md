@@ -10,6 +10,8 @@ tags: [vaggu, indice]
 
 **Revisão de 04/11/2026:** apresentação do bot com site/imagem e linguagem sem emojis; atendimento e privacidade usam `vagguempresarial@outlook.com`. Ver [processo completo e pendências reais](Documentação/whatsapp-processo-e-operacao.md).
 
+**Landing e memorial — 04/11/2026:** o rodapé público oferece contato pelo WhatsApp, e-mail, Instagram `@vagguempresarial` e repositório GitHub; o mockup de celulares foi removido. A rota `/memorial` incorpora o memorial da equipe, cuja fonte e acervo permanecem em `vaggu-memorial-samuel/`. Ver [mapa do projeto](Documentação/mapa-do-projeto.md) e [fluxo de telas](Documentação/fluxo-de-telas.md).
+
 **WhatsApp — 04/11/2026:** conexão e menu clicável publicados e confirmados pelo participante após corrigir a atribuição da conta real ao usuário técnico na Meta. Lista Ver opções com cinco escolhas, retorno ao menu e números digitados como alternativa; 18 testes locais aprovados. Fluxos estruturados de demonstração/suporte ainda parciais; captura anonimizada do WhatsApp pendente. Ver [guia do WhatsApp](Documentação/whatsapp-webhook.md) e [planejamento](Documentação/planejamento-do-projeto.md). Registros anteriores de adiamento permanecem históricos.
 
 **Registro inicial de 21/10 — bancada física (superado por ensaio posterior no mesmo dia):** preparado shopping local de três vagas e consulta automática do mapa Admin/gerente a cada 5 s. ESP32 gravada e conectada ao hotspot; HTTP202 real, persistência e exibição de A02 Livre no mapa do gerente comprovadas. S01 sem leitura e S03 intermitente ainda precisam de posicionamento/ensaio; não equivale à homologação dos três canais ou do ambiente publicado. Ver [guia da bancada](../../hardware/esp32-3-vagas/README.md).
