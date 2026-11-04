@@ -1,5 +1,8 @@
 # Próximos passos
 
+**Estado em 04/11/2026:** conexão real e menu clicável confirmados pelo participante. Apresentação com imagem/site e contato empresarial em atualização; o histórico de implantação e as pendências reais estão no [processo e operação do WhatsApp](../Documentação/whatsapp-processo-e-operacao.md). Registros datados de adiamento abaixo são históricos.
+
+
 **28/10/2026 — retomada solicitada do WhatsApp:** executar o [[Vaggu/Documentação/planejamento-whatsapp-2026-10-28|planejamento de conclusão]], começando pela confirmação do número salvo e configuração do link no build da landing. Homologação Meta/Render, respostas reais e atendimento humano continuam pendentes; os registros anteriores de adiamento são históricos.
 
 **Fechamento de 24/10/2026:** concluída a revisão visual e de carregamento das análises, com categorias no topo, estados de consulta, recuperação de falhas e novas evidências locais. Continuidade: homologação publicada com API/banco reais, conferência da integração com a main e validação de latências reais. O aviso de bundles grandes continua aberto. Ver [[Vaggu/Diário/2026-10-24|fechamento e verificações]].
@@ -71,7 +74,7 @@ O histórico confirmado e a análise por período de até 31 dias UTC estão imp
 | P07 | Operação, manutenção/ocorrências e telões com credencial própria implementados localmente; homologação pendente |
 | P08 | Histórico, período/comparação, setor/categoria, métricas, cobertura e Excel/PDF implementados; fotografia nos novos eventos e limites legados identificados; homologação pendente |
 | P09 | Dados preparados; relatório/publicação Power BI como evolução opcional |
-| P10 | Conexão real do WhatsApp adiada; retomada depende de número e ambiente Meta |
+| P10 | Conexão e menu reais confirmados; falta validar a nova apresentação e definir fluxos estruturados, retenção e operação humana |
 | P11 | Revisão integrada para o TCC |
 
 O estado diário técnico permanece em [[Vaggu/Documentação/planejamento-do-projeto|planejamento do projeto]], dentro da segunda mente. P04 e as melhorias de interação, gerentes e senha foram concluídos e validados com PostgreSQL real, frontend e navegador. O dia iniciado em 12/09 foi encerrado após a virada para 13/09.

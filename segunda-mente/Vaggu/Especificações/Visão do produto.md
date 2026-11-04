@@ -1,6 +1,9 @@
 # Visão do produto
 
-> **Atualização de 21/10/2026:** as três [[Vaggu/Especificações/Personas|personas documentadas]] são Carlos (fonte original), Mariana e Rafael (hipóteses). Equipamentos, telão instalado, atualização periódica e filtros analíticos foram implementados localmente. Conexão física e homologação publicada seguem pendentes. Power BI publicado é evolução opcional; a conexão real do WhatsApp foi adiada. Os registros históricos estão identificados pelas respectivas datas.
+**Estado em 04/11/2026:** conexão real e menu clicável confirmados pelo participante. Apresentação com imagem/site e contato empresarial em atualização; o histórico de implantação e as pendências reais estão no [processo e operação do WhatsApp](../Documentação/whatsapp-processo-e-operacao.md). Registros datados de adiamento abaixo são históricos.
+
+
+> **Atualização de 21/10/2026:** as três [[Vaggu/Especificações/Personas|personas documentadas]] são Carlos (fonte original), Mariana e Rafael (hipóteses). Equipamentos, telão instalado, atualização periódica e filtros analíticos foram implementados localmente. Conexão física e homologação publicada seguem pendentes. Power BI publicado é evolução opcional; a conexão real e o menu do WhatsApp foram confirmados em 04/11/2026. Os registros históricos estão identificados pelas respectivas datas.
 
 **Atualização:** 21/10/2026 · **Produto:** VAGGU — plataforma web responsiva para gestão de estacionamentos de shopping centers.
 
@@ -56,7 +59,7 @@ Para atingir esse objetivo, o produto deve:
 6. A base de sensores já recebe e confirma leituras em ambiente de teste. A validade individual já chega ao mapa na consulta; atualização periódica implementada; falta ligação ao ESP32 real.
 7. Indicadores e Excel/PDF já consomem o histórico e a situação atual; telões já exibem agregados autorizados sem duplicar categorias especiais; Power BI publicado é opcional.
 
-Os passos 1 a 5 estão implementados em P01–P05. O código atual inclui confirmação/expiração dos sensores, cadastro e vínculo de equipamentos, manutenção e ocorrências, mapa com atualização a cada 15 segundos e telões com credencial própria revogável. A análise oferece até 31 dias UTC, comparação, setor/categoria, entradas, saídas, permanência, rotatividade, cobertura e Excel/PDF. Os novos eventos preservam a classificação histórica; eventos legados sem fotografia confirmada continuam sinalizados. Hardware físico e homologação publicada seguem pendentes. Power BI publicado é opcional e a conexão real do WhatsApp foi adiada.
+Os passos 1 a 5 estão implementados em P01–P05. O código atual inclui confirmação/expiração dos sensores, cadastro e vínculo de equipamentos, manutenção e ocorrências, mapa com atualização a cada 15 segundos e telões com credencial própria revogável. A análise oferece até 31 dias UTC, comparação, setor/categoria, entradas, saídas, permanência, rotatividade, cobertura e Excel/PDF. Os novos eventos preservam a classificação histórica; eventos legados sem fotografia confirmada continuam sinalizados. Hardware físico e homologação publicada seguem pendentes. Power BI publicado é opcional e a conexão real e o menu do WhatsApp foram confirmados em 04/11/2026.
 
 ## Metas verificáveis
 
@@ -88,7 +91,7 @@ O MVP-alvo do TCC inclui:
 - telões web com agregados por andar ou setor;
 - preparação de dados históricos para evolução opcional no Power BI.
 
-P01–P05 e C01 estão concluídos. O código atual inclui confirmação/expiração dos sensores, cadastro e vínculo de equipamentos, manutenção e ocorrências, mapa com atualização a cada 15 segundos e telões com credencial própria revogável. A análise oferece até 31 dias UTC, comparação, setor/categoria, entradas, saídas, permanência, rotatividade, cobertura e Excel/PDF. Os novos eventos preservam a classificação histórica; eventos legados sem fotografia confirmada continuam sinalizados. Hardware físico e homologação publicada seguem pendentes. Power BI publicado é opcional e a conexão real do WhatsApp foi adiada.
+P01–P05 e C01 estão concluídos. O código atual inclui confirmação/expiração dos sensores, cadastro e vínculo de equipamentos, manutenção e ocorrências, mapa com atualização a cada 15 segundos e telões com credencial própria revogável. A análise oferece até 31 dias UTC, comparação, setor/categoria, entradas, saídas, permanência, rotatividade, cobertura e Excel/PDF. Os novos eventos preservam a classificação histórica; eventos legados sem fotografia confirmada continuam sinalizados. Hardware físico e homologação publicada seguem pendentes. Power BI publicado é opcional e a conexão real e o menu do WhatsApp foram confirmados em 04/11/2026.
 
 ## Posterior ao MVP
 

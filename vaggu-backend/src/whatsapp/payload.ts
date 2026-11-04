@@ -70,7 +70,7 @@ export function shouldSendTestMenu(message) {
 }
 
 // Menu de orientação; demonstração e suporte são tratados na conversa comercial.
-export const testMenuText = 'Olá! 👋 Bem-vindo à VAGGU.\n\nComo podemos ajudar? Toque em “Ver opções” para escolher seu atendimento.';
+export const testMenuText = 'Olá, seja bem-vindo à VAGGU.\n\nConheça nossa solução para a gestão de estacionamentos ou encontre o atendimento que precisa. Toque em “Ver opções” para começar.';
 
 export const menuAtendimento = {
   type: 'list',
@@ -84,7 +84,7 @@ export const menuAtendimento = {
       { id: '2', title: 'Ver funcionalidades', description: 'Mapa de vagas, monitoramento e análises.' },
       { id: '3', title: 'Pedir demonstração', description: 'Converse sobre uma apresentação para seu shopping.' },
       { id: '4', title: 'Solicitar suporte', description: 'Conte à equipe o que precisa de atenção.' },
-      { id: '5', title: 'Falar com a equipe', description: 'Continue o atendimento nesta conversa.' },
+      { id: '5', title: 'Falar com a equipe', description: 'Consulte nosso contato de atendimento.' },
     ] }],
   },
 };
@@ -93,9 +93,17 @@ export const menuAtendimento = {
 export function mensagemInterativaAtendimento(message) {
   if (shouldSendTestMenu(message)) return menuAtendimento;
   const text = respostaAtendimento(message);
+  const option = message.type === 'interactive' ? message.selectionId : message.text.trim();
   return text ? {
     type: 'button', body: { text },
-    action: { buttons: [{ type: 'reply', reply: { id: 'menu', title: 'Voltar ao menu' } }] },
+    ...(option === '1' ? { header: { type: 'image', image: { link: 'https://vaggu-tcc.onrender.com/assets/apresentacao-whatsapp-vaggu.jpg' } } } : {}),
+    action: { buttons: [
+      ...(option === '1' ? [
+        { type: 'reply', reply: { id: '2', title: 'Ver recursos' } },
+        { type: 'reply', reply: { id: '3', title: 'Pedir demonstração' } },
+      ] : []),
+      { type: 'reply', reply: { id: 'menu', title: 'Voltar ao menu' } },
+    ] },
   } : null;
 }
 
@@ -104,11 +112,11 @@ export function respostaAtendimento(message: { type: string; text: string; selec
   if (shouldSendTestMenu(message)) return testMenuText;
   if (!['text', 'interactive'].includes(message.type)) return null;
   const respostas: Record<string, string> = {
-    '1': 'A VAGGU organiza estacionamentos de shoppings com mapa de vagas, acompanhamento de ocupação e acessos separados por unidade. Digite 2 para conhecer as funcionalidades ou 3 para solicitar uma demonstração.',
+    '1': 'A VAGGU reúne mapa de vagas, monitoramento e análises para ajudar na gestão do estacionamento do seu shopping. Cada unidade tem seu próprio acesso.\n\nConheça o projeto no nosso site:\nhttps://vaggu-tcc.onrender.com\n\nVeja os recursos ou saiba como pedir uma demonstração nas opções abaixo.',
     '2': 'Você pode acompanhar vagas por andar, setor e categoria; consultar o monitoramento; analisar períodos e exportar relatórios. A disponibilidade depende de leituras confirmadas. Digite MENU para voltar.',
-    '3': 'Para solicitar uma demonstração, envie nesta conversa o nome do shopping, a cidade e seu nome. A equipe poderá combinar os detalhes por aqui. Não envie senhas ou dados de documentos. Digite MENU para voltar.',
-    '4': 'Descreva o problema, o shopping e o código da vaga ou equipamento, se houver. Informe quando começou. Nunca envie sua senha ou chave de equipamento. Para redefinir acesso, procure o Admin VAGGU. Digite MENU para voltar.',
-    '5': 'Escreva sua solicitação nesta conversa para o atendimento da equipe. Este menu automático não confirma horário nem prazo de resposta. Digite MENU para voltar.',
+    '3': 'Quer conhecer a VAGGU na prática? Envie seu nome, shopping e cidade para vagguempresarial@outlook.com com o assunto “Demonstração VAGGU”. A equipe combinará os detalhes por e-mail. O menu não agenda uma apresentação automaticamente.',
+    '4': 'Para solicitar suporte, escreva para vagguempresarial@outlook.com. Informe o shopping, o problema e quando começou. Se houver, inclua o código da vaga ou equipamento. Nunca envie senhas ou chaves de equipamentos. Para redefinir acesso, procure o Admin VAGGU.',
+    '5': 'Fale com nossa equipe pelo e-mail vagguempresarial@outlook.com. Conte brevemente o que precisa e informe como prefere ser contatado.\n\nEste menu é automático; o envio de uma opção não abre um chamado nem confirma prazo de resposta.',
   };
   const option = message.type === 'interactive' ? message.selectionId : message.text.trim();
   return Object.hasOwn(respostas, option) ? respostas[option] : null;

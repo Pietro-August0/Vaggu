@@ -1,5 +1,8 @@
 # Documentação da VAGGU
 
+**Estado em 04/11/2026:** conexão real e menu clicável confirmados pelo participante. Apresentação com imagem/site e contato empresarial em atualização; o histórico de implantação e as pendências reais estão no [processo e operação do WhatsApp](whatsapp-processo-e-operacao.md). Registros datados de adiamento abaixo são históricos.
+
+
 Estrutura inicial de 09/09/2026 • revisão geral em 21/10/2026 • Português brasileiro
 
 Esta pasta reúne as decisões de produto, o desenho técnico, os padrões de código e os critérios de aceite do projeto. “SSD” é o nome adotado para a especificação principal; a documentação descreve tanto o que já existe quanto o destino planejado da plataforma.
@@ -44,7 +47,7 @@ O `AGENTS.md` é o ponto de entrada para os acordos de trabalho. O SSD reúne as
 - O escopo considera as decisões de Pietro e o documento mestre revisado em 09/09/2026.
 - Nossas regras de código e organização orientam as novas entregas.
 - Modelos de dados, rotas e detalhes de infraestrutura marcados como **proposta** devem ser conciliados com o repositório.
-- P01–P05 e C01 estão concluídos. O código atual inclui confirmação/expiração dos sensores, cadastro e vínculo de equipamentos, manutenção e ocorrências, mapa com atualização a cada 15 segundos e telões com credencial própria revogável. A análise oferece até 31 dias UTC, comparação, setor/categoria, entradas, saídas, permanência, rotatividade, cobertura e Excel/PDF. Os novos eventos preservam a classificação histórica; eventos legados sem fotografia confirmada continuam sinalizados. Hardware físico e homologação publicada seguem pendentes. Power BI publicado é opcional e a conexão real do WhatsApp foi adiada. O estado local e as verificações datadas estão na [conclusão do software](conclusao-software-2026-10-19.md).
+- P01–P05 e C01 estão concluídos. O código atual inclui confirmação/expiração dos sensores, cadastro e vínculo de equipamentos, manutenção e ocorrências, mapa com atualização a cada 15 segundos e telões com credencial própria revogável. A análise oferece até 31 dias UTC, comparação, setor/categoria, entradas, saídas, permanência, rotatividade, cobertura e Excel/PDF. Os novos eventos preservam a classificação histórica; eventos legados sem fotografia confirmada continuam sinalizados. Hardware físico e homologação publicada seguem pendentes. Power BI publicado é opcional e a conexão real e o menu do WhatsApp foram confirmados em 04/11/2026. O estado local e as verificações datadas estão na [conclusão do software](conclusao-software-2026-10-19.md).
 
 - A referência visual é o [Figma VAGGU](https://www.figma.com/design/xKI9wjoiZ5CoXC3DXIJNmq/Vaggu?node-id=2022-2); esta revisão confere o repositório e não extrai novos tokens do Figma.
 - Mudanças no Figma, Trello, produção ou repositório remoto só são registradas como realizadas quando houver evidência específica.

@@ -1,7 +1,7 @@
 import { Link } from "react-router-dom"
 import { Brand } from "@/components/brand"
 
-const contato = "elisagommes@outlook.com"
+const contato = "vagguempresarial@outlook.com"
 const linkClass = "text-yellow-300 underline underline-offset-4 focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-yellow-300"
 
 /** Aviso público e instruções de direitos, sem exigir autenticação ou abrir conversa no bot. */
@@ -13,7 +13,7 @@ export function PrivacidadePage({ exclusao = false }: { exclusao?: boolean }) {
         <Link className={linkClass} to="/">Voltar ao início</Link>
       </header>
       <main id="conteudo" className="mx-auto max-w-4xl px-6 pb-16">
-        <p className="mb-3 text-sm text-yellow-300">VAGGU · Atualizado em 28/10/2026</p>
+        <p className="mb-3 text-sm text-yellow-300">VAGGU · Atualizado em 04/11/2026</p>
         <h1 className="mb-8 text-3xl font-semibold tracking-tight sm:text-5xl">{exclusao ? "Exclusão de dados" : "Política de Privacidade"}</h1>
         <div className="space-y-8 text-base leading-7 text-neutral-300 [&_h2]:mb-3 [&_h2]:text-xl [&_h2]:font-semibold [&_h2]:text-white [&_p+p]:mt-3">
           <section aria-labelledby="responsavel">

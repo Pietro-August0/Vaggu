@@ -1,6 +1,6 @@
 # Mapa do projeto VAGGU
 
-**28/10/2026 — privacidade e ativação:** `vaggu-frontend/src/pages/privacidade-page.tsx` apresenta aviso público e instruções de exclusão em `/privacidade` e `/exclusao-de-dados`, registradas em `main.tsx` e vinculadas no rodapé da landing. Contato indicado pelo responsável: Elisa Gomes Teixeira, `elisagommes@outlook.com`. `render.yaml` passa a habilitar respostas automáticas; credenciais continuam privadas e a ativação real depende do ambiente e da publicação Meta. Capturas em `Evidências visuais/2026-10-28 - Privacidade e exclusao/`.
+**28/10/2026 — privacidade e ativação:** `vaggu-frontend/src/pages/privacidade-page.tsx` apresenta aviso público e instruções de exclusão em `/privacidade` e `/exclusao-de-dados`, registradas em `main.tsx` e vinculadas no rodapé da landing. Responsável: Elisa Gomes Teixeira; contato público atualizado em 04/11 para `vagguempresarial@outlook.com`. `render.yaml` passa a habilitar respostas automáticas; credenciais continuam privadas e a ativação real depende do ambiente e da publicação Meta. Capturas em `Evidências visuais/2026-10-28 - Privacidade e exclusao/`.
 
 **28/10/2026 — contato público:** `vaggu-frontend/src/lib/constants.ts` centraliza o número confirmado da VAGGU, `5511993807892`, como padrão para os links `wa.me`; `VITE_WHATSAPP_NUMBER` pode substituir o destino no build. A conexão real Meta não foi homologada.
 
@@ -336,3 +336,6 @@ O painel analítico usa Motion já instalado: linha e preenchimento revelados po
 ### Clareza dos equipamentos — 28/10/2026
 
 O componente `vaggu-frontend/src/components/equipamentos-admin.tsx` orienta cadastro da placa ESP32, associação sensor/vaga e manutenção, com exemplos de códigos e estados sem placa/vaga elegível. Evidências locais em `Evidências visuais/2026-10-28 - Clareza equipamentos/`; fluxo e validação registrados no planejamento e no índice de evidências.
+
+| `scripts/gerar-apresentacao-whatsapp.mjs` | Exporta a arte JPEG do WhatsApp com marca, foto e fonte locais; Sharp usado somente na autoria. |
+| `vaggu-frontend/public/assets/apresentacao-whatsapp-vaggu.jpg` | Apresentação ilustrativa pública usada no cabeçalho da opção Conhecer a VAGGU. |

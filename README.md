@@ -79,7 +79,7 @@ Abra o endereço informado pelo Vite. O proxy encaminha `/api` à API local em `
 
 Em 21/10/2026, a suíte do backend aprovou **130 testes**, incluindo PostgreSQL descartável e ensaio de dump/restauração. A revisão no navegador exercitou filtros, estado sem observação, exportações, monitoramento e telão, com capturas em computador, tablet e celular. Os [resultados e limites](./segunda-mente/Vaggu/Documenta%C3%A7%C3%A3o/revisao-geral-2026-10-21.md) estão documentados.
 
-A implementação foi validada localmente com dados fictícios. A homologação da versão publicada e a integração com hardware físico seguem pendentes; a conexão real do WhatsApp está adiada e Power BI publicado é uma evolução opcional.
+A implementação foi validada localmente com dados fictícios. A homologação da versão publicada e a integração com hardware físico seguem pendentes; a conexão real e o menu clicável do WhatsApp foram confirmados pelo participante em 04/11/2026; fluxos estruturados e evidência visual do WhatsApp permanecem pendentes e Power BI publicado é uma evolução opcional.
 
 ## Documentação
 

@@ -6,7 +6,27 @@ import { createApp } from '../src/app.js';
 import { createWhatsappService } from '../src/whatsapp/service.js';
 import { createWhatsappClient } from '../src/whatsapp/client.js';
 import { signMetaPayload } from '../src/whatsapp/signature.js';
-import { testMenuText, respostaAtendimento, extractWhatsappEvents, summarizeWhatsappEvents, menuAtendimento } from '../src/whatsapp/payload.js';
+import { testMenuText, respostaAtendimento, extractWhatsappEvents, summarizeWhatsappEvents, menuAtendimento, mensagemInterativaAtendimento } from '../src/whatsapp/payload.js';
+
+test('apresentação inclui imagem, site e continuidade; contatos usam canal empresarial sem emojis', () => {
+  const presentation = mensagemInterativaAtendimento({ type: 'text', text: '1' });
+  assert.ok(presentation && 'image' in presentation.header && 'buttons' in presentation.action);
+  assert.equal(presentation.header.type, 'image');
+  assert.match(presentation.header.image.link, /^https:\/\/vaggu-tcc\.onrender\.com\/assets\/.+\.jpg$/);
+  assert.match(presentation.body.text, /https:\/\/vaggu-tcc\.onrender\.com/);
+  assert.deepEqual(presentation.action.buttons.map(button => button.reply.id), ['2', '3', 'menu']);
+  assert.equal(menuAtendimento.header.type, 'text');
+  for (const id of ['1', '2', '3', '4', '5']) {
+    const message = mensagemInterativaAtendimento({ type: 'interactive', text: '', selectionId: id });
+    assert.ok(message && 'buttons' in message.action);
+    assert.ok(message.action.buttons.length <= 3);
+    assert.ok(message.action.buttons.every(button => button.reply.title.length <= 20));
+    assert.doesNotMatch(message.body.text, /\p{Extended_Pictographic}/u);
+    if (['3', '4', '5'].includes(id)) assert.match(message.body.text, /vagguempresarial@outlook\.com/);
+    if (id !== '1') assert.equal(message.header, undefined);
+  }
+  assert.doesNotMatch(testMenuText, /\p{Extended_Pictographic}/u);
+});
 
 test('cliente envia lista nativa no contrato Meta e mantém alternativa de texto', async () => {
   const payloads = [];
@@ -349,7 +369,7 @@ test('cliques das cinco opções respondem como números e repetição não dupl
     await signedPost(current.app, payload).expect(200);
     assert.equal(current.sent.at(-1).body, respostaAtendimento({ type: 'text', text: id }));
     assert.equal(current.interactiveSent.at(-1).interactive.type, 'button');
-    assert.equal(current.interactiveSent.at(-1).interactive.action.buttons[0].reply.id, 'menu');
+    assert.ok(current.interactiveSent.at(-1).interactive.action.buttons.some(button => button.reply.id === 'menu'));
   }
   assert.equal(current.sent.length, 5);
 });

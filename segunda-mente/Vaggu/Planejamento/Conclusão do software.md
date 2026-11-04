@@ -1,5 +1,8 @@
 # Conclusão do software
 
+**Estado em 04/11/2026:** conexão real e menu clicável confirmados pelo participante. Apresentação com imagem/site e contato empresarial em atualização; o histórico de implantação e as pendências reais estão no [processo e operação do WhatsApp](../Documentação/whatsapp-processo-e-operacao.md). Registros datados de adiamento abaixo são históricos.
+
+
 > **Fechamento de 21/10/2026:** a suíte completa aprovou **130 testes**, zero falhas e zero ignorados, com PostgreSQL descartável e dump/restauração. Build e lint do frontend passaram. A rodada no navegador com API e banco reais locais conferiu filtros, estados sem observação, exportações, análise em desktop/tablet/celular, monitoramento e telão. O corte das categorias no telão foi corrigido e documentado com novos prints. A implementação está integrada em `origin/main`; isso não representa homologação publicada ou física. Os resultados 127/129 abaixo são históricos. Power BI publicado permanece opcional; WhatsApp real e hardware físico seguem etapas próprias. Ver [[Vaggu/Documentação/revisao-geral-2026-10-21]].
 
 Iniciado em 19/10/2026, por solicitação de concluir as pendências sem a conexão física do hardware, em etapas das menores para as maiores.

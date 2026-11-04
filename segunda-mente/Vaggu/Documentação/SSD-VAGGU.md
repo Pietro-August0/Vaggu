@@ -1,5 +1,8 @@
 # SSD VAGGU — especificação de produto e desenho do sistema
 
+**Estado em 04/11/2026:** conexão real e menu clicável confirmados pelo participante. Apresentação com imagem/site e contato empresarial em atualização; o histórico de implantação e as pendências reais estão no [processo e operação do WhatsApp](whatsapp-processo-e-operacao.md). Registros datados de adiamento abaixo são históricos.
+
+
 **Versão:** 1.3 • **Revisão:** 21/10/2026 • **Idioma:** português brasileiro.
 
 **Objetivo:** reunir as regras, os limites e o resultado esperado da VAGGU em um único lugar. Este documento explica o produto; o planejamento mostra o que já foi entregue e o que ainda falta. A [auditoria de 15/10](auditoria-documental-2026-10-15.md) preserva os achados daquela data; o [registro de conclusão](conclusao-software-2026-10-19.md) reúne a implementação posterior e as verificações datadas.
@@ -67,7 +70,7 @@ Em conflito, decisão recente explícita prevalece sobre documentação antiga. 
 
 ### 2.1 Entrega funcional planejada
 
-Landing, login, troca de senha, bot de WhatsApp, administração de shoppings e acessos, estrutura/importação, mapa por andar, placas/sensores, ingestão, estados atuais, histórico, ocorrências, indicadores, exportação de resumos, páginas de telão e preparação histórica para evolução opcional no Power BI. A conexão real do WhatsApp está adiada; hardware físico e homologação publicada permanecem pendentes.
+Landing, login, troca de senha, bot de WhatsApp, administração de shoppings e acessos, estrutura/importação, mapa por andar, placas/sensores, ingestão, estados atuais, histórico, ocorrências, indicadores, exportação de resumos, páginas de telão e preparação histórica para evolução opcional no Power BI. A conexão real e o menu do WhatsApp foram confirmados em 04/11/2026; hardware físico e homologação publicada permanecem pendentes.
 
 ### 2.2 Fora do escopo
 
