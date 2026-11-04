@@ -2,7 +2,9 @@
 
 ## Menu interativo — 04/11/2026
 
-**Estado de entrega:** código local `317075a`, build/18 testes aprovados. Publicação ainda não realizada: GitHub rejeitou duas tentativas com erro interno durante incidente oficial de operações Git, e a main remota foi conferida em `e1eecf9`. O menu textual publicado continua funcional. Validar a lista real somente após concluir push/deploy; captura da interface WhatsApp pendente por ausência de sessão controlável.
+**Validação funcional real:** participante confirmou o percurso Oi → Ver opções → Conhecer a VAGGU → Voltar ao menu no próprio WhatsApp. Logs registraram resposta de tipo `interactive` e eventos de status sem novo erro de envio no recorte observado. Cinco opções cobertas por testes automatizados; não confundir com exercício individual de todas em produção. Captura anonimizada permanece pendente.
+
+**Estado de entrega:** implementação `317075a`, build/18 testes aprovados, publicada na main com o registro `0c63291`. Após duas falhas internas do GitHub, terceira tentativa de push foi aceita. Render confirmou `Deploy succeeded|Live` para `0c63291`, duração de 2m31s. Teste do percurso Oi → Ver opções → Conhecer a VAGGU → Voltar ao menu solicitado ao participante. Captura da interface WhatsApp pendente por ausência de sessão controlável; não confundir testes simulados ou publicação com revisão visual completa.
 
 O atendimento passa a usar mensagens nativas interativas da Meta. `Oi`, `Olá` e `MENU` abrem lista com botão **Ver opções**, cinco escolhas e descrições. As respostas incluem **Voltar ao menu**, sem exigir digitação. Números de 1 a 5 continuam sendo aceitos. O webhook extrai o ID de `interactive.list_reply` ou `interactive.button_reply`; títulos externos não determinam a ação. Mídia e IDs não reconhecidos continuam ignorados. Não há coleta automática estruturada ou confirmação de atendimento humano.
 

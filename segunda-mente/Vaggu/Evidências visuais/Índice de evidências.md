@@ -5,7 +5,9 @@ tags: [vaggu, evidencias, interface]
 
 ## 04/11/2026 — menu interativo WhatsApp, captura pendente
 
-Lista nativa com Ver opções e cinco escolhas, seguida de Voltar ao menu, implementada no backend e coberta por 18 testes locais de contrato/fluxo. Ainda sem publicação devido a erro interno do GitHub, confirmado em seu status oficial. Nesta conexão não há app/janela ou aba controlável do WhatsApp para capturar uma conversa com dados fictícios/anonimizados; nenhuma conversa privada ou credencial foi fotografada. Pendência: após push/deploy, conferir lista aberta, cada escolha e retorno no WhatsApp, capturar resultado sem dados pessoais e registrar plataforma/viewport real. Revisão visual não concluída. O funcionamento do menu textual anterior foi confirmado pelo participante, mas não substitui essa evidência.
+Confirmação funcional posterior: participante confirmou Oi → Ver opções → Conhecer a VAGGU → Voltar ao menu. Logs de produção registraram entrada interativa. Essa confirmação não substitui a captura anonimizada nem conclui a revisão visual documental.
+
+Lista nativa com Ver opções e cinco escolhas, seguida de Voltar ao menu, implementada no backend e coberta por 18 testes locais de contrato/fluxo. Publicação confirmada no Render, `0c63291` Live, após terceira tentativa de push superar erro interno do GitHub. Nesta conexão não há app/janela ou aba controlável do WhatsApp para capturar uma conversa com dados fictícios/anonimizados; nenhuma conversa privada ou credencial foi fotografada. Pendência: conferir lista aberta, cada escolha e retorno no WhatsApp, capturar resultado sem dados pessoais e registrar plataforma/viewport real. Revisão visual não concluída. O funcionamento do menu textual anterior foi confirmado pelo participante, mas não substitui essa evidência.
 
 ## 28/10/2026 — privacidade e exclusão
 
