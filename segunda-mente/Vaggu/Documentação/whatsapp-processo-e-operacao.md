@@ -1,5 +1,7 @@
 # WhatsApp — processo de implantação e operação
 
+**Resultado da publicação — 04/11/2026:** commit funcional 0674a02 enviado à main; Render confirmou Deploy succeeded em 1m42s, deploy dep-dblilpon74is73a89kn0. Consulta pública GET /api/v1/health/ready retornou HTTP 200 e banco conectado. Opções 3–5 publicadas com anúncio demonstrativo de atendente em alguns instantes, sem pedido de e-mail. Nenhuma mensagem real enviada pelo agente; teste de recebimento e captura no WhatsApp permanecem separados. Autoria confirmada diretamente pelo usuário; trabalho local amplo preservado.
+
 **Atualização de 04/11/2026 — atendimento demonstrativo:** por solicitação do usuário, opções 3 (demonstração), 4 (suporte) e 5 (equipe) deixam de pedir envio de e-mail e informam “Uma atendente entrará em contato com você em alguns instantes”. Trata-se de simulação para o TCC: não há fila, notificação ou atendimento real acionado. Botões de retorno, números digitados e proteção contra repetição permanecem. Contatos públicos de privacidade/exclusão não mudam. Versões e relatos anteriores abaixo preservam o comportamento anterior.
 
 **Confirmação do participante — 04/11/2026:** em resposta ao teste solicitado, participante confirmou o percurso Oi → Ver opções → Conhecer a VAGGU, com imagem e link do site, seguido de Ver recursos e Voltar ao menu. Validação funcional da nova apresentação concluída para esse percurso na versão 7356e12. Não comprova os demais caminhos individualmente nem substitui captura anonimizada da interface.

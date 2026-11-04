@@ -1,5 +1,7 @@
 # VAGGU — planejamento e continuidade do projeto
 
+**Resultado da publicação — 04/11/2026:** commit funcional 0674a02 enviado à main; Render confirmou Deploy succeeded em 1m42s, deploy dep-dblilpon74is73a89kn0. Consulta pública GET /api/v1/health/ready retornou HTTP 200 e banco conectado. Opções 3–5 publicadas com anúncio demonstrativo de atendente em alguns instantes, sem pedido de e-mail. Nenhuma mensagem real enviada pelo agente; teste de recebimento e captura no WhatsApp permanecem separados. Autoria confirmada diretamente pelo usuário; trabalho local amplo preservado.
+
 ## Publicação solicitada — pendência de autoria em 04/11/2026
 
 Usuário autorizou publicar a atualização do bot. Preparado checkout isolado em evidencias.local/publicacao-bot, branch codex/publicar-atendente-demonstrativa, base origin/main 914ad62. Somente payload, testes e quatro registros relacionados compõem a entrega; revisão documental ampla e 66 capturas preservadas no checkout original. Build backend, 19 testes e verificador documental/diff aprovados.
