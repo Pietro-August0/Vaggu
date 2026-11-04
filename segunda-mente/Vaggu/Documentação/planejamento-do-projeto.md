@@ -1,5 +1,19 @@
 # VAGGU — planejamento e continuidade do projeto
 
+## Publicação solicitada — pendência de autoria em 04/11/2026
+
+Usuário autorizou publicar a atualização do bot. Preparado checkout isolado em evidencias.local/publicacao-bot, branch codex/publicar-atendente-demonstrativa, base origin/main 914ad62. Somente payload, testes e quatro registros relacionados compõem a entrega; revisão documental ampla e 66 capturas preservadas no checkout original. Build backend, 19 testes e verificador documental/diff aprovados.
+
+Revisão automática rejeitou o comando de commit com identidade elisagommes/elisagommes@outlook.com por considerar autoria de terceiro sem confirmação direta; a máquina está sem user.name/user.email configurados. Solicitada confirmação explícita do usuário; não houve contorno, commit ou push. Render consultado em modo de leitura: serviço vaggu-tcc ainda Live na versão 7356e12. A publicação não foi realizada. Confirmação direta posterior recebida do usuário: “pode ser”, em resposta ao nome/e-mail apresentados. Autorizada autoria elisagommes <elisagommes@outlook.com> para este commit. Publicação retomada; registrar commit, push e resultado do deploy após execução.
+
+
+
+## Publicação do atendimento demonstrativo — 04/11/2026
+
+**Atualização de 04/11/2026 — atendimento demonstrativo:** por solicitação do usuário, opções 3 (demonstração), 4 (suporte) e 5 (equipe) deixam de pedir envio de e-mail e informam “Uma atendente entrará em contato com você em alguns instantes”. Trata-se de simulação para o TCC: não há fila, notificação ou atendimento real acionado. Botões de retorno, números digitados e proteção contra repetição permanecem. Contatos públicos de privacidade/exclusão não mudam. Versões e relatos anteriores abaixo preservam o comportamento anterior.
+
+Publicação solicitada expressamente pelo usuário. Checkout isolado em codex/publicar-atendente-demonstrativa a partir de origin/main (914ad62), preservando a revisão documental ampla e as evidências locais ainda não commitadas. Build backend e 19 testes WhatsApp aprovados, com equivalência entre clique e número digitado e ausência de e-mail nas respostas 3–5. Meta/persistência simuladas; sem envio real. Comandos: npm.cmd run build --prefix vaggu-backend; node --test dist/test/whatsapp.test.js na pasta backend; node scripts/verificar-documentacao.mjs; git diff --check. Captura da interface real permanece bloqueada por ausência de sessão controlável de WhatsApp. Skill de roteamento VAGGU não localizada na revisão anterior; identidade Git mantém a autorização registrada, sem atribuição de coautoria. Commit/push/deploy e confirmação serão registrados após execução.
+
 **Confirmação do participante — 04/11/2026:** em resposta ao teste solicitado, participante confirmou o percurso Oi → Ver opções → Conhecer a VAGGU, com imagem e link do site, seguido de Ver recursos e Voltar ao menu. Validação funcional da nova apresentação concluída para esse percurso na versão 7356e12. Não comprova os demais caminhos individualmente nem substitui captura anonimizada da interface.
 
 ## Revisão de apresentação e contatos — 04/11/2026

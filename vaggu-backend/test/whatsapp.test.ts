@@ -8,7 +8,7 @@ import { createWhatsappClient } from '../src/whatsapp/client.js';
 import { signMetaPayload } from '../src/whatsapp/signature.js';
 import { testMenuText, respostaAtendimento, extractWhatsappEvents, summarizeWhatsappEvents, menuAtendimento, mensagemInterativaAtendimento } from '../src/whatsapp/payload.js';
 
-test('apresentação inclui imagem, site e continuidade; contatos usam canal empresarial sem emojis', () => {
+test('apresentação inclui imagem, site e continuidade; atendimento anuncia contato demonstrativo sem e-mail ou emojis', () => {
   const presentation = mensagemInterativaAtendimento({ type: 'text', text: '1' });
   assert.ok(presentation && 'image' in presentation.header && 'buttons' in presentation.action);
   assert.equal(presentation.header.type, 'image');
@@ -22,7 +22,11 @@ test('apresentação inclui imagem, site e continuidade; contatos usam canal emp
     assert.ok(message.action.buttons.length <= 3);
     assert.ok(message.action.buttons.every(button => button.reply.title.length <= 20));
     assert.doesNotMatch(message.body.text, /\p{Extended_Pictographic}/u);
-    if (['3', '4', '5'].includes(id)) assert.match(message.body.text, /vagguempresarial@outlook\.com/);
+    if (['3', '4', '5'].includes(id)) {
+      assert.match(message.body.text, /Uma atendente entrará em contato com você em alguns instantes/);
+      assert.doesNotMatch(message.body.text, /@|e-mail|email/i);
+      assert.equal(respostaAtendimento({ type: 'text', text: id }), message.body.text);
+    }
     if (id !== '1') assert.equal(message.header, undefined);
   }
   assert.doesNotMatch(testMenuText, /\p{Extended_Pictographic}/u);

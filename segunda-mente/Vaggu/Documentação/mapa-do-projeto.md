@@ -1,5 +1,7 @@
 # Mapa do projeto VAGGU
 
+**04/11 — texto demonstrativo do bot:** payload.ts mantém menu e retorno; opções 3–5 anunciam contato de uma atendente em alguns instantes, sem pedido de e-mail ou acionamento real. whatsapp.test.ts confere os mesmos textos para clique e número digitado; nenhuma nova dependência, migration ou rota.
+
 **28/10/2026 — privacidade e ativação:** `vaggu-frontend/src/pages/privacidade-page.tsx` apresenta aviso público e instruções de exclusão em `/privacidade` e `/exclusao-de-dados`, registradas em `main.tsx` e vinculadas no rodapé da landing. Responsável: Elisa Gomes Teixeira; contato público atualizado em 04/11 para `vagguempresarial@outlook.com`. `render.yaml` passa a habilitar respostas automáticas; credenciais continuam privadas e a ativação real depende do ambiente e da publicação Meta. Capturas em `Evidências visuais/2026-10-28 - Privacidade e exclusao/`.
 
 **28/10/2026 — contato público:** `vaggu-frontend/src/lib/constants.ts` centraliza o número confirmado da VAGGU, `5511993807892`, como padrão para os links `wa.me`; `VITE_WHATSAPP_NUMBER` pode substituir o destino no build. A conexão real Meta não foi homologada.
