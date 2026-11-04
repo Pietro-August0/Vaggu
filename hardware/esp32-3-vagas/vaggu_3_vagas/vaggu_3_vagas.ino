@@ -65,14 +65,17 @@ String base() {
 }
 
 bool enviar(const char* rota, const String& corpo) {
-  WiFiClient cliente;
-  NetworkClientSecure seguro;
-  HTTPClient http;
+  // Mantém o socket entre ciclos; evita repetir handshake TLS a cada leitura.
+  static WiFiClient cliente;
+  static NetworkClientSecure seguro;
+  static HTTPClient http;
+  http.setReuse(true);
   if (!abrirTransporte(http, cliente, seguro, String(API_BASE) + rota)) return false;
   http.addHeader("Content-Type", "application/json");
   http.addHeader("Authorization", String("Device ") + PLACA_CHAVE);
+  unsigned long inicioEnvio = millis();
   int status = http.POST(corpo);
-  Serial.printf("HTTP %d | sequencia %lu\n", status, (unsigned long)sequencia);
+  Serial.printf("HTTP %d | sequencia %lu | envio %lu ms\n", status, (unsigned long)sequencia, millis() - inicioEnvio);
   // Não imprime chave ou dados de Wi-Fi.
   if (status > 0) Serial.println(http.getString());
   if (status < 0 && String(API_BASE).startsWith("https://")) {
@@ -81,6 +84,8 @@ bool enviar(const char* rota, const String& corpo) {
     Serial.printf("Diagnostico TLS: %s\n", detalhe);
   }
   http.end();
+  // Conexão encerrada ou erro: o próximo ciclo abre outra com validação completa.
+  if (status < 0) { seguro.stop(); cliente.stop(); }
   if (status >= 400 && status < 500 && status != 408 && status != 429) {
     bloqueado = true;
     Serial.println("Requisicao recusada: confira URL, chave e sensores; depois reinicie.");
@@ -101,6 +106,7 @@ void setup() {
     (unsigned long)esp_random(), (unsigned long)esp_random(), (unsigned long)esp_random());
   inicializacaoId = identificador;
   WiFi.mode(WIFI_STA);
+  WiFi.setSleep(false); // Bancada alimentada por USB: prioriza latência.
   WiFi.onEvent([](WiFiEvent_t, WiFiEventInfo_t info) {
     Serial.printf("Wi-Fi desconectou; motivo tecnico: %u\n", info.wifi_sta_disconnected.reason);
   }, ARDUINO_EVENT_WIFI_STA_DISCONNECTED);

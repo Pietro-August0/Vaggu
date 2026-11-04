@@ -297,3 +297,15 @@ Verificação local após integrar origin/main: builds backend/frontend e lint a
 ### Diagnóstico da conexão do piloto
 
 `diagnostico_rede/diagnostico_rede.ino` reutiliza o config.h privado da bancada, mas não envia Authorization nem leituras. Verifica DNS do Vaggu e NTP, TCP/443 do Vaggu e de IP público, TCP/3000 do gateway, resposta NTP por IPv4 direto e GET público de saúde somente com relógio válido e certificado verificado. Repete a cada 30 segundos. Ao gravá-lo, a telemetria fica temporariamente pausada; depois do diagnóstico, regravar vaggu_3_vagas. Não desabilita TLS nem modifica hotspot, firewall ou VPN.
+
+### Retomada do teste por USB — 28/10/2026
+
+Quando NTP não responde na rede de bancada, o firmware aceita `TIME <segundos Unix UTC>` pela porta serial física. A validação da cadeia, hostname e validade do certificado HTTPS continua ativa. O horário do Windows precisa estar correto. Depois de reiniciar ou desligar a placa, repita o ajuste se NTP continuar indisponível; isso ainda não comprova operação autônoma com pilhas.
+
+Feche o Monitor Serial e execute `./hardware/esp32-3-vagas/sincronizar-relogio-usb.ps1 -Porta COM3`. O script envia horário durante os primeiros 12 segundos e acompanha a saída por 45 segundos, sem reiniciar a placa. Confirmação do horário e HTTP 200/202 precisam ser observados; contato da placa não comprova confirmação dos três sensores. O diagnóstico separado precisa ser substituído pelo firmware `vaggu_3_vagas` antes do ensaio.
+
+### Latência HTTPS do protótipo — 28/10/2026
+
+Preparada reutilização de socket HTTP/1.1 entre ciclos, mantendo os clientes locais/TLS e HTTPClient vivos. A resposta é consumida antes de end(); conexões com erro são encerradas e o próximo ciclo reconecta com certificado validado. Wi-Fi sem sleep somente na bancada USB; aumenta consumo e precisa ser reavaliado para pilhas. Log inclui duração do envio em milissegundos. Filtro de três amostras, separação acústica de 65 ms e histerese foram preservados.
+
+Para o ensaio publicado, a confirmação pode usar `TELEMETRIA_CONFIRMACAO_MS=2000` e `TELEMETRIA_LACUNA_MAXIMA_MS=4500` no Render. Isso é uma janela mínima com observações consistentes; não garante transição total de dois segundos. Ainda depende de aplicar o ambiente, gravar firmware e medir o ciclo físico. Alterar arquivo local não muda o ambiente hospedado.

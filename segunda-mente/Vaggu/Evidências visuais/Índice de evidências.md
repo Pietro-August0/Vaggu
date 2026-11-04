@@ -267,3 +267,9 @@ Rota `/admin/shoppings/d3a09b29-7e5a-4b7e-8c42-8f371d0a0001/estrutura`, perfil A
 - [Equipamento e vínculos cadastrados](2026-10-21%20-%20Piloto%20ESP32/equipamento-publicado.png).
 
 Nenhuma captura da emissão de chave foi feita. Revisão desktop/tablet/celular do frontend local integrado continua pendente.
+
+## 28/10/2026 — posições do piloto no site hospedado
+
+Admin, rota `/admin/shoppings/d3a09b29-7e5a-4b7e-8c42-8f371d0a0001/estrutura`, Piso G1, setor Piloto físico ESP32. [Mapa salvo](2026-10-28%20-%20Piloto%20ESP32/mapa-publicado-posicoes.png), viewport corrente 771×655 no navegador integrado, tema escuro. Fonte: API hospedada e dados do protótipo. P01/P02/P03 posicionadas em uma faixa livre central, sem sobreposição; demais posições conferidas e preservadas. Site confirmou “Mapa salvo”, e a captura mostra P01 em vermelho e P02/P03 em verde. Não equivale a ensaio de estabilidade dos sensores ou revisão responsiva do frontend; nenhum código de frontend foi alterado.
+
+- 28/10/2026, Render/Admin do serviço, viewport 771×655: [Deploy da confirmação rápida](2026-10-28%20-%20Piloto%20ESP32/render-confirmacao-rapida-deploy.png). Página do deploy dep-dbh38md9el5s73alk9u0 mostra sucesso e Environment updated. Comprova publicação da configuração; não mede resposta física dos sensores.
