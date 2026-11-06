@@ -3,6 +3,31 @@ tags: [vaggu, evidencias, interface]
 ---
 # Evidências visuais da VAGGU
 
+## 06/11/2026 — percurso sincronizado Da vaga ao painel
+
+Memorial local em /memorial/#projeto, visitante, tema escuro e diagramas ilustrativos. Edge e Playwright conferiram o ciclo de 12 segundos, a direção do marcador em cada largura, pausa e retomada por teclado e a versão estática. [Desktop 1440×1000](2026-11-06%20-%20Percurso%20sincronizado/desktop.png) · [Tablet 768×1024](2026-11-06%20-%20Percurso%20sincronizado/tablet.png) · [Celular 390×844](2026-11-06%20-%20Percurso%20sincronizado/celular.png) · [Movimento reduzido 390×844](2026-11-06%20-%20Percurso%20sincronizado/movimento-reduzido.png).
+
+## 06/11/2026 — grades de Nossos momentos juntos
+
+Rota local /memorial, visitante com sessão simulada, tema escuro, mídias fornecidas pelo usuário e imagens de pessoas mascaradas. Edge e Playwright conferiram cinco fotos e cinco vídeos, os controles por teclado, as colunas e a ausência de rolagem horizontal ou erros de console. Os vídeos mantêm nomes acessíveis e não exibem legendas na grade.
+
+| Mídia | Desktop | Tablet | Celular |
+| --- | --- | --- | --- |
+| Fotos | [1440×1000](2026-11-06%20-%20Nossos%20momentos%20juntos/fotos-desktop.png) | [768×1024](2026-11-06%20-%20Nossos%20momentos%20juntos/fotos-tablet.png) | [390×844](2026-11-06%20-%20Nossos%20momentos%20juntos/fotos-celular.png) |
+| Vídeos | [1440×1000](2026-11-06%20-%20Nossos%20momentos%20juntos/videos-desktop.png) | [768×1024](2026-11-06%20-%20Nossos%20momentos%20juntos/videos-tablet.png) | [390×844](2026-11-06%20-%20Nossos%20momentos%20juntos/videos-celular.png) |
+
+## 06/11/2026 — faixa arrastável no memorial
+
+Rota local /memorial, visitante com sessão simulada, tema escuro e imagens de pessoas mascaradas. Playwright/Edge conferiu arraste de mouse, gesto nativo de toque, foco visível, setas, pausa por Espaço, movimento reduzido e atributo de desativação de Picture-in-Picture nos vídeos. [Desktop 1440×1000](2026-11-06%20-%20Faixa%20arrastavel/desktop.png) · [Tablet 768×1024](2026-11-06%20-%20Faixa%20arrastavel/tablet.png) · [Celular 390×844](2026-11-06%20-%20Faixa%20arrastavel/celular.png).
+
+Na seção Da vaga ao painel, foi conferida a ausência do botão, a pausa por Espaço com foco na lista e a versão estática com movimento reduzido. Capturas em [desktop](2026-11-06%20-%20Faixa%20arrastavel/etapas-desktop.png), [tablet](2026-11-06%20-%20Faixa%20arrastavel/etapas-tablet.png), [celular](2026-11-06%20-%20Faixa%20arrastavel/etapas-celular.png).
+
+Os dois players da daily e dos testes de design aparecem em Nossos momentos juntos, com vídeos mascarados nas capturas. Reprodução e pausa verificadas por teclado em [desktop](2026-11-06%20-%20Faixa%20arrastavel/momentos-desktop.png), [tablet](2026-11-06%20-%20Faixa%20arrastavel/momentos-tablet.png), [celular](2026-11-06%20-%20Faixa%20arrastavel/momentos-celular.png).
+
+## 06/11/2026 — vídeos na abertura do memorial
+
+Rota local /memorial, visitante com sessão simulada, tema escuro, mídias fornecidas pelo usuário e imagens de pessoas mascaradas. Edge e Playwright confirmaram os cinco vídeos sem som, foco e pausa por teclado, início pausado com movimento reduzido e ausência de rolagem horizontal ou erros de console. Capturas com a faixa pausada. [Desktop 1440×1000](2026-11-06%20-%20Videos%20na%20abertura/desktop.png) · [Tablet 768×1024](2026-11-06%20-%20Videos%20na%20abertura/tablet.png) · [Celular 390×844](2026-11-06%20-%20Videos%20na%20abertura/celular.png).
+
 ## 06/11/2026 — bancada e bastidores no memorial
 
 Rota local /memorial, visitante com sessão simulada, tema escuro e arquivos fornecidos pelo usuário. Os vídeos e as imagens de pessoas foram mascarados nas capturas. Playwright/Edge conferiu ampliação por Enter, fechamento por Escape, retorno de foco, reprodução e pausa dos vídeos pelo teclado, console e rolagem horizontal.
@@ -551,3 +576,7 @@ Validação: `node %TEMP%/vaggu-memorial-lista-qa.cjs`, Playwright/Edge local, v
 Em 04/11/2026, o memorial recebeu o depoimento completo da Kamilly. Revisão local em /memorial/ com Playwright/Edge (1440×1000, 768×1024 e 390×844), com abertura por teclado e capturas fictícias em 2026-11-04 - Depoimento Kamilly. Verificações: build e lint do frontend, node scripts/verificar-documentacao.mjs e git diff --check. Visitante público, tema escuro, depoimento aberto sem overflow.
 
 - **05/11/2026 — diálogo do WhatsApp (captura pendente):** webhook `/api/v1/whatsapp/webhook`, perfil visitante, menu e respostas 1–5. Viewports do cliente nativo ainda não conferidos. Dados fictícios nos testes locais; seleção por número e por botão verificadas. Os novos textos e botões ainda não foram publicados no WhatsApp para captura anonimizada.
+
+## Retrato de Juan — 06/11/2026
+
+[/memorial — capturas locais](2026-11-06%20-%20Retrato%20de%20Juan/). Perfil público em 1440×1000, 768×1024 e 390×844. Retrato fornecido pelo usuário, com imagens mascaradas nas capturas. Grade, depoimento, ampliação por teclado e retorno de foco verificados, sem erros de console ou overflow horizontal.

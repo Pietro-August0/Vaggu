@@ -1,5 +1,36 @@
 # VAGGU — planejamento e continuidade do projeto
 
+## Grades de Nossos momentos juntos — 06/11/2026
+
+Cinco fotos e cinco vídeos organizados em duas grades, sem legendas visíveis nos players. Nomes acessíveis e controles nativos preservados. Validação local com node %TEMP%/vaggu-momentos-grid-qa.cjs, build e lint do frontend, node scripts/verificar-documentacao.mjs e git diff --check. Playwright/Edge usado por indisponibilidade do plugin Browser. Publicação pendente.
+
+## Plano de animação — Da vaga ao painel
+
+**Objetivo.** Contar a história de um único carro e de um único dado. A mesma bolinha amarela percorre as três etapas. Um rótulo curto acompanha a ação em cada momento, sem exigir a leitura dos parágrafos.
+
+| Momento | O que aparece | Texto de apoio |
+| --- | --- | --- |
+| 0–3 s · Detectar | Um carro entra na vaga. O sensor emite ondas e nasce um pacote amarelo. | O sensor detectou o carro |
+| 3–6 s · Enviar | O pacote passa por um fio até a placa ESP32. Depois cruza o Wi-Fi até a API. O visto de chegada indica recebimento. | A placa enviou a leitura |
+| 6–9 s · Confirmar | O sistema compara leituras consistentes antes de confirmar a ocupação. Um relógio marca uma leitura antiga que segue para indisponível. | O sistema confirmou a ocupação |
+| 9–12 s · Visualizar | A mesma vaga muda no mapa. O painel de análises recebe a informação e o telão mostra disponibilidade agregada. | A informação aparece nas telas |
+
+**Composição.** Manter os três títulos atuais. Enviar acontece dentro de Detectar, e os demais momentos seguem Confirmar e Visualizar. No desktop, o pacote percorre a linha da esquerda para a direita. No celular, os quadros empilham e a conexão segue de cima para baixo. Usar SVG e CSS para desenhar a vaga, o fio, o Wi-Fi e as telas. As três etapas estáticas continuam legíveis com movimento reduzido.
+
+**Implementação proposta.** Validar primeiro os quatro quadros estáticos e os rótulos. Em seguida, sincronizar as transições numa única sequência de aproximadamente 12 segundos, iniciada quando a seção entrar na área visível. Testar uma ação curta para rever o percurso em toque e teclado, preservando a abertura sem botão de pausa visível.
+
+**Aceite.** Em desktop, tablet, celular e a 320 px, o público deve conseguir apontar quem detecta o carro, quem transmite, quem confirma e onde o dado aparece. A animação precisa distinguir recebimento de confirmação, e a leitura antiga deve continuar indisponível. Conferir teclado, movimento reduzido, ausência de cortes e console. Registrar capturas antes da publicação.
+
+**Status.** Primeira versão implementada. A trilha agora sincroniza as cenas em 12 segundos, preservando o fio até a placa, Wi-Fi até o sistema e estados de confirmação. Espaço pausa ou retoma com foco na lista. A ação dedicada para rever o percurso fica para uma rodada seguinte. Comandos: node %TEMP%/vaggu-percurso-qa.cjs, build e lint do frontend, node scripts/verificar-documentacao.mjs e git diff --check. Playwright/Edge usado por indisponibilidade do plugin Browser. Publicação pendente.
+
+## Faixa arrastável no memorial — 06/11/2026
+
+A abertura usa rolagem horizontal nativa para toque e arraste com mouse. O avanço automático espera o fim da interação. Os players da daily e dos testes de design foram movidos do Acervo do projeto para Nossos momentos juntos. As setas navegam, e Espaço pausa ou retoma quando a faixa tem foco. Os botões de pausa saíram da abertura e da seção Da vaga ao painel. Espaço também controla os diagramas com foco na lista. Os vídeos do memorial desativam Picture-in-Picture no player. Com movimento reduzido, a faixa fica manual e os clipes ficam estáticos. Comandos: node %TEMP%/vaggu-faixa-arrastavel-qa.cjs, build e lint do frontend, node scripts/verificar-documentacao.mjs e git diff --check. Playwright/Edge usado por indisponibilidade do plugin Browser. Publicação pendente.
+
+## Vídeos na abertura do memorial — 06/11/2026
+
+A faixa alterna cinco imagens e cinco vídeos em 80 segundos. Três clipes novos foram adicionados. Daily e testes de design reaproveitam os arquivos já presentes no acervo, pois os reenvios têm o mesmo conteúdo e resolução. Só os vídeos visíveis tocam, sem som, enquanto a faixa estiver ativa. O clipe de 40 segundos aparece em trechos ao passar pela faixa. O controle pausa tudo e o movimento reduzido inicia pausado. Comandos: node %TEMP%/vaggu-videos-faixa-inspecao.cjs, node %TEMP%/vaggu-videos-faixa-qa.cjs, build e lint do frontend, node scripts/verificar-documentacao.mjs e git diff --check. Playwright/Edge usado por indisponibilidade do plugin Browser. Publicação pendente.
+
 ## Bancada e bastidores no memorial — 06/11/2026
 
 Duas fotos fornecidas pelo usuário registram a montagem de três sensores ultrassônicos e uma placa ESP32 em bancada. Os vídeos mostram a troca de ideias da equipe na daily e os testes de design. Incluídos no acervo, com referência técnica no [guia da bancada](../../../hardware/esp32-3-vagas/README.md). As fotos documentam a montagem e não confirmam estabilidade ou funcionamento dos canais. Validação local com node %TEMP%/vaggu-bancada-acervo-qa.cjs, build e lint do frontend, node scripts/verificar-documentacao.mjs e git diff --check. Playwright/Edge usado por indisponibilidade do plugin Browser. Push autorizado pelo usuário.
@@ -1128,3 +1159,7 @@ Em 04/11/2026, o memorial recebeu o depoimento completo da Kamilly. Revisão loc
 Feedback incorporado: recursos em três blocos curtos e caminhos distintos para roteiro de demonstração, ajuda e contato institucional. Removida a promessa de atendente em instantes; o bot continua demonstrativo. Mantidos os IDs, a seleção por número e o retorno ao menu. Sem alterações no frontend web, publicação ou envio real.
 
 Verificação: `npm test --prefix vaggu-backend` compilou e aprovou 100 testes, com 12 ignorados, incluindo integrações dependentes de PostgreSQL de teste. Executados também `node scripts/verificar-documentacao.mjs` e `git diff --check`. A skill de roteamento não foi localizada no repositório nem nas skills instaladas. Captura anonimizada dos novos textos e botões pendente: testes locais simulam a Meta e não exibem a conversa no WhatsApp.
+
+## Retrato de Juan — 06/11/2026
+
+Foto fornecida de 1200×1600 incorporada ao livro e ao Memorial. Validação local com Playwright/Edge via vaggu-juan-qa.cjs em três viewports, verificador documental e git diff --check. Renderização do DOCX pendente por ausência do LibreOffice.

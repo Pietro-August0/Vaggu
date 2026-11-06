@@ -29,25 +29,29 @@
       <a class="btn btn-yellow" href="#projeto">Conhecer o projeto <span aria-hidden="true">↓</span></a>
     </div>
     <figure class="abertura-foto" role="region" aria-roledescription="carrossel" aria-label="Destaques do memorial">
-      <div class="abertura-janela">
+      <div class="abertura-janela" role="group" aria-label="Faixa de fotos e vídeos" aria-describedby="instrucoes-destaques" tabindex="0">
         <div class="abertura-faixa">
           <img class="abertura-equipe" src="/memorial/assets/fotos/registro-34.webp" alt="Os seis integrantes da equipe VAGGU reunidos" width="1280" height="960" fetchpriority="high" decoding="async">
+          <video disablepictureinpicture class="abertura-equipe abertura-video" src="/memorial/assets/videos/brainstorming-daily.mp4" aria-label="Troca de ideias na daily" muted playsinline loop preload="metadata"></video>
           <img class="abertura-equipe" src="/memorial/assets/fotos/registro-05.webp" alt="Modelo 3D do estacionamento inteligente" decoding="async">
+          <video disablepictureinpicture class="abertura-equipe abertura-video" src="/memorial/assets/videos/testes-de-design.mp4" aria-label="Testes de design na tela" muted playsinline loop preload="metadata"></video>
           <img class="abertura-equipe abertura-logo" src="/memorial/assets/logotipo-vaggu-amarelo.svg" alt="Logotipo amarelo da VAGGU" decoding="async">
+          <video disablepictureinpicture class="abertura-equipe abertura-video" src="/memorial/assets/videos/variacoes-de-design.mp4" aria-label="Variações de design em amarelo e preto" muted playsinline loop preload="metadata"></video>
           <img class="abertura-equipe" src="/memorial/assets/fotos/registro-15.webp" alt="Visualização do estacionamento com sinalização amarela" decoding="async">
+          <video disablepictureinpicture class="abertura-equipe abertura-video" src="/memorial/assets/videos/equipe-em-sala.mp4" aria-label="Equipe reunida na sala" muted playsinline loop preload="metadata"></video>
           <img class="abertura-equipe" src="/memorial/assets/fotos/registro-33.webp" alt="Equipe VAGGU em um momento descontraído" decoding="async">
+          <video disablepictureinpicture class="abertura-equipe abertura-video" src="/memorial/assets/videos/bastidores-no-laboratorio.mp4" aria-label="Bastidores da equipe no laboratório" muted playsinline loop preload="metadata"></video>
         </div>
       </div>
-      <figcaption class="wrap"><span>SENAI Cotia · 2025–2026</span><button type="button" hidden>Pausar fotos</button></figcaption>
+      <figcaption class="wrap"><span>SENAI Cotia · 2025–2026</span><span id="instrucoes-destaques">Deslize ou arraste para explorar. Use as setas para navegar e Espaço para pausar ou retomar.</span></figcaption>
     </figure>
   </section>
 
   <section class="wrap memorial-secao" id="projeto" aria-labelledby="titulo-projeto">
     <h2 id="titulo-projeto">Da vaga ao painel.</h2>
     <p>A VAGGU ajuda a gestão de shopping centers a acompanhar o estacionamento em um só lugar.</p>
-    <button class="controle-etapas" type="button" aria-controls="etapas-projeto" hidden>Pausar animações</button>
-    <ol class="etapas-projeto" id="etapas-projeto">
-      <li class="reveal">
+    <ol class="etapas-projeto reveal" tabindex="0" aria-label="Etapas do projeto. Pressione Espaço para pausar ou retomar as animações.">
+      <li>
         <h3>Detectar</h3>
         <svg class="etapa-cena cena-detectar" viewBox="0 0 320 144" aria-hidden="true" focusable="false">
           <rect class="cena-painel" x="10" y="10" width="96" height="81" rx="8"/>
@@ -74,7 +78,7 @@
         </svg>
         <p>Quando o carro entra na vaga, o sensor percebe sua presença. A placa recebe a leitura e manda pelo Wi-Fi um recado ao sistema: “tem um carro na vaga”.</p>
       </li>
-      <li class="reveal">
+      <li>
         <h3>Confirmar</h3>
         <svg class="etapa-cena" viewBox="0 0 320 144" aria-hidden="true" focusable="false">
           <g class="cena-destaque">
@@ -90,9 +94,9 @@
             <text class="cena-legenda" x="68" y="106">Leitura antiga · indisponível</text>
           </g>
         </svg>
-        <p>O sistema valida as leituras. Se uma leitura ficar antiga, a vaga aparece como indisponível.</p>
+        <p>O sistema compara leituras antes de confirmar. Se ficarem antigas, a vaga aparece como indisponível.</p>
       </li>
-      <li class="reveal">
+      <li>
         <h3>Visualizar</h3>
         <svg class="etapa-cena" viewBox="0 0 320 144" aria-hidden="true" focusable="false">
           <g class="cena-destaque">
@@ -128,7 +132,7 @@
 <figure><button type="button" class="gal-item" data-cat="pessoas" data-img-id="3" aria-label="Ampliar imagem: Retrato da Ana">
     <img data-foto="3" alt="Retrato da Ana" class="gal-img" loading="lazy" decoding="async">
     </button><figcaption><strong>Ana Carvalho</strong><span class="relato-funcao">Scrum Master, documentação e interface</span></figcaption></figure>
-<figure><button type="button" class="gal-item" data-cat="pessoas" data-img-id="juan-ensaio" aria-label="Ampliar imagem: Juan de perfil">
+<figure><button type="button" class="gal-item" data-cat="pessoas" data-img-id="juan-ensaio" aria-label="Ampliar imagem: retrato de Juan">
       <img data-foto="juan-ensaio" class="gal-img" alt="" loading="lazy" decoding="async">
     </button><figcaption><strong>Juan</strong><span class="relato-funcao">Interface e design</span></figcaption></figure>
 <figure><button type="button" class="gal-item" data-cat="pessoas" data-img-id="24" aria-label="Ampliar imagem: Samuel em retrato">
@@ -139,7 +143,8 @@
     </button><figcaption><strong>Elisa</strong><span class="relato-funcao">Interface, experiência do usuário e qualidade</span></figcaption></figure>
 <figure><button type="button" class="gal-item" data-cat="pessoas" data-img-id="kamilly" aria-label="Ampliar imagem: Kamilly"><img data-foto="kamilly" class="gal-img" alt="Kamilly" loading="lazy" decoding="async"></button><figcaption><strong>Kamilly</strong><span class="relato-funcao">Servidor, Arduino e IoT</span></figcaption></figure></div>
     <h3 class="titulo-juntos">Nossos momentos juntos</h3>
-    <div class="archive-grid"><button type="button" class="gal-item" data-cat="pessoas" data-img-id="0" aria-label="Ampliar imagem: Uma conversa entre nós">
+    <h4 class="momentos-subtitulo">Fotos</h4>
+    <div class="archive-grid momentos-fotos"><button type="button" class="gal-item" data-cat="pessoas" data-img-id="0" aria-label="Ampliar imagem: Uma conversa entre nós">
     <img data-foto="0" alt="Uma conversa entre nós" class="gal-img" loading="lazy" decoding="async">
     </button>
 <button type="button" class="gal-item" data-cat="pessoas" data-img-id="1" aria-label="Ampliar imagem: Um retrato do grupo">
@@ -154,6 +159,14 @@
 <button type="button" class="gal-item" data-cat="pessoas" data-img-id="27" aria-label="Ampliar imagem: Um dia no SENAI">
     <img data-foto="27" alt="Um dia no SENAI" class="gal-img" loading="lazy" decoding="async">
     </button></div>
+    <h4 class="momentos-subtitulo">Vídeos</h4>
+    <div class="bastidores-videos">
+      <video disablepictureinpicture controls playsinline preload="metadata" width="480" height="640" aria-label="Brainstorming na daily" src="/memorial/assets/videos/brainstorming-daily.mp4"></video>
+      <video disablepictureinpicture controls playsinline preload="metadata" width="480" height="848" aria-label="Testes de design" src="/memorial/assets/videos/testes-de-design.mp4"></video>
+      <video disablepictureinpicture controls playsinline preload="metadata" width="480" height="640" aria-label="Variações de design em amarelo e preto" src="/memorial/assets/videos/variacoes-de-design.mp4"></video>
+      <video disablepictureinpicture controls playsinline preload="metadata" width="480" height="640" aria-label="Equipe reunida na sala" src="/memorial/assets/videos/equipe-em-sala.mp4"></video>
+      <video disablepictureinpicture controls playsinline preload="metadata" width="480" height="640" aria-label="Bastidores da equipe no laboratório" src="/memorial/assets/videos/bastidores-no-laboratorio.mp4"></video>
+    </div>
   </section>
   <section class="wrap memorial-secao" id="equipe" aria-labelledby="titulo-equipe">
     <div class="reveal">
@@ -267,21 +280,6 @@
     </button><figcaption>Planejamento da Sprint 6</figcaption></figure>
       <figure><button type="button" class="gal-item" data-cat="projeto" data-img-id="10" aria-label="Ampliar imagem: Os primeiros circuitos"><img data-foto="10" class="gal-img" alt="" loading="lazy" decoding="async"></button><figcaption>Os primeiros circuitos</figcaption></figure>
       <figure><button type="button" class="gal-item" data-cat="projeto" data-img-id="28" aria-label="Ampliar imagem: A marca tomando forma"><img data-foto="28" class="gal-img" alt="" loading="lazy" decoding="async"></button><figcaption>A marca tomando forma</figcaption></figure>
-    </div>
-    <div class="bastidores-projeto">
-      <h3>Bastidores em vídeo</h3>
-      <div class="bastidores-videos">
-        <figure>
-          <video controls playsinline preload="metadata" width="480" height="640" aria-labelledby="video-daily" src="/memorial/assets/videos/brainstorming-daily.mp4"></video>
-          <figcaption id="video-daily">Brainstorming na daily</figcaption>
-          <p>A equipe se reúne para trocar ideias sobre o projeto.</p>
-        </figure>
-        <figure>
-          <video controls playsinline preload="metadata" width="480" height="848" aria-labelledby="video-design" src="/memorial/assets/videos/testes-de-design.mp4"></video>
-          <figcaption id="video-design">Testes de design</figcaption>
-          <p>Na tela, a equipe compara variações de marca e sinalização em amarelo e preto.</p>
-        </figure>
-      </div>
     </div>
   </section>
 

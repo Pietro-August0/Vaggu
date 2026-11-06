@@ -44,6 +44,6 @@ A abertura usa a logo SVG oficial e alinhamento central. A foto das três integr
 
 A função de cada integrante aparece abaixo do nome na legenda do retrato e no título do depoimento. As atribuições seguem o [SSD-VAGGU](../segunda-mente/Vaggu/Documentação/SSD-VAGGU.md).
 
-O acervo inclui duas fotos da bancada com ESP32 e três sensores e dois vídeos de bastidores, sobre a troca de ideias na daily e os testes de design. Os vídeos têm controles próprios e começam pausados.
+O acervo inclui duas fotos da bancada com ESP32 e três sensores. Em Nossos momentos juntos, cinco fotos e cinco vídeos aparecem em grades separadas. Os vídeos têm nomes acessíveis, controles próprios e começam pausados. Na abertura, a faixa alterna cinco imagens e cinco vídeos em um ciclo de 80 segundos. Os clipes visíveis tocam sem som. É possível deslizar no celular, arrastar com o mouse ou usar as setas. Com foco na faixa, Espaço pausa ou retoma. Os vídeos do memorial desativam Picture-in-Picture no player.
 
-“Da vaga ao painel” ilustra a leitura do sensor, a confirmação e as formas de visualizar a disponibilidade. O ciclo de Detectar dura seis segundos e acompanha a leitura do sensor até o sistema, passando pela placa ESP32. As outras duas cenas têm ciclos de quatro segundos. Um botão pausa ou retoma as três cenas. Com movimento reduzido, os diagramas ficam estáticos.
+“Da vaga ao painel” ilustra a leitura do sensor, a confirmação e as formas de visualizar a disponibilidade. As três cenas compartilham um ciclo de 12 segundos. A trilha acompanha o envio, a confirmação e a chegada da informação às telas. Com foco na lista de etapas, Espaço pausa ou retoma as três cenas. Com movimento reduzido, os diagramas ficam estáticos.

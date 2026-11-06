@@ -271,7 +271,7 @@ As cópias de imagens entre `segunda-mente/Vaggu/Identidade visual/Assets/` e `v
 | `vaggu-frontend/tsconfig.node.json` | Configura compilação TypeScript e limites dos arquivos incluídos neste projeto. |
 | `vaggu-frontend/vite.config.ts` | Configura React, Tailwind, aliases e proxy local de /api para o backend. |
 | `vaggu-memorial-samuel/.gitignore` | Exclui dependências, artefatos e configurações locais do site independente do memorial. |
-| `vaggu-memorial-samuel/index.html` | Estrutura o memorial para acesso por QR code, com grade de abertura, atalho pelo mapa, funcionamento com três diagramas em ciclo, caminho da leitura e controle de pausa, identidade visual, retratos e depoimentos com a função de cada integrante, acervo da bancada e vídeos de bastidores. |
+| `vaggu-memorial-samuel/index.html` | Estrutura o memorial para acesso por QR code, com grade de abertura, atalho pelo mapa, funcionamento com três diagramas sincronizados, trilha da leitura e pausa por teclado, identidade visual, retratos e depoimentos com a função de cada integrante, acervo da bancada e grades de fotos e vídeos em Nossos momentos juntos. |
 | `vaggu-memorial-samuel/package.json` | Declara o comando de desenvolvimento do site sem dependências externas. |
 | `vaggu-memorial-samuel/README.md` | Explica o propósito, a execução local, a estrutura e os limites editoriais do memorial. |
 | `vaggu-memorial-samuel/public/assets/logotipo-vaggu-amarelo.svg` | Publica a marca amarela reutilizada na apresentação do memorial. |
@@ -341,8 +341,11 @@ As cópias de imagens entre `segunda-mente/Vaggu/Identidade visual/Assets/` e `v
 | `vaggu-memorial-samuel/public/assets/fotos/bancada-esp32.jpg` | Vista da placa ESP32, das protoboards e das ligações da bancada. |
 | `vaggu-memorial-samuel/public/assets/videos/brainstorming-daily.mp4` | Registro da troca de ideias da equipe durante a daily. |
 | `vaggu-memorial-samuel/public/assets/videos/testes-de-design.mp4` | Registro dos testes de marca e sinalização em amarelo e preto. |
+| `vaggu-memorial-samuel/public/assets/videos/variacoes-de-design.mp4` | Clipe curto de variações de marca e sinalização na tela. |
+| `vaggu-memorial-samuel/public/assets/videos/equipe-em-sala.mp4` | Registro da equipe reunida em sala, exibido em trechos na faixa inicial. |
+| `vaggu-memorial-samuel/public/assets/videos/bastidores-no-laboratorio.mp4` | Registro da equipe trabalhando no laboratório. |
 | `vaggu-memorial-samuel/src/interacoes/galeria.js` | Controla a ampliação das fotos por categoria, com teclado e retorno de foco. |
-| `vaggu-memorial-samuel/src/interacoes/carrossel.js` | Duplica a sequência de destaques para fechar a faixa contínua e controla pausa, visibilidade e preferência por movimento reduzido. |
+| `vaggu-memorial-samuel/src/interacoes/carrossel.js` | Emenda a faixa por rolagem horizontal, coordena arraste, toque e teclado e reproduz os clipes visíveis conforme a preferência de movimento. |
 | `vaggu-memorial-samuel/src/interacoes/movimento.js` | Inicia efeitos ao entrar na área visível e controla a pausa dos diagramas. |
 | `vaggu-memorial-samuel/src/interacoes/navegacao.js` | Abre o depoimento correspondente quando o fragmento do endereço aponta para um integrante. |
 
@@ -440,3 +443,6 @@ Memorial em 05/11/2026: `index.html` organiza carrossel automático na abertura,
 Memorial: `index.html` usa lista semântica para os tutores; `src/estilos.css` define espaçamento e marcadores da `.lista-tutores`.
 `vaggu-memorial-samuel/index.html`: título Memorial Vaggu e cinco tutores na lista de agradecimentos.
 `vaggu-memorial-samuel/index.html`: inclui o depoimento completo da Kamilly na seção da equipe.
+
+O retrato atual de Juan no Memorial está em vaggu-memorial-samuel/public/assets/fotos/retrato-juan.jpg. O acervo usa esse arquivo na grade, no depoimento e na ampliação.
+| `vaggu-memorial-samuel/public/assets/fotos/retrato-juan.jpg` | Retrato de Juan na grade, no depoimento e na ampliação do Memorial. |

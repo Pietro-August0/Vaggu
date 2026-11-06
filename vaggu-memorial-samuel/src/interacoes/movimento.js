@@ -3,14 +3,12 @@ export function iniciarMovimento() {
   if (!("IntersectionObserver" in window)) return
 
   const etapas = document.querySelector(".etapas-projeto")
-  const controle = document.querySelector(".controle-etapas")
-  if (etapas && controle) {
-    controle.hidden = false
-    controle.addEventListener("click", () => {
-      const pausadas = etapas.classList.toggle("etapas-pausadas")
-      controle.textContent = pausadas ? "Reproduzir animações" : "Pausar animações"
-    })
-  }
+  const movimentoReduzido = matchMedia("(prefers-reduced-motion: reduce)")
+  etapas?.addEventListener("keydown", evento => {
+    if (evento.code !== "Space" || movimentoReduzido.matches) return
+    evento.preventDefault()
+    if (!evento.repeat) etapas.classList.toggle("etapas-pausadas")
+  })
 
   const observador = new IntersectionObserver((entradas) => {
     entradas.forEach(({ isIntersecting, target }) => {

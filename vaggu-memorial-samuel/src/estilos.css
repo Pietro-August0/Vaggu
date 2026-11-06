@@ -257,18 +257,7 @@ body.lightbox-aberto { overflow: hidden; }
 .etapas-projeto { padding-left: 1.5rem; margin: 24px 0; }
 .etapas-projeto li::marker { color: var(--yellow); font-weight: 600; }
 .etapas-projeto h3 { margin-bottom: 8px; }
-.controle-etapas {
-  margin-top: 16px;
-  padding: 8px 12px;
-  border: 1px solid var(--line);
-  border-radius: 6px;
-  background: #171717;
-  color: var(--yellow);
-  font: inherit;
-  font-size: .875rem;
-  cursor: pointer;
-}
-.controle-etapas:focus-visible { outline: 2px solid var(--yellow); outline-offset: 4px; }
+.etapas-projeto:focus-visible { outline: 2px solid var(--yellow); outline-offset: 4px; }
 .etapa-cena { display: block; width: 100%; max-width: 400px; margin-block: 12px; background: #141414; border: 1px solid var(--line); border-radius: 12px; }
 .cena-painel { fill: #1e1e1e; stroke: #626262; }
 .cena-icone, .cena-sinal, .cena-trilha { fill: none; stroke-width: 2; stroke-linecap: round; stroke-linejoin: round; }
@@ -279,67 +268,91 @@ body.lightbox-aberto { overflow: hidden; }
 .etapa-cena text { fill: #fff; font-size: 14px; text-anchor: middle; }
 .etapa-cena .cena-legenda { text-anchor: start; }
 .etapa-cena .cena-acao { font-size: 12px; }
+.etapas-projeto { position: relative; grid-auto-rows: 1fr; --ciclo: 12s; }
+.etapas-projeto::before, .etapas-projeto::after { position: absolute; left: 0; pointer-events: none; }
+.etapas-projeto::before { content: ""; inset-block: 10px; width: 2px; background: var(--line); }
+.etapas-projeto::after { content: ""; top: 10px; width: 8px; height: 8px; border-radius: 50%; background: var(--yellow); transform: translate(-3px, -50%); }
+@media (min-width: 640px) {
+  .etapas-projeto { padding-top: 20px; }
+  .etapas-projeto::before { inset: 5px 0 auto; width: auto; height: 2px; }
+  .etapas-projeto::after { top: 6px; }
+}
 @media (prefers-reduced-motion: no-preference) {
-  .etapa-cena { --ciclo: 4s; }
-  .cena-detectar { --ciclo: 6s; }
+  .etapas-projeto.is-visible::after { animation: caminho-vertical var(--ciclo) linear infinite; }
   .is-visible .cena-carro { animation: estacionar-carro var(--ciclo) ease-in-out infinite; }
   .is-visible .cena-eco { animation: sinal-detectado var(--ciclo) ease-in-out infinite; }
   .is-visible .cena-pacote { animation: transmitir-leitura var(--ciclo) linear infinite; }
   .is-visible .cena-placa { animation: leitura-na-placa var(--ciclo) ease-in-out infinite; }
   .is-visible .cena-recepcao { animation: leitura-no-sistema var(--ciclo) ease-in-out infinite; }
   .is-visible .cena-destaque .cena-painel { animation: destacar-etapa var(--ciclo) ease-in-out infinite; }
-  .cena-segundo { --atraso: .9s; }
-  .cena-terceiro { --atraso: 1.8s; }
+  .etapas-projeto li:nth-child(2) { --atraso: 6s; }
+  .etapas-projeto li:nth-child(2) .cena-segundo { --atraso: 7.5s; }
+  .etapas-projeto li:nth-child(3) { --atraso: 9s; }
+  .etapas-projeto li:nth-child(3) .cena-segundo { --atraso: 9.7s; }
+  .etapas-projeto li:nth-child(3) .cena-terceiro { --atraso: 10.4s; }
   .is-visible .cena-destaque .cena-painel { animation-delay: var(--atraso, 0s); }
   .is-visible .cena-traco { animation: desenhar-leitura var(--ciclo) var(--atraso, 0s) ease-out infinite; }
-  .is-visible .cena-ponteiro { transform-origin: 47px 101px; animation: passar-tempo var(--ciclo) ease-in-out infinite; }
-  .is-visible .cena-vaga { animation: pulsar-leitura var(--ciclo) ease-in-out infinite; }
+  .is-visible .cena-ponteiro { transform-origin: 47px 101px; animation: passar-tempo var(--ciclo) var(--atraso) ease-in-out infinite; }
+  .is-visible .cena-vaga { animation: pulsar-leitura var(--ciclo) var(--atraso) ease-in-out infinite; }
   .is-visible .cena-telao { animation: pulsar-leitura var(--ciclo) var(--atraso) ease-in-out infinite; }
-  .etapas-pausadas .is-visible .etapa-cena * { animation-play-state: paused; }
+  .etapas-pausadas.is-visible::after, .etapas-pausadas.is-visible .etapa-cena * { animation-play-state: paused; }
+
+  @media (min-width: 640px) {
+    .etapas-projeto.is-visible::after { animation-name: caminho-horizontal; }
+  }
+  @keyframes caminho-vertical {
+    0%, 44% { top: 10px; }
+    50%, 70% { top: 34%; }
+    76%, 94% { top: 67%; opacity: 1; }
+    100% { top: 67%; opacity: 0; }
+  }
+  @keyframes caminho-horizontal {
+    0%, 44% { left: 0; }
+    50%, 70% { left: 34%; }
+    76%, 94% { left: 68%; opacity: 1; }
+    100% { left: 68%; opacity: 0; }
+  }
 
   @keyframes pulsar-leitura {
-    0%, 28%, 100% { opacity: 1; }
-    12%, 40% { opacity: .45; }
+    0%, 16%, 100% { opacity: 1; }
+    7% { opacity: .45; }
   }
   @keyframes estacionar-carro {
     0% { opacity: 0; transform: translateX(-22px); }
-    8% { opacity: 1; }
-    20%, 92% { opacity: 1; transform: translateX(0); }
+    4% { opacity: 1; }
+    12%, 95% { opacity: 1; transform: translateX(0); }
     100% { opacity: 0; transform: translateX(0); }
   }
   @keyframes sinal-detectado {
-    0%, 19%, 36%, 100% { opacity: .25; }
-    25%, 31% { opacity: 1; }
+    0%, 11%, 25%, 100% { opacity: .25; }
+    15%, 21% { opacity: 1; }
   }
   @keyframes transmitir-leitura {
-    0%, 30% { opacity: 0; transform: translateX(0); }
-    32% { opacity: 1; transform: translateX(0); }
-    50%, 58% { opacity: 1; transform: translateX(102px); }
-    77%, 87% { opacity: 1; transform: translateX(204px); }
-    91%, 100% { opacity: 0; transform: translateX(204px); }
+    0%, 24% { opacity: 0; transform: translateX(0); }
+    26% { opacity: 1; transform: translateX(0); }
+    34%, 37% { opacity: 1; transform: translateX(102px); }
+    47%, 49% { opacity: 1; transform: translateX(204px); }
+    51%, 100% { opacity: 0; transform: translateX(204px); }
   }
   @keyframes leitura-na-placa {
-    0%, 46%, 65%, 100% { opacity: .3; }
-    51%, 59% { opacity: 1; }
+    0%, 32%, 41%, 100% { opacity: .3; }
+    34%, 37% { opacity: 1; }
   }
   @keyframes leitura-no-sistema {
-    0%, 73%, 100% { opacity: .25; }
-    78%, 95% { opacity: 1; }
+    0%, 45%, 100% { opacity: .25; }
+    47%, 54% { opacity: 1; }
   }
   @keyframes destacar-etapa {
-    22%, 36% { fill: #33301b; stroke: var(--yellow); }
+    4%, 12% { fill: #33301b; stroke: var(--yellow); }
   }
   @keyframes desenhar-leitura {
-    0%, 6% { stroke-dasharray: 1; stroke-dashoffset: 1; }
-    24%, 100% { stroke-dasharray: 1; stroke-dashoffset: 0; }
+    0% { stroke-dasharray: 1; stroke-dashoffset: 1; }
+    8%, 100% { stroke-dasharray: 1; stroke-dashoffset: 0; }
   }
   @keyframes passar-tempo {
-    0%, 18% { transform: rotate(0); }
-    52%, 100% { transform: rotate(360deg); }
+    0% { transform: rotate(0); }
+    8%, 100% { transform: rotate(360deg); }
   }
-}
-@media (prefers-reduced-motion: reduce) {
-  .controle-etapas { display: none; }
 }
 .telas-projeto a, .guia-visual a { display: block; }
 .telas-projeto img { width: 100%; aspect-ratio: 16 / 10; object-fit: contain; background: #171717; border-radius: 6px; }
@@ -378,7 +391,12 @@ body.lightbox-aberto { overflow: hidden; }
 .memorial-abertura { grid-template-columns: minmax(0, 1fr); }
 .abertura-texto { max-width: 780px; }
 .abertura-texto p { max-width: 64ch; }
-.abertura-janela { overflow-x: auto; background: #171717; }
+.abertura-janela { overflow-x: auto; background: #171717; scrollbar-width: none; cursor: grab; user-select: none; }
+.abertura-janela::-webkit-scrollbar { display: none; }
+.abertura-janela.arrastando { cursor: grabbing; }
+.abertura-janela:focus-visible { outline: 2px solid var(--yellow); outline-offset: -2px; }
+.abertura-faixa > * { pointer-events: none; }
+@media (prefers-reduced-motion: reduce) { .abertura-faixa > [aria-hidden="true"] { display: none; } }
 .abertura-faixa { display: flex; width: max-content; }
 .abertura-faixa .abertura-equipe {
   flex: none;
@@ -388,20 +406,26 @@ body.lightbox-aberto { overflow: hidden; }
   border-radius: 0;
 }
 .abertura-faixa .abertura-logo { object-fit: contain; padding: 0 clamp(32px, 6vw, 120px); background: #0b0b0b; }
-.abertura-janela[data-loop] { overflow: hidden; }
-.abertura-janela[data-loop] .abertura-faixa { animation: percorrer-fotos 40s linear infinite paused; }
-.abertura-janela[data-loop="ativo"] .abertura-faixa { animation-play-state: running; }
-@keyframes percorrer-fotos { to { transform: translateX(-50%); } }
+.abertura-faixa .abertura-video { object-fit: contain; background: #101010; }
 .abertura-foto figcaption { align-items: center; }
-.abertura-foto button { min-height: 44px; padding-inline: 12px; border: 1px solid var(--line); border-radius: 6px; background: #191919; color: var(--yellow); }
+#instrucoes-destaques { font-size: .75rem; text-align: right; }
+@media (max-width: 540px) {
+  .abertura-foto figcaption { flex-direction: column; align-items: flex-start; gap: 4px; }
+  #instrucoes-destaques { text-align: left; }
+}
 .acervo-projeto-grid { margin-top: 24px; }
 .acervo-projeto-grid .gal-item { width: 100%; }
-.bastidores-projeto { margin-top: 36px; }
-.bastidores-videos { display: grid; grid-template-columns: repeat(auto-fit, minmax(min(100%, 240px), 1fr)); gap: 20px; max-width: 640px; margin-top: 16px; }
-.bastidores-videos video { display: block; width: 100%; height: auto; aspect-ratio: 4 / 5; object-fit: contain; background: #141414; border-radius: 8px; }
+.momentos-subtitulo { margin: 16px 0 10px; font-size: 1rem; color: var(--muted); }
+.bastidores-videos, .archive-grid.momentos-fotos { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 12px; }
+.momentos-fotos .gal-item { width: 100%; }
+.bastidores-videos video { display: block; width: 100%; height: auto; aspect-ratio: 3 / 4; object-fit: contain; background: #141414; border-radius: 8px; }
 .bastidores-videos video:focus-visible { outline: 2px solid var(--yellow); outline-offset: 4px; }
-.bastidores-videos figcaption { color: #fff; font-size: 1rem; font-weight: 600; }
-.bastidores-videos p { font-size: .875rem; }
+@media (min-width: 640px) {
+  .bastidores-videos, .archive-grid.momentos-fotos { grid-template-columns: repeat(3, minmax(0, 1fr)); }
+}
+@media (min-width: 1000px) {
+  .bastidores-videos, .archive-grid.momentos-fotos { grid-template-columns: repeat(5, minmax(0, 1fr)); }
+}
 .retratos-grid { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 20px 12px; margin-block: 24px 36px; }
 .retratos-grid .gal-item { width: 100%; aspect-ratio: 3 / 4; }
 .retratos-grid img { object-position: center 22%; }
