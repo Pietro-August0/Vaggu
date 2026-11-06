@@ -577,6 +577,10 @@ Em 04/11/2026, o memorial recebeu o depoimento completo da Kamilly. Revisão loc
 
 - **05/11/2026 — diálogo do WhatsApp (captura pendente):** webhook `/api/v1/whatsapp/webhook`, perfil visitante, menu e respostas 1–5. Viewports do cliente nativo ainda não conferidos. Dados fictícios nos testes locais; seleção por número e por botão verificadas. Os novos textos e botões ainda não foram publicados no WhatsApp para captura anonimizada.
 
+## Persona Mariana — 06/11/2026
+
+Peça editorial de motorista, sem rota de aplicativo. [Perfil fornecido](2026-11-06%20-%20Persona%20Mariana/perfil-mariana.png) e [complemento de necessidades](2026-11-06%20-%20Persona%20Mariana/necessidades-mariana.png), 1400 × 788. Origem: PDF entregue pelo usuário. O complemento explicita hipóteses de uso do telão.
+
 ## Retrato de Juan — 06/11/2026
 
 [/memorial — capturas locais](2026-11-06%20-%20Retrato%20de%20Juan/). Perfil público em 1440×1000, 768×1024 e 390×844. Retrato fornecido pelo usuário, com imagens mascaradas nas capturas. Grade, depoimento, ampliação por teclado e retorno de foco verificados, sem erros de console ou overflow horizontal.

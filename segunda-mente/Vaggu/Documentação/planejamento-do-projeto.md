@@ -1160,6 +1160,10 @@ Feedback incorporado: recursos em três blocos curtos e caminhos distintos para 
 
 Verificação: `npm test --prefix vaggu-backend` compilou e aprovou 100 testes, com 12 ignorados, incluindo integrações dependentes de PostgreSQL de teste. Executados também `node scripts/verificar-documentacao.mjs` e `git diff --check`. A skill de roteamento não foi localizada no repositório nem nas skills instaladas. Captura anonimizada dos novos textos e botões pendente: testes locais simulam a Meta e não exibem a conversa no WhatsApp.
 
+## Persona Mariana — 06/11/2026
+
+Perfil do PDF e complemento de necessidades incorporados ao livro e à ficha de personas. Jornada inclui alternativa quando o telão mostra dados indisponíveis. Conferência por pdftoppm, leitura do DOCX e verificador documental. A renderização do livro permanece pendente por falta de LibreOffice.
+
 ## Retrato de Juan — 06/11/2026
 
 Foto fornecida de 1200×1600 incorporada ao livro e ao Memorial. Validação local com Playwright/Edge via vaggu-juan-qa.cjs em três viewports, verificador documental e git diff --check. Renderização do DOCX pendente por ausência do LibreOffice.

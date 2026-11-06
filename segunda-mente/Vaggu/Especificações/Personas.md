@@ -38,11 +38,11 @@ Revisamos os quatro slides em 21/10 para acompanhar a referência de Carlos: for
 
 ## Mariana — motorista
 
-![Slide de perfil de Mariana, persona ilustrativa](../Evidências%20visuais/Personas/mariana-perfil-slide.png)
+![Slide de perfil de Mariana, persona ilustrativa](../Evidências%20visuais/2026-11-06%20-%20Persona%20Mariana/perfil-mariana.png)
 
-![Slide de necessidades de Mariana, hipóteses a validar](../Evidências%20visuais/Personas/mariana-necessidades-slide.png)
+![Slide de necessidades de Mariana, hipóteses a validar](../Evidências%20visuais/2026-11-06%20-%20Persona%20Mariana/necessidades-mariana.png)
 
-**Perfil fictício proposto:** 34 anos, frequenta o shopping para compras, alimentação e serviços.
+**Perfil fornecido em 06/11/2026:** 34 anos, frequenta o shopping para compras, alimentação e serviços.
 
 **Contexto e objetivo propostos:** encontrar uma vaga adequada com rapidez, inclusive em visitas com pouco tempo disponível.
 
@@ -58,7 +58,7 @@ Revisamos os quatro slides em 21/10 para acompanhar a referência de Carlos: for
 
 **Relação com o produto:** beneficiária do telão web disponível, com contagens agregadas e ocultação de números após perda de validade. A implantação física ainda está pendente. Não implica conta de motorista, aplicativo, reserva ou navegação 3D.
 
-**Jornada proposta:** chega à entrada → lê o telão → identifica setor e categoria adequados → segue a sinalização física → verifica a vaga.
+**Jornada proposta:** chega à entrada → lê o telão → identifica um setor com disponibilidade → segue a sinalização física → verifica a vaga. Se o telão indicar dados indisponíveis, segue a sinalização local.
 
 **Questões de validação:** O texto é legível à distância? A contagem parcial é compreensível sem depender só da cor? Qual recorte é útil na entrada?
 
