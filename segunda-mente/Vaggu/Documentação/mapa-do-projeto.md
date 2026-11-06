@@ -271,7 +271,7 @@ As cópias de imagens entre `segunda-mente/Vaggu/Identidade visual/Assets/` e `v
 | `vaggu-frontend/tsconfig.node.json` | Configura compilação TypeScript e limites dos arquivos incluídos neste projeto. |
 | `vaggu-frontend/vite.config.ts` | Configura React, Tailwind, aliases e proxy local de /api para o backend. |
 | `vaggu-memorial-samuel/.gitignore` | Exclui dependências, artefatos e configurações locais do site independente do memorial. |
-| `vaggu-memorial-samuel/index.html` | Estrutura o memorial para acesso por QR code, com grade de abertura, atalho pelo mapa, funcionamento com três diagramas em ciclo, caminho da leitura e controle de pausa, identidade visual, retratos e depoimentos com a função de cada integrante e acervo. |
+| `vaggu-memorial-samuel/index.html` | Estrutura o memorial para acesso por QR code, com grade de abertura, atalho pelo mapa, funcionamento com três diagramas em ciclo, caminho da leitura e controle de pausa, identidade visual, retratos e depoimentos com a função de cada integrante, acervo da bancada e vídeos de bastidores. |
 | `vaggu-memorial-samuel/package.json` | Declara o comando de desenvolvimento do site sem dependências externas. |
 | `vaggu-memorial-samuel/README.md` | Explica o propósito, a execução local, a estrutura e os limites editoriais do memorial. |
 | `vaggu-memorial-samuel/public/assets/logotipo-vaggu-amarelo.svg` | Publica a marca amarela reutilizada na apresentação do memorial. |
@@ -337,6 +337,10 @@ As cópias de imagens entre `segunda-mente/Vaggu/Identidade visual/Assets/` e `v
 | `vaggu-memorial-samuel/src/estilos.css` | Define o layout responsivo e a animação curta da marca em SVG, com suporte a movimento reduzido. |
 | `vaggu-memorial-samuel/src/main.js` | Inicializa navegação, movimento, carrossel e galeria da página independente. |
 | `vaggu-memorial-samuel/src/dados/acervo.js` | Mapeia fotografias e vídeos do memorial para os arquivos publicados. |
+| `vaggu-memorial-samuel/public/assets/fotos/bancada-sensores.jpg` | Vista da montagem em bancada com os três sensores. |
+| `vaggu-memorial-samuel/public/assets/fotos/bancada-esp32.jpg` | Vista da placa ESP32, das protoboards e das ligações da bancada. |
+| `vaggu-memorial-samuel/public/assets/videos/brainstorming-daily.mp4` | Registro da troca de ideias da equipe durante a daily. |
+| `vaggu-memorial-samuel/public/assets/videos/testes-de-design.mp4` | Registro dos testes de marca e sinalização em amarelo e preto. |
 | `vaggu-memorial-samuel/src/interacoes/galeria.js` | Controla a ampliação das fotos por categoria, com teclado e retorno de foco. |
 | `vaggu-memorial-samuel/src/interacoes/carrossel.js` | Duplica a sequência de destaques para fechar a faixa contínua e controla pausa, visibilidade e preferência por movimento reduzido. |
 | `vaggu-memorial-samuel/src/interacoes/movimento.js` | Inicia efeitos ao entrar na área visível e controla a pausa dos diagramas. |

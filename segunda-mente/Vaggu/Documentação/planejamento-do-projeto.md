@@ -1,5 +1,9 @@
 # VAGGU — planejamento e continuidade do projeto
 
+## Bancada e bastidores no memorial — 06/11/2026
+
+Duas fotos fornecidas pelo usuário registram a montagem de três sensores ultrassônicos e uma placa ESP32 em bancada. Os vídeos mostram a troca de ideias da equipe na daily e os testes de design. Incluídos no acervo, com referência técnica no [guia da bancada](../../../hardware/esp32-3-vagas/README.md). As fotos documentam a montagem e não confirmam estabilidade ou funcionamento dos canais. Validação local com node %TEMP%/vaggu-bancada-acervo-qa.cjs, build e lint do frontend, node scripts/verificar-documentacao.mjs e git diff --check. Playwright/Edge usado por indisponibilidade do plugin Browser. Push autorizado pelo usuário.
+
 ## Troca dos retratos de Kamilly e Elisa — 06/11/2026
 
 Os JPEGs de 1200×1600 fornecidos pelo usuário foram copiados sem edição e ligados à grade, às miniaturas dos depoimentos e à ampliação pelo mapa do acervo. Os arquivos anteriores ficam preservados como histórico. Validação local com node %TEMP%/vaggu-troca-retratos-qa.cjs, build e lint do frontend, node scripts/verificar-documentacao.mjs e git diff --check. Playwright/Edge usado por indisponibilidade do plugin Browser. Fotografias mascaradas nas evidências. Publicação pendente.

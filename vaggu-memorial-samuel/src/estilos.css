@@ -396,6 +396,12 @@ body.lightbox-aberto { overflow: hidden; }
 .abertura-foto button { min-height: 44px; padding-inline: 12px; border: 1px solid var(--line); border-radius: 6px; background: #191919; color: var(--yellow); }
 .acervo-projeto-grid { margin-top: 24px; }
 .acervo-projeto-grid .gal-item { width: 100%; }
+.bastidores-projeto { margin-top: 36px; }
+.bastidores-videos { display: grid; grid-template-columns: repeat(auto-fit, minmax(min(100%, 240px), 1fr)); gap: 20px; max-width: 640px; margin-top: 16px; }
+.bastidores-videos video { display: block; width: 100%; height: auto; aspect-ratio: 4 / 5; object-fit: contain; background: #141414; border-radius: 8px; }
+.bastidores-videos video:focus-visible { outline: 2px solid var(--yellow); outline-offset: 4px; }
+.bastidores-videos figcaption { color: #fff; font-size: 1rem; font-weight: 600; }
+.bastidores-videos p { font-size: .875rem; }
 .retratos-grid { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 20px 12px; margin-block: 24px 36px; }
 .retratos-grid .gal-item { width: 100%; aspect-ratio: 3 / 4; }
 .retratos-grid img { object-position: center 22%; }

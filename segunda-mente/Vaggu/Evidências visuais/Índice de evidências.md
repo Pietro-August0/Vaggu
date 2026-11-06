@@ -3,6 +3,17 @@ tags: [vaggu, evidencias, interface]
 ---
 # Evidências visuais da VAGGU
 
+## 06/11/2026 — bancada e bastidores no memorial
+
+Rota local /memorial, visitante com sessão simulada, tema escuro e arquivos fornecidos pelo usuário. Os vídeos e as imagens de pessoas foram mascarados nas capturas. Playwright/Edge conferiu ampliação por Enter, fechamento por Escape, retorno de foco, reprodução e pausa dos vídeos pelo teclado, console e rolagem horizontal.
+
+| Estado | Desktop | Tablet | Celular |
+| --- | --- | --- | --- |
+| Fotos da bancada | [1440×1000](2026-11-06%20-%20Bancada%20e%20bastidores/acervo-desktop.png) | [768×1024](2026-11-06%20-%20Bancada%20e%20bastidores/acervo-tablet.png) | [390×844](2026-11-06%20-%20Bancada%20e%20bastidores/acervo-celular.png) |
+| Vídeos de bastidores | [1440×1000](2026-11-06%20-%20Bancada%20e%20bastidores/videos-desktop.png) | [768×1024](2026-11-06%20-%20Bancada%20e%20bastidores/videos-tablet.png) | [390×844](2026-11-06%20-%20Bancada%20e%20bastidores/videos-celular.png) |
+
+Ampliações no celular: [três sensores](2026-11-06%20-%20Bancada%20e%20bastidores/bancada-sensores.png) · [placa e conexões](2026-11-06%20-%20Bancada%20e%20bastidores/bancada-esp32.png).
+
 ## 06/11/2026 — troca dos retratos de Kamilly e Elisa
 
 Rota local /memorial/, visitante, tema escuro e fotografias mascaradas nas capturas. Playwright/Edge confirmou as imagens enviadas pelo usuário na grade, nos depoimentos e na ampliação, com abertura por Enter, fechamento por Escape e retorno de foco. Sem rolagem horizontal ou erros de console.

@@ -44,4 +44,6 @@ A abertura usa a logo SVG oficial e alinhamento central. A foto das três integr
 
 A função de cada integrante aparece abaixo do nome na legenda do retrato e no título do depoimento. As atribuições seguem o [SSD-VAGGU](../segunda-mente/Vaggu/Documentação/SSD-VAGGU.md).
 
+O acervo inclui duas fotos da bancada com ESP32 e três sensores e dois vídeos de bastidores, sobre a troca de ideias na daily e os testes de design. Os vídeos têm controles próprios e começam pausados.
+
 “Da vaga ao painel” ilustra a leitura do sensor, a confirmação e as formas de visualizar a disponibilidade. O ciclo de Detectar dura seis segundos e acompanha a leitura do sensor até o sistema, passando pela placa ESP32. As outras duas cenas têm ciclos de quatro segundos. Um botão pausa ou retoma as três cenas. Com movimento reduzido, os diagramas ficam estáticos.

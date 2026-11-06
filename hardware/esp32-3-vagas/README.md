@@ -1,5 +1,12 @@
 # Protótipo físico VAGGU — três vagas
 
+## Registro fotográfico da montagem — 06/11/2026
+
+As duas vistas mostram a placa ESP32, três sensores ultrassônicos, resistores e fios de ligação montados em protoboards. As fotos registram a montagem em bancada. A pinagem e os resultados de teste devem ser consultados nas seções técnicas abaixo.
+
+- [Vista dos três sensores e da placa](../../vaggu-memorial-samuel/public/assets/fotos/bancada-sensores.jpg)
+- [Vista das conexões e das protoboards](../../vaggu-memorial-samuel/public/assets/fotos/bancada-esp32.jpg)
+
 **Referência vigente — revisão documental de 04/11/2026:** firmware versionado usa espera final de 100 ms e um LED em GPIO13; o mapa tenta consultar a cada 500 ms, com guarda da renovação automática pendente e pausa em aba oculta. Servidor usa confirmação padrão de 30 s; 5 s e depois 2 s são ajustes históricos da bancada, sem aferição do ambiente atual. Ensaio físico inicial das três vagas registrado em 21/10; estabilidade sustentada, tempos definitivos e piloto HTTPS publicado ainda exigem aceite. Ver [situação e pendências](../../segunda-mente/Vaggu/Documentação/revisao-documental-2026-11-04.md). As seções de preparação e ajustes abaixo preservam a ordem histórica.
 
 **Resultado do firmware rápido:** gravado e iniciado na COM3; eventos físicos medidos em aproximadamente 1,1 s nos ciclos saudáveis (com variações de rede), S02 confirmou mudança em 2,232 s após a primeira leitura candidata e os três canais voltaram a registrar observações recentes no mesmo lote. Isso não transforma falha acústica ou elétrica em leitura válida. Mapa consulta a cada 500 ms; estabilidade dos três canais deve continuar sendo observada na bancada.

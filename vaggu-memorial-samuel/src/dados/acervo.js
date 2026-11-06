@@ -46,5 +46,7 @@ export const fotos = Object.freeze({
   "mapa-demo": "/memorial/assets/fotos/mapa-demo.png",
   "telao-demo": "/memorial/assets/fotos/telao-demo.png",
   "guia-visual": "/memorial/assets/fotos/guia-visual.png",
-  "analise-demo": "/memorial/assets/fotos/analise-demo.png"
+  "analise-demo": "/memorial/assets/fotos/analise-demo.png",
+  "bancada-sensores": "/memorial/assets/fotos/bancada-sensores.jpg",
+  "bancada-esp32": "/memorial/assets/fotos/bancada-esp32.jpg"
 })
