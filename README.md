@@ -77,15 +77,7 @@ Abra o endereço informado pelo Vite. O proxy encaminha `/api` à API local em `
 
 ## Documentação
 
-- [Situação atual e pendências — 04/11/2026](./segunda-mente/Vaggu/Documentação/revisao-documental-2026-11-04.md): etapa de homologação, entregas verificadas e prioridades para concluir.
-
-- [Índice do projeto](./segunda-mente/Vaggu/Vaggu.md): produto, arquitetura e continuidade.
-- [Configuração](./segunda-mente/Vaggu/Documenta%C3%A7%C3%A3o/configuracao.md): instalação e execução completas.
-- [API](./vaggu-backend/README.md): contratos, scripts e testes.
-- [Backup e restauração](./segunda-mente/Vaggu/Documenta%C3%A7%C3%A3o/backup-e-restauracao.md): procedimentos e proteções.
-- [Acordos de desenvolvimento](./AGENTS.md): regras do projeto e prints obrigatórios após alterações de design ou frontend.
-- [Protótipo físico com três vagas](./hardware/esp32-3-vagas/README.md): análise do demo ESP32, firmware compatível, diagramas elétricos e roteiro de bancada.
-- [Segunda mente VAGGU](./segunda-mente/Vaggu/Vaggu.md): índice de produto e documentação.
-- [Fluxo de telas](./segunda-mente/Vaggu/Documentação/fluxo-de-telas.md): jornadas de Admin, gerente e visitante.
-- [Tecnologias e arquitetura](./segunda-mente/Vaggu/Tecnologias/Tecnologias%20e%20arquitetura.md): decisões técnicas e integrações.
-- [README da API](./vaggu-backend/README.md): comandos, contratos e testes do backend.
+- [Visão geral do projeto](./segunda-mente/Vaggu/Vaggu.md)
+- [Guia de configuração local](./segunda-mente/Vaggu/Documenta%C3%A7%C3%A3o/configuracao.md)
+- [Documentação da API](./vaggu-backend/README.md)
+- [Protótipo físico com ESP32](./hardware/esp32-3-vagas/README.md)
