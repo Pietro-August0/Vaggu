@@ -8,7 +8,7 @@ import { createWhatsappClient } from '../src/whatsapp/client.js';
 import { signMetaPayload } from '../src/whatsapp/signature.js';
 import { testMenuText, respostaAtendimento, extractWhatsappEvents, summarizeWhatsappEvents, menuAtendimento, mensagemInterativaAtendimento } from '../src/whatsapp/payload.js';
 
-test('apresentação inclui imagem, site e continuidade; atendimento anuncia contato demonstrativo sem e-mail ou emojis', () => {
+test('menu apresenta caminhos distintos com continuidade por botão e alternativa por número', () => {
   const presentation = mensagemInterativaAtendimento({ type: 'text', text: '1' });
   assert.ok(presentation && 'image' in presentation.header && 'buttons' in presentation.action);
   assert.equal(presentation.header.type, 'image');
@@ -16,17 +16,23 @@ test('apresentação inclui imagem, site e continuidade; atendimento anuncia con
   assert.match(presentation.body.text, /https:\/\/vaggu-tcc\.onrender\.com/);
   assert.deepEqual(presentation.action.buttons.map(button => button.reply.id), ['2', '3', 'menu']);
   assert.equal(menuAtendimento.header.type, 'text');
+  const expected = {
+    '1': { body: /Conheça o projeto/, buttons: ['2', '3', 'menu'] },
+    '2': { body: /Gestão de vagas[\s\S]+Monitoramento[\s\S]+Análises e relatórios/, buttons: ['3', 'menu'] },
+    '3': { body: /Roteiro da demonstração[\s\S]+https:\/\/vaggu-tcc\.onrender\.com/, buttons: ['2', 'menu'] },
+    '4': { body: /última leitura[\s\S]+Nunca compartilhe senhas/, buttons: ['5', 'menu'] },
+    '5': { body: /canais oficiais no rodapé[\s\S]+não encaminha mensagens/, buttons: ['menu'] },
+  };
   for (const id of ['1', '2', '3', '4', '5']) {
     const message = mensagemInterativaAtendimento({ type: 'interactive', text: '', selectionId: id });
     assert.ok(message && 'buttons' in message.action);
     assert.ok(message.action.buttons.length <= 3);
     assert.ok(message.action.buttons.every(button => button.reply.title.length <= 20));
     assert.doesNotMatch(message.body.text, /\p{Extended_Pictographic}/u);
-    if (['3', '4', '5'].includes(id)) {
-      assert.match(message.body.text, /Uma atendente entrará em contato com você em alguns instantes/);
-      assert.doesNotMatch(message.body.text, /@|e-mail|email/i);
-      assert.equal(respostaAtendimento({ type: 'text', text: id }), message.body.text);
-    }
+    assert.match(message.body.text, expected[id].body);
+    assert.doesNotMatch(message.body.text, /entrará em contato|em alguns instantes/i);
+    assert.deepEqual(message.action.buttons.map(button => button.reply.id), expected[id].buttons);
+    assert.deepEqual(mensagemInterativaAtendimento({ type: 'text', text: id }), message);
     if (id !== '1') assert.equal(message.header, undefined);
   }
   assert.doesNotMatch(testMenuText, /\p{Extended_Pictographic}/u);

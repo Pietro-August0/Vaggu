@@ -69,8 +69,7 @@ export function shouldSendTestMenu(message) {
   return ['OI', 'OLA', 'MENU'].includes(normalized);
 }
 
-// Menu de orientação; demonstração e suporte são tratados na conversa comercial.
-export const testMenuText = 'Olá, seja bem-vindo à VAGGU.\n\nConheça nossa solução para a gestão de estacionamentos ou encontre o atendimento que precisa. Toque em “Ver opções” para começar.';
+export const testMenuText = 'Olá! Este é o bot da VAGGU.\n\nToque em “Ver opções” para conhecer a plataforma, ver um roteiro de demonstração ou consultar orientações de suporte.';
 
 export const menuAtendimento = {
   type: 'list',
@@ -82,9 +81,9 @@ export const menuAtendimento = {
     sections: [{ title: 'Como podemos ajudar?', rows: [
       { id: '1', title: 'Conhecer a VAGGU', description: 'Entenda nossa solução para estacionamentos.' },
       { id: '2', title: 'Ver funcionalidades', description: 'Mapa de vagas, monitoramento e análises.' },
-      { id: '3', title: 'Pedir demonstração', description: 'Converse sobre uma apresentação para seu shopping.' },
-      { id: '4', title: 'Solicitar suporte', description: 'Conte à equipe o que precisa de atenção.' },
-      { id: '5', title: 'Falar com a equipe', description: 'Converse com uma atendente da VAGGU.' },
+      { id: '3', title: 'Ver demonstração', description: 'Veja o que explorar no site e no roteiro da VAGGU.' },
+      { id: '4', title: 'Ajuda com a plataforma', description: 'Confira os primeiros passos para problemas comuns.' },
+      { id: '5', title: 'Contato da equipe', description: 'Encontre os canais oficiais da VAGGU.' },
     ] }],
   },
 };
@@ -98,25 +97,24 @@ export function mensagemInterativaAtendimento(message) {
     type: 'button', body: { text },
     ...(option === '1' ? { header: { type: 'image', image: { link: 'https://vaggu-tcc.onrender.com/assets/apresentacao-whatsapp-vaggu.jpg' } } } : {}),
     action: { buttons: [
-      ...(option === '1' ? [
-        { type: 'reply', reply: { id: '2', title: 'Ver recursos' } },
-        { type: 'reply', reply: { id: '3', title: 'Pedir demonstração' } },
-      ] : []),
+      ...(['1', '3'].includes(option) ? [{ type: 'reply', reply: { id: '2', title: 'Ver recursos' } }] : []),
+      ...(['1', '2'].includes(option) ? [{ type: 'reply', reply: { id: '3', title: 'Ver demonstração' } }] : []),
+      ...(option === '4' ? [{ type: 'reply', reply: { id: '5', title: 'Contato da equipe' } }] : []),
       { type: 'reply', reply: { id: 'menu', title: 'Voltar ao menu' } },
     ] },
   } : null;
 }
 
-/** Textos demonstrativos; o aviso de atendente não cria fila nem aciona atendimento real. */
+/** Respostas informativas sem coleta de dados ou promessa de atendimento. */
 export function respostaAtendimento(message: { type: string; text: string; selectionId?: string }) {
   if (shouldSendTestMenu(message)) return testMenuText;
   if (!['text', 'interactive'].includes(message.type)) return null;
   const respostas: Record<string, string> = {
-    '1': 'A VAGGU reúne mapa de vagas, monitoramento e análises para ajudar na gestão do estacionamento do seu shopping. Cada unidade tem seu próprio acesso.\n\nConheça o projeto no nosso site:\nhttps://vaggu-tcc.onrender.com\n\nVeja os recursos ou saiba como pedir uma demonstração nas opções abaixo.',
-    '2': 'Você pode acompanhar vagas por andar, setor e categoria; consultar o monitoramento; analisar períodos e exportar relatórios. A disponibilidade depende de leituras confirmadas. Digite MENU para voltar.',
-    '3': 'Que bom que você quer conhecer a VAGGU na prática! Uma atendente entrará em contato com você em alguns instantes para combinar os detalhes da demonstração.',
-    '4': 'Uma atendente entrará em contato com você em alguns instantes para ajudar com sua solicitação de suporte. Nunca envie senhas ou chaves de equipamentos.',
-    '5': 'Uma atendente entrará em contato com você em alguns instantes. Agradecemos por falar com a VAGGU!',
+    '1': 'A VAGGU ajuda a gerenciar o estacionamento do seu shopping com mapa de vagas, monitoramento e análises. Cada unidade tem seu próprio acesso.\n\nConheça o projeto no nosso site:\nhttps://vaggu-tcc.onrender.com\n\nEscolha uma opção abaixo para continuar.',
+    '2': '*Conheça os recursos da VAGGU*\n\n*Gestão de vagas*\n• Consulte a disponibilidade por andar, setor e categoria.\n\n*Monitoramento*\n• Acompanhe a ocupação com base nas leituras confirmadas.\n\n*Análises e relatórios*\n• Compare períodos de movimento e exporte relatórios.',
+    '3': '*Roteiro da demonstração*\n\n1. No mapa, veja como localizar vagas por andar, setor e categoria.\n2. No monitoramento, confira como a ocupação é acompanhada.\n3. Nas análises, veja como comparar períodos e exportar relatórios.\n\nComece pela apresentação pública do projeto:\nhttps://vaggu-tcc.onrender.com\n\nO painel do shopping exige acesso autorizado.',
+    '4': '*Ajuda com a plataforma*\n\n• Se não conseguir entrar, confira se está usando o acesso do seu shopping.\n• Se o mapa parecer desatualizado, confira o horário da última leitura. Uma vaga sem leitura atual não deve ser considerada livre.\n\nSe o problema continuar, consulte “Contato da equipe”. Nunca compartilhe senhas ou chaves de equipamentos.',
+    '5': '*Contato da equipe VAGGU*\n\nPara dúvidas sobre o projeto ou contato institucional, consulte os canais oficiais no rodapé do site:\nhttps://vaggu-tcc.onrender.com\n\nEste bot é demonstrativo e não encaminha mensagens para a equipe.',
   };
   const option = message.type === 'interactive' ? message.selectionId : message.text.trim();
   return Object.hasOwn(respostas, option) ? respostas[option] : null;

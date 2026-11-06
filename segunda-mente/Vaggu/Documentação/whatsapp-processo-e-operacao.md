@@ -1,5 +1,7 @@
 # WhatsApp — processo de implantação e operação
 
+**Revisão local — 05/11/2026:** o menu diferencia roteiro de demonstração, ajuda para problemas comuns e contato institucional. Esta revisão remove a promessa de retorno humano da versão publicada em 04/11. Confira o fluxo abaixo; publicação e captura no WhatsApp ainda estão pendentes.
+
 **Resultado da publicação — 04/11/2026:** commit funcional 0674a02 enviado à main; Render confirmou Deploy succeeded em 1m42s, deploy dep-dblilpon74is73a89kn0. Consulta pública GET /api/v1/health/ready retornou HTTP 200 e banco conectado. Opções 3–5 publicadas com anúncio demonstrativo de atendente em alguns instantes, sem pedido de e-mail. Nenhuma mensagem real enviada pelo agente; teste de recebimento e captura no WhatsApp permanecem separados. Autoria confirmada diretamente pelo usuário; trabalho local amplo preservado.
 
 **Atualização de 04/11/2026 — atendimento demonstrativo:** por solicitação do usuário, opções 3 (demonstração), 4 (suporte) e 5 (equipe) deixam de pedir envio de e-mail e informam “Uma atendente entrará em contato com você em alguns instantes”. Trata-se de simulação para o TCC: não há fila, notificação ou atendimento real acionado. Botões de retorno, números digitados e proteção contra repetição permanecem. Contatos públicos de privacidade/exclusão não mudam. Versões e relatos anteriores abaixo preservam o comportamento anterior.
@@ -32,7 +34,15 @@ Atualizado em 04/11/2026. Este documento consolida o resultado atual; os registr
 
 ## Comportamento atual do código
 
-`Oi`, `Olá` e `MENU` abrem “Ver opções”. Há cinco caminhos: conhecer a VAGGU, funcionalidades, demonstração, suporte e equipe. Números 1–5 e IDs nativos de seleção usam a mesma resposta. A opção 1 inclui o site e um cabeçalho JPEG, com “Ver recursos”, “Pedir demonstração” e “Voltar ao menu”. As demais mantêm retorno ao menu. Textos livres não abrem solicitações automaticamente; IDs desconhecidos e mídia são ignorados. O texto de contato em instantes faz parte da simulação demonstrativa, sem atendimento real.
+`Oi`, `Olá` e `MENU` abrem “Ver opções”. Números 1–5 e IDs nativos de seleção usam a mesma resposta. Todas as opções oferecem “Voltar ao menu”.
+
+1. **Conhecer a VAGGU:** imagem, site e botões de recursos e demonstração.
+2. **Ver funcionalidades:** três blocos curtos sobre vagas, monitoramento e análises, com botão para a demonstração.
+3. **Ver demonstração:** roteiro do painel e link da apresentação pública. O painel exige acesso autorizado.
+4. **Ajuda com a plataforma:** dicas para acesso e mapa desatualizado, orientação para não compartilhar credenciais e botão de contato.
+5. **Contato da equipe:** indica os canais oficiais no rodapé do site e explica que o bot não encaminha mensagens.
+
+Textos livres não abrem solicitações automaticamente; IDs desconhecidos e mídia são ignorados. O bot não agenda, abre chamados ou promete retorno.
 
 A lista principal tem cabeçalho textual. A imagem fica em uma mensagem de botões, enviada como única resposta daquela entrada. Não acrescentamos um segundo envio que tornasse ambígua a recuperação após timeout. O serviço preserva deduplicação por identificador e revisão manual dos envios de resultado incerto; não há garantia universal de entrega exatamente uma vez.
 

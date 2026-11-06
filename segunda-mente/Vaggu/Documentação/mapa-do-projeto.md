@@ -164,7 +164,7 @@ As cópias de imagens entre `segunda-mente/Vaggu/Identidade visual/Assets/` e `v
 | `vaggu-backend/src/telemetria/routes.ts` | Expõe heartbeat e estados do ESP32 sem reutilizar cookies ou sessões humanas. |
 | `vaggu-backend/src/telemetria/service.ts` | Autentica placa, serializa eventos, deduplica sequência, persiste candidatos e confirma estados/histórico atomicamente. |
 | `vaggu-backend/src/whatsapp/client.ts` | Envia texto e mensagens interativas pela API Meta com configuração privada, timeout compartilhado e transporte substituível em testes. |
-| `vaggu-backend/src/whatsapp/payload.ts` | Interpreta texto, IDs de lista/botão e códigos de erro; resume tipos/contagens sem conteúdo ou contato; define menu clicável, retorno e respostas do atendimento. |
+| `vaggu-backend/src/whatsapp/payload.ts` | Interpreta texto, IDs de lista/botão e códigos de erro; resume tipos/contagens sem conteúdo ou contato; define menu, retorno e atalhos entre apresentação, recursos, roteiro, ajuda e contato institucional. |
 | `vaggu-backend/src/whatsapp/routes.ts` | Valida desafio e assinatura dos eventos da Meta; registra rejeição de assinatura ou resumo seguro do lote antes de processar. |
 | `vaggu-backend/src/whatsapp/service.ts` | Coordena mensagens recebidas, deduplicação persistente, retomada de eventos abandonados e respostas do menu demonstrativo. |
 | `vaggu-backend/src/whatsapp/signature.ts` | Calcula e verifica assinaturas HMAC para confirmar que o corpo recebido veio de quem possui o segredo Meta. |
@@ -335,7 +335,8 @@ As cópias de imagens entre `segunda-mente/Vaggu/Identidade visual/Assets/` e `v
 | `vaggu-memorial-samuel/src/estilos.css` | Define o layout responsivo e a animação curta da marca em SVG, com suporte a movimento reduzido. |
 | `vaggu-memorial-samuel/src/main.js` | Inicializa navegação, movimento, carrossel e galeria da página independente. |
 | `vaggu-memorial-samuel/src/dados/acervo.js` | Mapeia fotografias e vídeos do memorial para os arquivos publicados. |
-| `vaggu-memorial-samuel/src/interacoes/galeria.js` | Controla o carrossel manual do projeto e a ampliação das fotos por categoria, com teclado e retorno de foco. |
+| `vaggu-memorial-samuel/src/interacoes/galeria.js` | Controla a ampliação das fotos por categoria, com teclado e retorno de foco. |
+| `vaggu-memorial-samuel/src/interacoes/carrossel.js` | Duplica a sequência de destaques para fechar a faixa contínua e controla pausa, visibilidade e preferência por movimento reduzido. |
 | `vaggu-memorial-samuel/src/interacoes/movimento.js` | Dispara as entradas das seções quando entram na área visível. |
 | `vaggu-memorial-samuel/src/interacoes/navegacao.js` | Abre o depoimento correspondente quando o fragmento do endereço aponta para um integrante. |
 
@@ -421,7 +422,7 @@ O componente `vaggu-frontend/src/components/equipamentos-admin.tsx` orienta cada
 | `scripts/gerar-apresentacao-whatsapp.mjs` | Exporta a arte JPEG do WhatsApp com marca, foto e fonte locais; Sharp usado somente na autoria. |
 | `vaggu-frontend/public/assets/apresentacao-whatsapp-vaggu.jpg` | Apresentação ilustrativa pública usada no cabeçalho da opção Conhecer a VAGGU. |
 
-Memorial em 04/11/2026: `index.html` organiza hero único, conceito breve, carrossel, retratos, fotos em conjunto, relatos e agradecimentos; `src/estilos.css` define suas grades responsivas.
+Memorial em 05/11/2026: `index.html` organiza carrossel automático na abertura, conceito breve, fotos da equipe, relatos, grade do acervo do projeto e agradecimentos. `src/estilos.css` define as grades responsivas e as proporções dos destaques.
 
 | `vaggu-memorial-samuel/public/assets/fotos/trio-original.jpg` | Foto original das três integrantes enviada pelo usuário em 04/11, usada na galeria. |
 | `vaggu-memorial-samuel/public/assets/fotos/kamilly-original.jpg` | Retrato original da Kamilly enviado pelo usuário em 04/11, usado na galeria e no depoimento. |

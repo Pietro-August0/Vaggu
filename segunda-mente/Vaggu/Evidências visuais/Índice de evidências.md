@@ -16,6 +16,28 @@ Rotas locais `/` e `/login`, perfil visitante com sessão simulada, sem credenci
 
 Com a rolagem fixada, as 12 capturas ficaram idênticas byte a byte às capturas anteriores à remoção.
 
+## 05/11/2026 — curadoria da faixa do memorial
+
+Rota local `/memorial`, perfil visitante com sessão simulada e tema escuro. Fotografias substituídas por imagens fictícias ou mascaradas. Marca oficial amarela em SVG visível na faixa. O Edge confirmou o carregamento dos cinco destaques, a emenda do loop, o controle pelo teclado, o início pausado com movimento reduzido e os 18 itens do acervo, sem rolagem horizontal ou erros de console. [Desktop 1440×1000](2026-11-05%20-%20Curadoria%20da%20faixa%20do%20memorial/desktop.png) e [acervo](2026-11-05%20-%20Curadoria%20da%20faixa%20do%20memorial/desktop-acervo.png) · [Tablet 768×1024](2026-11-05%20-%20Curadoria%20da%20faixa%20do%20memorial/tablet.png) e [acervo](2026-11-05%20-%20Curadoria%20da%20faixa%20do%20memorial/tablet-acervo.png) · [Celular 390×844](2026-11-05%20-%20Curadoria%20da%20faixa%20do%20memorial/celular.png) e [acervo](2026-11-05%20-%20Curadoria%20da%20faixa%20do%20memorial/celular-acervo.png).
+
+## 05/11/2026 — faixa contínua no memorial
+
+Rota `/memorial` no Vite local, visitante com sessão simulada, tema escuro e imagens fictícias. O Edge confirmou a faixa de borda a borda, a emenda contínua, a pausa por teclado e o início pausado com movimento reduzido, sem rolagem horizontal da página ou erros de console. [Desktop 1440×1000](2026-11-05%20-%20Faixa%20continua%20no%20memorial/desktop.png), [tablet 768×1024](2026-11-05%20-%20Faixa%20continua%20no%20memorial/tablet.png) e [celular 390×844](2026-11-05%20-%20Faixa%20continua%20no%20memorial/celular.png).
+
+## 05/11/2026 — transição lateral no memorial
+
+Rota local `/memorial`, perfil visitante com sessão simulada e ilustrações fictícias, tema escuro. O Edge mostrou a imagem de saída à esquerda e a próxima à direita no meio da transição, inclusive na volta ao primeiro destaque. Capturas em [desktop 1440×1000](2026-11-05%20-%20Transição%20lateral%20no%20memorial/desktop-transicao.png), [tablet 768×1024](2026-11-05%20-%20Transição%20lateral%20no%20memorial/tablet-transicao.png) e [celular 390×844](2026-11-05%20-%20Transição%20lateral%20no%20memorial/celular-transicao.png). Pausa e retomada por teclado, início pausado com movimento reduzido e ausência de rolagem horizontal e erros de console conferidos.
+
+## 05/11/2026 — carrossel e acervo do memorial
+
+Visitante em `/memorial` no Vite local, tema escuro do memorial, com sessão simulada e fotografias substituídas por ilustrações fictícias nas capturas. Telas do projeto com dados de demonstração. Edge sem erros de console e sem rolagem horizontal. Três destaques alternam em ciclo, pausa e retomada funcionam pelo teclado, e a preferência por movimento reduzido inicia com pausa. A grade exibe 16 registros, com ampliação por Enter, avanço por seta e retorno de foco por Esc.
+
+| Viewport | Abertura pausada no segundo destaque | Acervo |
+| --- | --- | --- |
+| 1440×1000 | [Captura da abertura](2026-11-05%20-%20Carrossel%20e%20acervo/desktop-abertura.png) | [Captura do acervo](2026-11-05%20-%20Carrossel%20e%20acervo/desktop-acervo.png) |
+| 768×1024 | [Captura da abertura](2026-11-05%20-%20Carrossel%20e%20acervo/tablet-abertura.png) | [Captura do acervo](2026-11-05%20-%20Carrossel%20e%20acervo/tablet-acervo.png) |
+| 390×844 | [Captura da abertura](2026-11-05%20-%20Carrossel%20e%20acervo/celular-abertura.png) | [Captura do acervo](2026-11-05%20-%20Carrossel%20e%20acervo/celular-acervo.png) |
+
 ## 04/11/2026 — galeria por integrante
 
 Memorial local, perfil visitante e retratos fictícios nas capturas. Filtro Equipe em [desktop 1440×1000](2026-11-04%20-%20Galeria%20por%20integrante/equipe-desktop.jpg), [tablet 768×1024](2026-11-04%20-%20Galeria%20por%20integrante/equipe-tablet.jpg) e [celular 390×844](2026-11-04%20-%20Galeria%20por%20integrante/equipe-celular.jpg), sem rolagem horizontal. Navegação por teclado confirmou a sequência do par. Console sem erros no fluxo.
@@ -470,3 +492,5 @@ Validação: `node %TEMP%/vaggu-memorial-lista-qa.cjs`, Playwright/Edge local, v
 `index.html`: Edimar Dantas da Silva Duarte incluído como quinto tutor; título da aba atualizado para Memorial Vaggu. Playwright/Edge (`node %TEMP%/vaggu-edimar-qa.cjs`): visitante público em `/memorial/`, tema escuro, 1440×1000, 768×1024 e 390×844. Capturas completas anonimizadas em `2026-11-04 - Edimar e titulo/`; título, carregamento, teclado e ausência de overflow conferidos. Validação local, sem publicação. Verificadores: `node scripts/verificar-documentacao.mjs` e `git diff --check`.
 
 Em 04/11/2026, o memorial recebeu o depoimento completo da Kamilly. Revisão local em /memorial/ com Playwright/Edge (1440×1000, 768×1024 e 390×844), com abertura por teclado e capturas fictícias em 2026-11-04 - Depoimento Kamilly. Verificações: build e lint do frontend, node scripts/verificar-documentacao.mjs e git diff --check. Visitante público, tema escuro, depoimento aberto sem overflow.
+
+- **05/11/2026 — diálogo do WhatsApp (captura pendente):** webhook `/api/v1/whatsapp/webhook`, perfil visitante, menu e respostas 1–5. Viewports do cliente nativo ainda não conferidos. Dados fictícios nos testes locais; seleção por número e por botão verificadas. Os novos textos e botões ainda não foram publicados no WhatsApp para captura anonimizada.

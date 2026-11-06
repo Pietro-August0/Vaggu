@@ -22,15 +22,23 @@
   </div>
 </header>
 <main id="conteudo">
-  <section class="wrap memorial-abertura" id="inicio" aria-labelledby="titulo">
-    <div class="abertura-texto">
+  <section class="memorial-abertura" id="inicio" aria-labelledby="titulo">
+    <div class="wrap abertura-texto">
       <h1 id="titulo">Memorial <img class="titulo-logo" src="/memorial/assets/logotipo-vaggu-amarelo.svg" alt="VAGGU"></h1>
       <p>Um estacionamento mais fácil de entender. Conectamos sensores, mapa de vagas e informações para a gestão — um projeto construído por seis amigos no SENAI Cotia.</p>
       <a class="btn btn-yellow" href="#projeto">Conhecer o projeto <span aria-hidden="true">↓</span></a>
     </div>
-    <figure class="abertura-foto">
-      <img class="abertura-equipe" src="/memorial/assets/fotos/registro-34.webp" alt="Os seis integrantes da equipe VAGGU reunidos" width="1280" height="960" fetchpriority="high" decoding="async">
-      <figcaption>SENAI Cotia <span>2025–2026</span></figcaption>
+    <figure class="abertura-foto" role="region" aria-roledescription="carrossel" aria-label="Destaques do memorial">
+      <div class="abertura-janela">
+        <div class="abertura-faixa">
+          <img class="abertura-equipe" src="/memorial/assets/fotos/registro-34.webp" alt="Os seis integrantes da equipe VAGGU reunidos" width="1280" height="960" fetchpriority="high" decoding="async">
+          <img class="abertura-equipe" src="/memorial/assets/fotos/registro-05.webp" alt="Modelo 3D do estacionamento inteligente" decoding="async">
+          <img class="abertura-equipe abertura-logo" src="/memorial/assets/logotipo-vaggu-amarelo.svg" alt="Logotipo amarelo da VAGGU" decoding="async">
+          <img class="abertura-equipe" src="/memorial/assets/fotos/registro-15.webp" alt="Visualização do estacionamento com sinalização amarela" decoding="async">
+          <img class="abertura-equipe" src="/memorial/assets/fotos/registro-33.webp" alt="Equipe VAGGU em um momento descontraído" decoding="async">
+        </div>
+      </div>
+      <figcaption class="wrap"><span>SENAI Cotia · 2025–2026</span><button type="button" hidden>Pausar fotos</button></figcaption>
     </figure>
   </section>
 
@@ -42,56 +50,6 @@
       <li><h3>Confirmar</h3><p>O sistema valida as leituras. Dados desatualizados ficam sem confirmação, nunca como vaga livre.</p></li>
       <li><h3>Visualizar</h3><p>Um mapa por andar, análises para o gerente e um telão de disponibilidade para quem chega.</p></li>
     </ol>
-    <p class="nota-projeto">Do protótipo de bancada às telas: registros do nosso desenvolvimento. As telas abaixo usam dados de demonstração.</p>
-    <div class="carrossel" role="region" aria-roledescription="carrossel" aria-label="Imagens do projeto">
-      <div id="slides-projeto"><figure class="projeto-slide" role="group" aria-roledescription="slide" aria-label="1 de 18"><button type="button" class="gal-item gal-documento" data-cat="projeto" data-img-id="guia-visual" aria-label="Ampliar imagem: Guia de cores e tipografia da VAGGU"><img data-foto="guia-visual" class="gal-img" alt="" loading="lazy" decoding="async"></button><figcaption>Guia de cores e tipografia da VAGGU</figcaption></figure>
-<figure class="projeto-slide" role="group" aria-roledescription="slide" aria-label="2 de 18" hidden><button type="button" class="gal-item gal-documento" data-cat="projeto" data-img-id="analise-demo" aria-label="Ampliar imagem: Painel de análise com dados fictícios"><img data-foto="analise-demo" class="gal-img" alt="" loading="lazy" decoding="async"></button><figcaption>Painel de análise com dados fictícios</figcaption></figure>
-<figure class="projeto-slide" role="group" aria-roledescription="slide" aria-label="3 de 18" hidden><button type="button" class="gal-item gal-documento" data-cat="projeto" data-img-id="mapa-demo" aria-label="Ampliar imagem: Mapa de vagas em demonstração"><img data-foto="mapa-demo" class="gal-img" alt="" loading="lazy" decoding="async"></button><figcaption>Mapa de vagas em demonstração</figcaption></figure>
-<figure class="projeto-slide" role="group" aria-roledescription="slide" aria-label="4 de 18" hidden><button type="button" class="gal-item gal-documento" data-cat="projeto" data-img-id="telao-demo" aria-label="Ampliar imagem: Telão de entrada em demonstração"><img data-foto="telao-demo" class="gal-img" alt="" loading="lazy" decoding="async"></button><figcaption>Telão de entrada em demonstração</figcaption></figure>
-<figure class="projeto-slide" role="group" aria-roledescription="slide" aria-label="5 de 18" hidden><button type="button" class="gal-item" data-cat="projeto" data-img-id="4" aria-label="Ampliar imagem: Experimentos de cor">
-    <img data-foto="4" alt="Experimentos de cor" class="gal-img" loading="lazy" decoding="async">
-    </button><figcaption>Experimentos de cor</figcaption></figure>
-<figure class="projeto-slide" role="group" aria-roledescription="slide" aria-label="6 de 18" hidden><button type="button" class="gal-item" data-cat="projeto" data-img-id="5" aria-label="Ampliar imagem: Uma ideia em 3D">
-    <img data-foto="5" alt="Uma ideia em 3D" class="gal-img" loading="lazy" decoding="async">
-    </button><figcaption>Uma ideia em 3D</figcaption></figure>
-<figure class="projeto-slide" role="group" aria-roledescription="slide" aria-label="7 de 18" hidden><button type="button" class="gal-item" data-cat="projeto" data-img-id="6" aria-label="Ampliar imagem: Materiais do protótipo">
-    <img data-foto="6" alt="Materiais do protótipo" class="gal-img" loading="lazy" decoding="async">
-    </button><figcaption>Materiais do protótipo</figcaption></figure>
-<figure class="projeto-slide" role="group" aria-roledescription="slide" aria-label="8 de 18" hidden><button type="button" class="gal-item" data-cat="projeto" data-img-id="8" aria-label="Ampliar imagem: VAGGU nos primeiros registros">
-    <img data-foto="8" alt="VAGGU nos primeiros registros" class="gal-img" loading="lazy" decoding="async">
-    </button><figcaption>VAGGU nos primeiros registros</figcaption></figure>
-<figure class="projeto-slide" role="group" aria-roledescription="slide" aria-label="9 de 18" hidden><button type="button" class="gal-item" data-cat="projeto" data-img-id="9" aria-label="Ampliar imagem: O planejamento técnico">
-    <img data-foto="9" alt="O planejamento técnico" class="gal-img" loading="lazy" decoding="async">
-    </button><figcaption>O planejamento técnico</figcaption></figure>
-<figure class="projeto-slide" role="group" aria-roledescription="slide" aria-label="10 de 18" hidden><button type="button" class="gal-item" data-cat="projeto" data-img-id="10" aria-label="Ampliar imagem: Os primeiros circuitos">
-    <img data-foto="10" alt="Os primeiros circuitos" class="gal-img" loading="lazy" decoding="async">
-    </button><figcaption>Os primeiros circuitos</figcaption></figure>
-<figure class="projeto-slide" role="group" aria-roledescription="slide" aria-label="11 de 18" hidden><button type="button" class="gal-item" data-cat="projeto" data-img-id="12" aria-label="Ampliar imagem: Materiais de conexão">
-    <img data-foto="12" alt="Materiais de conexão" class="gal-img" loading="lazy" decoding="async">
-    </button><figcaption>Materiais de conexão</figcaption></figure>
-<figure class="projeto-slide" role="group" aria-roledescription="slide" aria-label="12 de 18" hidden><button type="button" class="gal-item" data-cat="projeto" data-img-id="13" aria-label="Ampliar imagem: Uma tela ganhando forma">
-    <img data-foto="13" alt="Uma tela ganhando forma" class="gal-img" loading="lazy" decoding="async">
-    </button><figcaption>Uma tela ganhando forma</figcaption></figure>
-<figure class="projeto-slide" role="group" aria-roledescription="slide" aria-label="13 de 18" hidden><button type="button" class="gal-item" data-cat="projeto" data-img-id="16" aria-label="Ampliar imagem: Testes de identidade visual">
-    <img data-foto="16" alt="Testes de identidade visual" class="gal-img" loading="lazy" decoding="async">
-    </button><figcaption>Testes de identidade visual</figcaption></figure>
-<figure class="projeto-slide" role="group" aria-roledescription="slide" aria-label="14 de 18" hidden><button type="button" class="gal-item gal-documento" data-cat="projeto" data-img-id="sprint-03" aria-label="Ampliar imagem: Planejamento da Sprint 3">
-      <img data-foto="sprint-03" class="gal-img" alt="" loading="lazy" decoding="async">
-    </button><figcaption>Planejamento da Sprint 3</figcaption></figure>
-<figure class="projeto-slide" role="group" aria-roledescription="slide" aria-label="15 de 18" hidden><button type="button" class="gal-item gal-documento" data-cat="projeto" data-img-id="sprint-04" aria-label="Ampliar imagem: Planejamento da Sprint 4">
-      <img data-foto="sprint-04" class="gal-img" alt="" loading="lazy" decoding="async">
-    </button><figcaption>Planejamento da Sprint 4</figcaption></figure>
-<figure class="projeto-slide" role="group" aria-roledescription="slide" aria-label="16 de 18" hidden><button type="button" class="gal-item gal-documento" data-cat="projeto" data-img-id="sprint-05" aria-label="Ampliar imagem: Planejamento da Sprint 5">
-      <img data-foto="sprint-05" class="gal-img" alt="" loading="lazy" decoding="async">
-    </button><figcaption>Planejamento da Sprint 5</figcaption></figure>
-<figure class="projeto-slide" role="group" aria-roledescription="slide" aria-label="17 de 18" hidden><button type="button" class="gal-item gal-documento" data-cat="projeto" data-img-id="sprint-06" aria-label="Ampliar imagem: Planejamento da Sprint 6">
-      <img data-foto="sprint-06" class="gal-img" alt="" loading="lazy" decoding="async">
-    </button><figcaption>Planejamento da Sprint 6</figcaption></figure>
-<figure class="projeto-slide" role="group" aria-roledescription="slide" aria-label="18 de 18" hidden><button type="button" class="gal-item" data-cat="projeto" data-img-id="28" aria-label="Ampliar imagem: A marca tomando forma">
-    <img data-foto="28" alt="A marca tomando forma" class="gal-img" loading="lazy" decoding="async">
-    </button><figcaption>A marca tomando forma</figcaption></figure></div>
-      <div class="carrossel-controles"><button type="button" id="projeto-anterior" aria-label="Imagem anterior do projeto" aria-controls="slides-projeto">←</button><p id="projeto-contagem" aria-live="polite" aria-atomic="true"></p><button type="button" id="projeto-proximo" aria-label="Próxima imagem do projeto" aria-controls="slides-projeto">→</button></div>
-    </div>
   </section>
   <section class="wrap memorial-secao" id="acervo" aria-labelledby="titulo-acervo">
     <h2 id="titulo-acervo">Quem fez acontecer.</h2>
@@ -118,9 +76,6 @@
     </button>
 <button type="button" class="gal-item" data-cat="pessoas" data-img-id="1" aria-label="Ampliar imagem: Um retrato do grupo">
     <img data-foto="1" alt="Um retrato do grupo" class="gal-img" loading="lazy" decoding="async">
-    </button>
-<button type="button" class="gal-item" data-cat="pessoas" data-img-id="34" aria-label="Ampliar imagem: Nossa fotografia oficial">
-    <img data-foto="34" alt="Nossa fotografia oficial" class="gal-img" loading="lazy" decoding="async">
     </button>
 <button type="button" class="gal-item" data-cat="pessoas" data-img-id="19" aria-label="Ampliar imagem: Todo mundo junto">
     <img data-foto="19" alt="Todo mundo junto" class="gal-img" loading="lazy" decoding="async">
@@ -184,6 +139,55 @@
       <p>Acredito que a VAGGU teve um papel muito importante no nosso crescimento, tanto profissional quanto pessoal. Durante o desenvolvimento, aprendemos a lidar com dificuldades, assumir responsabilidades, trabalhar em equipe, ter mais paciência e amadurecer diante dos obstáculos. Olhando para trás, percebo o quanto evoluímos desde o início e tenho muito orgulho de tudo o que conseguimos construir juntos.</p>
       <p>Mais do que o resultado final, vou levar comigo as experiências, os aprendizados e, principalmente, as pessoas que fizeram parte dessa trajetória. A VAGGU se tornou especial para mim justamente por tudo o que representa e por tudo o que vivemos durante sua construção. É um projeto que sempre vou lembrar com muito carinho, porque, de alguma forma, ele também representa uma parte da nossa história e do quanto crescemos juntos. ❤️</p></div>
     </details>
+  </section>
+
+  <section class="wrap memorial-secao" id="acervo-projeto" aria-labelledby="titulo-acervo-projeto">
+    <h2 id="titulo-acervo-projeto">Acervo do projeto</h2>
+    <p>Registros dos bastidores, das sprints e das telas com dados de demonstração.</p>
+    <div class="archive-grid acervo-projeto-grid">
+      <figure><button type="button" class="gal-item gal-documento" data-cat="projeto" data-img-id="guia-visual" aria-label="Ampliar imagem: Guia de cores e tipografia da VAGGU"><img data-foto="guia-visual" class="gal-img" alt="" loading="lazy" decoding="async"></button><figcaption>Guia de cores e tipografia da VAGGU</figcaption></figure>
+      <figure><button type="button" class="gal-item gal-documento" data-cat="projeto" data-img-id="analise-demo" aria-label="Ampliar imagem: Painel de análise com dados fictícios"><img data-foto="analise-demo" class="gal-img" alt="" loading="lazy" decoding="async"></button><figcaption>Painel de análise com dados fictícios</figcaption></figure>
+      <figure><button type="button" class="gal-item gal-documento" data-cat="projeto" data-img-id="mapa-demo" aria-label="Ampliar imagem: Mapa de vagas em demonstração"><img data-foto="mapa-demo" class="gal-img" alt="" loading="lazy" decoding="async"></button><figcaption>Mapa de vagas em demonstração</figcaption></figure>
+      <figure><button type="button" class="gal-item gal-documento" data-cat="projeto" data-img-id="telao-demo" aria-label="Ampliar imagem: Telão de entrada em demonstração"><img data-foto="telao-demo" class="gal-img" alt="" loading="lazy" decoding="async"></button><figcaption>Telão de entrada em demonstração</figcaption></figure>
+      <figure><button type="button" class="gal-item" data-cat="projeto" data-img-id="4" aria-label="Ampliar imagem: Experimentos de cor">
+    <img data-foto="4" alt="Experimentos de cor" class="gal-img" loading="lazy" decoding="async">
+    </button><figcaption>Experimentos de cor</figcaption></figure>
+      <figure><button type="button" class="gal-item" data-cat="projeto" data-img-id="5" aria-label="Ampliar imagem: Uma ideia em 3D">
+    <img data-foto="5" alt="Uma ideia em 3D" class="gal-img" loading="lazy" decoding="async">
+    </button><figcaption>Uma ideia em 3D</figcaption></figure>
+      <figure><button type="button" class="gal-item" data-cat="projeto" data-img-id="6" aria-label="Ampliar imagem: Materiais do protótipo">
+    <img data-foto="6" alt="Materiais do protótipo" class="gal-img" loading="lazy" decoding="async">
+    </button><figcaption>Materiais do protótipo</figcaption></figure>
+      <figure><button type="button" class="gal-item" data-cat="projeto" data-img-id="8" aria-label="Ampliar imagem: VAGGU nos primeiros registros">
+    <img data-foto="8" alt="VAGGU nos primeiros registros" class="gal-img" loading="lazy" decoding="async">
+    </button><figcaption>VAGGU nos primeiros registros</figcaption></figure>
+      <figure><button type="button" class="gal-item" data-cat="projeto" data-img-id="9" aria-label="Ampliar imagem: O planejamento técnico">
+    <img data-foto="9" alt="O planejamento técnico" class="gal-img" loading="lazy" decoding="async">
+    </button><figcaption>O planejamento técnico</figcaption></figure>
+      <figure><button type="button" class="gal-item" data-cat="projeto" data-img-id="12" aria-label="Ampliar imagem: Materiais de conexão">
+    <img data-foto="12" alt="Materiais de conexão" class="gal-img" loading="lazy" decoding="async">
+    </button><figcaption>Materiais de conexão</figcaption></figure>
+      <figure><button type="button" class="gal-item" data-cat="projeto" data-img-id="13" aria-label="Ampliar imagem: Uma tela ganhando forma">
+    <img data-foto="13" alt="Uma tela ganhando forma" class="gal-img" loading="lazy" decoding="async">
+    </button><figcaption>Uma tela ganhando forma</figcaption></figure>
+      <figure><button type="button" class="gal-item" data-cat="projeto" data-img-id="16" aria-label="Ampliar imagem: Testes de identidade visual">
+    <img data-foto="16" alt="Testes de identidade visual" class="gal-img" loading="lazy" decoding="async">
+    </button><figcaption>Testes de identidade visual</figcaption></figure>
+      <figure><button type="button" class="gal-item gal-documento" data-cat="projeto" data-img-id="sprint-03" aria-label="Ampliar imagem: Planejamento da Sprint 3">
+      <img data-foto="sprint-03" class="gal-img" alt="" loading="lazy" decoding="async">
+    </button><figcaption>Planejamento da Sprint 3</figcaption></figure>
+      <figure><button type="button" class="gal-item gal-documento" data-cat="projeto" data-img-id="sprint-04" aria-label="Ampliar imagem: Planejamento da Sprint 4">
+      <img data-foto="sprint-04" class="gal-img" alt="" loading="lazy" decoding="async">
+    </button><figcaption>Planejamento da Sprint 4</figcaption></figure>
+      <figure><button type="button" class="gal-item gal-documento" data-cat="projeto" data-img-id="sprint-05" aria-label="Ampliar imagem: Planejamento da Sprint 5">
+      <img data-foto="sprint-05" class="gal-img" alt="" loading="lazy" decoding="async">
+    </button><figcaption>Planejamento da Sprint 5</figcaption></figure>
+      <figure><button type="button" class="gal-item gal-documento" data-cat="projeto" data-img-id="sprint-06" aria-label="Ampliar imagem: Planejamento da Sprint 6">
+      <img data-foto="sprint-06" class="gal-img" alt="" loading="lazy" decoding="async">
+    </button><figcaption>Planejamento da Sprint 6</figcaption></figure>
+      <figure><button type="button" class="gal-item" data-cat="projeto" data-img-id="10" aria-label="Ampliar imagem: Os primeiros circuitos"><img data-foto="10" class="gal-img" alt="" loading="lazy" decoding="async"></button><figcaption>Os primeiros circuitos</figcaption></figure>
+      <figure><button type="button" class="gal-item" data-cat="projeto" data-img-id="28" aria-label="Ampliar imagem: A marca tomando forma"><img data-foto="28" class="gal-img" alt="" loading="lazy" decoding="async"></button><figcaption>A marca tomando forma</figcaption></figure>
+    </div>
   </section>
 
   <section class="wrap memorial-secao agradecimentos" id="agradecimentos" aria-labelledby="titulo-agradecimentos">

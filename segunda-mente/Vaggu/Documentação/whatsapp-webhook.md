@@ -1,5 +1,7 @@
 # Integração com o WhatsApp
 
+**Revisão local — 05/11/2026:** recursos em blocos curtos, demonstração com roteiro, suporte com orientações e contato institucional com link para os canais oficiais. Os IDs 1–5 e `menu` seguem compatíveis. Veja o [fluxo atual](whatsapp-processo-e-operacao.md#comportamento-atual-do-código).
+
 **Decisão de escopo e aceite — 04/11/2026:** o usuário confirmou a homologação completa do site. O aceite web está encerrado por essa confirmação, sem nova execução em produção pelo agente nem hash de deploy adicional informado. O WhatsApp será demonstrativo: atendimento humano real, coleta comercial e protocolos deixam de ser requisitos desta entrega. Procedimentos de dados definidos em [operação do TCC](operacao-dados-tcc.md); hardware físico mantém aceite próprio.
 
 **Referência atual — 04/11/2026:** o [processo e operação](whatsapp-processo-e-operacao.md) consolida publicação 7356e12 e confirmação do participante para imagem/site/recursos/retorno. As seções datadas abaixo são histórico de implantação; demais caminhos, captura anonimizada e operação humana permanecem abertos.

@@ -228,7 +228,6 @@ body.lightbox-aberto { overflow: hidden; }
 
 @media (prefers-reduced-motion: no-preference) {
   .abertura-texto { animation: entrar .65s var(--ease-out) both; }
-  .abertura-foto { animation: entrar .75s .1s var(--ease-out) both; }
   .abertura-texto .btn { animation: entrar .55s .16s var(--ease-out) both; }
   .reveal.is-visible, .relato[open] .relato-texto, .lightbox:not([hidden]) {
     animation: entrar .4s var(--ease-out) both;
@@ -285,17 +284,27 @@ body.lightbox-aberto { overflow: hidden; }
   @keyframes passagem-marca { from { transform: translateX(-20%); } }
 }
 /* Leitura breve para o QR code da apresentação. */
-.memorial-abertura { grid-template-columns: 1fr; }
+.memorial-abertura { grid-template-columns: minmax(0, 1fr); }
 .abertura-texto { max-width: 780px; }
 .abertura-texto p { max-width: 64ch; }
-.abertura-equipe { width: 100%; height: auto; aspect-ratio: auto; border-radius: 12px; }
-.abertura-foto { width: min(100%, 880px); margin-inline: auto; }
-.nota-projeto { font-size: .85rem; margin-bottom: 24px; }
-.projeto-slide .gal-item { display: block; width: 100%; height: clamp(240px, 44vw, 480px); aspect-ratio: auto; }
-.projeto-slide .gal-img { object-fit: contain; }
-.carrossel-controles { display: flex; align-items: center; justify-content: center; gap: 24px; margin-top: 16px; }
-.carrossel-controles button { width: 48px; min-height: 48px; border: 1px solid var(--line); border-radius: 6px; background: #191919; color: var(--yellow); }
-.carrossel-controles button:hover { border-color: var(--yellow); }
+.abertura-janela { overflow-x: auto; background: #171717; }
+.abertura-faixa { display: flex; width: max-content; }
+.abertura-faixa .abertura-equipe {
+  flex: none;
+  width: max(34vw, 240px);
+  height: auto;
+  object-fit: cover;
+  border-radius: 0;
+}
+.abertura-faixa .abertura-logo { object-fit: contain; padding: 0 clamp(32px, 6vw, 120px); background: #0b0b0b; }
+.abertura-janela[data-loop] { overflow: hidden; }
+.abertura-janela[data-loop] .abertura-faixa { animation: percorrer-fotos 40s linear infinite paused; }
+.abertura-janela[data-loop="ativo"] .abertura-faixa { animation-play-state: running; }
+@keyframes percorrer-fotos { to { transform: translateX(-50%); } }
+.abertura-foto figcaption { align-items: center; }
+.abertura-foto button { min-height: 44px; padding-inline: 12px; border: 1px solid var(--line); border-radius: 6px; background: #191919; color: var(--yellow); }
+.acervo-projeto-grid { margin-top: 24px; }
+.acervo-projeto-grid .gal-item { width: 100%; }
 .retratos-grid { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 20px 12px; margin-block: 24px 36px; }
 .retratos-grid .gal-item { width: 100%; aspect-ratio: 3 / 4; }
 .retratos-grid img { object-position: center 22%; }
@@ -307,7 +316,7 @@ body.lightbox-aberto { overflow: hidden; }
 @media (min-width: 1000px) { .retratos-grid { grid-template-columns: repeat(6, minmax(0, 1fr)); } .archive-grid { grid-template-columns: repeat(3, minmax(0, 1fr)); } }
 
 /* Ajustes solicitados na revisão comentada do memorial. */
-.abertura-texto { width: 100%; margin-inline: auto; text-align: center; }
+.abertura-texto { text-align: center; }
 .abertura-texto p { margin-inline: auto; }
 #titulo { display: flex; justify-content: center; align-items: center; flex-wrap: wrap; gap: .25em; }
 .titulo-logo { width: 3.2em; height: auto; }

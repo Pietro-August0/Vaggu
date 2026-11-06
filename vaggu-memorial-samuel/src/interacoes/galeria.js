@@ -1,6 +1,6 @@
 import { fotos } from "../dados/acervo.js"
 
-/** Coordena o carrossel do projeto e a ampliação acessível das fotos. */
+/** Coordena a ampliação acessível das fotos. */
 export function iniciarGaleria() {
   const fotografias = [...document.querySelectorAll(".gal-item")]
   const janela = document.getElementById("lightbox")
@@ -24,23 +24,6 @@ export function iniciarGaleria() {
     const fonte = fotos[imagem.dataset.foto ?? ""]
     if (fonte) imagem.src = fonte
   })
-
-  const slides = [...document.querySelectorAll(".projeto-slide")]
-  let slideAtual = 0
-  function mostrarSlide(direcao) {
-    slideAtual = (slideAtual + direcao + slides.length) % slides.length
-    slides.forEach((slide, indice) => { slide.hidden = indice !== slideAtual })
-    document.getElementById("projeto-contagem").textContent = `${slideAtual + 1} / ${slides.length}`
-  }
-  document.getElementById("projeto-anterior")?.addEventListener("click", () => mostrarSlide(-1))
-  document.getElementById("projeto-proximo")?.addEventListener("click", () => mostrarSlide(1))
-  document.querySelector(".carrossel")?.addEventListener("keydown", (evento) => {
-    if (evento.key === "ArrowLeft" || evento.key === "ArrowRight") {
-      evento.preventDefault()
-      mostrarSlide(evento.key === "ArrowRight" ? 1 : -1)
-    }
-  })
-  mostrarSlide(0)
 
   function abrirFotografia(indice) {
     const item = fotografiasFiltradas[indice]

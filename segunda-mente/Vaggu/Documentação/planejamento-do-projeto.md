@@ -18,6 +18,34 @@ Comandos de revisão e validação: `git status --short --branch`, `git ls-files
 
 Próxima etapa: confirmar os consumidores externos dos assets candidatos e conferir o efeito da remoção no build e nas telas antes de seguir com a simplificação de domínio.
 
+## Livro de documentação — 05/11/2026
+
+Cópia local revisada do DOCX com sumário em três páginas, links para as seções e referências de página atualizáveis. A seção 10.5 foi movida para depois de Wireframes, com as figuras e legendas. A revisão de leitura identificou pontos de melhoria na numeração, nos títulos e na apresentação das evidências.
+
+Conferência estrutural por extração OOXML com Python, além de `node scripts/verificar-documentacao.mjs` e `git diff --check`. A tentativa de renderização com `render_docx.py` ficou bloqueada pela ausência do LibreOffice. Paginação real e captura das páginas afetadas ficam pendentes.
+
+A revisão editorial acrescentou os seis retratos do Memorial e as responsabilidades registradas no SSD-VAGGU. Também ajustou os títulos e a numeração de seções no sumário e no corpo, numerou 46 figuras e contextualizou as evidências. A conferência estrutural confirmou seis imagens na seção Equipe. A tentativa de renderização continua bloqueada pela ausência de LibreOffice.
+
+## Curadoria da faixa do memorial — 05/11/2026
+
+A faixa reúne a foto oficial, o modelo 3D, o logotipo amarelo em SVG, a visualização da sinalização e um momento espontâneo da equipe. A sequência passou a durar 40 segundos para preservar a velocidade de passagem. Os registros dos primeiros circuitos e da criação da marca ficam no acervo do projeto, com 18 itens.
+
+Validação local por `node %TEMP%/vaggu-faixa-curadoria-qa.cjs`, build e lint do frontend, `node scripts/verificar-documentacao.mjs` e `git diff --check`. Playwright/Edge em desktop, tablet e celular, com sessão simulada e imagens fictícias nas evidências. A versão oficial da marca foi preservada nas capturas. Validação em produção pendente.
+
+## Faixa contínua do memorial — 05/11/2026
+
+Os três destaques formam uma faixa de borda a borda, sem espaçamento, que percorre uma sequência a cada 24 segundos. A repetição emenda o último destaque ao primeiro. O botão pausa no ponto atual e a preferência por movimento reduzido inicia a faixa parada.
+
+Validação local por `node %TEMP%/vaggu-faixa-qa.cjs`, build e lint do frontend, `node scripts/verificar-documentacao.mjs` e `git diff --check`. Playwright/Edge conferiu as bordas, a continuidade no ponto de repetição e a pausa por teclado em três tamanhos. Sessão simulada e capturas fictícias. Validação de produção pendente.
+
+## Carrossel e acervo do memorial — 05/11/2026
+
+A abertura alterna a foto oficial, os primeiros circuitos e a criação da marca a cada cinco segundos, com pausa por teclado e início pausado para movimento reduzido. As 16 imagens secundárias do projeto passam para uma grade depois dos relatos, com ampliação e retorno de foco. Os arquivos de mídia foram preservados.
+
+A troca dos destaques ganhou deslizamento da direita para a esquerda em 550 ms, inclusive na volta ao primeiro. Com movimento reduzido, a reprodução pode ser iniciada manualmente e a troca é instantânea. O roteiro local `node %TEMP%/vaggu-carrossel-lateral-qa.cjs` confere o deslocamento das duas fotos na metade da transição nos três tamanhos e gera capturas com imagens fictícias.
+
+Validação local com `npm.cmd --prefix vaggu-frontend run dev -- --host 127.0.0.1 --port 5173`, `node %TEMP%/vaggu-carrossel-qa.cjs`, build e lint do frontend, `node scripts/verificar-documentacao.mjs` e `git diff --check`. Plugin Browser indisponível nesta sessão. Playwright/Edge confirmou a rotação completa, pausa e retomada, movimento reduzido, ampliação, navegação e retorno de foco em três viewports. O build conserva o aviso de chunks acima de 500 kB. Sessão simulada e capturas com fotos fictícias. Validação em produção e conferência do QR code publicado ficam pendentes. Skill de roteamento VAGGU não localizada no catálogo local consultado.
+
 ## Memorial direto para o QR code — 04/11/2026
 
 Revisada a página sem descartar o trabalho local da main. Hero com uma única foto grande dos seis integrantes, conceito em três passos, carrossel manual com 18 imagens do projeto, grade única com um retrato de cada integrante e seis fotos em conjunto. Depoimentos originais preservados e recolhidos. Encerramento agradece SESI, SENAI, Matheus Zacaria, Giovanni Ribeiro, Edmar e Alex. Mantido Juan conforme identificação do acervo existente. Nenhum asset original removido.
@@ -1062,3 +1090,9 @@ Validação: `node %TEMP%/vaggu-memorial-lista-qa.cjs`, Playwright/Edge local, v
 `index.html`: Edimar Dantas da Silva Duarte incluído como quinto tutor; título da aba atualizado para Memorial Vaggu. Playwright/Edge (`node %TEMP%/vaggu-edimar-qa.cjs`): visitante público em `/memorial/`, tema escuro, 1440×1000, 768×1024 e 390×844. Capturas completas anonimizadas em `2026-11-04 - Edimar e titulo/`; título, carregamento, teclado e ausência de overflow conferidos. Validação local, sem publicação. Verificadores: `node scripts/verificar-documentacao.mjs` e `git diff --check`.
 
 Em 04/11/2026, o memorial recebeu o depoimento completo da Kamilly. Revisão local em /memorial/ com Playwright/Edge (1440×1000, 768×1024 e 390×844), com abertura por teclado e capturas fictícias em 2026-11-04 - Depoimento Kamilly. Verificações: build e lint do frontend, node scripts/verificar-documentacao.mjs e git diff --check.
+
+## Revisão do diálogo do WhatsApp — 05/11/2026
+
+Feedback incorporado: recursos em três blocos curtos e caminhos distintos para roteiro de demonstração, ajuda e contato institucional. Removida a promessa de atendente em instantes; o bot continua demonstrativo. Mantidos os IDs, a seleção por número e o retorno ao menu. Sem alterações no frontend web, publicação ou envio real.
+
+Verificação: `npm test --prefix vaggu-backend` compilou e aprovou 100 testes, com 12 ignorados, incluindo integrações dependentes de PostgreSQL de teste. Executados também `node scripts/verificar-documentacao.mjs` e `git diff --check`. A skill de roteamento não foi localizada no repositório nem nas skills instaladas. Captura anonimizada dos novos textos e botões pendente: testes locais simulam a Meta e não exibem a conversa no WhatsApp.
