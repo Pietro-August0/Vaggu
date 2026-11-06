@@ -3,6 +3,52 @@ tags: [vaggu, evidencias, interface]
 ---
 # Evidências visuais da VAGGU
 
+## 06/11/2026 — troca dos retratos de Kamilly e Elisa
+
+Rota local /memorial/, visitante, tema escuro e fotografias mascaradas nas capturas. Playwright/Edge confirmou as imagens enviadas pelo usuário na grade, nos depoimentos e na ampliação, com abertura por Enter, fechamento por Escape e retorno de foco. Sem rolagem horizontal ou erros de console.
+
+| Tela | Desktop | Tablet | Celular |
+| --- | --- | --- | --- |
+| Grade | [1440×1000](2026-11-06%20-%20Retratos%20de%20Kamilly%20e%20Elisa/retratos-desktop.png) | [768×1024](2026-11-06%20-%20Retratos%20de%20Kamilly%20e%20Elisa/retratos-tablet.png) | [390×844](2026-11-06%20-%20Retratos%20de%20Kamilly%20e%20Elisa/retratos-celular.png) |
+| Depoimentos | [1440×1000](2026-11-06%20-%20Retratos%20de%20Kamilly%20e%20Elisa/depoimentos-desktop.png) | [768×1024](2026-11-06%20-%20Retratos%20de%20Kamilly%20e%20Elisa/depoimentos-tablet.png) | [390×844](2026-11-06%20-%20Retratos%20de%20Kamilly%20e%20Elisa/depoimentos-celular.png) |
+
+Ampliação no celular: [Kamilly](2026-11-06%20-%20Retratos%20de%20Kamilly%20e%20Elisa/ampliacao-kamilly.png) · [Elisa](2026-11-06%20-%20Retratos%20de%20Kamilly%20e%20Elisa/ampliacao-elisa.png).
+
+## 06/11/2026 — caminho da leitura
+
+Memorial local em /memorial/#projeto, visitante, tema escuro, diagrama ilustrativo. Edge e Playwright conferiram o carro entrando, o sinal do sensor, a passagem do dado pela placa e a chegada ao sistema. Pausa e retomada por teclado, movimento reduzido, console e largura de 320 px conferidos. [Desktop 1440×1000](2026-11-06%20-%20Caminho%20da%20leitura/desktop.png) · [Tablet 768×1024](2026-11-06%20-%20Caminho%20da%20leitura/tablet.png) · [Celular 390×844](2026-11-06%20-%20Caminho%20da%20leitura/celular.png). Quadros do ciclo no celular: [sensor](2026-11-06%20-%20Caminho%20da%20leitura/sensor.png) · [placa](2026-11-06%20-%20Caminho%20da%20leitura/placa.png) · [sistema](2026-11-06%20-%20Caminho%20da%20leitura/sistema.png).
+
+## 06/11/2026 — cenas em ciclo no memorial
+
+Memorial local em /memorial/#projeto, visitante, tema escuro e diagramas ilustrativos. Playwright e Edge conferiram os ciclos, foco visível, pausa e retomada pelo teclado, preferência de movimento reduzido, console e largura de 320 px. As três primeiras capturas mostram um quadro com as cenas pausadas. [Desktop 1440×1000](2026-11-06%20-%20Animacoes%20em%20ciclo/desktop.png) · [Tablet 768×1024](2026-11-06%20-%20Animacoes%20em%20ciclo/tablet.png) · [Celular 390×844](2026-11-06%20-%20Animacoes%20em%20ciclo/celular.png) · [Movimento reduzido 390×844](2026-11-06%20-%20Animacoes%20em%20ciclo/movimento-reduzido.png).
+
+## 06/11/2026 — animações Da vaga ao painel
+
+Memorial local em /memorial/#projeto, visitante, tema escuro e diagramas ilustrativos sem dados operacionais. O atalho da abertura foi acionado por teclado. O Edge verificou as três cenas, o início do movimento ao chegar à área visível, a versão estática com movimento reduzido e ausência de rolagem horizontal. A largura de 320 px também foi conferida. [Desktop 1440×1000](2026-11-06%20-%20Da%20vaga%20ao%20painel/desktop.png) · [Tablet 768×1024](2026-11-06%20-%20Da%20vaga%20ao%20painel/tablet.png) · [Celular 390×844](2026-11-06%20-%20Da%20vaga%20ao%20painel/celular.png).
+
+## 06/11/2026 — rodapé sem link do memorial
+
+Landing local, visitante com sessão simulada. No Edge, os quatro links restantes foram conferidos, com foco visível e navegação por teclado até Privacidade. A rota direta do memorial abriu separadamente. Nenhuma rolagem horizontal ou erro de console.
+
+| Tema | Desktop | Tablet | Celular |
+| --- | --- | --- | --- |
+| Claro | [1440×1000](2026-11-06%20-%20Rodape%20sem%20link%20do%20memorial/desktop-light.png) | [768×1024](2026-11-06%20-%20Rodape%20sem%20link%20do%20memorial/tablet-light.png) | [390×844](2026-11-06%20-%20Rodape%20sem%20link%20do%20memorial/celular-light.png) |
+| Escuro | [1440×1000](2026-11-06%20-%20Rodape%20sem%20link%20do%20memorial/desktop-dark.png) | [768×1024](2026-11-06%20-%20Rodape%20sem%20link%20do%20memorial/tablet-dark.png) | [390×844](2026-11-06%20-%20Rodape%20sem%20link%20do%20memorial/celular-dark.png) |
+
+## 06/11/2026 — retratos, título e depoimentos do memorial
+
+Rota local /memorial/, visitante, tema escuro e retratos mascarados. Edge e Playwright verificaram a centralização do título, as seis legendas e a abertura dos depoimentos por teclado, sem rolagem horizontal ou erros de console. A largura de 320 px também foi conferida.
+
+| Estado | Desktop | Tablet | Celular |
+| --- | --- | --- | --- |
+| Título | [1440×1000](2026-11-06%20-%20Retratos%20e%20titulo%20do%20memorial/titulo-desktop.png) | [768×1024](2026-11-06%20-%20Retratos%20e%20titulo%20do%20memorial/titulo-tablet.png) | [390×844](2026-11-06%20-%20Retratos%20e%20titulo%20do%20memorial/titulo-celular.png) |
+| Retratos | [1440×1000](2026-11-06%20-%20Retratos%20e%20titulo%20do%20memorial/retratos-desktop.png) | [768×1024](2026-11-06%20-%20Retratos%20e%20titulo%20do%20memorial/retratos-tablet.png) | [390×844](2026-11-06%20-%20Retratos%20e%20titulo%20do%20memorial/retratos-celular.png) |
+| Depoimento aberto | [1440×1000](2026-11-06%20-%20Retratos%20e%20titulo%20do%20memorial/depoimento-desktop.png) | [768×1024](2026-11-06%20-%20Retratos%20e%20titulo%20do%20memorial/depoimento-tablet.png) | [390×844](2026-11-06%20-%20Retratos%20e%20titulo%20do%20memorial/depoimento-celular.png) |
+
+## 06/11/2026 — funções no memorial
+
+Rota local /memorial/, visitante, tema escuro do memorial e retratos mascarados. As seis funções ficam visíveis com os depoimentos fechados. Edge com Playwright confirmou foco visível, abertura e fechamento por Enter, sem cortes no texto, rolagem horizontal ou erros de console. [Desktop 1440×1000](2026-11-06%20-%20Funcoes%20no%20memorial/desktop.png) · [Tablet 768×1024](2026-11-06%20-%20Funcoes%20no%20memorial/tablet.png) · [Celular 390×844](2026-11-06%20-%20Funcoes%20no%20memorial/celular.png).
+
 ## 06/11/2026 — limpeza do frontend
 
 Rotas locais `/` e `/login`, perfil visitante com sessão simulada, sem credenciais preenchidas. Após retirar três assets públicos e quatro componentes sem consumidores, o Edge conferiu o rodapé e o formulário nos dois temas. O roteiro verificou foco visível com Tab e Shift+Tab, acesso ao login pelo rodapé e alternância da visibilidade do campo de senha com Enter. As telas abriram sem rolagem horizontal ou erros de console.

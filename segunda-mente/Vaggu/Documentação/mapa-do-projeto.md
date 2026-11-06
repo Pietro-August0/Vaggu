@@ -1,5 +1,7 @@
 # Mapa do projeto VAGGU
 
+**06/11/2026 — acesso ao memorial:** o rodapé da landing deixou de linkar o memorial. A rota continua disponível pelo endereço do QR code. As referências anteriores ao rodapé preservam o histórico.
+
 **06/11/2026 — organização e manutenção:** a [revisão da estrutura](revisao-estrutura-e-simplificacao-2026-11-06.md) reúne os candidatos a descarte e a ordem de simplificação e os arquivos já retirados. A [rotina do cofre](../../Rotina%20de%20registro.md) preserva os diários como histórico.
 
 **04/11/2026 — rota pública do memorial e contatos:** `vaggu-frontend/src/main.tsx` registra `/memorial`; `src/pages/memorial-page.tsx` incorpora a página estática. `vite.config.ts` serve o diretório-fonte sob `/memorial/` no desenvolvimento e publica HTML, scripts, estilos e mídias em `dist/memorial/` no build. `vaggu-memorial-samuel/` continua sendo a fonte do acervo; caminhos de assets usam o prefixo `/memorial/assets/`. A landing substitui o mockup de celulares por links oficiais de WhatsApp, e-mail, Instagram `@vagguempresarial` e GitHub. No rodapé, “Canais oficiais” é o único título; os nomes dos canais e o e-mail permanecem em uma linha, e os cartões mudam para duas colunas somente no breakpoint XL.
@@ -269,7 +271,7 @@ As cópias de imagens entre `segunda-mente/Vaggu/Identidade visual/Assets/` e `v
 | `vaggu-frontend/tsconfig.node.json` | Configura compilação TypeScript e limites dos arquivos incluídos neste projeto. |
 | `vaggu-frontend/vite.config.ts` | Configura React, Tailwind, aliases e proxy local de /api para o backend. |
 | `vaggu-memorial-samuel/.gitignore` | Exclui dependências, artefatos e configurações locais do site independente do memorial. |
-| `vaggu-memorial-samuel/index.html` | Estrutura o memorial para acesso por QR code, com grade de abertura, atalho pelo mapa, funcionamento, identidade visual, depoimentos e acervo. |
+| `vaggu-memorial-samuel/index.html` | Estrutura o memorial para acesso por QR code, com grade de abertura, atalho pelo mapa, funcionamento com três diagramas em ciclo, caminho da leitura e controle de pausa, identidade visual, retratos e depoimentos com a função de cada integrante e acervo. |
 | `vaggu-memorial-samuel/package.json` | Declara o comando de desenvolvimento do site sem dependências externas. |
 | `vaggu-memorial-samuel/README.md` | Explica o propósito, a execução local, a estrutura e os limites editoriais do memorial. |
 | `vaggu-memorial-samuel/public/assets/logotipo-vaggu-amarelo.svg` | Publica a marca amarela reutilizada na apresentação do memorial. |
@@ -307,7 +309,7 @@ As cópias de imagens entre `segunda-mente/Vaggu/Identidade visual/Assets/` e `v
 | `vaggu-memorial-samuel/public/assets/fotos/registro-19.webp` | Publica a fotografia identificada como registro 19 no acervo do memorial. |
 | `vaggu-memorial-samuel/public/assets/fotos/registro-20.webp` | Publica a fotografia identificada como registro 20 no acervo do memorial. |
 | `vaggu-memorial-samuel/public/assets/fotos/registro-21.webp` | Publica a fotografia identificada como registro 21 no acervo do memorial. |
-| `vaggu-memorial-samuel/public/assets/fotos/registro-22.webp` | Publica a fotografia identificada como registro 22 no acervo do memorial. |
+| `vaggu-memorial-samuel/public/assets/fotos/registro-22.webp` | Preserva o retrato anterior de Elisa no acervo do memorial. |
 | `vaggu-memorial-samuel/public/assets/fotos/registro-23.webp` | Publica a fotografia identificada como registro 23 no acervo do memorial. |
 | `vaggu-memorial-samuel/public/assets/fotos/registro-24.webp` | Publica a fotografia identificada como registro 24 no acervo do memorial. |
 | `vaggu-memorial-samuel/public/assets/fotos/registro-25.webp` | Publica a fotografia identificada como registro 25 no acervo do memorial. |
@@ -337,7 +339,7 @@ As cópias de imagens entre `segunda-mente/Vaggu/Identidade visual/Assets/` e `v
 | `vaggu-memorial-samuel/src/dados/acervo.js` | Mapeia fotografias e vídeos do memorial para os arquivos publicados. |
 | `vaggu-memorial-samuel/src/interacoes/galeria.js` | Controla a ampliação das fotos por categoria, com teclado e retorno de foco. |
 | `vaggu-memorial-samuel/src/interacoes/carrossel.js` | Duplica a sequência de destaques para fechar a faixa contínua e controla pausa, visibilidade e preferência por movimento reduzido. |
-| `vaggu-memorial-samuel/src/interacoes/movimento.js` | Dispara as entradas das seções quando entram na área visível. |
+| `vaggu-memorial-samuel/src/interacoes/movimento.js` | Inicia efeitos ao entrar na área visível e controla a pausa dos diagramas. |
 | `vaggu-memorial-samuel/src/interacoes/navegacao.js` | Abre o depoimento correspondente quando o fragmento do endereço aponta para um integrante. |
 
 
@@ -425,7 +427,9 @@ O componente `vaggu-frontend/src/components/equipamentos-admin.tsx` orienta cada
 Memorial em 05/11/2026: `index.html` organiza carrossel automático na abertura, conceito breve, fotos da equipe, relatos, grade do acervo do projeto e agradecimentos. `src/estilos.css` define as grades responsivas e as proporções dos destaques.
 
 | `vaggu-memorial-samuel/public/assets/fotos/trio-original.jpg` | Foto original das três integrantes enviada pelo usuário em 04/11, usada na galeria. |
-| `vaggu-memorial-samuel/public/assets/fotos/kamilly-original.jpg` | Retrato original da Kamilly enviado pelo usuário em 04/11, usado na galeria e no depoimento. |
+| `vaggu-memorial-samuel/public/assets/fotos/kamilly-original.jpg` | Retrato anterior de Kamilly, enviado em 04/11 e preservado como histórico. |
+| `vaggu-memorial-samuel/public/assets/fotos/retrato-kamilly.jpg` | Retrato atual de Kamilly, usado na grade, no depoimento e na ampliação. |
+| `vaggu-memorial-samuel/public/assets/fotos/retrato-elisa.jpg` | Retrato atual de Elisa, usado na grade, no depoimento e na ampliação. |
 
 `vaggu-memorial-samuel/index.html`: agradecimentos finais identificam os quatro tutores pelos nomes completos fornecidos em 04/11/2026.
 

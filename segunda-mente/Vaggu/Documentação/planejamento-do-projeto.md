@@ -1,5 +1,33 @@
 # VAGGU — planejamento e continuidade do projeto
 
+## Troca dos retratos de Kamilly e Elisa — 06/11/2026
+
+Os JPEGs de 1200×1600 fornecidos pelo usuário foram copiados sem edição e ligados à grade, às miniaturas dos depoimentos e à ampliação pelo mapa do acervo. Os arquivos anteriores ficam preservados como histórico. Validação local com node %TEMP%/vaggu-troca-retratos-qa.cjs, build e lint do frontend, node scripts/verificar-documentacao.mjs e git diff --check. Playwright/Edge usado por indisponibilidade do plugin Browser. Fotografias mascaradas nas evidências. Publicação pendente.
+
+## Caminho da leitura no memorial — 06/11/2026
+
+A cena Detectar passou a mostrar o carro entrando, o sensor percebendo sua presença, a leitura parando na placa ESP32 e seguindo por Wi-Fi até o sistema. O visto mostra recebimento, e a confirmação continua na cena seguinte. O ciclo de Detectar dura seis segundos. Comandos: node %TEMP%/vaggu-caminho-qa.cjs, build e lint do frontend, node scripts/verificar-documentacao.mjs e git diff --check. Playwright/Edge usado por indisponibilidade do plugin Browser. Publicação pendente.
+
+## Cenas em ciclo no memorial — 06/11/2026
+
+As três cenas passaram a se repetir a cada quatro segundos. O sensor pulsa, o pacote percorre a conexão, o servidor sinaliza recepção, o visto é desenhado, o relógio gira e as três telas ganham destaque em sequência. O botão pausa ou retoma todos os diagramas e a preferência de movimento reduzido mantém os SVGs estáticos. Comandos: node %TEMP%/vaggu-etapas-loop-qa.cjs, build e lint do frontend, node scripts/verificar-documentacao.mjs e git diff --check. Playwright/Edge usado por indisponibilidade do plugin Browser. Publicação pendente.
+
+## Animações Da vaga ao painel — 06/11/2026
+
+A seção usa três diagramas SVG com texto curto. Detectar mostra a leitura da vaga e o envio por Wi-Fi da placa ao servidor. Confirmar distingue leitura validada de leitura antiga e indisponível. Visualizar destaca mapa, análises e telão. O movimento é breve e a versão estática preserva as etapas. Validação local com node %TEMP%/vaggu-etapas-qa.cjs, build e lint do frontend, verificador documental e git diff --check. Playwright e Edge usados por indisponibilidade do plugin Browser. Capturas no índice de evidências. Publicação pendente.
+
+## Acesso ao memorial pelo QR code — 06/11/2026
+
+Removido o link do memorial do rodapé da landing. A rota direta continua servindo o QR code e pode ser aberta por quem conhecer o endereço. Comandos de validação: npm.cmd --prefix vaggu-frontend run dev, node %TEMP%/vaggu-rodape-sem-memorial-qa.cjs, build e lint do frontend, node scripts/verificar-documentacao.mjs e git diff --check. Playwright/Edge usado por indisponibilidade do plugin Browser. Publicação pendente.
+
+## Retratos, título e revisão dos depoimentos — 06/11/2026
+
+As funções também aparecem nos retratos. As correções nos depoimentos preservam a voz e o conteúdo. A abertura alinha e centraliza o nome Memorial com a marca VAGGU. Validação local com node %TEMP%/vaggu-retratos-qa.cjs, build e lint do frontend, verificador documental e git diff --check. Playwright/Edge usado por indisponibilidade do plugin Browser. Capturas no índice de evidências. Publicação pendente.
+
+## Funções da equipe no memorial — 06/11/2026
+
+Os seis depoimentos agora mostram a função ao lado do nome, conforme o SSD-VAGGU. Validação local com o servidor do memorial e Playwright/Edge em três tamanhos, com retratos mascarados. Plugin Browser indisponível. Executados npm.cmd --prefix vaggu-memorial-samuel run dev, node %TEMP%/vaggu-funcoes-qa.cjs, build e lint do frontend, verificador documental e git diff --check. Evidências no [índice de capturas](../Evidências%20visuais/Índice%20de%20evidências.md). Publicação pendente.
+
 ## Limpeza aprovada e simplificação de telões — 06/11/2026
 
 Retirados três assets públicos e quatro componentes sem consumidores identificados no repositório. A cópia documental do SVG de notebook tem o mesmo hash da cópia removida, e a landing mantém sua referência ao WebP. Os registros de setembro e de 06/11 ficam como histórico. O usuário decidiu encerrar a rotina diária pela fase final do projeto. O aplicativo confirmou a remoção do agendamento.

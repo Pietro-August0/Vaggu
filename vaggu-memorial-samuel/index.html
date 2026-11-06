@@ -24,7 +24,7 @@
 <main id="conteudo">
   <section class="memorial-abertura" id="inicio" aria-labelledby="titulo">
     <div class="wrap abertura-texto">
-      <h1 id="titulo">Memorial <img class="titulo-logo" src="/memorial/assets/logotipo-vaggu-amarelo.svg" alt="VAGGU"></h1>
+      <h1 id="titulo"><span>Memorial</span><img class="titulo-logo" src="/memorial/assets/logotipo-vaggu-amarelo.svg" alt="VAGGU"></h1>
       <p>Um estacionamento mais fácil de entender. Conectamos sensores, mapa de vagas e informações para a gestão — um projeto construído por seis amigos no SENAI Cotia.</p>
       <a class="btn btn-yellow" href="#projeto">Conhecer o projeto <span aria-hidden="true">↓</span></a>
     </div>
@@ -45,10 +45,78 @@
   <section class="wrap memorial-secao" id="projeto" aria-labelledby="titulo-projeto">
     <h2 id="titulo-projeto">Da vaga ao painel.</h2>
     <p>A VAGGU ajuda a gestão de shopping centers a acompanhar o estacionamento em um só lugar.</p>
-    <ol class="etapas-projeto">
-      <li><h3>Detectar</h3><p>Sensores leem as vagas e a placa ESP32 envia os dados pela rede Wi-Fi.</p></li>
-      <li><h3>Confirmar</h3><p>O sistema valida as leituras. Dados desatualizados ficam sem confirmação, nunca como vaga livre.</p></li>
-      <li><h3>Visualizar</h3><p>Um mapa por andar, análises para o gerente e um telão de disponibilidade para quem chega.</p></li>
+    <button class="controle-etapas" type="button" aria-controls="etapas-projeto" hidden>Pausar animações</button>
+    <ol class="etapas-projeto" id="etapas-projeto">
+      <li class="reveal">
+        <h3>Detectar</h3>
+        <svg class="etapa-cena cena-detectar" viewBox="0 0 320 144" aria-hidden="true" focusable="false">
+          <rect class="cena-painel" x="10" y="10" width="96" height="81" rx="8"/>
+          <rect class="cena-painel" x="112" y="10" width="96" height="81" rx="8"/>
+          <rect class="cena-painel" x="214" y="10" width="96" height="81" rx="8"/>
+          <rect class="cena-sinal" x="48" y="20" width="20" height="7" rx="3"/>
+          <path class="cena-sinal cena-eco" d="M53 31q5 4 10 0m-14 5q9 7 18 0m-22 5q13 10 26 0"/>
+          <path class="cena-icone" d="M24 78h68"/>
+          <g class="cena-carro">
+            <path class="cena-sinal" d="M34 67v-8l9-3 6-8h17l8 8 8 3v8zM45 56h28"/>
+            <circle class="cena-icone" cx="45" cy="69" r="4"/><circle class="cena-icone" cx="72" cy="69" r="4"/>
+          </g>
+          <rect class="cena-icone" x="144" y="29" width="32" height="28" rx="4"/>
+          <path class="cena-icone" d="M137 35h7m-7 8h7m-7 8h7m32-16h7m-7 8h7m-7 8h7"/>
+          <circle class="cena-sinal cena-placa" cx="160" cy="43" r="5"/>
+          <rect class="cena-icone" x="239" y="23" width="46" height="34" rx="4"/>
+          <path class="cena-icone" d="M262 57v8m-10 0h20"/>
+          <path class="cena-sinal cena-recepcao" d="m253 40 6 6 12-13"/>
+          <path class="cena-trilha" d="M58 83h99m6 0h99"/>
+          <path class="cena-icone" d="m99 79 5 4-5 4m101-8 5 4-5 4"/>
+          <circle class="cena-pacote" cx="58" cy="83" r="4"/>
+          <text x="58" y="110">Sensor</text><text x="160" y="110">Placa ESP32</text><text x="262" y="110">Sistema</text>
+          <text class="cena-acao" x="58" y="130">Detecta o carro</text><text class="cena-acao" x="160" y="130">Envia por Wi-Fi</text><text class="cena-acao" x="262" y="130">Recebe o dado</text>
+        </svg>
+        <p>Quando o carro entra na vaga, o sensor percebe sua presença. A placa recebe a leitura e manda pelo Wi-Fi um recado ao sistema: “tem um carro na vaga”.</p>
+      </li>
+      <li class="reveal">
+        <h3>Confirmar</h3>
+        <svg class="etapa-cena" viewBox="0 0 320 144" aria-hidden="true" focusable="false">
+          <g class="cena-destaque">
+            <rect class="cena-painel" x="22" y="20" width="276" height="46" rx="8"/>
+            <circle class="cena-sinal" cx="47" cy="43" r="11"/>
+            <path class="cena-sinal cena-traco" pathLength="1" d="m42 43 4 4 6-8"/>
+            <text class="cena-legenda" x="68" y="48">Leitura confirmada</text>
+          </g>
+          <g class="cena-destaque cena-segundo">
+            <rect class="cena-painel" x="22" y="78" width="276" height="46" rx="8"/>
+            <circle class="cena-icone" cx="47" cy="101" r="11"/>
+            <path class="cena-icone cena-ponteiro" d="M47 95v6l4 2"/>
+            <text class="cena-legenda" x="68" y="106">Leitura antiga · indisponível</text>
+          </g>
+        </svg>
+        <p>O sistema valida as leituras. Se uma leitura ficar antiga, a vaga aparece como indisponível.</p>
+      </li>
+      <li class="reveal">
+        <h3>Visualizar</h3>
+        <svg class="etapa-cena" viewBox="0 0 320 144" aria-hidden="true" focusable="false">
+          <g class="cena-destaque">
+            <rect class="cena-painel" x="15" y="34" width="88" height="67" rx="8"/>
+            <path class="cena-icone" d="M37 51h44v33H37zM59 51v33M37 67h44"/>
+            <path class="cena-sinal cena-vaga" d="M43 73h10v6H43z"/>
+            <text x="59" y="125">Mapa</text>
+          </g>
+          <g class="cena-destaque cena-segundo">
+            <rect class="cena-painel" x="116" y="34" width="88" height="67" rx="8"/>
+            <path class="cena-icone" d="M139 51v33h43"/>
+            <path class="cena-sinal cena-traco" pathLength="1" d="m145 75 10-10 9 4 13-14"/>
+            <text x="160" y="125">Análises</text>
+          </g>
+          <g class="cena-destaque cena-terceiro">
+            <rect class="cena-painel" x="217" y="34" width="88" height="67" rx="8"/>
+            <rect class="cena-icone" x="240" y="50" width="42" height="29" rx="3"/>
+            <path class="cena-icone" d="M261 79v7m-9 0h18"/>
+            <path class="cena-sinal cena-telao" d="M249 60h24m-24 9h16"/>
+            <text x="261" y="125">Telão</text>
+          </g>
+        </svg>
+        <p>O gerente acompanha o mapa e as análises. O telão orienta quem chega.</p>
+      </li>
     </ol>
   </section>
   <section class="wrap memorial-secao" id="acervo" aria-labelledby="titulo-acervo">
@@ -56,20 +124,20 @@
     <p>Seis pessoas, muitas ideias e uma história em comum.</p>
     <div class="retratos-grid"><figure><button type="button" class="gal-item" data-cat="pessoas" data-img-id="23" aria-label="Ampliar imagem: Pietro em retrato">
     <img data-foto="23" alt="Pietro em retrato" class="gal-img" loading="lazy" decoding="async">
-    </button><figcaption>Pietro</figcaption></figure>
+    </button><figcaption><strong>Pietro</strong><span class="relato-funcao">Liderança e desenvolvimento completo</span></figcaption></figure>
 <figure><button type="button" class="gal-item" data-cat="pessoas" data-img-id="3" aria-label="Ampliar imagem: Retrato da Ana">
     <img data-foto="3" alt="Retrato da Ana" class="gal-img" loading="lazy" decoding="async">
-    </button><figcaption>Ana Carvalho</figcaption></figure>
+    </button><figcaption><strong>Ana Carvalho</strong><span class="relato-funcao">Scrum Master, documentação e interface</span></figcaption></figure>
 <figure><button type="button" class="gal-item" data-cat="pessoas" data-img-id="juan-ensaio" aria-label="Ampliar imagem: Juan de perfil">
       <img data-foto="juan-ensaio" class="gal-img" alt="" loading="lazy" decoding="async">
-    </button><figcaption>Juan</figcaption></figure>
+    </button><figcaption><strong>Juan</strong><span class="relato-funcao">Interface e design</span></figcaption></figure>
 <figure><button type="button" class="gal-item" data-cat="pessoas" data-img-id="24" aria-label="Ampliar imagem: Samuel em retrato">
     <img data-foto="24" alt="Samuel em retrato" class="gal-img" loading="lazy" decoding="async">
-    </button><figcaption>Samuel</figcaption></figure>
+    </button><figcaption><strong>Samuel</strong><span class="relato-funcao">Servidor, dados e produto</span></figcaption></figure>
 <figure><button type="button" class="gal-item" data-cat="pessoas" data-img-id="22" aria-label="Ampliar imagem: Elisa em retrato">
     <img data-foto="22" alt="Elisa em retrato" class="gal-img" loading="lazy" decoding="async">
-    </button><figcaption>Elisa</figcaption></figure>
-<figure><button type="button" class="gal-item" data-cat="pessoas" data-img-id="kamilly" aria-label="Ampliar imagem: Kamilly"><img data-foto="kamilly" class="gal-img" alt="Kamilly" loading="lazy" decoding="async"></button><figcaption>Kamilly</figcaption></figure></div>
+    </button><figcaption><strong>Elisa</strong><span class="relato-funcao">Interface, experiência do usuário e qualidade</span></figcaption></figure>
+<figure><button type="button" class="gal-item" data-cat="pessoas" data-img-id="kamilly" aria-label="Ampliar imagem: Kamilly"><img data-foto="kamilly" class="gal-img" alt="Kamilly" loading="lazy" decoding="async"></button><figcaption><strong>Kamilly</strong><span class="relato-funcao">Servidor, Arduino e IoT</span></figcaption></figure></div>
     <h3 class="titulo-juntos">Nossos momentos juntos</h3>
     <div class="archive-grid"><button type="button" class="gal-item" data-cat="pessoas" data-img-id="0" aria-label="Ampliar imagem: Uma conversa entre nós">
     <img data-foto="0" alt="Uma conversa entre nós" class="gal-img" loading="lazy" decoding="async">
@@ -93,28 +161,28 @@
       <p>Toque em um nome para ler o depoimento.</p>
     </div>
     <details class="relato reveal" id="voz-samuel" name="depoimentos">
-      <summary><img data-foto="24" alt="" width="48" height="48" loading="lazy" decoding="async"><span>Samuel</span></summary>
-      <div class="relato-texto"><p>Durante dois anos no SENAI, aprendi não só sobre tecnologia, mas também a lidar com pessoas, desafios e mudanças. Fui do básico no computador ao desenvolvimento de um sistema com banco de dados, e cada etapa contribuiu para minha formação.</p>
+      <summary><img data-foto="24" alt="" width="48" height="48" loading="lazy" decoding="async"><span>Samuel<span class="relato-funcao">Servidor, dados e produto</span></span></summary>
+      <div class="relato-texto"><p>Durante dois anos no SENAI, aprendi não só sobre tecnologia, mas também aprendi a lidar com pessoas, desafios e mudanças. Fui do básico no computador ao desenvolvimento de um sistema com banco de dados, e cada etapa contribuiu para minha formação.</p>
 <p>Entre atividades, cansaço e muitos momentos de alegria, amadureci e criei laços mais fortes com amigos que já faziam parte da minha vida. Também me aproximei de pessoas com quem não imaginava construir uma conexão tão especial.</p>
 <p>Formar a VAGGU foi um sonho compartilhado. Escolher o projeto não foi fácil e quase mudamos de caminho, mas continuar nos fez crescer junto com ele. Sou grato por encerrar essa etapa do SENAI ao lado de pessoas que admiro.</p>
 <p>Para mim, a VAGGU é mais do que um trabalho de conclusão: representa amizade, parceria e pertencimento. Ela faz parte da minha história e de um ciclo que vou levar comigo. Sinto-me privilegiado por ter vivido essa jornada com esse grupo.</p></div>
     </details>
     <details class="relato reveal" id="voz-pietro" name="depoimentos">
-      <summary><img data-foto="23" alt="" width="48" height="48" loading="lazy" decoding="async"><span>Pietro</span></summary>
-      <div class="relato-texto"><p>A Vaggu com certeza foi a melhor forma de finalizar esse ciclo com chave de ouro.</p>
-<p>Após dois anos aprendendo ao lado de colegas tão focados e competentes, após tantos projetos bem concluídos, atividades que transformaram nossas dúvidas em trabalho feito, eu evolui ao lado de grandes amigos que hoje tenho orgulho de dividir um projeto tão importante quanto o de conclusão de curso.</p>
-<p>Não tenho duvidas de que estou me formando e trabalhando com a melhor equipe formada da sala, conseguimos conciliar todos os quesitos para um time bom, com dedicação, inteligência, proatividade, profissionalismo, pontualidade e qualidade.</p>
-<p>No início dessa jornada todos estávamos aflitos por estar conhecendo um mundo novo, com oportunidades e dificuldades novas, agora chegando ao final tenho certeza que cada um de nós lá atrás teria orgulho do que nos tornamos nesses últimos anos, mesmo cada um seguindo uma carreira diferente, as vezes divergente ou não do curso, acredito que conseguimos uma bagagem gigantesca sobre problemas que aconteceriam em qualquer profissão, e isso não tem preço.</p>
-<p>Chegando ao final do projeto só tenho a agradecer aos meus colegas, não tinha como ter sido melhor essa ultima experiência com vocês, todos deram seu melhor para fazer isso acontecer.</p>
-<p>Aos professores e coordenadores também que nos guiaram até a tão esperada conclusão de curso, que nos preparou para um futuro prospero e nos proporcionou lembranças que vão ficar no coração pra sempre.</p></div>
+      <summary><img data-foto="23" alt="" width="48" height="48" loading="lazy" decoding="async"><span>Pietro<span class="relato-funcao">Liderança e desenvolvimento completo</span></span></summary>
+      <div class="relato-texto"><p>A VAGGU, com certeza, foi a melhor forma de finalizar esse ciclo com chave de ouro.</p>
+<p>Após dois anos aprendendo ao lado de colegas tão focados e competentes, após tantos projetos bem concluídos, atividades que transformaram nossas dúvidas em trabalho feito, eu evoluí ao lado de grandes amigos com quem hoje tenho orgulho de dividir um projeto tão importante quanto o de conclusão de curso.</p>
+<p>Não tenho dúvidas de que estou me formando e trabalhando com a melhor equipe formada da sala. Conseguimos conciliar todos os quesitos para um time bom, com dedicação, inteligência, proatividade, profissionalismo, pontualidade e qualidade.</p>
+<p>No início dessa jornada, todos estávamos aflitos por estarmos conhecendo um mundo novo, com oportunidades e dificuldades novas. Agora, chegando ao final, tenho certeza de que cada um de nós lá atrás teria orgulho do que nos tornamos nesses últimos anos. Mesmo cada um seguindo uma carreira diferente, às vezes divergente ou não do curso, acredito que conseguimos uma bagagem gigantesca sobre problemas que aconteceriam em qualquer profissão, e isso não tem preço.</p>
+<p>Chegando ao final do projeto, só tenho a agradecer aos meus colegas. Não tinha como ter sido melhor essa última experiência com vocês. Todos deram seu melhor para fazer isso acontecer.</p>
+<p>Agradeço também aos professores e coordenadores que nos guiaram até a tão esperada conclusão de curso, nos prepararam para um futuro próspero e nos proporcionaram lembranças que vão ficar no coração pra sempre.</p></div>
     </details>
     <details class="relato reveal" id="voz-juan" name="depoimentos">
-      <summary><img data-foto="juan-ensaio" alt="" width="48" height="48" loading="lazy" decoding="async"><span>Juan</span></summary>
-      <div class="relato-texto"><p>Eu fiquei muito empolgado com o projeto da Vaggu, feliz em fazer com meus amigos e aprendi muito durante todo o processo. Aprendi não somente conteúdos do curso e que foram aplicados no projeto, mas também valores de amizade, respeito e companheirismo. Tem sido uma honra e muito divertido fazer parte desse projeto e pôr parte da minha identidade e esforço.</p>
-<p>Foi maravilhoso ser parte da Vaggu, amadurecer e criar vínculos que duram a vida toda! 💛</p></div>
+      <summary><img data-foto="juan-ensaio" alt="" width="48" height="48" loading="lazy" decoding="async"><span>Juan<span class="relato-funcao">Interface e design</span></span></summary>
+      <div class="relato-texto"><p>Eu fiquei muito empolgado com o projeto da VAGGU, fiquei feliz em fazê-lo com meus amigos e aprendi muito durante todo o processo. Aprendi não somente conteúdos do curso que foram aplicados no projeto, mas também valores de amizade, respeito e companheirismo. Tem sido uma honra e muito divertido fazer parte desse projeto e pôr parte da minha identidade e do meu esforço nele.</p>
+<p>Foi maravilhoso ser parte da VAGGU, amadurecer e criar vínculos que duram a vida toda! 💛</p></div>
     </details>
     <details class="relato reveal" id="voz-elisa" name="depoimentos">
-      <summary><img data-foto="22" alt="" width="48" height="48" loading="lazy" decoding="async"><span>Elisa</span></summary>
+      <summary><img data-foto="22" alt="" width="48" height="48" loading="lazy" decoding="async"><span>Elisa<span class="relato-funcao">Interface, experiência do usuário e qualidade</span></span></summary>
       <div class="relato-texto"><p>O que é a VAGGU pra mim?</p>
 <p>Bom, acho que essa não é uma pergunta tão simples, porque a VAGGU vai muito além de um trabalho de conclusão de curso. Ela conseguiu unir ainda mais seus integrantes, não apenas pela afinidade, mas também pela vontade de finalizar o curso técnico com honra, alegria e gratidão.</p>
 <p>A nossa equipe é completamente capacitada e esforçada, e cada integrante da VAGGU tem um olhar determinado e um jeito único de tornar tudo mais especial. Essa é uma das coisas que eu mais amo: a individualidade de cada um.</p>
@@ -125,19 +193,19 @@
 <p>Deixo aqui meu texto de agradecimento à VAGGU. Obrigada por tudo!</p></div>
     </details>
     <details class="relato reveal" id="voz-ana" name="depoimentos">
-      <summary><img data-foto="3" alt="" width="48" height="48" loading="lazy" decoding="async"><span>Ana Carvalho</span></summary>
+      <summary><img data-foto="3" alt="" width="48" height="48" loading="lazy" decoding="async"><span>Ana Carvalho<span class="relato-funcao">Scrum Master, documentação e interface</span></span></summary>
       <div class="relato-texto"><p>Pra mim, a VAGGU é muito mais do que um projeto. É também o convívio com pessoas excelentes e competentes, que todos os dias se dedicam para que possamos concluir com sucesso essa jornada.</p>
 <p>Eu amo não só as pessoas, mas também o nosso cotidiano, a nossa organização, o nosso relacionamento e a nossa conexão. O “flow” aqui é diferente e, pra mim, uma das melhores coisas é me sentir parte de tudo isso, entendendo que cada um tem seu papel e que, juntos, fazemos as coisas acontecerem. Além disso, nossos momentos de descontração também são essenciais e têm um papel muito importante em tudo isso. São esses momentos que tornam a rotina mais leve, nos aproximam cada vez mais e fortalecem o nosso vínculo como equipe. Afinal, não são só as responsabilidades e os objetivos em comum que nos unem, mas também as risadas, as conversas e os momentos que compartilhamos ao longo dessa jornada.</p>
 <p>Esse projeto também foi muito importante pra eu ter uma noção do que é um TCC na prática, de como é desenvolver uma ideia do zero e chegar ao ponto de apresentá-la para uma banca. É muito interessante pensar que nós, como equipe, criamos tudo isso do zero e que, em breve, teremos algo ainda maior para apresentar na próxima jornada das nossas vidas.</p>
-<p>Mesmo não sendo o curso que eu quero seguir, foram muitos os aprendizados que tive aqui dentro do SENAI. A Ana que entrou e a Ana que está saindo agora são pessoas completamente diferentes. Hoje, me sinto com mais maturidade, conhecimento, paciência e capacidade de me relacionar com pessoas diferentes. Aprendi muito sobre trabalho em equipe, responsabilidades e sobre como cada pessoa pode contribuir de uma maneira.</p>
-<p>É muito bonito e gratificante fazer parte de tudo isso, principalmente quando lembro que, ainda no nosso primeiro semestre, já tínhamos o nosso grupo dos sonhos para o TCC. E hoje, ver isso se concretizando, torna tudo ainda mais especial.</p>
+<p>Mesmo não sendo o curso que eu quero seguir, foram muitos os aprendizados que tive aqui dentro do SENAI. A Ana que entrou e a Ana que está saindo agora são pessoas completamente diferentes. Hoje me sinto com mais maturidade, conhecimento, paciência e capacidade de me relacionar com pessoas diferentes. Aprendi muito sobre trabalho em equipe, responsabilidades e sobre como cada pessoa pode contribuir de uma maneira.</p>
+<p>É muito bonito e gratificante fazer parte de tudo isso, principalmente quando lembro que, ainda no nosso primeiro semestre, já tínhamos o nosso grupo dos sonhos para o TCC. E hoje, ver isso se concretizando torna tudo ainda mais especial.</p>
 <p>No fim, acho que o mais importante é perceber que a VAGGU vai muito além do resultado que vamos apresentar. Ela representa tudo o que vivemos, construímos e aprendemos juntos. E poder encerrar essa etapa ao lado de uma equipe tão especial faz com que essa experiência tenha um significado ainda maior pra mim.</p></div>
     </details>
     <details class="relato reveal" id="voz-kamilly" name="depoimentos">
-      <summary><img data-foto="kamilly" alt="" width="48" height="48" loading="lazy" decoding="async"><span>Kamilly</span></summary>
+      <summary><img data-foto="kamilly" alt="" width="48" height="48" loading="lazy" decoding="async"><span>Kamilly<span class="relato-funcao">Servidor, Arduino e IoT</span></span></summary>
       <div class="relato-texto"><p>A VAGGU significa muito mais para mim do que apenas um trabalho ou um projeto desenvolvido durante o curso. Foi uma experiência pela qual criei um carinho enorme, não só pelo que construímos, mas principalmente pelas pessoas que estiveram comigo durante todo esse processo. Gostei muito de fazer parte desse projeto, de enfrentar os desafios, compartilhar ideias, aprender coisas novas e acompanhar cada etapa da nossa evolução.</p>
       <p>Acredito que a VAGGU teve um papel muito importante no nosso crescimento, tanto profissional quanto pessoal. Durante o desenvolvimento, aprendemos a lidar com dificuldades, assumir responsabilidades, trabalhar em equipe, ter mais paciência e amadurecer diante dos obstáculos. Olhando para trás, percebo o quanto evoluímos desde o início e tenho muito orgulho de tudo o que conseguimos construir juntos.</p>
-      <p>Mais do que o resultado final, vou levar comigo as experiências, os aprendizados e, principalmente, as pessoas que fizeram parte dessa trajetória. A VAGGU se tornou especial para mim justamente por tudo o que representa e por tudo o que vivemos durante sua construção. É um projeto que sempre vou lembrar com muito carinho, porque, de alguma forma, ele também representa uma parte da nossa história e do quanto crescemos juntos. ❤️</p></div>
+      <p>Mais do que o resultado final, vou levar comigo as experiências, os aprendizados e, principalmente, as pessoas que fizeram parte dessa trajetória. A VAGGU se tornou especial para mim justamente por tudo o que representa e por tudo o que vivemos durante sua construção. É um projeto de que sempre vou lembrar com muito carinho, porque, de alguma forma, ele também representa uma parte da nossa história e do quanto crescemos juntos. ❤️</p></div>
     </details>
   </section>
 

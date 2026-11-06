@@ -40,4 +40,8 @@ Prévia local anonimizada (as fotos reais permanecem no site):
 
 ![Acervo no celular](../segunda-mente/Vaggu/Evidências%20visuais/2026-11-05%20-%20Curadoria%20da%20faixa%20do%20memorial/celular-acervo.png)
 
-A abertura usa a logo SVG oficial e alinhamento central. A foto das três meninas e o retrato de Kamilly utilizam os originais enviados em 04/11/2026, sem edição; as miniaturas anteriores permanecem preservadas.
+A abertura usa a logo SVG oficial e alinhamento central. A foto das três integrantes usa o original enviado em 04/11/2026. Os retratos atuais de Kamilly e Elisa foram fornecidos em 06/11/2026 e são usados sem edição na grade, nos depoimentos e na ampliação. As versões anteriores permanecem no acervo.
+
+A função de cada integrante aparece abaixo do nome na legenda do retrato e no título do depoimento. As atribuições seguem o [SSD-VAGGU](../segunda-mente/Vaggu/Documentação/SSD-VAGGU.md).
+
+“Da vaga ao painel” ilustra a leitura do sensor, a confirmação e as formas de visualizar a disponibilidade. O ciclo de Detectar dura seis segundos e acompanha a leitura do sensor até o sistema, passando pela placa ESP32. As outras duas cenas têm ciclos de quatro segundos. Um botão pausa ou retoma as três cenas. Com movimento reduzido, os diagramas ficam estáticos.
