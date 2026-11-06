@@ -22,8 +22,9 @@ test('menu apresenta caminhos distintos com continuidade por botão e alternativ
     '3': { body: /Roteiro da demonstração[\s\S]+https:\/\/vaggu-tcc\.onrender\.com/, buttons: ['2', 'menu'] },
     '4': { body: /última leitura[\s\S]+Nunca compartilhe senhas/, buttons: ['5', 'menu'] },
     '5': { body: /canais oficiais no rodapé[\s\S]+não encaminha mensagens/, buttons: ['menu'] },
+    '6': { body: /Nesta demonstração[\s\S]+Nossa equipe vai entrar em contato/, buttons: ['menu'] },
   };
-  for (const id of ['1', '2', '3', '4', '5']) {
+  for (const id of ['1', '2', '3', '4', '5', '6']) {
     const message = mensagemInterativaAtendimento({ type: 'interactive', text: '', selectionId: id });
     assert.ok(message && 'buttons' in message.action);
     assert.ok(message.action.buttons.length <= 3);
@@ -53,7 +54,7 @@ test('cliente envia lista nativa no contrato Meta e mantém alternativa de texto
   assert.equal(payloads[0].interactive.type, 'list');
   assert.equal(payloads[0].interactive.action.button, 'Ver opções');
   const rows = payloads[0].interactive.action.sections.flatMap(section => section.rows);
-  assert.deepEqual(rows.map(row => row.id), ['1', '2', '3', '4', '5']);
+  assert.deepEqual(rows.map(row => row.id), ['1', '2', '3', '4', '5', '6']);
   assert.ok(rows.every(row => row.title.length <= 24 && row.description.length <= 72));
   assert.equal(payloads[1].type, 'text');
   assert.equal(payloads[1].text.body, 'Alternativa de texto');
@@ -73,7 +74,7 @@ test('diagnóstico preserva código de mensagem não suportada sem expor convers
 });
 
 test('opções do atendimento possuem orientação e mídia não dispara resposta', () => {
-  for (const text of ['1', '2', '3', '4', '5']) {
+  for (const text of ['1', '2', '3', '4', '5', '6']) {
     const resposta = respostaAtendimento({ type: 'text', text });
     assert.ok(resposta);
     assert.doesNotMatch(resposta, /em configuração/i);
@@ -369,9 +370,9 @@ test('flag desativada impede envio e OI/MENU gera menu quando habilitado', async
   assert.equal(enabled.interactiveSent[0].interactive.type, 'list');
 });
 
-test('cliques das cinco opções respondem como números e repetição não duplica a resposta', async () => {
+test('cliques das opções respondem como números e repetição não duplica a resposta', async () => {
   const current = createWhatsappApp({ autoReplyEnabled: true });
-  for (const id of ['1', '2', '3', '4', '5']) {
+  for (const { id } of menuAtendimento.action.sections[0].rows) {
     const payload = messagePayload([{ id: `clique-${id}`, from: '5511999990000', type: 'interactive',
       interactive: { type: 'list_reply', list_reply: { id, title: 'Título externo não define a opção' } },
     }]);
@@ -381,7 +382,7 @@ test('cliques das cinco opções respondem como números e repetição não dupl
     assert.equal(current.interactiveSent.at(-1).interactive.type, 'button');
     assert.ok(current.interactiveSent.at(-1).interactive.action.buttons.some(button => button.reply.id === 'menu'));
   }
-  assert.equal(current.sent.length, 5);
+  assert.equal(current.sent.length, 6);
 });
 
 test('retorno clicável reabre menu e ID desconhecido não escolhe opção pelo título', async () => {

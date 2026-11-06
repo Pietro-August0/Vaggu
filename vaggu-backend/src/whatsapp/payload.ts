@@ -69,13 +69,13 @@ export function shouldSendTestMenu(message) {
   return ['OI', 'OLA', 'MENU'].includes(normalized);
 }
 
-export const testMenuText = 'Olá! Este é o bot da VAGGU.\n\nToque em “Ver opções” para conhecer a plataforma, ver um roteiro de demonstração ou consultar orientações de suporte.';
+export const testMenuText = 'Olá! Este é o bot da VAGGU.\n\nToque em “Ver opções” para conhecer ou contratar a VAGGU, ver uma demonstração ou consultar orientações de suporte.';
 
 export const menuAtendimento = {
   type: 'list',
   header: { type: 'text', text: 'Atendimento VAGGU' },
   body: { text: testMenuText },
-  footer: { text: 'Você também pode digitar de 1 a 5.' },
+  footer: { text: 'Você também pode digitar de 1 a 6.' },
   action: {
     button: 'Ver opções',
     sections: [{ title: 'Como podemos ajudar?', rows: [
@@ -84,6 +84,7 @@ export const menuAtendimento = {
       { id: '3', title: 'Ver demonstração', description: 'Veja o que explorar no site e no roteiro da VAGGU.' },
       { id: '4', title: 'Ajuda com a plataforma', description: 'Confira os primeiros passos para problemas comuns.' },
       { id: '5', title: 'Contato da equipe', description: 'Encontre os canais oficiais da VAGGU.' },
+      { id: '6', title: 'Contratar a VAGGU', description: 'Veja como começar a usar a VAGGU no seu shopping.' },
     ] }],
   },
 };
@@ -105,7 +106,7 @@ export function mensagemInterativaAtendimento(message) {
   } : null;
 }
 
-/** Respostas informativas sem coleta de dados ou promessa de atendimento. */
+/** Respostas do menu demonstrativo, sem coleta de dados ou acionamento de atendimento. */
 export function respostaAtendimento(message: { type: string; text: string; selectionId?: string }) {
   if (shouldSendTestMenu(message)) return testMenuText;
   if (!['text', 'interactive'].includes(message.type)) return null;
@@ -115,6 +116,7 @@ export function respostaAtendimento(message: { type: string; text: string; selec
     '3': '*Roteiro da demonstração*\n\n1. No mapa, veja como localizar vagas por andar, setor e categoria.\n2. No monitoramento, confira como a ocupação é acompanhada.\n3. Nas análises, veja como comparar períodos e exportar relatórios.\n\nComece pela apresentação pública do projeto:\nhttps://vaggu-tcc.onrender.com\n\nO painel do shopping exige acesso autorizado.',
     '4': '*Ajuda com a plataforma*\n\n• Se não conseguir entrar, confira se está usando o acesso do seu shopping.\n• Se o mapa parecer desatualizado, confira o horário da última leitura. Uma vaga sem leitura atual não deve ser considerada livre.\n\nSe o problema continuar, consulte “Contato da equipe”. Nunca compartilhe senhas ou chaves de equipamentos.',
     '5': '*Contato da equipe VAGGU*\n\nPara dúvidas sobre o projeto ou contato institucional, consulte os canais oficiais no rodapé do site:\nhttps://vaggu-tcc.onrender.com\n\nEste bot é demonstrativo e não encaminha mensagens para a equipe.',
+    '6': 'Obrigado pelo interesse em contratar a VAGGU! Nesta demonstração, a resposta seria: “Nossa equipe vai entrar em contato para conversar sobre a contratação e os próximos passos.”',
   };
   const option = message.type === 'interactive' ? message.selectionId : message.text.trim();
   return Object.hasOwn(respostas, option) ? respostas[option] : null;

@@ -166,7 +166,7 @@ As cópias de imagens entre `segunda-mente/Vaggu/Identidade visual/Assets/` e `v
 | `vaggu-backend/src/telemetria/routes.ts` | Expõe heartbeat e estados do ESP32 sem reutilizar cookies ou sessões humanas. |
 | `vaggu-backend/src/telemetria/service.ts` | Autentica placa, serializa eventos, deduplica sequência, persiste candidatos e confirma estados/histórico atomicamente. |
 | `vaggu-backend/src/whatsapp/client.ts` | Envia texto e mensagens interativas pela API Meta com configuração privada, timeout compartilhado e transporte substituível em testes. |
-| `vaggu-backend/src/whatsapp/payload.ts` | Interpreta texto, IDs de lista/botão e códigos de erro; resume tipos/contagens sem conteúdo ou contato; define menu, retorno e atalhos entre apresentação, recursos, roteiro, ajuda e contato institucional. |
+| `vaggu-backend/src/whatsapp/payload.ts` | Interpreta texto, IDs de lista/botão e códigos de erro; resume tipos/contagens sem conteúdo ou contato; define menu, retorno, atalhos e a mensagem demonstrativa de contratação na opção 6. |
 | `vaggu-backend/src/whatsapp/routes.ts` | Valida desafio e assinatura dos eventos da Meta; registra rejeição de assinatura ou resumo seguro do lote antes de processar. |
 | `vaggu-backend/src/whatsapp/service.ts` | Coordena mensagens recebidas, deduplicação persistente, retomada de eventos abandonados e respostas do menu demonstrativo. |
 | `vaggu-backend/src/whatsapp/signature.ts` | Calcula e verifica assinaturas HMAC para confirmar que o corpo recebido veio de quem possui o segredo Meta. |

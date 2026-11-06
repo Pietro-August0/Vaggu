@@ -34,13 +34,14 @@ Atualizado em 04/11/2026. Este documento consolida o resultado atual; os registr
 
 ## Comportamento atual do código
 
-`Oi`, `Olá` e `MENU` abrem “Ver opções”. Números 1–5 e IDs nativos de seleção usam a mesma resposta. Todas as opções oferecem “Voltar ao menu”.
+`Oi`, `Olá` e `MENU` abrem “Ver opções”. Números 1–6 e IDs nativos de seleção usam a mesma resposta. Todas as opções oferecem “Voltar ao menu”.
 
 1. **Conhecer a VAGGU:** imagem, site e botões de recursos e demonstração.
 2. **Ver funcionalidades:** três blocos curtos sobre vagas, monitoramento e análises, com botão para a demonstração.
 3. **Ver demonstração:** roteiro do painel e link da apresentação pública. O painel exige acesso autorizado.
 4. **Ajuda com a plataforma:** dicas para acesso e mapa desatualizado, orientação para não compartilhar credenciais e botão de contato.
 5. **Contato da equipe:** indica os canais oficiais no rodapé do site e explica que o bot não encaminha mensagens.
+6. **Contratar a VAGGU** simula o início da contratação com uma mensagem de retorno da equipe. O fluxo dispensa coleta de dados comerciais e acionamento de atendimento.
 
 Textos livres não abrem solicitações automaticamente; IDs desconhecidos e mídia são ignorados. O bot não agenda, abre chamados ou promete retorno.
 

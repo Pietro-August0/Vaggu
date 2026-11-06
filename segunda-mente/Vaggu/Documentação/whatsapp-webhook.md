@@ -117,7 +117,7 @@ O erro 130497 é tratado como restrição de envio informada pela Meta. O códig
 
 A deduplicação usa `meta_message_id` único no PostgreSQL. Falhas definitivas ficam como `FALHOU` e podem ser retomadas por reentrega legítima. Um evento `PROCESSANDO` há mais de dois minutos também pode ser retomado por uma única reentrega; a tentativa antiga não pode sobrescrever a nova. Antes da chamada externa, o serviço marca `ENVIANDO`. Timeout ou resultado incerto levam a `REVISAO`; um `ENVIANDO` abandonado também vai para revisão na reentrega, sem repetir automaticamente o envio. É necessário procedimento de conferência humana. A integração não promete entrega exatamente uma vez e `PROCESSADO` não comprova entrega ao destinatário.
 
-O menu já responde às opções 1–5, além de OI/OLÁ/MENU. As instruções para demonstração, suporte e equipe são textuais: ainda não coletam etapas, persistem solicitações nem encaminham atendimento humano.
+O menu local responde às opções 1–6, além de OI/OLÁ/MENU. A opção 6, **Contratar a VAGGU**, simula o retorno da equipe sobre os próximos passos. O fluxo dispensa coleta de dados comerciais, registro de solicitações e encaminhamento humano.
 
 
 ## Demonstração definida para a apresentação — 17/10/2026

@@ -1,5 +1,7 @@
 # Próximos passos
 
+**Contratação demonstrativa no WhatsApp em 06/11/2026.** A opção 6, “Contratar a VAGGU”, simula o retorno da equipe por seleção no menu ou número digitado. `npm --prefix vaggu-backend test` incluiu o build e aprovou 100 testes, com 12 pulados por requisitos de integração. Verificações de entrega com `node scripts/verificar-documentacao.mjs` e `git diff --check`. A publicação e a captura anonimizada no cliente WhatsApp ficam pendentes, pois o fluxo foi exercitado com transporte simulado local.
+
 **Manutenção em 06/11/2026:** concluídas a limpeza dos arquivos do frontend sem consumo identificado e a simplificação da agregação de telões. A próxima etapa do [plano de simplificação](../Documentação/revisao-estrutura-e-simplificacao-2026-11-06.md) é separar regras de telemetria e importação das escritas, preservando as transações.
 
 **Aceite e escopo atualizados em 04/11/2026:** site completamente homologado conforme confirmação do usuário; foco em evidências e preparação da apresentação. WhatsApp demonstrativo, sem exigência de atendimento humano, coleta comercial ou protocolo. Procedimentos de dados definidos em [[Vaggu/Documentação/operacao-dados-tcc|operação dos dados do TCC]]. O aceite físico sustentado dos sensores continua separado. Os registros anteriores abaixo preservam o diagnóstico antes desta confirmação.
