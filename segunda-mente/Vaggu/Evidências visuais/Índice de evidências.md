@@ -3,6 +3,19 @@ tags: [vaggu, evidencias, interface]
 ---
 # Evidências visuais da VAGGU
 
+## 06/11/2026 — limpeza do frontend
+
+Rotas locais `/` e `/login`, perfil visitante com sessão simulada, sem credenciais preenchidas. Após retirar três assets públicos e quatro componentes sem consumidores, o Edge conferiu o rodapé e o formulário nos dois temas. O roteiro verificou foco visível com Tab e Shift+Tab, acesso ao login pelo rodapé e alternância da visibilidade do campo de senha com Enter. As telas abriram sem rolagem horizontal ou erros de console.
+
+| Tela | Tema | Desktop | Tablet | Celular |
+| --- | --- | --- | --- | --- |
+| Landing | Claro | [1440×1000](2026-11-06%20-%20Limpeza%20do%20frontend/landing-rodape-desktop-light.png) | [768×1024](2026-11-06%20-%20Limpeza%20do%20frontend/landing-rodape-tablet-light.png) | [390×844](2026-11-06%20-%20Limpeza%20do%20frontend/landing-rodape-celular-light.png) |
+| Landing | Escuro | [1440×1000](2026-11-06%20-%20Limpeza%20do%20frontend/landing-rodape-desktop-dark.png) | [768×1024](2026-11-06%20-%20Limpeza%20do%20frontend/landing-rodape-tablet-dark.png) | [390×844](2026-11-06%20-%20Limpeza%20do%20frontend/landing-rodape-celular-dark.png) |
+| Login | Claro | [1440×1000](2026-11-06%20-%20Limpeza%20do%20frontend/login-desktop-light.png) | [768×1024](2026-11-06%20-%20Limpeza%20do%20frontend/login-tablet-light.png) | [390×844](2026-11-06%20-%20Limpeza%20do%20frontend/login-celular-light.png) |
+| Login | Escuro | [1440×1000](2026-11-06%20-%20Limpeza%20do%20frontend/login-desktop-dark.png) | [768×1024](2026-11-06%20-%20Limpeza%20do%20frontend/login-tablet-dark.png) | [390×844](2026-11-06%20-%20Limpeza%20do%20frontend/login-celular-dark.png) |
+
+Com a rolagem fixada, as 12 capturas ficaram idênticas byte a byte às capturas anteriores à remoção.
+
 ## 04/11/2026 — galeria por integrante
 
 Memorial local, perfil visitante e retratos fictícios nas capturas. Filtro Equipe em [desktop 1440×1000](2026-11-04%20-%20Galeria%20por%20integrante/equipe-desktop.jpg), [tablet 768×1024](2026-11-04%20-%20Galeria%20por%20integrante/equipe-tablet.jpg) e [celular 390×844](2026-11-04%20-%20Galeria%20por%20integrante/equipe-celular.jpg), sem rolagem horizontal. Navegação por teclado confirmou a sequência do par. Console sem erros no fluxo.

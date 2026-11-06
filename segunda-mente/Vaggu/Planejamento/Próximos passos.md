@@ -1,5 +1,7 @@
 # Próximos passos
 
+**Manutenção em 06/11/2026:** concluídas a limpeza dos arquivos do frontend sem consumo identificado e a simplificação da agregação de telões. A próxima etapa do [plano de simplificação](../Documentação/revisao-estrutura-e-simplificacao-2026-11-06.md) é separar regras de telemetria e importação das escritas, preservando as transações.
+
 **Aceite e escopo atualizados em 04/11/2026:** site completamente homologado conforme confirmação do usuário; foco em evidências e preparação da apresentação. WhatsApp demonstrativo, sem exigência de atendimento humano, coleta comercial ou protocolo. Procedimentos de dados definidos em [[Vaggu/Documentação/operacao-dados-tcc|operação dos dados do TCC]]. O aceite físico sustentado dos sensores continua separado. Os registros anteriores abaixo preservam o diagnóstico antes desta confirmação.
 
 **Ordem da revisão inicial, substituída pelo aceite acima — 04/11/2026:** homologação integrada (P11/E6), estabilidade dos três sensores e piloto publicado, operação de backup/retenção, fechamento de P10 e ensaio do TCC. Ver [[Vaggu/Documentação/revisao-documental-2026-11-04|pendências priorizadas e critérios de conclusão]]. Registros datados abaixo preservam a sequência histórica.

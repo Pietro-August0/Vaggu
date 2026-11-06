@@ -1,6 +1,6 @@
 # Rotina de registro
 
-Definida por Pietro em 11/09/2026, fuso America/Sao_Paulo.
+Rotina histórica definida por Pietro em 11/09/2026, fuso America/Sao_Paulo. No encerramento, o planejamento concentra a continuidade.
 
 1. Registrar assuntos discutidos, ideias, decisões, alterações, verificações e pendências em `Atualizações diárias/AAAA-MM-DD.md`.
 2. Para assuntos da VAGGU, acrescentar os detalhes em `Vaggu/Diário/AAAA-MM-DD.md` e ligar as duas notas.
@@ -12,6 +12,8 @@ Definida por Pietro em 11/09/2026, fuso America/Sao_Paulo.
 8. Não copiar senhas, tokens, arquivos .env ou links de convite com segredo.
 
 ## Como a continuidade funciona
+
+Em 06/11/2026, o agendamento diário foi criado e cancelado a pedido do usuário antes da primeira execução confirmada. As notas existentes ficam como histórico.
 
 O `AGENTS.md`, na raiz do repositório, reúne nossos acordos de manutenção, incluindo a obrigação de gerar prints após alterações de design ou frontend. O planejamento concentra a situação atual, e os diários preservam o que aconteceu em cada data sem criar outra versão das decisões.
 

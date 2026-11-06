@@ -26,6 +26,8 @@ Plataforma web responsiva para gestão de estacionamentos de shopping centers, d
 
 ## Comece aqui
 
+- [Revisão da estrutura e plano de simplificação — 06/11/2026](Documentação/revisao-estrutura-e-simplificacao-2026-11-06.md)
+
 - [[Vaggu/Documentação/revisao-geral-2026-10-21|Revisão geral de 21/10 — estado local, capturas atuais e limpeza]]
 
 - [[Vaggu/Especificações/Visão do produto]]

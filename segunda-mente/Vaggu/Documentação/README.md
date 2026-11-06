@@ -15,6 +15,7 @@ Esta pasta reúne as decisões de produto, o desenho técnico, os padrões de c�
 
 | Arquivo | O que contém |
 | --- | --- |
+| [revisao-estrutura-e-simplificacao-2026-11-06.md](revisao-estrutura-e-simplificacao-2026-11-06.md) | Inventário, candidatos a descarte e sequência de simplificação com critérios de aceite. |
 | [operacao-dados-tcc.md](operacao-dados-tcc.md) | Retenção, exclusão e contingência do TCC; backup dispensado pelo usuário. |
 | [revisao-documental-2026-11-04.md](revisao-documental-2026-11-04.md) | Etapa atual, matriz por pacote, pendências priorizadas, critérios e limites da revisão. |
 | [whatsapp-processo-e-operacao.md](whatsapp-processo-e-operacao.md) | Implantação confirmada e pendências de atendimento, retenção e evidência visual. |

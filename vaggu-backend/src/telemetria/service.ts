@@ -23,10 +23,12 @@ type TipoMensagem = 'HEARTBEAT' | 'ESTADOS';
 
 const erroCredencial = () => new ApiError(401, 'PLACA_NAO_AUTENTICADA', 'Credencial da placa ausente ou inválida.');
 
+// Compara o conteúdo quando a placa reenvia a mesma sequência da mesma inicialização.
 function hashPayload(tipo: TipoMensagem, mensagem: MensagemBaseTelemetria | MensagemEstados): string {
   return createHash('sha256').update(JSON.stringify({ tipo, mensagem })).digest('hex');
 }
 
+// Reconstrói a confirmação sem reaproveitar estados ou candidatos de sensores expirados.
 function confirmacaoPersistida(sensor: {
   estadoConfirmado: string;
   estadoCandidato: string | null;
@@ -104,6 +106,7 @@ export function createTelemetriaService(
         return { duplicado: true, recebidoEm: existente.recebidoEm, leituras: [] as Array<unknown> };
       }
 
+      // Uma inicialização já substituída não pode voltar a controlar a sequência da placa.
       const inicializacaoConhecida = await tx.inicializacaoPlaca.findUnique({
         where: {
           dispositivoId_inicializacaoId: {
@@ -120,6 +123,7 @@ export function createTelemetriaService(
       const novaInicializacaoInvalida = mudouInicializacao && inicializacaoConhecida === null && mensagem.sequencia > 1;
 
       if (inicializacaoAntiga || sequenciaAntiga || novaInicializacaoInvalida) {
+        // Devolve o erro após a transação para preservar o registro da rejeição.
         await tx.eventoTelemetriaRecebido.create({
           data: {
             shoppingId: dispositivo.shoppingId,

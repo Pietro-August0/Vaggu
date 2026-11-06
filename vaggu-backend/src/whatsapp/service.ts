@@ -22,7 +22,7 @@ export function createWhatsappService(prisma, client, config) {
       try {
         const resposta = config.autoReplyEnabled && message.from ? mensagemInterativaAtendimento(message) : null;
         if (resposta) {
-          // Um envio de resultado incerto não será repetido automaticamente.
+          // Marca o envio antes de chamar a Meta para impedir reenvio automático se o resultado ficar incerto.
           const marcado = await prisma.whatsappEvento.updateMany({ where: { id: claim.eventId, status: envioIniciado ? 'ENVIANDO' : 'PROCESSANDO', atualizadoEm: claim.claimedAt }, data: { status: 'ENVIANDO', atualizadoEm: claim.claimedAt } });
           if (!marcado.count) return { duplicate: true };
           envioIniciado = true;
@@ -96,7 +96,7 @@ async function claimMessage(prisma, message) {
   // O horário também identifica esta tentativa: uma execução antiga não pode finalizar a nova.
   const claimedAt = new Date(Math.max(Date.now(), existing.atualizadoEm.getTime() + 1));
 
-  // A condição FALHOU na própria escrita permite que só uma tentativa concorrente assuma a retomada.
+  // A escrita confere o estado e o horário lidos para que só uma tentativa assuma a retomada.
   const update = await prisma.whatsappEvento.updateMany({
     where: {
       id: existing.id,

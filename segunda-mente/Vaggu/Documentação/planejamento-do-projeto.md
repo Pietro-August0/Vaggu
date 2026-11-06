@@ -1,5 +1,23 @@
 # VAGGU — planejamento e continuidade do projeto
 
+## Limpeza aprovada e simplificação de telões — 06/11/2026
+
+Retirados três assets públicos e quatro componentes sem consumidores identificados no repositório. A cópia documental do SVG de notebook tem o mesmo hash da cópia removida, e a landing mantém sua referência ao WebP. Os registros de setembro e de 06/11 ficam como histórico. O usuário decidiu encerrar a rotina diária pela fase final do projeto. O aplicativo confirmou a remoção do agendamento.
+
+O serviço de telões passou a reutilizar os filtros de capacidade ativa e a regra de contagem de leituras válidas. Os grupos administrativos mantêm rotas separadas para preservar a origem do shopping e as políticas de cache. A próxima etapa do [plano](revisao-estrutura-e-simplificacao-2026-11-06.md) trata de telemetria e importação.
+
+Comandos: `git status --short --branch`, `git diff`, `rg`, `Get-FileHash`, `npm.cmd --prefix vaggu-backend test`, `npm.cmd --prefix vaggu-frontend run build`, `npm.cmd --prefix vaggu-frontend run lint`, `node scripts/verificar-documentacao.mjs` e `git diff --check`. PostgreSQL descartável local com 140 testes aprovados e um cenário de dump e restauração pulado. Build e lint aprovados. O aviso de chunks grandes do Vite continua. Plugin Browser indisponível. Validação local com Playwright e Edge, `node %TEMP%/vaggu-limpeza-qa.cjs`, em três tamanhos e dois temas. Veja o [índice de evidências](../Evidências%20visuais/Índice%20de%20evidências.md).
+
+## Revisão de estrutura e retomada dos diários — 06/11/2026
+
+Inventário inicial de 852 arquivos rastreados em `main`, com alterações locais preservadas. A [revisão de estrutura](revisao-estrutura-e-simplificacao-2026-11-06.md) registra os candidatos a descarte, o motivo de manter fontes e evidências e a ordem de simplificação. Ajustamos a indentação de telões, reutilizamos o validador de corpo da rota e acrescentamos comentários sobre leituras válidas, credenciais, sequência de telemetria e tentativas de envio. Nenhum candidato foi excluído. A skill de roteamento VAGGU não foi localizada nas buscas locais, e nenhuma responsabilidade ou autoria foi atribuída.
+
+Na primeira rodada foi criado um agendamento local para os diários. A decisão posterior acima cancelou a rotina e preservou as notas existentes.
+
+Comandos de revisão e validação: `git status --short --branch`, `git ls-files`, `git diff`, buscas com `rg`, `npm.cmd --prefix vaggu-backend test`, `npm.cmd --prefix vaggu-frontend run build`, `npm.cmd --prefix vaggu-frontend run lint`, `node scripts/verificar-documentacao.mjs` e `git diff --check`. A suíte com PostgreSQL descartável local aprovou 140 testes e pulou um cenário de dump e restauração. O servidor temporário foi encerrado. Build e lint do frontend aprovados, com aviso do Vite sobre chunks acima de 500 kB. Sem mudanças de frontend nesta rodada, não foram produzidas novas capturas.
+
+Próxima etapa: confirmar os consumidores externos dos assets candidatos e conferir o efeito da remoção no build e nas telas antes de seguir com a simplificação de domínio.
+
 ## Memorial direto para o QR code — 04/11/2026
 
 Revisada a página sem descartar o trabalho local da main. Hero com uma única foto grande dos seis integrantes, conceito em três passos, carrossel manual com 18 imagens do projeto, grade única com um retrato de cada integrante e seis fotos em conjunto. Depoimentos originais preservados e recolhidos. Encerramento agradece SESI, SENAI, Matheus Zacaria, Giovanni Ribeiro, Edmar e Alex. Mantido Juan conforme identificação do acervo existente. Nenhum asset original removido.

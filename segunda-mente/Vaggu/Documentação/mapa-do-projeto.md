@@ -1,5 +1,7 @@
 # Mapa do projeto VAGGU
 
+**06/11/2026 — organização e manutenção:** a [revisão da estrutura](revisao-estrutura-e-simplificacao-2026-11-06.md) reúne os candidatos a descarte e a ordem de simplificação e os arquivos já retirados. A [rotina do cofre](../../Rotina%20de%20registro.md) preserva os diários como histórico.
+
 **04/11/2026 — rota pública do memorial e contatos:** `vaggu-frontend/src/main.tsx` registra `/memorial`; `src/pages/memorial-page.tsx` incorpora a página estática. `vite.config.ts` serve o diretório-fonte sob `/memorial/` no desenvolvimento e publica HTML, scripts, estilos e mídias em `dist/memorial/` no build. `vaggu-memorial-samuel/` continua sendo a fonte do acervo; caminhos de assets usam o prefixo `/memorial/assets/`. A landing substitui o mockup de celulares por links oficiais de WhatsApp, e-mail, Instagram `@vagguempresarial` e GitHub. No rodapé, “Canais oficiais” é o único título; os nomes dos canais e o e-mail permanecem em uma linha, e os cartões mudam para duas colunas somente no breakpoint XL.
 
 **04/11 — texto demonstrativo do bot:** payload.ts mantém menu e retorno; opções 3–5 anunciam contato de uma atendente em alguns instantes, sem pedido de e-mail ou acionamento real. whatsapp.test.ts confere os mesmos textos para clique e número digitado; nenhuma nova dependência, migration ou rota.
@@ -83,8 +85,6 @@ As cópias de imagens entre `segunda-mente/Vaggu/Identidade visual/Assets/` e `v
 | `vaggu-frontend/public/assets/estacionamento-hero-vaggu.webp` | Imagem ilustrativa criada a partir da referência visual do projeto em 19/10/2026; exibida na abertura da landing. |
 | `vaggu-frontend/public/assets/favicon-vaggu.svg` | Favicon vetorial baseado no ícone de referência do projeto, com o “v” da marca oficial. |
 | `vaggu-frontend/public/assets/mockup-laptop-vaggu.webp` | Imagem WebP do notebook exibida na seção sobre a VAGGU, com carregamento adiado. |
-| `vaggu-frontend/public/assets/phones-vaggu.webp` | Versão WebP sem perda dos celulares do rodapé desktop da landing; composição oculta no mobile. |
-| `vaggu-frontend/public/assets/vaggu-circulado.webp` | Versão WebP sem perda da variante circular da marca; preservada no catálogo, sem uso nas telas atuais. |
 | `vaggu-frontend/public/assets/vaggu-foto-homem-login-sem-fundo.webp` | Versão WebP sem perda do retrato decorativo recortado usado no login, preservando transparência. |
 | `segunda-mente/Vaggu/Especificações/Personas.md` | Registra Carlos a partir dos slides originais do projeto, complementos e personas propostas, fontes, necessidades, hipóteses de validação e limites de escopo e permissões. |
 
@@ -100,6 +100,7 @@ As cópias de imagens entre `segunda-mente/Vaggu/Identidade visual/Assets/` e `v
 | `render.yaml` | Define build, inicialização, saúde e solicita os segredos de banco e Blob sem versionar seus valores. |
 | `scripts/verificar-documentacao.mjs` | Confere cobertura do mapa, wikilinks e destinos/âncoras locais de todos os Markdown versionáveis, incluindo READMEs; ignora exemplos em blocos de código. |
 | `scripts/gerar-slides-personas.py` | Gera os quatro slides PNG ilustrativos de Mariana e Rafael, reutilizando retratos locais e a identidade preta e amarela da referência. |
+| `segunda-mente/Vaggu/Documentação/revisao-estrutura-e-simplificacao-2026-11-06.md` | Registra a revisão estrutural, o uso dos arquivos candidatos a descarte e o plano incremental de simplificação. |
 | `segunda-mente/Vaggu/Evidências visuais/Personas/README.md` | Registra fontes e prompts dos recortes e fundos, reprodução com Poppins e conferência dos slides de Mariana e Rafael com os originais de Carlos. |
 | `segunda-mente/Vaggu/Documentação/auditoria-documental-2026-10-15.md` | Consolida a auditoria semântica, as pendências funcionais e de aceite, as evidências e os limites da revisão de 15/10. |
 | `vaggu-backend/.env.example` | Documenta banco, servidor, WhatsApp e parâmetros provisórios da telemetria sem incluir credenciais reais. |
@@ -194,7 +195,6 @@ As cópias de imagens entre `segunda-mente/Vaggu/Identidade visual/Assets/` e `v
 | `vaggu-frontend/index.html` | Documento de entrada do Vite e ponto de montagem do React. |
 | `vaggu-frontend/package-lock.json` | Fixa a árvore de dependências e integridade para instalação reproduzível via npm ci. |
 | `vaggu-frontend/package.json` | Declara dependências, faixa do Node e scripts de desenvolvimento, build e verificação. |
-| `vaggu-frontend/public/assets/mockup-laptop-vaggu.svg` | Fonte SVG válida do notebook, preservada para edição e recuperação do raster original; a interface carrega o WebP. |
 | `vaggu-frontend/public/assets/vaggu-logo-white.svg` | Variante vetorial branca da marca, sem filtro de sombra, usada na landing e em outras superfícies escuras. |
 | `vaggu-frontend/public/assets/vaggu-logo-yellow.svg` | Variante amarela do logotipo preservada no catálogo público; não está montada nas telas atuais. |
 | `vaggu-frontend/public/assets/vaggu-logo.svg` | Asset visual vaggu-logo.svg; reutilizado na identidade e composição da interface. |
@@ -222,20 +222,16 @@ As cópias de imagens entre `segunda-mente/Vaggu/Identidade visual/Assets/` e `v
 | `vaggu-frontend/src/components/protected-route.tsx` | Aguarda a sessão e exibe carregamento/erro com cores do tema, foco visível e nova tentativa; autorização de recursos continua no backend. |
 | `vaggu-frontend/src/components/sobre-vaggu.css` | Escala, anéis automáticos e pesos da landing; medidas compartilhadas mantêm as conexões alinhadas. |
 | `vaggu-frontend/src/components/sobre-vaggu.tsx` | Apresenta a solução, a jornada comercial e os benefícios; inicia as conexões quando o painel está quase todo visível. |
-| `vaggu-frontend/src/components/ui/alert.tsx` | Componente de interface reutilizável alert; usado para controles, estados e composição acessível. |
-| `vaggu-frontend/src/components/ui/avatar.tsx` | Componente de interface reutilizável avatar; usado para controles, estados e composição acessível. |
 | `vaggu-frontend/src/components/ui/badge.tsx` | Componente de interface reutilizável badge; usado para controles, estados e composição acessível. |
 | `vaggu-frontend/src/components/ui/button.tsx` | Componente de interface reutilizável button; usado para controles, estados e composição acessível. |
 | `vaggu-frontend/src/components/ui/card.tsx` | Componente de interface reutilizável card; usado para controles, estados e composição acessível. |
 | `vaggu-frontend/src/components/ui/dialog.tsx` | Componente de interface reutilizável dialog; usado para controles, estados e composição acessível. |
-| `vaggu-frontend/src/components/ui/field.tsx` | Componente de interface reutilizável field; usado para controles, estados e composição acessível. |
 | `vaggu-frontend/src/components/ui/input.tsx` | Componente de interface reutilizável input; usado para controles, estados e composição acessível. |
 | `vaggu-frontend/src/components/ui/label.tsx` | Componente de interface reutilizável label; usado para controles, estados e composição acessível. |
 | `vaggu-frontend/src/components/ui/separator.tsx` | Componente de interface reutilizável separator; usado para controles, estados e composição acessível. |
 | `vaggu-frontend/src/components/ui/sheet.tsx` | Componente de interface reutilizável sheet; usado para controles, estados e composição acessível. |
 | `vaggu-frontend/src/components/ui/sonner.tsx` | Componente de interface reutilizável sonner; usado para controles, estados e composição acessível. |
 | `vaggu-frontend/src/components/ui/table.tsx` | Componente de interface reutilizável table; usado para controles, estados e composição acessível. |
-| `vaggu-frontend/src/components/ui/tooltip.tsx` | Componente de interface reutilizável tooltip; usado para controles, estados e composição acessível. |
 | `vaggu-frontend/src/hooks/use-scroll-reveal.ts` | Revela uma vez os blocos da landing conforme entram na viewport; a decisão atual mantém esse movimento automático. |
 | `vaggu-frontend/src/index.css` | Reúne temas claro/escuro, compatibilidade visual dos painéis, responsividade e microinterações dos cards acionáveis. |
 | `vaggu-frontend/src/lib/constants.ts` | Publica links de contato somente após configurar o número oficial da VAGGU. |
@@ -386,8 +382,8 @@ Regras, contratos, operação e limitações estão em [conclusao-software-2026-
 | `vaggu-backend/src/equipamentos/ocorrencias.ts` | Deduplica falhas de comunicação e agrupa sensores quando a placa perde contato, preservando manutenção manual. |
 | `vaggu-backend/src/equipamentos/routes.ts` | Expõe operações administrativas de equipamentos/manutenção e consulta de ocorrências no shopping da sessão. |
 | `vaggu-backend/src/equipamentos/service.ts` | Valida vínculos, administra credenciais e manutenção, invalida leituras e exige nova confirmação no retorno. |
-| `vaggu-backend/src/teloes/routes.ts` | Expõe cadastro, edição e revogação para Admin e gerente; o shopping do gerente deriva da sessão. Mantém a consulta agregada com credencial própria. |
-| `vaggu-backend/src/teloes/service.ts` | Valida recortes e credenciais; agrega somente capacidade ativa e leituras válidas sem expor detalhes administrativos. |
+| `vaggu-backend/src/teloes/routes.ts` | Separa consulta por credencial do telão, gestão do gerente pelo shopping da sessão e gestão da equipe VAGGU pelo shopping da URL. |
+| `vaggu-backend/src/teloes/service.ts` | Valida credenciais e recortes. Reutiliza a seleção de capacidade ativa e a contagem de leituras válidas entre visão geral, grupos e categorias. |
 | `vaggu-backend/test/analiticos-postgresql.test.ts` | Exercita snapshots históricos, ciclos e isolamento/filtros em PostgreSQL descartável. |
 | `vaggu-backend/test/equipamentos-postgresql.test.ts` | Exercita escopo, vínculo, manutenção, recuperação de comunicação, rotação de chave e autorização. |
 | `vaggu-backend/test/renovar-cenario-apresentacao.test.ts` | Verifica planejamento, prévia, proteção do exemplo e repetição da renovação. |
