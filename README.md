@@ -75,14 +75,6 @@ npm.cmd --prefix vaggu-frontend run dev
 
 Abra o endereço informado pelo Vite. O proxy encaminha `/api` à API local em `127.0.0.1:3000`; `/api/v1/health/ready` confirma a conexão com o banco. Encerre cada terminal com `Ctrl+C`.
 
-## Estado e verificações
-
-Em 21/10/2026, a suíte do backend aprovou **130 testes**, incluindo PostgreSQL descartável e ensaio de dump/restauração. A revisão no navegador exercitou filtros, estado sem observação, exportações, monitoramento e telão, com capturas em computador, tablet e celular. Os [resultados e limites](./segunda-mente/Vaggu/Documenta%C3%A7%C3%A3o/revisao-geral-2026-10-21.md) estão documentados.
-
-A implementação foi validada localmente com dados fictícios. Há registro de ensaio físico inicial com três sensores; estabilidade física permanece em etapa própria. Em 04/11/2026, o usuário confirmou a homologação completa do site publicado.
-
-O participante confirmou conexão real, menu clicável e apresentação do WhatsApp com imagem/site em 04/11/2026, no percurso documentado. O WhatsApp tem escopo demonstrativo, sem exigência de coleta estruturada ou operação humana. Capturas da interface real dependem de sessão disponível. Power BI publicado é uma evolução opcional.
-
 ## Documentação
 
 - [Situação atual e pendências — 04/11/2026](./segunda-mente/Vaggu/Documentação/revisao-documental-2026-11-04.md): etapa de homologação, entregas verificadas e prioridades para concluir.
