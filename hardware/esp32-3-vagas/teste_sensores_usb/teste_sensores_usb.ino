@@ -1,10 +1,11 @@
-// Ensaio USB/Serial com LED da vaga 1, sem Wi-Fi ou API.
+// Ensaio USB/Serial dos três sensores e seis LEDs, sem Wi-Fi ou API.
 #include <Arduino.h>
 
 const uint8_t TRIG[3] = {27, 26, 25};
 const uint8_t ECHO[3] = {32, 33, 34};
-const uint8_t LED_VAGA_1 = 13;
-const float LIMIAR_LED_CM = 15.0f;
+const uint8_t VERMELHO[3] = {13, 14, 23};
+const uint8_t VERDE[3] = {18, 19, 21};
+int estado[3] = {-1, -1, -1};
 
 float medirCm(int sensor) {
   digitalWrite(TRIG[sensor], LOW);
@@ -19,30 +20,33 @@ float medirCm(int sensor) {
 
 void setup() {
   Serial.begin(115200);
-  pinMode(LED_VAGA_1, OUTPUT);
-  digitalWrite(LED_VAGA_1, LOW);
-  // Pisca na inicialização para separar falha do LED de falha da leitura.
-  for (int i = 0; i < 3; i++) {
-    digitalWrite(LED_VAGA_1, HIGH); delay(250);
-    digitalWrite(LED_VAGA_1, LOW); delay(250);
-  }
   for (int i = 0; i < 3; i++) {
     pinMode(TRIG[i], OUTPUT);
     digitalWrite(TRIG[i], LOW);
     pinMode(ECHO[i], INPUT);
+    pinMode(VERMELHO[i], OUTPUT);
+    pinMode(VERDE[i], OUTPUT);
+    digitalWrite(VERMELHO[i], LOW);
+    digitalWrite(VERDE[i], LOW);
   }
-  delay(1000);
-  Serial.println("TESTE USB + LED GPIO13 | S01=27/32, S02=26/33, S03=25/34 (TRIG/ECHO).");
+  Serial.println("TESTE USB: tres sensores e seis LEDs.");
+  for (int i = 0; i < 3; i++) {
+    Serial.printf("P%02d: vermelho GPIO%u, depois verde GPIO%u\n", i + 1, VERMELHO[i], VERDE[i]);
+    digitalWrite(VERMELHO[i], HIGH); delay(600);
+    digitalWrite(VERMELHO[i], LOW);
+    digitalWrite(VERDE[i], HIGH); delay(600);
+    digitalWrite(VERDE[i], LOW);
+  }
 }
 
 void loop() {
   for (int i = 0; i < 3; i++) {
     float cm = medirCm(i);
-    if (i == 0) {
-      bool acender = cm >= 2 && cm <= LIMIAR_LED_CM;
-      digitalWrite(LED_VAGA_1, acender ? HIGH : LOW);
-      Serial.printf("LED GPIO13: %s (controlado somente pelo S01)\n", acender ? "LIGADO" : "DESLIGADO");
-    }
+    if (cm < 0) estado[i] = -1;
+    else if (cm <= 15) estado[i] = 1;
+    else if (cm >= 18) estado[i] = 0;
+    digitalWrite(VERMELHO[i], estado[i] == 1 ? HIGH : LOW);
+    digitalWrite(VERDE[i], estado[i] == 0 ? HIGH : LOW);
     if (cm < 0) Serial.printf("S%02d: SEM LEITURA VALIDA\n", i + 1);
     else Serial.printf("S%02d: %.1f cm\n", i + 1, cm);
     delay(80); // Separa disparos para reduzir interferência entre sensores.

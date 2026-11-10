@@ -9,8 +9,8 @@
 const uint8_t TRIG[3] = {27, 26, 25};
 const uint8_t ECHO[3] = {32, 33, 34};
 const uint8_t LED_OCUPADA[3] = {13, 14, 23};
-const bool USAR_LEDS = true; // Somente LED da vaga 1 montado no GPIO13.
-const uint8_t QUANTIDADE_LEDS = 1;
+const uint8_t LED_LIVRE[3] = {18, 19, 21};
+const unsigned long SILENCIO_ACUSTICO_MS = 120;
 const char* SUFIXOS[3] = {"-S01", "-S02", "-S03"};
 const float OCUPAR_CM[3] = {15, 15, 15};
 const float LIBERAR_CM[3] = {18, 18, 18};
@@ -21,9 +21,11 @@ bool iniciou = false;
 bool bloqueado = false;
 unsigned long ultimaTentativaWifi = 0;
 
-void apagarLeds() {
-  if (!USAR_LEDS) return;
-  for (int i = 0; i < QUANTIDADE_LEDS; i++) digitalWrite(LED_OCUPADA[i], LOW);
+void indicarVaga(uint8_t i, int estado) {
+  digitalWrite(LED_OCUPADA[i], LOW);
+  digitalWrite(LED_LIVRE[i], LOW);
+  if (estado == 1) digitalWrite(LED_OCUPADA[i], HIGH);
+  if (estado == 0) digitalWrite(LED_LIVRE[i], HIGH);
 }
 
 float medir(uint8_t i) {
@@ -44,18 +46,24 @@ float medirFiltrado(uint8_t i) {
   for (int amostra = 0; amostra < 3; amostra++) {
     float cm = medir(i);
     if (cm >= 0) validas[quantidade++] = cm;
-    delay(65); // Preserva separação acústica entre disparos.
+    // Nenhum TRIG durante esta pausa, inclusive ao trocar de sensor ou após timeout.
+    delay(SILENCIO_ACUSTICO_MS);
   }
   if (quantidade < 2) return -1;
   for (int a = 0; a < quantidade; a++) for (int b = a + 1; b < quantidade; b++) {
     if (validas[a] > validas[b]) { float t = validas[a]; validas[a] = validas[b]; validas[b] = t; }
   }
-  if (quantidade == 3) return validas[1];
-  float media = (validas[0] + validas[1]) / 2.0f;
-  float tolerancia = max(2.0f, media * 0.15f);
-  // Leituras em lados opostos dos limiares não devem fabricar uma classificação.
-  if (validas[1] - validas[0] > tolerancia || (validas[0] <= OCUPAR_CM[i] && validas[1] >= LIBERAR_CM[i])) return -1;
-  return media;
+  // Exige um par coerente até quando as três amostras retornam algum eco.
+  int melhorPar = -1;
+  float menorDiferenca = 401;
+  for (int a = 0; a + 1 < quantidade; a++) {
+    float baixa = validas[a], alta = validas[a + 1];
+    float diferenca = alta - baixa;
+    if (diferenca > max(2.0f, (baixa + alta) * 0.075f)) continue;
+    if (baixa <= OCUPAR_CM[i] && alta >= LIBERAR_CM[i]) continue;
+    if (diferenca < menorDiferenca) { melhorPar = a; menorDiferenca = diferenca; }
+  }
+  return melhorPar < 0 ? -1 : (validas[melhorPar] + validas[melhorPar + 1]) / 2.0f;
 }
 
 String base() {
@@ -95,11 +103,18 @@ bool enviar(const char* rota, const String& corpo) {
 
 void setup() {
   Serial.begin(115200);
-  Serial.println("VAGGU: telemetria com HTTPS validado, S01=27/32, S02=26/33, S03=25/34.");
+  Serial.println("VAGGU: seis LEDs, disparos separados por 120 ms de silencio, S01=27/32, S02=26/33, S03=25/34.");
   for (int i = 0; i < 3; i++) {
     pinMode(TRIG[i], OUTPUT); digitalWrite(TRIG[i], LOW);
     pinMode(ECHO[i], INPUT);
-    if (USAR_LEDS && i < QUANTIDADE_LEDS) { pinMode(LED_OCUPADA[i], OUTPUT); digitalWrite(LED_OCUPADA[i], LOW); }
+    pinMode(LED_OCUPADA[i], OUTPUT);
+    pinMode(LED_LIVRE[i], OUTPUT);
+    indicarVaga(i, -1);
+  }
+  for (uint8_t i = 0; i < 3; ++i) {
+    indicarVaga(i, 1); delay(350);
+    indicarVaga(i, 0); delay(350);
+    indicarVaga(i, -1);
   }
   char identificador[48];
   snprintf(identificador, sizeof(identificador), "esp32-%08lx-%08lx-%08lx",
@@ -127,9 +142,23 @@ void setup() {
 
 void loop() {
   receberHorarioUsb();
-  if (bloqueado) { apagarLeds(); delay(1000); return; }
+  // A indicação física depende apenas do eco e continua mesmo sem rede.
+  String leituras;
+  for (int i = 0; i < 3; i++) {
+    float cm = medirFiltrado(i);
+    if (cm < 0) estados[i] = -1;
+    else if (cm <= OCUPAR_CM[i]) estados[i] = 1;
+    else if (cm >= LIBERAR_CM[i]) estados[i] = 0;
+    indicarVaga(i, estados[i]);
+    Serial.printf("S%02d: %.1f cm | %s\n", i + 1, cm,
+      estados[i] == 1 ? "VERMELHO" : estados[i] == 0 ? "VERDE" : "SEM ESTADO");
+    if (estados[i] < 0) continue;
+    if (leituras.length()) leituras += ',';
+    leituras += String("{\"sensorCodigo\":\"") + PLACA_CODIGO + SUFIXOS[i] +
+      "\",\"estadoDetectado\":\"" + (estados[i] ? "OCUPADA" : "LIVRE") + "\"}";
+  }
+  if (bloqueado) { delay(100); return; }
   if (WiFi.status() != WL_CONNECTED) {
-    apagarLeds();
     Serial.println("Aguardando Wi-Fi 2,4 GHz...");
     if (millis() - ultimaTentativaWifi >= 15000UL) {
       WiFi.disconnect();
@@ -144,21 +173,6 @@ void loop() {
     iniciou = enviar("/heartbeat", base() + "}");
     if (iniciou) sequencia++;
     delay(1000); return;
-  }
-  String leituras;
-  for (int i = 0; i < 3; i++) {
-    float cm = medirFiltrado(i);
-    Serial.printf("S%02d: %.1f cm\n", i + 1, cm);
-    if (cm < 0) { estados[i] = -1; if (USAR_LEDS && i < QUANTIDADE_LEDS) digitalWrite(LED_OCUPADA[i], LOW); continue; }
-    if (cm <= OCUPAR_CM[i]) estados[i] = 1;
-    else if (cm >= LIBERAR_CM[i]) estados[i] = 0;
-    // Detecção local; a janela de confirmação é configurada na API.
-    if (USAR_LEDS && i < QUANTIDADE_LEDS) digitalWrite(LED_OCUPADA[i], estados[i] == 1 ? HIGH : LOW);
-    // Após falha/inicialização, a faixa intermediária não confirma estado.
-    if (estados[i] < 0) continue;
-    if (leituras.length()) leituras += ',';
-    leituras += String("{\"sensorCodigo\":\"") + PLACA_CODIGO + SUFIXOS[i] +
-      "\",\"estadoDetectado\":\"" + (estados[i] ? "OCUPADA" : "LIVRE") + "\"}";
   }
   if (leituras.length()) enviar("/estados", base() + ",\"leituras\":[" + leituras + "]}");
   else enviar("/heartbeat", base() + "}");

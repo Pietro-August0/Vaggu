@@ -4,6 +4,8 @@ tags: [vaggu, indice]
 ---
 # VAGGU
 
+**Bancada física — 10/11/2026:** teste local das três vagas concluído e aceito pela equipe. O vídeo integrado mostra os LEDs e o mapa mudando de livre para ocupada e voltando a livre. Ver [registro do ensaio e das cinco mídias](Documentação/ensaio-fisico-esp32-2026-11-10.md).
+
 **Memorial para apresentação — 05/11/2026:** a rota `/memorial` abre com uma faixa contínua de ponta a ponta com cinco destaques. O acervo do projeto fica em grade após os depoimentos. Ver [evidências da revisão](Evidências%20visuais/Índice%20de%20evidências.md).
 
 **Aceite e escopo atualizados em 04/11/2026:** site completamente homologado conforme confirmação do usuário; foco em evidências e preparação da apresentação. WhatsApp demonstrativo, sem exigência de atendimento humano, coleta comercial ou protocolo. Procedimentos de dados definidos em [[Vaggu/Documentação/operacao-dados-tcc|operação dos dados do TCC]]. O aceite físico sustentado dos sensores continua separado. Os registros anteriores abaixo preservam o diagnóstico antes desta confirmação.

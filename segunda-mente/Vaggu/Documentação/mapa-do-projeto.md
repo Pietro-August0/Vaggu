@@ -44,8 +44,8 @@ Conhecimento, documentos e regras ficam em `segunda-mente`. O planejamento canô
 | Arquivo de hardware | Responsabilidade |
 | --- | --- |
 | `hardware/esp32-3-vagas/README.md` | Parecer de viabilidade do demo, diagramas de ligação/arquitetura/posição, preparação da API, provisionamento, calibração e aceite físico. |
-| `hardware/esp32-3-vagas/teste_sensores_usb/teste_sensores_usb.ino` | Ensaio independente USB/Serial, sem rede, com TRIG 27/26/25, ECHO 32/33/34 e LED GPIO13 controlado pelo S01 até 15 cm; três piscadas iniciais e diagnóstico serial. |
-| `hardware/esp32-3-vagas/vaggu_3_vagas/vaggu_3_vagas.ino` | Firmware de bancada WROOM-32 para três HC-SR04, ECHO 32/33/34, saídas previstas 13/14/23 com somente um LED habilitado no GPIO13, autenticação Device, sequência por boot e leituras filtradas com omissão de sensores sem leitura válida. |
+| `hardware/esp32-3-vagas/teste_sensores_usb/teste_sensores_usb.ino` | Ensaio USB sem rede dos três sensores e seis LEDs, com sequência inicial por vaga e indicação local com histerese. |
+| `hardware/esp32-3-vagas/vaggu_3_vagas/vaggu_3_vagas.ino` | Firmware WROOM-32 de três HC-SR04 com pausa acústica de 120 ms, filtro por par coerente, seis LEDs por estado local e telemetria autenticada que omite leituras inválidas. |
 | `hardware/esp32-3-vagas/vaggu_3_vagas/relogio_serial.h` | Ajuste temporário do relógio de bancada por comando TIME recebido via USB, com validação do intervalo e preservação do TLS. |
 | `hardware/esp32-3-vagas/vaggu_3_vagas/config.example.h` | Modelo sem segredos para gerar config.h local ignorado pelo Git. |
 
@@ -446,3 +446,4 @@ Memorial: `index.html` usa lista semântica para os tutores; `src/estilos.css` d
 
 O retrato atual de Juan no Memorial está em vaggu-memorial-samuel/public/assets/fotos/retrato-juan.jpg. O acervo usa esse arquivo na grade, no depoimento e na ampliação.
 | `vaggu-memorial-samuel/public/assets/fotos/retrato-juan.jpg` | Retrato de Juan na grade, no depoimento e na ampliação do Memorial. |
+| `hardware/esp32-3-vagas/teste_leds_usb/teste_leds_usb.ino` | Teste por USB exclusivo dos seis LEDs, com indicação de cor, vaga e GPIO no serial. |

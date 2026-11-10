@@ -1,5 +1,15 @@
 # Protótipo físico VAGGU — três vagas
 
+**Aceite local de 10/11/2026:** a equipe concluiu o ensaio com três sensores, seis LEDs e atualização das vagas A01/A02/A03 no Vaggu local. Montagem, resultados e mídias estão no [registro do ensaio físico](../../segunda-mente/Vaggu/Documentação/ensaio-fisico-esp32-2026-11-10.md). As pendências de teste local citadas nos registros anteriores são históricas.
+
+**Ensaio integrado com sensores próximos:** o firmware dispara um transdutor por vez e deixa 120 ms sem disparos após cada tentativa de eco, inclusive na troca de sensor. Exige duas das três amostras coerentes. Mantém os GPIO dos sensores, aciona vermelhos em 13/14/23 e verdes em 18/19/21 e testa os seis na inicialização. Vermelho até 15 cm, verde a partir de 18 cm; sem eco coerente, ambos apagados e leitura omitida no envio. Os LEDs refletem a detecção local; o mapa mostra a confirmação do servidor. Use uma superfície plana frente a uma vaga de cada vez; se os vizinhos ainda reagirem, afaste ou reoriente os sensores. As notas anteriores sobre um LED e 65 ms são históricas.
+
+Para o ensaio local, use o hotspot Vaggu em 2,4 GHz e a placa de bancada, separada do piloto hospedado. Abra `http://127.0.0.1:5173/painel` com o gerente da bancada e acompanhe A01/A02/A03. Se houver uma bancada previamente preparada, preserve as chaves e use uma cópia privada do config.h da bancada com o IP atual do hotspot. Nunca reutilize a chave hospedada como chave local.
+
+**Teste USB de seis LEDs:** o sketch `teste_sensores_usb` acende primeiro o vermelho e depois o verde de P01, P02 e P03 na inicialização. Vermelhos: GPIO13/14/23; verdes: GPIO18/19/21. Cada LED usa seu próprio resistor de 1 kΩ em série e GND comum. Depois da sequência, cada sensor comanda seu par: vermelho até 15 cm, verde a partir de 18 cm, estado anterior no intervalo e ambos apagados sem leitura válida. O teste funciona sem rede e não envia ao site; o firmware de integração é gravado separadamente.
+
+**Inventário confirmado em 10/11/2026:** os resistores necessários estão disponíveis. A falta de um resistor citada nas etapas anteriores não impede mais a montagem. O firmware versionado ainda habilita somente o LED de GPIO13; a disponibilidade dos componentes não confirma montagem, habilitação ou teste dos demais LEDs. Mantenha os divisores dos três ECHO e use um resistor em série para cada LED.
+
 ## Registro fotográfico da montagem — 06/11/2026
 
 As duas vistas mostram a placa ESP32, três sensores ultrassônicos, resistores e fios de ligação montados em protoboards. As fotos registram a montagem em bancada. A pinagem e os resultados de teste devem ser consultados nas seções técnicas abaixo.
@@ -318,3 +328,7 @@ Feche o Monitor Serial e execute `./hardware/esp32-3-vagas/sincronizar-relogio-u
 Preparada reutilização de socket HTTP/1.1 entre ciclos, mantendo os clientes locais/TLS e HTTPClient vivos. A resposta é consumida antes de end(); conexões com erro são encerradas e o próximo ciclo reconecta com certificado validado. Wi-Fi sem sleep somente na bancada USB; aumenta consumo e precisa ser reavaliado para pilhas. Log inclui duração do envio em milissegundos. Filtro de três amostras, separação acústica de 65 ms e histerese foram preservados.
 
 Para o ensaio publicado, a confirmação pode usar `TELEMETRIA_CONFIRMACAO_MS=2000` e `TELEMETRIA_LACUNA_MAXIMA_MS=4500` no Render. Isso é uma janela mínima com observações consistentes; não garante transição total de dois segundos. Ainda depende de aplicar o ambiente, gravar firmware e medir o ciclo físico. Alterar arquivo local não muda o ambiente hospedado.
+
+### Teste somente dos LEDs
+
+Grave `teste_leds_usb/teste_leds_usb.ino`. O sketch repete a sequência P01/P02/P03, vermelho e verde, um LED por vez, e identifica cada GPIO no serial a 115200. Não usa os sensores nem o Wi-Fi. Cada LED usa resistor individual de 1 kΩ e GND comum; o barramento positivo dos sensores pode ficar desligado. Para voltar à integração, regrave o firmware de telemetria.

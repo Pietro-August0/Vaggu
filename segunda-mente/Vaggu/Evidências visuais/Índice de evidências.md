@@ -3,6 +3,10 @@ tags: [vaggu, evidencias, interface]
 ---
 # Evidências visuais da VAGGU
 
+## 10/11/2026 — teste físico integrado do ESP32
+
+Três fotos da montagem e da maquete, mais dois vídeos do ensaio real da bancada. No vídeo integrado, a rota local `/painel` do gerente mostra as vagas A01/A02/A03 junto à placa e aos LEDs; a gravação não é um teste responsivo. [Registro, inventário e localização dos originais privados](../Documentação/ensaio-fisico-esp32-2026-11-10.md).
+
 ## 06/11/2026 — percurso sincronizado Da vaga ao painel
 
 Memorial local em /memorial/#projeto, visitante, tema escuro e diagramas ilustrativos. Edge e Playwright conferiram o ciclo de 12 segundos, a direção do marcador em cada largura, pausa e retomada por teclado e a versão estática. [Desktop 1440×1000](2026-11-06%20-%20Percurso%20sincronizado/desktop.png) · [Tablet 768×1024](2026-11-06%20-%20Percurso%20sincronizado/tablet.png) · [Celular 390×844](2026-11-06%20-%20Percurso%20sincronizado/celular.png) · [Movimento reduzido 390×844](2026-11-06%20-%20Percurso%20sincronizado/movimento-reduzido.png).

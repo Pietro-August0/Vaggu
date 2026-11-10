@@ -1167,3 +1167,28 @@ Perfil do PDF e complemento de necessidades incorporados ao livro e à ficha de 
 ## Retrato de Juan — 06/11/2026
 
 Foto fornecida de 1200×1600 incorporada ao livro e ao Memorial. Validação local com Playwright/Edge via vaggu-juan-qa.cjs em três viewports, verificador documental e git diff --check. Renderização do DOCX pendente por ausência do LibreOffice.
+
+## Sincronização do repositório e inventário da bancada — 10/11/2026
+
+Executados `git fetch --all --prune` e `git merge --ff-only origin/main`. A main local já estava no mesmo commit do remoto (`2020505`) e sem alterações antes do registro. A main inclui a consolidação do piloto ESP32 (`fdc779c`, PR #23), fotos da bancada e vídeos no memorial (`ce5ca6a`), avanços na navegação e no acervo do memorial (`437f8df`) e contratação demonstrativa no WhatsApp (`70fa371`). Ramos remotos não integrados foram revisados sem incorporar trabalho paralelo automaticamente. Mudanças restritas a outras máquinas só podem ser comparadas após envio ao remoto.
+
+Usuário confirmou ter os resistores necessários. Guia da bancada atualizado; firmware continua com um LED ativo no GPIO13. Não houve gravação, ensaio dos novos componentes, alteração do ambiente hospedado ou push nesta revisão.
+
+### Ensaio da montagem de três sensores e seis LEDs
+
+Montagem informada pelo usuário. Monitor serial em COM3 confirmou execução do teste USB anterior e leituras dos três canais, com ausência intermitente de eco, especialmente no S03. Nesse modo não há envio ao site. Atualizado o sketch de ensaio para testar os seis LEDs na partida e indicar ocupação por par de LEDs, preservando a pinagem dos sensores. Arduino CLI compile para esp32:esp32:esp32doit-devkit-v1 aprovado (272.916 bytes, RAM global 22.132). Tentativa de upload automático parou em modo 0x13 antes de gravar; solicitado BOOT para repetir. Validação visual dos LEDs e transições físicas pendente. Guia, mapa e verificador documental atualizados; git diff --check executado.
+`teste_leds_usb`: preparado ensaio isolado dos seis LEDs em sequência; gravação e conferência visual pendentes.
+
+### Ensaio local com sensores próximos
+
+Montagem observada com três transdutores próximos. Firmware integrado mantém um disparo por vez, 120 ms de silêncio por tentativa, par coerente entre três amostras e LEDs vermelho/verde para cada canal, inclusive sem Wi-Fi. Separação não comprova eliminação de interferência. Cópia privada para ensaio local preserva config.h hospedado; identidade e chave da bancada verificadas contra PostgreSQL. Vite aberto em /painel, API via Vite e IP do hotspot respondendo /api/v1/health/ready. Build backend, dez testes de confirmação/rotas, compilação Arduino DevKit V1 (1.102.568 bytes), verificador documental e diff check executados. Aguardando BOOT para gravar e testar cada sensor com o alvo isolado. Nenhum deploy.
+
+Gravação do firmware local em COM3 concluída e flash verificada pelo esptool. Serial confirmou leituras simultaneamente válidas S01 92,6 cm, S02 90,1 cm e S03 89,0 cm com indicação lógica verde. A aparência dos LEDs e reação isolada de cada vaga ainda precisam de conferência física. A ESP32 aguardava Wi-Fi (201/36), e o IPv4 do hotspot não estava ativo no computador durante a verificação. API local via Vite respondeu com banco conectado. Aguardando reativação do hotspot para validar envio e mapa.
+
+### Confirmação mais rápida no Vaggu local — 10/11/2026
+
+Reduzida TELEMETRIA_CONFIRMACAO_MS de 2000 para 1000 somente no `.env` local ignorado. Lacuna de 4500 ms, duas observações coerentes e consulta do mapa a cada 500 ms preservadas. Reiniciados backend e Vite; `/api/v1/health/ready` respondeu com banco conectado. Seis intervalos de eventos reais da ESP32 mediram 1520 a 1649 ms; banco registrou estados OCUPADA e LIVRE das três vagas após iniciar os serviços. Isso não mede o tempo exato entre mover um alvo e a atualização visual; teste isolado do S01 solicitado. Firmware, pausa acústica e Render não alterados nesta rodada.
+
+### Aceite do teste local — 10/11/2026
+
+Equipe confirmou o funcionamento do protótipo. Revisadas três fotos e os quadros dos dois vídeos de 11,73 s e 14 s. A gravação integrada mostra LEDs e mapa das três vagas livres → ocupadas → livres. Cinco originais preservados na pasta privada ignorada; referência no [registro do ensaio](ensaio-fisico-esp32-2026-11-10.md). Não houve publicação, alteração de firmware ou medição adicional de latência nesta etapa de documentação.
