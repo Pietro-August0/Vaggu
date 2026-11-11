@@ -3,6 +3,10 @@ tags: [vaggu, evidencias, interface]
 ---
 # Evidências visuais da VAGGU
 
+## 11/11/2026 — composição das análises e ordem do mapa
+
+Gerente fictício, fixtures somente no navegador, temas claro/escuro. Análises `/painel/analise`: categorias visíveis, Filtros conectado ao período e gráficos alinhados, em desktop amplo1625×884/desktop1440×1000/tablet768×1024/celular390×844. [Capturas e QA das análises](2026-11-11%20-%20Composicao%20das%20analises/README.md). Mapa `/painel`: pesquisa/filtros/diagnóstico antes dos andares, ordem de teclado e interações preservadas nos três tamanhos de tela. [Matriz e 30 prints do mapa](2026-11-11%20-%20Pesquisa%20antes%20dos%20andares/README.md). Evidências locais não comprovam produção/hardware; capturas anteriores preservadas como histórico.
+
 ## 11/11/2026 — alinhamento do resumo
 
 Quatro indicadores com ícones e valores na mesma altura relativa, apoio reservado sem texto fictício. Gerente fictício em `/painel/analise`, fixtures, desktop1440×1000/tablet768×1024/celular390×844 e dois temas. [Capturas e validação](2026-11-11%20-%20Alinhamento%20do%20resumo/README.md). Prova local sem publicação ou hardware.

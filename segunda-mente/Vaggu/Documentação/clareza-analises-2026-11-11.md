@@ -1,5 +1,13 @@
 # Clareza e distribuição das análises — 11/11/2026
 
+## Composição e categorias — revisão após comentários em produção
+
+O usuário apontou cor pouco perceptível nas categorias, lacuna abaixo do card da consulta, legenda de cadastro desnecessária e distância entre Filtros e período. Os ícones agora têm badge sutil e os números usam a cor de cada categoria, com contraste nos dois temas; fundos inteiros permanecem neutros. Removido “Cadastro atual do recorte”. O botão Filtros passa à esquerda do período/recorte, no mesmo grupo visual e na ordem do teclado.
+
+Os dois gráficos principais ficam em cards de altura equilibrada: a comparação com o período anterior passa para faixa própria abaixo dos gráficos e o traçado foi ajustado para11rem no desktop. Isso elimina a lacuna exterior sem devolver o grande espaço vazio interno ao card da rosca. Ajuda dos estados continua recolhida; resumo alinhado, cobertura contextual, filtros e métricas preservados. Sem mudança de fórmula ou API. [Evidências atuais](../Evidências%20visuais/2026-11-11%20-%20Composicao%20das%20analises/README.md).
+
+Continuação na branch local existente, base `acfc4a76`, preservando todas as alterações. Sem commit/push por esta tarefa.
+
 ## Alinhamento do resumo
 
 O usuário apontou que os conjuntos de ícone, valor e título ficavam em alturas diferentes quando um indicador não tinha apoio. Os quatro cards agora compartilham linhas consistentes e área inferior reservada, sem inserir texto vazio ou fictício. A borda superior também tem espessura uniforme para não deslocar a ocupação. [Capturas atuais](../Evidências%20visuais/2026-11-11%20-%20Alinhamento%20do%20resumo/README.md). Métricas e contratos preservados.

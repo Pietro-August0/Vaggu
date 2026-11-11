@@ -1,5 +1,9 @@
 # VAGGU — planejamento e continuidade do projeto
 
+## Comentários do navegador — 11/11/2026
+
+Cinco ajustes solicitados após observação do site publicado: contraste das categorias com ícones/números coloridos; gráficos com alturas compatíveis sem lacuna externa e comparação abaixo; remoção de Cadastro atual do recorte; Filtros à esquerda junto ao período; pesquisa/filtros/diagnóstico antes dos andares no mapa. Sem alteração de métricas, API ou regras de disponibilidade. Roteamento UI/UX: Juan/Elisa como referências, sem atribuir participação real; integração na branch local `codex/fix/pendencias-tcc-pietro`, base `acfc4a76`, identidade Git existente preservada. Playwright usado porque o plugin Browser não está disponível nesta sessão. Capturas fictícias em três viewports nos dois temas e desktop amplo1625×884 nas análises. Comandos: build/lint frontend, scripts focados de composição e ordem do mapa em ambiente.local, verificador documental e diff check. Evidências e limites no índice; envio à main segue autorização vigente do usuário, sem inferir publicação Render.
+
 ## Fechamento para envio à main — 11/11/2026
 
 Atualizações autorizadas pelo usuário para envio direto à main, partindo de `185c0bbc`. Build e lint frontend aprovados; backend: 100 testes aprovados e 12 integrações ignoradas por ausência de TEST_DATABASE_URL. A primeira execução isolada falhou por EACCES nas conexões locais; repetida fora do isolamento com sucesso. Revisão estática sem bloqueios ou padrões de credenciais; evidências visuais atuais com dados fictícios. Verificador documental e diff check aprovados. O envio ao Git não comprova implantação Render nem validação do site publicado. [Pendências vigentes](../Planejamento/Próximos%20passos.md#estado-vigente--11112026): versão publicada, evidência WhatsApp, limites da bancada e ensaio do TCC; dependências residuais em manutenção. Nenhuma coautoria ou aprovação da equipe foi atribuída.

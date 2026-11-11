@@ -1,5 +1,7 @@
 # Mapa do projeto VAGGU
 
+**Comentários de navegação — 11/11:** análises com cores mais visíveis nos ícones/números das categorias, filtros junto ao período e gráficos de altura coerente; comparação em linha própria. `visualizacao-vagas.tsx` ordena pesquisa/filtros antes dos andares também no teclado. [Análises](clareza-analises-2026-11-11.md) e [evidências do mapa](../Evidências%20visuais/2026-11-11%20-%20Pesquisa%20antes%20dos%20andares/README.md).
+
 **Alinhamento dos indicadores — 11/11:** `analise-estacionamento.css` define linhas uniformes de ícone/valor/título e reserva o apoio sem texto fictício; bordas com espessura consistente. [Registro](clareza-analises-2026-11-11.md).
 
 **Cobertura no resumo — 11/11:** `analise-estacionamento.tsx` apresenta a ressalva de cobertura parcial dentro de Ocupação média, sem banner isolado. [Decisão e validação](clareza-analises-2026-11-11.md). Cálculos, estados de ausência/erro e API preservados.

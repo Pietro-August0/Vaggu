@@ -5,9 +5,9 @@ A VAGGU é uma plataforma web responsiva desenvolvida como TCC em Desenvolviment
 
 Cada gerente consulta somente seu shopping. Categorias de vaga — comum, PCD, idoso e elétrica — são separadas do estado operacional; falha de comunicação ou ausência de leitura não significa vaga livre.
 
-![Mapa do Shopping Exemplo, com andares, filtros e disponibilidade das vagas](./segunda-mente/Vaggu/Evid%C3%AAncias%20visuais/2026-10-21%20-%20Revisao%20geral/mapa-desktop.png)
+![Mapa do Shopping Exemplo, com andares, filtros e disponibilidade das vagas](./segunda-mente/Vaggu/Evid%C3%AAncias%20visuais/2026-11-11%20-%20Pesquisa%20antes%20dos%20andares/desktop-light-inicio.png)
 
-*Captura local de 21/10/2026, com API real, PostgreSQL descartável e dados fictícios do Shopping Exemplo.*
+*Captura local de 11/11/2026, com dados fictícios interceptados no navegador; não comprova produção ou sensores físicos.*
 
 ## Funcionalidades
 
@@ -31,7 +31,7 @@ Cada gerente consulta somente seu shopping. Categorias de vaga — comum, PCD, i
   </tr>
 </table>
 
-Veja também [análise](./segunda-mente/Vaggu/Evid%C3%AAncias%20visuais/2026-11-11%20-%20Alinhamento%20do%20resumo/desktop-light-completa.png), [editor e filtros](./segunda-mente/Vaggu/Evid%C3%AAncias%20visuais/2026-11-11%20-%20Painel%20e%20configuracoes/admin-editor-desktop-light.png), [mapa no celular](./segunda-mente/Vaggu/Evid%C3%AAncias%20visuais/2026-11-11%20-%20Painel%20e%20configuracoes/gerente-mapa-celular-light.png) e [login no celular](./segunda-mente/Vaggu/Evid%C3%AAncias%20visuais/2026-10-21%20-%20Revisao%20geral/login-mobile.png). A [galeria de evidências](./segunda-mente/Vaggu/Evid%C3%AAncias%20visuais/%C3%8Dndice%20de%20evid%C3%AAncias.md) registra rotas, resoluções, verificações e limites de cada captura.
+Veja também [análise](./segunda-mente/Vaggu/Evid%C3%AAncias%20visuais/2026-11-11%20-%20Composicao%20das%20analises/desktop-light-completa.png), [editor e filtros](./segunda-mente/Vaggu/Evid%C3%AAncias%20visuais/2026-11-11%20-%20Painel%20e%20configuracoes/admin-editor-desktop-light.png), [mapa no celular](./segunda-mente/Vaggu/Evid%C3%AAncias%20visuais/2026-11-11%20-%20Pesquisa%20antes%20dos%20andares/celular-light-inicio.png) e [login no celular](./segunda-mente/Vaggu/Evid%C3%AAncias%20visuais/2026-10-21%20-%20Revisao%20geral/login-mobile.png). A [galeria de evidências](./segunda-mente/Vaggu/Evid%C3%AAncias%20visuais/%C3%8Dndice%20de%20evid%C3%AAncias.md) registra rotas, resoluções, verificações e limites de cada captura.
 
 ## Tecnologias
 

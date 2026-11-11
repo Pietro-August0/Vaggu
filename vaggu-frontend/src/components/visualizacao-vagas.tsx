@@ -134,25 +134,7 @@ export function VisualizacaoVagas({ estrutura, modo }: VisualizacaoVagasProps) {
       }
     >
       <div className="rounded-2xl bg-white p-4 sm:p-5">
-        <div className="flex flex-wrap gap-2" aria-label="Selecionar andar">
-          {estrutura.andares.map((item) => (
-            <button
-              key={item.id}
-              type="button"
-              onClick={() => selecionarAndar(item.id)}
-              aria-pressed={andar?.id === item.id}
-              className={`cartao-clicavel rounded-full px-4 py-2 text-sm font-semibold ${
-                andar?.id === item.id
-                  ? "bg-[#ffe100] text-black hover:bg-[#f2d500] active:bg-[#e0c600]"
-                  : "bg-neutral-100 text-neutral-700 hover:bg-neutral-200 active:bg-neutral-300"
-              }`}
-            >
-              {item.nome}
-            </button>
-          ))}
-        </div>
-
-        <div className="mt-4 flex flex-wrap items-end gap-3">
+        <div className="flex flex-wrap items-end gap-3">
           <div className="grid w-full min-w-0 gap-1 sm:min-w-56 sm:flex-1">
             <Label htmlFor={`${modo}-busca-vaga`}>Buscar vaga, sensor ou placa</Label>
             <Input id={`${modo}-busca-vaga`} type="search" placeholder="Código da vaga, sensor ou placa" value={busca} onChange={evento => buscar(evento.target.value)} />
@@ -176,6 +158,23 @@ export function VisualizacaoVagas({ estrutura, modo }: VisualizacaoVagasProps) {
               <MonitoramentoSensores vagas={filtradas} demonstracao={estrutura.shopping.demonstracao === true} aoSelecionar={id => { abrirDetalhes(id); setDiagnosticoAberto(false) }} />
             </DialogContent>
           </Dialog>
+        </div>
+        <div className="mt-4 flex flex-wrap gap-2" aria-label="Selecionar andar">
+          {estrutura.andares.map((item) => (
+            <button
+              key={item.id}
+              type="button"
+              onClick={() => selecionarAndar(item.id)}
+              aria-pressed={andar?.id === item.id}
+              className={`cartao-clicavel rounded-full px-4 py-2 text-sm font-semibold ${
+                andar?.id === item.id
+                  ? "bg-[#ffe100] text-black hover:bg-[#f2d500] active:bg-[#e0c600]"
+                  : "bg-neutral-100 text-neutral-700 hover:bg-neutral-200 active:bg-neutral-300"
+              }`}
+            >
+              {item.nome}
+            </button>
+          ))}
         </div>
         {totalFiltros > 0 && <div className="mt-3 flex flex-wrap items-center gap-2 text-sm"><span className="text-muted-foreground">Recorte: {resumoFiltros.join(" · ")}</span><Button type="button" variant="link" onClick={() => { setSetorId("TODOS"); setTipo("TODAS"); setEstado("TODOS") }}>Limpar filtros</Button></div>}
       </div>

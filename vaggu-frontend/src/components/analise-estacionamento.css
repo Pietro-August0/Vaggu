@@ -207,15 +207,7 @@
 .analise-metricas-principais .analise-card-metrica>small{font-size:.75rem;line-height:1.5}
 @media(max-width:420px){.analise-metricas-principais{grid-template-columns:1fr}.analise-metricas-principais>.analise-card-metrica{grid-template-columns:2.5rem minmax(0,1fr)}.analise-metricas-principais .analise-card-metrica p{font-size:.8rem}.analise-metricas-principais .analise-card-metrica>strong,.analise-metricas-principais .analise-card-metrica:not(:first-child)>strong{font-size:1.4rem}}
 
-/* Cor somente nos ícones; títulos, números e superfícies permanecem discretos. */
-.analise-categoria--0>svg{color:#9b8700}
-.analise-categoria--1>svg{color:#3478bf}
-.analise-categoria--2>svg{color:#b87931}
-.analise-categoria--3>svg{color:#31825c}
-.dark .analise-categoria--0>svg{color:#e4ce43}
-.dark .analise-categoria--1>svg{color:#7fb6ed}
-.dark .analise-categoria--2>svg{color:#e5b179}
-.dark .analise-categoria--3>svg{color:#75c99e}
+/* Ajuda de estados permanece recolhida para não disputar espaço com os dados. */
 .analise-estados-detalhes{margin-top:1rem;border-top:1px solid var(--an-border);padding-top:.75rem;font-size:.75rem;color:var(--an-muted)}
 .analise-estados-detalhes summary{cursor:pointer;width:fit-content}
 .analise-estados-detalhes .analise-estados-ajuda{margin-top:.65rem;padding-top:0;border:0}
@@ -226,3 +218,26 @@
 .analise-metricas-principais .analise-card-metrica p{align-self:start}
 .analise-metricas-principais .analise-card-metrica>small{align-self:start}
 .analise-metricas-principais>.analise-card-metrica:first-child{border-top-width:1px}
+
+/* Categorias reconhecíveis e leitura dos filtros junto ao período. */
+.analise-categoria--0{--categoria-cor:#927d00}
+.analise-categoria--1{--categoria-cor:#266eb5}
+.analise-categoria--2{--categoria-cor:#a96924}
+.analise-categoria--3{--categoria-cor:#25774f}
+.dark .analise-categoria--0{--categoria-cor:#e4ce43}
+.dark .analise-categoria--1{--categoria-cor:#7fb6ed}
+.dark .analise-categoria--2{--categoria-cor:#e5b179}
+.dark .analise-categoria--3{--categoria-cor:#75c99e}
+.analise-categoria-icone{display:grid;place-items:center;flex:0 0 2rem;width:2rem;height:2rem;border-radius:.6rem;color:var(--categoria-cor);background:color-mix(in srgb,var(--categoria-cor) 12%,transparent)}
+.analise-categoria-icone svg{width:1.15rem;height:1.15rem}
+.analise-categoria strong{color:var(--categoria-cor);font-size:1.25rem;font-weight:700}
+.analise-toolbar{justify-content:flex-start;gap:1rem}
+.analise-toolbar-acoes{flex-shrink:0}
+.analise-grade-principal{align-items:stretch}
+.analise-situacao{align-self:stretch;display:flex;flex-direction:column}
+.analise-situacao .analise-estados-detalhes{margin-top:auto;padding-top:.75rem}
+.analise-situacao .analise-rosca-bloco{margin-bottom:1rem}
+.analise-grade-principal .grafico-linha svg{height:11rem}
+.analise-comparacao{display:flex;align-items:baseline;flex-wrap:wrap;justify-content:space-between;gap:.5rem 1rem;margin-top:0;padding:.75rem 0;border-top:0;border-bottom:1px solid var(--an-border)}
+.analise-comparacao h3{font-size:.8rem;font-weight:600}
+@media(max-width:680px){.analise-toolbar{flex-direction:row;align-items:center}.analise-toolbar-acoes{width:auto}.analise-periodo{flex:1;min-width:12rem}.analise-grade-principal .grafico-linha svg{height:12rem}.analise-situacao .analise-estados-detalhes{margin-top:0}}
