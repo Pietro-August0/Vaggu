@@ -1,10 +1,14 @@
 # Integração com o WhatsApp
 
+**Código de 06/11/2026:** menu com seis opções, incluindo “Contratar a VAGGU”, demonstrativa e sem coleta/encaminhamento real. Testes locais não comprovam publicação dessa revisão; o percurso real de 04/11 permanece aceito para a versão registrada.
+
+**Situação vigente:** consulte a [revisão de pendências de 09/11](planejamento-do-projeto.md#revisão-de-pendências--09112026). O aceite web confirmado em 04/11 permanece encerrado. Registros anteriores preservam os limites daquela etapa; mudanças posteriores e aceite físico são separados.
+
 **Revisão local — 05/11/2026:** recursos em blocos curtos, demonstração com roteiro, suporte com orientações e contato institucional com link para os canais oficiais. Os IDs 1–5 e `menu` seguem compatíveis. Veja o [fluxo atual](whatsapp-processo-e-operacao.md#comportamento-atual-do-código).
 
 **Decisão de escopo e aceite — 04/11/2026:** o usuário confirmou a homologação completa do site. O aceite web está encerrado por essa confirmação, sem nova execução em produção pelo agente nem hash de deploy adicional informado. O WhatsApp será demonstrativo: atendimento humano real, coleta comercial e protocolos deixam de ser requisitos desta entrega. Procedimentos de dados definidos em [operação do TCC](operacao-dados-tcc.md); hardware físico mantém aceite próprio.
 
-**Referência atual — 04/11/2026:** o [processo e operação](whatsapp-processo-e-operacao.md) consolida publicação 7356e12 e confirmação do participante para imagem/site/recursos/retorno. As seções datadas abaixo são histórico de implantação; demais caminhos, captura anonimizada e operação humana permanecem abertos.
+**Referência atual — 04/11/2026:** o [processo e operação](whatsapp-processo-e-operacao.md) consolida publicação 7356e12 e confirmação do participante para imagem/site/recursos/retorno. As seções datadas abaixo são histórico de implantação; as mudanças posteriores exigem conferência própria; captura anonimizada depende de sessão disponível. Operação humana não é requisito do TCC.
 
 **Confirmação do participante — 04/11/2026:** em resposta ao teste solicitado, participante confirmou o percurso Oi → Ver opções → Conhecer a VAGGU, com imagem e link do site, seguido de Ver recursos e Voltar ao menu. Validação funcional da nova apresentação concluída para esse percurso na versão 7356e12. Não comprova os demais caminhos individualmente nem substitui captura anonimizada da interface.
 

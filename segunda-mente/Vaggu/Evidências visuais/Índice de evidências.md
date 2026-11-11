@@ -3,6 +3,38 @@ tags: [vaggu, evidencias, interface]
 ---
 # Evidências visuais da VAGGU
 
+## 11/11/2026 — alinhamento do resumo
+
+Quatro indicadores com ícones e valores na mesma altura relativa, apoio reservado sem texto fictício. Gerente fictício em `/painel/analise`, fixtures, desktop1440×1000/tablet768×1024/celular390×844 e dois temas. [Capturas e validação](2026-11-11%20-%20Alinhamento%20do%20resumo/README.md). Prova local sem publicação ou hardware.
+
+## 11/11/2026 — cobertura no resumo
+
+Ressalva parcial junto à Ocupação média, sem banner no topo. `/painel/analise`, Gerente fictício, desktop1440×1000/tablet768×1024/celular390×844, claro/escuro, dados interceptados no navegador. [Matriz e prints atuais](2026-11-11%20-%20Cobertura%20no%20resumo/README.md), incluindo cobertura completa e ausente. Sem banco, hardware ou publicação.
+
+## 11/11/2026 — análises com menos texto
+
+Explicações óbvias retiradas, ajuda dos estados recolhida e cor apenas nos ícones das categorias. `/painel/analise`, Gerente fictício, fixtures no navegador, desktop1440×1000/tablet768×1024/celular390×844, claro/escuro. [Matriz e capturas atuais](2026-11-11%20-%20Analises%20com%20menos%20texto/README.md). Prova local sem publicação ou hardware.
+
+## 11/11/2026 — clareza das análises
+
+Total fora da rosca, card compacto e explicações dos indicadores/estados. Gerente fictício, `/painel/analise`, desktop 1440×1000, tablet 768×1024 e celular 390×844, temas claro/escuro, fixtures de navegador. [Matriz e capturas atuais](2026-11-11%20-%20Clareza%20das%20analises/README.md). Prova local, sem publicação, banco ou hardware.
+
+## 11/11/2026 — painel compacto e configurações
+
+Faixa superior removida, Configurações centraliza conta/aparência/solicitação/saída, quatro indicadores compactos e gráfico principal prioritário. Admin/Gerente, desktop/tablet/celular, claro/escuro; 12 combinações aprovadas com fixtures somente no navegador. [Matriz e 94 prints atuais](2026-11-11%20-%20Painel%20e%20configuracoes/README.md). Rotas de análises, estrutura, conta legada e login na saída; provas locais sem mensagens ou contas reais.
+
+## 11/11/2026 — hierarquia das análises
+
+Composição anterior recuperada com categorias neutras, resumo compreensível em destaque e dados avançados recolhidos. `/painel/analise`, Gerente fictício, dados interceptados somente no navegador. Seis combinações de desktop/tablet/celular e claro/escuro aprovadas. [Matriz e 36 capturas](2026-11-11%20-%20Hierarquia%20das%20analises/README.md). Exportações e estados de ausência/falha preservados; evidência local, sem publicação.
+
+## 09/11/2026 — simplificação dos painéis
+
+Mapa principal, diagnóstico e detalhes secundários, atualização silenciosa e cinco conjuntos de filtros em popup. Gerente/Admin, rotas `/painel`, `/painel/analise` e `/admin/shoppings/qa/estrutura`; dados fictícios interceptados no navegador, sem banco ou hardware. Desktop 1440×1000, tablet 768×1024 e celular 390×844 nos dois temas; seis combinações aprovadas. [Galeria e estados exercitados](2026-11-09%20-%20Simplificacao%20dos%20paineis/README.md). Inclui conflito no editor, manutenção, ausência de observação e falha/recuperação.
+
+## 09/11/2026 — contato com número válido, vazio e inválido
+
+Rota `/`, visitante, Edge/Playwright local, viewports 1440×1000, 768×1024 e 390×844, temas claro/escuro; número fictício e sessão pública simulada. Os quatro contatos usam e-mail na ausência de WhatsApp válido. [Matriz e 72 capturas](2026-11-09%20-%20Contato%20sem%20WhatsApp/README.md), com origem dos dados, teclado, destinos e limites da execução. Evidência local; nenhum envio real.
+
 ## 10/11/2026 — teste físico integrado do ESP32
 
 Três fotos da montagem e da maquete, mais dois vídeos do ensaio real da bancada. No vídeo integrado, a rota local `/painel` do gerente mostra as vagas A01/A02/A03 junto à placa e aos LEDs; a gravação não é um teste responsivo. [Registro, inventário e localização dos originais privados](../Documentação/ensaio-fisico-esp32-2026-11-10.md).

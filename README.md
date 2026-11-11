@@ -14,7 +14,7 @@ Cada gerente consulta somente seu shopping. Categorias de vaga — comum, PCD, i
 - **Acessos por shopping:** logins individuais, troca de senha provisória e isolamento dos dados.
 - **Estrutura e mapa:** andares, setores, vagas, importação CSV/XLSX com prévia e editor de posições por arraste, toque ou teclado.
 - **Monitoramento:** vínculo entre placas ESP32, sensores e vagas; confirmação de leituras, expiração, manutenção e ocorrências.
-- **Disponibilidade atualizada:** consultas automáticas do mapa a cada 500 ms e do telão instalado a cada 15 segundos, atualização manual e invalidação dos dados antigos.
+- **Disponibilidade atualizada:** consultas automáticas do mapa a cada 500 ms e do telão instalado a cada 15 segundos, atualização silenciosa e invalidação dos dados antigos, com nova tentativa em caso de falha.
 - **Análises e relatórios:** período, setor e categoria; comparação, entradas, saídas, permanência, rotatividade e exportações Excel/PDF.
 - **Telões web autorizados:** credencial por instalação, visão geral ou andar escolhida pelo gerente, tela cheia com Esc e apresentação sem rolagem. Contagens ficam ocultas quando a consulta perde validade.
 
@@ -31,7 +31,7 @@ Cada gerente consulta somente seu shopping. Categorias de vaga — comum, PCD, i
   </tr>
 </table>
 
-Veja também [análise](./segunda-mente/Vaggu/Evid%C3%AAncias%20visuais/2026-10-25%20-%20Analises%20cores%20e%20leitura/desktop-light.png), [editor](./segunda-mente/Vaggu/Evid%C3%AAncias%20visuais/2026-10-21%20-%20Revisao%20geral/editor-desktop.png), [mapa no celular](./segunda-mente/Vaggu/Evid%C3%AAncias%20visuais/2026-10-21%20-%20Revisao%20geral/mapa-mobile.png) e [login no celular](./segunda-mente/Vaggu/Evid%C3%AAncias%20visuais/2026-10-21%20-%20Revisao%20geral/login-mobile.png). A [galeria de evidências](./segunda-mente/Vaggu/Evid%C3%AAncias%20visuais/%C3%8Dndice%20de%20evid%C3%AAncias.md) registra rotas, resoluções, verificações e limites de cada captura.
+Veja também [análise](./segunda-mente/Vaggu/Evid%C3%AAncias%20visuais/2026-11-11%20-%20Alinhamento%20do%20resumo/desktop-light-completa.png), [editor e filtros](./segunda-mente/Vaggu/Evid%C3%AAncias%20visuais/2026-11-11%20-%20Painel%20e%20configuracoes/admin-editor-desktop-light.png), [mapa no celular](./segunda-mente/Vaggu/Evid%C3%AAncias%20visuais/2026-11-11%20-%20Painel%20e%20configuracoes/gerente-mapa-celular-light.png) e [login no celular](./segunda-mente/Vaggu/Evid%C3%AAncias%20visuais/2026-10-21%20-%20Revisao%20geral/login-mobile.png). A [galeria de evidências](./segunda-mente/Vaggu/Evid%C3%AAncias%20visuais/%C3%8Dndice%20de%20evid%C3%AAncias.md) registra rotas, resoluções, verificações e limites de cada captura.
 
 ## Tecnologias
 

@@ -9,9 +9,9 @@ Revisão: 21/10/2026. Preservamos os dois slides originais de Carlos e usamos su
 - `mariana-perfil-slide.png`, `mariana-necessidades-slide.png`, `rafael-perfil-slide.png` e `rafael-necessidades-slide.png`: slides finais em 1920×1080, com Poppins e texto diagramado.
 - `personas-visao-geral.png`: folha de comparação dos seis slides, com os originais na primeira linha.
 
-## Reprodução e conferência
+## Preservação e conferência
 
-O script [gerar-slides-personas.py](../../../../scripts/gerar-slides-personas.py) usa Pillow e os arquivos Poppins de `vaggu-frontend/node_modules/@fontsource/poppins/files`. Execute `python scripts/gerar-slides-personas.py` na raiz, com Pillow disponível. O script recria os quatro slides e a visão geral a partir dos assets locais; não solicita geração de imagens ou conexão externa. Os prompts abaixo registram a preparação dos assets com a ferramenta de imagem integrada, sem uso do modo CLI/API.
+O gerador auxiliar em Python foi removido em 11/11/2026 por decisão do usuário, pois os slides já estavam concluídos. Os quatro slides finais, a visão geral, os retratos, os recortes e os fundos continuam preservados. Os prompts abaixo registram a preparação dos assets com a ferramenta de imagem integrada.
 
 Conferimos visualmente os quatro slides com a referência de Carlos: posição dos títulos e retratos, textura, retículas, tamanho e peso da tipografia, destaques, leitura integral e ausência de sobreposição entre texto e sujeito. Retiramos as notas de rodapé dos quatro slides; o caráter ilustrativo dos retratos e a condição de validação permanecem na documentação. A conferência do conteúdo com o código está registrada no documento de personas; não equivale a entrevistas ou pesquisa de campo.
 

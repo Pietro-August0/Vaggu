@@ -1,5 +1,9 @@
 # SSD VAGGU — especificação de produto e desenho do sistema
 
+**Refatoração de UX — 09/11/2026:** mapa como visão principal, diagnóstico e métricas técnicas sob demanda, filtros complementares em popups com pesquisa visível, atualização automática silenciosa e Admin abrindo o mapa. Ver [decisões, classificação e validação](simplificacao-paineis-2026-11-09.md).
+
+**Situação vigente:** consulte a [revisão de pendências de 09/11](planejamento-do-projeto.md#revisão-de-pendências--09112026). O aceite web confirmado em 04/11 permanece encerrado. Registros anteriores preservam os limites daquela etapa; mudanças posteriores e aceite físico são separados.
+
 **Atualização de 04/11/2026 — atendimento demonstrativo:** por solicitação do usuário, opções 3 (demonstração), 4 (suporte) e 5 (equipe) deixam de pedir envio de e-mail e informam “Uma atendente entrará em contato com você em alguns instantes”. Trata-se de simulação para o TCC: não há fila, notificação ou atendimento real acionado. Botões de retorno, números digitados e proteção contra repetição permanecem. Contatos públicos de privacidade/exclusão não mudam. Versões e relatos anteriores abaixo preservam o comportamento anterior.
 
 **Decisão de escopo e aceite — 04/11/2026:** o usuário confirmou a homologação completa do site. O aceite web está encerrado por essa confirmação, sem nova execução em produção pelo agente nem hash de deploy adicional informado. O WhatsApp será demonstrativo: atendimento humano real, coleta comercial e protocolos deixam de ser requisitos desta entrega. Procedimentos de dados definidos em [operação do TCC](operacao-dados-tcc.md); hardware físico mantém aceite próprio.
@@ -74,7 +78,7 @@ Em conflito, decisão recente explícita prevalece sobre documentação antiga. 
 
 ### 2.1 Entrega funcional planejada
 
-Landing, login, troca de senha, bot de WhatsApp, administração de shoppings e acessos, estrutura/importação, mapa por andar, placas/sensores, ingestão, estados atuais, histórico, ocorrências, indicadores, exportação de resumos, páginas de telão e preparação histórica para evolução opcional no Power BI. A conexão real e o menu do WhatsApp foram confirmados em 04/11/2026; estabilidade física e homologação integrada publicada permanecem pendentes; ensaio inicial dos três sensores já foi registrado.
+Landing, login, troca de senha, bot de WhatsApp, administração de shoppings e acessos, estrutura/importação, mapa por andar, placas/sensores, ingestão, estados atuais, histórico, ocorrências, indicadores, exportação de resumos, páginas de telão e preparação histórica para evolução opcional no Power BI. A conexão real e o menu do WhatsApp foram confirmados em 04/11/2026; estabilidade física e piloto HTTPS dos sensores permanecem pendentes; a homologação web foi confirmada pelo usuário em 04/11; ensaio inicial dos três sensores já foi registrado.
 
 ### 2.2 Fora do escopo
 
@@ -247,7 +251,7 @@ Retorno de contato encerra a falha de comunicação correspondente, mas o histó
 
 ## 9. Protocolo e processamento de telemetria
 
-Esta seção é **proposta técnica** de contrato e algoritmo. Deve ser conciliada com o firmware existente e implementada com testes de tempo, concorrência e reinicialização.
+O contrato implementado está em `vaggu-backend/src/telemetria/contratos.ts` e o processamento em `service.ts`. As regras abaixo registram a especificação e os parâmetros padrão; o aceite sustentado do firmware e do piloto permanece separado da implementação.
 
 **Estado local de 21/10, reconciliado documentalmente em 04/11/2026:** a base já controla a ordem das mensagens, usa o horário do servidor, rejeita um grupo inteiro quando há leitura inválida e exige uma credencial própria da placa. A integração com PostgreSQL foi executada com sucesso. Os tempos definitivos ainda dependem de ensaio sustentado; houve teste físico inicial dos três canais em 21/10. Cadastro/vínculo de equipamentos, manutenção/ocorrências e atualização periódica das telas estão implementados. O P06 ainda depende da estabilidade física, do fechamento dos tempos e da conferência no ambiente publicado.
 
@@ -259,9 +263,9 @@ Esta seção é **proposta técnica** de contrato e algoritmo. Deve ser concilia
 | Limite sem resposta | Inicialmente 120 segundos, preservado da base e sujeito a ensaio físico. |
 | Heartbeat da placa | Proposta inicial de 30 segundos. |
 | Frequência de leitura/envio dos sensores | Pendente de validar com firmware. Deve permitir observar consistência durante a janela. |
-| Lacuna máxima entre observações para confirmação | Pendente; menor que o timeout offline e compatível com a frequência real. |
-| Frequência da tarefa de expiração | Pendente da hospedagem; atraso e instante efetivo devem ser documentados. |
-| Tolerância do relógio do equipamento | Pendente; não confiar cegamente em timestamp do ESP32. |
+| Lacuna máxima entre observações para confirmação | Padrão de 15000 ms com janela padrão de 30000 ms em `vaggu-backend/src/config/env.ts`; sem configuração explícita, usa o menor valor entre 15000 ms e janela menos 1 ms. Valor final do piloto exige ensaio sustentado. |
+| Frequência da tarefa de expiração | Padrão de 30000 ms em `vaggu-backend/src/config/env.ts`; execução efetiva e atrasos no piloto dependem do ambiente. |
+| Tolerância do relógio do equipamento | O servidor usa `recebidoEm` como autoridade temporal; `capturadoEm` é metadado. HTTPS exige relógio válido para TLS. |
 
 Não preencher a frequência desconhecida com um valor apresentado como aprovado. A janela de confirmação não pode ser validada por uma única mensagem seguida de silêncio.
 
@@ -618,17 +622,17 @@ A [revisão consolidada de 04/11](revisao-documental-2026-11-04.md) organiza pri
 
 | Pendência | Evidência necessária | Não impede |
 | --- | --- | --- |
-| Cores, fontes, espaçamentos e assets exatos | Leitura do Figma/tokens do repositório | Especificar comportamentos e manter estilos existentes. |
+| Referência visual — encerrada em 16/10 | Site aprovado; fidelidade exata ao Figma dispensada. Tokens/contraste são melhorias específicas | Preservar estilos aprovados. |
 | Revalidar regressões e divergências atuais do código | Auditoria, execução e testes do checkout atual | Manter histórico das validações anteriores sem tratá-lo como prova automática do código presente. |
 | Placas/sensores e topologia final | Montagem da maquete | Modelar placa 1:N sensores. |
 | Frequências, lacuna e relógio do firmware | Ensaio de mensagens e reinicialização | Escrever testes parametrizados. |
-| API, rotina de expiração e atualização web | Hospedagem e capacidade verificadas | Separar contratos do transporte. |
-| Formato e edição do mapa | Planta/base por andar e interação aprovada | Manter IDs e posições como entidades. |
+| Capacidade operacional da telemetria | API, expiração e polling implementados; medir carga/latências no destino | Preservar o aceite web confirmado. |
+| Formato e edição do mapa — implementados | Mouse, toque e teclado com evidências locais; aceite web confirmado | Preservar IDs, posições e isolamento. |
 | Publicação/licenciamento Power BI | Conta, conectividade e forma de acesso | Criar relatório Desktop com dados de teste. |
 | Instalação física dos telões | Aceite físico quando utilizado na apresentação; homologação web completa confirmada pelo usuário | Usar a instalação web implementada com agregados sem dados pessoais. |
 | WhatsApp demonstrativo — decisão encerrada em 04/11 | Atendimento real e coleta/protocolo retirados do escopo pelo usuário | Manter apresentação/menu e contato institucional. |
 | Backup — dispensado no TCC em 04/11 | Decisão expressa do usuário; procedimento e ensaios preservados como referência opcional | Concluir a entrega demonstrativa sem criar ou agendar backup. |
-| Volumes, retenção e arquivos | Requisitos reais de implantação | Desenvolver MVP com limites documentados. |
+| Retenção do TCC — definida | Procedimento em `operacao-dados-tcc.md`; sem expurgo automático exigido | Rever requisitos para implantação comercial. |
 
 Riscos principais: perda de comunicação interpretada como vaga livre; isolamento apenas visual; duplicação de eventos; histórico reclassificado incorretamente após edição cadastral; mapa dessincronizado do andar; integração Power BI apenas aparente; tokens visuais inventados; refatoração ampla que dificulta a manutenção.
 

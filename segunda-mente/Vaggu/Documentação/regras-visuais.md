@@ -1,5 +1,11 @@
 # VAGGU — regras visuais permanentes
 
+**Complemento posterior de 11/11:** o usuário forneceu nova referência de painel e pediu remover a faixa superior. [Configurações e organização vigentes](configuracoes-e-painel-2026-11-11.md) centralizam ações pessoais e usam quatro indicadores compactos, preservando o registro anterior como histórico.
+
+**Decisão posterior de 11/11:** nas análises, o usuário preferiu a composição anterior com categorias neutras, mais gráficos visíveis e técnicos recolhidos. Ver [hierarquia vigente](hierarquia-analises-2026-11-11.md); o diagnóstico datado abaixo permanece histórico.
+
+**Refatoração de UX — 09/11/2026:** mapa como visão principal, diagnóstico e métricas técnicas sob demanda, filtros complementares em popups com pesquisa visível, atualização automática silenciosa e Admin abrindo o mapa. Ver [decisões, classificação e validação](simplificacao-paineis-2026-11-09.md).
+
 Atualização de aprovação visual: 16/10/2026. Regras iniciais de 09/09/2026.
 
 ## 1. Referência e grau de confirmação

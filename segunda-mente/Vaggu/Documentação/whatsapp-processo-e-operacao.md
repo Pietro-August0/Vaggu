@@ -1,5 +1,7 @@
 # WhatsApp — processo de implantação e operação
 
+**Verificação local de 09/11/2026:** 19 testes focados aprovados, incluindo seis opções e contratação demonstrativa, assinatura, deduplicação e falhas de envio. Transporte e persistência simulados; nenhum envio real. O percurso real aceito de 04/11 permanece preservado; publicação das revisões de 05–06/11 e captura anonimizada ainda exigem evidência própria.
+
 **Revisão local — 05/11/2026:** o menu diferencia roteiro de demonstração, ajuda para problemas comuns e contato institucional. Esta revisão remove a promessa de retorno humano da versão publicada em 04/11. Confira o fluxo abaixo; publicação e captura no WhatsApp ainda estão pendentes.
 
 **Resultado da publicação — 04/11/2026:** commit funcional 0674a02 enviado à main; Render confirmou Deploy succeeded em 1m42s, deploy dep-dblilpon74is73a89kn0. Consulta pública GET /api/v1/health/ready retornou HTTP 200 e banco conectado. Opções 3–5 publicadas com anúncio demonstrativo de atendente em alguns instantes, sem pedido de e-mail. Nenhuma mensagem real enviada pelo agente; teste de recebimento e captura no WhatsApp permanecem separados. Autoria confirmada diretamente pelo usuário; trabalho local amplo preservado.

@@ -1,5 +1,24 @@
 # Próximos passos
 
+## Estado vigente — 11/11/2026
+
+A revisão local de UX, configurações, filtros e análises foi concluída e validada em desktop, tablet e celular nos dois temas. O ensaio integrado das três vagas foi aceito localmente em 10/11; não deve continuar listado como inteiramente pendente. Os registros datados abaixo preservam o histórico e são subordinados a esta seção.
+
+1. **Conferir a versão publicada após o envio à main:** verificar implantação e navegação do Admin/Gerente, configurações, mapa, filtros, análises e exportações. O aceite web de 04/11 permanece registrado; as mudanças posteriores precisam dessa conferência específica. Push não comprova implantação.
+2. **Fechar a evidência do WhatsApp:** conferir as mudanças de 05–06/11 no serviço publicado, exercitar as seis opções e preservar captura anonimizada. Conexão, menu e apresentação anteriores já foram confirmados; atendimento humano e coleta comercial estão dispensados no TCC.
+3. **Consolidar o limite do hardware:** o ciclo coletivo livre → ocupada → livre das três vagas foi aceito na bancada em 10/11. Operação prolongada, resposta isolada de cada sensor e última versão do firmware no HTTPS hospedado ainda não estão comprovadas. Se a demonstração depender delas, validar antes do ensaio final.
+4. **Fechar a apresentação:** confirmar 30/11 ou 03/12/2026 e horário; revisar o Canva, definir responsáveis e ensaiar 10–20 minutos com alternativa gravada caso rede/hardware falhem.
+5. **Triar alertas residuais do frontend:** a auditoria de 09/11 registrou 17 alertas, sem críticos. Reavaliar dependências e alcance antes de atualizações incompatíveis; não confundir contagem de advisories com exploração comprovada.
+
+Power BI publicado, operação comercial humana e exercício de backup não bloqueiam a entrega do TCC no escopo confirmado. Não há novo módulo funcional obrigatório identificado nesta revisão.
+
+
+**Correções iniciadas em 09/11/2026:** os quatro contatos sem WhatsApp válido foram corrigidos; dependências backend ficaram sem alertas na auditoria atual e frontend caiu para 17, sem críticos, com limites registrados. Build/lint frontend, build e testes locais backend aprovados. A continuidade está no [registro de correções](../Documentação/planejamento-do-projeto.md#correções-de-contato-dependências-e-apresentação--09112026): WhatsApp publicado/captura real, ensaio físico, alertas residuais e preparação do TCC.
+
+**Apresentação — informação do usuário em 09/11/2026:** 30/11 ou 03/12/2026, duração habitual de 10–20 minutos. Data final e horário ainda não confirmados. [Canva utilizado](https://canva.link/pd7uk2f8llcr498); detalhes e roteiro proposto no [cenário de apresentação](../Documentação/cenario-de-apresentacao.md).
+
+**Revisão vigente — 09/11/2026:** consulte o [estado confirmado e as pendências reais](../Documentação/planejamento-do-projeto.md#revisão-de-pendências--09112026). O aceite web de 04/11 e a dispensa de backup/atendimento comercial no TCC prevalecem sobre diagnósticos anteriores.
+
 **Contratação demonstrativa no WhatsApp em 06/11/2026.** A opção 6, “Contratar a VAGGU”, simula o retorno da equipe por seleção no menu ou número digitado. `npm --prefix vaggu-backend test` incluiu o build e aprovou 100 testes, com 12 pulados por requisitos de integração. Verificações de entrega com `node scripts/verificar-documentacao.mjs` e `git diff --check`. A publicação e a captura anonimizada no cliente WhatsApp ficam pendentes, pois o fluxo foi exercitado com transporte simulado local.
 
 **Manutenção em 06/11/2026:** concluídas a limpeza dos arquivos do frontend sem consumo identificado e a simplificação da agregação de telões. A próxima etapa do [plano de simplificação](../Documentação/revisao-estrutura-e-simplificacao-2026-11-06.md) é separar regras de telemetria e importação das escritas, preservando as transações.
@@ -78,11 +97,11 @@ O histórico confirmado e a análise por período de até 31 dias UTC estão imp
 | P04 | Andares, setores, vagas e mapa — concluído em 12/09 |
 | P05 | Importação CSV/XLSX com prévia — concluída em 21/09 |
 | C01 | Correções da interface administrativa — concluídas em 23/09 |
-| P06 | Sensores, confirmação, expiração e cadastro/vínculo implementados; ensaio físico e homologação pendentes |
-| P07 | Operação, manutenção/ocorrências e telões com credencial própria implementados localmente; homologação pendente |
-| P08 | Histórico, período/comparação, setor/categoria, métricas, cobertura e Excel/PDF implementados; fotografia nos novos eventos e limites legados identificados; homologação pendente |
+| P06 | Software implementado e ensaio integrado local aceito em 10/11; operação sustentada, isolamento por sensor e última versão hospedada ainda sem comprovação |
+| P07 | Operação e telões implementados; aceite web confirmado em 04/11; instalação física separada se utilizada |
+| P08 | Análises, snapshots novos e Excel/PDF implementados; aceite web confirmado em 04/11; limites legados preservados |
 | P09 | Dados preparados; relatório/publicação Power BI como evolução opcional |
-| P10 | Conexão e menu reais confirmados; apresentação real confirmada; faltam caminhos restantes, captura anonimizada, fluxos estruturados, retenção e operação humana |
+| P10 | Conexão/menu/apresentação reais confirmados; conferir mudanças de 05–06/11 e captura anonimizada; operação humana e coleta comercial dispensadas |
 | P11 | Revisão integrada para o TCC |
 
 O estado diário técnico permanece em [[Vaggu/Documentação/planejamento-do-projeto|planejamento do projeto]], dentro da segunda mente. P04 e as melhorias de interação, gerentes e senha foram concluídos e validados com PostgreSQL real, frontend e navegador. O dia iniciado em 12/09 foi encerrado após a virada para 13/09.

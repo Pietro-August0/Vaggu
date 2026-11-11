@@ -1,5 +1,7 @@
 # Conclusão do software — implementação de 19/10/2026
 
+**Leitura histórica:** resultados e pendências pertencem à data registrada. Para decisões posteriores, consulte a [revisão de pendências de 09/11](planejamento-do-projeto.md#revisão-de-pendências--09112026); o aceite web de 04/11, a dispensa de backup e o recorte demonstrativo do WhatsApp prevalecem.
+
 > **Fechamento local posterior — 21/10/2026:** a [revisão geral](revisao-geral-2026-10-21.md) aprovou a suíte completa com **130 testes, zero falhas e zero ignorados**, incluindo dump/restauração. A conferência no navegador com API e PostgreSQL locais reais cobriu filtros, ausência de observação, PDF/Excel, análise em desktop/tablet/celular, monitoramento e telão. O bloqueio local mencionado nos registros abaixo foi contornado para esta rodada. Há novas capturas e uma correção de grade/espaçamento no telão web. Produção e hardware físico continuam pendentes; os resultados 127/129/9 abaixo preservam as rodadas anteriores.
 
 ### Primeira verificação adicional de 21/10/2026 — histórico

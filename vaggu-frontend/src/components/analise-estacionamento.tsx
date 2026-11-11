@@ -2,10 +2,10 @@ import { useMovimentoReduzido } from "@/hooks/use-movimento-reduzido"
 /** Análise por período e recorte, sem substituir ausência de histórico por números genéricos. */
 import { useEffect, useId, useRef, useState, type FormEvent } from "react"
 import { motion, useInView } from "motion/react"
-import { NumeroAnimado } from "@/components/numero-animado"
-import { Download, CarFront, CircleParking, Clock3, Activity, Accessibility, UserRound, PlugZap, RefreshCw, type LucideIcon } from "lucide-react"
+import { Download, CarFront, CircleParking, Clock3, Activity, Accessibility, UserRound, PlugZap, RefreshCw, SlidersHorizontal, CalendarDays, type LucideIcon } from "lucide-react"
 import { useAppStore } from "@/app/app-store"
 import { Button } from "@/components/ui/button"
+import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle, DialogTrigger } from "@/components/ui/dialog"
 import { lerEstrutura } from "@/servicos/estrutura"
 import { lerAnaliseHistorica, formatarMetrica, formatarDuracao, type AnaliseHistorica } from "@/servicos/analise"
 import { montarRelatorioAnalise, baixarArquivo, nomeArquivoRelatorio } from "@/servicos/modelo-relatorio-analise"
@@ -28,8 +28,9 @@ function validar(filtro: Filtro) {
   if (filtro.fim > new Date().toISOString().slice(0, 10)) return "A data final não pode estar no futuro."
   return ""
 }
-function Cartao({ titulo, valor, formato = "inteiro", ausente = "—", apoio, tom = "amarelo", icone: Icone }: { titulo: string; valor: number | null; formato?: "inteiro" | "percentual" | "duracao"; ausente?: string; apoio: string; tom?: "amarelo" | "azul" | "verde" | "roxo"; icone: LucideIcon }) {
-  return <article className={`analise-card-metrica analise-card-metrica--${tom}`}><div className="analise-metrica-titulo"><span className="analise-icone"><Icone aria-hidden="true"/></span><p>{titulo}</p></div><strong><NumeroAnimado valor={valor} formato={formato} ausente={ausente}/></strong><small>{apoio}</small></article>
+function Cartao({ titulo, valor, formato = "inteiro", ausente = "—", apoio, tom = "amarelo", icone: Icone }: { titulo: string; valor: number | null; formato?: "inteiro" | "decimal" | "percentual" | "duracao"; ausente?: string; apoio?: string; tom?: "amarelo" | "azul" | "verde" | "roxo"; icone: LucideIcon }) {
+  const texto = valor === null ? ausente : formato === "duracao" ? formatarDuracao(valor) : formatarMetrica(valor, formato === "percentual" ? "%" : "", formato === "inteiro" ? 0 : formato === "decimal" ? 2 : 1)
+  return <article className={`analise-card-metrica analise-card-metrica--${tom}`}><div className="analise-metrica-titulo"><span className="analise-icone"><Icone aria-hidden="true"/></span><p>{titulo}</p></div><strong>{texto}</strong>{apoio && <small>{apoio}</small>}</article>
 }
 function GraficoOcupacao({ dias }: { dias: AnaliseHistorica["porDia"] }) {
   const [selecionado, setSelecionado] = useState<string | null>(null)
@@ -63,7 +64,7 @@ function GraficoOcupacao({ dias }: { dias: AnaliseHistorica["porDia"] }) {
 }
 
 
-function Rosca({ itens, centro, legenda }: { itens: { nome: string; quantidade: number; cor: string }[]; centro: number; legenda: string }) {
+function Rosca({ itens }: { itens: { nome: string; quantidade: number; cor: string }[] }) {
   const reduzirMovimento = useMovimentoReduzido()
   const total = itens.reduce((soma, item) => soma + item.quantidade, 0)
   let acumulado = 0
@@ -72,7 +73,7 @@ function Rosca({ itens, centro, legenda }: { itens: { nome: string; quantidade: 
     acumulado += total ? item.quantidade / total * 100 : 0
     return `${item.cor} ${inicio}% ${acumulado}%`
   })
-  return <div className="analise-rosca-bloco"><motion.div className="analise-rosca" aria-hidden="true" initial={reduzirMovimento ? false : { opacity: 0, scale: .88 }} whileInView={{ opacity: 1, scale: 1 }} viewport={{ once: true }} transition={{ duration: .65, ease: "easeOut" }} style={{ background: total ? `conic-gradient(${fatias.join(",")})` : "var(--an-border)" }}><span><strong><NumeroAnimado valor={centro}/></strong><small>{legenda}</small></span></motion.div><ul>{itens.map(item => <li key={item.nome}><i style={{ background: item.cor }}/><span>{item.nome}</span><strong><NumeroAnimado valor={item.quantidade}/></strong></li>)}</ul></div>
+  return <div className="analise-rosca-bloco"><motion.div className="analise-rosca" aria-hidden="true" initial={reduzirMovimento ? false : { opacity: 0, scale: .88 }} whileInView={{ opacity: 1, scale: 1 }} viewport={{ once: true }} transition={{ duration: .65, ease: "easeOut" }} style={{ background: total ? `conic-gradient(${fatias.join(",")})` : "var(--an-border)" }}></motion.div><ul>{itens.map(item => <li key={item.nome}><i style={{ background: item.cor }}/><span>{item.nome}</span><strong>{item.quantidade}</strong></li>)}</ul></div>
 }
 function GraficoMovimento({ dias }: { dias: AnaliseHistorica["porDia"] }) {
   const [detalhe, setDetalhe] = useState("")
@@ -82,10 +83,10 @@ function GraficoMovimento({ dias }: { dias: AnaliseHistorica["porDia"] }) {
 }
 
 export function AnaliseEstacionamento() {
-  const reduzirMovimento = useMovimentoReduzido()
   const { consultar } = useAppStore()
   const [formulario, setFormulario] = useState<Filtro>(periodoPadrao)
   const [pedido, setPedido] = useState({ filtro: formulario, revisao: 0 })
+  const [filtrosAbertos, setFiltrosAbertos] = useState(false)
   const [resultado, setResultado] = useState<{ estrutura: EstruturaEstacionamento; historico: AnaliseHistorica; anterior: AnaliseHistorica | null; comparacao: "carregando" | "pronta" | "erro"; filtro: Filtro } | null>(null)
   const [erro, setErro] = useState("")
   const [erroFormulario, setErroFormulario] = useState("")
@@ -131,10 +132,21 @@ export function AnaliseEstacionamento() {
     const mensagem = validar(formulario)
     setErroFormulario(mensagem)
     if (mensagem) return
+    solicitarFiltro(formulario)
+    setFiltrosAbertos(false)
+  }
+  function solicitarFiltro(filtro: Filtro) {
     setCarregando(true)
     setErro("")
     setErroExportacao("")
-    setPedido(p => ({ filtro: { ...formulario }, revisao: p.revisao + 1 }))
+    setPedido(p => ({ filtro: { ...filtro }, revisao: p.revisao + 1 }))
+  }
+  function abrirFiltros(aberto: boolean) {
+    if (aberto) {
+      setFormulario({ ...pedido.filtro })
+      setErroFormulario("")
+    }
+    setFiltrosAbertos(aberto)
   }
   function atualizar() {
     setCarregando(true)
@@ -157,39 +169,86 @@ export function AnaliseEstacionamento() {
   const resumo = resultado?.historico.resumo
   const temObservacao = resumo?.ocupacaoPercentual != null
   const delta = resumo?.ocupacaoPercentual != null && resultado?.anterior?.resumo.ocupacaoPercentual != null ? resumo.ocupacaoPercentual - resultado.anterior.resumo.ocupacaoPercentual : null
-  return <section className="analise-estacionamento" aria-labelledby="titulo-analise" aria-busy={carregando}>
-    <header className="analise-cabecalho"><div><p className="analise-selo">{!resultado ? carregando ? "Consultando análise" : "Consulta indisponível" : resultado.estrutura.shopping.demonstracao ? "Cenário de demonstração" : temObservacao ? "Histórico confirmado" : "Sem observação suficiente"}</p><h2 id="titulo-analise">Análise do estacionamento</h2><p>{resultado?.estrutura.shopping.nome}</p></div><div className="analise-acoes"><Button disabled={carregando || exportando !== null} onClick={atualizar}><RefreshCw aria-hidden="true"/>Atualizar análise</Button>{(["xlsx", "pdf"] as const).map(formato => <Button key={formato} disabled={!resultado || carregando || !!erro || exportando !== null || resultado.comparacao === "carregando"} onClick={() => void exportar(formato)}><Download aria-hidden="true"/>{exportando === formato ? "Preparando..." : `Exportar ${formato === "xlsx" ? "Excel" : "PDF"}`}</Button>)}</div></header>
-    {relatorio ? <section className="analise-categorias" aria-labelledby="titulo-categorias"><div className="analise-faixa-titulo"><div><h3 id="titulo-categorias">Vagas por categoria</h3><p>{resultado?.filtro.setorId || resultado?.filtro.tipo ? relatorio.recorte : "Cadastro atual"}</p></div><span>{formatarMetrica(relatorio.totais.total, "", 0)} vagas</span></div><div className="analise-categorias-grade">{relatorio.porTipo.map((tipo, i) => {
-      const Icone = iconesCategorias[i]
-      return <article key={tipo.nome} className="analise-categoria" data-categoria={i}><Icone aria-hidden="true"/><div><h4>{tipo.nome}</h4><p><strong><NumeroAnimado valor={tipo.quantidade}/></strong></p></div></article>
-    })}</div></section> : carregando ? <section className="analise-categorias"><div className="analise-faixa-titulo"><div><h3>Vagas por categoria</h3><p>Consultando o cadastro atual...</p></div></div><div className="analise-esqueleto" aria-hidden="true"><div className="analise-categorias-grade">{Object.keys(categorias).map(tipo => <div key={tipo}/>)}</div></div></section> : null}
-    <form className="analise-filtro" onSubmit={aplicar}><div className="analise-filtro-campos">
-      <div className="analise-campo"><label htmlFor="analise-inicio">De</label><input id="analise-inicio" type="date" required value={formulario.inicio} max={new Date().toISOString().slice(0, 10)} onChange={e => setFormulario(f => ({ ...f, inicio: e.target.value }))}/></div>
-      <div className="analise-campo"><label htmlFor="analise-fim">Até</label><input id="analise-fim" type="date" required value={formulario.fim} max={new Date().toISOString().slice(0, 10)} onChange={e => setFormulario(f => ({ ...f, fim: e.target.value }))}/></div>
-      <div className="analise-campo"><label htmlFor="analise-setor">Setor</label><select id="analise-setor" value={formulario.setorId} onChange={e => setFormulario(f => ({ ...f, setorId: e.target.value }))}><option value="">Todos os setores</option>{resultado?.estrutura.andares.filter(a => a.ativo).flatMap(a => a.setores.filter(s => s.ativo).map(s => <option key={s.id} value={s.id}>{a.nome} · {s.nome}</option>))}</select></div>
-      <div className="analise-campo"><label htmlFor="analise-categoria">Categoria</label><select id="analise-categoria" value={formulario.tipo} onChange={e => setFormulario(f => ({ ...f, tipo: e.target.value as Filtro["tipo"] }))}><option value="">Todas as categorias</option>{Object.entries(categorias).map(([id, nome]) => <option key={id} value={id}>{nome}</option>)}</select></div>
-      <Button disabled={carregando}>{carregando ? "Consultando..." : "Aplicar filtros"}</Button>
-    </div><small>Até 31 dias · UTC</small></form>
-    {erroFormulario && <p role="alert" className="analise-erro-exportacao">{erroFormulario}</p>}
-    {erro && <div role="alert" className="analise-erro-exportacao"><p>{erro} {resultado ? "A última consulta válida permanece abaixo; os dados não foram atualizados." : "Não foi possível carregar os dados."}</p><Button onClick={atualizar}>Tentar novamente</Button></div>}
-    {erroExportacao && <p role="alert" className="analise-erro-exportacao">{erroExportacao}</p>}
-    {carregando && <p role="status" className="analise-atualizando"><RefreshCw aria-hidden="true"/>{resultado ? "Atualizando análise. Abaixo permanece a última consulta válida até a conclusão." : "Carregando vagas e histórico do período..."}</p>}
-    {carregando && !resultado && <div className="analise-esqueleto" aria-hidden="true"><div className="analise-esqueleto-grafico"/></div>}
-    {resultado && relatorio && resumo && <div className={`analise-conteudo${carregando || erro ? " analise-conteudo-anterior" : ""}`}>
-      <p className="analise-status">{carregando || erro ? "Última consulta válida: " : "Exibindo "} {dataUtc(resultado.filtro.inicio)} a {dataUtc(resultado.filtro.fim)} · {relatorio.recorte}</p>
-      {!temObservacao && <p className="analise-vazio" role="status">Não há observações válidas suficientes neste período. Isso não significa que o estacionamento estava vazio. As contagens por categoria e situação atual vêm do cadastro.</p>}
-      <div className="analise-metricas"><Cartao titulo="Ocupação no período" valor={resumo.ocupacaoPercentual} formato="percentual" ausente="—" apoio="do tempo observado" icone={CircleParking}/><Cartao titulo="Cobertura estimada" valor={resumo.coberturaPercentual} formato="percentual" apoio={resumo.coberturaPercentual === null ? "Sem leitura no período" : "do período com leitura"} tom="azul" icone={Activity}/><Cartao titulo="Entradas observadas" valor={temObservacao ? resumo.entradasObservadas : null} ausente="—" apoio="entradas confirmadas" tom="verde" icone={CarFront}/><Cartao titulo="Permanência média" valor={resumo.permanenciaMediaMinutos} formato="duracao" apoio={resumo.permanenciaMediaMinutos === null ? "Sem ciclos completos" : `${formatarMetrica(resumo.ciclosCompletos, "", 0)} ciclos completos`} tom="roxo" icone={Clock3}/></div>
-      <details className="analise-ajuda"><summary>Como ler os indicadores</summary><dl><div><dt>Ocupação</dt><dd>Tempo ocupado dividido pelo tempo com leitura válida.</dd></div><div><dt>Cobertura</dt><dd>Tempo com leitura em relação à capacidade atual. Alterações no cadastro limitam a comparação histórica.</dd></div><div><dt>Entradas</dt><dd>Transições confirmadas de livre para ocupada.</dd></div><div><dt>Permanência</dt><dd>Média dos ciclos completos encerrados no período, sem falhas intermediárias. Sem ciclos, exibimos —.</dd></div></dl></details>
-      <div className="analise-grade-principal"><article className="analise-painel"><div className="analise-titulo"><div><h3>Ocupação por dia</h3><p>Lacunas indicam dias sem observação.</p></div></div>{temObservacao ? <GraficoOcupacao key={JSON.stringify(resultado.filtro)} dias={resultado.historico.porDia}/> : <p className="analise-vazio">Sem série histórica observável.</p>}</article>
-        <article className="analise-painel"><div className="analise-titulo"><div><h3>Situação atual do recorte</h3><p>Na última consulta.</p></div></div><Rosca centro={relatorio.totais.total} legenda="vagas ativas" itens={[{ nome: "Livres", quantidade: relatorio.totais.livres, cor: "#84bd21" }, { nome: "Ocupadas", quantidade: relatorio.totais.ocupadas, cor: "#ffe100" }, { nome: "Sem leitura", quantidade: relatorio.totais.semLeitura, cor: "#858585" }, { nome: "Indisponíveis", quantidade: relatorio.totais.indisponiveis, cor: "#d06b50" }]}/><p className="analise-cobertura-nota">Leituras ao vivo no mapa.</p></article></div>
-      <div className="analise-grade-secundaria">
-        <article className="analise-painel"><div className="analise-titulo"><div><h3>Entradas e saídas</h3><p>Movimentação confirmada por dia.</p></div></div>{temObservacao ? <GraficoMovimento key={JSON.stringify(resultado.filtro)} dias={resultado.historico.porDia}/> : <p className="analise-vazio">Sem movimentação observável.</p>}</article>
-        <article className="analise-painel"><div className="analise-titulo"><div><h3>Tipo de vaga</h3><p>Categorias do cadastro atual.</p></div></div><Rosca centro={relatorio.totais.total} legenda="vagas no recorte" itens={relatorio.porTipo.map((t, i) => ({ ...t, cor: ["#ffe100", "#168df2", "#84bd21", "#23a55a"][i] }))}/></article>
-        <article className="analise-painel"><div className="analise-titulo"><div><h3>Cobertura por setor</h3><p>Tempo com leitura válida.</p></div></div><ul className="analise-cobertura-lista">{resultado.historico.porSetor.map(s => <li key={s.setor}><div><span>{s.setor}</span><strong><NumeroAnimado valor={s.coberturaPercentual} formato="percentual"/></strong></div><div className="analise-cobertura-trilha"><motion.span style={{ width: `${s.coberturaPercentual ?? 0}%`, transformOrigin: "left" }} initial={reduzirMovimento ? false : { scaleX: 0 }} whileInView={{ scaleX: 1 }} viewport={{ once: true }} transition={{ duration: .8, ease: "easeOut" }}/></div></li>)}</ul>{!resultado.historico.porSetor.length && <p className="analise-vazio">Sem histórico por setor.</p>}<p className="analise-cobertura-nota">Cobertura não representa disponibilidade de vagas.</p></article>
-      </div>
-      <article className="analise-painel analise-comparacao"><h3>Comparação com o período anterior</h3>{resultado.comparacao === "carregando" && (carregando || erro) ? <p>Comparação pendente na última consulta.</p> : resultado.comparacao === "carregando" ? <p role="status">Consultando o período anterior. Os gráficos atuais já estão disponíveis.</p> : resultado.comparacao === "erro" ? <p>Não foi possível consultar o período anterior. Use Atualizar análise para tentar novamente.</p> : <p>{delta === null ? "Não há observação suficiente nos dois períodos para comparar ocupação." : `Variação de ocupação: ${delta > 0 ? "+" : ""}${formatarMetrica(delta, " pontos percentuais")}.`}</p>}</article>
-      <details className="analise-painel analise-tabela"><summary>Ver indicadores detalhados por setor</summary><div className="analise-tabela-scroll"><table><caption>Ocupação e cobertura por tempo observado; permanência em horas e minutos.</caption><thead><tr><th>Setor</th><th>Ocupação</th><th>Cobertura</th><th>Entradas</th><th>Saídas</th><th>Permanência</th><th>Rotatividade</th></tr></thead><tbody>{resultado.historico.porSetor.map(s => <tr key={s.setor}><th scope="row">{s.setor}</th><td>{formatarMetrica(s.ocupacaoPercentual, "%")}</td><td>{formatarMetrica(s.coberturaPercentual, "%")}</td><td>{s.entradasObservadas}</td><td>{s.saidasObservadas}</td><td>{formatarDuracao(s.permanenciaMediaMinutos)}</td><td>{formatarMetrica(s.rotatividadeObservada, "", 2)}</td></tr>)}</tbody></table>{!resultado.historico.porSetor.length && <p className="analise-vazio">Sem histórico por setor no recorte.</p>}</div><p className="analise-cobertura-nota">Rotatividade: entradas observadas por vaga ativa. Permanência: ciclos completos encerrados, sem falhas intermediárias.</p></details>
+  const padrao = periodoPadrao()
+  const quantidadeFiltros = Number(pedido.filtro.inicio !== padrao.inicio || pedido.filtro.fim !== padrao.fim) + Number(!!pedido.filtro.setorId) + Number(!!pedido.filtro.tipo)
+  const setorSelecionado = resultado?.estrutura.andares.flatMap(a => a.setores.map(s => ({ id: s.id, nome: a.nome + " · " + s.nome }))).find(s => s.id === pedido.filtro.setorId)
+  const diasObservados = resultado?.historico.porDia.filter(d => d.ocupacaoPercentual !== null) ?? []
+  const pico = diasObservados.reduce<AnaliseHistorica["porDia"][number] | null>((maior, dia) => !maior || (dia.ocupacaoPercentual ?? -1) > (maior.ocupacaoPercentual ?? -1) ? dia : maior, null)
 
+  return <section className="analise-estacionamento" aria-labelledby="titulo-analise" aria-busy={carregando}>
+    <header className="analise-cabecalho">
+      <div><h2 id="titulo-analise">{resultado?.estrutura.shopping.nome ?? "Resumo do período"}</h2></div>
+      <div className="analise-acoes">
+        <Button variant="outline" disabled={carregando || exportando !== null} onClick={atualizar}><RefreshCw aria-hidden="true"/>Atualizar</Button>
+        <details className="analise-exportacoes">
+          <summary><Download aria-hidden="true"/>Exportar relatório</summary>
+          <div>{(["xlsx", "pdf"] as const).map(formato => <Button key={formato} disabled={!resultado || carregando || !!erro || exportando !== null || resultado.comparacao === "carregando"} onClick={() => void exportar(formato)}>{exportando === formato ? "Preparando..." : formato === "xlsx" ? "Excel" : "PDF"}</Button>)}</div>
+        </details>
+      </div>
+    </header>
+    <div className="analise-toolbar">
+      <p className="analise-periodo"><strong>{dataUtc(pedido.filtro.inicio)} a {dataUtc(pedido.filtro.fim)}</strong><span>{setorSelecionado?.nome ?? (pedido.filtro.setorId ? "Setor selecionado" : "Todos os setores")} · {pedido.filtro.tipo ? categorias[pedido.filtro.tipo] : "Todas as categorias"}</span></p>
+      <div className="analise-toolbar-acoes">
+        <Dialog open={filtrosAbertos} onOpenChange={abrirFiltros}>
+          <DialogTrigger asChild><Button variant="outline" aria-label={quantidadeFiltros ? "Filtros da análise: " + quantidadeFiltros + " ativos" : "Filtros da análise"}><SlidersHorizontal aria-hidden="true"/>Filtros{quantidadeFiltros > 0 && <span className="analise-filtros-contagem">{quantidadeFiltros}</span>}</Button></DialogTrigger>
+          <DialogContent className="analise-dialogo sm:max-w-lg">
+            <DialogHeader><DialogTitle>Filtros da análise</DialogTitle><DialogDescription>Escolha um período de até 31 dias. As datas usam UTC.</DialogDescription></DialogHeader>
+            <form className="analise-filtro" onSubmit={aplicar}>
+              <div className="analise-filtro-campos">
+                <div className="analise-campo"><label htmlFor="analise-inicio">De</label><input id="analise-inicio" type="date" required value={formulario.inicio} max={padrao.fim} onChange={e => setFormulario(f => ({ ...f, inicio: e.target.value }))}/></div>
+                <div className="analise-campo"><label htmlFor="analise-fim">Até</label><input id="analise-fim" type="date" required value={formulario.fim} max={padrao.fim} onChange={e => setFormulario(f => ({ ...f, fim: e.target.value }))}/></div>
+                <div className="analise-campo"><label htmlFor="analise-setor">Setor</label><select id="analise-setor" value={formulario.setorId} onChange={e => setFormulario(f => ({ ...f, setorId: e.target.value }))}><option value="">Todos os setores</option>{resultado?.estrutura.andares.filter(a => a.ativo).flatMap(a => a.setores.filter(s => s.ativo).map(s => <option key={s.id} value={s.id}>{a.nome} · {s.nome}</option>))}</select></div>
+                <div className="analise-campo"><label htmlFor="analise-categoria">Categoria</label><select id="analise-categoria" value={formulario.tipo} onChange={e => setFormulario(f => ({ ...f, tipo: e.target.value as Filtro["tipo"] }))}><option value="">Todas as categorias</option>{Object.entries(categorias).map(([id, nome]) => <option key={id} value={id}>{nome}</option>)}</select></div>
+              </div>
+              {erroFormulario && <p role="alert" className="analise-erro-exportacao">{erroFormulario}</p>}
+              <div className="analise-filtro-acoes"><Button type="button" variant="ghost" onClick={() => { const filtro = periodoPadrao(); setFormulario(filtro); setErroFormulario(""); solicitarFiltro(filtro); setFiltrosAbertos(false) }}>Limpar filtros</Button><Button type="button" variant="outline" onClick={() => setFiltrosAbertos(false)}>Cancelar</Button><Button type="submit" disabled={carregando}>Aplicar filtros</Button></div>
+            </form>
+          </DialogContent>
+        </Dialog>
+        {quantidadeFiltros > 0 && <Button variant="ghost" onClick={() => solicitarFiltro(periodoPadrao())} disabled={carregando}>Limpar filtros</Button>}
+      </div>
+    </div>
+    {erro && <div role="alert" className="analise-erro-exportacao"><p>{erro} {resultado ? "Exibindo a última consulta válida." : "Não foi possível carregar os dados."}</p><Button onClick={atualizar}>Tentar novamente</Button></div>}
+    {erroExportacao && <p role="alert" className="analise-erro-exportacao">{erroExportacao}</p>}
+    {carregando && <p role="status" className="analise-atualizando">{resultado ? "Consultando o recorte. A última análise permanece disponível." : "Carregando análise..."}</p>}
+    {carregando && !resultado && <div className="analise-esqueleto" aria-hidden="true"><div className="analise-esqueleto-grafico"/></div>}
+    {resultado && relatorio && resumo && <div className="analise-conteudo">
+      {(carregando || erro) && <p className="analise-status">Última consulta válida: {dataUtc(resultado.filtro.inicio)} a {dataUtc(resultado.filtro.fim)} · {relatorio.recorte}</p>}
+      {!temObservacao && <p className="analise-vazio" role="status">Sem observações válidas suficientes no período. Isso não significa que o estacionamento estava vazio.</p>}
+
+      <section className="analise-resumo" aria-labelledby="titulo-resumo-periodo">
+        <div className="analise-titulo"><h3 id="titulo-resumo-periodo">Resumo do período</h3></div>
+        <div className="analise-metricas analise-metricas-principais">
+          <Cartao titulo="Ocupação média" valor={resumo.ocupacaoPercentual} formato="percentual" apoio={temObservacao && resumo.coberturaPercentual !== null && resumo.coberturaPercentual < 100 ? `Cobertura parcial: ${formatarMetrica(resumo.coberturaPercentual, "%")}. Somente o tempo com leitura válida.` : "Somente o tempo com leitura válida"} icone={CircleParking}/>
+          <Cartao titulo="Entradas registradas" valor={temObservacao ? resumo.entradasObservadas : null} icone={CarFront}/>
+          <Cartao titulo="Saídas registradas" valor={temObservacao ? resumo.saidasObservadas : null} icone={CarFront}/>
+          <Cartao titulo="Tempo médio na vaga" valor={resumo.permanenciaMediaMinutos} formato="duracao" apoio={resumo.permanenciaMediaMinutos === null ? "Sem entradas e saídas completas para calcular" : "Entradas e saídas confirmadas"} icone={Clock3}/>
+        </div>
+      </section>
+      <section className="analise-categorias" aria-labelledby="titulo-categorias"><div className="analise-titulo"><h3 id="titulo-categorias">Vagas por categoria</h3><span>Cadastro atual do recorte</span></div><div className="analise-categorias-grade">{relatorio.porTipo.map((tipo, i) => { const Icone = iconesCategorias[i]; return <article key={tipo.nome} className={`analise-categoria analise-categoria--${i}`}><Icone aria-hidden="true"/><div><h4>{tipo.nome}</h4><strong>{formatarMetrica(tipo.quantidade, "", 0)}</strong></div></article> })}</div></section>
+      <div className="analise-grade-principal">
+        <article className="analise-painel"><div className="analise-titulo"><h3>Evolução da ocupação</h3></div>{temObservacao ? <GraficoOcupacao key={JSON.stringify(resultado.filtro)} dias={resultado.historico.porDia}/> : <p className="analise-vazio">Sem série histórica observável.</p>}
+          <div className="analise-comparacao"><h4>Em relação ao período anterior</h4>{resultado.comparacao === "carregando" ? <p>{carregando || erro ? "Comparação ainda não concluída." : "Consultando comparação..."}</p> : resultado.comparacao === "erro" ? <p>Comparação indisponível. Use Atualizar para tentar novamente.</p> : <p>{delta === null ? "Sem observação suficiente para comparar." : (delta > 0 ? "+" : "") + formatarMetrica(delta, " pontos percentuais")}</p>}</div>
+        </article>
+            <article className="analise-painel analise-situacao"><div className="analise-titulo"><h3>Situação na última consulta</h3></div><p className="analise-total-vagas"><strong>{relatorio.totais.total}</strong> vagas no recorte atual</p><Rosca itens={[{ nome: "Livres", quantidade: relatorio.totais.livres, cor: "#84bd21" }, { nome: "Ocupadas", quantidade: relatorio.totais.ocupadas, cor: "#ffe100" }, { nome: "Sem leitura", quantidade: relatorio.totais.semLeitura, cor: "#858585" }, { nome: "Indisponíveis", quantidade: relatorio.totais.indisponiveis, cor: "#d06b50" }]}/><details className="analise-estados-detalhes"><summary>Entender os estados</summary><dl className="analise-estados-ajuda"><div><dt>Sem leitura</dt><dd>Ocupação desconhecida, sem sensor associado.</dd></div><div><dt>Indisponíveis</dt><dd>Sem leitura válida do sensor ou em manutenção.</dd></div></dl></details></article>
+      </div>
+      <div className="analise-grade-secundaria analise-movimento-setores">
+            <article className="analise-painel"><div className="analise-titulo"><h3>Entradas e saídas por dia</h3></div>{temObservacao ? <GraficoMovimento key={JSON.stringify(resultado.filtro)} dias={resultado.historico.porDia}/> : <p className="analise-vazio">Sem movimentação observável.</p>}</article>
+        <article className="analise-painel"><div className="analise-titulo"><h3>Ocupação por setor</h3></div><ul className="analise-setores-lista">{resultado.historico.porSetor.map(setor => <li key={setor.setor}><div><span>{setor.setor}</span><strong>{formatarMetrica(setor.ocupacaoPercentual, "%")}</strong></div><div className="analise-setor-trilha" aria-hidden="true"><span style={{ width: (setor.ocupacaoPercentual ?? 0) + "%" }}/></div></li>)}</ul>{!resultado.historico.porSetor.length && <p className="analise-vazio">Sem histórico por setor no recorte.</p>}</article>
+      </div>
+      <details className="analise-detalhes">
+        <summary>Dados avançados</summary>
+        <div className="analise-detalhes-conteudo">
+          <div className="analise-metricas">
+            <Cartao titulo="Cobertura estimada" valor={resumo.coberturaPercentual} formato="percentual" apoio="do período com leitura" tom="azul" icone={Activity}/>
+
+            <article className="analise-card-metrica analise-card-metrica--azul"><div className="analise-metrica-titulo"><span className="analise-icone"><CalendarDays aria-hidden="true"/></span><p>Dia de maior ocupação</p></div><strong>{pico ? dataUtc(pico.inicioEm) : "—"}</strong><small>{pico ? formatarMetrica(pico.ocupacaoPercentual, "%") + " de ocupação média" : "Sem observação no período"}</small></article>
+            <Cartao titulo="Rotatividade observada" valor={resumo.rotatividadeObservada} formato="decimal" apoio="entradas por vaga ativa" icone={CircleParking}/>
+          </div>
+          <div className="analise-painel analise-tabela"><h3>Indicadores por setor</h3><div className="analise-tabela-scroll"><table><caption>Ocupação e cobertura no tempo observado.</caption><thead><tr><th>Setor</th><th>Ocupação</th><th>Cobertura</th><th>Entradas</th><th>Saídas</th><th>Permanência</th><th>Rotatividade</th></tr></thead><tbody>{resultado.historico.porSetor.map(setor => <tr key={setor.setor}><th scope="row">{setor.setor}</th><td>{formatarMetrica(setor.ocupacaoPercentual, "%")}</td><td>{formatarMetrica(setor.coberturaPercentual, "%")}</td><td>{setor.entradasObservadas}</td><td>{setor.saidasObservadas}</td><td>{formatarDuracao(setor.permanenciaMediaMinutos)}</td><td>{formatarMetrica(setor.rotatividadeObservada, "", 2)}</td></tr>)}</tbody></table>{!resultado.historico.porSetor.length && <p className="analise-vazio">Sem histórico por setor no recorte.</p>}</div></div>
+          <details className="analise-ajuda"><summary>Como interpretar os dados</summary><p>Ocupação usa apenas tempo com leitura válida. Cobertura compara esse tempo com a capacidade atual; mudanças no cadastro limitam a comparação histórica. Entradas e saídas são transições confirmadas. Permanência considera ciclos completos, sem falhas intermediárias; rotatividade é o total de entradas por vaga ativa. — indica ausência de observação.</p></details>
+        </div>
+      </details>
     </div>}
   </section>
 }

@@ -20,6 +20,7 @@ import { EMAIL_CONTATO, INSTAGRAM_URL, REPOSITORIO_URL, WHATSAPP_URL } from "@/l
 /** Reúne conteúdo comercial estático, imagens e animações; o contato usa o link compartilhado. */
 export function LandingPage() {
   useScrollReveal()
+  const contatoUrl = WHATSAPP_URL ?? `mailto:${EMAIL_CONTATO}`
 
   return (
     <MotionConfig reducedMotion="user">
@@ -78,7 +79,12 @@ export function LandingPage() {
                     size="lg"
                     variant="outline"
                   >
-                    <a aria-label="Falar com a VAGGU pelo WhatsApp (abre em nova aba)" href={WHATSAPP_URL} rel="noreferrer" target="_blank">
+                    <a
+                      aria-label={WHATSAPP_URL ? "Falar com a VAGGU pelo WhatsApp (abre em nova aba)" : "Falar com a VAGGU por e-mail"}
+                      href={contatoUrl}
+                      rel={WHATSAPP_URL ? "noreferrer" : undefined}
+                      target={WHATSAPP_URL ? "_blank" : undefined}
+                    >
                       Falar com a VAGGU
                       <ArrowRight className="size-5" aria-hidden="true" />
                     </a>
@@ -142,18 +148,23 @@ export function LandingPage() {
               <Card className="mx-auto mt-10 max-w-2xl overflow-hidden rounded-[2rem] border-[#ffe100] bg-[#fffdf2] text-left text-neutral-950 shadow-xl shadow-black/8 sm:mt-12">
                 <CardContent className="grid gap-7 p-7 sm:grid-cols-[auto_1fr] sm:p-9">
                   <div className="grid size-16 place-items-center rounded-2xl bg-[#ffe100] text-black">
-                    <IconeWhatsApp className="size-8" />
+                    {WHATSAPP_URL ? <IconeWhatsApp className="size-8" /> : <Mail className="size-8" aria-hidden="true" />}
                   </div>
                   <div>
-                    <h3 className="font-landing text-2xl font-semibold tracking-tight">Converse com a equipe VAGGU pelo WhatsApp</h3>
+                    <h3 className="font-landing text-2xl font-semibold tracking-tight">Converse com a equipe VAGGU {WHATSAPP_URL ? "pelo WhatsApp" : "por e-mail"}</h3>
                     <p className="mt-2 font-light text-neutral-600">
                       Conheça a implantação e prepare o acesso do seu shopping com o acompanhamento da nossa equipe.
                     </p>
                   </div>
                   <Button asChild className="h-12 w-full justify-between rounded-full bg-[#ffe100] px-6 font-medium text-black hover:bg-[#f2d500] sm:col-span-2">
-                    <a aria-label="Iniciar conversa com a VAGGU no WhatsApp (abre em nova aba)" href={WHATSAPP_URL} rel="noreferrer" target="_blank">
-                      Iniciar conversa
-                      <ExternalLink className="size-4" aria-hidden="true" />
+                    <a
+                      aria-label={WHATSAPP_URL ? "Iniciar conversa com a VAGGU no WhatsApp (abre em nova aba)" : "Enviar e-mail para a equipe VAGGU"}
+                      href={contatoUrl}
+                      rel={WHATSAPP_URL ? "noreferrer" : undefined}
+                      target={WHATSAPP_URL ? "_blank" : undefined}
+                    >
+                      {WHATSAPP_URL ? "Iniciar conversa" : "Enviar e-mail"}
+                      {WHATSAPP_URL ? <ExternalLink className="size-4" aria-hidden="true" /> : <Mail className="size-4" aria-hidden="true" />}
                     </a>
                   </Button>
                 </CardContent>

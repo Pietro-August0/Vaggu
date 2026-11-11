@@ -25,10 +25,12 @@ interface DetalhesVagaProps {
   andar: string
   setor: string
   aoFechar: () => void
+  aoRestaurarFoco?: () => void
 }
 
 /** Mantém o diálogo controlado pela seleção feita no mapa ou na lista. */
-export function DetalhesVaga({ vaga, andar, setor, aoFechar }: DetalhesVagaProps) {
+export function DetalhesVaga({ vaga, andar, setor, aoFechar, aoRestaurarFoco }: DetalhesVagaProps) {
+  const precisaAtencao = !vaga?.monitoramento || !["OPERANDO", "CONFIRMANDO"].includes(vaga.monitoramento.situacao)
   return (
     <Dialog
       open={vaga !== null}
@@ -37,7 +39,9 @@ export function DetalhesVaga({ vaga, andar, setor, aoFechar }: DetalhesVagaProps
       }}
     >
       {vaga ? (
-        <DialogContent className="max-h-[calc(100vh-2rem)] overflow-y-auto sm:max-w-lg">
+        <DialogContent className="max-h-[calc(100vh-2rem)] overflow-y-auto sm:max-w-lg" onCloseAutoFocus={evento => {
+          if (aoRestaurarFoco) { evento.preventDefault(); aoRestaurarFoco() }
+        }}>
           <DialogHeader className="pr-8">
             <div className="flex flex-wrap items-center gap-2">
               <DialogTitle className="text-xl">Vaga {vaga.codigo}</DialogTitle>
@@ -46,7 +50,7 @@ export function DetalhesVaga({ vaga, andar, setor, aoFechar }: DetalhesVagaProps
               </Badge>
             </div>
             <DialogDescription>
-              Detalhes estruturais e situação de monitoramento desta vaga.
+              Localização e situação atual da vaga.
             </DialogDescription>
           </DialogHeader>
 
@@ -67,15 +71,17 @@ export function DetalhesVaga({ vaga, andar, setor, aoFechar }: DetalhesVagaProps
           </section>
 
           <section
-            className="grid gap-3 rounded-xl border border-amber-300 bg-amber-50 p-4 text-amber-950"
+            className={`grid gap-3 rounded-xl border p-4 ${precisaAtencao ? "border-amber-300 bg-amber-50 text-amber-950" : "bg-muted/30"}`}
             aria-labelledby="sensor-vaga"
           >
             <h3 id="sensor-vaga" className="flex items-center gap-2 font-semibold">
               <Radio className="size-4" aria-hidden="true" />
-              Monitoramento do sensor
+              Situação do sensor
             </h3>
+            <p className="font-medium">{vaga.monitoramento ? nomesSituacaoSensor[vaga.monitoramento.situacao] : "Sem sensor vinculado"}</p>
+            <details className="min-w-0 border-t pt-2">
+              <summary className="cursor-pointer rounded-md py-2 font-semibold outline-none focus-visible:ring-2 focus-visible:ring-ring">Dados técnicos do sensor</summary>
             <dl className="grid gap-3 text-sm sm:grid-cols-2">
-              <LinhaDetalhe termo="Situação" descricao={vaga.monitoramento ? nomesSituacaoSensor[vaga.monitoramento.situacao] : "Sem sensor vinculado"} />
               <LinhaDetalhe termo="Sensor" descricao={vaga.monitoramento?.sensorCodigo ?? "Não configurado"} />
               <LinhaDetalhe termo="Placa ESP32" descricao={vaga.monitoramento?.placaNome ?? "Não vinculada"} />
               <LinhaDetalhe termo="Último contato da placa" descricao={horarioSensor(vaga.monitoramento?.ultimoContatoPlacaEm ?? null)} />
@@ -91,6 +97,7 @@ export function DetalhesVaga({ vaga, andar, setor, aoFechar }: DetalhesVagaProps
                 {vaga.monitoramento?.demonstracao ? "A situação exibida considera o registro individual deste sensor. O contato da placa não substitui sua última observação." : "A validade depende das observações individuais do sensor. O contato da placa, sozinho, não comprova que todos os sensores estejam funcionando."}
               </span>
             </p>
+            </details>
           </section>
         </DialogContent>
       ) : null}

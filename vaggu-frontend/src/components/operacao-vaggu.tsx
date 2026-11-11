@@ -1,6 +1,6 @@
 /** Relaciona a imagem de movimento urbano aos benefícios da gestão e ao atendimento. */
 import { ArrowRight, BarChart3, ParkingCircle } from "lucide-react"
-import { WHATSAPP_URL } from "@/lib/constants"
+import { EMAIL_CONTATO, WHATSAPP_URL } from "@/lib/constants"
 import "./operacao-vaggu.css"
 
 /** Mantém a foto como destaque e apresenta o acompanhamento oferecido ao shopping. */
@@ -22,7 +22,13 @@ export function OperacaoVaggu() {
               <div><h3>Conte com a equipe VAGGU</h3><p>Da avaliação à implantação, nossa equipe prepara a estrutura e os acessos para o seu shopping.</p></div>
             </li>
           </ul>
-          <a className="operacao-contato" href={WHATSAPP_URL} target="_blank" rel="noreferrer" aria-label="Conversar sobre meu shopping com a VAGGU no WhatsApp (abre em nova aba)">Conversar sobre meu shopping <ArrowRight aria-hidden="true" /></a>
+          <a
+            className="operacao-contato"
+            href={WHATSAPP_URL ?? `mailto:${EMAIL_CONTATO}`}
+            target={WHATSAPP_URL ? "_blank" : undefined}
+            rel={WHATSAPP_URL ? "noreferrer" : undefined}
+            aria-label={WHATSAPP_URL ? "Conversar sobre meu shopping com a VAGGU no WhatsApp (abre em nova aba)" : "Conversar sobre meu shopping com a VAGGU por e-mail"}
+          >Conversar sobre meu shopping <ArrowRight aria-hidden="true" /></a>
         </div>
       </div>
     </section>

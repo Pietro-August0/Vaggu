@@ -1,12 +1,12 @@
 /** Apresenta a solução, a jornada comercial e os benefícios conectados ao painel. */
-import { CalendarClock, Car, Monitor } from "lucide-react"
+import { CalendarClock, Car, Mail, Monitor } from "lucide-react"
 import { motion } from "motion/react"
 import { IconeWhatsApp } from "@/components/icone-whatsapp"
-import { WHATSAPP_URL } from "@/lib/constants"
+import { EMAIL_CONTATO, WHATSAPP_URL } from "@/lib/constants"
 import "./sobre-vaggu.css"
 
 const etapas = [
-  { icone: IconeWhatsApp, texto: <>Entre em contato conosco pelo WhatsApp</> },
+  { icone: WHATSAPP_URL ? IconeWhatsApp : Mail, texto: <>Entre em contato conosco {WHATSAPP_URL ? "pelo WhatsApp" : "por e-mail"}</> },
   { icone: CalendarClock, texto: <>Agende uma avaliação do seu estacionamento</> },
   { icone: Car, texto: <>Implantação da <span>Vaggu</span> no seu local</> },
   { icone: Monitor, texto: <>Acompanhe a operação e seus dados em tempo real</> },
@@ -70,7 +70,12 @@ export function SobreVaggu() {
                 <p>{texto}</p>
                 <div className="sobre-circulo">
                   {indice === 0 ? (
-                    <a href={WHATSAPP_URL} target="_blank" rel="noreferrer" aria-label="Conversar com a VAGGU no WhatsApp (abre em nova aba)"><Icone aria-hidden="true" /></a>
+                    <a
+                      href={WHATSAPP_URL ?? `mailto:${EMAIL_CONTATO}`}
+                      target={WHATSAPP_URL ? "_blank" : undefined}
+                      rel={WHATSAPP_URL ? "noreferrer" : undefined}
+                      aria-label={WHATSAPP_URL ? "Conversar com a VAGGU no WhatsApp (abre em nova aba)" : "Conversar com a VAGGU por e-mail"}
+                    ><Icone aria-hidden="true" /></a>
                   ) : <div><Icone aria-hidden="true" /></div>}
                 </div>
               </li>

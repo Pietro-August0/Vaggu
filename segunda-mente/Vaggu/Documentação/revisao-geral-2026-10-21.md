@@ -1,5 +1,7 @@
 # Revisão geral — 21/10/2026
 
+**Leitura histórica:** resultados e pendências pertencem à data registrada. Para decisões posteriores, consulte a [revisão de pendências de 09/11](planejamento-do-projeto.md#revisão-de-pendências--09112026); o aceite web de 04/11, a dispensa de backup e o recorte demonstrativo do WhatsApp prevalecem.
+
 Revisamos a documentação vigente, a apresentação do repositório e os arquivos de apoio. Atualizamos o README com capturas da aplicação atual e preservamos os registros anteriores como histórico datado.
 
 ## Documentação e regras
