@@ -1,5 +1,11 @@
 # VAGGU — planejamento e continuidade do projeto
 
+## Campos de senha e autorização do telão — 12/11/2026
+
+No login, na troca obrigatória e em Minha conta, fica um olho por campo: a folha de estilos oculta o controle nativo do Edge onde a VAGGU tem seu próprio botão. Na autorização do telão, a instrução dos atalhos começa abaixo da explicação e a combinação Alt + S não quebra.
+
+Conferidos `npm.cmd --prefix vaggu-frontend run build`, `npm.cmd --prefix vaggu-frontend run lint`, `node scripts/verificar-documentacao.mjs` e `git diff --check`. Os roteiros temporários `vaggu-olho-senha-qa.cjs` e `vaggu-autorizacao-telao-qa.cjs` foram executados com Node, Playwright e Edge local sobre a prévia do build, pois o plugin Browser não estava disponível. Verificadas as interações por teclado e a disposição em três tamanhos, nos dois temas. A comparação no Edge confirmou a mudança visual do controle nativo. A [galeria de evidências](../Evidências%20visuais/Índice%20de%20evidências.md#12112026--um-olho-por-campo-de-senha) usa dados fictícios; gerenciador de senhas de um perfil real, instalação física e versão publicada ficaram fora da conferência. O build manteve o aviso sobre tamanho de pacotes. Skill de roteamento VAGGU não localizada; sem nova atribuição de responsabilidade ou autoria.
+
 ## Integração das alterações com a main — 12/11/2026
 
 A integração preserva a landing com acesso ao Memorial, a consulta silenciosa do mapa e a nova visão geral administrativa. O mapa incorpora o diálogo de filtros da branch remota e mantém a legenda antes das vagas. O painel de análises usa os gráficos e o diálogo da branch remota com textos de ausência de leituras revisados.

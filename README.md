@@ -29,7 +29,7 @@ A VAGGU é uma plataforma web responsiva desenvolvida como TCC em Desenvolviment
   </tr>
 </table>
 
-Veja também [análise](./segunda-mente/Vaggu/Evid%C3%AAncias%20visuais/2026-11-12%20-%20Analises%20integradas/desktop-light-historico.png), [editor e filtros](./segunda-mente/Vaggu/Evid%C3%AAncias%20visuais/2026-11-11%20-%20Painel%20e%20configuracoes/admin-editor-desktop-light.png), [mapa no celular](./segunda-mente/Vaggu/Evid%C3%AAncias%20visuais/2026-11-12%20-%20Mapa%20sem%20faixa/celular-light.png) e [login no celular](./segunda-mente/Vaggu/Evid%C3%AAncias%20visuais/2026-10-21%20-%20Revisao%20geral/login-mobile.png). A [galeria de evidências](./segunda-mente/Vaggu/Evid%C3%AAncias%20visuais/%C3%8Dndice%20de%20evid%C3%AAncias.md) registra rotas, resoluções, verificações e limites de cada captura.
+Veja também [análise](./segunda-mente/Vaggu/Evid%C3%AAncias%20visuais/2026-11-12%20-%20Analises%20integradas/desktop-light-historico.png), [editor e filtros](./segunda-mente/Vaggu/Evid%C3%AAncias%20visuais/2026-11-11%20-%20Painel%20e%20configuracoes/admin-editor-desktop-light.png), [mapa no celular](./segunda-mente/Vaggu/Evid%C3%AAncias%20visuais/2026-11-12%20-%20Mapa%20sem%20faixa/celular-light.png) e [login no celular](./segunda-mente/Vaggu/Evid%C3%AAncias%20visuais/2026-11-12%20-%20Um%20olho%20por%20senha/login-celular-light.png). A [galeria de evidências](./segunda-mente/Vaggu/Evid%C3%AAncias%20visuais/%C3%8Dndice%20de%20evid%C3%AAncias.md) registra rotas, resoluções, verificações e limites de cada captura.
 
 ## Tecnologias
 

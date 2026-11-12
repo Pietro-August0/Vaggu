@@ -41,7 +41,7 @@ export function LoginPage() {
           <label htmlFor="email">E-mail</label>
           <input id="email" name="email" type="email" autoComplete="off" maxLength={254} placeholder="Digite ou escolha seu e-mail" value={email} onChange={evento => setEmail(evento.target.value)} required disabled={enviando} />
           <label htmlFor="senha">Senha</label>
-          <div className="login-senha">
+          <div className="login-senha senha-com-controle">
             <input id="senha" name="senha" type={mostrarSenha ? "text" : "password"} autoComplete="off" maxLength={128} placeholder="Digite ou escolha sua senha" value={senha} onChange={evento => setSenha(evento.target.value)} required disabled={enviando} />
             <button type="button" className="login-olho" aria-label={mostrarSenha ? "Ocultar senha" : "Mostrar senha"} aria-pressed={mostrarSenha} onClick={() => setMostrarSenha(!mostrarSenha)}>{mostrarSenha ? <EyeOff aria-hidden="true" size={20} /> : <Eye aria-hidden="true" size={20} />}</button>
           </div>

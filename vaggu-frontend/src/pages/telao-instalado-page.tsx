@@ -64,7 +64,19 @@ export function TelaoInstaladoPage() {
   return () => { ativo = false; controle?.abort(); clearTimeout(prazo); clearInterval(intervalo); window.removeEventListener("online", voltar); window.removeEventListener("offline", offline); document.removeEventListener("visibilitychange", voltar) }
  }, [chave, telaoId])
  function instalar(e: FormEvent<HTMLFormElement>) { e.preventDefault(); setChave(String(new FormData(e.currentTarget).get("chave") ?? "").trim()); setDados(null); setValido(false) }
- if (!chave) return <main className="mx-auto grid min-h-screen max-w-lg content-center gap-4 p-6"><h1 className="text-2xl font-bold">Autorizar telão VAGGU</h1><p>Informe a credencial emitida na gestão dos telões para esta instalação. O acesso fica guardado somente nesta aba. Use Alt + S para voltar à gestão e Esc para sair da tela cheia.</p>{erro && <p role="alert">{erro}</p>}<form onSubmit={instalar} className="grid gap-3"><label className="grid gap-1">Credencial<Input name="chave" type="password" autoComplete="off" required minLength={43} maxLength={43}/></label><Button>Autorizar exibição</Button></form></main>
+ if (!chave) return <main className="mx-auto grid min-h-screen max-w-lg content-center gap-4 p-6">
+  <h1 className="text-2xl font-bold">Autorizar telão VAGGU</h1>
+  <p>
+   Informe a credencial emitida na gestão dos telões para esta instalação. O acesso fica guardado somente nesta aba.
+   <br />
+   Use <span className="whitespace-nowrap">Alt + S</span> para voltar à gestão e Esc para sair da tela cheia.
+  </p>
+  {erro && <p role="alert">{erro}</p>}
+  <form onSubmit={instalar} className="grid gap-3">
+   <label className="grid gap-1">Credencial<Input name="chave" type="password" autoComplete="off" required minLength={43} maxLength={43}/></label>
+   <Button>Autorizar exibição</Button>
+  </form>
+ </main>
  return <TelaoApresentacao
   shopping={dados?.shopping ?? "Estacionamento"}
   nomeTelao={dados?.nome ?? "Telão"}

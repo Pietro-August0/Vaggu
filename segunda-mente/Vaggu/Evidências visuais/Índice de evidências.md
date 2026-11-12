@@ -3,6 +3,24 @@ tags: [vaggu, evidencias, interface]
 ---
 # Evidências visuais da VAGGU
 
+## 12/11/2026 — um olho por campo de senha
+
+Edge local com API simulada e valores fictícios mascarados nas capturas. Cada campo ficou com um botão visível. Tab alcançou o botão com foco visível; Enter mostrou e Espaço voltou a ocultar a senha. Sem rolagem horizontal ou erros no console.
+
+| Rota e perfil | Desktop 1440×900 | Tablet 768×1024 | Celular 390×844 |
+| --- | --- | --- | --- |
+| `/login` — visitante | [Claro](2026-11-12%20-%20Um%20olho%20por%20senha/login-desktop-light.png) · [Escuro](2026-11-12%20-%20Um%20olho%20por%20senha/login-desktop-dark.png) | [Claro](2026-11-12%20-%20Um%20olho%20por%20senha/login-tablet-light.png) · [Escuro](2026-11-12%20-%20Um%20olho%20por%20senha/login-tablet-dark.png) | [Claro](2026-11-12%20-%20Um%20olho%20por%20senha/login-celular-light.png) · [Escuro](2026-11-12%20-%20Um%20olho%20por%20senha/login-celular-dark.png) |
+| `/trocar-senha` — gerente no primeiro acesso | [Claro](2026-11-12%20-%20Um%20olho%20por%20senha/troca-desktop-light.png) · [Escuro](2026-11-12%20-%20Um%20olho%20por%20senha/troca-desktop-dark.png) | [Claro](2026-11-12%20-%20Um%20olho%20por%20senha/troca-tablet-light.png) · [Escuro](2026-11-12%20-%20Um%20olho%20por%20senha/troca-tablet-dark.png) | [Claro](2026-11-12%20-%20Um%20olho%20por%20senha/troca-celular-light.png) · [Escuro](2026-11-12%20-%20Um%20olho%20por%20senha/troca-celular-dark.png) |
+| `/admin/conta` — Admin em Alterar senha | [Claro](2026-11-12%20-%20Um%20olho%20por%20senha/conta-desktop-light.png) · [Escuro](2026-11-12%20-%20Um%20olho%20por%20senha/conta-desktop-dark.png) | [Claro](2026-11-12%20-%20Um%20olho%20por%20senha/conta-tablet-light.png) · [Escuro](2026-11-12%20-%20Um%20olho%20por%20senha/conta-tablet-dark.png) | [Claro](2026-11-12%20-%20Um%20olho%20por%20senha/conta-celular-light.png) · [Escuro](2026-11-12%20-%20Um%20olho%20por%20senha/conta-celular-dark.png) |
+
+## 12/11/2026 — autorização do telão
+
+Rota local `/telao/exemplo`, instalação sem credencial, com sessão fictícia de gerente para o retorno à gestão. A instrução começa abaixo do texto sobre a credencial; Alt + S permanece junto e leva à gestão. Campo vazio nas capturas; sem rolagem horizontal ou erros no console.
+
+| Estado | Desktop 1440×900 | Tablet 768×1024 | Celular 390×844 |
+| --- | --- | --- | --- |
+| Aguardando credencial | [Claro](2026-11-12%20-%20Autorizacao%20do%20telao/desktop-light.png) · [Escuro](2026-11-12%20-%20Autorizacao%20do%20telao/desktop-dark.png) | [Claro](2026-11-12%20-%20Autorizacao%20do%20telao/tablet-light.png) · [Escuro](2026-11-12%20-%20Autorizacao%20do%20telao/tablet-dark.png) | [Claro](2026-11-12%20-%20Autorizacao%20do%20telao/celular-light.png) · [Escuro](2026-11-12%20-%20Autorizacao%20do%20telao/celular-dark.png) |
+
 ## 12/11/2026 — análises após integração com a main
 
 Rota `/painel/analise`, perfil gerente e API simulada com dados fictícios. Conferidos abertura do filtro pelo teclado, aplicação da categoria PcD e aviso de leituras insuficientes, sem rolagem horizontal ou erros no console.

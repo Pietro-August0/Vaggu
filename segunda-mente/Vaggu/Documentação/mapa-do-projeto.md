@@ -261,7 +261,7 @@ As cópias de imagens entre `segunda-mente/Vaggu/Identidade visual/Assets/` e `v
 | `vaggu-frontend/src/components/ui/sonner.tsx` | Componente de interface reutilizável sonner; usado para controles, estados e composição acessível. |
 | `vaggu-frontend/src/components/ui/table.tsx` | Componente de interface reutilizável table; usado para controles, estados e composição acessível. |
 | `vaggu-frontend/src/hooks/use-scroll-reveal.ts` | Revela uma vez os blocos da landing conforme entram na viewport; a decisão atual mantém esse movimento automático. |
-| `vaggu-frontend/src/index.css` | Reúne temas claro/escuro, compatibilidade visual dos painéis, responsividade e microinterações dos cards acionáveis. |
+| `vaggu-frontend/src/index.css` | Reúne temas claro/escuro, compatibilidade visual dos painéis, responsividade e microinterações dos cards acionáveis. Oculta o olho nativo do Edge nos campos marcados com `senha-com-controle` no login, na troca obrigatória e em Minha conta. |
 | `vaggu-frontend/src/lib/constants.ts` | Publica links de contato somente após configurar o número oficial da VAGGU. |
 | `vaggu-frontend/src/lib/utils.ts` | Combina classes condicionais e resolve conflitos de utilitários Tailwind. |
 | `vaggu-frontend/src/main.tsx` | Inicializa o React, respeita a preferência de movimento reduzido e reúne tema, mensagens, sessão e rotas autenticadas, incluindo análise e prévia de telões do gerente. |
@@ -428,7 +428,7 @@ Regras, contratos, operação e limitações estão em [conclusao-software-2026-
 | `vaggu-frontend/src/components/equipamentos-admin.tsx` | Oferece cadastro, vínculo e manutenção, consulta de ocorrências e exibição única de chaves no Admin. |
 | `vaggu-frontend/src/components/teloes-admin.tsx` | Configura visão geral ou andar por instalação para Admin e gerente, salva explicitamente sem trocar credencial, emite a chave uma vez, permite revogação e exclusão definitiva com confirmação. |
 | `vaggu-frontend/src/hooks/use-estrutura-atualizada.ts` | Centraliza consulta periódica de 500 ms/manual, guarda da renovação automática enquanto há consulta pendente, pausa em aba oculta, descarte de respostas antigas e invalidação por erro ou prazo de 30 s. |
-| `vaggu-frontend/src/pages/telao-instalado-page.tsx` | Exibe agregados com chave própria por aba e oculta contagens quando a consulta perde validade. |
+| `vaggu-frontend/src/pages/telao-instalado-page.tsx` | Exibe agregados com chave própria por aba e oculta contagens quando a consulta perde validade. Na autorização, apresenta os atalhos abaixo das instruções sobre a credencial. |
 | `vaggu-frontend/src/servicos/validade-estrutura.ts` | Produz estrutura com leituras indisponíveis quando a consulta vence, preservando indicação de manutenção. |
 
 ### Telões para apresentação — 21/10/2026

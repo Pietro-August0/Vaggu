@@ -80,7 +80,7 @@ export function TrocarSenhaPage() {
     const erro = erros[campo]
     return <>
       <label htmlFor={campo}>{rotulo}</label>
-      <div className="login-senha">
+      <div className="login-senha senha-com-controle">
         <input
           id={campo}
           name={campo}

@@ -61,7 +61,7 @@ export function FormularioAlterarSenha() {
     const erro = erros[campoId]
     return <div className="grid gap-2">
       <Label htmlFor={`conta-${campoId}`}>{rotulo}</Label>
-      <div className="relative">
+      <div className="relative senha-com-controle">
         <Input
           id={`conta-${campoId}`}
           name={campoId}

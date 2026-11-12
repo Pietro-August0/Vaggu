@@ -27,6 +27,8 @@ As rotas administrativas e do gerente passam por proteção de sessão e perfil.
 
 A sessão persiste em cookie HttpOnly de mesma origem. Ao recarregar uma rota protegida, o frontend aguarda `/auth/me` antes de renderizar ou redirecionar; uma sessão expirada ou revogada volta ao login. A identidade pública fica somente em memória React.
 
+No login, na troca obrigatória e em Minha conta, cada campo de senha mantém um único botão da VAGGU para mostrar ou ocultar o conteúdo. O olho nativo do Edge fica oculto nesses campos; os atributos de preenchimento continuam os mesmos.
+
 ## Rotas implementadas
 
 | Rota/tela | Perfil | Origem | Destino | Ações principais | Resultado observado no código | Estado |
@@ -48,6 +50,8 @@ A sessão persiste em cookie HttpOnly de mesma origem. Ao recarregar uma rota pr
 | `/painel/teloes` — Gestão dos telões | Gerente | Menu “Telões” | Prévias geral/andar e `/telao/:id` | Cadastrar instalação, escolher visão geral/andar, salvar exibição e revogar acesso | Shopping derivado da sessão; edição mantém a credencial; prévias abrem em nova aba | Protótipo funcional local validado |
 | `/telao/:id` — Telão instalado | Instalação autorizada | Endereço emitido na gestão do gerente ou na configuração administrativa | Própria exibição | Exibir agregados do recorte; atualizar a cada 15 segundos; ocultar leituras vencidas ou em falha | Usa credencial própria revogável e não exige sessão administrativa; gerente e Admin escolhem a exibição por instalação; tela cheia/Esc e grade sem rolagem | Implementado localmente; instalação física e homologação publicada pendentes |
 | `*` — Página não encontrada | Qualquer | URL não reconhecida | `/`; seção Sobre; WhatsApp quando configurado | Assistir à vaga ser liberada uma vez e retornar à tela inicial | Exibe uma 404 própria; o carro sai da vaga, o sensor muda de vermelho para verde e a animação reinicia somente ao recarregar a página | Implementado |
+
+Na autorização do telão, a orientação de teclado começa abaixo da explicação sobre a credencial. A combinação Alt + S fica junta mesmo em telas estreitas.
 
 ## Conteúdo real da ficha administrativa
 
