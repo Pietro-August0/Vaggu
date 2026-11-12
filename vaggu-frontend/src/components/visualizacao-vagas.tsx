@@ -183,7 +183,7 @@ export function VisualizacaoVagas({ estrutura, modo }: VisualizacaoVagasProps) {
           </div>
 
           <div className="grid gap-1">
-            <Label htmlFor={`${modo}-estado-vaga`}>Status</Label>
+            <Label htmlFor={`${modo}-estado-vaga`}>Estado da vaga</Label>
             <select
               id={`${modo}-estado-vaga`}
               className="rounded-md border bg-white px-3 py-2"
@@ -192,7 +192,7 @@ export function VisualizacaoVagas({ estrutura, modo }: VisualizacaoVagasProps) {
                 setEstado(evento.target.value as VagaEstrutura["estadoAtual"] | "TODOS")
               }
             >
-              <option value="TODOS">Todos os status</option>
+              <option value="TODOS">Todos os estados</option>
               {Object.entries(nomesEstadoVaga).map(([valor, nome]) => (
                 <option key={valor} value={valor}>
                   {nome}
@@ -216,6 +216,18 @@ export function VisualizacaoVagas({ estrutura, modo }: VisualizacaoVagasProps) {
           </div>
           <Badge variant="secondary">{filtradas.length} vaga(s)</Badge>
         </div>
+
+        <ul aria-label="Legenda de estados das vagas" className="mb-3 flex flex-wrap gap-x-4 gap-y-2 rounded-lg bg-neutral-100 px-3 py-2.5 text-sm text-neutral-800">
+          {Object.entries(nomesEstadoVaga).map(([valor, nome]) => (
+            <li key={valor} className="flex items-center gap-2">
+              <span
+                className={`size-3 shrink-0 rounded-sm ${classesEstado[valor as VagaEstrutura["estadoAtual"]]}`}
+                aria-hidden="true"
+              />
+              {nome}
+            </li>
+          ))}
+        </ul>
 
         {filtradas.length === 0 ? (
           <p className="rounded-xl bg-white p-6 text-center text-neutral-600">
@@ -293,19 +305,6 @@ export function VisualizacaoVagas({ estrutura, modo }: VisualizacaoVagasProps) {
           </>
         )}
 
-        <div className="mt-4 flex flex-wrap gap-x-4 gap-y-2 text-xs text-neutral-700">
-          {Object.entries(nomesEstadoVaga).map(([valor, nome]) => (
-            <span key={valor} className="flex items-center gap-1.5">
-              <span
-                className={`size-3 rounded-sm ${
-                  classesEstado[valor as VagaEstrutura["estadoAtual"]]
-                }`}
-                aria-hidden="true"
-              />
-              {nome}
-            </span>
-          ))}
-        </div>
       </div>}
 
       <DetalhesVaga

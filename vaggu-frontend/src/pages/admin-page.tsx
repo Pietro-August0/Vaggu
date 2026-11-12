@@ -1,6 +1,6 @@
 /** Fluxo administrativo de cadastro, listagem e ficha completa dos shoppings VAGGU. */
 import { useCallback, useEffect, useMemo, useRef, useState, type FormEvent } from "react"
-import { ArrowLeft, Building2, CarFront, Check, ChevronDown, CircleCheck, CircleHelp, CircleParking, Copy, Plus, Search, Tags, Trash2, Upload, UserRound, UsersRound } from "lucide-react"
+import { ArrowLeft, ArrowUpRight, Building2, CarFront, Check, ChevronDown, CircleCheck, CircleHelp, CircleParking, Copy, Plus, Search, Tags, Trash2, Upload, UserRound, UsersRound } from "lucide-react"
 import { Link, useLocation, useNavigate, useParams } from "react-router-dom"
 import { toast } from "sonner"
 import { useAppStore } from "@/app/app-store"
@@ -12,7 +12,7 @@ import { ImportacaoEstrutura } from "@/components/importacao-estrutura"
 import { ResumoAnaliticoAdmin } from "@/components/resumo-analitico-admin"
 import { Badge } from "@/components/ui/badge"
 import { Button } from "@/components/ui/button"
-import { Dialog, DialogClose, DialogContent, DialogDescription, DialogFooter, DialogHeader, DialogTitle } from "@/components/ui/dialog"
+import { Dialog, DialogClose, DialogContent, DialogDescription, DialogFooter, DialogHeader, DialogTitle, DialogTrigger } from "@/components/ui/dialog"
 import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
 import { objeto } from "@/servicos/api"
@@ -48,6 +48,7 @@ function pendenciasCadastrais(shopping: ShoppingAdmin) {
 function VisaoGeralAdmin() {
   const { consultar } = useAppStore()
   const [shoppings, setShoppings] = useState<ShoppingAdmin[] | null>(null)
+  const [somentePendentes, setSomentePendentes] = useState(false)
   const [erro, setErro] = useState("")
   useEffect(() => {
     let ativo = true
@@ -95,117 +96,115 @@ function VisaoGeralAdmin() {
     { rotulo: "Vagas estruturadas", valor: resumo.vagas, Icone: CircleParking },
   ]
 
+  const cadastros = (shoppings ?? []).map((shopping) => ({
+    shopping,
+    pendencias: pendenciasCadastrais(shopping),
+  }))
+  const comPendencias = cadastros.filter(({ pendencias }) => pendencias.length > 0)
+  const visiveis = somentePendentes ? comPendencias : cadastros
+
   return (
-    <section className="mx-auto grid max-w-6xl gap-7">
+    <section className="mx-auto grid max-w-6xl gap-7 text-foreground">
       <header className="flex flex-wrap items-end justify-between gap-4">
-        <div>
-          <p className="text-sm font-semibold uppercase tracking-[.18em] text-[#ffe100]">
-            Operação administrativa
-          </p>
-          <h2 className="mt-2 text-3xl font-black text-white">Visão geral</h2>
-          <p className="mt-2 max-w-2xl text-neutral-400">
-            Acompanhe cadastros, implantação e acessos com os dados já registrados no sistema.
-          </p>
-        </div>
-        <div className="flex flex-wrap gap-2">
-          <Button asChild className="h-11 px-5 font-bold">
-            <Link to="/admin/cadastrar"><Plus aria-hidden="true" />Cadastrar shopping</Link>
-          </Button>
-        </div>
+        <h2 className="text-3xl font-bold tracking-tight sm:text-4xl">Implantação dos shoppings</h2>
+        <Button asChild className="h-11 px-5 font-bold">
+          <Link to="/admin/cadastrar"><Plus aria-hidden="true" />Cadastrar shopping</Link>
+        </Button>
       </header>
 
       {erro ? (
-        <p role="alert" className="rounded-xl border border-red-500/30 bg-red-950/40 p-4 text-red-200">
-          {erro}
-        </p>
+        <p role="alert" className="rounded-xl border border-destructive/40 bg-card p-4">{erro}</p>
       ) : null}
 
       {shoppings === null && !erro ? (
-        <p role="status" className="text-neutral-300">Carregando visão administrativa...</p>
+        <p role="status" className="text-muted-foreground">Carregando shoppings...</p>
       ) : null}
 
       {shoppings ? (
         <>
-          <div className="grid grid-cols-2 gap-3 md:grid-cols-3 xl:grid-cols-5">
+          <dl className="grid grid-cols-2 gap-px overflow-hidden rounded-xl border bg-border sm:grid-cols-3 xl:grid-cols-5">
             {cartoes.map(({ rotulo, valor, Icone }) => (
-              <article key={rotulo} className="rounded-2xl border border-white/10 bg-[#202020] p-4 sm:p-5">
-                <div className="flex items-start justify-between gap-3">
-                  <span className="grid size-10 place-items-center rounded-xl bg-[#ffe100] text-black">
-                    <Icone className="size-5" aria-hidden="true" />
-                  </span>
-                  <strong className="text-3xl leading-none text-white">{valor}</strong>
-                </div>
-                <p className="mt-4 text-sm font-medium text-neutral-400">{rotulo}</p>
-              </article>
+              <div key={rotulo} className="grid content-start gap-2 bg-card px-4 py-4 last:col-span-2 sm:px-5 xl:last:col-span-1">
+                <dt className="flex items-center gap-2 text-sm font-medium text-muted-foreground">
+                  <Icone className="size-4 shrink-0" aria-hidden="true" />
+                  {rotulo}
+                </dt>
+                <dd className="text-3xl font-bold tabular-nums">{valor}</dd>
+              </div>
             ))}
-          </div>
+          </dl>
 
           <section className="grid gap-4" aria-labelledby="implantacao-shoppings">
-            <div className="flex flex-wrap items-end justify-between gap-3">
-              <div>
-                <h3 id="implantacao-shoppings" className="text-2xl font-bold text-white">
-                  Implantação dos shoppings
-                </h3>
-                <p className="mt-1 text-sm text-neutral-400">
-                  Itens cadastrais pendentes são calculados sem usar sensores ou integrações externas.
-                </p>
-              </div>
-              <Button asChild variant="outline" className="border-white/20 bg-transparent text-white">
-                <Link to="/admin/shoppings">Ver todos</Link>
+            <div className="flex flex-wrap items-center justify-between gap-3">
+              <h3 id="implantacao-shoppings" className="text-2xl font-bold tracking-tight">Shoppings</h3>
+              <Button asChild variant="outline">
+                <Link to="/admin/shoppings">Abrir lista de shoppings</Link>
               </Button>
             </div>
 
-            {shoppings.length === 0 ? (
-              <div className="rounded-3xl border border-dashed border-white/20 p-10 text-center text-neutral-400">
-                Nenhum shopping cadastrado. Comece registrando a primeira parceria.
+            {cadastros.length > 0 ? (
+              <div role="group" aria-label="Filtrar shoppings" className="flex flex-wrap gap-2">
+                <Button type="button" variant={somentePendentes ? "outline" : "default"} aria-pressed={!somentePendentes} onClick={() => setSomentePendentes(false)}>
+                  Todos <span className="tabular-nums">({cadastros.length})</span>
+                </Button>
+                <Button type="button" variant={somentePendentes ? "default" : "outline"} aria-pressed={somentePendentes} onClick={() => setSomentePendentes(true)}>
+                  Com pendências <span className="tabular-nums">({comPendencias.length})</span>
+                </Button>
               </div>
+            ) : null}
+
+            {visiveis.length === 0 ? (
+              <p role="status" className="rounded-xl border border-dashed p-8 text-center text-muted-foreground">
+                {somentePendentes ? "Nenhuma pendência cadastral encontrada." : "Nenhum shopping cadastrado."}
+              </p>
             ) : (
-              <div className="grid gap-3">
-                {shoppings.map((shopping) => {
+              <ul className="grid gap-3 lg:grid-cols-2">
+                {visiveis.map(({ shopping, pendencias }) => {
                   const situacao = obterSituacaoImplantacao(shopping.situacaoImplantacao)
-                  const pendencias = pendenciasCadastrais(shopping)
+                  const contagens = [
+                    ["Andares", shopping.totalAndares],
+                    ["Setores", shopping.totalSetores],
+                    ["Vagas", shopping.totalVagas],
+                    ["Gerentes", shopping.totalGerentes],
+                  ] as const
 
                   return (
-                    <Link
-                      key={shopping.id}
-                      to={`/admin/shoppings/${shopping.id}`}
-                      className="cartao-clicavel grid gap-4 rounded-2xl border border-white/10 bg-white p-5 text-neutral-950 focus-visible:outline-none focus-visible:ring-4 focus-visible:ring-[#ffe100]/50 md:grid-cols-[1fr_auto] md:items-center"
-                    >
-                      <span className="min-w-0">
-                        <span className="flex flex-wrap items-center gap-2">
-                          <strong className="break-words text-lg">{shopping.nome}</strong>
-                          <Badge className={situacao.classe}>{situacao.nome}</Badge>
-                        </span>
-                        <span className="mt-1 block break-words text-sm text-neutral-600">
-                          {enderecoResumido(shopping)}
-                        </span>
-                        <span className="mt-2 block text-xs font-medium text-neutral-500">
-                          {shopping.totalAndares} andar(es) · {shopping.totalSetores} setor(es) · {shopping.totalVagas} vaga(s)
-                        </span>
-                        <span className="mt-3 flex flex-wrap gap-2">
-                          {pendencias.length > 0 ? (
-                            pendencias.map((pendencia) => (
-                              <span key={pendencia} className="rounded-full bg-amber-100 px-2.5 py-1 text-xs font-semibold text-amber-900">
-                                {pendencia}
-                              </span>
-                            ))
-                          ) : (
-                            <span className="rounded-full bg-emerald-100 px-2.5 py-1 text-xs font-semibold text-emerald-900">
-                              Cadastro essencial completo
+                    <li key={shopping.id}>
+                      <Link
+                        to={`/admin/shoppings/${shopping.id}`}
+                        aria-label={`Abrir ficha de ${shopping.nome}`}
+                        className="group flex h-full min-w-0 flex-col gap-4 rounded-xl border bg-card p-4 transition-colors hover:border-ring focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring sm:p-5"
+                      >
+                        <div className="flex items-start gap-3">
+                          <div className="min-w-0 flex-1">
+                            <h4 className="text-lg leading-tight font-bold [overflow-wrap:anywhere]">{shopping.nome}</h4>
+                            <p className="mt-1 text-sm text-muted-foreground [overflow-wrap:anywhere]">{enderecoResumido(shopping)}</p>
+                          </div>
+                          <ArrowUpRight aria-hidden="true" className="size-5 shrink-0 text-muted-foreground group-hover:text-foreground" />
+                        </div>
+                        <Badge className={situacao.classe}>{situacao.nome}</Badge>
+                        <dl className="grid grid-cols-2 gap-3 border-y py-3 min-[380px]:grid-cols-4">
+                          {contagens.map(([rotulo, valor]) => (
+                            <div key={rotulo}>
+                              <dt className="text-xs text-muted-foreground">{rotulo}</dt>
+                              <dd className="text-lg font-semibold tabular-nums">{valor}</dd>
+                            </div>
+                          ))}
+                        </dl>
+                        <div className="mt-auto flex flex-wrap gap-2">
+                          {pendencias.length > 0 ? pendencias.map((pendencia) => (
+                            <Badge key={pendencia} variant="outline" className="border-amber-500/40 text-amber-800 dark:text-amber-300">{pendencia}</Badge>
+                          )) : (
+                            <span className="flex items-center gap-1.5 text-xs font-medium text-muted-foreground">
+                              <CircleCheck aria-hidden="true" className="size-4" /> Cadastro essencial completo
                             </span>
                           )}
-                        </span>
-                      </span>
-                      <span className="flex items-center justify-between gap-3 md:justify-end">
-                        <Badge variant="secondary">{shopping.totalGerentes} gerente(s)</Badge>
-                        <span className="rounded-lg bg-[#ffe100] px-4 py-2 text-sm font-bold text-black">
-                          Abrir ficha
-                        </span>
-                      </span>
-                    </Link>
+                        </div>
+                      </Link>
+                    </li>
                   )
                 })}
-              </div>
+              </ul>
             )}
           </section>
         </>
@@ -238,7 +237,7 @@ function CadastroShopping() {
   }
 
   return <section className="mx-auto grid max-w-6xl gap-7">
-    <header><p className="text-sm font-semibold uppercase tracking-[.18em] text-[#ffe100]">Nova parceria</p><h2 className="mt-2 text-3xl font-black text-white">Cadastro do shopping</h2><p className="mt-2 max-w-2xl text-neutral-400">Registre os dados institucionais e operacionais. Gerentes e estrutura são configurados depois, na ficha do shopping.</p></header>
+    <header><h2 className="text-3xl font-black text-white">Cadastro do shopping</h2><p className="mt-2 max-w-2xl text-neutral-400">Cadastre o shopping. Depois, abra a ficha para configurar a estrutura e adicionar gerentes.</p></header>
     {erro && <p role="alert" className="rounded-xl border border-red-500/30 bg-red-950/40 p-4 text-red-200">{erro}</p>}
     <div className="rounded-3xl border border-white/10 bg-[#202020] p-5 shadow-2xl sm:p-8"><FormularioShopping ocupado={ocupado} rotuloBotao="Cadastrar shopping" aoEnviar={criar} /></div>
   </section>
@@ -254,7 +253,7 @@ function ListaShoppings() {
   const filtrados = useMemo(() => shoppings?.filter(shopping => `${shopping.nome} ${enderecoResumido(shopping)}`.toLocaleLowerCase("pt-BR").includes(busca.toLocaleLowerCase("pt-BR"))) ?? [], [busca, shoppings])
 
   return <section className="mx-auto grid max-w-6xl gap-7">
-    <div className="flex flex-wrap items-end justify-between gap-4"><div><p className="text-sm font-semibold uppercase tracking-[.18em] text-[#ffe100]">Clientes VAGGU</p><h2 className="mt-2 text-3xl font-black text-white">Shoppings cadastrados</h2></div><div className="relative w-full sm:w-80"><Search className="absolute left-3 top-1/2 size-4 -translate-y-1/2 text-neutral-500" aria-hidden="true" /><Input className="h-11 border-white/15 bg-white/5 pl-10 text-white" value={busca} onChange={evento => setBusca(evento.target.value)} placeholder="Buscar shopping ou cidade" aria-label="Buscar shoppings" /></div></div>
+    <div className="flex flex-wrap items-end justify-between gap-4"><div><h2 className="text-3xl font-black text-white">Shoppings cadastrados</h2></div><div className="relative w-full sm:w-80"><Search className="absolute left-3 top-1/2 size-4 -translate-y-1/2 text-neutral-500" aria-hidden="true" /><Input className="h-11 border-white/15 bg-white/5 pl-10 text-white" value={busca} onChange={evento => setBusca(evento.target.value)} placeholder="Buscar shopping ou cidade" aria-label="Buscar shoppings" /></div></div>
     {erro && <p role="alert" className="rounded-xl border border-red-500/30 bg-red-950/40 p-4 text-red-200">{erro}</p>}
     {shoppings === null ? <p role="status" className="text-neutral-300">Carregando shoppings...</p> : filtrados.length === 0 ? <div className="rounded-3xl border border-dashed border-white/20 p-10 text-center text-neutral-400">{busca ? "Nenhum shopping corresponde à busca." : "Nenhum shopping cadastrado."}</div>
       : <div className="grid gap-4">{filtrados.map(shopping => <Link key={shopping.id} to={`/admin/shoppings/${shopping.id}`} className="cartao-clicavel grid gap-4 rounded-2xl border border-white/10 bg-white p-5 text-neutral-950 focus-visible:outline-none focus-visible:ring-4 focus-visible:ring-[#ffe100]/50 sm:grid-cols-[1fr_auto] sm:items-center">
@@ -420,17 +419,42 @@ function FichaShopping({ shoppingId, secao }: { shoppingId: string; secao: "resu
   function recarregarAposImportacao() { setRevisaoEstrutura(revisao => revisao + 1); void carregar() }
   if (erro && !shopping) return <section className="mx-auto max-w-6xl"><p role="alert" className="rounded-xl border border-red-500/30 bg-red-950/40 p-4 text-red-200">{erro}</p><Button asChild className="mt-4"><Link to="/admin/shoppings">Voltar aos shoppings</Link></Button></section>
   if (!shopping || (secao !== "gerentes" && !estrutura)) return <p role="status" className="text-neutral-300">Carregando {secao === "gerentes" ? "acessos" : "ficha"} do shopping...</p>
-  return <section className="mx-auto grid w-full min-w-0 max-w-6xl grid-cols-[minmax(0,1fr)] gap-10"><header className="flex min-w-0 flex-wrap items-center gap-4"><Button asChild variant="outline" size="icon" className="border-white/20 bg-transparent text-white"><Link to="/admin/shoppings" aria-label="Voltar aos shoppings"><ArrowLeft aria-hidden="true" /></Link></Button><div className="order-3 w-full min-w-0 lg:order-none lg:w-auto lg:flex-1"><h2 className="break-words text-3xl font-black text-white">{shopping.nome}</h2><p className="mt-1 break-words text-sm text-neutral-400">{enderecoResumido(shopping)}</p></div><Badge className={`order-4 lg:order-none lg:ml-auto ${obterSituacaoImplantacao(shopping.situacaoImplantacao).classe}`}>{obterSituacaoImplantacao(shopping.situacaoImplantacao).nome}</Badge><Button type="button" variant="destructive" className="order-4 lg:order-none" disabled={ocupado} onClick={() => setConfirmarExclusao(true)}><Trash2 aria-hidden="true" />Excluir shopping</Button></header>
-    {erro && <p role="alert" className="rounded-xl border border-red-500/30 bg-red-950/40 p-4 text-red-200">{erro}</p>}
+  return <section className="mx-auto grid w-full min-w-0 max-w-6xl grid-cols-[minmax(0,1fr)] gap-10"><header className="flex min-w-0 flex-wrap items-center gap-4"><Button asChild variant="outline" size="icon" className="border-white/20 bg-transparent text-white"><Link to="/admin/shoppings" aria-label="Voltar aos shoppings"><ArrowLeft aria-hidden="true" /></Link></Button><div className="order-3 w-full min-w-0 lg:order-none lg:w-auto lg:flex-1"><h2 className="break-words text-3xl font-black text-white">{shopping.nome}</h2><p className="mt-1 break-words text-sm text-neutral-400">{enderecoResumido(shopping)}</p></div><Badge className={`order-4 lg:order-none lg:ml-auto ${obterSituacaoImplantacao(shopping.situacaoImplantacao).classe}`}>{obterSituacaoImplantacao(shopping.situacaoImplantacao).nome}</Badge></header>
+    {erro && !confirmarExclusao && <p role="alert" className="rounded-xl border border-red-500/30 bg-red-950/40 p-4 text-red-200">{erro}</p>}
     {secao === "resumo" && <><div className="min-w-0 rounded-3xl border border-white/10 bg-[#202020] p-5 sm:p-8"><h3 className="text-xl font-bold text-white">Dados da administração</h3><dl className="mt-5 grid gap-4 text-sm sm:grid-cols-2 lg:grid-cols-3"><div className="min-w-0"><dt className="text-neutral-400">Responsável</dt><dd className="mt-1 break-words font-medium text-white">{shopping.responsavelNome || "Não informado"}</dd></div><div className="min-w-0"><dt className="text-neutral-400">E-mail</dt><dd className="mt-1 break-all font-medium text-white">{shopping.emailCorporativo || "Não informado"}</dd></div><div className="min-w-0"><dt className="text-neutral-400">Telefone</dt><dd className="mt-1 font-medium text-white">{shopping.telefone || "Não informado"}</dd></div></dl><details className="group mt-6 border-t border-white/10 pt-5"><summary className="flex min-h-11 cursor-pointer list-none items-center justify-between gap-3 rounded-lg px-2 font-semibold text-[#ffe100] outline-none hover:bg-white/5 active:bg-white/10 focus-visible:ring-2 focus-visible:ring-[#ffe100] [&::-webkit-details-marker]:hidden"><span>Editar cadastro e endereço</span><ChevronDown className="size-5 shrink-0 transition-transform group-open:rotate-180" aria-hidden="true" /></summary><div className="mt-5"><FormularioShopping key={shopping.id + JSON.stringify(shopping)} shopping={shopping} ocupado={ocupado} rotuloBotao="Salvar alterações" aoEnviar={salvar} /></div></details></div>{estrutura && <><ResumoVagas estrutura={estrutura} /><ResumoAnaliticoAdmin shoppingId={shoppingId} estrutura={estrutura} /></>}</>}
     {secao === "estrutura" && <><div className="flex flex-wrap items-center justify-between gap-3"><div><h3 className="text-2xl font-bold text-white">Estrutura do estacionamento</h3><p className="mt-1 text-sm text-neutral-400">Configure andares, setores e vagas; depois confira o mapa.</p></div><div className="flex w-full flex-wrap gap-2 sm:w-auto"><Button type="button" variant="outline" onClick={() => setImportacaoAberta(true)}><Upload aria-hidden="true" />Importar estrutura</Button><ExportacaoEstrutura estrutura={estrutura} /></div></div><EstruturaAdmin key={`${shoppingId}-${revisaoEstrutura}`} shoppingId={shoppingId} aoAlterar={() => { void carregar().catch(falha => setErro(falha instanceof Error ? falha.message : "Não foi possível atualizar o resumo.")) }} /><Dialog open={importacaoAberta} onOpenChange={setImportacaoAberta}><DialogContent className="max-h-[90vh] overflow-y-auto sm:max-w-5xl"><DialogHeader className="sr-only"><DialogTitle>Importar estrutura</DialogTitle><DialogDescription>Revise a prévia antes de aplicar mudanças nas vagas.</DialogDescription></DialogHeader><ImportacaoEstrutura shoppingId={shoppingId} aoConfirmar={recarregarAposImportacao} /></DialogContent></Dialog></>}
     {secao === "gerentes" && <GerentesShopping shoppingId={shoppingId} gerentes={gerentes} recarregar={carregar} />}
-    <Dialog open={confirmarExclusao} onOpenChange={setConfirmarExclusao}>
-      <DialogContent>
-        <DialogHeader><DialogTitle>Excluir shopping?</DialogTitle><DialogDescription>{shopping.nome} será retirado da administração e todos os acessos de gerente serão encerrados. A estrutura e o histórico permanecem preservados.</DialogDescription></DialogHeader>
-        <DialogFooter><DialogClose asChild><Button type="button" variant="outline">Cancelar</Button></DialogClose><Button type="button" variant="destructive" disabled={ocupado} onClick={excluirShopping}>{ocupado ? "Excluindo..." : "Sim, excluir shopping"}</Button></DialogFooter>
-      </DialogContent>
-    </Dialog>
+    {secao === "resumo" && (
+      <Dialog open={confirmarExclusao} onOpenChange={aberto => {
+        if (aberto) setErro("")
+        setConfirmarExclusao(aberto)
+      }}>
+        <div className="flex flex-wrap items-center justify-between gap-4 border-t border-border pt-6">
+          <div>
+            <h3 className="font-semibold">Exclusão do shopping</h3>
+            <p className="mt-1 text-sm text-muted-foreground">Excluir encerra o acesso dos gerentes e preserva o histórico.</p>
+          </div>
+          <DialogTrigger asChild>
+            <Button type="button" variant="outline" disabled={ocupado}>
+              <Trash2 aria-hidden="true" /> Excluir shopping
+            </Button>
+          </DialogTrigger>
+        </div>
+        <DialogContent>
+          <DialogHeader>
+            <DialogTitle>Excluir shopping?</DialogTitle>
+            <DialogDescription>Ao excluir {shopping.nome}, todos os gerentes perderão o acesso. A estrutura e o histórico ficam preservados.</DialogDescription>
+          </DialogHeader>
+          {erro && <p role="alert" className="text-sm text-red-700 dark:text-red-300">{erro}</p>}
+          <DialogFooter>
+            <DialogClose asChild><Button type="button" variant="outline">Cancelar</Button></DialogClose>
+            <Button type="button" variant="destructive" disabled={ocupado} onClick={excluirShopping}>
+              {ocupado ? "Excluindo..." : "Sim, excluir shopping"}
+            </Button>
+          </DialogFooter>
+        </DialogContent>
+      </Dialog>
+    )}
   </section>
 }
 

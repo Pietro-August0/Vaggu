@@ -62,6 +62,13 @@ h3 { font-size: 1.45rem; }
 .logo { width: clamp(76px, 14vw, 112px); display: grid; align-items: center; min-height: 44px; }
 .memorial-nav nav { display: flex; gap: clamp(0px, 1vw, 12px); }
 .memorial-nav nav a { display: grid; place-items: center; min-height: 44px; padding-inline: 8px; font-size: .85rem; }
+.memorial-nav nav a[aria-current="location"] { color: var(--yellow); text-decoration: underline; text-underline-offset: 5px; }
+@media (max-width: 480px) {
+  html { scroll-padding-top: 112px; }
+  .memorial-nav { flex-wrap: wrap; justify-content: center; gap: 0; }
+  .memorial-nav nav { justify-content: center; width: 100%; }
+  .memorial-nav nav a { padding-inline: clamp(4px, 1.4vw, 8px); }
+}
 
 .memorial-abertura {
   display: grid;

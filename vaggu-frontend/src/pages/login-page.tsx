@@ -46,7 +46,7 @@ export function LoginPage() {
             <button type="button" className="login-olho" aria-label={mostrarSenha ? "Ocultar senha" : "Mostrar senha"} aria-pressed={mostrarSenha} onClick={() => setMostrarSenha(!mostrarSenha)}>{mostrarSenha ? <EyeOff aria-hidden="true" size={20} /> : <Eye aria-hidden="true" size={20} />}</button>
           </div>
           <button type="button" className="login-recuperar" onClick={() => setAjuda(!ajuda)} aria-expanded={ajuda} aria-controls="ajuda-acesso">Esqueci minha senha</button>
-          {ajuda && <p id="ajuda-acesso" className="login-aviso">Solicite a redefinição à equipe VAGGU pelo canal de atendimento utilizado na sua parceria.{WHATSAPP_SUPPORT_URL && <> <a href={WHATSAPP_SUPPORT_URL} target="_blank" rel="noreferrer">Falar no WhatsApp</a></>}</p>}
+          {ajuda && <p id="ajuda-acesso" className="login-aviso">Peça uma nova senha à equipe VAGGU.{WHATSAPP_SUPPORT_URL ? <> <a href={WHATSAPP_SUPPORT_URL} target="_blank" rel="noreferrer">Falar no WhatsApp</a></> : " Use o canal pelo qual você recebeu seu acesso."}</p>}
           {(erro || mensagemSessao) && <p className="login-erro" role="alert">{erro || mensagemSessao}</p>}
           <button className="login-enviar" type="submit" disabled={enviando}>{enviando ? "Entrando..." : "Entrar no painel"}</button>
         </form>

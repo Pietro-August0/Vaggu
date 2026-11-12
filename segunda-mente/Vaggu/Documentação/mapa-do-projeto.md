@@ -1,5 +1,7 @@
 # Mapa do projeto VAGGU
 
+**11/11/2026 — acesso ao memorial:** o cartão do GitHub no rodapé da landing deu lugar ao link interno “Memorial da VAGGU”, que abre `/memorial` na mesma aba. O acesso por QR code continua disponível.
+
 **06/11/2026 — acesso ao memorial:** o rodapé da landing deixou de linkar o memorial. A rota continua disponível pelo endereço do QR code. As referências anteriores ao rodapé preservam o histórico.
 
 **06/11/2026 — organização e manutenção:** a [revisão da estrutura](revisao-estrutura-e-simplificacao-2026-11-06.md) reúne os candidatos a descarte e a ordem de simplificação e os arquivos já retirados. A [rotina do cofre](../../Rotina%20de%20registro.md) preserva os diários como histórico.
@@ -98,10 +100,11 @@ As cópias de imagens entre `segunda-mente/Vaggu/Identidade visual/Assets/` e `v
 | `.github/workflows/publicar-render.yml` | Solicita ao Render um novo deploy após cada push na `main`, usando um Deploy Hook guardado como segredo do GitHub. |
 | `.gitignore` | Exclui ferramentas locais, segredos, dependências e saídas de build. |
 | `AGENTS.md` | Reúne nossos acordos de desenvolvimento, isolamento, documentação, autoria e prints obrigatórios após alterações de design ou frontend. |
-| `README.md` | Apresenta a VAGGU no GitHub com proposta, experiência por perfil, imagens comentadas, tecnologias, início local e links para a documentação técnica. |
+| `README.md` | Apresenta a VAGGU no GitHub com resumo dos recursos, captura do mapa, badges das tecnologias, início local e links para evidências e documentação técnica. |
 | `render.yaml` | Define build, inicialização, saúde e solicita os segredos de banco e Blob sem versionar seus valores. |
 | `scripts/verificar-documentacao.mjs` | Confere cobertura do mapa, wikilinks e destinos/âncoras locais de todos os Markdown versionáveis, incluindo READMEs; ignora exemplos em blocos de código. |
 | `scripts/gerar-slides-personas.py` | Gera os quatro slides PNG ilustrativos de Mariana e Rafael, reutilizando retratos locais e a identidade preta e amarela da referência. |
+| `scripts/gerar-animacao-apresentacao.py` | Renderiza a animação 2D muda, incorpora as capturas locais do mapa e do telão e extrai os quadros de conferência. |
 | `segunda-mente/Vaggu/Documentação/revisao-estrutura-e-simplificacao-2026-11-06.md` | Registra a revisão estrutural, o uso dos arquivos candidatos a descarte e o plano incremental de simplificação. |
 | `segunda-mente/Vaggu/Evidências visuais/Personas/README.md` | Registra fontes e prompts dos recortes e fundos, reprodução com Poppins e conferência dos slides de Mariana e Rafael com os originais de Carlos. |
 | `segunda-mente/Vaggu/Documentação/auditoria-documental-2026-10-15.md` | Consolida a auditoria semântica, as pendências funcionais e de aceite, as evidências e os limites da revisão de 15/10. |
@@ -159,6 +162,7 @@ As cópias de imagens entre `segunda-mente/Vaggu/Identidade visual/Assets/` e `v
 | `vaggu-backend/src/lib/prisma.ts` | Cria o cliente Prisma compartilhado; serviços aceitam cliente transacional por injeção. |
 | `vaggu-backend/src/server.ts` | Garante o Shopping Exemplo em produção antes de iniciar HTTP, conecta serviços e executa a expiração periódica dos sensores. |
 | `vaggu-backend/src/shoppings/routes.ts` | Rotas administrativas de cadastro, ficha, gerentes, exclusões e emissão de senha provisória. |
+| `vaggu-backend/src/shoppings/documentos-fiscais.ts` | Valida e normaliza CPF e CNPJ numérico ou alfanumérico no servidor. |
 | `vaggu-backend/src/shoppings/service.ts` | Valida a ficha, administra shoppings e gerentes, agrega a estrutura ativa para a visão geral e entrega senha provisória somente na emissão. |
 | `vaggu-backend/src/telemetria/confirmacao-estado.ts` | Calcula a confirmação temporal de leituras de vaga já validadas, sem receber telemetria ou persistir dados. |
 | `vaggu-backend/src/telemetria/contratos.ts` | Valida placa, inicialização, sequência e lote de sensores, além de exigir credencial `Device` no cabeçalho. |
@@ -203,7 +207,7 @@ As cópias de imagens entre `segunda-mente/Vaggu/Identidade visual/Assets/` e `v
 | `vaggu-frontend/src/app/app-store.tsx` | Restaura identidade via cookie e `/auth/me` antes de liberar rotas; gerencia expiração, logout, troca de senha e consultas. |
 | `vaggu-frontend/src/components/brand.tsx` | Reutiliza os arquivos de marca publicados em public/assets nos links para a página inicial. |
 | `vaggu-frontend/src/components/analise-estacionamento.css` | Define painel analítico responsivo, categorias e indicadores coloridos, espaçamento interno, filtros compactos, ajuda expansível e estados de consulta nos dois temas; preserva foco e redução de movimento. |
-| `vaggu-frontend/src/components/analise-estacionamento.tsx` | Filtra datas UTC/setor/categoria, apresenta contagens de categorias no topo e gráficos com lacunas; carrega a comparação separadamente, preserva a última consulta ao atualizar/falhar, permite tentar novamente e ignora respostas de consultas anteriores. Exportações Excel/PDF carregadas sob demanda; tabela setorial expansível e séries longas com rolagem interna. |
+| `vaggu-frontend/src/components/analise-estacionamento.tsx` | Filtra datas UTC/setor/categoria, apresenta contagens de categorias no topo e gráficos com lacunas e explica quando faltam leituras válidas; carrega a comparação separadamente, preserva a última consulta ao atualizar/falhar, permite tentar novamente e ignora respostas de consultas anteriores. Exportações Excel/PDF carregadas sob demanda; tabela setorial expansível e séries longas com rolagem interna. |
 | `vaggu-frontend/src/components/resumo-analitico-admin.tsx` | Resume ocupação, cobertura e tendência do shopping selecionado na ficha Admin, distinguindo histórico real de demonstração. |
 | `vaggu-frontend/src/components/dashboard-shell.tsx` | Compartilha cabeçalho e conteúdo centralizados, menu responsivo, cartão de conta no rodapé da sidebar, diálogo da conta, alternância claro/escuro e saída da sessão. |
 | `vaggu-frontend/src/components/estrutura-admin.tsx` | Permite criar a hierarquia, explica o estado real de implantação e alterna cadastro, mapa e posições com refetch após mutações. |
@@ -211,13 +215,13 @@ As cópias de imagens entre `segunda-mente/Vaggu/Identidade visual/Assets/` e `v
 | `vaggu-frontend/src/components/importacao-estrutura.tsx` | Permite ao Admin baixar o modelo CSV, enviar CSV/XLSX, revisar registros e erros, confirmar a importação e consultar o resumo aplicado. |
 | `vaggu-frontend/src/components/formulario-alterar-senha.tsx` | Compartilha a troca voluntária de senha com validação por campo, requisitos visíveis e confirmação da senha atual. |
 | `vaggu-frontend/src/components/formulario-shopping.tsx` | Compartilha cadastro e edição em três etapas; consulta CEP e mantém o endereço editável manualmente. |
-| `vaggu-frontend/src/components/mapa-estacionamento.tsx` | Busca a estrutura isolada do gerente, mostra aviso de implantação sem ocultá-la e delega o desenho ao componente compartilhado. |
+| `vaggu-frontend/src/components/mapa-estacionamento.tsx` | Busca a estrutura isolada do gerente, mostra aviso e oferece nova tentativa quando as leituras ficam indisponíveis, mantém o aviso de implantação e delega o desenho ao componente compartilhado. |
 | `vaggu-frontend/src/components/minha-conta.tsx` | Compartilha dados pessoais em layout responsivo entre Admin e gerente; mantém vínculos protegidos, impede salvar sem alterações e abre a troca de senha em diálogo sob demanda. |
 | `vaggu-frontend/src/components/detalhes-vaga.tsx` | Exibe localização, situação do sensor, placa, horários independentes, estado confirmado e confirmação pendente. |
 | `vaggu-frontend/src/components/editor-mapa-vagas.tsx` | Edita posições por arraste, toque ou teclado, ajusta tamanho/rotação e mantém rascunho, desfazer, limites e prevenção de sobreposição. |
 | `vaggu-frontend/src/components/monitoramento-sensores.tsx` | Mostra contagens e cartões dos sensores, filtra situação e abre os detalhes no recorte de vagas autorizado. |
 | `segunda-mente/Vaggu/Documentação/edicao-visual-e-monitoramento.md` | Documenta fluxos, contratos, origem dos dados, apresentação, testes e limites da entrega de 15/10. |
-| `vaggu-frontend/src/components/visualizacao-vagas.tsx` | Compartilha mapa 2D, busca, filtros e seleção entre Admin e gerente; abre o mesmo detalhe pelo mapa, lista móvel ou vaga sem posição. |
+| `vaggu-frontend/src/components/visualizacao-vagas.tsx` | Compartilha mapa 2D, busca, filtros e seleção entre Admin e gerente, com legenda de estados antes das vagas; abre o mesmo detalhe pelo mapa, lista móvel ou vaga sem posição. |
 | `vaggu-frontend/src/components/icone-whatsapp.tsx` | Disponibiliza o símbolo usado nos links de atendimento, sem requisições externas. |
 | `vaggu-frontend/src/components/operacao-vaggu.css` | Foto e conteúdo dividem a seção sem impor uma altura vazia acima dos benefícios. |
 | `vaggu-frontend/src/components/operacao-vaggu.tsx` | Relaciona a imagem de movimento urbano aos benefícios da gestão e ao atendimento. |
@@ -239,12 +243,12 @@ As cópias de imagens entre `segunda-mente/Vaggu/Identidade visual/Assets/` e `v
 | `vaggu-frontend/src/lib/constants.ts` | Publica links de contato somente após configurar o número oficial da VAGGU. |
 | `vaggu-frontend/src/lib/utils.ts` | Combina classes condicionais e resolve conflitos de utilitários Tailwind. |
 | `vaggu-frontend/src/main.tsx` | Inicializa o React, respeita a preferência de movimento reduzido e reúne tema, mensagens, sessão e rotas autenticadas, incluindo análise e prévia de telões do gerente. |
-| `vaggu-frontend/src/pages/admin-page.tsx` | Implementa a visão geral administrativa, cadastro, lista e ficha do shopping; o resumo inclui análise compacta e estrutura/mapa e gerentes mantêm seus fluxos próprios. |
+| `vaggu-frontend/src/pages/admin-page.tsx` | Implementa a visão geral administrativa com indicadores, cartões de shopping e filtro de pendências, além do cadastro, da lista e da ficha do shopping; a exclusão com confirmação fica ao fim do resumo, que inclui análise compacta e estrutura/mapa e gerentes mantêm seus fluxos próprios. |
 | `vaggu-frontend/src/pages/area-autenticada.tsx` | Centraliza mapa e análise do gerente; a rota legada de conta mantém o painel ao fundo enquanto o diálogo compartilhado abre. |
-| `vaggu-frontend/src/pages/landing-page.tsx` | Compõe a landing pública, respeita movimento reduzido e mantém contato, temas e rodapé móvel legíveis. |
+| `vaggu-frontend/src/pages/landing-page.tsx` | Compõe a abertura e o rodapé originais da landing pública e a faixa amarela de implantação. A faixa usa WhatsApp ou e-mail conforme a configuração. |
 | `vaggu-frontend/src/pages/privacidade-page.tsx` | Apresenta a Política de Privacidade e as instruções de exclusão por e-mail, com responsável informado, em duas rotas públicas e sem exigir login. |
 | `vaggu-frontend/src/pages/login-page.css` | Define composição responsiva do login, troca de senha e desenho animado do rabisco em “vagas”. |
-| `vaggu-frontend/src/pages/login-page.tsx` | Entrada única para Admin e gerente, sem solicitar preenchimento automático das credenciais ao abrir a página. |
+| `vaggu-frontend/src/pages/login-page.tsx` | Entrada única para Admin e gerente, com orientação para solicitar nova senha à equipe e sem solicitar preenchimento automático das credenciais ao abrir a página. |
 | `vaggu-frontend/src/pages/pagina-nao-encontrada.tsx` | Exibe a rota 404 pública, oferece retorno à landing e compõe a animação semântica da vaga liberada. |
 | `vaggu-frontend/src/pages/pagina-nao-encontrada.css` | Define o layout responsivo e a sequência única em que o carro deixa o sensor vermelho, sai pela esquerda e libera o estado verde. |
 | `vaggu-frontend/src/pages/trocar-senha-page.tsx` | Exige uma senha definitiva e reaproveita na aba a senha provisória digitada no login. |
@@ -260,6 +264,7 @@ As cópias de imagens entre `segunda-mente/Vaggu/Identidade visual/Assets/` e `v
 | `vaggu-frontend/src/servicos/exportar-analise-pdf.ts` | Gera relatório PDF paginado com filtro, comparação, indicadores, setores e séries dos gráficos, preservando nomes longos e a origem dos dados. |
 | `vaggu-frontend/src/servicos/importacao.ts` | Valida as respostas da API de prévia e confirmação antes de entregá-las à interface administrativa. |
 | `vaggu-frontend/src/servicos/politica-senha.ts` | Centraliza requisitos, mensagens locais e códigos de erro da senha definitiva para as duas jornadas de troca. |
+| `vaggu-frontend/src/servicos/documentos-fiscais.ts` | Replica a validação fiscal da API para orientar o Admin antes de enviar a ficha. |
 | `vaggu-frontend/src/servicos/shoppings.ts` | Valida fichas, listas, agregados estruturais, URL HTTPS de imagem e gerentes recebidos pelas rotas administrativas. |
 | `vaggu-frontend/src/types/app.ts` | Declara o contrato da identidade autenticada compartilhado pela interface. |
 | `vaggu-frontend/src/types/estrutura.ts` | Declara os contratos TypeScript da estrutura, implantação, tipos e mapa. |
@@ -271,7 +276,7 @@ As cópias de imagens entre `segunda-mente/Vaggu/Identidade visual/Assets/` e `v
 | `vaggu-frontend/tsconfig.node.json` | Configura compilação TypeScript e limites dos arquivos incluídos neste projeto. |
 | `vaggu-frontend/vite.config.ts` | Configura React, Tailwind, aliases e proxy local de /api para o backend. |
 | `vaggu-memorial-samuel/.gitignore` | Exclui dependências, artefatos e configurações locais do site independente do memorial. |
-| `vaggu-memorial-samuel/index.html` | Estrutura o memorial para acesso por QR code, com grade de abertura, atalho pelo mapa, funcionamento com três diagramas sincronizados, trilha da leitura e pausa por teclado, identidade visual, retratos e depoimentos com a função de cada integrante, acervo da bancada e grades de fotos e vídeos em Nossos momentos juntos. |
+| `vaggu-memorial-samuel/index.html` | Estrutura o memorial para acesso por QR code, com links diretos para projeto, equipe, acervo e agradecimentos, grade de abertura, atalho pelo mapa, funcionamento com três diagramas sincronizados, trilha da leitura e pausa por teclado, identidade visual, retratos e depoimentos com a função de cada integrante, acervo da bancada e grades de fotos e vídeos em Nossos momentos juntos. |
 | `vaggu-memorial-samuel/package.json` | Declara o comando de desenvolvimento do site sem dependências externas. |
 | `vaggu-memorial-samuel/README.md` | Explica o propósito, a execução local, a estrutura e os limites editoriais do memorial. |
 | `vaggu-memorial-samuel/public/assets/logotipo-vaggu-amarelo.svg` | Publica a marca amarela reutilizada na apresentação do memorial. |
@@ -342,8 +347,8 @@ As cópias de imagens entre `segunda-mente/Vaggu/Identidade visual/Assets/` e `v
 | `vaggu-memorial-samuel/public/assets/videos/brainstorming-daily.mp4` | Registro da troca de ideias da equipe durante a daily. |
 | `vaggu-memorial-samuel/public/assets/videos/testes-de-design.mp4` | Registro dos testes de marca e sinalização em amarelo e preto. |
 | `vaggu-memorial-samuel/public/assets/videos/variacoes-de-design.mp4` | Clipe curto de variações de marca e sinalização na tela. |
-| `vaggu-memorial-samuel/public/assets/videos/equipe-em-sala.mp4` | Registro da equipe reunida em sala, exibido em trechos na faixa inicial. |
-| `vaggu-memorial-samuel/public/assets/videos/bastidores-no-laboratorio.mp4` | Registro da equipe trabalhando no laboratório. |
+| `vaggu-memorial-samuel/public/assets/videos/equipe-em-sala.mp4` | Registro da equipe reunida em sala com os nove segundos iniciais cortados, usado na abertura e na galeria. |
+| `vaggu-memorial-samuel/public/assets/videos/bastidores-no-laboratorio.mp4` | Registro da equipe no laboratório, com os três segundos iniciais cortados. A abertura e a galeria usam o mesmo arquivo. |
 | `vaggu-memorial-samuel/src/interacoes/galeria.js` | Controla a ampliação das fotos por categoria, com teclado e retorno de foco. |
 | `vaggu-memorial-samuel/src/interacoes/carrossel.js` | Emenda a faixa por rolagem horizontal, coordena arraste, toque e teclado e reproduz os clipes visíveis conforme a preferência de movimento. |
 | `vaggu-memorial-samuel/src/interacoes/movimento.js` | Inicia efeitos ao entrar na área visível e controla a pausa dos diagramas. |
@@ -407,7 +412,7 @@ Regras, contratos, operação e limitações estão em [conclusao-software-2026-
 ### Telões para apresentação — 21/10/2026
 
 | `vaggu-frontend/src/components/apresentar-telao.tsx` | Aciona tela cheia diretamente no clique e navega para o recorte escolhido na mesma aba. |
-| `vaggu-frontend/src/components/telao-apresentacao.tsx` | Compartilha apresentação enxuta, contagens confirmadas, paginação automática de áreas e tela cheia com saída por Esc. |
+| `vaggu-frontend/src/components/telao-apresentacao.tsx` | Compartilha a apresentação dos telões, com nome do shopping e do telão no cabeçalho, total centralizado e escala ampliada em telas largas, cards por piso ou setor, faixa de categorias e aviso sem contagem atual, paginação e tela cheia com saída por Esc. |
 | `vaggu-frontend/src/pages/teloes-page.tsx` | Mantém a gestão de instalações e as prévias geral/por andar no painel do gerente em `/painel/teloes`. |
 
 O [protótipo e sua validação](telao-apresentacao-2026-10-21.md) substituem o visual de 17/10: não há avisos técnicos de dados parciais na apresentação. A página instalada mantém o mesmo elemento em tela cheia quando o gerente altera seu andar. As evidências atuais estão em `Evidências visuais/2026-10-21 - Telao apresentacao/`; as capturas anteriores permanecem históricas.

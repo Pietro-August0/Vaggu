@@ -1,7 +1,16 @@
 import { fotos } from "../dados/acervo.js"
 
-/** Coordena a ampliação acessível das fotos. */
+/** Coordena a ampliação das fotos e evita áudio simultâneo na galeria. */
 export function iniciarGaleria() {
+  const videos = document.querySelectorAll(".bastidores-videos video")
+  for (const video of videos) {
+    video.addEventListener("play", () => {
+      for (const outro of videos) {
+        if (outro !== video) outro.pause()
+      }
+    })
+  }
+
   const fotografias = [...document.querySelectorAll(".gal-item")]
   const janela = document.getElementById("lightbox")
   const imagemAmpliada = document.getElementById("lightImage")

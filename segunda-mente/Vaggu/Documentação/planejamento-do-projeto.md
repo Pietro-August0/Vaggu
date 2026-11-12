@@ -1,5 +1,113 @@
 # VAGGU — planejamento e continuidade do projeto
 
+## Visão geral dos shoppings no Admin — 12/11/2026
+
+Os indicadores ficam em uma faixa única. Os cartões reúnem situação de implantação, endereço, contagens de estrutura e gerentes, e lacunas do cadastro. O filtro mostra os shoppings que precisam de atenção e cada cartão leva à ficha.
+
+Conferidos `node %TEMP%/vaggu-visao-admin-qa.cjs` com API simulada, `npm --prefix vaggu-frontend run build`, `npm --prefix vaggu-frontend run lint`, `node scripts/verificar-documentacao.mjs` e `git diff --check`. A revisão foi local com dados fictícios.
+
+## Exclusão ao fim da ficha do shopping — 12/11/2026
+
+A ação de exclusão saiu do cabeçalho e fica ao fim da visão geral da ficha. O diálogo explica o efeito sobre o acesso dos gerentes e mostra falhas de exclusão junto à confirmação. Escape cancela e devolve o foco ao botão. A revisão aplica Make Interfaces Feel Better à hierarquia das ações.
+
+Conferidos `node %TEMP%/vaggu-exclusao-ficha-qa.cjs` com API simulada, build, lint, verificação documental e `git diff --check`.
+
+## Mapa do gerente sem faixa de atualização — 12/11/2026
+
+A consulta automática segue em segundo plano. A faixa com horário e botão foi removida durante a operação normal. Se as leituras ficarem indisponíveis, o aviso oferece “Tentar novamente”. Conferidos `node %TEMP%/vaggu-mapa-sem-faixa-qa.cjs`, build, lint, verificação documental e `git diff --check`.
+
+## Legenda do mapa — 12/11/2026
+
+O filtro usa “Estado da vaga” e a legenda aparece antes do mapa ou da lista móvel. Ela reúne rótulos e cores para Livre, Ocupada, Sem leitura e Indisponível. A revisão aplica os princípios de hierarquia de Make Interfaces Feel Better e de linguagem direta das skills de redação. Conferidos `node %TEMP%/vaggu-legenda-mapa-qa.cjs`, build, lint, verificação documental e `git diff --check`.
+
+## Versões recortadas em todo o Memorial — 12/11/2026
+
+A faixa inicial e a galeria usam as mesmas URLs identificadas pelo corte de cada vídeo, para evitar o reaproveitamento do arquivo antigo em cache. Conferidos os metadados nas duas áreas e nas cópias do carrossel com `node %TEMP%/vaggu-videos-recortados-qa.cjs`, build, lint, verificação documental e `git diff --check`.
+
+## Corte no vídeo da equipe e reprodução na galeria — 12/11/2026
+
+O FFmpeg cortou os nove segundos iniciais de “Equipe reunida na sala”, de 40,03 s para 31,03 s, com áudio preservado. A abertura e a galeria usam o arquivo editado. Iniciar outro vídeo da galeria pausa o anterior no ponto em que estava. A conferência usou decodificação integral, `node %TEMP%/vaggu-corte-equipe-qa.cjs`, build, lint, verificação documental e `git diff --check`.
+
+## Corte no vídeo do laboratório — 12/11/2026
+
+O FFmpeg cortou os três segundos iniciais do clipe compartilhado pela abertura e pela galeria do Memorial, de 12,33 s para 9,33 s, com áudio preservado. A conferência usou decodificação integral, `node %TEMP%/vaggu-corte-laboratorio-qa.cjs`, build, verificação documental e `git diff --check`.
+
+## Navegação do Memorial — 12/11/2026
+
+O subtítulo da abertura foi reduzido a uma frase. A conferência usa o roteiro local de navegação, build, lint, verificação documental e `git diff --check`.
+
+Após revisão da abertura, o texto situa a VAGGU como trabalho de conclusão do curso Técnico em Desenvolvimento de Sistemas e explica o que o Memorial reúne. A redação usa o README para o escopo da plataforma e a [página oficial do SENAI](https://www.sp.senai.br/interesse/138/102811/tecnico-em-desenvolvimento-de-sistemas) para o nome do curso. As capturas da abertura foram atualizadas.
+
+O menu aponta diretamente para Projeto, Equipe, Acervo e Agradecimentos e destaca o destino selecionado. Em telas estreitas, o cabeçalho divide marca e navegação em duas linhas. A abertura apresenta o projeto de forma direta. A revisão segue os princípios de hierarquia do Make Interfaces Feel Better e de concisão do Anti-AI-Slop Writing, No AI Slop e Humanizer.
+
+Conferidos `node %TEMP%/vaggu-navegacao-memorial-qa.cjs`, build, lint, verificação documental e `git diff --check`. [Capturas](../Evidências%20visuais/Índice%20de%20evidências.md#12112026--navegação-do-memorial).
+
+## Escala de leitura do telão — 12/11/2026
+
+Em telas largas e altas, o telão amplia os títulos, o total e os cards de categoria e reduz a distância entre as colunas. A escala usa as dimensões da tela. A legibilidade em instalação física continua pendente. Conferência local com `node %TEMP%/vaggu-telao-grande-qa.cjs`, build, lint, verificação documental e `git diff --check`.
+
+## Nome no cabeçalho do telão — 12/11/2026
+
+O cabeçalho mostra shopping e nome do telão juntos. A prévia geral usa “Telão geral”, a prévia de andar usa seu nome e a instalação usa o nome cadastrado. Conferência local com `node %TEMP%/vaggu-nome-telao-qa.cjs`, build, lint, verificação documental e `git diff --check`.
+
+## Ajuste de composição do telão — 12/11/2026
+
+O total fica centralizado sob o título, os cards por piso ou setor ajustam a altura ao conteúdo e PCD, Idoso e Elétrica voltam em uma faixa compacta. As categorias sem leitura confirmada exibem traço. A animação ilustrativa anterior permanece disponível. Conferidos `node %TEMP%/vaggu-telao-categorias-qa.cjs`, build, lint, verificação documental e `git diff --check`. [Capturas](../Evidências%20visuais/Índice%20de%20evidências.md#12112026--telão-compacto-com-categorias).
+
+## Leitura de passagem no telão — 12/11/2026
+
+A apresentação pública prioriza o total de vagas livres e a distribuição por piso ou setor. A faixa de categorias saiu da exibição pública. Na animação ilustrativa, o telão destaca Piso G1 e Setor A com a contagem em tamanho maior. A projeção no equipamento da apresentação segue pendente.
+
+Executados o gerador `py scripts/gerar-animacao-apresentacao.py`, a decodificação integral pelo FFmpeg, `node %TEMP%/vaggu-telao-direto-qa.cjs` em Playwright/Edge com sessão e leituras fictícias, build, lint, `node scripts/verificar-documentacao.mjs` e `git diff --check`. [Vídeo e capturas](../Evidências%20visuais/Índice%20de%20evidências.md#12112026--telão-direto).
+
+## Aviso do telão — 12/11/2026
+
+O telão sem áreas para exibir informa “Sem contagem atual de vagas livres” quando a disponibilidade está indisponível. A contagem continua representada por um traço nesse estado. A prévia local foi conferida com `node %TEMP%/vaggu-aviso-telao-qa.cjs`, Playwright/Edge, build, lint, `node scripts/verificar-documentacao.mjs` e `git diff --check`. [Capturas](../Evidências%20visuais/Índice%20de%20evidências.md#12112026--aviso-do-telão).
+
+## Correção de CPF e CNPJ — 12/11/2026
+
+O formulário orienta a correção na identificação e a API valida documentos novos ou alterados antes de gravar. CPF segue opcional. CNPJ aceita o formato numérico ou alfanumérico. Na edição, documentos legados podem ser mantidos ao salvar outros campos. A validação verifica formato e dígitos. Unicidade e exigência dos demais campos seguem em aberto.
+
+Executados `npm run test:integracao` com PostgreSQL isolado, build e lint do frontend, `node %TEMP%/vaggu-documentos-qa.cjs` com Playwright/Edge e `node scripts/verificar-documentacao.mjs` e `git diff --check`. [Capturas](../Evidências%20visuais/Índice%20de%20evidências.md#12112026--validação-de-cpf-e-cnpj).
+
+## Auditoria dos cadastros — 12/11/2026
+
+O formulário de shopping bloqueou nome ausente e e-mail inválido, mas avançou com CPF de dígitos repetidos, CNPJ alfabético e telefone alfabético. A API rejeitou CPF, CNPJ e CEP curtos, e-mail corporativo inválido e horário fora do formato de 24 horas. Aceitou CPF e CNPJ de dígitos repetidos, o mesmo CNPJ em dois shoppings, criação com apenas nome e edição com UF inexistente ou telefone alfabético. No cadastro de gerente, a API exigiu nome e e-mail válido e retornou conflito para o mesmo e-mail com diferenças de caixa e espaços.
+
+Executados `node %TEMP%/vaggu-auditoria-formulario.cjs` com Playwright/Edge, `node --test %TEMP%/vaggu-auditoria-cadastros.test.mjs`, `npm run test:integracao` (38 aprovados), `node scripts/verificar-documentacao.mjs` e `git diff --check`. A configuração PostgreSQL habitual estava indisponível. A auditoria HTTP e a suíte usaram um cluster PostgreSQL temporário local com dados fictícios. Pendentes a definição de unicidade do CNPJ e o alinhamento entre os campos exigidos pelo formulário e pela API.
+
+## Revisão de telas para aprovação — 12/11/2026
+
+O mapa destaca leituras indisponíveis e separa o horário da última consulta do anúncio de estado. As análises explicam a falta de leituras válidas e esclarecem a base do percentual de ocupação. O Admin simplifica os títulos do cadastro e da lista, e o login indica como pedir nova senha. Make Interfaces Feel Better orientou a hierarquia. Anti-AI-Slop Writing, No AI Slop e Humanizer orientaram os textos. A posição de “Excluir shopping”, o Memorial e os telões ficam para avaliação posterior. O canvas do Superdesign depende de login.
+
+Conferência local com sessão e respostas fictícias em `node %TEMP%/vaggu-revisao-paineis-qa.cjs`, Playwright com Edge, `npm run build`, `npm run lint`, `node scripts/verificar-documentacao.mjs` e `git diff --check`. O build sinalizou chunks acima de 500 kB. [Capturas para aprovação](../Evidências%20visuais/Índice%20de%20evidências.md#12112026--revisão-de-telas-para-aprovação).
+
+## Revisão da página pública — 11/11/2026
+
+O rodapé passou a abrir o Memorial da VAGGU na mesma aba. O ícone usa o livro aberto do Lucide, consultado com `npx --yes better-icons get lucide:book-open`. A conferência local usou `node %TEMP%/vaggu-link-memorial-qa.cjs`, build, lint, verificação documental e `git diff --check`. O roteiro abriu o memorial por teclado e voltou à landing, com sessão de visitante simulada.
+
+A abertura e o rodapé voltaram ao conteúdo, layout e animações originais. A faixa amarela de implantação segue com WhatsApp e alternativa por e-mail. As seis skills instaladas seguem disponíveis. O canvas do Superdesign depende de login.
+
+Executados `npm run build`, `npm run lint`, `node %TEMP%/vaggu-restaurar-landing-qa.cjs`, `node scripts/verificar-documentacao.mjs` e `git diff --check`. Playwright com Edge usou sessão de visitante e destino do WhatsApp simulados. O build sinalizou chunks acima de 500 kB. A skill de roteamento VAGGU segue indisponível nas buscas locais. [Capturas por viewport](../Evidências%20visuais/Índice%20de%20evidências.md#11112026--revisão-da-página-pública).
+
+## Animação para apresentação — 11/11/2026
+
+O corte de 31 segundos acrescenta a cancela na entrada do estacionamento e a consulta a dois telões. O principal indica o Piso G1 em uma adaptação ilustrada da captura. Já no piso, o telão do andar indica o Setor A. Reexecutados o gerador, a decodificação pelo FFmpeg, `node scripts/verificar-documentacao.mjs` e `git diff --check`. Falta ensaio no projetor.
+
+A abertura agora mostra o motorista procurando orientação antes de encontrar o telão. Cada sensor mostra a emissão e o retorno do eco antes de enviar a leitura. Reexecutados o gerador, a decodificação pelo FFmpeg, `node scripts/verificar-documentacao.mjs` e `git diff --check`. A demonstração é ilustrativa e falta ensaio no projetor.
+
+O corte atual reduziu a projeção de 40 para 27 segundos. A aproximação abre o telão em quadro inteiro, e o carro usa um arco tangente ao corredor e à entrada da vaga, com frenagem ao estacionar. Reexecutados `py scripts/gerar-animacao-apresentacao.py` com o diretório de evidências revisadas, decodificação integral pelo FFmpeg, `node scripts/verificar-documentacao.mjs` e `git diff --check`. Falta testar a leitura do telão no projetor com a narração.
+
+A revisão de 40 segundos acrescentou o zoom do telão, setas de percurso, pulsos de leitura em sequência nos três canais do ESP32 e destaque de A03 no mapa. As telas incorporadas vieram da versão local atual no Vite, com capturas de Edge e Playwright em 1440×810. O mapa foi exercitado em `/painel` com respostas fictícias, e o telão foi montado pelo componente `TelaoApresentacao` com a mesma contagem. Conferidos os dois estados e a ausência de exceções no navegador. O plugin Browser não estava disponível. Reexecutados o gerador, a decodificação integral pelo FFmpeg, `node scripts/verificar-documentacao.mjs` e `git diff --check`. Falta o ensaio com a fala.
+
+Vídeo 2D ilustrativo de 35 segundos em Full HD, sem áudio nem legendas. Mostra chegada ao shopping, leitura do telão, estacionamento, sensor, ESP32, sistema e atualização do telão. A duração e os cortes foram definidos para permitir narração ao vivo. Ainda falta ensaiar a fala com o vídeo no equipamento da apresentação. [Uso e reprodução](cenario-de-apresentacao.md#animação-da-chegada-à-atualização-do-telão).
+
+Executados `py -m pip install --user imageio-ffmpeg`, o gerador `py scripts/gerar-animacao-apresentacao.py` com o diretório de evidências, a decodificação integral pelo FFmpeg, `node scripts/verificar-documentacao.mjs` e `git diff --check`. O vídeo usa cenas fictícias. O trabalho não altera os aplicativos e a skill de roteamento VAGGU segue indisponível nas buscas locais.
+
+## Revisão do README — 11/11/2026
+
+README simplificado, com os badges amarelos e escuros da stack, captura do mapa e link para o ensaio local da bancada de três vagas. A consulta HTTP aos oito SVGs do Shields.io confirmou os ícones incorporados. Verificação documental com `node scripts/verificar-documentacao.mjs` e `git diff --check`. A revisão se limita à documentação e reutiliza as capturas existentes. A renderização no GitHub ficou sem conferência. A skill de roteamento VAGGU continua indisponível nas buscas locais.
+
 ## Grades de Nossos momentos juntos — 06/11/2026
 
 Cinco fotos e cinco vídeos organizados em duas grades, sem legendas visíveis nos players. Nomes acessíveis e controles nativos preservados. Validação local com node %TEMP%/vaggu-momentos-grid-qa.cjs, build e lint do frontend, node scripts/verificar-documentacao.mjs e git diff --check. Playwright/Edge usado por indisponibilidade do plugin Browser. Publicação pendente.

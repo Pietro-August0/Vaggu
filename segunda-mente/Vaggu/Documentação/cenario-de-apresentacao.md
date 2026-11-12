@@ -16,6 +16,25 @@ O funcionamento e os testes do editor e dos sensores estão em [edição visual 
 - **Protótipo físico:** sensores ficarão instalados na maquete. Um deles ficará dentro de uma caixa/carcaça de proteção que criaremos, para demonstrar o formato de acondicionamento do sensor. Material, dimensões, fixação e modelo do sensor ainda não foram informados.
 - **Integração física:** a presença dos sensores na maquete não comprova, por si só, atualização das vagas no site. Esse fluxo precisa de teste próprio. O Shopping Exemplo descrito neste documento continua sendo sintético; não foi confirmado como destino da telemetria da maquete.
 
+### Animação da chegada à atualização do telão
+
+O [vídeo revisado para projeção](../Evidências%20visuais/2026-11-11%20-%20Animação%20revisada%20para%20apresentação/vaggu-do-shopping-ao-telao.mp4) tem 31 segundos, formato 16:9 e resolução 1920×1080. Foi montado para acompanhar a narração ao vivo, sem áudio nem legendas. O telão do andar e o mapa usam capturas locais com três vagas fictícias. O telão principal adapta a captura para mostrar a disponibilidade por andar.
+
+| Tempo | Cena |
+| --- | --- |
+| 0–6,5 s | O motorista chega à cancela com um “?” sobre o carro. O telão principal indica uma vaga livre no Piso G1 e o carro avança quando a cancela sobe. |
+| 6,5–10,5 s | No Piso G1, o motorista consulta o telão do andar, que indica o Setor A. |
+| 10,5–16,5 s | O carro faz uma curva contínua para entrar na vaga A03 e freia já dentro dela. |
+| 16,5–24 s | Cada sensor emite uma onda, recebe o eco do carro e envia a leitura ao mesmo ESP32. A placa transmite os dados ao sistema. |
+| 24–27,5 s | O mapa destaca A03, que muda de livre para ocupada. |
+| 27,5–31 s | O telão do andar muda de uma para zero vagas livres no setor A. |
+
+A sequência é fictícia e usa tempos ilustrativos de leitura e atualização. Para renderizar novamente no Windows, instale Pillow e `imageio-ffmpeg`, preserve as quatro imagens `referencia-*.png` no destino e execute a partir da raiz:
+
+```powershell
+py scripts/gerar-animacao-apresentacao.py 'segunda-mente/Vaggu/Evidências visuais/2026-11-11 - Animação revisada para apresentação'
+```
+
 ### Informações dos sensores — responsável e retomada
 
 Em 17/10/2026, registramos que as definições dos sensores estão sob responsabilidade de **Kamilly**, com detalhamento posterior. Aguardar modelo do sensor/hardware, frequência das leituras, tempos de confirmação e perda de comunicação e procedimento de manutenção. Detalhes da carcaça também permanecem pendentes. Não adotar valores provisórios do código como decisões finais do projeto.

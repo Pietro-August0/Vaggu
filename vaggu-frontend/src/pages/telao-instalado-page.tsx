@@ -67,12 +67,11 @@ export function TelaoInstaladoPage() {
  if (!chave) return <main className="mx-auto grid min-h-screen max-w-lg content-center gap-4 p-6"><h1 className="text-2xl font-bold">Autorizar telão VAGGU</h1><p>Informe a credencial emitida na gestão dos telões para esta instalação. O acesso fica guardado somente nesta aba. Use Alt + S para voltar à gestão e Esc para sair da tela cheia.</p>{erro && <p role="alert">{erro}</p>}<form onSubmit={instalar} className="grid gap-3"><label className="grid gap-1">Credencial<Input name="chave" type="password" autoComplete="off" required minLength={43} maxLength={43}/></label><Button>Autorizar exibição</Button></form></main>
  return <TelaoApresentacao
   shopping={dados?.shopping ?? "Estacionamento"}
-  escopo={dados?.escopo.nome ?? "Carregando disponibilidade"}
+  nomeTelao={dados?.nome ?? "Telão"}
   porAndar={!!dados && dados.escopo.tipo !== "GERAL"}
   contagem={dados ?? { livres: 0, monitoradas: 0 }}
   grupos={dados?.grupos ?? []}
   categorias={dados?.categorias ?? []}
   disponivel={valido}
-  demonstracao={dados?.demonstracao}
  />
 }

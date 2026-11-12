@@ -3,6 +3,169 @@ tags: [vaggu, evidencias, interface]
 ---
 # Evidências visuais da VAGGU
 
+## 12/11/2026 — visão geral dos shoppings no Admin
+
+Rota `/admin`, perfil Admin e API local simulada com shoppings fictícios. Foram conferidos o filtro por pendências, o foco visível e a abertura da ficha por teclado, sem rolagem horizontal ou erros inesperados no console.
+
+| Estado | Desktop 1440×900 | Tablet 768×1024 | Celular 390×844 |
+| --- | --- | --- | --- |
+| Todos | [Claro](2026-11-12%20-%20Visao%20geral%20Admin/desktop-light-todos.png) · [Escuro](2026-11-12%20-%20Visao%20geral%20Admin/desktop-dark-todos.png) | [Claro](2026-11-12%20-%20Visao%20geral%20Admin/tablet-light-todos.png) · [Escuro](2026-11-12%20-%20Visao%20geral%20Admin/tablet-dark-todos.png) | [Claro](2026-11-12%20-%20Visao%20geral%20Admin/celular-light-todos.png) · [Escuro](2026-11-12%20-%20Visao%20geral%20Admin/celular-dark-todos.png) |
+| Com pendências | [Claro](2026-11-12%20-%20Visao%20geral%20Admin/desktop-light-pendencias.png) · [Escuro](2026-11-12%20-%20Visao%20geral%20Admin/desktop-dark-pendencias.png) | [Claro](2026-11-12%20-%20Visao%20geral%20Admin/tablet-light-pendencias.png) · [Escuro](2026-11-12%20-%20Visao%20geral%20Admin/tablet-dark-pendencias.png) | [Claro](2026-11-12%20-%20Visao%20geral%20Admin/celular-light-pendencias.png) · [Escuro](2026-11-12%20-%20Visao%20geral%20Admin/celular-dark-pendencias.png) |
+| Carregando | [Claro](2026-11-12%20-%20Visao%20geral%20Admin/desktop-light-carregando.png) · [Escuro](2026-11-12%20-%20Visao%20geral%20Admin/desktop-dark-carregando.png) | — | — |
+| Sem shoppings | [Claro](2026-11-12%20-%20Visao%20geral%20Admin/desktop-light-vazio.png) · [Escuro](2026-11-12%20-%20Visao%20geral%20Admin/desktop-dark-vazio.png) | — | — |
+| Sem pendências | [Claro](2026-11-12%20-%20Visao%20geral%20Admin/desktop-light-sem-pendencias.png) · [Escuro](2026-11-12%20-%20Visao%20geral%20Admin/desktop-dark-sem-pendencias.png) | — | — |
+| Falha na consulta | [Claro](2026-11-12%20-%20Visao%20geral%20Admin/desktop-light-erro.png) · [Escuro](2026-11-12%20-%20Visao%20geral%20Admin/desktop-dark-erro.png) | — | — |
+
+## 12/11/2026 — exclusão na ficha do shopping
+
+Rota `/admin/shoppings/exemplo`, Admin e shopping fictícios. A API simulada permitiu conferir abertura por teclado, cancelamento com Escape, retorno de foco, falha dentro do diálogo e retorno à lista após confirmação.
+
+| Estado | Desktop 1440×900 | Tablet 768×1024 | Celular 390×844 |
+| --- | --- | --- | --- |
+| Ação na ficha | [Claro](2026-11-12%20-%20Exclusao%20na%20ficha/desktop-light-ficha.png) · [Escuro](2026-11-12%20-%20Exclusao%20na%20ficha/desktop-dark-ficha.png) | [Claro](2026-11-12%20-%20Exclusao%20na%20ficha/tablet-light-ficha.png) · [Escuro](2026-11-12%20-%20Exclusao%20na%20ficha/tablet-dark-ficha.png) | [Claro](2026-11-12%20-%20Exclusao%20na%20ficha/celular-light-ficha.png) · [Escuro](2026-11-12%20-%20Exclusao%20na%20ficha/celular-dark-ficha.png) |
+| Confirmação | [Claro](2026-11-12%20-%20Exclusao%20na%20ficha/desktop-light-confirmacao.png) · [Escuro](2026-11-12%20-%20Exclusao%20na%20ficha/desktop-dark-confirmacao.png) | [Claro](2026-11-12%20-%20Exclusao%20na%20ficha/tablet-light-confirmacao.png) · [Escuro](2026-11-12%20-%20Exclusao%20na%20ficha/tablet-dark-confirmacao.png) | [Claro](2026-11-12%20-%20Exclusao%20na%20ficha/celular-light-confirmacao.png) · [Escuro](2026-11-12%20-%20Exclusao%20na%20ficha/celular-dark-confirmacao.png) |
+
+Falha simulada no desktop. [Claro](2026-11-12%20-%20Exclusao%20na%20ficha/desktop-light-falha.png) · [Escuro](2026-11-12%20-%20Exclusao%20na%20ficha/desktop-dark-falha.png).
+
+## 12/11/2026 — mapa do gerente sem faixa de atualização
+
+Rota `/painel`, gerente e dados fictícios. A faixa fica oculta durante a consulta normal. Uma falha simulada mostra o aviso, e uma nova consulta válida o remove. O botão de recuperação recebeu foco por teclado.
+
+| Estado | Desktop 1440×900 | Tablet 768×1024 | Celular 390×844 |
+| --- | --- | --- | --- |
+| Operação normal | [Claro](2026-11-12%20-%20Mapa%20sem%20faixa/desktop-light.png) · [Escuro](2026-11-12%20-%20Mapa%20sem%20faixa/desktop-dark.png) | [Claro](2026-11-12%20-%20Mapa%20sem%20faixa/tablet-light.png) · [Escuro](2026-11-12%20-%20Mapa%20sem%20faixa/tablet-dark.png) | [Claro](2026-11-12%20-%20Mapa%20sem%20faixa/celular-light.png) · [Escuro](2026-11-12%20-%20Mapa%20sem%20faixa/celular-dark.png) |
+| Leituras indisponíveis | [Claro](2026-11-12%20-%20Mapa%20sem%20faixa/desktop-light-falha.png) · [Escuro](2026-11-12%20-%20Mapa%20sem%20faixa/desktop-dark-falha.png) | [Claro](2026-11-12%20-%20Mapa%20sem%20faixa/tablet-light-falha.png) · [Escuro](2026-11-12%20-%20Mapa%20sem%20faixa/tablet-dark-falha.png) | [Claro](2026-11-12%20-%20Mapa%20sem%20faixa/celular-light-falha.png) · [Escuro](2026-11-12%20-%20Mapa%20sem%20faixa/celular-dark-falha.png) |
+
+## 12/11/2026 — legenda do mapa
+
+Rotas locais `/painel` e `/admin/shoppings/exemplo/estrutura`, sessões e vagas fictícias. A legenda aparece antes das vagas. O filtro foi operado por teclado e manteve os estados distintos.
+
+| Perfil | Desktop 1440×900 | Tablet 768×1024 | Celular 390×844 |
+| --- | --- | --- | --- |
+| Gerente | [Claro](2026-11-12%20-%20Legenda%20do%20mapa/gerente-desktop-light.png) · [Escuro](2026-11-12%20-%20Legenda%20do%20mapa/gerente-desktop-dark.png) | [Claro](2026-11-12%20-%20Legenda%20do%20mapa/gerente-tablet-light.png) · [Escuro](2026-11-12%20-%20Legenda%20do%20mapa/gerente-tablet-dark.png) | [Claro](2026-11-12%20-%20Legenda%20do%20mapa/gerente-celular-light.png) · [Escuro](2026-11-12%20-%20Legenda%20do%20mapa/gerente-celular-dark.png) |
+| Admin | [Claro](2026-11-12%20-%20Legenda%20do%20mapa/admin-desktop-light.png) · [Escuro](2026-11-12%20-%20Legenda%20do%20mapa/admin-desktop-dark.png) | [Claro](2026-11-12%20-%20Legenda%20do%20mapa/admin-tablet-light.png) · [Escuro](2026-11-12%20-%20Legenda%20do%20mapa/admin-tablet-dark.png) | [Claro](2026-11-12%20-%20Legenda%20do%20mapa/admin-celular-light.png) · [Escuro](2026-11-12%20-%20Legenda%20do%20mapa/admin-celular-dark.png) |
+
+## 12/11/2026 — vídeos recortados em todo o Memorial
+
+Rota `/memorial`, visitante simulado, mídia pessoal mascarada e movimento reduzido. A faixa, suas cópias e a galeria carregaram os arquivos de 31,03 s e 9,33 s. As capturas documentam a disposição dos elementos. Os metadados confirmam a duração.
+
+| Área | Desktop 1440×900 | Tablet 768×1024 | Celular 390×844 |
+| --- | --- | --- | --- |
+| Carrossel | [Captura](2026-11-12%20-%20Videos%20recortados%20no%20memorial/desktop-carrossel.png) | [Captura](2026-11-12%20-%20Videos%20recortados%20no%20memorial/tablet-carrossel.png) | [Captura](2026-11-12%20-%20Videos%20recortados%20no%20memorial/celular-carrossel.png) |
+| Galeria | [Captura](2026-11-12%20-%20Videos%20recortados%20no%20memorial/desktop-galeria.png) | [Captura](2026-11-12%20-%20Videos%20recortados%20no%20memorial/tablet-galeria.png) | [Captura](2026-11-12%20-%20Videos%20recortados%20no%20memorial/celular-galeria.png) |
+
+## 12/11/2026 — corte no vídeo da equipe
+
+Rota local `/memorial`, visitante simulado, mídia pessoal mascarada. A galeria carregou o vídeo de 31,03 s e pausou sua reprodução ao iniciar outro clipe pelo teclado. [Desktop 1440×900](2026-11-12%20-%20Corte%20do%20video%20da%20equipe/desktop.png) · [Tablet 768×1024](2026-11-12%20-%20Corte%20do%20video%20da%20equipe/tablet.png) · [Celular 390×844](2026-11-12%20-%20Corte%20do%20video%20da%20equipe/celular.png).
+
+## 12/11/2026 — corte do vídeo do laboratório
+
+Rota local `/memorial`, visitante simulado, mídia pessoal mascarada. O navegador carregou e reproduziu o clipe de 9,33 s. [Desktop 1440×900](2026-11-12%20-%20Corte%20do%20video%20do%20laboratorio/desktop.png) · [Tablet 768×1024](2026-11-12%20-%20Corte%20do%20video%20do%20laboratorio/tablet.png) · [Celular 390×844](2026-11-12%20-%20Corte%20do%20video%20do%20laboratorio/celular.png).
+
+## 12/11/2026 — navegação do Memorial
+
+A abertura usa o subtítulo “Os bastidores do nosso TCC no SENAI Cotia.”
+
+Rota local `/memorial`, visitante simulado, mídia pessoal mascarada e movimento reduzido. As quatro âncoras foram acionadas por teclado, com foco visível, destino livre do cabeçalho fixo e ausência de rolagem horizontal.
+
+| Estado | Desktop 1440×900 | Tablet 768×1024 | Celular 390×844 | Celular 320×740 |
+| --- | --- | --- | --- | --- |
+| Abertura | [Captura](2026-11-12%20-%20Navegacao%20do%20memorial/desktop-abertura.png) | [Captura](2026-11-12%20-%20Navegacao%20do%20memorial/tablet-abertura.png) | [Captura](2026-11-12%20-%20Navegacao%20do%20memorial/celular-abertura.png) | [Captura](2026-11-12%20-%20Navegacao%20do%20memorial/estreito-abertura.png) |
+| Acervo selecionado | [Captura](2026-11-12%20-%20Navegacao%20do%20memorial/desktop-acervo.png) | [Captura](2026-11-12%20-%20Navegacao%20do%20memorial/tablet-acervo.png) | [Captura](2026-11-12%20-%20Navegacao%20do%20memorial/celular-acervo.png) | [Captura](2026-11-12%20-%20Navegacao%20do%20memorial/estreito-acervo.png) |
+
+## 12/11/2026 — escala de leitura do telão
+
+Prévia em `/painel/telao`, com gerente e leituras fictícios. Contagem confirmada e ausência de leitura conferidas sem rolagem ou corte nas larguras testadas. Alt + S retorna à gestão.
+
+| Estado | Full HD 1920×1080 | Desktop 1440×900 | Tablet 768×1024 | Celular 390×844 |
+| --- | --- | --- | --- | --- |
+| Contagem confirmada | [Captura](2026-11-12%20-%20Telao%20ampliado/full-hd-piso.png) | [Captura](2026-11-12%20-%20Telao%20ampliado/desktop-piso.png) | [Captura](2026-11-12%20-%20Telao%20ampliado/tablet-piso.png) | [Captura](2026-11-12%20-%20Telao%20ampliado/celular-piso.png) |
+| Sem contagem | [Captura](2026-11-12%20-%20Telao%20ampliado/full-hd-sem-contagem.png) | [Captura](2026-11-12%20-%20Telao%20ampliado/desktop-sem-contagem.png) | [Captura](2026-11-12%20-%20Telao%20ampliado/tablet-sem-contagem.png) | [Captura](2026-11-12%20-%20Telao%20ampliado/celular-sem-contagem.png) |
+
+## 12/11/2026 — nome do telão
+
+Prévia local em `/painel/telao`, gerente simulado e dados fictícios. Shopping e telão aparecem no mesmo título.
+
+| Estado | Desktop 1440×900 | Tablet 768×1024 | Celular 390×844 |
+| --- | --- | --- | --- |
+| Contagem confirmada | [Captura](2026-11-12%20-%20Nome%20do%20telao/desktop-piso.png) | [Captura](2026-11-12%20-%20Nome%20do%20telao/tablet-piso.png) | [Captura](2026-11-12%20-%20Nome%20do%20telao/celular-piso.png) |
+| Sem contagem | [Captura](2026-11-12%20-%20Nome%20do%20telao/desktop-sem-contagem.png) | [Captura](2026-11-12%20-%20Nome%20do%20telao/tablet-sem-contagem.png) | [Captura](2026-11-12%20-%20Nome%20do%20telao/celular-sem-contagem.png) |
+
+## 12/11/2026 — telão compacto com categorias
+
+Prévia local em `/painel/telao`, gerente simulado, shopping e leituras fictícias. A paleta do telão é fixa. O total está centralizado e as categorias distinguem contagem confirmada de leitura indisponível. O atalho Alt + S volta à gestão.
+
+| Estado | Desktop 1440×900 | Tablet 768×1024 | Celular 390×844 |
+| --- | --- | --- | --- |
+| Contagem confirmada | [Captura](2026-11-12%20-%20Telao%20compacto/desktop-piso.png) | [Captura](2026-11-12%20-%20Telao%20compacto/tablet-piso.png) | [Captura](2026-11-12%20-%20Telao%20compacto/celular-piso.png) |
+| Sem contagem | [Captura](2026-11-12%20-%20Telao%20compacto/desktop-sem-contagem.png) | [Captura](2026-11-12%20-%20Telao%20compacto/tablet-sem-contagem.png) | [Captura](2026-11-12%20-%20Telao%20compacto/celular-sem-contagem.png) |
+
+## 12/11/2026 — telão direto
+
+Prévia local em `/painel/telao`, gerente simulado e dados fictícios. O total e o piso aparecem com leitura confirmada. Sem leitura, a contagem fica em traço. Alt + S retorna à gestão.
+
+| Estado | Desktop 1440×900 | Tablet 768×1024 | Celular 390×844 |
+| --- | --- | --- | --- |
+| Contagem confirmada | [Captura](2026-11-12%20-%20Telao%20direto/desktop-piso.png) | [Captura](2026-11-12%20-%20Telao%20direto/tablet-piso.png) | [Captura](2026-11-12%20-%20Telao%20direto/celular-piso.png) |
+| Sem contagem | [Captura](2026-11-12%20-%20Telao%20direto/desktop-sem-contagem.png) | [Captura](2026-11-12%20-%20Telao%20direto/tablet-sem-contagem.png) | [Captura](2026-11-12%20-%20Telao%20direto/celular-sem-contagem.png) |
+
+A animação ilustrativa em Full HD mostra [Piso G1 na entrada](2026-11-12%20-%20Animacao%20com%20telao%20direto/02-consulta.png), [Setor A no andar](2026-11-12%20-%20Animacao%20com%20telao%20direto/02d-telao-do-andar.png) e [a contagem atualizada](2026-11-12%20-%20Animacao%20com%20telao%20direto/09-telao-atualizado.png). [Vídeo de 31 segundos](2026-11-12%20-%20Animacao%20com%20telao%20direto/vaggu-do-shopping-ao-telao.mp4).
+
+## 12/11/2026 — aviso do telão
+
+Rota local `/painel/telao`, gerente simulado e shopping fictício sem andares. A prévia usa paleta escura própria e exibe o aviso sem contagem de vagas. [Desktop 1440×900](2026-11-12%20-%20Aviso%20do%20telao/desktop.png) · [Tablet 768×1024](2026-11-12%20-%20Aviso%20do%20telao/tablet.png) · [Celular 390×844](2026-11-12%20-%20Aviso%20do%20telao/celular.png).
+
+## 12/11/2026 — validação de CPF e CNPJ
+
+Rota local `/admin/cadastrar`, Admin simulado, dados fictícios. Enter em Continuar mantém a identificação e leva o foco ao documento inválido. CNPJ alfanumérico válido e CPF em branco permitem avançar.
+
+| Estado | Desktop 1440×1000 | Tablet 768×1024 | Celular 390×844 |
+| --- | --- | --- | --- |
+| CNPJ inválido | [Claro](2026-11-12%20-%20Validacao%20de%20documentos/cnpj-desktop-light.png) · [Escuro](2026-11-12%20-%20Validacao%20de%20documentos/cnpj-desktop-dark.png) | [Claro](2026-11-12%20-%20Validacao%20de%20documentos/cnpj-tablet-light.png) · [Escuro](2026-11-12%20-%20Validacao%20de%20documentos/cnpj-tablet-dark.png) | [Claro](2026-11-12%20-%20Validacao%20de%20documentos/cnpj-celular-light.png) · [Escuro](2026-11-12%20-%20Validacao%20de%20documentos/cnpj-celular-dark.png) |
+| CPF inválido | [Claro](2026-11-12%20-%20Validacao%20de%20documentos/cpf-desktop-light.png) · [Escuro](2026-11-12%20-%20Validacao%20de%20documentos/cpf-desktop-dark.png) | [Claro](2026-11-12%20-%20Validacao%20de%20documentos/cpf-tablet-light.png) · [Escuro](2026-11-12%20-%20Validacao%20de%20documentos/cpf-tablet-dark.png) | [Claro](2026-11-12%20-%20Validacao%20de%20documentos/cpf-celular-light.png) · [Escuro](2026-11-12%20-%20Validacao%20de%20documentos/cpf-celular-dark.png) |
+
+## 12/11/2026 — revisão de telas para aprovação
+
+Rotas locais `/login`, `/admin/shoppings`, `/admin/cadastrar`, `/painel` e `/painel/analise`. Perfis visitante, Admin e gerente com sessão e dados fictícios. A conferência exercitou a ajuda do login e a atualização de análises por teclado, a busca e a navegação para o cadastro no Admin, além da indisponibilidade simulada e da recuperação do mapa. O login tem paleta própria. As telas autenticadas foram capturadas nos dois temas.
+
+| Tela | Desktop 1440×1000 | Tablet 768×1024 | Celular 390×844 |
+| --- | --- | --- | --- |
+| Ajuda de acesso | [Captura](2026-11-12%20-%20Revisao%20de%20telas/login-ajuda-desktop.png) | [Captura](2026-11-12%20-%20Revisao%20de%20telas/login-ajuda-tablet.png) | [Captura](2026-11-12%20-%20Revisao%20de%20telas/login-ajuda-celular.png) |
+| Lista de shoppings | [Claro](2026-11-12%20-%20Revisao%20de%20telas/admin-lista-desktop-light.png) · [Escuro](2026-11-12%20-%20Revisao%20de%20telas/admin-lista-desktop-dark.png) | [Claro](2026-11-12%20-%20Revisao%20de%20telas/admin-lista-tablet-light.png) · [Escuro](2026-11-12%20-%20Revisao%20de%20telas/admin-lista-tablet-dark.png) | [Claro](2026-11-12%20-%20Revisao%20de%20telas/admin-lista-celular-light.png) · [Escuro](2026-11-12%20-%20Revisao%20de%20telas/admin-lista-celular-dark.png) |
+| Cadastro de shopping | [Claro](2026-11-12%20-%20Revisao%20de%20telas/admin-cadastro-desktop-light.png) · [Escuro](2026-11-12%20-%20Revisao%20de%20telas/admin-cadastro-desktop-dark.png) | [Claro](2026-11-12%20-%20Revisao%20de%20telas/admin-cadastro-tablet-light.png) · [Escuro](2026-11-12%20-%20Revisao%20de%20telas/admin-cadastro-tablet-dark.png) | [Claro](2026-11-12%20-%20Revisao%20de%20telas/admin-cadastro-celular-light.png) · [Escuro](2026-11-12%20-%20Revisao%20de%20telas/admin-cadastro-celular-dark.png) |
+| Mapa atualizado | [Claro](2026-11-12%20-%20Revisao%20de%20telas/mapa-desktop-light.png) · [Escuro](2026-11-12%20-%20Revisao%20de%20telas/mapa-desktop-dark.png) | [Claro](2026-11-12%20-%20Revisao%20de%20telas/mapa-tablet-light.png) · [Escuro](2026-11-12%20-%20Revisao%20de%20telas/mapa-tablet-dark.png) | [Claro](2026-11-12%20-%20Revisao%20de%20telas/mapa-celular-light.png) · [Escuro](2026-11-12%20-%20Revisao%20de%20telas/mapa-celular-dark.png) |
+| Mapa com leitura indisponível | [Claro](2026-11-12%20-%20Revisao%20de%20telas/mapa-indisponivel-desktop-light.png) · [Escuro](2026-11-12%20-%20Revisao%20de%20telas/mapa-indisponivel-desktop-dark.png) | [Claro](2026-11-12%20-%20Revisao%20de%20telas/mapa-indisponivel-tablet-light.png) · [Escuro](2026-11-12%20-%20Revisao%20de%20telas/mapa-indisponivel-tablet-dark.png) | [Claro](2026-11-12%20-%20Revisao%20de%20telas/mapa-indisponivel-celular-light.png) · [Escuro](2026-11-12%20-%20Revisao%20de%20telas/mapa-indisponivel-celular-dark.png) |
+| Análises com histórico | [Claro](2026-11-12%20-%20Revisao%20de%20telas/analises-desktop-light.png) · [Escuro](2026-11-12%20-%20Revisao%20de%20telas/analises-desktop-dark.png) | [Claro](2026-11-12%20-%20Revisao%20de%20telas/analises-tablet-light.png) · [Escuro](2026-11-12%20-%20Revisao%20de%20telas/analises-tablet-dark.png) | [Claro](2026-11-12%20-%20Revisao%20de%20telas/analises-celular-light.png) · [Escuro](2026-11-12%20-%20Revisao%20de%20telas/analises-celular-dark.png) |
+| Análises sem leituras suficientes | [Claro](2026-11-12%20-%20Revisao%20de%20telas/analises-sem-leituras-desktop-light.png) · [Escuro](2026-11-12%20-%20Revisao%20de%20telas/analises-sem-leituras-desktop-dark.png) | [Claro](2026-11-12%20-%20Revisao%20de%20telas/analises-sem-leituras-tablet-light.png) · [Escuro](2026-11-12%20-%20Revisao%20de%20telas/analises-sem-leituras-tablet-dark.png) | [Claro](2026-11-12%20-%20Revisao%20de%20telas/analises-sem-leituras-celular-light.png) · [Escuro](2026-11-12%20-%20Revisao%20de%20telas/analises-sem-leituras-celular-dark.png) |
+
+## 11/11/2026 — animação revisada para apresentação
+
+O corte de 31 segundos registra [o telão principal por andar](2026-11-11%20-%20Animação%20revisada%20para%20apresentação/02-consulta.png), [a abertura da cancela](2026-11-11%20-%20Animação%20revisada%20para%20apresentação/02b-cancela-aberta.png), [a chegada ao Piso G1](2026-11-11%20-%20Animação%20revisada%20para%20apresentação/02c-chegada-no-andar.png) e [o telão do andar por setor](2026-11-11%20-%20Animação%20revisada%20para%20apresentação/02d-telao-do-andar.png). Quadros 1920×1080, peça offline para plateia, com dados fictícios.
+
+Quadros offline 1920×1080 para plateia, com dados fictícios. O [motorista procura o telão](2026-11-11%20-%20Animação%20revisada%20para%20apresentação/01b-procura.png). Na A03, a [onda emitida](2026-11-11%20-%20Animação%20revisada%20para%20apresentação/05-leitura.png) chega ao carro e o [eco retorna](2026-11-11%20-%20Animação%20revisada%20para%20apresentação/05b-eco.png) antes de a leitura seguir à placa.
+
+O [quadro da curva](2026-11-11%20-%20Animação%20revisada%20para%20apresentação/03b-curva.png) mostra o carro alinhado à trajetória rumo à A03.
+
+Peça offline, perfil plateia, 1920×1080. [Vídeo revisado](2026-11-11%20-%20Animação%20revisada%20para%20apresentação/vaggu-do-shopping-ao-telao.mp4), [quadro de leitura](2026-11-11%20-%20Animação%20revisada%20para%20apresentação/05-leitura.png) e [quadro do ESP32](2026-11-11%20-%20Animação%20revisada%20para%20apresentação/06-esp32.png). Referências locais em 1440×810, com cenário fictício de três vagas: `/painel` no perfil gerente [antes](2026-11-11%20-%20Animação%20revisada%20para%20apresentação/referencia-mapa-livre.png) e [depois](2026-11-11%20-%20Animação%20revisada%20para%20apresentação/referencia-mapa-ocupada.png), e componente `TelaoApresentacao` no perfil visitante [antes](2026-11-11%20-%20Animação%20revisada%20para%20apresentação/referencia-telao-livre.png) e [depois](2026-11-11%20-%20Animação%20revisada%20para%20apresentação/referencia-telao-ocupada.png). A03 muda de verde para vermelho e a contagem do Setor A passa de 1 para 0.
+
+## 11/11/2026 — revisão da página pública
+
+As capturas mostram a abertura e o rodapé originais com a faixa amarela de implantação.
+
+Rota local `/`, perfil visitante simulado, foto ilustrativa e destino fictício de WhatsApp. A página pública tem cores próprias de marca. Playwright com Edge conferiu foco visível, navegação por teclado pelos links de WhatsApp da abertura e da faixa de implantação, abertura do destino simulado em nova aba, ausência de transbordamento horizontal e console sem erros.
+
+| Área | Desktop 1440×1000 | Tablet 768×1024 | Celular 390×844 | Celular estreito 320×740 |
+| --- | --- | --- | --- | --- |
+| Abertura | [Captura](2026-11-11%20-%20Revisao%20da%20landing/abertura-desktop.png) | [Captura](2026-11-11%20-%20Revisao%20da%20landing/abertura-tablet.png) | [Captura](2026-11-11%20-%20Revisao%20da%20landing/abertura-celular.png) | [Movimento reduzido](2026-11-11%20-%20Revisao%20da%20landing/abertura-estreito.png) |
+| Implantação com foco | [Captura](2026-11-11%20-%20Revisao%20da%20landing/implantacao-desktop.png) | [Captura](2026-11-11%20-%20Revisao%20da%20landing/implantacao-tablet.png) | [Captura](2026-11-11%20-%20Revisao%20da%20landing/implantacao-celular.png) | [Captura](2026-11-11%20-%20Revisao%20da%20landing/implantacao-estreito.png) |
+| Contatos com foco no Memorial | [Captura](2026-11-11%20-%20Revisao%20da%20landing/rodape-desktop.png) | [Captura](2026-11-11%20-%20Revisao%20da%20landing/rodape-tablet.png) | [Captura](2026-11-11%20-%20Revisao%20da%20landing/rodape-celular.png) | [Captura](2026-11-11%20-%20Revisao%20da%20landing/rodape-estreito.png) |
+
+Com o número indisponível, o botão da faixa usa o e-mail institucional. [Captura em 390×844](2026-11-11%20-%20Revisao%20da%20landing/implantacao-sem-whatsapp.png).
+
+## 11/11/2026 — animação para apresentação
+
+Peça offline, perfil plateia, quadro fixo de projeção 1920×1080 e dados fictícios. Os quadros extraídos do MP4 mostram [chegada](2026-11-11%20-%20Animação%20para%20apresentação/01-chegada.png), [consulta ao telão](2026-11-11%20-%20Animação%20para%20apresentação/02-consulta.png), [percurso](2026-11-11%20-%20Animação%20para%20apresentação/03-percurso.png), [estacionamento](2026-11-11%20-%20Animação%20para%20apresentação/04-estacionamento.png), [leitura](2026-11-11%20-%20Animação%20para%20apresentação/05-leitura.png), [ESP32](2026-11-11%20-%20Animação%20para%20apresentação/06-esp32.png), [atualização no sistema](2026-11-11%20-%20Animação%20para%20apresentação/07-sistema.png) e [telão atualizado](2026-11-11%20-%20Animação%20para%20apresentação/08-telao-atualizado.png). A contagem ilustrada passa de uma para zero vagas livres após a atualização do sistema. [Vídeo completo](2026-11-11%20-%20Animação%20para%20apresentação/vaggu-do-shopping-ao-telao.mp4).
+
 ## 10/11/2026 — teste físico integrado do ESP32
 
 Três fotos da montagem e da maquete, mais dois vídeos do ensaio real da bancada. No vídeo integrado, a rota local `/painel` do gerente mostra as vagas A01/A02/A03 junto à placa e aos LEDs; a gravação não é um teste responsivo. [Registro, inventário e localização dos originais privados](../Documentação/ensaio-fisico-esp32-2026-11-10.md).

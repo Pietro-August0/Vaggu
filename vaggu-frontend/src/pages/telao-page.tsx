@@ -55,13 +55,12 @@ export function TelaoPage() {
   return <TelaoApresentacao
     key={andarId ?? "geral"}
     shopping={estrutura?.shopping.nome ?? "Estacionamento"}
-    escopo={andarAtual?.nome ?? (andarId ? "Andar indisponível" : "Visão geral")}
+    nomeTelao={andarAtual ? `Telão ${andarAtual.nome}` : andarId ? "Telão do andar" : "Telão geral"}
     porAndar={!!andarId}
     contagem={contagemGeral}
     grupos={grupos.map(g => ({ nome: g.nome, ...g.contagem }))}
     categorias={porTipo}
     disponivel={disponivel}
-    demonstracao={estrutura?.shopping.demonstracao}
     retorno="/painel/teloes"
   />
 }

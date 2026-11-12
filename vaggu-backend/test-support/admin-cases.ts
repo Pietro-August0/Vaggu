@@ -18,10 +18,24 @@ export async function runAdminCases(t: TestContext, prisma: PrismaClient, senhaA
   const adminHeader = { Authorization: `Bearer ${adminLogin.body.token}` };
   let shoppingCentralId = '';
 
+  await t.test('API recusa dígitos verificadores inválidos em CPF e CNPJ', async () => {
+    for (const documentos of [{ responsavelCpf: '111.111.111-11' }, { cnpj: '12.345.678/0001-90' }]) {
+      await request(app).post('/api/v1/shoppings').set(adminHeader)
+        .send({ nome: 'Shopping de teste', ...documentos }).expect(400);
+    }
+  });
+
+  await t.test('API normaliza CNPJ alfanumérico e mantém CPF opcional', async () => {
+    const resposta = await request(app).post('/api/v1/shoppings').set(adminHeader)
+      .send({ nome: 'Shopping de teste alfanumérico', cnpj: '12.abc.345/01de-35' }).expect(201);
+    assert.equal(resposta.body.shopping.cnpj, '12ABC34501DE35');
+    assert.equal(resposta.body.shopping.responsavelCpf, null);
+  });
+
   await t.test('Admin cadastra shopping e dois gerentes com senhas individuais', async () => {
     const shoppingResponse = await request(app).post('/api/v1/shoppings')
       .set(adminHeader).send({
-        nome: 'Shopping Central', cnpj: '12.345.678/0001-90', responsavelNome: 'Ana Responsável',
+        nome: 'Shopping Central', cnpj: '12.345.678/0001-95', responsavelNome: 'Ana Responsável',
         emailCorporativo: 'contato@shopping.example', telefone: '+55 11 90000-0000', cep: '01001-000',
         uf: 'sp', cidade: 'São Paulo', bairro: 'Centro', logradouro: 'Rua de teste', numero: '100',
         horarioAbertura: '06:00', horarioFechamento: '23:59', fusoHorario: 'America/Sao_Paulo',
@@ -33,7 +47,7 @@ export async function runAdminCases(t: TestContext, prisma: PrismaClient, senhaA
     assert.equal(shopping.totalAndares, 0);
     assert.equal(shopping.totalSetores, 0);
     assert.equal(shopping.totalVagas, 0);
-    assert.equal(shopping.cnpj, '12345678000190');
+    assert.equal(shopping.cnpj, '12345678000195');
     assert.equal(shopping.cep, '01001000');
     assert.equal(shopping.uf, 'SP');
 

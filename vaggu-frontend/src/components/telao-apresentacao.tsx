@@ -6,11 +6,11 @@ import "@/pages/telao-page.css"
 
 export type ContagemTelao = { livres: number; monitoradas: number }
 export type GrupoTelao = ContagemTelao & { nome: string }
-export type CategoriaTelao = ContagemTelao & { tipo: string }
+type CategoriaTelao = ContagemTelao & { tipo: string }
 type Props = {
-  shopping: string; escopo: string; porAndar: boolean; contagem: ContagemTelao
+  shopping: string; nomeTelao: string; porAndar: boolean; contagem: ContagemTelao
   grupos: GrupoTelao[]; categorias: CategoriaTelao[]; disponivel: boolean
-  demonstracao?: boolean; retorno?: string
+  retorno?: string
 }
 const categoriasFixas = [
   { tipo: "PCD", nome: "PCD", Icone: Accessibility },
@@ -18,7 +18,7 @@ const categoriasFixas = [
   { tipo: "ELETRICA", nome: "Elétrica", Icone: Zap },
 ]
 
-export function TelaoApresentacao({ shopping, escopo, porAndar, contagem, grupos, categorias, disponivel, demonstracao, retorno }: Props) {
+export function TelaoApresentacao({ shopping, nomeTelao, porAndar, contagem, grupos, categorias, disponivel, retorno }: Props) {
   const tela = useRef<HTMLElement>(null)
   const navegar = useNavigate()
   const [aviso, setAviso] = useState(true)
@@ -39,7 +39,7 @@ export function TelaoApresentacao({ shopping, escopo, porAndar, contagem, grupos
     if (paginas <= 1) return
     const intervalo = window.setInterval(() => setPagina(p => (p + 1) % paginas), 8_000)
     return () => window.clearInterval(intervalo)
-  }, [paginas, escopo])
+  }, [paginas, nomeTelao])
   useEffect(() => {
     const prazo = window.setTimeout(() => setAviso(false), 8_000)
     return () => window.clearTimeout(prazo)
@@ -73,28 +73,36 @@ export function TelaoApresentacao({ shopping, escopo, porAndar, contagem, grupos
   return <main ref={tela} className="telao-vaggu" aria-label="Disponibilidade do estacionamento">
     <header className="telao-vaggu__topo">
       <img src="/assets/vaggu-logo-yellow.svg" alt="VAGGU" className="telao-vaggu__logo" />
-      <div className="telao-vaggu__identidade"><h1 title={shopping}>{shopping}</h1><p title={escopo}>{escopo}{demonstracao && <span> · Demonstração</span>}</p></div>
+      <h1 className="telao-vaggu__identidade">
+        {shopping} <span>· {nomeTelao}</span>
+      </h1>
     </header>
     {aviso && <p className="telao-vaggu__atalhos" role="status"><span><kbd>F</kbd> Tela cheia</span><span><kbd>Esc</kbd> Sair da tela cheia</span><span><kbd>Alt + S</kbd> Voltar à gestão</span></p>}
     {erroTelaCheia && <p className="telao-vaggu__aviso" role="alert">{erroTelaCheia}</p>}
     <div className="telao-vaggu__conteudo">
       <section className="telao-vaggu__total" aria-label="Vagas livres">
         <h2>Vagas livres</h2><strong className={contagem.livres >= 1000 ? "telao-vaggu__numero-longo" : undefined}>{disponivel && contagem.monitoradas > 0 ? contagem.livres : "—"}</strong>
-        <p>{disponivel ? (porAndar ? "neste andar" : "no estacionamento") : "Consulte a sinalização local"}</p>
+        {(!disponivel || contagem.monitoradas === 0) && <p>Consulte a sinalização local</p>}
       </section>
       <section className="telao-vaggu__distribuicao" aria-label={porAndar ? "Disponibilidade por setor" : "Disponibilidade por andar"}>
-        <div className="telao-vaggu__titulo-grupos"><h2>{porAndar ? "Por setor" : "Por andar"}</h2>{paginas > 1 && <span>{atual + 1} / {paginas}</span>}</div>
+        <div className="telao-vaggu__titulo-grupos"><h2>{porAndar ? "Vagas livres por setor" : "Vagas livres por piso"}</h2>{paginas > 1 && <span>{atual + 1} / {paginas}</span>}</div>
         <div className="telao-vaggu__grupos">
-          {visiveis.map((g, i) => <article key={`${atual}-${i}-${g.nome}`} className="telao-vaggu__grupo"><h3 title={g.nome}>{g.nome}</h3><p><strong>{disponivel && g.monitoradas > 0 ? g.livres : "—"}</strong><span>livres</span></p></article>)}
-          {!visiveis.length && <p className="telao-vaggu__sem-grupos">{disponivel ? "Siga a sinalização local" : "Disponibilidade indisponível"}</p>}
+          {visiveis.map((g, i) => <article key={`${atual}-${i}-${g.nome}`} className="telao-vaggu__grupo"><h3 title={g.nome}>{g.nome}</h3><p><strong>{disponivel && g.monitoradas > 0 ? g.livres : "—"}</strong></p></article>)}
+          {!visiveis.length && <p className="telao-vaggu__sem-grupos">{disponivel ? "Siga a sinalização local" : "Sem contagem atual de vagas livres"}</p>}
+        </div>
+      </section>
+      <section className="telao-vaggu__categorias" aria-labelledby="telao-categorias">
+        <h2 id="telao-categorias">Vagas livres por categoria</h2>
+        <div className="telao-vaggu__lista-categorias">
+          {categoriasFixas.map(({ tipo, nome, Icone }) => {
+            const categoria = categorias.find(item => item.tipo === tipo)
+            return <div key={tipo} className="telao-vaggu__categoria">
+              <span><Icone aria-hidden="true" />{nome}</span>
+              <strong>{disponivel && categoria && categoria.monitoradas > 0 ? categoria.livres : "—"}</strong>
+            </div>
+          })}
         </div>
       </section>
     </div>
-    <footer className="telao-vaggu__categorias" aria-label="Vagas livres por categoria">
-      {categoriasFixas.map(({ tipo, nome, Icone }) => {
-        const categoria = categorias.find(c => c.tipo === tipo)
-        return <div key={tipo} className={`telao-vaggu__categoria telao-vaggu__categoria--${tipo.toLowerCase()}`}><Icone aria-hidden="true"/><h2>{nome}</h2><strong>{disponivel && categoria && categoria.monitoradas > 0 ? categoria.livres : "—"}</strong><span>livres</span></div>
-      })}
-    </footer>
   </main>
 }

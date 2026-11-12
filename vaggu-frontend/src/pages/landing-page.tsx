@@ -1,6 +1,7 @@
 /** Compõe a landing pública e encaminha o contato comercial ao WhatsApp. */
 import {
   ArrowRight,
+  BookOpen,
   ExternalLink,
   LogIn,
   Mail,
@@ -13,9 +14,8 @@ import { SobreVaggu } from "@/components/sobre-vaggu"
 import { Brand } from "@/components/brand"
 import { IconeWhatsApp } from "@/components/icone-whatsapp"
 import { Button } from "@/components/ui/button"
-import { Card, CardContent } from "@/components/ui/card"
 import { useScrollReveal } from "@/hooks/use-scroll-reveal"
-import { EMAIL_CONTATO, INSTAGRAM_URL, REPOSITORIO_URL, WHATSAPP_URL } from "@/lib/constants"
+import { EMAIL_CONTATO, INSTAGRAM_URL, WHATSAPP_URL } from "@/lib/constants"
 
 /** Reúne conteúdo comercial estático, imagens e animações; o contato usa o link compartilhado. */
 export function LandingPage() {
@@ -97,69 +97,31 @@ export function LandingPage() {
           </div>
         </section>
 
-        <section className="px-5 py-20 sm:px-8 lg:py-28">
-          <motion.div
-            className="mx-auto max-w-6xl text-center"
-            initial={{ opacity: 0, y: 20 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.6 }}
-            viewport={{ once: true, margin: "-100px" }}
-          >
-            <motion.p
-              className="text-xs font-medium uppercase tracking-[0.25em] text-neutral-500"
-              initial={{ opacity: 0 }}
-              whileInView={{ opacity: 1 }}
-              transition={{ duration: 0.4, delay: 0.1 }}
-              viewport={{ once: true, margin: "-100px" }}
-            >
-              Seu próximo passo
-            </motion.p>
-            <motion.h2
-              className="mt-4 font-landing text-4xl font-semibold tracking-[-0.04em] sm:text-5xl lg:text-6xl"
-              initial={{ opacity: 0, y: 10 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.6, delay: 0.2 }}
-              viewport={{ once: true, margin: "-100px" }}
-            >
-              Fale com quem cuida de tudo.
-            </motion.h2>
-            <motion.p
-              className="mx-auto mt-4 max-w-2xl text-lg font-light text-neutral-600"
-              initial={{ opacity: 0 }}
-              whileInView={{ opacity: 1 }}
-              transition={{ duration: 0.6, delay: 0.3 }}
-              viewport={{ once: true, margin: "-100px" }}
-            >
-              O cadastro do shopping, das vagas e a preparação do acesso são feitos pela nossa equipe, diretamente com você.
-            </motion.p>
-
-            <motion.div
-              initial={{ opacity: 0, scale: 0.95 }}
-              whileInView={{ opacity: 1, scale: 1 }}
-              transition={{ duration: 0.6, delay: 0.2 }}
-              viewport={{ once: true, margin: "-100px" }}
-            >
-              <Card className="mx-auto mt-10 max-w-2xl overflow-hidden rounded-[2rem] border-[#ffe100] bg-[#fffdf2] text-left text-neutral-950 shadow-xl shadow-black/8 sm:mt-12">
-                <CardContent className="grid gap-7 p-7 sm:grid-cols-[auto_1fr] sm:p-9">
-                  <div className="grid size-16 place-items-center rounded-2xl bg-[#ffe100] text-black">
-                    <IconeWhatsApp className="size-8" />
-                  </div>
-                  <div>
-                    <h3 className="font-landing text-2xl font-semibold tracking-tight">Converse com a equipe VAGGU pelo WhatsApp</h3>
-                    <p className="mt-2 font-light text-neutral-600">
-                      Conheça a implantação e prepare o acesso do seu shopping com o acompanhamento da nossa equipe.
-                    </p>
-                  </div>
-                  <Button asChild className="h-12 w-full justify-between rounded-full bg-[#ffe100] px-6 font-medium text-black hover:bg-[#f2d500] sm:col-span-2">
-                    <a aria-label="Iniciar conversa com a VAGGU no WhatsApp (abre em nova aba)" href={WHATSAPP_URL} rel="noreferrer" target="_blank">
-                      Iniciar conversa
-                      <ExternalLink className="size-4" aria-hidden="true" />
-                    </a>
-                  </Button>
-                </CardContent>
-              </Card>
-            </motion.div>
-          </motion.div>
+        <section id="implantacao" aria-labelledby="implantacao-titulo" className="bg-[#ffe100] px-5 py-10 text-neutral-950 sm:px-8 sm:py-14 lg:px-12">
+          <div className="mx-auto flex max-w-[1440px] flex-wrap items-center justify-between gap-x-12 gap-y-6">
+            <div className="max-w-2xl">
+              <h2 id="implantacao-titulo" className="text-balance font-landing text-2xl font-semibold tracking-tight sm:text-4xl">
+                Como levar a VAGGU ao seu shopping
+              </h2>
+              <p className="mt-3 max-w-xl text-pretty leading-relaxed text-neutral-900">
+                Nossa equipe cadastra o shopping e as vagas e prepara o acesso dos gerentes.
+              </p>
+            </div>
+            <Button asChild size="lg" className="h-12 rounded-lg bg-neutral-950 px-5 font-medium text-white hover:bg-neutral-800 focus-visible:ring-neutral-950">
+              {WHATSAPP_URL ? (
+                <a href={WHATSAPP_URL} rel="noreferrer" target="_blank" aria-label="Falar no WhatsApp (abre em nova aba)">
+                  <IconeWhatsApp className="size-5" />
+                  Falar no WhatsApp
+                  <ExternalLink className="size-4" aria-hidden="true" />
+                </a>
+              ) : (
+                <a href={`mailto:${EMAIL_CONTATO}`}>
+                  <Mail className="size-5" aria-hidden="true" />
+                  Enviar e-mail
+                </a>
+              )}
+            </Button>
+          </div>
         </section>
 
         <SobreVaggu />
@@ -225,18 +187,13 @@ export function LandingPage() {
                   </a>
                 </li>
                 <li>
-                  <a
+                  <Link
                     className="flex min-h-16 min-w-0 items-center gap-3 rounded-2xl border border-white/15 p-4 text-sm transition-colors hover:border-[#ffe100]/70 hover:bg-white/[0.04] focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#ffe100]"
-                    href={REPOSITORIO_URL}
-                    rel="noreferrer"
-                    target="_blank"
-                    aria-label="Repositório da VAGGU no GitHub (abre em nova aba)"
+                    to="/memorial"
                   >
-                    <svg className="size-5 shrink-0 fill-[#ffe100]" viewBox="0 0 24 24" aria-hidden="true">
-                      <path d="M12 .5a12 12 0 0 0-3.79 23.39c.6.11.82-.26.82-.58v-2.03c-3.34.73-4.04-1.42-4.04-1.42-.55-1.39-1.33-1.76-1.33-1.76-1.09-.75.08-.74.08-.74 1.2.08 1.83 1.23 1.83 1.23 1.07 1.83 2.8 1.3 3.49.99.11-.78.42-1.3.76-1.6-2.66-.3-5.46-1.33-5.46-5.93 0-1.31.47-2.38 1.24-3.22-.12-.3-.54-1.52.12-3.17 0 0 1.01-.32 3.3 1.23a11.5 11.5 0 0 1 6 0c2.29-1.55 3.3-1.23 3.3-1.23.66 1.65.24 2.87.12 3.17.77.84 1.24 1.91 1.24 3.22 0 4.61-2.8 5.63-5.47 5.92.43.37.81 1.1.81 2.22v3.29c0 .32.22.69.83.57A12 12 0 0 0 12 .5Z" />
-                    </svg>
-                    <span className="whitespace-nowrap">Repositório no GitHub</span>
-                  </a>
+                    <BookOpen className="size-5 shrink-0 text-[#ffe100]" aria-hidden="true" />
+                    <span>Memorial da VAGGU</span>
+                  </Link>
                 </li>
               </ul>
             </section>

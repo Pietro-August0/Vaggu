@@ -4,6 +4,7 @@ import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
 import { buscarEnderecoPorCep, ErroCep } from "@/servicos/cep"
+import { normalizarCnpj, normalizarCpf } from "@/servicos/documentos-fiscais"
 import type { DadosShopping, ShoppingAdmin } from "@/types/admin"
 
 interface FormularioShoppingProps {
@@ -21,6 +22,7 @@ export function FormularioShopping({ shopping, ocupado, rotuloBotao, aoEnviar }:
   const [etapa, setEtapa] = useState(0)
   const [cep, setCep] = useState("")
   const [avisoCep, setAvisoCep] = useState("")
+  const [erroDocumento, setErroDocumento] = useState<{ campo: string; mensagem: string } | null>(null)
   const formularioRef = useRef<HTMLFormElement>(null)
 
   useEffect(() => {
@@ -50,6 +52,21 @@ export function FormularioShopping({ shopping, ocupado, rotuloBotao, aoEnviar }:
   /** Valida somente controles da etapa visível e leva o foco ao primeiro campo inválido. */
   function validarEtapa(formulario: HTMLFormElement, indice: number) {
     const campos = formulario.querySelectorAll<HTMLInputElement>(`[data-etapa="${indice}"] input`)
+    if (indice === 0) {
+      for (const [nome, normalizar, mensagem] of [
+        ["cnpj", normalizarCnpj, "Informe um CNPJ válido."],
+        ["responsavelCpf", normalizarCpf, "Informe um CPF válido."],
+      ] as const) {
+        const controle = formulario.elements.namedItem(nome) as HTMLInputElement
+        const documento = controle.value.trim()
+        if (documento && documento !== shopping?.[nome] && !normalizar(documento)) {
+          setErroDocumento({ campo: nome, mensagem })
+          setEtapa(0)
+          window.requestAnimationFrame(() => controle.focus())
+          return false
+        }
+      }
+    }
     const invalido = Array.from(campos).find(campo => !campo.checkValidity())
     if (!invalido) return true
     setEtapa(indice)
@@ -80,7 +97,15 @@ export function FormularioShopping({ shopping, ocupado, rotuloBotao, aoEnviar }:
 
   const campo = (nome: keyof DadosShopping, rotulo: string, props: ComponentProps<"input"> = {}) => <div className="grid gap-2">
     <Label htmlFor={`shopping-${nome}`} className="text-neutral-950 dark:text-neutral-100">{rotulo}{props.required && <span className="text-amber-700 dark:text-[#ffe100]" aria-hidden="true"> *</span>}</Label>
-    <Input id={`shopping-${nome}`} name={nome} defaultValue={shopping?.[nome] ?? ""} className="h-11 border-white/15 bg-white/5 text-white placeholder:text-neutral-600" disabled={ocupado} {...props} />
+    <Input id={`shopping-${nome}`} name={nome} defaultValue={shopping?.[nome] ?? ""} className="h-11 border-white/15 bg-white/5 text-white placeholder:text-neutral-600" disabled={ocupado} {...props}
+      aria-invalid={erroDocumento?.campo === nome || undefined}
+      aria-describedby={erroDocumento?.campo === nome ? `shopping-${nome}-erro` : undefined}
+      onChange={evento => {
+        props.onChange?.(evento)
+        if (erroDocumento?.campo === nome) setErroDocumento(null)
+      }}
+    />
+    {erroDocumento?.campo === nome && <p id={`shopping-${nome}-erro`} className="text-sm text-red-700 dark:text-red-300">{erroDocumento.mensagem}</p>}
   </div>
 
   return <form ref={formularioRef} className="grid min-w-0 grid-cols-[minmax(0,1fr)] gap-5" onSubmit={enviar} autoComplete="off" noValidate>
@@ -88,7 +113,7 @@ export function FormularioShopping({ shopping, ocupado, rotuloBotao, aoEnviar }:
     <p className="text-sm text-neutral-300" role="status">Etapa {etapa + 1} de {etapas.length}: {etapas[etapa]}</p>
     <fieldset data-etapa="0" hidden={etapa !== 0} style={{ display: etapa === 0 ? undefined : "none" }} className="grid min-w-0 gap-5">
       <legend className="sr-only">Identificação do shopping</legend>
-      <div className="grid gap-5 md:grid-cols-[minmax(0,2fr)_minmax(14rem,1fr)]">{campo("nome", "Nome do shopping", { required: true, minLength: 2, maxLength: 120, placeholder: "Ex.: Shopping Central" })}{campo("cnpj", "CNPJ", { required: true, inputMode: "numeric", maxLength: 18, placeholder: "00.000.000/0000-00" })}</div>
+      <div className="grid gap-5 md:grid-cols-[minmax(0,2fr)_minmax(14rem,1fr)]">{campo("nome", "Nome do shopping", { required: true, minLength: 2, maxLength: 120, placeholder: "Ex.: Shopping Central" })}{campo("cnpj", "CNPJ", { required: true, maxLength: 18, placeholder: "00.000.000/0000-00" })}</div>
       <div className="grid gap-5 md:grid-cols-2">{campo("responsavelNome", "Responsável", { required: true, maxLength: 120 })}{campo("responsavelCpf", "CPF do responsável", { inputMode: "numeric", maxLength: 14, placeholder: "Opcional" })}</div>
       <div className="grid gap-5 md:grid-cols-2">{campo("emailCorporativo", "E-mail corporativo", { required: true, type: "email", maxLength: 254 })}{campo("telefone", "Telefone", { required: true, type: "tel", maxLength: 40 })}</div>
     </fieldset>

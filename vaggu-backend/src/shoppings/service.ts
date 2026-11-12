@@ -4,6 +4,8 @@ import { randomBytes } from 'node:crypto';
 import { hashPassword } from '../auth/password.js';
 import { ApiError, normalizeEmail, publicUser } from '../auth/service.js';
 
+import { normalizarCnpj, normalizarCpf } from './documentos-fiscais.js';
+
 const SITUACOES_IMPLANTACAO = new Set(['NOVO_ATENDIMENTO', 'EM_ANALISE', 'DOCUMENTACAO_PENDENTE', 'APROVADO', 'EM_CONFIGURACAO', 'AGUARDANDO_INSTALACAO', 'ATIVO', 'REJEITADO', 'INATIVO']);
 const PRAZO_DESFAZER_EXCLUSAO_MS = 7_000;
 const MARGEM_TRANSPORTE_DESFAZER_MS = 1_000;
@@ -40,7 +42,7 @@ function textoOpcional(value, nomeCampo, max = 200) {
   return text || null;
 }
 
-/** Mantém apenas dígitos e valida documentos/CEP pelo tamanho esperado. */
+/** Mantém apenas dígitos e valida CEP pelo tamanho esperado. */
 function digitosOpcionais(value: unknown, nomeCampo: string, tamanho: number): string | null {
   const texto = textoOpcional(value, nomeCampo, tamanho + 6);
   if (texto === null) return null;
@@ -49,6 +51,14 @@ function digitosOpcionais(value: unknown, nomeCampo: string, tamanho: number): s
     throw new ApiError(400, 'DADOS_INVALIDOS', `${nomeCampo} deve ter ${tamanho} dígitos.`);
   }
   return digitos;
+}
+
+function documentoOpcional(value: unknown, rotulo: string, normalizar: (texto: string) => string | null) {
+  const texto = textoOpcional(value, rotulo, 18);
+  if (texto === null) return null;
+  const documento = normalizar(texto);
+  if (!documento) throw new ApiError(400, 'DADOS_INVALIDOS', `Informe um ${rotulo} válido.`);
+  return documento;
 }
 
 /** Normaliza e valida e-mail corporativo sem alterar o e-mail de acesso dos gerentes. */
@@ -69,15 +79,15 @@ function horarioOpcional(value: unknown, nomeCampo: string): string | null {
 }
 
 /** Converte os campos permitidos em dados prontos para criação ou atualização. */
-function dadosShopping(body: Record<string, unknown> = {}, exigeNome = false) {
+function dadosShopping(body: Record<string, unknown> = {}, exigeNome = false, documentosAnteriores?: { cnpj: string | null; responsavelCpf: string | null }) {
   const data: Record<string, unknown> = {};
   const campo = (nome: string, converter: (valor: unknown) => unknown): void => {
     if (nome in body) data[nome] = converter(body[nome]);
   };
   if (exigeNome || 'nome' in body) data.nome = textoObrigatorio(body.nome, 'nome do shopping');
-  campo('cnpj', valor => digitosOpcionais(valor, 'CNPJ', 14));
+  campo('cnpj', valor => valor === documentosAnteriores?.cnpj ? valor : documentoOpcional(valor, 'CNPJ', normalizarCnpj));
   campo('responsavelNome', valor => textoOpcional(valor, 'nome do responsável', 120));
-  campo('responsavelCpf', valor => digitosOpcionais(valor, 'CPF do responsável', 11));
+  campo('responsavelCpf', valor => valor === documentosAnteriores?.responsavelCpf ? valor : documentoOpcional(valor, 'CPF do responsável', normalizarCpf));
   campo('emailCorporativo', emailOpcional);
   campo('telefone', valor => textoOpcional(valor, 'telefone', 40));
   campo('cep', valor => digitosOpcionais(valor, 'CEP', 8));
@@ -193,7 +203,7 @@ export function createShoppingsService(prisma, { now = () => new Date() }: { now
     /** Atualiza somente dados cadastrais permitidos, preservando estrutura e vínculos. */
     async atualizarShopping(shoppingId, body: Record<string, unknown> = {}) {
       const shopping = await exigirShopping(prisma, shoppingId);
-      const data = dadosShopping(body);
+      const data = dadosShopping(body, false, shopping);
       if (Object.keys(data).length === 0) {
         throw new ApiError(400, 'DADOS_INVALIDOS', 'Informe ao menos um dado do shopping para alterar.');
       }
