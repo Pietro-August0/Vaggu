@@ -1,5 +1,9 @@
 # Documentação da VAGGU
 
+**Refatoração de UX — 09/11/2026:** mapa como visão principal, diagnóstico e métricas técnicas sob demanda, filtros complementares em popups com pesquisa visível, atualização automática silenciosa e Admin abrindo o mapa. Ver [decisões, classificação e validação](simplificacao-paineis-2026-11-09.md).
+
+**Situação vigente:** consulte a [revisão de pendências de 09/11](planejamento-do-projeto.md#revisão-de-pendências--09112026). O aceite web confirmado em 04/11 permanece encerrado. Registros anteriores preservam os limites daquela etapa; mudanças posteriores e aceite físico são separados.
+
 **Decisão de escopo e aceite — 04/11/2026:** o usuário confirmou a homologação completa do site. O aceite web está encerrado por essa confirmação, sem nova execução em produção pelo agente nem hash de deploy adicional informado. O WhatsApp será demonstrativo: atendimento humano real, coleta comercial e protocolos deixam de ser requisitos desta entrega. Procedimentos de dados definidos em [operação do TCC](operacao-dados-tcc.md); hardware físico mantém aceite próprio.
 
 **Situação consolidada em 04/11/2026, após confirmação do usuário:** site completamente homologado; procedimentos de dados definidos para o TCC e WhatsApp demonstrativo sem atendimento humano obrigatório. Foco em evidências e apresentação; sensores mantêm aceite físico próprio. Ver [etapa atual, lacunas e prioridades](revisao-documental-2026-11-04.md).

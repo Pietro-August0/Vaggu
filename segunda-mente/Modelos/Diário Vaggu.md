@@ -5,7 +5,7 @@ tags: [vaggu, diario]
 ---
 # VAGGU — {{date:YYYY-MM-DD}}
 
-Diário geral: [[Atualizações diárias/{{date:YYYY-MM-DD}}]]
+Continuidade: [[Vaggu/Documentação/planejamento-do-projeto]].
 
 ## Objetivo e contexto
 

@@ -1,5 +1,7 @@
 # Revisão documental e situação do projeto — 04/11/2026
 
+**Leitura histórica:** resultados e pendências pertencem à data registrada. Para decisões posteriores, consulte a [revisão de pendências de 09/11](planejamento-do-projeto.md#revisão-de-pendências--09112026); o aceite web de 04/11, a dispensa de backup e o recorte demonstrativo do WhatsApp prevalecem.
+
 ## Em que etapa estamos
 
 A VAGGU está na **consolidação das evidências e preparação da apresentação do TCC (P11/E6)**. Em 04/11/2026, o usuário confirmou explicitamente que já homologou completamente o site. Esse aceite encerra a pendência web; não representa nova rodada de produção executada pelo agente, e o hash da versão testada não foi informado. O aceite físico sustentado dos sensores permanece separado.

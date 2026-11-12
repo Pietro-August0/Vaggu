@@ -1,5 +1,11 @@
 # VAGGU — fluxo de telas
 
+**Complemento posterior de 11/11:** o usuário forneceu nova referência de painel e pediu remover a faixa superior. [Configurações e organização vigentes](configuracoes-e-painel-2026-11-11.md) centralizam ações pessoais e usam quatro indicadores compactos, preservando o registro anterior como histórico.
+
+**Decisão posterior de 11/11:** nas análises, o usuário preferiu a composição anterior com categorias neutras, mais gráficos visíveis e técnicos recolhidos. Ver [hierarquia vigente](hierarquia-analises-2026-11-11.md); o diagnóstico datado abaixo permanece histórico.
+
+**Refatoração de UX — 09/11/2026:** mapa como visão principal, diagnóstico e métricas técnicas sob demanda, filtros complementares em popups com pesquisa visível, atualização automática silenciosa e Admin abrindo o mapa. Ver [decisões, classificação e validação](simplificacao-paineis-2026-11-09.md).
+
 **Decisão de escopo e aceite — 04/11/2026:** o usuário confirmou a homologação completa do site. O aceite web está encerrado por essa confirmação, sem nova execução em produção pelo agente nem hash de deploy adicional informado. O WhatsApp será demonstrativo: atendimento humano real, coleta comercial e protocolos deixam de ser requisitos desta entrega. Procedimentos de dados definidos em [operação do TCC](operacao-dados-tcc.md); hardware físico mantém aceite próprio.
 
 **Estado em 04/11/2026:** conexão real e menu clicável confirmados pelo participante. Apresentação com imagem/site e contato empresarial publicada em 7356e12; imagem, link e continuidade confirmados pelo participante em teste real; o histórico de implantação e as pendências reais estão no [processo e operação do WhatsApp](whatsapp-processo-e-operacao.md). Registros datados de adiamento abaixo são históricos.

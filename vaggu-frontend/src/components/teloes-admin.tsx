@@ -5,6 +5,7 @@ import { ApresentarTelao } from "@/components/apresentar-telao"
 import { useAppStore } from "@/app/app-store"
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
+import { Dialog, DialogContent, DialogDescription, DialogFooter, DialogHeader, DialogTitle, DialogTrigger } from "@/components/ui/dialog"
 import { objeto } from "@/servicos/api"
 import type { EstruturaEstacionamento } from "@/types/estrutura"
 
@@ -60,6 +61,8 @@ function Instalacao({ telao, estrutura, ocupado, salvar, revogar, excluir }: {
 export function TeloesAdmin({ shoppingId, estrutura }: { shoppingId?: string; estrutura: EstruturaEstacionamento }) {
   const { consultar } = useAppStore()
   const [filtro, setFiltro] = useState("ativos")
+  const [filtrosAbertos, setFiltrosAbertos] = useState(false)
+  const [filtroRascunho, setFiltroRascunho] = useState("ativos")
   const [busca, setBusca] = useState("")
   const [teloes, setTeloes] = useState<Telao[]>([])
   const [andarId, setAndarId] = useState("")
@@ -150,10 +153,20 @@ export function TeloesAdmin({ shoppingId, estrutura }: { shoppingId?: string; es
     {carregando && <p role="status" className="text-sm text-muted-foreground">Carregando telões…</p>}
     {falhouCarga && !carregando && <Button variant="outline" className="w-fit" onClick={() => void tentarNovamente()}>Tentar novamente</Button>}
     {!carregando && !falhouCarga && teloes.length === 0 && <p className="py-4 text-center text-sm text-muted-foreground">Nenhum telão cadastrado. Adicione a primeira tela acima.</p>}
-    <div className="grid gap-3 sm:grid-cols-2">
-      <label className="grid gap-1 text-sm font-medium">Buscar telão<Input value={busca} onChange={evento => setBusca(evento.target.value)} placeholder="Nome do telão" /></label>
-      <label className="grid gap-1 text-sm font-medium">Mostrar<select className={estiloSelect} value={filtro} onChange={evento => setFiltro(evento.target.value)}><option value="ativos">Ativos ({teloes.filter(t => t.ativo).length})</option><option value="revogados">Revogados ({teloes.filter(t => !t.ativo).length})</option><option value="todos">Todos ({teloes.length})</option></select></label>
+    <div className="flex flex-wrap items-end gap-3">
+      <label className="grid min-w-0 flex-1 gap-1 text-sm font-medium">Buscar telão<Input type="search" value={busca} onChange={evento => setBusca(evento.target.value)} placeholder="Nome do telão" /></label>
+      <Dialog open={filtrosAbertos} onOpenChange={aberto => { if (aberto) setFiltroRascunho(filtro); setFiltrosAbertos(aberto) }}>
+        <DialogTrigger asChild><Button type="button" variant="outline" className="min-h-11">Filtros{filtro !== "todos" ? " (1)" : ""}</Button></DialogTrigger>
+        <DialogContent className="max-h-[calc(100dvh-2rem)] overflow-y-auto [&_button]:min-h-11">
+          <DialogHeader><DialogTitle>Filtros dos telões</DialogTitle><DialogDescription>Escolha quais instalações aparecem na lista.</DialogDescription></DialogHeader>
+          <form className="grid gap-4" onSubmit={evento => { evento.preventDefault(); setFiltro(filtroRascunho); setFiltrosAbertos(false) }}>
+            <label className="grid gap-1 text-sm font-medium">Mostrar<select className={estiloSelect} value={filtroRascunho} onChange={evento => setFiltroRascunho(evento.target.value)}><option value="ativos">Ativos ({teloes.filter(t => t.ativo).length})</option><option value="revogados">Revogados ({teloes.filter(t => !t.ativo).length})</option><option value="todos">Todos ({teloes.length})</option></select></label>
+            <DialogFooter><Button type="button" variant="ghost" onClick={() => { setFiltro("todos"); setFiltrosAbertos(false) }}>Limpar filtros</Button><Button type="button" variant="outline" onClick={() => setFiltrosAbertos(false)}>Cancelar</Button><Button type="submit">Aplicar filtros</Button></DialogFooter>
+          </form>
+        </DialogContent>
+      </Dialog>
     </div>
+    {filtro !== "todos" && <p className="text-xs text-muted-foreground">Exibindo telões {filtro === "ativos" ? "ativos" : "com acesso revogado"}.</p>}
     {!carregando && teloes.length > 0 && !teloes.some(t => (filtro === "todos" || t.ativo === (filtro === "ativos")) && t.nome.toLocaleLowerCase("pt-BR").includes(busca.trim().toLocaleLowerCase("pt-BR"))) && <p role="status" className="text-sm text-muted-foreground">Nenhum telão corresponde aos filtros.</p>}
     {teloes.filter(t => (filtro === "todos" || t.ativo === (filtro === "ativos")) && t.nome.toLocaleLowerCase("pt-BR").includes(busca.trim().toLocaleLowerCase("pt-BR"))).map(telao => <Instalacao key={`${telao.id}:${telao.andarId}:${telao.setorId}`} telao={telao} estrutura={estrutura} ocupado={ocupado} salvar={salvar} revogar={revogar} excluir={excluir}/>)}
   </section>

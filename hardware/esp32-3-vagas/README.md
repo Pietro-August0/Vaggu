@@ -215,7 +215,7 @@ Invoke-RestMethod 'http://localhost:3000/api/v1/health/ready'
 Invoke-RestMethod 'http://192.168.1.100:3000/api/v1/health/ready'
 ```
 
-Teste a segunda URL também no navegador de um celular na mesma rede. Se falhar, confira HOST, IP, rede de convidados/isolamento e Firewall do Windows. Permita Node.js/porta 3000 somente na rede privada confiável, sem desativar o firewall inteiro. HTTP expõe a chave na rede: use esta configuração apenas na bancada privada. O firmware fornecido não implementa HTTPS; para serviço publicado, adicionar cliente TLS com validação de certificado, sem `setInsecure()`.
+Teste a segunda URL também no navegador de um celular na mesma rede. Se falhar, confira HOST, IP, rede de convidados/isolamento e Firewall do Windows. Permita Node.js/porta 3000 somente na rede privada confiável, sem desativar o firewall inteiro. HTTP expõe a chave na rede: use esta configuração apenas na bancada privada. O firmware atual implementa HTTPS em `transporte.h`, com bundle de certificados e relógio NTP; HTTP privado exige habilitação explícita. O aceite ponta a ponta do piloto publicado permanece separado; não usar `setInsecure()`.
 
 ## 2. Provisionar uma placa e três sensores
 

@@ -1,7 +1,7 @@
 /** Edição direta das vagas; mantém o rascunho até salvar a revisão do piso. */
 import { useEffect, useId, useMemo, useRef, useState, type PointerEvent, type KeyboardEvent } from "react"
 import { useBlocker } from "react-router-dom"
-import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogDescription, DialogFooter } from "@/components/ui/dialog"
+import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogDescription, DialogFooter, DialogTrigger } from "@/components/ui/dialog"
 import { Button } from "@/components/ui/button"
 import type { AndarEstrutura, PosicaoVaga } from "@/types/estrutura"
 
@@ -32,6 +32,8 @@ export function EditorMapaVagas({ andar, ocupado, aoSalvar, aoMudarRascunho }: {
   const [selecionada, setSelecionada] = useState(vagas[0]?.id ?? "")
   const [buscaVaga, setBuscaVaga] = useState("")
   const [setorFiltro, setSetorFiltro] = useState("TODOS")
+  const [filtrosAbertos, setFiltrosAbertos] = useState(false)
+  const [setorRascunho, setSetorRascunho] = useState("TODOS")
   const [alterado, setAlterado] = useState(false)
   const bloqueio = useBlocker(alterado)
   const [aviso, setAviso] = useState("")
@@ -105,8 +107,20 @@ export function EditorMapaVagas({ andar, ocupado, aoSalvar, aoMudarRascunho }: {
     <div className="flex flex-wrap items-end gap-3 rounded-xl border p-3">
       <div className="grid min-w-0 flex-1 gap-2 sm:grid-cols-2 lg:grid-cols-3">
         <div className="grid gap-1 text-sm font-semibold"><label htmlFor={`${selecaoId}-busca`}>Buscar vaga ou sensor</label><input id={`${selecaoId}-busca`} type="search" className="min-h-11 min-w-0 rounded-md border bg-background px-3" placeholder="Código, setor ou sensor" value={buscaVaga} onChange={e => setBuscaVaga(e.target.value)} /></div>
-        <div className="grid gap-1 text-sm font-semibold"><label htmlFor={`${selecaoId}-setor`}>Setor</label><select id={`${selecaoId}-setor`} className="min-h-11 min-w-0 rounded-md border bg-background px-3" value={setorFiltro} onChange={e => setSetorFiltro(e.target.value)}><option value="TODOS">Todos os setores</option>{setores.map(setor => <option key={setor} value={setor}>{setor}</option>)}</select></div>
         <div className="grid gap-1 text-sm font-semibold"><label htmlFor={selecaoId}>Vaga selecionada</label><select id={selecaoId} className="min-h-11 min-w-0 rounded-md border bg-background px-3" value={selecionada} disabled={ocupado || vagas.length === 0} onChange={e => setSelecionada(e.target.value)}>{vaga && !vagasEncontradas.some(item => item.id === vaga.id) && <option value={vaga.id}>{vaga.codigo} · {vaga.setor} (fora do filtro)</option>}{vagasEncontradas.map(item => <option key={item.id} value={item.id}>{item.codigo} · {item.setor}{item.monitoramento ? ` · ${item.monitoramento.sensorCodigo}` : ""}</option>)}</select></div>
+        <div className="flex flex-wrap items-end gap-2">
+          <Dialog open={filtrosAbertos} onOpenChange={aberto => { if (aberto) setSetorRascunho(setorFiltro); setFiltrosAbertos(aberto) }}>
+            <DialogTrigger asChild><Button type="button" variant="outline" className="min-h-11">Filtros{setorFiltro !== "TODOS" ? " (1)" : ""}</Button></DialogTrigger>
+            <DialogContent className="max-h-[calc(100dvh-2rem)] overflow-y-auto [&_button]:min-h-11">
+              <DialogHeader><DialogTitle>Filtros do editor</DialogTitle><DialogDescription>Escolha o setor para encontrar uma vaga.</DialogDescription></DialogHeader>
+              <form className="grid gap-4" onSubmit={evento => { evento.preventDefault(); setSetorFiltro(setorRascunho); setFiltrosAbertos(false) }}>
+                <div className="grid gap-1 text-sm font-semibold"><label htmlFor={`${selecaoId}-setor`}>Setor</label><select id={`${selecaoId}-setor`} className="min-h-11 min-w-0 rounded-md border bg-background px-3" value={setorRascunho} onChange={e => setSetorRascunho(e.target.value)}><option value="TODOS">Todos os setores</option>{setores.map(setor => <option key={setor} value={setor}>{setor}</option>)}</select></div>
+                <DialogFooter><Button type="button" variant="ghost" onClick={() => { setSetorFiltro("TODOS"); setFiltrosAbertos(false) }}>Limpar filtros</Button><Button type="button" variant="outline" onClick={() => setFiltrosAbertos(false)}>Cancelar</Button><Button type="submit">Aplicar filtros</Button></DialogFooter>
+              </form>
+            </DialogContent>
+          </Dialog>
+          {setorFiltro !== "TODOS" && <span className="text-xs text-muted-foreground">Setor: {setorFiltro}</span>}
+        </div>
         <p role="status" className="text-xs font-normal text-muted-foreground sm:col-span-2 lg:col-span-3">{vagasEncontradas.length} de {vagas.length} vagas encontradas. {vaga ? `Selecionada: ${vaga.codigo} · ${vaga.setor}.` : ""}</p>
       </div>
       <Button variant="outline" disabled={ocupado || !vaga} onClick={() => redimensionar(1.1)}>Aumentar vaga</Button>

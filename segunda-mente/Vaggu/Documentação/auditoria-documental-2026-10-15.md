@@ -1,5 +1,7 @@
 # Auditoria documental e pendências — 15/10/2026
 
+**Leitura histórica:** resultados e pendências pertencem à data registrada. Para decisões posteriores, consulte a [revisão de pendências de 09/11](planejamento-do-projeto.md#revisão-de-pendências--09112026); o aceite web de 04/11, a dispensa de backup e o recorte demonstrativo do WhatsApp prevalecem.
+
 Base funcional inspecionada: commit `c505b78`. Esta revisão compara o repositório com seus documentos; não certifica hardware, produção ou ausência absoluta de defeitos. As alterações desta auditoria são documentais e no verificador, sem implementar os módulos pendentes.
 
 ## Resultado

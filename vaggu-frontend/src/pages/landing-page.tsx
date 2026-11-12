@@ -20,6 +20,7 @@ import { EMAIL_CONTATO, INSTAGRAM_URL, WHATSAPP_URL } from "@/lib/constants"
 /** Reúne conteúdo comercial estático, imagens e animações; o contato usa o link compartilhado. */
 export function LandingPage() {
   useScrollReveal()
+  const contatoUrl = WHATSAPP_URL ?? `mailto:${EMAIL_CONTATO}`
 
   return (
     <MotionConfig reducedMotion="user">
@@ -78,7 +79,12 @@ export function LandingPage() {
                     size="lg"
                     variant="outline"
                   >
-                    <a aria-label="Falar com a VAGGU pelo WhatsApp (abre em nova aba)" href={WHATSAPP_URL} rel="noreferrer" target="_blank">
+                    <a
+                      aria-label={WHATSAPP_URL ? "Falar com a VAGGU pelo WhatsApp (abre em nova aba)" : "Falar com a VAGGU por e-mail"}
+                      href={contatoUrl}
+                      rel={WHATSAPP_URL ? "noreferrer" : undefined}
+                      target={WHATSAPP_URL ? "_blank" : undefined}
+                    >
                       Falar com a VAGGU
                       <ArrowRight className="size-5" aria-hidden="true" />
                     </a>

@@ -1,5 +1,11 @@
 # VAGGU — planejamento e continuidade do projeto
 
+## Integração das alterações com a main — 12/11/2026
+
+A integração preserva a landing com acesso ao Memorial, a consulta silenciosa do mapa e a nova visão geral administrativa. O mapa incorpora o diálogo de filtros da branch remota e mantém a legenda antes das vagas. O painel de análises usa os gráficos e o diálogo da branch remota com textos de ausência de leituras revisados.
+
+Verificados build e lint do frontend, `npm --prefix vaggu-backend test` (100 aprovados, 12 ignorados), links do projeto e `git diff --check`. O navegador foi conferido com API simulada. A suíte `test:integracao` parou na criação do banco PostgreSQL isolado, antes de executar os fluxos que dependem dele.
+
 ## Visão geral dos shoppings no Admin — 12/11/2026
 
 Os indicadores ficam em uma faixa única. Os cartões reúnem situação de implantação, endereço, contagens de estrutura e gerentes, e lacunas do cadastro. O filtro mostra os shoppings que precisam de atenção e cada cartão leva à ficha.
@@ -107,6 +113,93 @@ Executados `py -m pip install --user imageio-ffmpeg`, o gerador `py scripts/gera
 ## Revisão do README — 11/11/2026
 
 README simplificado, com os badges amarelos e escuros da stack, captura do mapa e link para o ensaio local da bancada de três vagas. A consulta HTTP aos oito SVGs do Shields.io confirmou os ícones incorporados. Verificação documental com `node scripts/verificar-documentacao.mjs` e `git diff --check`. A revisão se limita à documentação e reutiliza as capturas existentes. A renderização no GitHub ficou sem conferência. A skill de roteamento VAGGU continua indisponível nas buscas locais.
+
+## Comentários do navegador — 11/11/2026
+
+Cinco ajustes solicitados após observação do site publicado: contraste das categorias com ícones/números coloridos; gráficos com alturas compatíveis sem lacuna externa e comparação abaixo; remoção de Cadastro atual do recorte; Filtros à esquerda junto ao período; pesquisa/filtros/diagnóstico antes dos andares no mapa. Sem alteração de métricas, API ou regras de disponibilidade. Roteamento UI/UX: Juan/Elisa como referências, sem atribuir participação real; integração na branch local `codex/fix/pendencias-tcc-pietro`, base `acfc4a76`, identidade Git existente preservada. Playwright usado porque o plugin Browser não está disponível nesta sessão. Capturas fictícias em três viewports nos dois temas e desktop amplo1625×884 nas análises. Comandos: build/lint frontend, scripts focados de composição e ordem do mapa em ambiente.local, verificador documental e diff check. Evidências e limites no índice; envio à main segue autorização vigente do usuário, sem inferir publicação Render.
+
+## Fechamento para envio à main — 11/11/2026
+
+Atualizações autorizadas pelo usuário para envio direto à main, partindo de `185c0bbc`. Build e lint frontend aprovados; backend: 100 testes aprovados e 12 integrações ignoradas por ausência de TEST_DATABASE_URL. A primeira execução isolada falhou por EACCES nas conexões locais; repetida fora do isolamento com sucesso. Revisão estática sem bloqueios ou padrões de credenciais; evidências visuais atuais com dados fictícios. Verificador documental e diff check aprovados. O envio ao Git não comprova implantação Render nem validação do site publicado. [Pendências vigentes](../Planejamento/Próximos%20passos.md#estado-vigente--11112026): versão publicada, evidência WhatsApp, limites da bancada e ensaio do TCC; dependências residuais em manutenção. Nenhuma coautoria ou aprovação da equipe foi atribuída.
+
+## Alinhamento do resumo — 11/11/2026
+
+Correção CSS da altura relativa de ícones, valores e títulos nos quatro indicadores, com região de apoio reservada e bordas uniformes. Sem mudança de API ou métricas. QA local `node ambiente.local/alinhamento-resumo-qa.cjs`: três viewports/dois temas, posições medidas, cobertura parcial/100%/ausente, estados/filtros/teclado/exportações. Comandos de build/lint frontend, verificador documental e diff check. Mesma branch local/base185c0bbc, alterações preservadas; sem commit/publicação.
+
+## Cobertura no resumo — 11/11/2026
+
+Aviso parcial movido do topo para apoio do indicador Ocupação média, com percentual e ressalva de tempo observado. [Registro](clareza-analises-2026-11-11.md). Validação local: build/lint, `node ambiente.local/cobertura-resumo-qa.cjs`, três viewports e dois temas, coberturas parcial/100%/ausente, ausência de observações e falha/recuperação; `node scripts/verificar-documentacao.mjs` e `git diff --check`. Mesma branch local/base185c0bbc, alterações anteriores preservadas, sem commit/publicação ou dados reais.
+
+## Clareza das análises — continuação de 11/11/2026
+
+[Decisões e limites](clareza-analises-2026-11-11.md): total fora da rosca, card sem esticar, explicações curtas e indicadores legíveis no celular. Sem leitura e indisponíveis mantidos separados conforme semântica do servidor. Mesma branch local/base, sem publicação e sem descartar alterações anteriores. Validação: build/lint frontend, seis combinações de viewport/tema, 42 PNGs, teclado/filtros/avançados/exportação Excel-PDF, ausência/falha/recuperação, sem overflow ou console inesperado; roteiro `node ambiente.local/clareza-analises-qa.cjs`. Conferência documental com `node scripts/verificar-documentacao.mjs` e `git diff --check`. Limite: fixtures locais, sem prova de publicação ou hardware.
+
+## Painel e configurações — complemento de 11/11/2026
+
+Atendida nova referência visual e a remoção da faixa superior solicitada pelo usuário. Configurações centraliza conta, claro/escuro, solicitar alterações (gerente) e saída; navegação operacional permanece limpa. Desktop sem faixa de contexto; celular/tablet com menu/config compactos. Conta na mesma janela, senha preexistente preservada e rotas legadas compatíveis. Análises com quatro cartões compactos, categorias discretas abaixo e gráfico principal maior. [Decisões e limites](configuracoes-e-painel-2026-11-11.md).
+
+Build/lint frontend e QA de 12 combinações perfil/viewport/tema aprovados. 94 PNGs atuais, incluindo mapa/editor para atualizar README. Validado PATCH de conta simulado, senha sem preenchimento, modo claro/escuro, rotas de conta, foco e logout com falha/sucesso, sem envio ao contato externo ou conta real. Roteiros `ambiente.local/painel-configuracoes-qa.cjs` e `painel-configuracoes-prints.cjs`, ignorados pelo Git. Verificador documental e diff conferidos antes da entrega; build mantém aviso de chunks grandes. Revisão estática independente sem regressão bloqueadora; acrescentado H1 apenas acessível para preservar navegação por título sem reintroduzir faixa visual.
+
+Mesma branch local e base, alterações anteriores preservadas; sem commit, push, publicação, credencial/banco real, backend ou hardware alterados. A conferência publicada e a avaliação com usuários permanecem separadas da prova local.
+
+## Hierarquia das análises — ajuste de 11/11/2026
+
+Usuário preferiu a composição anterior e pediu hierarquia em vez de ocultação extensa. [Revisão vigente](hierarquia-analises-2026-11-11.md): categorias em faixa neutra, resumo com ocupação média/entradas/tempo médio, evolução e fotografia da consulta, movimento e setores visíveis; técnicos em Dados avançados. Filtros em popup e atualização silenciosa preservados. Build/lint passaram; seis cenários de largura/tema com 36 PNGs, filtros, teclado, exportações e estados de ausência/falha aprovados com fixtures de navegador. README, mapa e galeria atualizados. Sem mudança de API, dependências, dados reais ou identidade Git; mesma branch local, sem commit/publicação. Limites e comandos completos no registro.
+
+## Simplificação dos painéis — execução de 09/11, fechamento em 11/11/2026
+
+Aplicado o brief profissional fornecido pelo usuário: mapa como principal, diagnóstico secundário e dados técnicos recolhidos, atualização saudável sem barra/horário piscando, análise com três indicadores principais e dois gráficos, filtros de mapa/diagnóstico/editor/telões/análise em popup e pesquisa visível. Admin abre no mapa; configuração e manutenção permanecem disponíveis. Sem mudanças de backend, autenticação, banco, firmware ou dados do produto.
+
+[Diagnóstico em quatro classes, mudanças, preservação de capacidades e limites](simplificacao-paineis-2026-11-09.md). [Galeria da entrega](../Evidências%20visuais/2026-11-09%20-%20Simplificacao%20dos%20paineis/README.md): 114 PNGs, seis combinações desktop/tablet/celular e claro/escuro, com dados fictícios somente no navegador. Browser plugin ausente; Edge/Playwright autorizado fora do isolamento. O roteiro validou rascunhos/cancelamento/limpeza, filtros durante polling, busca em outro andar, diagnóstico/detalhes e retorno de foco, ausência de observação, consulta lenta/falha/recuperação, downloads Excel/PDF, manutenção e edição por teclado/desfazer/conflito. Inclui proteção de navegação do gerente, sem alegar novo ensaio de autorização do servidor.
+
+Comandos aprovados: `npm.cmd --prefix vaggu-frontend run build`, `npm.cmd --prefix vaggu-frontend run lint`, `node ambiente.local/ux-simplificacao-qa.cjs`, `node scripts/verificar-documentacao.mjs` (1151 arquivos e 62 Markdown com links/âncoras válidos) e `git diff --check`. Build mantém aviso de chunks grandes. A revisão de código identificou e corrigiu feedback de salvamento oculto, foco após diagnóstico e sobreposição da exportação; os prints também levaram ao ajuste da largura da pesquisa e compactação de indicadores no celular. Nenhum erro inesperado de console ou overflow da página na matriz final; respostas 503/409 foram falhas deliberadas de QA. README aponta às novas experiências afetadas, preservando imagens anteriores.
+
+Alterações anteriores preservadas na branch somente local `codex/fix/pendencias-tcc-pietro`, base `20205056`, sem troca de identidade ou branch. Elisa indicada para UX, Juan para UI, Pietro para integração e Ana para documentação, sem aprovação/coautoria atribuída. Sem commit, push, PR, publicação ou mensagens. A entrega exige conferência no ambiente de destino quando publicada e avaliação de uso com pessoas; não reabre o aceite histórico de 04/11 nem comprova hardware/produção.
+
+## Correções de contato, dependências e apresentação — 09/11/2026
+
+Continuação autorizada pelo usuário após a revisão de pendências. Branch somente local `codex/fix/pendencias-tcc-pietro`, base `20205056`; preservadas todas as alterações documentais anteriores. O nome inicial da continuação foi `codex/fix/contato-apresentacao-juan`; ajustado ao incluir backend. Responsável primário indicado: Pietro para integração; Juan para frontend, Kamilly/Samuel para revisão técnica de dependências/telemetria e Ana para documentação, sem aprovação ou coautoria atribuída. Identidade Git preservada; sem commit, PR, push ou publicação.
+
+- **Contatos corrigidos:** a conferência no navegador ampliou o achado de dois para quatro links: hero, card, Sobre e operação. Quando o número é vazio/inválido, usam e-mail empresarial com rótulos, ícones e abertura coerentes. Número válido preserva o WhatsApp; rodapé/404 mantêm suas guardas. Os três TSX passaram por revisão independente sem achados acionáveis.
+- **Apresentação:** o usuário informou duas possibilidades, **30/11 ou 03/12/2026**, e duração habitual de **10–20 minutos**. Data definitiva e horário seguem sem confirmação. [Canva utilizado](https://canva.link/pd7uk2f8llcr498) abriu no navegador como “TCC- Vaggu”; capa identificada, sem revisão integral ou edição dos slides. O [cenário](cenario-de-apresentacao.md) registra a referência e um roteiro proposto nos limites de 10/20 minutos, substituindo a antiga previsão de 20–25 minutos.
+- **Backend:** lockfile atualiza body-parser 2.3.0→2.4.0, proxy-addr 2.0.7→2.0.8, fast-uri 3.1.7→3.1.9 e qs 6.16.0→6.17.1. Auditoria atual: **4→0 alertas**. Build aprovado; suíte sem variáveis de banco do processo: **100 testes aprovados, 12 integrações ignoradas, zero falhas**. WhatsApp **19/19**, incluindo seis opções e contratação demonstrativa, com persistência/transporte simulados. Não comprova banco ou Meta reais.
+- **Frontend:** Vite 8.2.2→8.2.6, faixa mínima `^8.2.6`, e transitivos atualizados nas faixas permitidas, incluindo Zod principal 4.5.4→4.6.7. Auditoria atual: **31→17 alertas**, zero críticos, 2 altos, 14 moderados e 1 baixo. Restam cadeias de Zod3/shadcn, minimatch, deepmerge e uuid/ExcelJS; corrigir exige avaliação própria de versões principais ou dependência sem patch direto. Não aplicado `audit fix --force`, que propunha downgrades. Não equivale a 17 vulnerabilidades exploráveis no código publicado; o uso concreto e a cadeia precisam ser analisados.
+- **Comandos e limites:** auditorias `npm audit --json`, atualizações dirigidas com `--ignore-scripts`, sem force/majors novos; build backend, `node --test dist/test/whatsapp.test.js`, suíte backend com conexões reais removidas do processo, `npm run build` e `npm run lint` frontend. Build/lint aprovados após atualizar dependências. Build mantém chunks de aproximadamente 757 kB (principal) e 929 kB (ExcelJS carregado sob demanda); isso é medida do artefato local, não ensaio de carga/latência em produção. Polling de 500 ms preservado; não alterado sem medição do destino.
+
+**Verificação visual:** matriz de 18 cenários e capturas em [Contato sem WhatsApp](../Evidências%20visuais/2026-11-09%20-%20Contato%20sem%20WhatsApp/README.md). Browser plugin not available; Playwright/Edge autorizado fora do isolamento. A primeira inicialização do Edge falhou no isolamento e o Vite isolado ficou inacessível ao navegador externo. O cache compartilhado de três Vites gerou EPERM/504; configurações temporárias ESM com caches separados passaram a isolar cada cenário. Roteiros/configurações somente em `ambiente.local`, ignorados pelo Git. O aviso da biblioteca Motion sobre movimento reduzido é esperado. Nada desse diagnóstico foi tratado como falha de produção.
+
+**Resultado final da continuação:** 18/18 cenários de contato aprovados com Vite 8.2.6, 72 PNGs atuais, três viewports e dois temas; destinos e Enter nos quatro contatos conferidos, sem links sem `href`, overflow, overlay ou erros inesperados. Prints representativos de celular, tablet e desktop inspecionados visualmente após concluir transições. `node scripts/verificar-documentacao.mjs` aprovado com 1034 arquivos cobertos e 60 documentos Markdown; `git diff --check` sem erros. Revisão estática independente dos TSX sem achados acionáveis. O README mantém capturas históricas do percurso com número válido, cuja experiência visível foi preservada.
+
+**Continuidade:** conferir publicação das revisões recentes do WhatsApp e capturar o cliente real anonimizado quando houver sessão; ensaiar sensores físicos/piloto HTTPS e apresentação; avaliar alertas residuais e medir carga/polling no ambiente de destino. Nenhum envio real, alteração em banco, regravação de ESP32, publicação ou edição do Canva executados nesta rodada. Aceite web de 04/11, dispensa de backup e recorte demonstrativo permanecem preservados.
+
+## Revisão de pendências — 09/11/2026
+
+Revisão solicitada pelo usuário na branch local `docs/revisao-pendencias-ana`, criada da `origin/main` atualizada em `20205056`, com árvore inicial limpa. Ana Clara é a responsável documental indicada pelo roteamento; Samuel e Pietro são revisores sugeridos de escopo e integração, sem aprovação ou coautoria atribuída. Identidade Git preservada; sem commit, push ou publicação nesta revisão.
+
+Este quadro prevalece sobre diagnósticos antigos. Conferimos documentação, scripts reais dos pacotes, código e testes versionados. O aceite web de 04/11 foi confirmado pelo usuário; não é uma nova execução em produção pelo agente. Nenhum serviço externo, banco, hardware ou conversa WhatsApp foi exercitado nesta revisão.
+
+| Item encontrado | Estado confirmado e encaminhamento |
+| --- | --- |
+| Homologação geral do site / P07 e P08 | Encerrada pela confirmação do usuário em 04/11. Corrigidas tabelas que ainda a apresentavam aberta. Alterações posteriores exigem suas próprias evidências. |
+| Equipamentos, manutenção, ocorrências, mapa/editor, filtros, métricas e exportações | Implementados. Históricos que os apresentavam ausentes não são backlog atual. Preservados os limites de snapshots legados e da capacidade histórica. |
+| Figma e design | Site aprovado em 16/10; reprodução exata dispensada. Conciliação documental de tokens e conferência de contraste continuam melhorias específicas, sem reabrir aprovação visual. |
+| P06 / ESP32 | Ensaio local inicial dos três canais registrado em 21/10. Permanecem ensaio sustentado, reinício/silêncio/retorno, tempos finais e comprovação ponta a ponta do piloto HTTPS. TLS já está implementado em `transporte.h`; corrigida afirmação contrária no guia. |
+| Parâmetros da telemetria | Código: confirmação padrão 30000 ms, lacuna 15000 ms, timeouts de placa/sensor 120000 ms e job de expiração 30000 ms. Horário do servidor é a autoridade. Mapa tenta renovar a cada 500 ms; telão instalado usa 15 s e validade visual de 30 s. Ajustes históricos de bancada não comprovam configuração atual de produção. |
+| WhatsApp / P10 | Conexão e percurso com imagem/site/recursos/retorno confirmados em 04/11. Código de 06/11 possui seis opções, incluindo contratação demonstrativa. Conferência publicada das mudanças de 05–06/11 e captura anonimizada continuam específicas; falta de sessão impede a captura real. Atendimento humano, coleta comercial e protocolos dispensados no TCC. |
+| Backup, retenção e contingência | Procedimentos definidos em `operacao-dados-tcc.md`; backup dispensado expressamente no recorte TCC. Expurgo automático não implementado nem exigido. Implantação comercial exigiria revisão própria. |
+| CTAs sem número válido | Corrigidos na continuação de 09/11: quatro contatos (hero, card, Sobre e operação) usam e-mail quando o número está vazio/inválido; rótulos e ícones acompanham o canal. Rodapé e 404 preservam suas guardas. Evidências e verificações registradas na continuação abaixo. |
+| Desempenho, dependências e simplificação | Medir polling/chunks no destino; reavaliar auditoria de dependências antes de citar contagens antigas. Etapas restantes do plano de simplificação são propostas, não bloqueadores automaticamente aceitos. |
+| P11 / apresentação e personas | Datas possíveis informadas em 09/11: 30/11 ou 03/12/2026; duração habitual de 10–20 minutos. Confirmar escolha/horário e ensaiar o hardware que for utilizado; instalação física de telão somente se adotada. Validação com representantes das personas não tem pesquisa registrada. |
+| Power BI e evoluções | Publicação Power BI opcional. Reativação de shopping excluído e tela de atendimentos não implementadas; não são requisitos novos desta revisão. |
+| “Pendente” no código | Troca obrigatória de senha, cadastro incompleto, estado candidato de sensor, comparação e requisições em voo são estados operacionais legítimos. Busca por marcadores TODO/FIXME/HACK/XXX não encontrou tarefas de implementação nesses formatos; não removemos esses estados. |
+
+**Rotina abandonada removida:** excluídos os seis registros de `segunda-mente/Atualizações diárias/` e o modelo de diário geral, conforme pedido. Conteúdo VAGGU já representado nos diários técnicos foi mantido; contexto da criação da segunda mente e cancelamento da rotina incorporado aos diários de 11/09 e 06/11. Corrigidos índice, rotina, modelos, ideias, artigos e vínculos dos diários. Plugin de notas diárias desativado; sua configuração aponta para o diário VAGGU se for reativado manualmente, evitando recriar a pasta abandonada. Nenhum agendamento externo foi alterado nesta revisão.
+
+**Verificações:** `git fetch origin`, inspeção de status/branch/diffs e busca com `rg` por pendências e sinônimos em documentação e fontes; leitura dirigida dos contratos, configuração, polling, CTAs e menu WhatsApp. Validação final: `node scripts/verificar-documentacao.mjs` e `git diff --check`. Alterações somente em documentação/configuração do cofre; builds, testes do produto e navegador não foram repetidos. Resultados de execuções anteriores permanecem datados, sem serem atribuídos a esta sessão.
+
+**Continuidade atualizada:** contatos corrigidos na continuação abaixo; conferir mudanças recentes do WhatsApp no destino, fechar ensaio físico e preparar a apresentação de 10–20 minutos para 30/11 ou 03/12. Não reabrir aceite web, backup ou atendimento comercial dispensados.
+
+**Resultado da validação de 09/11:** verificador aprovado com 961 arquivos cobertos e 59 documentos Markdown com links e âncoras locais válidos; `git diff --check` sem erros. JSONs do Obsidian válidos e ausência da pasta abandonada confirmada. Revisão documental independente do diff sem perda material de contexto identificada.
 
 ## Grades de Nossos momentos juntos — 06/11/2026
 
@@ -490,6 +583,8 @@ Os registros datados abaixo preservam a informação disponível em cada etapa; 
 
 ## 1. Situação atual
 
+**Seção histórica:** o título original foi preservado para manter a navegação. Os relatos e o resumo de lacunas abaixo descrevem as revisões datadas de setembro/outubro. O quadro de 09/11 no início deste documento registra o estado vigente.
+
 ### Auditoria documental e pendências — 15/10
 
 - Revisados código, rotas, schema, sprints, índices, PRD/TRD/SSD e aceite sobre `c505b78`. Corrigidos os resumos que ainda listavam validade do mapa, seleção de período e Excel/PDF como ausentes, além da afirmação incorreta de atualização automática de leituras na tela.
@@ -599,6 +694,8 @@ Classificações: **verificado** exige execução do comportamento indicado; **p
 - A documentação de produto, telas, configuração e arquitetura foi alinhada ao novo escopo. A remoção foi validada por typecheck e testes do backend, lint e build do frontend; a integração PostgreSQL aprovou 33/33 cenários em banco descartável.
 
 ## 2. O que foi implementado
+
+**Inventário histórico:** esta tabela reúne o diagnóstico anterior às entregas de 19–21/10 e aos aceites de novembro. Itens nela descritos como ausentes ou parciais devem ser confrontados com a revisão de 09/11; não representam tarefas automaticamente abertas.
 
 | Área | Estado atual | Evidência e limite |
 | --- | --- | --- |
@@ -1300,3 +1397,18 @@ Reduzida TELEMETRIA_CONFIRMACAO_MS de 2000 para 1000 somente no `.env` local ign
 ### Aceite do teste local — 10/11/2026
 
 Equipe confirmou o funcionamento do protótipo. Revisadas três fotos e os quadros dos dois vídeos de 11,73 s e 14 s. A gravação integrada mostra LEDs e mapa das três vagas livres → ocupadas → livres. Cinco originais preservados na pasta privada ignorada; referência no [registro do ensaio](ensaio-fisico-esp32-2026-11-10.md). Não houve publicação, alteração de firmware ou medição adicional de latência nesta etapa de documentação.
+
+
+## Integração do repositório — 11/11/2026
+
+Integrado `origin/main` de `20205056` até `185c0bbc` por fast-forward na branch local `codex/fix/pendencias-tcc-pietro`. O novo ensaio de bancada de 10/11 e os ajustes de firmware foram preservados junto às alterações locais de UX/documentação. Dois conflitos de inserção no índice de evidências e no índice VAGGU foram conciliados mantendo ambos os registros. Backup das alterações locais mantido no stash; sem commit ou publicação. O ensaio local aceito não comprova operação prolongada nem a última versão no ambiente hospedado.
+
+
+## Limpeza das personas e ajustes de leitura — 11/11/2026
+
+Removido, por autorização do usuário, o gerador auxiliar dos slides de personas em Python. A busca de consumo confirmou uso somente para gerar imagens estáticas, sem dependência de build, aplicação ou CI. Slides, visão geral e assets preservados; ficha de personas, registro dos assets e mapa atualizados. Nas análises, a revisão reduz explicações redundantes, recolhe a ajuda dos estados e usa cor somente nos ícones de categorias, mantendo os cards neutros. Evidências e validação registradas no documento de clareza das análises. Continuação na branch local `codex/fix/pendencias-tcc-pietro`, base `185c0bbc`; sem commit ou publicação.
+
+
+## Preparação do envio à main — 11/11/2026
+
+Usuário autorizou commit e push das atualizações à main. Revisão consolidada de UX, filtros em diálogo, Configurações, hierarquia das análises, contatos e dependências; rotina geral abandonada e gerador de personas removidos, com imagens preservadas. Roteamento técnico de integração: Pietro; autoria do commit mantém a identidade Git configurada, sem coautores ou aprovações atribuídas. Base remota conferida em `185c0bbc`; alterações locais e stash de segurança preservados. Pendências atuais consolidadas em [Próximos passos](../Planejamento/Próximos%20passos.md#estado-vigente--11112026). As várias pastas de prints preservam a evolução; o README aponta para as capturas finais. Validação de navegador local com dados fictícios não comprova publicação.

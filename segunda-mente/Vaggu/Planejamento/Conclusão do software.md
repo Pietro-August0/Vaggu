@@ -1,5 +1,7 @@
 # Conclusão do software
 
+**Revisão vigente — 09/11/2026:** consulte o [estado confirmado e as pendências reais](../Documentação/planejamento-do-projeto.md#revisão-de-pendências--09112026). O aceite web de 04/11 e a dispensa de backup/atendimento comercial no TCC prevalecem sobre diagnósticos anteriores.
+
 **Aceite e escopo atualizados em 04/11/2026:** site completamente homologado conforme confirmação do usuário; foco em evidências e preparação da apresentação. WhatsApp demonstrativo, sem exigência de atendimento humano, coleta comercial ou protocolo. Procedimentos de dados definidos em [[Vaggu/Documentação/operacao-dados-tcc|operação dos dados do TCC]]. O aceite físico sustentado dos sensores continua separado. Os registros anteriores abaixo preservam o diagnóstico antes desta confirmação.
 
 **Registro anterior à confirmação do usuário — 04/11:** etapa P11/E6, com homologação publicada e aceite físico sustentado em aberto. A [[Vaggu/Documentação/revisao-documental-2026-11-04|matriz atual de entregas e pendências]] substitui resumos anteriores de WhatsApp adiado e hardware ainda não ensaiado; as verificações antigas permanecem datadas.

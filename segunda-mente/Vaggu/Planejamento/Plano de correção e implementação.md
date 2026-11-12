@@ -1,10 +1,12 @@
 # Plano de correção e implementação
 
+**Revisão vigente — 09/11/2026:** consulte o [estado confirmado e as pendências reais](../Documentação/planejamento-do-projeto.md#revisão-de-pendências--09112026). O aceite web de 04/11 e a dispensa de backup/atendimento comercial no TCC prevalecem sobre diagnósticos anteriores.
+
 **Aceite e escopo atualizados em 04/11/2026:** site completamente homologado conforme confirmação do usuário; foco em evidências e preparação da apresentação. WhatsApp demonstrativo, sem exigência de atendimento humano, coleta comercial ou protocolo. Procedimentos de dados definidos em [[Vaggu/Documentação/operacao-dados-tcc|operação dos dados do TCC]]. O aceite físico sustentado dos sensores continua separado. Os registros anteriores abaixo preservam o diagnóstico antes desta confirmação.
 
 **Diagnóstico da revisão inicial, substituído pelo aceite acima — 04/11/2026:** foco em homologação integrada e entrega (P11/E6); P06–P08 implementados com aceites externos abertos, três canais com ensaio físico inicial e WhatsApp real/apresentação confirmados. Consulte [[Vaggu/Documentação/revisao-documental-2026-11-04|lacunas, prioridades e critérios atuais]]. As divisões e achados datados abaixo preservam a referência histórica; não atribuem tarefas da Sprint 7.
 
-Atualizado em 21/10/2026. Este plano começou com os problemas encontrados na auditoria de 23/09 e mantém os pacotes P01–P11 como referência. Os registros concluídos foram preservados como histórico; o resumo abaixo mostra o estado atual.
+Atualizado em 21/10/2026. Este plano começou com os problemas encontrados na auditoria de 23/09 e mantém os pacotes P01–P11 como referência. Os registros concluídos foram preservados como histórico; as tabelas preservam o diagnóstico da época; linhas atualizadas identificam as decisões posteriores.
 
 ## Objetivo
 
@@ -29,11 +31,11 @@ Os estados abaixo descrevem o conjunto depois da consolidação D01. Quando a do
 
 | Área | Estado | O que falta |
 | --- | --- | --- |
-| Design | Parcial | Extrair ou confirmar no Figma tamanhos, espaçamentos, sombras, estados e componentes; a paleta e Poppins estão registradas no guia visual do projeto. |
-| Evidências atuais da interface | Parcial | Editor, monitoramento e análise têm oito capturas autenticadas locais de 15/10. Faltam renovar as capturas específicas de exclusões, importação/erros e validar o site publicado. |
+| Design | Referência aprovada em 16/10 | Reprodução exata do Figma dispensada; manter o site aprovado e verificar contraste ao alterar componentes. |
+| Evidências da interface | Renovadas | Revisões de 21/10 e 04/11 têm novas capturas; 04/11 registra 66 de importação e exclusões. Aceite web confirmado pelo usuário. |
 | Sprints históricas | Consolidado com limites | Fotos recebidas em 19/10 confirmam datas e responsáveis das Sprints 3–6. Sprint 1: brainstorming no começo de agosto; Sprint 2: ideia no Figma até a Sprint 3. Datas exatas e divisão individual das Sprints 1–2 não foram informadas. Não retrocalcular. |
 | Personas | Documentadas com limites | Carlos tem fonte original; Mariana e Rafael são hipóteses de uso coerentes com o produto. Validação com pessoas continua pendente. |
-| WhatsApp comercial | Parcial | Conexão/menu/apresentação confirmados em 04/11; faltam caminhos restantes, coleta estruturada, evidência anonimizada e operação humana. |
+| WhatsApp demonstrativo | Percurso real confirmado em 04/11 | Mudanças de 05–06/11 têm testes locais; conferir publicação e captura anonimizada. Coleta comercial e operação humana dispensadas. |
 
 ### 3. O que estava desatualizado
 
@@ -48,7 +50,7 @@ Os estados abaixo descrevem o conjunto depois da consolidação D01. Quando a do
 - A visão geral administrativa, as exclusões, Minha conta e a área de análises já existem. A análise usa histórico confirmado; sem observações exibe estado vazio. O Shopping Exemplo usa dados sintéticos identificados.
 - A base de sensores, confirmação, expiração e histórico já funciona em testes com PostgreSQL. Atualização periódica já existe; há ensaio físico inicial registrado; faltam estabilidade, tempos definitivos e conferência no ambiente publicado; a validade individual já é aplicada na consulta do mapa.
 - Histórico, filtro de período, comparação e exportações Excel/PDF foram entregues. Setor/categoria, entradas/saídas, permanência, rotatividade, cobertura zero e classificação dos novos eventos estão implementados; registros legados continuam identificados. O aceite de exportação foi alinhado ao SSD: PDF e planilha XLSX; CSV é opcional. No Power BI existem preparação de dados e registro histórico de protótipo externo, sem artefato final versionado ou acesso integrado.
-- Decisões ainda pendentes: contrato final de firmware, retenção operacional e forma de distribuição de uma futura evolução opcional Power BI.
+- Pendências reais: ensaio sustentado e tempos finais do firmware; distribuição do Power BI somente se adotado. Retenção e contingência do TCC já estão definidas em `operacao-dados-tcc.md`.
 
 Essas pendências não autorizam criar tudo de uma vez. Cada pacote continua sujeito às dependências e aos critérios de aceite.
 
@@ -161,10 +163,10 @@ O aceite permanece CA15–CA24. Uma leitura isolada ou heartbeat não pode torna
 
 | Ordem | Entrega | Dependência principal |
 | --- | --- | --- |
-| P07 | Operação, manutenção, contagens e telões implementados; homologação pendente | P06 |
-| P08 | Histórico, métricas e exportações implementados; homologação pendente | P06/P07 |
+| P07 | Operação e telões implementados; aceite web confirmado em 04/11; instalação física separada | P06 |
+| P08 | Análises e exportações implementadas; aceite web confirmado em 04/11 | P06/P07 |
 | P09 | Relatório/publicação Power BI opcionais | P08 |
-| P10 | Fluxos comerciais WhatsApp | Número oficial e ambiente Meta; pode avançar em paralelo |
+| P10 | WhatsApp demonstrativo; conferir mudanças de 05–06/11 e captura real | Conexão e percurso anteriores confirmados; revisão recente exige evidência própria |
 | P11 | Integração e apresentação do TCC | Entregas usadas na demonstração |
 
 ## Riscos controlados

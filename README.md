@@ -3,18 +3,33 @@
 
 A VAGGU é uma plataforma web responsiva desenvolvida como TCC em Desenvolvimento de Sistemas. O Admin VAGGU configura os estacionamentos, e cada gerente acompanha as vagas, os sensores e os indicadores do próprio shopping.
 
-![Mapa do Shopping Exemplo, com andares, filtros e disponibilidade das vagas](./segunda-mente/Vaggu/Evid%C3%AAncias%20visuais/2026-10-21%20-%20Revisao%20geral/mapa-desktop.png)
+![Mapa do Shopping Exemplo, com andares, filtros e disponibilidade das vagas](./segunda-mente/Vaggu/Evid%C3%AAncias%20visuais/2026-11-12%20-%20Mapa%20sem%20faixa/desktop-light.png)
 
-*Mapa do gerente em ambiente local, com dados fictícios do Shopping Exemplo.*
+*Captura local de 11/11/2026, com dados fictícios interceptados no navegador; não comprova produção ou sensores físicos.*
 
 ## Funcionalidades
 
-- **Mapa 2D:** organiza vagas por andar, setor e categoria, com editor de posições e importação CSV/XLSX com prévia.
-- **Monitoramento:** vincula sensores e vagas a placas ESP32 e registra manutenção e ocorrências. Leituras ausentes ou vencidas deixam o estado da vaga desconhecido.
-- **Telões:** exibem a disponibilidade geral ou por andar e ocultam contagens desatualizadas.
-- **Análises:** comparam entradas, saídas, permanência e rotatividade por período, setor e categoria, com exportação em Excel e PDF.
+- **Acessos por shopping:** logins individuais, troca de senha provisória e isolamento dos dados.
+- **Estrutura e mapa:** andares, setores, vagas, importação CSV/XLSX com prévia e editor de posições por arraste, toque ou teclado.
+- **Monitoramento:** vínculo entre placas ESP32, sensores e vagas; confirmação de leituras, expiração, manutenção e ocorrências.
+- **Disponibilidade atualizada:** consultas automáticas do mapa a cada 500 ms e do telão instalado a cada 15 segundos, atualização silenciosa e invalidação dos dados antigos, com nova tentativa em caso de falha.
+- **Análises e relatórios:** período, setor e categoria; comparação, entradas, saídas, permanência, rotatividade e exportações Excel/PDF.
+- **Telões web autorizados:** credencial por instalação, visão geral ou andar escolhida pelo gerente, tela cheia com Esc e apresentação sem rolagem. Contagens ficam ocultas quando a consulta perde validade.
 
-Veja o [mapa no celular](./segunda-mente/Vaggu/Evid%C3%AAncias%20visuais/2026-10-21%20-%20Revisao%20geral/mapa-mobile.png), o [telão](./segunda-mente/Vaggu/Evid%C3%AAncias%20visuais/2026-11-12%20-%20Telao%20ampliado/full-hd-piso.png) e o [painel de análises](./segunda-mente/Vaggu/Evid%C3%AAncias%20visuais/2026-10-25%20-%20Analises%20cores%20e%20leitura/desktop-light.png) na [galeria de evidências](./segunda-mente/Vaggu/Evid%C3%AAncias%20visuais/%C3%8Dndice%20de%20evid%C3%AAncias.md).
+## Interface
+
+<table>
+  <tr>
+    <td width="50%"><img src="./segunda-mente/Vaggu/Evid%C3%AAncias%20visuais/2026-11-11%20-%20Revisao%20da%20landing/abertura-desktop.png" alt="Página de apresentação da VAGGU com a identidade preta e amarela"></td>
+    <td width="50%"><img src="./segunda-mente/Vaggu/Evid%C3%AAncias%20visuais/2026-11-12%20-%20Telao%20ampliado/full-hd-piso.png" alt="Telão autorizado com contagens por andar e categorias especiais"></td>
+  </tr>
+  <tr>
+    <td><strong>Apresentação.</strong> Proposta do serviço e contato para parceria.</td>
+    <td><strong>Orientação.</strong> Disponibilidade agregada para quem chega ao estacionamento.</td>
+  </tr>
+</table>
+
+Veja também [análise](./segunda-mente/Vaggu/Evid%C3%AAncias%20visuais/2026-11-12%20-%20Analises%20integradas/desktop-light-historico.png), [editor e filtros](./segunda-mente/Vaggu/Evid%C3%AAncias%20visuais/2026-11-11%20-%20Painel%20e%20configuracoes/admin-editor-desktop-light.png), [mapa no celular](./segunda-mente/Vaggu/Evid%C3%AAncias%20visuais/2026-11-12%20-%20Mapa%20sem%20faixa/celular-light.png) e [login no celular](./segunda-mente/Vaggu/Evid%C3%AAncias%20visuais/2026-10-21%20-%20Revisao%20geral/login-mobile.png). A [galeria de evidências](./segunda-mente/Vaggu/Evid%C3%AAncias%20visuais/%C3%8Dndice%20de%20evid%C3%AAncias.md) registra rotas, resoluções, verificações e limites de cada captura.
 
 ## Tecnologias
 

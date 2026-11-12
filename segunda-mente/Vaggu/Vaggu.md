@@ -4,7 +4,15 @@ tags: [vaggu, indice]
 ---
 # VAGGU
 
+**Fechamento local — 11/11/2026:** navegação, filtros, configurações e análises revisados; evidências atuais nos dois temas e três tamanhos de tela. Bancada integrada aceita em 10/11. Consulte [pendências finais vigentes](Planejamento/Próximos%20passos.md#estado-vigente--11112026) para separar versão publicada, evidências e apresentação do histórico.
+
 **Bancada física — 10/11/2026:** teste local das três vagas concluído e aceito pela equipe. O vídeo integrado mostra os LEDs e o mapa mudando de livre para ocupada e voltando a livre. Ver [registro do ensaio e das cinco mídias](Documentação/ensaio-fisico-esp32-2026-11-10.md).
+
+**Simplificação dos painéis — 09/11/2026:** mapa principal, diagnóstico secundário e filtros recolhidos com pesquisa visível. Ver [[Vaggu/Documentação/simplificacao-paineis-2026-11-09|decisões e validação da refatoração]].
+
+**Apresentação — informação do usuário em 09/11/2026:** 30/11 ou 03/12/2026, duração habitual de 10–20 minutos. Data final e horário ainda não confirmados. [Canva utilizado](https://canva.link/pd7uk2f8llcr498); detalhes e roteiro proposto no [cenário de apresentação](Documentação/cenario-de-apresentacao.md).
+
+**Estado em 09/11/2026:** revisão de pendências e retirada da rotina geral abandonada concluídas. Site homologado conforme confirmação de 04/11; continuidade em sensores, evidências e apresentação. Ver [[Vaggu/Documentação/planejamento-do-projeto#Revisão de pendências — 09/11/2026|estado confirmado e limites]].
 
 **Memorial para apresentação — 05/11/2026:** a rota `/memorial` abre com uma faixa contínua de ponta a ponta com cinco destaques. O acervo do projeto fica em grade após os depoimentos. Ver [evidências da revisão](Evidências%20visuais/Índice%20de%20evidências.md).
 

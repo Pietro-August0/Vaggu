@@ -2,6 +2,22 @@
 
 **11/11/2026 — acesso ao memorial:** o cartão do GitHub no rodapé da landing deu lugar ao link interno “Memorial da VAGGU”, que abre `/memorial` na mesma aba. O acesso por QR code continua disponível.
 
+**Comentários de navegação — 11/11:** análises com cores mais visíveis nos ícones/números das categorias, filtros junto ao período e gráficos de altura coerente; comparação em linha própria. `visualizacao-vagas.tsx` ordena pesquisa/filtros antes dos andares também no teclado. [Análises](clareza-analises-2026-11-11.md) e [evidências do mapa](../Evidências%20visuais/2026-11-11%20-%20Pesquisa%20antes%20dos%20andares/README.md).
+
+**Alinhamento dos indicadores — 11/11:** `analise-estacionamento.css` define linhas uniformes de ícone/valor/título e reserva o apoio sem texto fictício; bordas com espessura consistente. [Registro](clareza-analises-2026-11-11.md).
+
+**Cobertura no resumo — 11/11:** `analise-estacionamento.tsx` apresenta a ressalva de cobertura parcial dentro de Ocupação média, sem banner isolado. [Decisão e validação](clareza-analises-2026-11-11.md). Cálculos, estados de ausência/erro e API preservados.
+
+**Refinamento de 11/11:** [clareza das análises](clareza-analises-2026-11-11.md) explica indicadores, reorganiza a consulta pontual e registra [vocabulário de domínio](../../../GLOSSARY.md). Substitui os rótulos e proporções anteriores dessa seção.
+
+**Orientação vigente de 11/11:** [painel e configurações](configuracoes-e-painel-2026-11-11.md) reúne conta, aparência, solicitação e saída, remove a faixa superior repetida e compacta os quatro indicadores das análises.
+
+**Ajuste de 11/11:** a [hierarquia das análises](hierarquia-analises-2026-11-11.md) recupera categorias neutras, resumo com ocupação/entradas/tempo médio, gráficos visíveis e Dados avançados recolhidos, substituindo a simplificação anterior dessa tela.
+
+**Continuação de 09/11:** contatos da landing/Sobre/operação usam e-mail quando o WhatsApp não é válido; lockfiles corrigidos e Vite mínimo 8.2.6. O planejamento registra auditorias, testes e roteiro atualizado de apresentação. Evidências de contato em três viewports e dois temas foram adicionadas ao índice.
+
+**Revisão de 09/11/2026:** o [planejamento](planejamento-do-projeto.md#revisão-de-pendências--09112026) consolida pendências reais e decisões encerradas. Removidos os seis registros gerais e o modelo da rotina diária abandonada a pedido do usuário; contexto útil preservado nos diários VAGGU. Índices e referências corrigidos. O plugin de notas diárias está desativado e sua configuração de reserva usa `Vaggu/Diário` e o modelo VAGGU. A finalidade da pasta `segunda-mente/` continua cobrindo notas, modelos e configuração do cofre.
+
 **06/11/2026 — acesso ao memorial:** o rodapé da landing deixou de linkar o memorial. A rota continua disponível pelo endereço do QR code. As referências anteriores ao rodapé preservam o histórico.
 
 **06/11/2026 — organização e manutenção:** a [revisão da estrutura](revisao-estrutura-e-simplificacao-2026-11-06.md) reúne os candidatos a descarte e a ordem de simplificação e os arquivos já retirados. A [rotina do cofre](../../Rotina%20de%20registro.md) preserva os diários como histórico.
@@ -22,13 +38,19 @@ A revisão de 04/11 é a fonte do diagnóstico atual; notas de implantação aba
 
 **28/10/2026 — WhatsApp:** [planejamento-whatsapp-2026-10-28.md](planejamento-whatsapp-2026-10-28.md) reúne revisão local, configuração do link da landing, homologação Meta/Render e critérios de conclusão do atendimento. O [guia do webhook](whatsapp-webhook.md) descreve a proteção atual de envios incertos com `ENVIANDO`/`REVISAO`.
 
-**Atualização de 21/10/2026:** `Especificações/Personas.md` reúne Carlos, Mariana e Rafael, separando material recebido de hipóteses. `Evidências visuais/Personas/` guarda duas páginas originais de Carlos, dois retratos gerados e quatro slides ilustrativos de Mariana e Rafael; `scripts/gerar-slides-personas.py` reproduz a diagramação desses quatro slides. A análise histórica distingue setores pelo andar e nome e deixa cobertura indisponível sem capacidade atual de referência.
+**Atualização de 21/10/2026:** `Especificações/Personas.md` reúne Carlos, Mariana e Rafael, separando material recebido de hipóteses. `Evidências visuais/Personas/` guarda duas páginas originais de Carlos, dois retratos gerados e quatro slides ilustrativos de Mariana e Rafael. O gerador auxiliar foi retirado em 11/11/2026, preservando os slides e assets finais. A análise histórica distingue setores pelo andar e nome e deixa cobertura indisponível sem capacidade atual de referência.
 
 O frontend começa em main.tsx, monta o provedor de sessão e encaminha /login, /trocar-senha, /admin e /painel. O cliente HTTP chama /api/v1 pelo proxy local do Vite; o backend server.ts conecta os serviços e app.ts monta as rotas. Serviços validam permissões antes de acessar o Prisma/PostgreSQL. O cookie HttpOnly preserva a sessão no refresh; a identidade pública é restaurada da API.
 
 Conhecimento, documentos e regras ficam em `segunda-mente`. O planejamento canônico registra a situação atual e a continuidade. Imagens da aplicação ficam no `public` do frontend; o cofre mantém cópias próprias das evidências necessárias ao Obsidian. Dependências, builds, segredos e bancos ignorados não integram o mapa.
 
 **Revisão geral de 21/10/2026:** `AGENTS.md` consolida os acordos antes mantidos em `CONTRIBUTING.md` e exige prints após alterações de design/frontend. O README usa capturas da aplicação atual com dados fictícios. `Evidências visuais/2026-10-21 - Revisao geral/` reúne telas públicas, painéis, filtros, estados vazios, editor e telão; `Documentação/revisao-geral-2026-10-21.md` registra verificação, limites e limpeza. Removemos quatro assets públicos redundantes e o otimizador antigo sem função atual, preservando fontes e WebP usados. Reparados os rasters incorporados dos dois SVGs documentais, sem alterar a geometria.
+
+## Vocabulário do produto
+
+| Arquivo | Finalidade |
+| --- | --- |
+| `GLOSSARY.md` | Define recorte, estados das vagas e indicadores em linguagem do domínio, sem detalhes de implementação. |
 
 ## Pastas principais
 
@@ -103,7 +125,6 @@ As cópias de imagens entre `segunda-mente/Vaggu/Identidade visual/Assets/` e `v
 | `README.md` | Apresenta a VAGGU no GitHub com resumo dos recursos, captura do mapa, badges das tecnologias, início local e links para evidências e documentação técnica. |
 | `render.yaml` | Define build, inicialização, saúde e solicita os segredos de banco e Blob sem versionar seus valores. |
 | `scripts/verificar-documentacao.mjs` | Confere cobertura do mapa, wikilinks e destinos/âncoras locais de todos os Markdown versionáveis, incluindo READMEs; ignora exemplos em blocos de código. |
-| `scripts/gerar-slides-personas.py` | Gera os quatro slides PNG ilustrativos de Mariana e Rafael, reutilizando retratos locais e a identidade preta e amarela da referência. |
 | `scripts/gerar-animacao-apresentacao.py` | Renderiza a animação 2D muda, incorpora as capturas locais do mapa e do telão e extrai os quadros de conferência. |
 | `segunda-mente/Vaggu/Documentação/revisao-estrutura-e-simplificacao-2026-11-06.md` | Registra a revisão estrutural, o uso dos arquivos candidatos a descarte e o plano incremental de simplificação. |
 | `segunda-mente/Vaggu/Evidências visuais/Personas/README.md` | Registra fontes e prompts dos recortes e fundos, reprodução com Poppins e conferência dos slides de Mariana e Rafael com os originais de Carlos. |
@@ -206,28 +227,29 @@ As cópias de imagens entre `segunda-mente/Vaggu/Identidade visual/Assets/` e `v
 | `vaggu-frontend/public/assets/vaggu-logo.svg` | Asset visual vaggu-logo.svg; reutilizado na identidade e composição da interface. |
 | `vaggu-frontend/src/app/app-store.tsx` | Restaura identidade via cookie e `/auth/me` antes de liberar rotas; gerencia expiração, logout, troca de senha e consultas. |
 | `vaggu-frontend/src/components/brand.tsx` | Reutiliza os arquivos de marca publicados em public/assets nos links para a página inicial. |
-| `vaggu-frontend/src/components/analise-estacionamento.css` | Define painel analítico responsivo, categorias e indicadores coloridos, espaçamento interno, filtros compactos, ajuda expansível e estados de consulta nos dois temas; preserva foco e redução de movimento. |
-| `vaggu-frontend/src/components/analise-estacionamento.tsx` | Filtra datas UTC/setor/categoria, apresenta contagens de categorias no topo e gráficos com lacunas e explica quando faltam leituras válidas; carrega a comparação separadamente, preserva a última consulta ao atualizar/falhar, permite tentar novamente e ignora respostas de consultas anteriores. Exportações Excel/PDF carregadas sob demanda; tabela setorial expansível e séries longas com rolagem interna. |
+| `vaggu-frontend/src/components/analise-estacionamento.css` | Define quatro indicadores compactos, categorias neutras, gráfico principal prioritário e técnicos recolhidos, com filtros em diálogo e adaptação aos dois temas e larguras. |
+| `vaggu-frontend/src/components/analise-estacionamento.tsx` | Aplica filtros UTC/setor/categoria em popup; destaca ocupação média, entradas e tempo na vaga, categorias neutras e gráficos familiares. Técnicos e relatórios completos sob demanda, com comparação independente e última consulta preservada. |
 | `vaggu-frontend/src/components/resumo-analitico-admin.tsx` | Resume ocupação, cobertura e tendência do shopping selecionado na ficha Admin, distinguindo histórico real de demonstração. |
-| `vaggu-frontend/src/components/dashboard-shell.tsx` | Compartilha cabeçalho e conteúdo centralizados, menu responsivo, cartão de conta no rodapé da sidebar, diálogo da conta, alternância claro/escuro e saída da sessão. |
-| `vaggu-frontend/src/components/estrutura-admin.tsx` | Permite criar a hierarquia, explica o estado real de implantação e alterna cadastro, mapa e posições com refetch após mutações. |
+| `vaggu-frontend/src/components/dashboard-shell.tsx` | Compartilha navegação, configurações/conta/aparência/saída, menu móvel e foco do conteúdo, sem faixa contextual visual repetida. |
+| `vaggu-frontend/src/components/estrutura-admin.tsx` | Abre no mapa, alterna configuração/posições, recolhe equipamentos e telões; preserva rascunho, revisão e feedback de mutações em todas as abas. |
 | `vaggu-frontend/src/components/exportacao-estrutura.tsx` | Abre a janela de exportação estrutural, mostra o recorte e inicia o download XLSX sob demanda. |
 | `vaggu-frontend/src/components/importacao-estrutura.tsx` | Permite ao Admin baixar o modelo CSV, enviar CSV/XLSX, revisar registros e erros, confirmar a importação e consultar o resumo aplicado. |
 | `vaggu-frontend/src/components/formulario-alterar-senha.tsx` | Compartilha a troca voluntária de senha com validação por campo, requisitos visíveis e confirmação da senha atual. |
 | `vaggu-frontend/src/components/formulario-shopping.tsx` | Compartilha cadastro e edição em três etapas; consulta CEP e mantém o endereço editável manualmente. |
 | `vaggu-frontend/src/components/mapa-estacionamento.tsx` | Busca a estrutura isolada do gerente, mostra aviso e oferece nova tentativa quando as leituras ficam indisponíveis, mantém o aviso de implantação e delega o desenho ao componente compartilhado. |
 | `vaggu-frontend/src/components/minha-conta.tsx` | Compartilha dados pessoais em layout responsivo entre Admin e gerente; mantém vínculos protegidos, impede salvar sem alterações e abre a troca de senha em diálogo sob demanda. |
-| `vaggu-frontend/src/components/detalhes-vaga.tsx` | Exibe localização, situação do sensor, placa, horários independentes, estado confirmado e confirmação pendente. |
+| `vaggu-frontend/src/components/estado-consulta-operacional.tsx` | Mostra apenas carregamento ou falha/desatualização operacional com nova tentativa; não anuncia cada polling saudável. |
+| `vaggu-frontend/src/components/detalhes-vaga.tsx` | Exibe localização e situação da vaga; recolhe dados técnicos e restaura foco na origem ou Diagnóstico. |
 | `vaggu-frontend/src/components/editor-mapa-vagas.tsx` | Edita posições por arraste, toque ou teclado, ajusta tamanho/rotação e mantém rascunho, desfazer, limites e prevenção de sobreposição. |
-| `vaggu-frontend/src/components/monitoramento-sensores.tsx` | Mostra contagens e cartões dos sensores, filtra situação e abre os detalhes no recorte de vagas autorizado. |
+| `vaggu-frontend/src/components/monitoramento-sensores.tsx` | Reutiliza cartões de sensores em diagnóstico secundário; situação em popup e pesquisa visível no recorte autorizado. |
 | `segunda-mente/Vaggu/Documentação/edicao-visual-e-monitoramento.md` | Documenta fluxos, contratos, origem dos dados, apresentação, testes e limites da entrega de 15/10. |
-| `vaggu-frontend/src/components/visualizacao-vagas.tsx` | Compartilha mapa 2D, busca, filtros e seleção entre Admin e gerente, com legenda de estados antes das vagas; abre o mesmo detalhe pelo mapa, lista móvel ou vaga sem posição. |
+| `vaggu-frontend/src/components/visualizacao-vagas.tsx` | Compartilha mapa, pesquisa, filtros em diálogo, resumo do recorte e legenda de estados antes das vagas, para Admin e gerente. |
 | `vaggu-frontend/src/components/icone-whatsapp.tsx` | Disponibiliza o símbolo usado nos links de atendimento, sem requisições externas. |
 | `vaggu-frontend/src/components/operacao-vaggu.css` | Foto e conteúdo dividem a seção sem impor uma altura vazia acima dos benefícios. |
-| `vaggu-frontend/src/components/operacao-vaggu.tsx` | Relaciona a imagem de movimento urbano aos benefícios da gestão e ao atendimento. |
+| `vaggu-frontend/src/components/operacao-vaggu.tsx` | Relaciona a imagem de movimento urbano aos benefícios da gestão e ao contato; usa e-mail quando WhatsApp não é válido. |
 | `vaggu-frontend/src/components/protected-route.tsx` | Aguarda a sessão e exibe carregamento/erro com cores do tema, foco visível e nova tentativa; autorização de recursos continua no backend. |
 | `vaggu-frontend/src/components/sobre-vaggu.css` | Escala, anéis automáticos e pesos da landing; medidas compartilhadas mantêm as conexões alinhadas. |
-| `vaggu-frontend/src/components/sobre-vaggu.tsx` | Apresenta a solução, a jornada comercial e os benefícios; inicia as conexões quando o painel está quase todo visível. |
+| `vaggu-frontend/src/components/sobre-vaggu.tsx` | Apresenta solução, jornada e benefícios; contato inicial usa WhatsApp válido ou e-mail; inicia conexões quando o painel está visível. |
 | `vaggu-frontend/src/components/ui/badge.tsx` | Componente de interface reutilizável badge; usado para controles, estados e composição acessível. |
 | `vaggu-frontend/src/components/ui/button.tsx` | Componente de interface reutilizável button; usado para controles, estados e composição acessível. |
 | `vaggu-frontend/src/components/ui/card.tsx` | Componente de interface reutilizável card; usado para controles, estados e composição acessível. |

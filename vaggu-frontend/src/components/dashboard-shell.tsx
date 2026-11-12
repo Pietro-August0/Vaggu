@@ -12,7 +12,8 @@ import {
   Sun,
   Map,
   ChartNoAxesCombined,
-  ChevronDown,
+  ArrowLeft,
+  Settings,
   UsersRound,
   UserRound,
   Monitor,
@@ -34,7 +35,7 @@ import {
   SheetTitle,
   SheetTrigger,
 } from "@/components/ui/sheet"
-import { WHATSAPP_URL } from "@/lib/constants"
+import { EMAIL_CONTATO, WHATSAPP_URL } from "@/lib/constants"
 import { cn } from "@/lib/utils"
 
 interface NavItem {
@@ -79,7 +80,6 @@ function Navigation({ items, admin = false, aoNavegar }: { items: NavItem[]; adm
 /** Recebe títulos e conteúdo da página; escolhe os atalhos pelo perfil do contexto autenticado. */
 export function DashboardShell({
   title,
-  eyebrow,
   shoppingId,
   children,
 }: {
@@ -93,10 +93,15 @@ export function DashboardShell({
   const { resolvedTheme, setTheme } = useTheme()
   const navigate = useNavigate()
   const [menuAberto, setMenuAberto] = useState(false)
-  const [contaAberta, setContaAberta] = useState(false)
+  const [configuracoesAbertas, setConfiguracoesAbertas] = useState(false)
+  const [secaoConfiguracoes, setSecaoConfiguracoes] = useState<"geral" | "conta">("geral")
   const [saindo, setSaindo] = useState(false)
   const [erroSaida, setErroSaida] = useState("")
-  const tituloRef = useRef<HTMLHeadingElement>(null)
+  const conteudoRef = useRef<HTMLElement>(null)
+  const menuRef = useRef<HTMLButtonElement>(null)
+  const origemConfiguracoes = useRef<HTMLButtonElement | null>(null)
+  const voltarRef = useRef<HTMLButtonElement>(null)
+  const contaRef = useRef<HTMLButtonElement>(null)
   const rotaInicial = useRef(pathname)
   const isAdmin = currentUser?.role === "admin"
   const navItems: NavItem[] = isAdmin
@@ -113,17 +118,47 @@ export function DashboardShell({
   ] : []
   const escuro = resolvedTheme === "dark"
   const rotaConta = pathname === (isAdmin ? "/admin/conta" : "/painel/conta")
-  const contaVisivel = contaAberta || rotaConta
+  const configuracoesVisiveis = configuracoesAbertas || rotaConta
+  const contaVisivel = rotaConta || secaoConfiguracoes === "conta"
 
-  function fecharConta() {
-    setContaAberta(false)
+  function abrirConfiguracoes(gatilho: HTMLButtonElement) {
+    origemConfiguracoes.current = gatilho
+    setErroSaida("")
+    setSecaoConfiguracoes("geral")
+    setMenuAberto(false)
+    setConfiguracoesAbertas(true)
+  }
+
+  function fecharConfiguracoes() {
+    if (saindo) return
+    setConfiguracoesAbertas(false)
+    setSecaoConfiguracoes("geral")
     if (rotaConta) navigate(isAdmin ? "/admin" : "/painel", { replace: true })
   }
 
-  /** Move o foco para o título após navegação interna para anunciar a nova tela. */
+  function abrirConta() {
+    setSecaoConfiguracoes("conta")
+    requestAnimationFrame(() => voltarRef.current?.focus())
+  }
+
+  function voltarConfiguracoes() {
+    setConfiguracoesAbertas(true)
+    setSecaoConfiguracoes("geral")
+    if (rotaConta) navigate(isAdmin ? "/admin" : "/painel", { replace: true })
+    requestAnimationFrame(() => contaRef.current?.focus())
+  }
+
+  function fecharNavegacao() {
+    setMenuAberto(false)
+    setConfiguracoesAbertas(false)
+    setSecaoConfiguracoes("geral")
+  }
+
+  /** Anuncia o contexto pelo conteúdo principal sem repetir uma faixa de títulos. */
   useEffect(() => {
     if (pathname === rotaInicial.current) return
-    tituloRef.current?.focus()
+    rotaInicial.current = pathname
+    conteudoRef.current?.focus()
   }, [pathname])
 
   /** Limpa a sessão na API e substitui a rota atual pela tela de entrada. */
@@ -147,54 +182,23 @@ export function DashboardShell({
         <Brand inverted={!isAdmin} />
       </div>
       <p className={cn("mb-2 text-xs font-bold uppercase tracking-[0.18em]", isAdmin ? "text-neutral-800/70" : "text-neutral-500")}>{isAdmin ? "Administração" : "Shopping"}</p>
-      <Navigation items={navItems} admin={isAdmin} aoNavegar={() => { setMenuAberto(false); setContaAberta(false) }} />
+      <Navigation items={navItems} admin={isAdmin} aoNavegar={fecharNavegacao} />
       {shoppingItems.length > 0 && <div className="mt-6 border-t border-black/15 pt-5">
         <p className="mb-2 text-xs font-bold uppercase tracking-[0.18em] text-neutral-800/70">Shopping atual</p>
-        <Navigation items={shoppingItems} admin aoNavegar={() => { setMenuAberto(false); setContaAberta(false) }} />
+        <Navigation items={shoppingItems} admin aoNavegar={fecharNavegacao} />
       </div>}
-      <div className="mt-auto grid w-full min-w-0 gap-2 pt-8">
-        <Button type="button" variant="ghost" className={isAdmin ? "justify-start gap-3 text-neutral-950 hover:bg-black/10" : "justify-start gap-3 text-neutral-300 hover:bg-neutral-900 hover:text-white"} onClick={() => setTheme(escuro ? "light" : "dark")} aria-label={escuro ? "Ativar modo claro" : "Ativar modo escuro"}>
-          {escuro ? <Sun className="size-4" aria-hidden="true" /> : <Moon className="size-4" aria-hidden="true" />}
-          {escuro ? "Modo claro" : "Modo escuro"}
-        </Button>
-        {!isAdmin && WHATSAPP_URL && (
-          <Button asChild className="justify-start gap-3" variant="outline">
-            <a href={WHATSAPP_URL} rel="noreferrer" target="_blank">
-              <MessageCircle className="size-4" aria-hidden="true" />
-              Solicitar alteração
-              <ExternalLink className="ml-auto size-3.5" aria-hidden="true" />
-            </a>
-          </Button>
-        )}
-        <button
-          type="button"
-          className={cn(
-            "mt-3 flex min-h-14 w-full min-w-0 max-w-full items-center gap-2 overflow-hidden rounded-full p-1 text-left outline-none transition-colors focus-visible:ring-2 focus-visible:ring-offset-2",
-            isAdmin ? "bg-neutral-950 text-white hover:bg-neutral-800 focus-visible:ring-neutral-950 focus-visible:ring-offset-[#ffe100]" : "bg-[#ffe100] text-neutral-950 hover:bg-yellow-300 focus-visible:ring-[#ffe100] focus-visible:ring-offset-neutral-950",
-          )}
-          aria-haspopup="dialog"
-          aria-expanded={contaVisivel}
-          aria-label={`Abrir minha conta de ${currentUser?.nome ?? "usuário"}`}
-          data-conta-trigger=""
-          onClick={() => { setMenuAberto(false); setContaAberta(true) }}
-        >
-          <span className={cn("grid size-11 shrink-0 place-items-center rounded-full font-heading text-xl font-bold", isAdmin ? "bg-[#ffe100] text-neutral-950" : "bg-neutral-950 text-[#ffe100]")} aria-hidden="true">
-            {currentUser?.nome.trim().charAt(0).toLocaleUpperCase("pt-BR") || <UserRound className="size-5" />}
-          </span>
-          <span className="min-w-0 flex-1 overflow-hidden">
-            <span className="block truncate text-sm font-medium leading-tight">{currentUser?.nome}</span>
-            <span className={cn("block truncate text-xs font-medium leading-tight", isAdmin ? "text-white" : "text-neutral-900")}>{currentUser?.email}</span>
-          </span>
-          <ChevronDown className="mr-2 size-4 shrink-0" aria-hidden="true" />
-        </button>
+      <div className="mt-auto border-t border-current/15 pt-5">
         <Button
-          className={isAdmin ? "justify-center gap-2 text-neutral-950 hover:bg-black/10 hover:text-black" : "justify-center gap-2 text-neutral-300 hover:bg-neutral-900 hover:text-white"}
-          disabled={saindo}
-          onClick={() => void handleLogout()}
+          type="button"
           variant="ghost"
+          className={isAdmin ? "h-11 w-full justify-start gap-3 text-neutral-950 hover:bg-black/10 hover:text-black" : "h-11 w-full justify-start gap-3 text-neutral-300 hover:bg-neutral-900 hover:text-white"}
+          aria-haspopup="dialog"
+          aria-expanded={configuracoesVisiveis}
+          data-configuracoes-trigger=""
+          onClick={evento => abrirConfiguracoes(evento.currentTarget)}
         >
-          <LogOut className="size-4" aria-hidden="true" />
-          {saindo ? "Saindo..." : "Sair"}
+          <Settings className="size-4" aria-hidden="true" />
+          Configurações
         </Button>
       </div>
     </>
@@ -205,53 +209,82 @@ export function DashboardShell({
       <a href="#conteudo-principal" className="fixed left-4 top-3 z-[100] -translate-y-20 rounded-lg bg-neutral-950 px-4 py-2 font-semibold text-white shadow-lg transition-transform focus:translate-y-0 focus:outline-none focus:ring-2 focus:ring-[#ffe100]">
         Ir para o conteúdo principal
       </a>
-      <aside className={isAdmin ? "fixed inset-y-0 left-0 hidden w-64 flex-col bg-[#ffe100] p-6 lg:flex" : "fixed inset-y-0 left-0 hidden w-64 flex-col bg-neutral-950 p-6 lg:flex"}>
+      <aside className={isAdmin ? "fixed inset-y-0 left-0 hidden w-64 flex-col overflow-y-auto bg-[#ffe100] p-6 lg:flex" : "fixed inset-y-0 left-0 hidden w-64 flex-col overflow-y-auto bg-neutral-950 p-6 lg:flex"}>
         {sideContent}
       </aside>
 
       <div className="min-w-0 max-w-full lg:pl-64">
-        <header className="sticky top-0 z-30 border-b border-black/10 bg-[#f5f5f3]/90 backdrop-blur-xl dark:border-white/10 dark:bg-[#171717]/90">
-          <div className="mx-auto flex min-h-20 w-full max-w-6xl items-center gap-4 px-4 sm:px-6 lg:px-10">
-            <Sheet open={menuAberto} onOpenChange={setMenuAberto}>
-              <SheetTrigger asChild>
-                <Button aria-label="Abrir navegação" className="border-black/15 bg-white/80 text-neutral-950 hover:bg-white lg:hidden dark:border-white/20 dark:bg-white/10 dark:text-white dark:hover:bg-white/20" size="icon" variant="outline">
-                  <Menu aria-hidden="true" />
-                </Button>
-              </SheetTrigger>
-              <SheetContent className={isAdmin ? "flex w-[86vw] max-w-sm flex-col border-yellow-300 bg-[#ffe100] p-6 text-black" : "flex w-[86vw] max-w-sm flex-col border-neutral-800 bg-neutral-950 p-6 text-white"} side="left">
-                <SheetHeader className="sr-only">
-                  <SheetTitle>Navegação</SheetTitle>
-                  <SheetDescription>Atalhos do painel VAGGU.</SheetDescription>
-                </SheetHeader>
-                {sideContent}
-              </SheetContent>
-            </Sheet>
-            <div className="min-w-0">
-              <p className="text-xs font-bold uppercase tracking-[0.18em] text-neutral-500">{eyebrow}</p>
-              <h1 ref={tituloRef} tabIndex={-1} className="break-words rounded-sm font-heading text-xl font-black tracking-tight outline-none focus-visible:ring-2 focus-visible:ring-[#ffe100] sm:text-2xl">{title}</h1>
-            </div>
-            <div className="ml-auto hidden items-center gap-2 rounded-full border border-black/10 bg-white px-3 py-2 text-xs font-medium text-neutral-600 sm:flex dark:border-white/15 dark:bg-white/5 dark:text-neutral-300">
-              <span className="size-2 rounded-full bg-[#ffe100]" aria-hidden="true" />
-              Acesso autenticado
-            </div>
-          </div>
-        </header>
-        <main id="conteudo-principal" tabIndex={-1} className={isAdmin ? "min-w-0 max-w-full overflow-x-hidden px-0 py-0" : "min-w-0 max-w-full overflow-x-hidden px-4 py-8 sm:px-6 lg:px-10 lg:py-10"}>{erroSaida && <p role="alert" className="m-5 text-red-700">{erroSaida}</p>}{children}</main>
+        <div className="sticky top-0 z-30 flex items-center justify-between border-b border-black/10 bg-[#f5f5f3]/95 px-4 py-2 backdrop-blur-xl lg:hidden dark:border-white/10 dark:bg-[#171717]/95">
+          <Sheet open={menuAberto} onOpenChange={setMenuAberto}>
+            <SheetTrigger asChild>
+              <Button ref={menuRef} aria-label="Abrir navegação" className="h-11 w-11 border-black/15 bg-white/80 text-neutral-950 hover:bg-white dark:border-white/20 dark:bg-white/10 dark:text-white dark:hover:bg-white/20" size="icon" variant="outline"><Menu aria-hidden="true" /></Button>
+            </SheetTrigger>
+            <SheetContent onCloseAutoFocus={evento => { if (configuracoesVisiveis) evento.preventDefault() }} className={isAdmin ? "flex w-[86vw] max-w-sm flex-col overflow-y-auto border-yellow-300 bg-[#ffe100] p-6 text-black" : "flex w-[86vw] max-w-sm flex-col overflow-y-auto border-neutral-800 bg-neutral-950 p-6 text-white"} side="left">
+              <SheetHeader className="sr-only"><SheetTitle>Navegação</SheetTitle><SheetDescription>Atalhos do painel VAGGU.</SheetDescription></SheetHeader>
+              {sideContent}
+            </SheetContent>
+          </Sheet>
+          <Button
+            type="button"
+            variant="ghost"
+            size="icon"
+            className="h-11 w-11"
+            aria-label="Abrir configurações"
+            aria-haspopup="dialog"
+            aria-expanded={configuracoesVisiveis}
+            data-configuracoes-trigger=""
+            onClick={evento => abrirConfiguracoes(evento.currentTarget)}
+          ><Settings aria-hidden="true" /></Button>
+        </div>
+        <main ref={conteudoRef} id="conteudo-principal" aria-label={title} tabIndex={-1} className={isAdmin ? "min-w-0 max-w-full overflow-x-hidden px-0 py-0 outline-none focus-visible:ring-2 focus-visible:ring-inset focus-visible:ring-[#a58b00] dark:focus-visible:ring-[#ffe100]" : "min-w-0 max-w-full overflow-x-hidden px-4 py-6 outline-none focus-visible:ring-2 focus-visible:ring-inset focus-visible:ring-[#a58b00] sm:px-6 lg:px-10 lg:py-8 dark:focus-visible:ring-[#ffe100]"}><h1 className="sr-only">{title}</h1>{children}</main>
       </div>
-      <Dialog open={contaVisivel} onOpenChange={(aberto) => { if (!aberto) fecharConta() }}>
+      <Dialog open={configuracoesVisiveis} onOpenChange={aberto => { if (!aberto) fecharConfiguracoes() }}>
         <DialogContent
           className="max-h-[calc(100dvh-2rem)] overflow-y-auto p-5 sm:max-w-2xl sm:p-7"
-          onCloseAutoFocus={(evento) => {
-            const gatilhos = document.querySelectorAll<HTMLButtonElement>("[data-conta-trigger]")
-            const visivel = [...gatilhos].find((gatilho) => gatilho.getClientRects().length > 0)
-            if (visivel) { evento.preventDefault(); visivel.focus() }
+          showCloseButton={!saindo}
+          onCloseAutoFocus={evento => {
+            const origem = origemConfiguracoes.current
+            const destino = origem?.isConnected && origem.getClientRects().length > 0
+              ? origem
+              : menuRef.current && menuRef.current.getClientRects().length > 0
+                ? menuRef.current
+                : [...document.querySelectorAll<HTMLButtonElement>("[data-configuracoes-trigger]")].find(gatilho => gatilho.getClientRects().length > 0)
+            if (destino) { evento.preventDefault(); destino.focus() }
           }}
         >
           <DialogHeader className="pr-9">
-            <DialogTitle className="font-heading text-2xl">Minha conta</DialogTitle>
-            <DialogDescription>Atualize seus dados pessoais e gerencie sua senha.</DialogDescription>
+            <DialogTitle className="font-heading text-2xl">{contaVisivel ? "Minha conta" : "Configurações"}</DialogTitle>
+            <DialogDescription>{contaVisivel ? "Atualize seus dados pessoais e gerencie sua senha." : "Gerencie sua conta, a aparência e o acesso ao painel."}</DialogDescription>
           </DialogHeader>
-          <MinhaConta />
+          {contaVisivel ? <>
+            <Button ref={voltarRef} type="button" variant="ghost" className="mb-1 w-fit gap-2" onClick={voltarConfiguracoes}><ArrowLeft aria-hidden="true" />Voltar às configurações</Button>
+            <MinhaConta />
+          </> : <div className="grid divide-y divide-neutral-200 dark:divide-white/10">
+            <section className="pb-5" aria-labelledby="configuracoes-conta">
+              <h2 id="configuracoes-conta" className="text-sm font-semibold">Conta</h2>
+              <div className="mt-3 flex min-w-0 items-center justify-between gap-3">
+                <div className="min-w-0"><p className="truncate text-sm font-medium">{currentUser?.nome}</p><p className="mt-1 truncate text-xs text-neutral-600 dark:text-neutral-400">{currentUser?.email}</p></div>
+                <Button ref={contaRef} type="button" variant="outline" disabled={saindo} onClick={abrirConta}><UserRound aria-hidden="true" />Minha conta</Button>
+              </div>
+            </section>
+            <section className="py-5" aria-labelledby="configuracoes-aparencia">
+              <h2 id="configuracoes-aparencia" className="text-sm font-semibold">Aparência</h2>
+              <div role="group" aria-label="Tema da interface" className="mt-3 flex gap-3">
+                <Button type="button" className="h-11 flex-1" variant={escuro ? "outline" : "default"} aria-pressed={!escuro} disabled={saindo} onClick={() => setTheme("light")}><Sun aria-hidden="true" />Modo claro</Button>
+                <Button type="button" className="h-11 flex-1" variant={escuro ? "default" : "outline"} aria-pressed={escuro} disabled={saindo} onClick={() => setTheme("dark")}><Moon aria-hidden="true" />Modo escuro</Button>
+              </div>
+            </section>
+            {!isAdmin && <section className="py-5" aria-labelledby="configuracoes-alteracoes">
+              <h2 id="configuracoes-alteracoes" className="text-sm font-semibold">Solicitar alterações</h2>
+              <p className="mt-2 text-sm text-neutral-600 dark:text-neutral-400">Fale com a equipe VAGGU sobre mudanças no seu shopping.</p>
+              <Button asChild variant="outline" className="mt-3 min-h-11 w-full sm:w-auto"><a href={WHATSAPP_URL ?? `mailto:${EMAIL_CONTATO}`} target={WHATSAPP_URL ? "_blank" : undefined} rel={WHATSAPP_URL ? "noreferrer" : undefined} aria-label={WHATSAPP_URL ? "Solicitar alterações pelo WhatsApp (abre em nova aba)" : "Solicitar alterações por e-mail"}><MessageCircle aria-hidden="true" />Solicitar alterações{WHATSAPP_URL && <ExternalLink aria-hidden="true" />}</a></Button>
+            </section>}
+            <section className="pt-5" aria-labelledby="configuracoes-sessao">
+              <h2 id="configuracoes-sessao" className="text-sm font-semibold">Sessão</h2>
+              {erroSaida && <p role="alert" className="mt-3 text-sm text-red-700 dark:text-red-300">{erroSaida}</p>}
+              <Button type="button" variant="outline" className="mt-3 h-11 w-full gap-2 sm:w-auto" disabled={saindo} onClick={() => void handleLogout()}><LogOut aria-hidden="true" />{saindo ? "Saindo..." : "Sair"}</Button>
+            </section>
+          </div>}
         </DialogContent>
       </Dialog>
     </div>
